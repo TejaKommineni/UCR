@@ -1,8 +1,10 @@
 import json
 import datetime
 from flask import Flask
+from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
-from database import db
+from app.database import db
+from app.helpers import DateTimeEncoder
 
 """
     A base class that all models derive from
@@ -13,24 +15,11 @@ class CustomModel(db.Model):
     #    super(CustomModel,self).__init__()
         
     def dict(self):
-       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-       
+        items = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        return items
+    
     def json(self):
-        return DateTimeEncoder().encode(self.dict())
-
-"""
-    A custom json encoder that works with dates
-"""
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
-        elif isinstance(obj, datetime.date):
-            return obj.isoformat()
-        elif isinstance(obj, datetime.timedelta):
-            return (datetime.datetime.min + obj).time().isoformat()
-        else:
-            return super(DateTimeEncoder, self).default(obj)
+        return jsonify(self.dict())
             
 ##############################################################################
 # Models
