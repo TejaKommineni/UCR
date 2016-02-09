@@ -46,7 +46,7 @@ class PopulatedDB(TestCase):
             periodStart = datetime(2016,2,2),
             periodEnd = datetime(2016,2,2),
             periodTotal = 1.23,
-            periodComment = "Budget Period")
+            periodComment = "comment")
             
         p = models.Project(
             projectType_projectTypeID = 1,
@@ -65,7 +65,9 @@ class PopulatedDB(TestCase):
             final_recruitment_report = "report")
         rc = models.ReviewCommittee(
             project_projectID=p.projectID,
-            review_committee_number=1,
+            RCStatusList_rc_StatusID=1,
+            reviewCommitteeList_rcListID=1,
+            review_committee_number="1",
             date_initial_review=datetime(2016,2,2),
             date_expires = datetime(2016,2,2),
             rc_note = "rc_note",
@@ -99,9 +101,6 @@ class PopulatedDB(TestCase):
         db.session.add(p)
         db.session.commit()
         
-##############################################################################
-# Root Node Tests
-##############################################################################
 class TestRoot(PopulatedDB):
     def test_root(self):
         response = self.client.get("/api/")
@@ -112,9 +111,46 @@ class TestRoot(PopulatedDB):
                 "staff"
             ]})    
 
-##############################################################################
-# IRB Holder Tests
-##############################################################################
+class TestBudget(PopulatedDB):
+    def test_get_budgets(self):
+        response = self.client.get("/api/budgets/")
+        self.assertEqual(response.json["budgets"][0]["projectID"], 1)
+        self.assertEqual(response.json["budgets"][0]["numPeriods"], 1)
+        self.assertEqual(response.json["budgets"][0]["periodStart"], "2016-02-02")
+        self.assertEqual(response.json["budgets"][0]["periodEnd"], "2016-02-02")
+        self.assertEqual(response.json["budgets"][0]["periodTotal"], 1.23)
+        self.assertEqual(response.json["budgets"][0]["periodComment"], "comment")
+        
+    def test_get_budget(self):
+        response = self.client.get("/api/budgets/1/")
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["numPeriods"], 1)
+        self.assertEqual(response.json["periodStart"], "2016-02-02")
+        self.assertEqual(response.json["periodEnd"], "2016-02-02")
+        self.assertEqual(response.json["periodTotal"], 1.23)
+        self.assertEqual(response.json["periodComment"], "comment")
+        
+    def test_update_budget(self):
+        response = self.client.put("/api/budgets/1/",data = {
+            "projectID" : 2,
+            "numPeriods" : 2,
+            "periodStart" : "2016-02-03",
+            "periodEnd" : "2016-02-03",
+            "periodTotal" : 1.5,
+            "periodComment" : "comment Updated"
+        })
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["numPeriods"], 2)
+        self.assertEqual(response.json["periodStart"], "2016-02-03")
+        self.assertEqual(response.json["periodEnd"], "2016-02-03")
+        self.assertEqual(response.json["periodTotal"], 1.5)
+        self.assertEqual(response.json["periodComment"], "comment Updated")
+        
+    def test_delete_budget(self):
+        response = self.client.delete("/api/budgets/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "BudgetID 1 deleted")
+            
 class TestIRBHolder(PopulatedDB):
     def test_get_irb_holders(self):
         response = self.client.get("/api/irbholders/")
@@ -139,9 +175,6 @@ class TestIRBHolder(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
             
-##############################################################################
-# Project Tests
-##############################################################################
 class TestProject(PopulatedDB):   
     # test getting list of projects
     def test_get_projects(self):
@@ -219,9 +252,6 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ProjectID 1 deleted")
 
-##############################################################################
-# RCStatusList Tests
-##############################################################################
 class TestRCStatusList(PopulatedDB):
     def test_get_rcStatusList(self):
         response = self.client.get("/api/rcstatuslist/")
@@ -248,15 +278,64 @@ class TestRCStatusList(PopulatedDB):
         response = self.client.delete("/api/rcstatuslist/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "RCStatusListID 1 deleted")
+
+class TestReviewCommittee(PopulatedDB):
+    def test_get_review_committees(self):
+        response = self.client.get("/api/reviewcommittees/")
+        self.assertEqual(response.json['reviewCommittees'][0]["project_projectID"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["RCStatusList_rc_StatusID"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["reviewCommitteeList_rcListID"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["review_committee_number"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["date_initial_review"], "2016-02-02")
+        self.assertEqual(response.json['reviewCommittees'][0]["date_expires"], "2016-02-02")
+        self.assertEqual(response.json['reviewCommittees'][0]["rc_note"], "rc_note")
+        self.assertEqual(response.json['reviewCommittees'][0]["rc_protocol"], "rc_proto")
+        self.assertEqual(response.json['reviewCommittees'][0]["rc_approval"], "rc_approval")
         
-##############################################################################
-# ReviewCommitteList
-##############################################################################
+    def test_get_review_committees(self):
+        response = self.client.get("/api/reviewcommittees/1/")
+        self.assertEqual(response.json["project_projectID"], 1)
+        self.assertEqual(response.json["RCStatusList_rc_StatusID"], 1)
+        self.assertEqual(response.json["reviewCommitteeList_rcListID"], 1)
+        self.assertEqual(response.json["review_committee_number"], "1")
+        self.assertEqual(response.json["date_initial_review"], "2016-02-02")
+        self.assertEqual(response.json["date_expires"], "2016-02-02")
+        self.assertEqual(response.json["rc_note"], "rc_note")
+        self.assertEqual(response.json["rc_protocol"], "rc_proto")
+        self.assertEqual(response.json["rc_approval"], "rc_approval")
+        
+    def test_update_review_committee_list(self):
+        response = self.client.put("/api/reviewcommittees/1/", data = {
+            "project_projectID" : 2,
+            "RCStatusList_rc_StatusID": 2,
+            "reviewCommitteeList_rcListID": 2,
+            "review_committee_number":"2",
+            "date_initial_review":"2016-02-03",
+            "date_expires" : "2016-02-03",
+            "rc_note" : "rc_note Updated",
+            "rc_protocol" : "rc_proto Updated",
+            "rc_approval":"rc_approval Updated"
+        })
+        self.assertEqual(response.json["project_projectID"], 2)
+        self.assertEqual(response.json["RCStatusList_rc_StatusID"], 2)
+        self.assertEqual(response.json["reviewCommitteeList_rcListID"], 2)
+        self.assertEqual(response.json["review_committee_number"], "2")
+        self.assertEqual(response.json["date_initial_review"], "2016-02-03")
+        self.assertEqual(response.json["date_expires"], "2016-02-03")
+        self.assertEqual(response.json["rc_note"], "rc_note Updated")
+        self.assertEqual(response.json["rc_protocol"], "rc_proto Updated")
+        self.assertEqual(response.json["rc_approval"], "rc_approval Updated")
+        
+    def test_delete_review_committee(self):
+        response = self.client.delete("/api/reviewcommittees/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ReviewCommitteeID 1 deleted")
+        
 class TestReviewCommitteeList(PopulatedDB):
     def test_get_review_committee_lists(self):
         response = self.client.get("/api/reviewcommitteelist/")
-        self.assertEqual(response.json["ReviewCommitteeList"][0]["reviewCommittee"], "rc")
-        self.assertEqual(response.json["ReviewCommitteeList"][0]["rc_description"], "rc desc")
+        self.assertEqual(response.json["reviewCommitteeList"][0]["reviewCommittee"], "rc")
+        self.assertEqual(response.json["reviewCommitteeList"][0]["rc_description"], "rc desc")
         
     def test_get_review_committee_list(self):
         response = self.client.get("/api/reviewcommitteelist/1/")

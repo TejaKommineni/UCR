@@ -4,6 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from app.database import db
 from app.models import *
 
+def get_budgets():
+    return db.session.query(Budget).all()
+    
+def get_budget(id):
+    return db.session.query(Budget).filter_by(budgetID = id).first()
+
 def get_irb_holders():
     return db.session.query(IRBHolderLUT).all()
 
@@ -21,6 +27,12 @@ def get_rc_status(id):
     
 def get_rc_statuses():
     return db.session.query(RCStatusList).all()
+    
+def get_review_committees():
+    return db.session.query(ReviewCommittee).all()
+    
+def get_review_committee(id):
+    return db.session.query(ReviewCommittee).filter_by(reviewCommitteeID=id).first()
     
 def get_review_committee_list(id):
     return db.session.query(ReviewCommitteeList).filter_by(rcListID=id).first()

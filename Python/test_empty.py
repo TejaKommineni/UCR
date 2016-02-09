@@ -27,9 +27,7 @@ class BlankDB(TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-##############################################################################
-# Root Node Tests
-##############################################################################
+
 class TestRoot(BlankDB):        
     # Test the root node    
     def test_root(self):
@@ -39,11 +37,28 @@ class TestRoot(BlankDB):
             "endpoints" : [
                 "projects",
                 "staff"
-            ]})
-
-#############################################################################
-# IRB Holder Tests
-#############################################################################
+            ]})       
+            
+class TestBudget(BlankDB):
+    def test_empty_budget(self):
+        response = self.client.get("/api/budgets/")
+        self.assertEquals(response.json, {"budgets" : [] })
+        
+    def test_budget_no_id(self):
+        response = self.client.get('/api/budgets/1/')
+        self.assertEqual(response.json, {"Error" : "BudgetID 1 not found"})
+        
+    def test_create_budget(self):
+        response = self.client.post("/api/budgets/", data = {
+            "projectID" : 1,
+            "numPeriods" : 2,
+            "periodStart" : "2016-02-02",
+            "periodEnd" : "2016-02-02",
+            "periodTotal" : 1.2,
+            "periodComment" : "comment"
+        })
+        self.assertEqual(response.json, dict(budgetID=1))
+ 
 class TestIRBHolder(BlankDB):
     def test_empty_irb_holder(self):
         response = self.client.get("/api/irbholders/")
@@ -60,9 +75,6 @@ class TestIRBHolder(BlankDB):
             })
         self.assertEqual(response.json, dict(irbHolderID=1))
        
-##############################################################################
-# Project Tests
-##############################################################################   
 class TestProject(BlankDB):
     # Test for empty array of projects        
     def test_empty_projects(self):
@@ -95,9 +107,6 @@ class TestProject(BlankDB):
             "final_recruitment_report" : "report"})
         self.assertEqual(response.json,dict(projectID=1))
         
-##############################################################################
-# RCStatusList Tests
-##############################################################################
 class TestRCStatusList(BlankDB):
     # Test for empty RCStatusList
     def test_empty_rcStatusList(self):
@@ -114,14 +123,34 @@ class TestRCStatusList(BlankDB):
             "rc_status_definition" : "rc status def"
         })
         self.assertEqual(response.json, {"rcStatusListID": 1})
+
+class TestReviewCommittee(BlankDB):
+    def test_empty_review_committee(self):
+        response = self.client.get("/api/reviewcommittees/")
+        self.assertEqual(response.json, dict(reviewCommittees = []))
         
-##############################################################################
-# ReviewCommitteList Tests
-##############################################################################
+    def test_review_committee_no_id(self):
+        response = self.client.get("/api/reviewcommittees/1/")
+        self.assertEqual(response.json, {"Error": "ReviewCommitteeID 1 not found"})
+        
+    def test_create_review_committee(self):
+        response = self.client.post("/api/reviewcommittees/", data = {
+            "project_projectID" : 1,
+            "RCStatusList_rc_StatusID": 1,
+            "reviewCommitteeList_rcListID": 1,
+            "review_committee_number":"1",
+            "date_initial_review":"2016-02-02",
+            "date_expires" : "2016-02-02",
+            "rc_note" : "rc_note",
+            "rc_protocol" : "rc_proto",
+            "rc_approval":"rc_approval"
+        })
+        self.assertEqual(response.json, {"reviewCommitteeID" : 1})
+        
 class TestReviewCommitteeList(BlankDB):
     def test_empty_review_committee_lists(self):
         response = self.client.get("/api/reviewcommitteelist/")
-        self.assertEqual(response.json, dict(ReviewCommitteeList = []))
+        self.assertEqual(response.json, dict(reviewCommitteeList = []))
         
     def test_review_committee_list_no_id(self):
         response = self.client.get("/api/reviewcommitteelist/1/")

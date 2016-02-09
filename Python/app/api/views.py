@@ -119,6 +119,72 @@ def root():
         "staff"
     ]})
 
+    
+#############################################################################
+# Budget
+#############################################################################
+@api.route('/budgets/', methods = ['GET'])
+@api.route('/budgets/<int:budgetID>/', methods = ['GET'])
+def get_budget(budgetID = None):
+    if budgetID is None:
+        return jsonify(budgets = [i.dict() for i in query.get_budgets()])
+    else:
+        budget = query.get_budget(budgetID)
+        if budget is not None:
+            return budget.json()
+        else:
+            return item_not_found("BudgetID {} not found".format(budgetID))
+            
+@api.route('/budgets/<int:budgetID>/',methods = ['PUT'])
+def update_budget(budgetID):
+    budget = query.get_budget(budgetID)
+    if budget is not None:
+        try:
+            budget.projectID = request.form['projectID']
+            budget.numPeriods = request.form['numPeriods']
+            budget.periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d")
+            budget.periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d")
+            budget.periodTotal = request.form['periodTotal']
+            budget.periodComment = request.form['periodComment']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return budget.json()
+    else:
+        return item_not_found("BudgetID {} not found".format(budgetID))
+        
+@api.route('/budgets/',methods=['POST'])
+def create_budget():
+    try:
+        budget = models.Budget(
+            projectID = request.form['projectID'],
+            numPeriods = request.form['numPeriods'],
+            periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
+            periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
+            periodTotal = request.form['periodTotal'],
+            periodComment = request.form['periodComment']
+        )
+        ret = query.add(budget)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"budgetID" : budget.budgetID})
+    
+@api.route('/budgets/<int:budgetID>/', methods = ['DELETE'])
+def delete_budget(budgetID):
+    try:
+        budget = query.get_budget(budgetID)
+        if budget is not None:
+            query.delete(budget)
+            return item_deleted("BudgetID {} deleted".format(budgetID))
+        else:
+            return item_not_found("BudgetID {} not found".format(budgetID))
+    except Exception as e:
+        return internal_error(e)
+    
 ##############################################################################
 # IRBHolderLUT
 ##############################################################################
@@ -137,7 +203,6 @@ def get_irb_holder(irbHolderID=None):
 @api.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
 def update_irb_holder(irbHolderID):
     irb = query.get_irb_holder(irbHolderID)
-    print(irb)
     if irb is not None:
         try:
             irb.irb_holder = request.form['irb_holder']
@@ -323,6 +388,78 @@ def delete_rc_status_list(rcStatusID):
             return item_not_found("RCStatusListID {} not found".format(rcStatusID))
     except Exception as e:
         return internal_error(e)
+
+
+##############################################################################
+# ReviewCommittee
+##############################################################################
+@api.route('/reviewcommittees/', methods = ['GET'])
+@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['GET'])
+def get_review_committee(reviewCommitteeID = None):
+    if reviewCommitteeID is None:
+        return jsonify(reviewCommittees = [i.dict() for i in query.get_review_committees()])
+    else:
+        reviewCommittee = query.get_review_committee(reviewCommitteeID)
+        if reviewCommittee is not None:
+            return reviewCommittee.json()
+        else:
+            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
+ 
+@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['PUT'])
+def update_review_committee(reviewCommitteeID):
+    rc = query.get_review_committee(reviewCommitteeID)
+    if rc is not None:
+        try:
+            rc.project_projectID = request.form['project_projectID']
+            rc.RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID']
+            rc.reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID']
+            rc.review_committee_number = request.form['review_committee_number']
+            rc.date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d")
+            rc.date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d")
+            rc.rc_note = request.form['rc_note']
+            rc.rc_protocol = request.form['rc_protocol']
+            rc.rc_approval = request.form['rc_approval']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return rc.json()
+    else:
+        return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
+ 
+@api.route('/reviewcommittees/', methods = ['POST'])
+def create_review_committee():
+    try:
+        rc = models.ReviewCommittee(
+            project_projectID = request.form['project_projectID'],
+            RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID'],
+            reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID'],
+            review_committee_number = request.form['review_committee_number'],
+            date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d"),
+            date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d"),
+            rc_note = request.form['rc_note'],
+            rc_protocol = request.form['rc_protocol'],
+            rc_approval = request.form['rc_approval']
+        )
+        ret = query.add(rc)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
+    
+@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['DELETE'])
+def delete_review_committee(reviewCommitteeID):
+    try:
+        rc = query.get_review_committee(reviewCommitteeID)
+        if rc is not None:
+            query.delete(rc)
+            return item_deleted("ReviewCommitteeID {} deleted".format(reviewCommitteeID))
+        else:
+            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
+    except Exception as e:
+        return internal_error(e)
         
 ##############################################################################
 # Review CommitteeList
@@ -331,7 +468,7 @@ def delete_rc_status_list(rcStatusID):
 @api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['GET'])
 def get_review_committee_list(rcListID=None):
     if rcListID is None:
-        return jsonify(ReviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
+        return jsonify(reviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
     else:
         review_committee_list = query.get_review_committee_list(rcListID)
         if review_committee_list is not None:
