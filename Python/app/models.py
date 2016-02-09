@@ -1622,7 +1622,7 @@ class RCStatusList(CustomModel):
     rc_status_definition = db.Column(db.String)
     
     # Relationships
-    reviewCommittees = db.relationship("ReviewCommittee", back_populates="RCStatus")
+    reviewCommittees = db.relationship("ReviewCommittee", back_populates="RCStatusList")
     
     def __repr__(self):
         return "<RCStatusList(\
@@ -1651,7 +1651,7 @@ class ReviewCommittee(CustomModel):
     # 1- M, one project many review committees
     project = db.relationship("Project",foreign_keys=[project_projectID],back_populates="reviewCommittees")
     # M - 1, Many review committees per rcStatus
-    RCStatus = db.relationship("RCStatusList", foreign_keys=[RCStatusList_rc_StatusID], back_populates="reviewCommittees")
+    RCStatusList = db.relationship("RCStatusList", foreign_keys=[RCStatusList_rc_StatusID], back_populates="reviewCommittees")
     # M - 1, Many review committees per rcList
     reviewCommitteeList = db.relationship("ReviewCommitteeList",foreign_keys=[reviewCommitteeList_rcListID],back_populates="reviewCommittees")
         

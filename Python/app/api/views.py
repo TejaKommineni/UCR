@@ -101,6 +101,12 @@ def missing_params(e):
 def internal_error(e):
     return jsonify({"Error": str(e)}), 500
 
+def item_deleted(message):
+    return jsonify({
+        "Success": True,
+        "Message": str(message)
+        })
+    
 ##############################################################################
 # Root Node
 ##############################################################################    
@@ -114,14 +120,72 @@ def root():
     ]})
 
 ##############################################################################
+# IRBHolderLUT
+##############################################################################
+@api.route('/irbholders/',methods=['GET'])
+@api.route('/irbholders/<int:irbHolderID>/', methods = ['GET'])
+def get_irb_holder(irbHolderID=None):
+    if irbHolderID is None:
+        return jsonify(irbHolders = [i.dict() for i in query.get_irb_holders()])
+    else:
+        irb = query.get_irb_holder(irbHolderID)
+        if irb is not None:
+            return irb.json()
+        else:
+            return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+            
+@api.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
+def update_irb_holder(irbHolderID):
+    irb = query.get_irb_holder(irbHolderID)
+    print(irb)
+    if irb is not None:
+        try:
+            irb.irb_holder = request.form['irb_holder']
+            irb.irb_holder_definition = request.form['irb_holder_definition']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return irb.json()
+    else:
+        return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+        
+@api.route('/irbholders/', methods = ['POST'])
+def create_irb_holder():
+    try:
+        irb = models.IRBHolderLUT(
+            irb_holder = request.form['irb_holder'],
+            irb_holder_definition = request.form['irb_holder_definition']
+        )
+        ret = query.add(irb)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"irbHolderID":irb.irbHolderID})
+    
+@api.route('/irbholders/<int:irbHolderID>/',methods=['DELETE'])
+def delete_irb_holder(irbHolderID):
+    try:
+        irb = query.get_irb_holder(irbHolderID)
+        if irb is not None:
+            query.delete(irb)
+            return item_deleted("IrbHolderID {} deleted".format(irbHolderID))
+        else:
+            return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+    except Exception as e:
+        return internal_error(e)
+    
+##############################################################################
 # Project 
 ##############################################################################
 """ 
     Get project(s)
 """
 @api.route('/projects/', methods=['GET'])
-@api.route('/projects/<int:projectID>',methods = ['GET'])
-def get_roject(projectID=None):
+@api.route('/projects/<int:projectID>/',methods = ['GET'])
+def get_project(projectID=None):
     if projectID is None:
         return jsonify(projects = [i.dict() for i in query.get_projects()])
     else:
@@ -190,7 +254,19 @@ def create_project():
     except Exception as e:
        return internal_error(e)
     return jsonify({'projectID':proj.projectID})
-        
+
+@api.route('/projects/<int:projectID>/',methods = ['DELETE'])
+def delete_project(projectID):
+    try:
+        proj = query.get_project(projectID)
+        if proj is not None:
+            query.delete(proj)
+            return item_deleted("ProjectID {} deleted".format(projectID))
+        else:
+            return item_not_found("ProjectID {} not found".format(projectID))
+    except Exception as e:
+        return internal_error(e)
+    
 ##############################################################################
 # RCStatusList
 ##############################################################################
@@ -209,7 +285,6 @@ def get_rc_status_list(rcStatusID=None):
 @api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['PUT'])
 def update_rc_status_list(rcStatusID):
     rcStatus = query.get_rc_status(rcStatusID)
-    print(rcStatus)
     if rcStatus is not None:
         try:
             rcStatus.rc_status = request.form['rc_status']
@@ -234,6 +309,74 @@ def create_rc_status_list():
     except KeyError as e:
         return missing_params(e)
     except Exception as e:
-        return interal_error(e)
-    return jsonify({'RCStatusListID':rcStatus.rcStatusID})
+        return internal_error(e)
+    return jsonify({'rcStatusListID':rcStatus.rcStatusID})
 
+@api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['DELETE'])
+def delete_rc_status_list(rcStatusID):
+    try:
+        rcStatusList = query.get_rc_status(rcStatusID)
+        if rcStatusList is not None:
+            query.delete(rcStatusList)
+            return item_deleted("RCStatusListID {} deleted".format(rcStatusID))
+        else:
+            return item_not_found("RCStatusListID {} not found".format(rcStatusID))
+    except Exception as e:
+        return internal_error(e)
+        
+##############################################################################
+# Review CommitteeList
+##############################################################################
+@api.route('/reviewcommitteelist/', methods = ['GET'])
+@api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['GET'])
+def get_review_committee_list(rcListID=None):
+    if rcListID is None:
+        return jsonify(ReviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
+    else:
+        review_committee_list = query.get_review_committee_list(rcListID)
+        if review_committee_list is not None:
+            return review_committee_list.json()
+        else:
+            return item_not_found("RCListID {} not found".format(rcListID))
+            
+@api.route('/reviewcommitteelist/<int:rcListID>/',methods = ['PUT'])
+def update_review_committee_list(rcListID):
+    rcList = query.get_review_committee_list(rcListID)
+    if rcList is not None:
+        try:
+            rcList.reviewCommittee = request.form['reviewCommittee']
+            rcList.rc_description = request.form['rc_description']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return rcList.json()
+    else:
+        return item_not_found("RCListID {} not found".format(rcListID))
+        
+@api.route('/reviewcommitteelist/',methods = ['POST'])
+def create_review_committee_list():
+    try:
+        reviewCommitteeList = models.ReviewCommitteeList(
+            reviewCommittee = request.form['reviewCommittee'],
+            rc_description = request.form['rc_description']
+            )
+        ret = query.add(reviewCommitteeList)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'rcListID':reviewCommitteeList.rcListID})
+    
+@api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['DELETE'])
+def delete_review_committee_list(rcListID):
+    try:
+        reviewCommittee = query.get_rc_status(rcListID)
+        if reviewCommittee is not None:
+            query.delete(reviewCommittee)
+            return item_deleted("RCListID {} deleted".format(rcListID))
+        else:
+            return item_not_found("RCListID {} not found".format(rcListID))
+    except Exception as e:
+        return internal_error(e)
