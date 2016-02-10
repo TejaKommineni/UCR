@@ -38,11 +38,41 @@ class TestRoot(BlankDB):
                 "projects",
                 "staff"
             ]})       
+
+class TestArcReview(BlankDB):
+    def test_empty_arc_review(self):
+        response = self.client.get("/api/arcreviews/")
+        self.assertEqual(response.json, {"arcReviews" : []})
+        
+    def test_arc_review_no_id(self):
+        response = self.client.get("/api/arcreviews/1/")
+        self.assertEqual(response.json, {"Error" : "ArcReviewID 1 not found"})
+    
+    def test_create_arc_review(self):
+        response = self.client.post("/api/arcreviews/", data = {
+            "projectID" : 1,
+            "review_type" : 1,
+            "date_sent_to_reviewer" : "2016-02-02",
+            "reviewer1" : 1,
+            "reviewer1_rec" : 1,
+            "reviewer1_sig_date" : "2016-02-02",
+            "reviewer1_comments" : "test comment",
+            "reviewer2" : 2,
+            "reviewer2_rec"  :2 ,
+            "reviewer2_sig_date" : "2016-02-02",
+            "reviewer2_comments" : "2016-02-02",
+            "research" : 1,
+            "lnkage":False,
+            "contact" : True,
+            "engaged" : True,
+            "non_public_data" : True
+        })
+        self.assertEqual(response.json, {"arcReviewID" : 1})
             
 class TestBudget(BlankDB):
     def test_empty_budget(self):
         response = self.client.get("/api/budgets/")
-        self.assertEquals(response.json, {"budgets" : [] })
+        self.assertEqual(response.json, {"budgets" : [] })
         
     def test_budget_no_id(self):
         response = self.client.get('/api/budgets/1/')
@@ -162,6 +192,25 @@ class TestReviewCommitteeList(BlankDB):
             "rc_description" : "rc desc"
             })
         self.assertEqual(response.json, {"rcListID" : 1 })
+
+class TestUCRReport(BlankDB):
+    def test_empty_ucr_report(self):
+        response = self.client.get("/api/ucrreports/")
+        self.assertEqual(response.json, dict(ucrReports = []))
+        
+    def test_ucr_report_no_id(self):
+        response = self.client.get("/api/ucrreports/1/")
+        self.assertEqual(response.json, {"Error": "UcrReportID 1 not found"})
+        
+    def test_create_ucr_report(self):
+        response = self.client.post("/api/ucrreports/", data = {
+            "projectID" : 1,
+            "report_type" : 1,
+            "report_submitted" : "2016-02-02",
+            "report_due" : "2016-02-02",
+            "report_doc" : "doc"
+        })
+        self.assertEqual(response.json, {"ucrReportID" : 1})
         
 if __name__ == '__main__':
     unittest.main()

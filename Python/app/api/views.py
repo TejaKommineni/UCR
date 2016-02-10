@@ -120,6 +120,92 @@ def root():
     ]})
 
     
+##############################################################################
+# ArcReviews
+##############################################################################    
+@api.route('/arcreviews/', methods = ['GET'])
+@api.route('/arcreviews/<int:arcReviewID>/', methods = ['GET'])
+def get_arc_review(arcReviewID = None):
+    if arcReviewID is None:
+        return jsonify(arcReviews = [i.dict() for i in query.get_arc_reviews()])
+    else:
+        arcReview = query.get_arc_review(arcReviewID)
+        if arcReview is not None:
+            return arcReview.json()
+        else:
+            return item_not_found("ArcReviewID {} not found".format(arcReviewID))
+            
+@api.route('/arcreviews/<int:arcReviewID>/', methods = ['PUT'])
+def update_arc_review(arcReviewID):
+    arcReview = query.get_arc_review(arcReviewID)
+    if arcReviewID is not None:
+        try:
+            arcReview.projectID = request.form['projectID']
+            arcReview.review_type = request.form['review_type']
+            arcReview.date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d")
+            arcReview.reviewer1 = request.form['reviewer1']
+            arcReview.reviewer1_rec = request.form['reviewer1_rec']
+            arcReview.reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d")
+            arcReview.reviewer1_comments = request.form['reviewer1_comments']
+            arcReview.reviewer2 = request.form['reviewer2']
+            arcReview.reviewer2_rec = request.form['reviewer2_rec']
+            arcReview.reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d")
+            arcReview.reviewer2_comments = request.form['reviewer2_comments']
+            arcReview.research = request.form['research']
+            arcReview.contact = "true" == request.form['contact'].lower()
+            arcReview.contact = "true" == request.form['contact'].lower()
+            arcReview.lnkage = "true" == request.form['lnkage'].lower()
+            arcReview.engaged = "true" == request.form['engaged'].lower()
+            arcReview.non_public_data = "true" == request.form['non_public_data'].lower()
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return arcReview.json()
+    else:
+        return item_not_found("ArcReviewID {} not found".format(arcReviewID))
+        
+@api.route('/arcreviews/', methods = ['POST'])
+def create_arc_review():
+    try:
+        arcReview = models.ArcReview(
+            projectID = request.form['projectID'],
+            review_type = request.form['review_type'],
+            date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d"),
+            reviewer1 = request.form['reviewer1'],
+            reviewer1_rec = request.form['reviewer1_rec'],
+            reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d"),
+            reviewer1_comments = request.form['reviewer1_comments'],
+            reviewer2 = request.form['reviewer2'],
+            reviewer2_rec = request.form['reviewer2_rec'],
+            reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d"),
+            reviewer2_comments = request.form['reviewer2_comments'],
+            research = request.form['research'],
+            contact = "true" == request.form['contact'].lower(),
+            lnkage = "true" == request.form['lnkage'].lower(),
+            engaged = "true" == request.form['engaged'].lower(),
+            non_public_data = "true" == request.form['non_public_data'].lower()
+        )
+        ret = query.add(arcReview)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"arcReviewID" : arcReview.arcReviewID})
+    
+@api.route('/arcreviews/<int:arcReviewID>/', methods = ['DELETE'])
+def delete_arc_review(arcReviewID):
+    try:
+        arcReview = query.get_arc_review(arcReviewID)
+        if arcReview is not None:
+            query.delete(arcReview)
+            return item_deleted("ArcReviewID {} deleted".format(arcReviewID))
+        else:
+            return item_not_found("ArcReviewID {} not found".format(arcReviewID))
+    except Exception as e:
+        return interal_error(e)
+    
 #############################################################################
 # Budget
 #############################################################################
@@ -515,5 +601,67 @@ def delete_review_committee_list(rcListID):
             return item_deleted("RCListID {} deleted".format(rcListID))
         else:
             return item_not_found("RCListID {} not found".format(rcListID))
+    except Exception as e:
+        return internal_error(e)
+        
+##############################################################################
+# UCR Report
+##############################################################################
+@api.route('/ucrreports/', methods = ['GET'])
+@api.route('/ucrreports/<int:ucrReportID>/', methods = ['GET'])
+def get_ucr_report(ucrReportID=None):
+    if ucrReportID is None:
+        return jsonify(ucrReports = [i.dict() for i in query.get_ucr_reports()])
+    else:
+        ucr = query.get_ucr_report(ucrReportID)
+        if ucr is not None:
+            return ucr.json()
+        else:
+            return item_not_found("UcrReportID {} not found".format(ucrReportID))
+            
+@api.route('/ucrreports/<int:ucrReportID>/', methods = ['PUT'])
+def update_ucr_report(ucrReportID):
+    ucr = query.get_ucr_report(ucrReportID)
+    if ucr is not None:
+        try:
+            ucr.projectID = request.form['projectID']
+            ucr.report_type = request.form['report_type']
+            ucr.report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d")
+            ucr.report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d")
+            ucr.report_doc = request.form['report_doc']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return ucr.json()
+    else:
+        return item_not_found("UcrReportID {} not found.".format(ucrReportID))
+        
+@api.route('/ucrreports/', methods = ['POST'])
+def create_ucr_report():
+    try:
+        ucr = models.UCRReport(
+            projectID = request.form['projectID'],
+            report_type = request.form['report_type'],
+            report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d"),
+            report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d"),
+            report_doc = request.form['report_doc']
+        )
+        query.add(ucr)
+        query.commit()
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'ucrReportID': ucr.ucrReportID})
+    
+@api.route('/ucrreports/<int:ucrReportID>/',methods = ['DELETE'])
+def delete_ucr_report(ucrReportID):
+    try:
+        ucr = query.get_ucr_report(ucrReportID)
+        if ucr is not None:
+            query.delete(ucr)
+            return item_deleted("UcrReportID {} deleted".format(ucrReportID))
     except Exception as e:
         return internal_error(e)

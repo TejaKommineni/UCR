@@ -34,7 +34,7 @@ class PopulatedDB(TestCase):
             reviewer2 = 2,
             reviewer2_rec  =2 ,
             reviewer2_sig_date = datetime(2016,2,2),
-            reviewer2_comments = datetime(2016,2,2),
+            reviewer2_comments = "test comment",
             research = 1,
             lnkage=False,
             contact = True,
@@ -73,6 +73,14 @@ class PopulatedDB(TestCase):
             rc_note = "rc_note",
             rc_protocol = "rc_proto",
             rc_approval="rc_approval")
+            
+        ucr = models.UCRReport(
+            projectID = 1,
+            report_type= 1,
+            report_submitted= datetime(2016,2,2),
+            report_due= datetime(2016,2,2),
+            report_doc= "doc"
+        )
         
         rcsl = models.RCStatusList(
             rc_status = "Status 1",
@@ -97,6 +105,7 @@ class PopulatedDB(TestCase):
         p.reviewCommittees.append(rc)
         p.budgets.append(budget)
         p.arcReview = arcReview
+        p.ucrReports.append(ucr)
 
         db.session.add(p)
         db.session.commit()
@@ -111,6 +120,87 @@ class TestRoot(PopulatedDB):
                 "staff"
             ]})    
 
+class TestArcReview(PopulatedDB):
+    def test_get_arc_reviews(self):
+        response = self.client.get("/api/arcreviews/")
+        self.assertEqual(response.json["arcReviews"][0]["projectID"], 1)
+        self.assertEqual(response.json["arcReviews"][0]["review_type"], 1)
+        self.assertEqual(response.json["arcReviews"][0]["date_sent_to_reviewer"], "2016-02-02")
+        self.assertEqual(response.json["arcReviews"][0]["reviewer1"], 1)
+        self.assertEqual(response.json["arcReviews"][0]["reviewer1_rec"], 1)
+        self.assertEqual(response.json["arcReviews"][0]["reviewer1_sig_date"], "2016-02-02")
+        self.assertEqual(response.json["arcReviews"][0]["reviewer1_comments"], "test comment")
+        self.assertEqual(response.json["arcReviews"][0]["reviewer2"], 2)
+        self.assertEqual(response.json["arcReviews"][0]["reviewer2_rec"], 2)
+        self.assertEqual(response.json["arcReviews"][0]["reviewer2_sig_date"], "2016-02-02")
+        self.assertEqual(response.json["arcReviews"][0]["reviewer2_comments"], "test comment")
+        self.assertEqual(response.json["arcReviews"][0]["research"], 1)
+        self.assertEqual(response.json["arcReviews"][0]["contact"], True)
+        self.assertEqual(response.json["arcReviews"][0]["lnkage"], False)
+        self.assertEqual(response.json["arcReviews"][0]["engaged"], True)
+        self.assertEqual(response.json["arcReviews"][0]["non_public_data"], True)
+        
+    def test_get_arc_review(self):
+        response = self.client.get("/api/arcreviews/1/")
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["review_type"], 1)
+        self.assertEqual(response.json["date_sent_to_reviewer"], "2016-02-02")
+        self.assertEqual(response.json["reviewer1"], 1)
+        self.assertEqual(response.json["reviewer1_rec"], 1)
+        self.assertEqual(response.json["reviewer1_sig_date"], "2016-02-02")
+        self.assertEqual(response.json["reviewer1_comments"], "test comment")
+        self.assertEqual(response.json["reviewer2"], 2)
+        self.assertEqual(response.json["reviewer2_rec"], 2)
+        self.assertEqual(response.json["reviewer2_sig_date"], "2016-02-02")
+        self.assertEqual(response.json["reviewer2_comments"], "test comment")
+        self.assertEqual(response.json["research"], 1)
+        self.assertEqual(response.json["contact"], True)
+        self.assertEqual(response.json["lnkage"], False)
+        self.assertEqual(response.json["engaged"], True)
+        self.assertEqual(response.json["non_public_data"], True)
+        
+    def test_update_arc_review(self):
+        response = self.client.put("/api/arcreviews/1/", data = {
+            "projectID" : 2,
+            "review_type" : 2,
+            "date_sent_to_reviewer" : "2016-02-03",
+            "reviewer1" : 3,
+            "reviewer1_rec" : 3,
+            "reviewer1_sig_date" : "2016-02-03",
+            "reviewer1_comments" : "test comment Updated",
+            "reviewer2" : 4,
+            "reviewer2_rec"  :4 ,
+            "reviewer2_sig_date" : "2016-02-03",
+            "reviewer2_comments" : "test comment Updated",
+            "research" : 2,
+            "lnkage":True,
+            "contact" : False,
+            "engaged" : False,
+            "non_public_data" : False
+        })
+        print(response.json)
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["review_type"], 2)
+        self.assertEqual(response.json["date_sent_to_reviewer"], "2016-02-03")
+        self.assertEqual(response.json["reviewer1"], 3)
+        self.assertEqual(response.json["reviewer1_rec"], 3)
+        self.assertEqual(response.json["reviewer1_sig_date"], "2016-02-03")
+        self.assertEqual(response.json["reviewer1_comments"], "test comment Updated")
+        self.assertEqual(response.json["reviewer2"], 4)
+        self.assertEqual(response.json["reviewer2_rec"], 4)
+        self.assertEqual(response.json["reviewer2_sig_date"], "2016-02-03")
+        self.assertEqual(response.json["reviewer2_comments"], "test comment Updated")
+        self.assertEqual(response.json["research"], 2)
+        self.assertEqual(response.json["contact"], False)
+        self.assertEqual(response.json["lnkage"], True)
+        self.assertEqual(response.json["engaged"], False)
+        self.assertEqual(response.json["non_public_data"], False)
+        
+    def test_delete_arc_review(self):
+        response = self.client.delete("/api/arcreviews/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ArcReviewID 1 deleted")
+            
 class TestBudget(PopulatedDB):
     def test_get_budgets(self):
         response = self.client.get("/api/budgets/")
@@ -354,6 +444,45 @@ class TestReviewCommitteeList(PopulatedDB):
         response = self.client.delete("/api/reviewcommitteelist/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "RCListID 1 deleted")
+
+class TestUCRReport(PopulatedDB):
+    def test_get_ucr_report(self):
+        response = self.client.get("/api/ucrreports/")
+        self.assertEqual(response.json["ucrReports"][0]["projectID"],1)
+        self.assertEqual(response.json["ucrReports"][0]["report_type"],1)
+        self.assertEqual(response.json["ucrReports"][0]["report_submitted"],"2016-02-02")
+        self.assertEqual(response.json["ucrReports"][0]["report_due"],"2016-02-02")
+        self.assertEqual(response.json["ucrReports"][0]["report_doc"],"doc")
+        
+    def test_get_ucr_report(self):
+        response = self.client.get("/api/ucrreports/1/")
+        self.assertEqual(response.json["projectID"],1)
+        self.assertEqual(response.json["report_type"],1)
+        self.assertEqual(response.json["report_submitted"],"2016-02-02")
+        self.assertEqual(response.json["report_due"],"2016-02-02")
+        self.assertEqual(response.json["report_doc"],"doc")
+        
+    def test_update_ucr_report(self):
+        response = self.client.put("/api/ucrreports/1/", data = {
+            "projectID" : 2,
+            "report_type": 2,
+            "report_submitted": "2016-02-03",
+            "report_due": "2016-02-03",
+            "report_doc": "doc Updated"
+        })
+        print(response)
+        self.assertEqual(response.json["projectID"],2)
+        self.assertEqual(response.json["report_type"],2)
+        self.assertEqual(response.json["report_submitted"],"2016-02-03")
+        self.assertEqual(response.json["report_due"],"2016-02-03")
+        self.assertEqual(response.json["report_doc"],"doc Updated")
+        
+    def test_delete_ucr_report(self):
+        response = self.client.delete("/api/ucrreports/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "UcrReportID 1 deleted")
+        
+        
         
 if __name__ == '__main__':
     unittest.main()
