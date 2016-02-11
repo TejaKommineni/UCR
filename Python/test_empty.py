@@ -88,7 +88,66 @@ class TestBudget(BlankDB):
             "periodComment" : "comment"
         })
         self.assertEqual(response.json, dict(budgetID=1))
- 
+
+class TestFunding(BlankDB):
+
+    def test_empty_funding(self):
+        response = self.client.get("/api/fundings/")
+        self.assertEqual(response.json, dict(Fundings = []))
+   
+    def test_funding_no_id(self):
+        response = self.client.get("/api/fundings/1/")
+        self.assertEqual(response.json, {"Error" : "FundingID 1 not found"})
+
+    def test_create_funding(self):
+        response = self.client.post("/api/fundings/", data = {
+            "grantStatusLUTID": 1,
+            "projectID": 1,
+            "fundingSourceLUTID": 1,
+            "primary_funding_source" : "fs 1",
+            "secondary_funding_source": "fs 2",
+            "funding_number": "number",
+            "grant_title" : "title",
+            "grantStatusID" : 1,
+            "date_status" : "2016-02-02",
+            "grant_pi": 1,
+            "primary_chartfield" : "chartfield 1",
+            "secondary_chartfield" : "chartfield 2"
+        })
+        self.assertEqual(response.json, {"fundingID": 1})
+        
+class TestFundingSource(BlankDB):
+
+    def test_empty_funding_source(self):
+        response = self.client.get("/api/fundingsources/")
+        self.assertEqual(response.json, dict(FundingSources = []))
+   
+    def test_funding_source__no_id(self):
+        response = self.client.get("/api/fundingsources/1/")
+        self.assertEqual(response.json, {"Error" : "FundingSourceLUTID 1 not found"})
+
+    def test_create_funding_source(self):
+        response = self.client.post("/api/fundingsources/", data = {
+            "fundingSource" : "fs",
+        })
+        self.assertEqual(response.json, {"fundingSourceLUTID": 1})
+        
+class TestGrantStatus(BlankDB):
+
+    def test_empty_grant_status(self):
+        response = self.client.get("/api/grantstatuses/")
+        self.assertEqual(response.json, dict(GrantStatuses = []))
+   
+    def test_grant_status__no_id(self):
+        response = self.client.get("/api/grantstatuses/1/")
+        self.assertEqual(response.json, {"Error" : "GrantStatusLUTID 1 not found"})
+
+    def test_create_grant_status(self):
+        response = self.client.post("/api/grantstatuses/", data = {
+            "grant_status" : "status",
+        })
+        self.assertEqual(response.json, {"grantStatusLUTID": 1})
+        
 class TestIRBHolder(BlankDB):
     def test_empty_irb_holder(self):
         response = self.client.get("/api/irbholders/")
@@ -104,7 +163,7 @@ class TestIRBHolder(BlankDB):
             "irb_holder_definition" : "test holder def"
             })
         self.assertEqual(response.json, dict(irbHolderID=1))
-       
+        
 class TestProject(BlankDB):
     # Test for empty array of projects        
     def test_empty_projects(self):
@@ -136,7 +195,60 @@ class TestProject(BlankDB):
             "date_added" : "2016-02-02",
             "final_recruitment_report" : "report"})
         self.assertEqual(response.json,dict(projectID=1))
+
+class TestProjectStatus(BlankDB):
+    def test_empty_project_type(self):
+        response = self.client.get("/api/projectstatuses/")
+        self.assertEqual(response.json, dict(ProjectStatuses = []))
+   
+    def test_project_status_no_id(self):
+        response = self.client.get("/api/projectstatuses/1/")
+        self.assertEqual(response.json, {"Error" : "ProjectStatusID 1 not found"})
+
+    def test_create_project_statuse(self):
+        response = self.client.post("/api/projectstatuses/", data = {
+            "projectStatusLUTID" : 1,
+            "projectID" : 1,
+            "staffID" : 1,
+            "status_date" : "2016-02-02",
+            "status_notes" : "note"
+        })
+        self.assertEqual(response.json, {"projectStatusID": 1})
         
+class TestProjectStatusType(BlankDB):
+
+    def test_empty_project_status_type(self):
+        response = self.client.get("/api/projectstatustypes/")
+        self.assertEqual(response.json, dict(ProjectStatusTypes = []))
+   
+    def test_project_status_type_no_id(self):
+        response = self.client.get("/api/projectstatustypes/1/")
+        self.assertEqual(response.json, {"Error" : "ProjectStatusTypeID 1 not found"})
+
+    def test_create_project_status_type(self):
+        response = self.client.post("/api/projectstatustypes/", data = {
+            "project_status" : "Status 1",
+            "status_definition" : "status def"
+        })
+        self.assertEqual(response.json, {"projectStatusTypeID": 1})
+        
+class TestProjectType(BlankDB):
+
+    def test_empty_project_type(self):
+        response = self.client.get("/api/projecttypes/")
+        self.assertEqual(response.json, dict(ProjectTypes = []))
+   
+    def test_project_status__no_id(self):
+        response = self.client.get("/api/projecttypes/1/")
+        self.assertEqual(response.json, {"Error" : "ProjectTypeID 1 not found"})
+
+    def test_create_project_type(self):
+        response = self.client.post("/api/projecttypes/", data = {
+            "project_type" : 1,
+            "project_type_definition" : "type def"
+        })
+        self.assertEqual(response.json, {"projectTypeID": 1})
+ 
 class TestRCStatusList(BlankDB):
     # Test for empty RCStatusList
     def test_empty_rcStatusList(self):

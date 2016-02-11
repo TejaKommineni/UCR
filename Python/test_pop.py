@@ -106,7 +106,54 @@ class PopulatedDB(TestCase):
         p.budgets.append(budget)
         p.arcReview = arcReview
         p.ucrReports.append(ucr)
+        
+        funding = models.Funding(
+            grantStatusLUTID = 1,
+            projectID = 1,
+            fundingSourceLUTID = 1,
+            primary_funding_source = "pfs",
+            secondary_funding_source = "sfs",
+            funding_number = "number",
+            grant_title = "title",
+            grantStatusID = 1,
+            date_status = datetime(2016,2,2),
+            grant_pi = 1,
+            primary_chartfield = "pcf",
+            secondary_chartfield = "scf"
+        )
+        
+        fundingSourceLUT = models.FundingSourceLUT(
+            fundingSource = "fs"
+        )
+        
+        grantStatus = models.GrantStatusLUT(
+            grant_status = "status"
+        )
+        
+        projStatus = models.ProjectStatus(
+            projectStatusLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            status_date = datetime(2016,2,2),
+            status_notes = "notes"
+        
+        )
+        
+        projType = models.ProjectType(
+            project_type = "1",
+            project_type_definition = "type def"
+        )
+        
+        projStatusType = models.ProjectStatusLUT(
+            project_status = "Status 1",
+            status_definition = "status def",)
+        db.session.add(projStatusType)
 
+        db.session.add(funding)
+        db.session.add(fundingSourceLUT)
+        db.session.add(grantStatus)
+        db.session.add(projType)
+        db.session.add(projStatus)
         db.session.add(p)
         db.session.commit()
         
@@ -240,7 +287,119 @@ class TestBudget(PopulatedDB):
         response = self.client.delete("/api/budgets/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "BudgetID 1 deleted")
-            
+
+class TestFunding(PopulatedDB):
+    def test_get_fundings(self):
+        response = self.client.get("/api/fundings/")
+        self.assertEqual(response.json["Fundings"][0]["fundingID"], 1)
+        self.assertEqual(response.json["Fundings"][0]["grantStatusLUTID"], 1)
+        self.assertEqual(response.json["Fundings"][0]["projectID"], 1)
+        self.assertEqual(response.json["Fundings"][0]["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["Fundings"][0]["primary_funding_source"], "pfs")
+        self.assertEqual(response.json["Fundings"][0]["secondary_funding_source"], "sfs")
+        self.assertEqual(response.json["Fundings"][0]["funding_number"], "number")
+        self.assertEqual(response.json["Fundings"][0]["grant_title"], "title")
+        self.assertEqual(response.json["Fundings"][0]["grantStatusID"], 1)
+        self.assertEqual(response.json["Fundings"][0]["date_status"], "2016-02-02")
+        self.assertEqual(response.json["Fundings"][0]["grant_pi"], 1)
+        self.assertEqual(response.json["Fundings"][0]["primary_chartfield"], "pcf")
+        self.assertEqual(response.json["Fundings"][0]["secondary_chartfield"], "scf")
+
+    def test_get_funding(self):
+        response = self.client.get("/api/fundings/1/")
+        self.assertEqual(response.json["fundingID"], 1)
+        self.assertEqual(response.json["grantStatusLUTID"], 1)
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["primary_funding_source"], "pfs")
+        self.assertEqual(response.json["secondary_funding_source"], "sfs")
+        self.assertEqual(response.json["funding_number"], "number")
+        self.assertEqual(response.json["grant_title"], "title")
+        self.assertEqual(response.json["grantStatusID"], 1)
+        self.assertEqual(response.json["date_status"], "2016-02-02")
+        self.assertEqual(response.json["grant_pi"], 1)
+        self.assertEqual(response.json["primary_chartfield"], "pcf")
+        self.assertEqual(response.json["secondary_chartfield"], "scf")
+        
+    def test_update_funding(self):
+        response = self.client.put("/api/fundings/1/", data = {
+            "fundingID": 1,
+            "grantStatusLUTID": 2,
+            "projectID": 2,
+            "fundingSourceLUTID": 2,
+            "primary_funding_source": "pfs Updated",
+            "secondary_funding_source": "sfs Updated",
+            "funding_number": "number Updated",
+            "grant_title": "title Updated",
+            "grantStatusID": 2,
+            "date_status": "2016-02-03",
+            "grant_pi": 2,
+            "primary_chartfield": "pcf Updated",
+            "secondary_chartfield": "scf Updated"
+        })
+        self.assertEqual(response.json["fundingID"], 1)
+        self.assertEqual(response.json["grantStatusLUTID"], 2)
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["fundingSourceLUTID"], 2)
+        self.assertEqual(response.json["primary_funding_source"], "pfs Updated")
+        self.assertEqual(response.json["secondary_funding_source"], "sfs Updated")
+        self.assertEqual(response.json["funding_number"], "number Updated")
+        self.assertEqual(response.json["grant_title"], "title Updated")
+        self.assertEqual(response.json["grantStatusID"], 2)
+        self.assertEqual(response.json["date_status"], "2016-02-03")
+        self.assertEqual(response.json["grant_pi"], 2)
+        self.assertEqual(response.json["primary_chartfield"], "pcf Updated")
+        self.assertEqual(response.json["secondary_chartfield"], "scf Updated")
+        
+    def test_delete_funding(self):
+        response = self.client.delete("/api/fundings/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "FundingID 1 deleted")  
+        
+class TestFundingSource(PopulatedDB):
+    def test_get_funding_sources(self):
+        response = self.client.get("/api/fundingsources/")
+        self.assertEqual(response.json["FundingSources"][0]["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["FundingSources"][0]["fundingSource"], "fs")
+
+    def test_get_funding_source(self):
+        response = self.client.get("/api/fundingsources/1/")
+        self.assertEqual(response.json["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["fundingSource"], "fs") 
+        
+    def test_update_funding_source(self):
+        response = self.client.put("/api/fundingsources/1/", data = {
+            "fundingSource" : "fs Updated",
+        })
+        self.assertEqual(response.json["fundingSource"], "fs Updated")
+        
+    def test_delete_funding_source(self):
+        response = self.client.delete("/api/fundingsources/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "FundingSourceLUTID 1 deleted")             
+        
+class TestGrantStatus(PopulatedDB):
+    def test_get_grant_statuses(self):
+        response = self.client.get("/api/grantstatuses/")
+        self.assertEqual(response.json["GrantStatuses"][0]["grantStatusLUTID"], 1)
+        self.assertEqual(response.json["GrantStatuses"][0]["grant_status"], "status")
+
+    def test_get_grant_status(self):
+        response = self.client.get("/api/grantstatuses/1/")
+        self.assertEqual(response.json["grantStatusLUTID"], 1)
+        self.assertEqual(response.json["grant_status"], "status")
+        
+    def test_update_grant_status(self):
+        response = self.client.put("/api/grantstatuses/1/", data = {
+            "grant_status" : "status Updated",
+        })
+        self.assertEqual(response.json["grant_status"], "status Updated")
+        
+    def test_delete_grant_status(self):
+        response = self.client.delete("/api/grantstatuses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "GrantStatusLUTID 1 deleted")     
+        
 class TestIRBHolder(PopulatedDB):
     def test_get_irb_holders(self):
         response = self.client.get("/api/irbholders/")
@@ -264,7 +423,7 @@ class TestIRBHolder(PopulatedDB):
         response = self.client.delete("/api/irbholders/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
-            
+
 class TestProject(PopulatedDB):   
     # test getting list of projects
     def test_get_projects(self):
@@ -342,6 +501,93 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ProjectID 1 deleted")
 
+class TestProjectStatus(PopulatedDB):
+    def test_get_project_statuses(self):
+        response = self.client.get("/api/projectstatuses/")
+        self.assertEqual(response.json["ProjectStatuses"][0]["projectStatusLUTID"], 1)
+        self.assertEqual(response.json["ProjectStatuses"][0]["projectID"], 1)
+        self.assertEqual(response.json["ProjectStatuses"][0]["staffID"], 1)
+        self.assertEqual(response.json["ProjectStatuses"][0]["status_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectStatuses"][0]["status_notes"], "notes")
+        
+    def test_get_project_status(self):
+        response = self.client.get("/api/projectstatuses/1/")
+        self.assertEqual(response.json["projectStatusLUTID"], 1)
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["staffID"], 1)
+        self.assertEqual(response.json["status_date"], "2016-02-02")
+        self.assertEqual(response.json["status_notes"], "notes")
+        
+    def test_update_project_status(self):
+        response = self.client.put("/api/projectstatuses/1/", data = {
+            "projectStatusLUTID" : 2,
+            "projectID": 2,
+            "staffID" : 2,
+            "status_date" : "2016-02-03",
+            "status_notes": "notes Updated"
+        })
+        self.assertEqual(response.json["projectStatusLUTID"], 2)
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["staffID"], 2)
+        self.assertEqual(response.json["status_date"], "2016-02-03")
+        self.assertEqual(response.json["status_notes"], "notes Updated")
+        
+    def test_delete_project_status(self):
+        response = self.client.delete("/api/projectstatuses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ProjectStatusID 1 deleted")       
+        
+class TestProjectStatusType(PopulatedDB):
+    def test_get_project_status_types(self):
+        response = self.client.get("/api/projectstatustypes/")
+        self.assertEqual(response.json["ProjectStatusTypes"][0]["projectStatusTypeID"], 1)
+        self.assertEqual(response.json["ProjectStatusTypes"][0]["project_status"], "Status 1")
+        self.assertEqual(response.json["ProjectStatusTypes"][0]["status_definition"], "status def")
+        
+    def test_get_project_status_type(self):
+        response = self.client.get("/api/projectstatustypes/1/")
+        self.assertEqual(response.json["projectStatusTypeID"], 1)
+        self.assertEqual(response.json["project_status"], "Status 1")
+        self.assertEqual(response.json["status_definition"], "status def")
+        
+    def test_update_project_status_type(self):
+        response = self.client.put("/api/projectstatustypes/1/", data = {
+            "project_status" : "Status 1 Updated",
+            "status_definition" : "status def Updated"
+        })
+        self.assertEqual(response.json["projectStatusTypeID"], 1)
+        self.assertEqual(response.json["project_status"], "Status 1 Updated")
+        self.assertEqual(response.json["status_definition"], "status def Updated")
+        
+    def test_delete_project_status_type(self):
+        response = self.client.delete("/api/projectstatustypes/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ProjectStatusTypeID 1 deleted")            
+ 
+class TestProjectType(PopulatedDB):
+    def test_get_project_types(self):
+        response = self.client.get("/api/projecttypes/")
+        self.assertEqual(response.json["ProjectTypes"][0]["project_type"], "1")
+        self.assertEqual(response.json["ProjectTypes"][0]["project_type_definition"], "type def")
+        
+    def test_get_project_type(self):
+        response = self.client.get("/api/projecttypes/1/")
+        self.assertEqual(response.json["project_type"], "1")
+        self.assertEqual(response.json["project_type_definition"], "type def")
+        
+    def test_update_project_type(self):
+        response = self.client.put("/api/projecttypes/1/", data = {
+            "project_type" : "2",
+            "project_type_definition" : "type def Updated"
+        })
+        self.assertEqual(response.json["project_type"], "2")
+        self.assertEqual(response.json["project_type_definition"], "type def Updated")
+        
+    def test_delete_project_type(self):
+        response = self.client.delete("/api/projecttypes/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ProjectTypeID 1 deleted")      
+ 
 class TestRCStatusList(PopulatedDB):
     def test_get_rcStatusList(self):
         response = self.client.get("/api/rcstatuslist/")
@@ -368,7 +614,7 @@ class TestRCStatusList(PopulatedDB):
         response = self.client.delete("/api/rcstatuslist/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "RCStatusListID 1 deleted")
-
+                     
 class TestReviewCommittee(PopulatedDB):
     def test_get_review_committees(self):
         response = self.client.get("/api/reviewcommittees/")

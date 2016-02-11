@@ -16,6 +16,24 @@ def get_budgets():
 def get_budget(id):
     return db.session.query(Budget).filter_by(budgetID = id).first()
 
+def get_fundings():
+    return db.session.query(Funding).all()
+    
+def get_funding(id):
+    return db.session.query(Funding).filter_by(fundingID = id).first()
+    
+def get_funding_sources():
+    return db.session.query(FundingSourceLUT).all()
+    
+def get_funding_source(id):
+    return db.session.query(FundingSourceLUT).filter_by(fundingSourceLUTID = id).first()
+    
+def get_grant_statuses():
+    return db.session.query(GrantStatusLUT).all()
+    
+def get_grant_status(id):
+    return db.session.query(GrantStatusLUT).filter_by(grantStatusLUTID = id).first()
+    
 def get_irb_holders():
     return db.session.query(IRBHolderLUT).all()
 
@@ -27,6 +45,24 @@ def get_project(id):
     
 def get_projects():
     return db.session.query(Project).all()
+
+def get_project_statuses():
+    return db.session.query(ProjectStatus).all()
+    
+def get_project_status(id):
+    return db.session.query(ProjectStatus).filter_by(projectStatusID = id).first()
+    
+def get_project_status_luts():
+    return db.session.query(ProjectStatusLUT).all()
+    
+def get_project_status_lut(id):
+    return db.session.query(ProjectStatusLUT).filter_by(projectStatusTypeID = id).first()
+    
+def get_project_types():
+    return db.session.query(ProjectType).all()
+    
+def get_project_type(id):
+    return db.session.query(ProjectType).filter_by(projectTypeID=id).first()
     
 def get_rc_status(id):
     return db.session.query(RCStatusList).filter_by(rcStatusID=id).first()
