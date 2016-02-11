@@ -517,7 +517,94 @@ def delete_irb_holder(irbHolderID):
             return item_not_found("IrbHolderID {} not found".format(irbHolderID))
     except Exception as e:
         return internal_error(e)
-    
+
+##############################################################################
+# Patient
+##############################################################################
+@api.route('/patients/', methods=['GET'])
+@api.route('/patients/<int:patAutoID>/',methods = ['GET'])
+def get_patient(patAutoID=None):
+    if patAutoID is None:
+        return jsonify(Patients = [i.dict() for i in query.get_patients()])
+    else:
+        patient = query.get_patient(patAutoID)
+        if patient is not None:
+            return patient.json()
+        else:
+            return item_not_found("PatAutoID {} not found".format(patAutoID))
+
+@api.route('/patients/<int:patAutoID>/',methods = ['PUT'])
+def update_patient(patAutoID):
+    patient = query.get_patient(patAutoID)
+    if patient is not None:
+        try:
+            patient.patID = request.form['patID']
+            patient.recordID = request.form['recordID']
+            patient.ucrDistID = request.form['ucrDistID']
+            patient.UPDBID = request.form['UPDBID']
+            patient.fname = request.form['fname']
+            patient.lname = request.form['lname']
+            patient.middle_name = request.form['middle_name']
+            patient.maiden_name = request.form['maiden_name']
+            patient.alias_fname = request.form['alias_fname']
+            patient.alias_lname = request.form['alias_lname']
+            patient.alias_middle_name = request.form['alias_middle_name']
+            patient.dob = datetime.strptime(request.form['dob'],"%Y-%m-%d")
+            patient.SSN = request.form['SSN']
+            patient.sex = request.form['sex']
+            patient.race = request.form['race']
+            patient.ethnicity = request.form['ethnicity']
+            patient.vital_status = request.form['vital_status']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patient.json()
+    else:
+        return item_not_found("PatAutoID {} not found".format(patAutoID))
+
+@api.route('/patients/', methods=['POST'])
+def create_patient():
+    try:
+        patient = models.Patient(
+           patID = request.form['patID'],
+           recordID = request.form['recordID'],
+           ucrDistID = request.form['ucrDistID'],
+           UPDBID = request.form['UPDBID'],
+           fname = request.form['fname'],
+           lname = request.form['lname'],
+           middle_name = request.form['middle_name'],
+           maiden_name = request.form['maiden_name'],
+           alias_fname = request.form['alias_fname'],
+           alias_lname = request.form['alias_lname'],
+           alias_middle_name = request.form['alias_middle_name'],
+           dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
+           SSN = request.form['SSN'],
+           sex = request.form['sex'],
+           ethnicity = request.form['ethnicity'],
+           vital_status = request.form['vital_status']
+            )
+        ret = query.add(patient)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'patAutoID':patient.patAutoID})
+
+@api.route('/patients/<int:patAutoID>/',methods = ['DELETE'])
+def delete_patient(patAutoID):
+    try:
+        patient = query.get_patient(patAutoID)
+        if patient is not None:
+            query.delete(patient)
+            return item_deleted("PatAutoID {} deleted".format(patAutoID))
+        else:
+            return item_not_found("PatAutoID {} not found".format(patAutoID))
+    except Exception as e:
+        return internal_error(e)
+
+        
 ##############################################################################
 # Project 
 ##############################################################################

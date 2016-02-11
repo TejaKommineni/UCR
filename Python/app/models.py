@@ -6,6 +6,67 @@ from flask_sqlalchemy import SQLAlchemy
 from app.database import db
 from app.helpers import DateTimeEncoder
 
+STATES = db.Enum("AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
+            )
+RACES = db.Enum("white", "black")
+ETHNICITIES = db.Enum("hispanic", "non-hispanic")
+PHONE_SOURCES = db.Enum("s1", "s2")
+SEXES = db.Enum("male", "female")
+VITAL_STATUSES = db.Enum("v1","v2")
+CONTACTS = db.Enum("yes","no")
+INACTIVES = db.Enum("yes", "no")
+
+            
 """
     A base class that all models derive from
 """
@@ -363,7 +424,7 @@ class FacilityAddress(CustomModel):
     zip = db.Column(db.Integer)
     addresss_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(db.Enum)
+    address_status_source = db.Column(STATES)
     
     # Relationships
     # M - 1, many facilities can be at the same address
@@ -624,7 +685,7 @@ class InformantAddress(CustomModel):
     zip = db.Column(db.String)
     address_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(db.Enum)
+    address_status_source = db.Column(STATES)
     
     # Relationships
     # 1 - M, one informant may have multiple addresses
@@ -667,7 +728,7 @@ class InformantPhone(CustomModel):
     informantID = db.Column(db.Integer,db.ForeignKey("informant.informantID"))
     contactInfoStatusID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
     phone = db.Column(db.String)
-    phone_source = db.Column(db.Enum)
+    phone_source = db.Column(PHONE_SOURCES)
     phone_status = db.Column(db.Integer)
     phone_status_date = db.Column(db.Date)
     
@@ -768,10 +829,10 @@ class Patient(CustomModel):
     alias_middle_name = db.Column(db.String)
     dob = db.Column(db.Date)
     SSN = db.Column(db.Integer)
-    sex = db.Column(db.Enum)
-    race = db.Column(db.Enum)
-    ethnicity = db.Column(db.Enum)
-    vital_status = db.Column(db.Enum)
+    sex = db.Column(SEXES)
+    race = db.Column(RACES)
+    ethnicity = db.Column(ETHNICITIES)
+    vital_status = db.Column(VITAL_STATUSES)
     
     # Relationships
     # M - 1, many patients can be at the same address
@@ -838,7 +899,7 @@ class PatientAddress(CustomModel):
     zip = db.Column(db.Integer)
     addresss_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(db.Enum)
+    address_status_source = db.Column(STATES)
     
     # Relationships
     patients = db.relationship("Patient",back_populates="patientAddress")
@@ -917,7 +978,7 @@ class PatientPhone(CustomModel):
     patientID = db.Column(db.Integer,db.ForeignKey("patient.patAutoID"))
     contactInfoStatusID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
     phone = db.Column(db.String)
-    phone_source = db.Column(db.Enum)
+    phone_source = db.Column(PHONE_SOURCES)
     phone_status = db.Column(db.Integer)
     phone_status_date = db.Column(db.Date)
     
@@ -1075,7 +1136,7 @@ class PhysicianAddress(CustomModel):
     zip = db.Column(db.Integer)
     addresss_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(db.Enum)
+    address_status_source = db.Column(STATES)
     
     # Relationship
     # M - 1, many physicians can be at the same address
@@ -1146,7 +1207,7 @@ class PhysicianPhone(CustomModel):
     physicianID = db.Column(db.Integer,db.ForeignKey("physician.physicianID"))
     contactInfoStatusID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
     phone = db.Column(db.String)
-    phone_source = db.Column(db.Enum)
+    phone_source = db.Column(PHONE_SOURCES)
     phone_status = db.Column(db.Integer)
     phone_status_date = db.Column(db.Date)
     
@@ -1499,8 +1560,8 @@ class ProjectStaff(CustomModel):
     role = db.Column(db.Integer)
     date_pledge = db.Column(db.Date)
     date_revoked = db.Column(db.Date)
-    contact = db.Column(db.Enum)
-    inactive = db.Column(db.Enum)
+    contact = db.Column(CONTACTS)
+    inactive = db.Column(INACTIVES)
     human_sub_training_exp = db.Column(db.Date)
     human_sub_type_id = db.Column(db.Integer)
     study_role = db.Column(db.Integer)

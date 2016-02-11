@@ -130,6 +130,26 @@ class PopulatedDB(TestCase):
             grant_status = "status"
         )
         
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+        
         projStatus = models.ProjectStatus(
             projectStatusLUTID = 1,
             projectID = 1,
@@ -176,7 +196,7 @@ class PopulatedDB(TestCase):
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
         )        
-        
+        db.session.add(patient)
         db.session.add(projectPatient)
         db.session.add(projStatusType)
         db.session.add(funding)
@@ -452,6 +472,87 @@ class TestIRBHolder(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
 
+class TestPatient(PopulatedDB):
+    def test_get_patients(self):
+        response = self.client.get("/api/patients/")
+        self.assertEqual(response.json["Patients"][0]["patID"], "1")
+        self.assertEqual(response.json["Patients"][0]["recordID"], 1)
+        self.assertEqual(response.json["Patients"][0]["ucrDistID"], 1)
+        self.assertEqual(response.json["Patients"][0]["UPDBID"], 1)
+        self.assertEqual(response.json["Patients"][0]["fname"], "fname")
+        self.assertEqual(response.json["Patients"][0]["lname"], "lname")
+        self.assertEqual(response.json["Patients"][0]["maiden_name"], "maiden_name")
+        self.assertEqual(response.json["Patients"][0]["alias_fname"], "alias_fname")
+        self.assertEqual(response.json["Patients"][0]["alias_lname"], "alias_lname")
+        self.assertEqual(response.json["Patients"][0]["alias_middle_name"], "alias_middle")
+        self.assertEqual(response.json["Patients"][0]["dob"], "2016-02-02")
+        self.assertEqual(response.json["Patients"][0]["SSN"], 999999999)
+        self.assertEqual(response.json["Patients"][0]["sex"], "male")
+        self.assertEqual(response.json["Patients"][0]["race"], "white")
+        self.assertEqual(response.json["Patients"][0]["ethnicity"], "hispanic")
+        self.assertEqual(response.json["Patients"][0]["vital_status"], "v1")
+        
+    def test_get_patient(self):
+        response = self.client.get("/api/patients/1/")
+        self.assertEqual(response.json["patID"], "1")
+        self.assertEqual(response.json["recordID"], 1)
+        self.assertEqual(response.json["ucrDistID"], 1)
+        self.assertEqual(response.json["UPDBID"], 1)
+        self.assertEqual(response.json["fname"], "fname")
+        self.assertEqual(response.json["lname"], "lname")
+        self.assertEqual(response.json["maiden_name"], "maiden_name")
+        self.assertEqual(response.json["alias_fname"], "alias_fname")
+        self.assertEqual(response.json["alias_lname"], "alias_lname")
+        self.assertEqual(response.json["alias_middle_name"], "alias_middle")
+        self.assertEqual(response.json["dob"], "2016-02-02")
+        self.assertEqual(response.json["SSN"], 999999999)
+        self.assertEqual(response.json["sex"], "male")
+        self.assertEqual(response.json["race"], "white")
+        self.assertEqual(response.json["ethnicity"], "hispanic")
+        self.assertEqual(response.json["vital_status"], "v1")
+        
+    def test_update_patient(self):
+        response = self.client.put("/api/patients/1/", data = {
+            "patID" : "2",
+            "recordID" : 2,
+            "ucrDistID" : 2,
+            "UPDBID" : 2,
+            "fname" : "fname Updated",
+            "lname" : "lname Updated",
+            "middle_name" : "mname Updated",
+            "maiden_name" : "maiden_name Updated",
+            "alias_fname" : "alias_fname Updated",
+            "alias_lname" : "alias_lname Updated",
+            "alias_middle_name" : "alias_middle Updated",
+            "dob" : "2016-02-03",
+            "SSN" : "999999990",
+            "sex" : "female",
+            "race" : "black",
+            "ethnicity" : "non-hispanic",
+            "vital_status" : "v2"
+        })
+        self.assertEqual(response.json["patID"], "2")
+        self.assertEqual(response.json["recordID"], 2)
+        self.assertEqual(response.json["ucrDistID"], 2)
+        self.assertEqual(response.json["UPDBID"], 2)
+        self.assertEqual(response.json["fname"], "fname Updated")
+        self.assertEqual(response.json["lname"], "lname Updated")
+        self.assertEqual(response.json["maiden_name"], "maiden_name Updated")
+        self.assertEqual(response.json["alias_fname"], "alias_fname Updated")
+        self.assertEqual(response.json["alias_lname"], "alias_lname Updated")
+        self.assertEqual(response.json["alias_middle_name"], "alias_middle Updated")
+        self.assertEqual(response.json["dob"], "2016-02-03")
+        self.assertEqual(response.json["SSN"], 999999990)
+        self.assertEqual(response.json["sex"], "female")
+        self.assertEqual(response.json["race"], "black")
+        self.assertEqual(response.json["ethnicity"], "non-hispanic")
+        self.assertEqual(response.json["vital_status"], "v2")
+        
+    def test_delete_patient(self):
+        response = self.client.delete("/api/patients/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PatAutoID 1 deleted")      
+        
 class TestProject(PopulatedDB):   
     # test getting list of projects
     def test_get_projects(self):

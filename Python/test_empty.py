@@ -163,6 +163,37 @@ class TestIRBHolder(BlankDB):
             "irb_holder_definition" : "test holder def"
             })
         self.assertEqual(response.json, dict(irbHolderID=1))
+
+class TestPatient(BlankDB):
+    def test_empty_patients(self):
+        response = self.client.get("/api/patients/")
+        self.assertEqual(response.json, dict(Patients = []))
+   
+    def test_patient_no_id(self):
+        response = self.client.get("/api/patients/1/")
+        self.assertEqual(response.json, {"Error" : "PatAutoID 1 not found"})
+
+    def test_create_patient(self):
+        response = self.client.post("/api/patients/", data = {
+            "patID" : 1,
+            "recordID" : 1,
+            "ucrDistID" : 1,
+            "UPDBID" : 1,
+            "fname" : "fname",
+            "lname" : "lname",
+            "middle_name" : "mname",
+            "maiden_name" : "madien_name",
+            "alias_fname" : "alias_fname",
+            "alias_lname" : "alias_lname",
+            "alias_middle_name" : "alias_middle",
+            "dob" : "2016-02-02",
+            "SSN" : "999999999",
+            "sex" : "male",
+            "race" : "white",
+            "ethnicity" : "hispanic",
+            "vital_status" : "v1"
+        })
+        self.assertEqual(response.json, {"patAutoID": 1})
         
 class TestProject(BlankDB):
     # Test for empty array of projects        
