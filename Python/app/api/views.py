@@ -519,6 +519,63 @@ def delete_irb_holder(irbHolderID):
         return internal_error(e)
 
 ##############################################################################
+# Log Subject
+##############################################################################
+@api.route('/logsubjects/',methods=['GET'])
+@api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['GET'])
+def get_log_subject(logSubjectLUTID=None):
+    if logSubjectLUTID is None:
+        return jsonify(LogSubjects = [i.dict() for i in query.get_log_subjects()])
+    else:
+        logSubject = query.get_log_subject(logSubjectLUTID)
+        if logSubject is not None:
+            return logSubject.json()
+        else:
+            return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+            
+@api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['PUT'])
+def update_log_subject(logSubjectLUTID):
+    logSubject = query.get_log_subject(logSubjectLUTID)
+    if logSubject is not None:
+        try:
+            logSubject.log_subject = request.form['log_subject']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return logSubject.json()
+    else:
+        return item_not_found("logSubjectLUTID {} not found".format(logSubjectLUTID))
+        
+@api.route('/logsubjects/', methods = ['POST'])
+def create_log_subject():
+    try:
+        logSubject = models.LogSubjectLUT(
+            log_subject = request.form['log_subject']
+        )
+        ret = query.add(logSubject)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"logSubjectLUTID":logSubject.logSubjectLUTID})
+    
+@api.route('/logsubjects/<int:logSubjectLUTID>/',methods=['DELETE'])
+def delete_log_subject(logSubjectLUTID):
+    try:
+        logSubject = query.get_log_subject(logSubjectLUTID)
+        if logSubject is not None:
+            query.delete(logSubject)
+            return item_deleted("LogSubjectLUTID {} deleted".format(logSubjectLUTID))
+        else:
+            return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+    except Exception as e:
+        return internal_error(e)
+
+        
+        
+##############################################################################
 # Patient
 ##############################################################################
 @api.route('/patients/', methods=['GET'])

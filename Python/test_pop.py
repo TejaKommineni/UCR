@@ -102,6 +102,10 @@ class PopulatedDB(TestCase):
         pt = models.ProjectType(
             project_type = "Type 1",
             project_type_definition = "Def 1")
+            
+        logSubject = models.LogSubjectLUT(
+            log_subject = "subject"
+        )
         
         rc.RCStatusList = rcsl
         rc.reviewCommitteeList = rcl
@@ -201,6 +205,7 @@ class PopulatedDB(TestCase):
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
         )   
+        db.session.add(logSubject)
         db.session.add(phaseStatus)
         db.session.add(patient)
         db.session.add(projectPatient)
@@ -478,6 +483,27 @@ class TestIRBHolder(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
 
+class TestLogSubject(PopulatedDB):
+    def test_get_log_subjects(self):
+        response = self.client.get("/api/logsubjects/")
+        self.assertEqual(response.json["LogSubjects"][0]["log_subject"], "subject")
+        
+    def test_get_log_subject(self):
+        response = self.client.get("/api/logsubjects/1/")
+        self.assertEqual(response.json["log_subject"], "subject")
+        
+    def test_update_log_subject(self):
+        response = self.client.put("/api/logsubjects/1/", data = {
+            "log_subject" : "subject Updated",
+        })
+        self.assertEqual(response.json["log_subject"], "subject Updated")
+        
+    def test_delete_log_subject(self):
+        response = self.client.delete("/api/logsubjects/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "LogSubjectLUTID 1 deleted")       
+         
+        
 class TestPatient(PopulatedDB):
     def test_get_patients(self):
         response = self.client.get("/api/patients/")
