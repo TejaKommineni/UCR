@@ -45,6 +45,12 @@ def get_patients():
     
 def get_patient(id):
     return db.session.query(Patient).filter_by(patAutoID = id).first()
+
+def get_phase_statuses():
+    return db.session.query(PhaseStatus).all()
+    
+def get_phase_status(id):
+    return db.session.query(PhaseStatus).filter_by(logPhaseID=id).first()
     
 def get_project(id):
     return Project.query.filter_by(projectID=id).first()

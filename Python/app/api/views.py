@@ -604,6 +604,63 @@ def delete_patient(patAutoID):
     except Exception as e:
         return internal_error(e)
 
+##############################################################################
+# Phase Status
+##############################################################################
+@api.route('/phasestatuses/', methods = ['GET'])
+@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['GET'])
+def get_phase_status(logPhaseID=None):
+    if logPhaseID is None:
+        return jsonify(PhaseStatuses = [i.dict() for i in query.get_phase_statuses()])
+    else:
+        phaseStatus = query.get_phase_status(logPhaseID)
+        if phaseStatus is not None:
+            return phaseStatus.json()
+        else:
+            return item_not_found("LogPhaseID {} not found".format(logPhaseID))
+            
+@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['PUT'])
+def update_phase_status(logPhaseID):
+    phaseStatus = query.get_phase_status(logPhaseID)
+    if phaseStatus is not None:
+        try:
+            phaseStatus.phase_status = request.form['phase_status']
+            phaseStatus.phase_description = request.form['phase_description']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return phaseStatus.json()
+    else:
+        return item_not_found("LogPhaseID {} not found".format(logPhaseID)) 
+
+@api.route('/phasestatuses/', methods=['POST'])
+def create_phase_status():
+    try:
+        phaseStatus = models.PhaseStatus(
+            phase_status = request.form['phase_status'],
+            phase_description = request.form['phase_description']
+        )
+        ret = query.add(phaseStatus)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'logPhaseID':phaseStatus.logPhaseID})        
+
+@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['DELETE'])
+def delete_phase_status(logPhaseID):
+    try:
+        phaseStatus = query.get_phase_status(logPhaseID)
+        if phaseStatus is not None:
+            query.delete(phaseStatus)
+            return item_deleted("LogPhaseID {} deleted".format(logPhaseID))
+        else:
+            return item_not_found("LogPhaseID {} not found".format(logPhaseID))
+    except Exception as e:
+        return internal_error(e)
+    
         
 ##############################################################################
 # Project 

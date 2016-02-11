@@ -93,7 +93,12 @@ class PopulatedDB(TestCase):
         rcl = models.ReviewCommitteeList(
             reviewCommittee = "rc",
             rc_description = "rc desc")
-            
+        
+        phaseStatus = models.PhaseStatus(
+            phase_status = "status",
+            phase_description = "desc"
+        )
+        
         pt = models.ProjectType(
             project_type = "Type 1",
             project_type_definition = "Def 1")
@@ -195,7 +200,8 @@ class PopulatedDB(TestCase):
             med_record_release_date = datetime(2016,2,2),
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
-        )        
+        )   
+        db.session.add(phaseStatus)
         db.session.add(patient)
         db.session.add(projectPatient)
         db.session.add(projStatusType)
@@ -552,6 +558,30 @@ class TestPatient(PopulatedDB):
         response = self.client.delete("/api/patients/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "PatAutoID 1 deleted")      
+ 
+class TestPhaseStatus(PopulatedDB):
+    def test_get_phase_statuses(self):
+        response = self.client.get("/api/phasestatuses/")
+        self.assertEqual(response.json["PhaseStatuses"][0]["phase_status"], "status")
+        self.assertEqual(response.json["PhaseStatuses"][0]["phase_description"], "desc")
+        
+    def test_get_phase_status(self):
+        response = self.client.get("/api/phasestatuses/1/")
+        self.assertEqual(response.json["phase_status"], "status")
+        self.assertEqual(response.json["phase_description"], "desc")
+        
+    def test_update_phase_status(self):
+        response = self.client.put("/api/phasestatuses/1/", data = {
+            "phase_status" : "status Updated",
+            "phase_description": "desc Updated"
+        })
+        self.assertEqual(response.json["phase_status"], "status Updated")
+        self.assertEqual(response.json["phase_description"], "desc Updated")
+        
+    def test_delete_phase_status(self):
+        response = self.client.delete("/api/phasestatuses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "LogPhaseID 1 deleted")       
         
 class TestProject(PopulatedDB):   
     # test getting list of projects

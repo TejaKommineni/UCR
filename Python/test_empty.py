@@ -194,6 +194,23 @@ class TestPatient(BlankDB):
             "vital_status" : "v1"
         })
         self.assertEqual(response.json, {"patAutoID": 1})
+
+class TestPhaseStatus(BlankDB):
+    def test_empty_phase_status(self):
+        response = self.client.get("/api/phasestatuses/")
+        self.assertEqual(response.json, dict(PhaseStatuses = []))
+   
+    def test_phase_status_no_id(self):
+        response = self.client.get("/api/phasestatuses/1/")
+        self.assertEqual(response.json, {"Error" : "LogPhaseID 1 not found"})
+
+    def test_create_phase_status(self):
+        response = self.client.post("/api/phasestatuses/", data = {
+            "phase_status" : "status",
+            "phase_description" : "description"
+        })
+        self.assertEqual(response.json, {"logPhaseID": 1})
+           
         
 class TestProject(BlankDB):
     # Test for empty array of projects        
@@ -271,8 +288,7 @@ class TestProjectPatient(BlankDB):
             "survey_to_researcher_staff" : 1
         })
         self.assertEqual(response.json, {"participantID": 1})
-        
-        
+              
 class TestProjectStatus(BlankDB):
     def test_empty_project_status(self):
         response = self.client.get("/api/projectstatuses/")
