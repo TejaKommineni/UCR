@@ -107,6 +107,15 @@ class PopulatedDB(TestCase):
             log_subject = "subject"
         )
         
+        log = models.Log(
+            logSubjectLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            phaseStatusID = 1,
+            note = "note",
+            date = datetime(2016,2,2)
+        )
+        
         rc.RCStatusList = rcsl
         rc.reviewCommitteeList = rcl
         p.irbHolder = irb
@@ -204,7 +213,8 @@ class PopulatedDB(TestCase):
             med_record_release_date = datetime(2016,2,2),
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
-        )   
+        ) 
+        db.session.add(log)
         db.session.add(logSubject)
         db.session.add(phaseStatus)
         db.session.add(patient)
@@ -483,6 +493,46 @@ class TestIRBHolder(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
 
+class TestLog(PopulatedDB):
+    def test_get_logs(self):
+        response = self.client.get("/api/logs/")
+        self.assertEqual(response.json["Logs"][0]["logSubjectLUTID"],1)
+        self.assertEqual(response.json["Logs"][0]["projectID"],1)
+        self.assertEqual(response.json["Logs"][0]["staffID"],1)
+        self.assertEqual(response.json["Logs"][0]["phaseStatusID"],1)
+        self.assertEqual(response.json["Logs"][0]["note"],"note")
+        self.assertEqual(response.json["Logs"][0]["date"],"2016-02-02")
+        
+    def test_get_log(self):
+        response = self.client.get("/api/logs/1/")
+        self.assertEqual(response.json["logSubjectLUTID"],1)
+        self.assertEqual(response.json["projectID"],1)
+        self.assertEqual(response.json["staffID"],1)
+        self.assertEqual(response.json["phaseStatusID"],1)
+        self.assertEqual(response.json["note"],"note")
+        self.assertEqual(response.json["date"],"2016-02-02")
+        
+    def test_update_log(self):
+        response = self.client.put("/api/logs/1/", data = {
+            "logSubjectLUTID" : 2,
+            "projectID" : 2,
+            "staffID" : 2,
+            "phaseStatusID" : 2,
+            "note" : "note Updated",
+            "date" : "2016-02-03",
+        })
+        self.assertEqual(response.json["logSubjectLUTID"],2)
+        self.assertEqual(response.json["projectID"],2)
+        self.assertEqual(response.json["staffID"],2)
+        self.assertEqual(response.json["phaseStatusID"],2)
+        self.assertEqual(response.json["note"],"note Updated")
+        self.assertEqual(response.json["date"],"2016-02-03")
+        
+    def test_delete_log(self):
+        response = self.client.delete("/api/logs/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "LogID 1 deleted")  
+        
 class TestLogSubject(PopulatedDB):
     def test_get_log_subjects(self):
         response = self.client.get("/api/logsubjects/")

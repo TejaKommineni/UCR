@@ -757,8 +757,8 @@ class InformantPhone(CustomModel):
         self.phone_status,
         self.phoen_status_date)
         
-class Log_3(CustomModel):
-    __tablename__ = 'log_3'
+class Log(CustomModel):
+    __tablename__ = 'log'
     
     logID = db.Column(db.Integer, primary_key=True)
     logSubjectLUTID = db.Column(db.Integer, db.ForeignKey('logSubjectLUT.logSubjectLUTID'))
@@ -770,16 +770,16 @@ class Log_3(CustomModel):
     
     # Relationships
     # M - 1, many logs with the same subject
-    logSubject = db.relationship("LogSubjectLUT", back_populates="log_3s")
+    logSubject = db.relationship("LogSubjectLUT", back_populates="logs")
     # M - 1, many logs with the same subject
-    phaseStatus = db.relationship("PhaseStatus", back_populates="log_3s")
+    phaseStatus = db.relationship("PhaseStatus", back_populates="logs")
     # 1 - M, one staff with many logs
-    staff = db.relationship("Staff", back_populates="log_3s")
+    staff = db.relationship("Staff", back_populates="logs")
     # 1 - M, one project with many logs
-    project = db.relationship("Project",back_populates="log_3s")
+    project = db.relationship("Project",back_populates="logs")
     
     def __repr__(self):
-        return "<Log_3(\
+        return "<Log<(\
         logID = {},\
         logSubjectLUTID = {},\
         projectID = {},\
@@ -803,7 +803,7 @@ class LogSubjectLUT(CustomModel):
     
     # Relationships
     # M - 1, many logs with the same subject
-    log_3s = db.relationship("Log_3",back_populates="logSubject")
+    logs = db.relationship("Log",back_populates="logSubject")
     
     def __repr(self):
         return "<LogSubject(\
@@ -1055,7 +1055,7 @@ class PhaseStatus(CustomModel):
     
     # Relationships
     # M - 1, many logs with the same phase
-    log_3s = db.relationship("Log_3",back_populates="phaseStatus")
+    logs = db.relationship("Log",back_populates="phaseStatus")
     
     def __repr__(self):
         return "<PhaseStatus(\
@@ -1390,7 +1390,7 @@ class Project(CustomModel):
     # 1 - 1, one project, one preApp
     preApplication = db.relationship("PreApplication",uselist=False,back_populates = "project")
     # 1 - M, one project, many logs
-    log_3s = db.relationship("Log_3",back_populates="project")
+    logs = db.relationship("Log",back_populates="project")
     # 1 - M, one project, many fundings
     fundings = db.relationship("Funding",back_populates="project")
     # M - 1, many project staff can have the same project
@@ -1784,7 +1784,7 @@ class Staff(CustomModel):
     # 1 - M, one staff with many statuses
     projectStatuses = db.relationship("ProjectStatus",back_populates="staff")
     # 1 - M, one staff with many lgos
-    log_3s = db.relationship("Log_3",back_populates="staff")
+    logs = db.relationship("Log",back_populates="staff")
     # 1 - M, one staff with many trainings
     staffTraining = db.relationship('StaffTraining', back_populates="staff")
     # M - 1, many projectStaff to staff (people can be working on multiple projects)

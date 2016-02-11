@@ -519,6 +519,73 @@ def delete_irb_holder(irbHolderID):
         return internal_error(e)
 
 ##############################################################################
+# Log
+##############################################################################
+@api.route('/logs/',methods=['GET'])
+@api.route('/logs/<int:logID>/', methods = ['GET'])
+def get_log(logID=None):
+    if logID is None:
+        return jsonify(Logs = [i.dict() for i in query.get_logs()])
+    else:
+        log = query.get_log(logID)
+        if log is not None:
+            return log.json()
+        else:
+            return item_not_found("LogID {} not found".format(logID))
+            
+@api.route('/logs/<int:logID>/', methods = ['PUT'])
+def update_log(logID):
+    log = query.get_log(logID)
+    if log is not None:
+        try:
+            log.logSubjectLUTID = request.form['logSubjectLUTID']
+            log.projectID = request.form['projectID']
+            log.staffID = request.form['staffID']
+            log.phaseStatusID = request.form['phaseStatusID']
+            log.note = request.form['note']
+            log.date = datetime.strptime(request.form['date'],"%Y-%m-%d") 
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return log.json()
+    else:
+        return item_not_found("LogID {} not found".format(logID))
+        
+@api.route('/logs/', methods = ['POST'])
+def create_log():
+    try:
+        log  = models.Log(
+            logSubjectLUTID = request.form['logSubjectLUTID'],
+            projectID = request.form['projectID'],
+            staffID = request.form['staffID'],
+            phaseStatusID = request.form['phaseStatusID'],
+            note = request.form['note'],
+            date = datetime.strptime(request.form['date'],"%Y-%m-%d") 
+        )
+        ret = query.add(log)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"logID":log.logID})
+    
+@api.route('/logs/<int:logID>/',methods=['DELETE'])
+def delete_log(logID):
+    try:
+        log = query.get_log(logID)
+        if log is not None:
+            query.delete(log)
+            return item_deleted("LogID {} deleted".format(logID))
+        else:
+            return item_not_found("LogID {} not found".format(logID))
+    except Exception as e:
+        return internal_error(e)
+
+        
+        
+##############################################################################
 # Log Subject
 ##############################################################################
 @api.route('/logsubjects/',methods=['GET'])

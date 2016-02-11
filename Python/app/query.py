@@ -40,6 +40,12 @@ def get_irb_holders():
 def get_irb_holder(id):
     return db.session.query(IRBHolderLUT).filter_by(irbHolderID=id).first()
 
+def get_logs():
+    return db.session.query(Log).all()
+    
+def get_log(id):
+    return db.session.query(Log).filter_by(logID=id).first()
+    
 def get_log_subjects():
     return db.session.query(LogSubjectLUT).all()
     

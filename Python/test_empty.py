@@ -164,6 +164,27 @@ class TestIRBHolder(BlankDB):
             })
         self.assertEqual(response.json, dict(irbHolderID=1))
 
+class TestLog(BlankDB):
+    def test_empty_log(self):
+        response = self.client.get("/api/logs/")
+        self.assertEqual(response.json, {"Logs" : []})
+    
+    def test_log_no_id(self):
+        response = self.client.get("/api/logs/1/")
+        self.assertEqual(response.json, {"Error" : "LogID 1 not found"})
+        
+    def test_create_log(self):
+        response = self.client.post("/api/logs/", data = {
+            "logSubjectLUTID" : 1,
+            "projectID" : 1,
+            "staffID" : 1,
+            "phaseStatusID" : 1,
+            "note" : "note",
+            "date" : "2016-02-02"
+            })
+        self.assertEqual(response.json, dict(logID=1))
+
+        
 class TestLogSubject(BlankDB):
     def test_empty_log_subject(self):
         response = self.client.get("/api/logsubjects/")
