@@ -139,20 +139,49 @@ class PopulatedDB(TestCase):
         
         )
         
-        projType = models.ProjectType(
-            project_type = "1",
-            project_type_definition = "type def"
-        )
-        
         projStatusType = models.ProjectStatusLUT(
             project_status = "Status 1",
             status_definition = "status def",)
+            
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )        
+        
+        db.session.add(projectPatient)
         db.session.add(projStatusType)
-
         db.session.add(funding)
         db.session.add(fundingSourceLUT)
         db.session.add(grantStatus)
-        db.session.add(projType)
         db.session.add(projStatus)
         db.session.add(p)
         db.session.commit()
@@ -225,7 +254,6 @@ class TestArcReview(PopulatedDB):
             "engaged" : False,
             "non_public_data" : False
         })
-        print(response.json)
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["review_type"], 2)
         self.assertEqual(response.json["date_sent_to_reviewer"], "2016-02-03")
@@ -501,6 +529,150 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ProjectID 1 deleted")
 
+class TestProjectPatient(PopulatedDB):
+    def test_get_project_statuses(self):
+        response = self.client.get("/api/projectpatients/")
+        self.assertEqual(response.json["ProjectPatients"][0]["participantID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["projectID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["staffID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["ctcID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["current_age"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["batch"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["sitegrp"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["final_code"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["final_code_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["enrollment_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["date_coord_signed"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["import_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["final_code_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["enrollment_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["date_coord_signed_staff"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["abstract_status"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["abstract_status_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["abstract_status_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["sent_to_abstractor"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["sent_to_abstractor_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["abstracted_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["abstractor_initials"], "atp")
+        self.assertEqual(response.json["ProjectPatients"][0]["researcher_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["researcher_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["consent_link"], "link")
+        self.assertEqual(response.json["ProjectPatients"][0]["tracing_status"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["med_record_release_signed"], True)
+        self.assertEqual(response.json["ProjectPatients"][0]["med_record_release_link"], "link")
+        self.assertEqual(response.json["ProjectPatients"][0]["med_record_release_staff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["med_record_release_date"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["survey_to_researcher"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["survey_to_researcher_staff"], 1)
+
+        
+    def test_get_project_patient(self):
+        response = self.client.get("/api/projectpatients/1/")
+        self.assertEqual(response.json["participantID"], 1)
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["staffID"], 1)
+        self.assertEqual(response.json["ctcID"], 1)
+        self.assertEqual(response.json["current_age"], 1)
+        self.assertEqual(response.json["batch"], 1)
+        self.assertEqual(response.json["sitegrp"], 1)
+        self.assertEqual(response.json["final_code"], 1)
+        self.assertEqual(response.json["final_code_date"], "2016-02-02")
+        self.assertEqual(response.json["enrollment_date"], "2016-02-02")
+        self.assertEqual(response.json["date_coord_signed"], "2016-02-02")
+        self.assertEqual(response.json["import_date"], "2016-02-02")
+        self.assertEqual(response.json["final_code_staff"], 1)
+        self.assertEqual(response.json["enrollment_staff"], 1)
+        self.assertEqual(response.json["date_coord_signed_staff"], "2016-02-02")
+        self.assertEqual(response.json["abstract_status"], 1)
+        self.assertEqual(response.json["abstract_status_date"], "2016-02-02")
+        self.assertEqual(response.json["abstract_status_staff"], 1)
+        self.assertEqual(response.json["sent_to_abstractor"], "2016-02-02")
+        self.assertEqual(response.json["sent_to_abstractor_staff"], 1)
+        self.assertEqual(response.json["abstracted_date"], "2016-02-02")
+        self.assertEqual(response.json["abstractor_initials"], "atp")
+        self.assertEqual(response.json["researcher_date"], "2016-02-02")
+        self.assertEqual(response.json["researcher_staff"], 1)
+        self.assertEqual(response.json["consent_link"], "link")
+        self.assertEqual(response.json["tracing_status"], 1)
+        self.assertEqual(response.json["med_record_release_signed"], True)
+        self.assertEqual(response.json["med_record_release_link"], "link")
+        self.assertEqual(response.json["med_record_release_staff"], 1)
+        self.assertEqual(response.json["med_record_release_date"], "2016-02-02")
+        self.assertEqual(response.json["survey_to_researcher"], "2016-02-02")
+        self.assertEqual(response.json["survey_to_researcher_staff"], 1)
+        
+    def test_update_project_patient(self):
+        response = self.client.put("/api/projectpatients/1/", data = {
+            "projectID" : 2,
+            "staffID" : 2,
+            "ctcID" : 2,
+            "current_age" : 2,
+            "batch"  : 2,
+            "sitegrp" : 2,
+            "final_code" : 2,
+            "final_code_date" : "2016-02-03",
+            "enrollment_date" : "2016-02-03",
+            "date_coord_signed" : "2016-02-03",
+            "import_date" : "2016-02-03",
+            "final_code_staff" : 2,
+            "enrollment_staff" : 2,
+            "date_coord_signed_staff"  : "2016-02-03",
+            "abstract_status" : 2,
+            "abstract_status_date" : "2016-02-03",
+            "abstract_status_staff" : 2,
+            "sent_to_abstractor"  : "2016-02-03",
+            "sent_to_abstractor_staff" : 2,
+            "abstracted_date" : "2016-02-03",
+            "abstractor_initials" : "atp Updated",
+            "researcher_date" : "2016-02-03",
+            "researcher_staff" : 2,
+            "consent_link" : "link Updated",
+            "tracing_status" : 2,
+            "med_record_release_signed" : False,
+            "med_record_release_link" : "link Updated",
+            "med_record_release_staff" : 2,
+            "med_record_release_date"  : "2016-02-03",
+            "survey_to_researcher"  : "2016-02-03",
+            "survey_to_researcher_staff" : 2
+        })
+        self.assertEqual(response.json["participantID"], 1)
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["staffID"], 2)
+        self.assertEqual(response.json["ctcID"], 2)
+        self.assertEqual(response.json["current_age"], 2)
+        self.assertEqual(response.json["batch"], 2)
+        self.assertEqual(response.json["sitegrp"], 2)
+        self.assertEqual(response.json["final_code"], 2)
+        self.assertEqual(response.json["final_code_date"], "2016-02-03")
+        self.assertEqual(response.json["enrollment_date"], "2016-02-03")
+        self.assertEqual(response.json["date_coord_signed"], "2016-02-03")
+        self.assertEqual(response.json["import_date"], "2016-02-03")
+        self.assertEqual(response.json["final_code_staff"], 2)
+        self.assertEqual(response.json["enrollment_staff"], 2)
+        self.assertEqual(response.json["date_coord_signed_staff"], "2016-02-03")
+        self.assertEqual(response.json["abstract_status"], 2)
+        self.assertEqual(response.json["abstract_status_date"], "2016-02-03")
+        self.assertEqual(response.json["abstract_status_staff"], 2)
+        self.assertEqual(response.json["sent_to_abstractor"], "2016-02-03")
+        self.assertEqual(response.json["sent_to_abstractor_staff"], 2)
+        self.assertEqual(response.json["abstracted_date"], "2016-02-03")
+        self.assertEqual(response.json["abstractor_initials"], "atp Updated")
+        self.assertEqual(response.json["researcher_date"], "2016-02-03")
+        self.assertEqual(response.json["researcher_staff"], 2)
+        self.assertEqual(response.json["consent_link"], "link Updated")
+        self.assertEqual(response.json["tracing_status"], 2)
+        self.assertEqual(response.json["med_record_release_signed"], False)
+        self.assertEqual(response.json["med_record_release_link"], "link Updated")
+        self.assertEqual(response.json["med_record_release_staff"], 2)
+        self.assertEqual(response.json["med_record_release_date"], "2016-02-03")
+        self.assertEqual(response.json["survey_to_researcher"], "2016-02-03")
+        self.assertEqual(response.json["survey_to_researcher_staff"], 2)
+        
+    def test_delete_project_patient(self):
+        response = self.client.delete("/api/projectpatients/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ParticipantID 1 deleted")       
+             
 class TestProjectStatus(PopulatedDB):
     def test_get_project_statuses(self):
         response = self.client.get("/api/projectstatuses/")
@@ -567,13 +739,13 @@ class TestProjectStatusType(PopulatedDB):
 class TestProjectType(PopulatedDB):
     def test_get_project_types(self):
         response = self.client.get("/api/projecttypes/")
-        self.assertEqual(response.json["ProjectTypes"][0]["project_type"], "1")
-        self.assertEqual(response.json["ProjectTypes"][0]["project_type_definition"], "type def")
+        self.assertEqual(response.json["ProjectTypes"][0]["project_type"], "Type 1")
+        self.assertEqual(response.json["ProjectTypes"][0]["project_type_definition"], "Def 1")
         
     def test_get_project_type(self):
         response = self.client.get("/api/projecttypes/1/")
-        self.assertEqual(response.json["project_type"], "1")
-        self.assertEqual(response.json["project_type_definition"], "type def")
+        self.assertEqual(response.json["project_type"], "Type 1")
+        self.assertEqual(response.json["project_type_definition"], "Def 1")
         
     def test_update_project_type(self):
         response = self.client.put("/api/projecttypes/1/", data = {
@@ -716,7 +888,6 @@ class TestUCRReport(PopulatedDB):
             "report_due": "2016-02-03",
             "report_doc": "doc Updated"
         })
-        print(response)
         self.assertEqual(response.json["projectID"],2)
         self.assertEqual(response.json["report_type"],2)
         self.assertEqual(response.json["report_submitted"],"2016-02-03")

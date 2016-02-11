@@ -46,6 +46,12 @@ def get_project(id):
 def get_projects():
     return db.session.query(Project).all()
 
+def get_project_patients():
+    return db.session.query(ProjectPatient).all()
+    
+def get_project_patient(id):
+    return db.session.query(ProjectPatient).filter_by(participantID = id).first()
+    
 def get_project_statuses():
     return db.session.query(ProjectStatus).all()
     

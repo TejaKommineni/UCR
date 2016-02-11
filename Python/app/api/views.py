@@ -600,6 +600,122 @@ def delete_project(projectID):
         return internal_error(e)
 
 ##############################################################################
+# Project Patient
+##############################################################################
+@api.route('/projectpatients/', methods = ['GET'])
+@api.route('/projectpatients/<int:participantID>/', methods = ['GET'])
+def get_project_patient(participantID=None):
+    if participantID is None:
+        return jsonify(ProjectPatients = [i.dict() for i in query.get_project_patients()])
+    else:
+        projectPatient = query.get_project_patient(participantID)
+        if projectPatient is not None:
+            return projectPatient.json()
+        else:
+            return item_not_found("ParticipantID {} not found".format(participantID))
+            
+@api.route('/projectpatients/<int:participantID>/', methods = ['PUT'])
+def update_project_patient(participantID):
+    projectPatient = query.get_project_patient(participantID)
+    if projectPatient is not None:
+        try:
+            projectPatient.projectID = request.form['projectID']
+            projectPatient.staffID = request.form['staffID']
+            projectPatient.ctcID = request.form['ctcID']
+            projectPatient.current_age = request.form['current_age']
+            projectPatient.batch = request.form['batch']
+            projectPatient.sitegrp = request.form['sitegrp']
+            projectPatient.final_code = request.form['final_code']
+            projectPatient.final_code_date = datetime.strptime(request.form['final_code_date'],"%Y-%m-%d")
+            projectPatient.enrollment_date = datetime.strptime(request.form['enrollment_date'],"%Y-%m-%d")
+            projectPatient.date_coord_signed = datetime.strptime(request.form['date_coord_signed'],"%Y-%m-%d")
+            projectPatient.import_date = datetime.strptime(request.form['import_date'],"%Y-%m-%d")
+            projectPatient.final_code_staff = request.form['final_code_staff']
+            projectPatient.enrollment_staff = request.form['enrollment_staff']
+            projectPatient.date_coord_signed_staff = datetime.strptime(request.form['date_coord_signed_staff'],"%Y-%m-%d")
+            projectPatient.abstract_status = request.form['abstract_status']
+            projectPatient.abstract_status_date = datetime.strptime(request.form['abstract_status_date'],"%Y-%m-%d")
+            projectPatient.abstract_status_staff = request.form['abstract_status_staff']
+            projectPatient.sent_to_abstractor = datetime.strptime(request.form['sent_to_abstractor'],"%Y-%m-%d")
+            projectPatient.sent_to_abstractor_staff = request.form['sent_to_abstractor_staff']
+            projectPatient.abstracted_date = datetime.strptime(request.form['abstracted_date'],"%Y-%m-%d")
+            projectPatient.abstractor_initials = request.form['abstractor_initials']
+            projectPatient.researcher_date = datetime.strptime(request.form['researcher_date'],"%Y-%m-%d")
+            projectPatient.researcher_staff = request.form['researcher_staff']
+            projectPatient.consent_link = request.form['consent_link']
+            projectPatient.tracing_status = request.form['tracing_status']
+            projectPatient.med_record_release_signed = "true" == request.form['med_record_release_signed'].lower()
+            projectPatient.med_record_release_link = request.form['med_record_release_link']
+            projectPatient.med_record_release_staff = request.form['med_record_release_staff']
+            projectPatient.med_record_release_date =  datetime.strptime(request.form['med_record_release_date'],"%Y-%m-%d")
+            projectPatient.survey_to_researcher =  datetime.strptime(request.form['survey_to_researcher'],"%Y-%m-%d")
+            projectPatient.survey_to_researcher_staff = request.form['survey_to_researcher_staff']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return projectPatient.json()
+    else:
+        return item_not_found("ParticipantID {} not found".format(participantID)) 
+
+@api.route('/projectpatients/', methods=['POST'])
+def create_project_patient():
+    try:
+        projectPatient = models.ProjectPatient(
+            projectID = request.form['projectID'],
+            staffID = request.form['staffID'],
+            ctcID = request.form['ctcID'],
+            current_age = request.form['current_age'],
+            batch = request.form['batch'],
+            sitegrp = request.form['sitegrp'],
+            final_code = request.form['final_code'],
+            final_code_date = datetime.strptime(request.form['final_code_date'],"%Y-%m-%d"),
+            enrollment_date = datetime.strptime(request.form['enrollment_date'],"%Y-%m-%d"),
+            date_coord_signed = datetime.strptime(request.form['date_coord_signed'],"%Y-%m-%d"),
+            import_date = datetime.strptime(request.form['import_date'],"%Y-%m-%d"),
+            final_code_staff = request.form['final_code_staff'],
+            enrollment_staff = request.form['enrollment_staff'],
+            date_coord_signed_staff = datetime.strptime(request.form['date_coord_signed_staff'],"%Y-%m-%d"),
+            abstract_status = request.form['abstract_status'],
+            abstract_status_date = datetime.strptime(request.form['abstract_status_date'],"%Y-%m-%d"),
+            abstract_status_staff = request.form['abstract_status_staff'],
+            sent_to_abstractor = datetime.strptime(request.form['sent_to_abstractor'],"%Y-%m-%d"),
+            sent_to_abstractor_staff = request.form['sent_to_abstractor_staff'],
+            abstracted_date = datetime.strptime(request.form['abstracted_date'],"%Y-%m-%d"),
+            abstractor_initials = request.form['abstractor_initials'],
+            researcher_date = datetime.strptime(request.form['researcher_date'],"%Y-%m-%d"),
+            researcher_staff = request.form['researcher_staff'],
+            consent_link = request.form['consent_link'],
+            tracing_status = request.form['tracing_status'],
+            med_record_release_signed = "true" == request.form['med_record_release_signed'].lower(),
+            med_record_release_link = request.form['med_record_release_link'],
+            med_record_release_staff = request.form['med_record_release_staff'],
+            med_record_release_date =  datetime.strptime(request.form['med_record_release_date'],"%Y-%m-%d"),
+            survey_to_researcher =  datetime.strptime(request.form['survey_to_researcher'],"%Y-%m-%d"),
+            survey_to_researcher_staff = request.form['survey_to_researcher_staff']
+        )
+        ret = query.add(projectPatient)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'participantID':projectPatient.participantID})        
+
+@api.route('/projectpatients/<int:participantID>/', methods = ['DELETE'])
+def delete_project_patient(participantID):
+    try:
+        projectPatient = query.get_project_patient(participantID)
+        if projectPatient is not None:
+            query.delete(projectPatient)
+            return item_deleted("ParticipantID {} deleted".format(participantID))
+        else:
+            return item_not_found("ParticipantID {} not found".format(participantID))
+    except Exception as e:
+        return internal_error(e)
+    
+        
+##############################################################################
 # Project Status
 ##############################################################################
 @api.route('/projectstatuses/', methods = ['GET'])

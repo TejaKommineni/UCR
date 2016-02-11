@@ -196,8 +196,54 @@ class TestProject(BlankDB):
             "final_recruitment_report" : "report"})
         self.assertEqual(response.json,dict(projectID=1))
 
+class TestProjectPatient(BlankDB):
+    def test_empty_project_patient(self):
+        response = self.client.get("/api/projectpatients/")
+        self.assertEqual(response.json, dict(ProjectPatients = []))
+   
+    def test_project_patient_no_id(self):
+        response = self.client.get("/api/projectpatients/1/")
+        self.assertEqual(response.json, {"Error" : "ParticipantID 1 not found"})
+
+    def test_create_project_patient(self):
+        response = self.client.post("/api/projectpatients/", data = {
+            "projectID" : 1,
+            "staffID" : 1,
+            "ctcID" : 1,
+            "current_age" : 1,
+            "batch"  : 1,
+            "sitegrp" : 1,
+            "final_code" : 1,
+            "final_code_date" : "2016-02-02",
+            "enrollment_date" : "2016-02-02",
+            "date_coord_signed" : "2016-02-02",
+            "import_date" : "2016-02-02",
+            "final_code_staff" : 1,
+            "enrollment_staff" : 1,
+            "date_coord_signed_staff"  : "2016-02-02",
+            "abstract_status" : 1,
+            "abstract_status_date" : "2016-02-02",
+            "abstract_status_staff" : 1,
+            "sent_to_abstractor"  : "2016-02-02",
+            "sent_to_abstractor_staff" : 1,
+            "abstracted_date" : "2016-02-02",
+            "abstractor_initials" : "atp",
+            "researcher_date" : "2016-02-02",
+            "researcher_staff" : 1,
+            "consent_link" : "consent",
+            "tracing_status" : 1,
+            "med_record_release_signed" : True,
+            "med_record_release_link" : "link",
+            "med_record_release_staff" : 1,
+            "med_record_release_date"  : "2016-02-02",
+            "survey_to_researcher"  : "2016-02-02",
+            "survey_to_researcher_staff" : 1
+        })
+        self.assertEqual(response.json, {"participantID": 1})
+        
+        
 class TestProjectStatus(BlankDB):
-    def test_empty_project_type(self):
+    def test_empty_project_status(self):
         response = self.client.get("/api/projectstatuses/")
         self.assertEqual(response.json, dict(ProjectStatuses = []))
    
@@ -205,7 +251,7 @@ class TestProjectStatus(BlankDB):
         response = self.client.get("/api/projectstatuses/1/")
         self.assertEqual(response.json, {"Error" : "ProjectStatusID 1 not found"})
 
-    def test_create_project_statuse(self):
+    def test_create_project_status(self):
         response = self.client.post("/api/projectstatuses/", data = {
             "projectStatusLUTID" : 1,
             "projectID" : 1,

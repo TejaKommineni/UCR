@@ -1391,7 +1391,7 @@ class ProjectPatient(CustomModel):
     enrollment_staff = db.Column(db.Integer) #FK?
     date_coord_signed_staff = db.Column(db.Date)
     abstract_status = db.Column(db.Integer)
-    abstarct_status_date = db.Column(db.Date)
+    abstract_status_date = db.Column(db.Date)
     abstract_status_staff = db.Column(db.Integer) # FK?
     sent_to_abstractor = db.Column(db.Date)
     sent_to_abstractor_staff = db.Column(db.Integer) # FK
@@ -1402,7 +1402,7 @@ class ProjectPatient(CustomModel):
     consent_link = db.Column(db.String)
     tracing_status = db.Column(db.Integer)
     med_record_release_signed = db.Column(db.Boolean)
-    med_record_relase_link = db.Column(db.String)
+    med_record_release_link = db.Column(db.String)
     med_record_release_staff = db.Column(db.Integer) # FK
     med_record_release_date = db.Column(db.Date)
     survey_to_researcher = db.Column(db.Date)
