@@ -865,7 +865,74 @@ def delete_patient_email(emailID):
             return item_not_found("EmailID {} not found".format(emailID))
     except Exception as e:
         return internal_error(e)
-                
+
+##############################################################################
+# Patient Phone
+##############################################################################
+@api.route('/patientphones/', methods=['GET'])
+@api.route('/patientphones/<int:patPhoneID>/',methods = ['GET'])
+def get_patient_phone(patPhoneID=None):
+    if patPhoneID is None:
+        return jsonify(PatientPhones = [i.dict() for i in query.get_patient_phones()])
+    else:
+        patientPhone = query.get_patient_phone(patPhoneID)
+        if patientPhone is not None:
+            return patientPhone.json()
+        else:
+            return item_not_found("PatPhoneID {} not found".format(patPhoneID))
+
+@api.route('/patientphones/<int:patPhoneID>/',methods = ['PUT'])
+def update_patient_phone(patPhoneID):
+    patientPhone = query.get_patient_phone(patPhoneID)
+    if patientPhone is not None:
+        try:
+            patientPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            patientPhone.patientID = request.form['patientID']
+            patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
+            patientPhone.phone = request.form['phone']  
+            patientPhone.phone_source = request.form['phone_source']  
+            patientPhone.phone_status = request.form['phone_status']  
+            patientPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patientPhone.json()
+    else:
+        return item_not_found("PatPhoneID {} not found".format(patPhoneID))
+
+@api.route('/patientphones/', methods=['POST'])
+def create_patient_phone():
+    try:
+        patientPhone = models.PatientPhone(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            patientID = request.form['patientID'],
+            contactInfoStatusID = request.form['contactInfoStatusID'],
+            phone = request.form['phone'],
+            phone_source = request.form['phone_source'],
+            phone_status = request.form['phone_status'], 
+            phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            )
+        ret = query.add(patientPhone)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'patPhoneID':patientPhone.patPhoneID})
+
+@api.route('/patientphones/<int:patPhoneID>/',methods = ['DELETE'])
+def delete_patient_phone(patPhoneID):
+    try:
+        patientPhone = query.get_patient_phone(patPhoneID)
+        if patientPhone is not None:
+            query.delete(patientPhone)
+            return item_deleted("PatPhoneID {} deleted".format(patPhoneID))
+        else:
+            return item_not_found("PatPhoneID {} not found".format(patPhoneID))
+    except Exception as e:
+        return internal_error(e)
+                 
         
 ##############################################################################
 # Phase Status

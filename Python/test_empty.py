@@ -275,6 +275,28 @@ class TestPatientEmail(BlankDB):
             "email_status_date" : "2016-02-02"
         })
         self.assertEqual(response.json, {"emailID": 1})
+
+class TestPatientPhone(BlankDB):         
+    def test_empty_patient_phone(self):
+        response = self.client.get("/api/patientphones/")
+        self.assertEqual(response.json, dict(PatientPhones = []))
+   
+    def test_patient_phone_no_id(self):
+        response = self.client.get("/api/patientphones/1/")
+        self.assertEqual(response.json, {"Error" : "PatPhoneID 1 not found"})
+
+    def test_create_phone_phone(self):
+        response = self.client.post("/api/patientphones/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "patientID" : 1,
+            "contactInfoStatusID" : 1,
+            "phone" : "phone",
+            "phone_status" : 1,
+            "phone_source" : "s1",
+            "phone_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"patPhoneID": 1})
+        
         
 class TestPhaseStatus(BlankDB):
     def test_empty_phase_status(self):
