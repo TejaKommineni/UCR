@@ -725,6 +725,149 @@ def delete_patient(patAutoID):
         return internal_error(e)
 
 ##############################################################################
+# Patient Address
+##############################################################################
+@api.route('/patientaddresses/', methods=['GET'])
+@api.route('/patientaddresses/<int:patAddressID>/',methods = ['GET'])
+def get_patient_address(patAddressID=None):
+    if patAddressID is None:
+        return jsonify(PatientAddresses = [i.dict() for i in query.get_patient_addresses()])
+    else:
+        patientaddress = query.get_patient_address(patAddressID)
+        if patientaddress is not None:
+            return patientaddress.json()
+        else:
+            return item_not_found("PatAddressID {} not found".format(patAddressID))
+
+@api.route('/patientaddresses/<int:patAddressID>/',methods = ['PUT'])
+def update_patient_address(patAddressID):
+    patientAddress = query.get_patient_address(patAddressID)
+    if patientAddress is not None:
+        try:
+            patientAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            patientAddress.patientID = request.form['patientID']
+            patientAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+            patientAddress.street = request.form['street']
+            patientAddress.street2 = request.form['street2']
+            patientAddress.city = request.form['city']
+            patientAddress.state = request.form['state']
+            patientAddress.zip = request.form['zip']
+            patientAddress.address_status = request.form['address_status']
+            patientAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
+            patientAddress.address_status_source = request.form['address_status_source']          
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patientAddress.json()
+    else:
+        return item_not_found("PatAddressID {} not found".format(patAddressID))
+
+@api.route('/patientaddresses/', methods=['POST'])
+def create_patient_address():
+    try:
+        patientaddress = models.PatientAddress(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            patientID = request.form['patientID'],
+            contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+            street = request.form['street'],
+            street2 = request.form['street2'],
+            city = request.form['city'],
+            state = request.form['state'],
+            zip = request.form['zip'],
+            address_status = request.form['address_status'],
+            address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
+            address_status_source = request.form['address_status_source']  
+            )
+        ret = query.add(patientaddress)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'patAddressID':patientaddress.patAddressID})
+
+@api.route('/patientaddresses/<int:patAddressID>/',methods = ['DELETE'])
+def delete_patient_address(patAddressID):
+    try:
+        patientaddress = query.get_patient_address(patAddressID)
+        if patientaddress is not None:
+            query.delete(patientaddress)
+            return item_deleted("PatAddressID {} deleted".format(patAddressID))
+        else:
+            return item_not_found("PatAddressID {} not found".format(patAddressID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Patient Email
+##############################################################################
+@api.route('/patientemails/', methods=['GET'])
+@api.route('/patientemails/<int:emailID>/',methods = ['GET'])
+def get_patient_email(emailID=None):
+    if emailID is None:
+        return jsonify(PatientEmails = [i.dict() for i in query.get_patient_emails()])
+    else:
+        patientEmail = query.get_patient_email(emailID)
+        if patientEmail is not None:
+            return patientEmail.json()
+        else:
+            return item_not_found("EmailID {} not found".format(emailID))
+
+@api.route('/patientemails/<int:emailID>/',methods = ['PUT'])
+def update_patient_email(emailID):
+    patientEmail = query.get_patient_email(emailID)
+    if patientEmail is not None:
+        try:
+            patientEmail.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            patientEmail.patientID = request.form['patientID']
+            patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']  
+            patientEmail.email = request.form['email']  
+            patientEmail.email_status = request.form['email_status']  
+            patientEmail.email_source = request.form['email_source']  
+            patientEmail.email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patientEmail.json()
+    else:
+        return item_not_found("EmailID {} not found".format(emailID))
+
+@api.route('/patientemails/', methods=['POST'])
+def create_patient_email():
+    try:
+        patientEmail = models.PatientEmail(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            patientID = request.form['patientID'],
+            contactInfoStatusID = request.form['contactInfoStatusID'],
+            email = request.form['email'],
+            email_status = request.form['email_status'],
+            email_source = request.form['email_source'], 
+            email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
+            )
+        ret = query.add(patientEmail)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'emailID':patientEmail.emailID})
+
+@api.route('/patientemails/<int:emailID>/',methods = ['DELETE'])
+def delete_patient_email(emailID):
+    try:
+        patientEmail = query.get_patient_email(emailID)
+        if patientEmail is not None:
+            query.delete(patientEmail)
+            return item_deleted("EmailID {} deleted".format(emailID))
+        else:
+            return item_not_found("EmailID {} not found".format(emailID))
+    except Exception as e:
+        return internal_error(e)
+                
+        
+##############################################################################
 # Phase Status
 ##############################################################################
 @api.route('/phasestatuses/', methods = ['GET'])

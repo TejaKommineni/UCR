@@ -230,6 +230,52 @@ class TestPatient(BlankDB):
         })
         self.assertEqual(response.json, {"patAutoID": 1})
 
+class TestPatientAddress(BlankDB):         
+    def test_empty_patient_address(self):
+        response = self.client.get("/api/patientaddresses/")
+        self.assertEqual(response.json, dict(PatientAddresses = []))
+   
+    def test_patient_address_no_id(self):
+        response = self.client.get("/api/patientaddresses/1/")
+        self.assertEqual(response.json, {"Error" : "PatAddressID 1 not found"})
+
+    def test_create_patient_address(self):
+        response = self.client.post("/api/patientaddresses/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "patientID" : 1,
+            "contactInfoStatusLUTID" : 1,
+            "street" : "street",
+            "street2" : "street2",
+            "city" : "city",
+            "state" : "state",
+            "zip" : "zip",
+            "address_status" : 1,
+            "address_status_date" : "2016-02-02",
+            "address_status_source" : "s1"
+        })
+        self.assertEqual(response.json, {"patAddressID": 1})
+
+class TestPatientEmail(BlankDB):         
+    def test_empty_patient_email(self):
+        response = self.client.get("/api/patientemails/")
+        self.assertEqual(response.json, dict(PatientEmails = []))
+   
+    def test_patient_email_no_id(self):
+        response = self.client.get("/api/patientemails/1/")
+        self.assertEqual(response.json, {"Error" : "EmailID 1 not found"})
+
+    def test_create_patient_email(self):
+        response = self.client.post("/api/patientemails/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "patientID" : 1,
+            "contactInfoStatusID" : 1,
+            "email" : "email",
+            "email_status" : 1,
+            "email_source" : 1,
+            "email_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"emailID": 1})
+        
 class TestPhaseStatus(BlankDB):
     def test_empty_phase_status(self):
         response = self.client.get("/api/phasestatuses/")

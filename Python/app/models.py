@@ -65,6 +65,7 @@ SEXES = db.Enum("male", "female")
 VITAL_STATUSES = db.Enum("v1","v2")
 CONTACTS = db.Enum("yes","no")
 INACTIVES = db.Enum("yes", "no")
+ADDRESS_STATUS_SOURCE = db.Enum("s1", "s2")
 
             
 """
@@ -424,7 +425,7 @@ class FacilityAddress(CustomModel):
     zip = db.Column(db.Integer)
     addresss_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(STATES)
+    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
     # Relationships
     # M - 1, many facilities can be at the same address
@@ -685,7 +686,7 @@ class InformantAddress(CustomModel):
     zip = db.Column(db.String)
     address_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(STATES)
+    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
     # Relationships
     # 1 - M, one informant may have multiple addresses
@@ -897,9 +898,9 @@ class PatientAddress(CustomModel):
     city = db.Column(db.String)
     state = db.Column(db.String)
     zip = db.Column(db.Integer)
-    addresss_status = db.Column(db.Integer)
+    address_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(STATES)
+    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
     # Relationships
     patients = db.relationship("Patient",back_populates="patientAddress")
@@ -1136,7 +1137,7 @@ class PhysicianAddress(CustomModel):
     zip = db.Column(db.Integer)
     addresss_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(STATES)
+    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
     # Relationship
     # M - 1, many physicians can be at the same address

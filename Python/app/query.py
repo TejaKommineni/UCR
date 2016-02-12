@@ -58,6 +58,18 @@ def get_patients():
 def get_patient(id):
     return db.session.query(Patient).filter_by(patAutoID = id).first()
 
+def get_patient_addresses():
+    return db.session.query(PatientAddress).all()
+    
+def get_patient_address(id):
+    return db.session.query(PatientAddress).filter_by(patAddressID = id).first()
+
+def get_patient_emails():
+    return db.session.query(PatientEmail).all()
+    
+def get_patient_email(id):
+    return db.session.query(PatientEmail).filter_by(emailID = id).first()
+    
 def get_phase_statuses():
     return db.session.query(PhaseStatus).all()
     
