@@ -183,7 +183,6 @@ class TestLog(BlankDB):
             "date" : "2016-02-02"
             })
         self.assertEqual(response.json, dict(logID=1))
-
         
 class TestLogSubject(BlankDB):
     def test_empty_log_subject(self):
@@ -246,8 +245,48 @@ class TestPhaseStatus(BlankDB):
             "phase_description" : "description"
         })
         self.assertEqual(response.json, {"logPhaseID": 1})
-           
-        
+
+class TestPreApplication(BlankDB):         
+    def test_empty_pre_application(self):
+        response = self.client.get("/api/preapplications/")
+        self.assertEqual(response.json, dict(PreApplications = []))
+   
+    def test_pre_application_no_id(self):
+        response = self.client.get("/api/preapplications/1/")
+        self.assertEqual(response.json, {"Error" : "PreApplicationID 1 not found"})
+
+    def test_create_pre_application(self):
+        response = self.client.post("/api/preapplications/", data = {
+            "projectID" : 1,
+            "pi_fname" : "pi_fname",
+            "pi_lname" : "pi_lname",
+            "pi_email" : "pi_email",
+            "pi_phone" : "pi_phone",
+            "contact_fname" : "contact_fname",
+            "contact_lname" : "contact_lname",
+            "contact_phone" : "contact_phone",
+            "contact_email" : "contact_email",
+            "institution" : "institution",
+            "institution2" : "institution2",
+            "uid" : "uid",
+            "udoh" : 1,
+            "project_title" : "project_title",
+            "purpose" : "purpose",
+            "irb0" : True,
+            "irb1" : True,
+            "irb2" : True,
+            "irb3" : True,
+            "irb4" : True,
+            "other_irb" : "other_irb",
+            "updb" : True,
+            "pt_contact" : True,
+            "start_date" : "2016-02-02",
+            "link" : True,
+            "delivery_date" : "2016-02-02",
+            "description" : "description"
+        })
+        self.assertEqual(response.json, {"preApplicationID": 1})
+                
 class TestProject(BlankDB):
     # Test for empty array of projects        
     def test_empty_projects(self):
@@ -324,7 +363,32 @@ class TestProjectPatient(BlankDB):
             "survey_to_researcher_staff" : 1
         })
         self.assertEqual(response.json, {"participantID": 1})
-              
+
+class TestProjectStaff(BlankDB):
+    def test_empty_project_staff(self):
+        response = self.client.get("/api/projectstaff/")
+        self.assertEqual(response.json, {"ProjectStaff" : []})
+    
+    def test_project_staff_no_id(self):
+        response = self.client.get("/api/projectstaff/1/")
+        self.assertEqual(response.json, {"Error" : "ProjectStaffID 1 not found"})
+        
+    def test_create_project_staff(self):
+        response = self.client.post("/api/projectstaff/", data = {
+            "staffRoleLUTID" : 1,
+            "projectID" : 1,
+            "staffID" : 1,
+            "role" : 1,
+            "date_pledge" : "2016-02-02",
+            "date_revoked" : "2016-02-02",
+            "contact" : "yes",
+            "inactive" : "no",
+            "human_sub_training_exp" : "2016-02-02",
+            "human_sub_type_id" : 1,
+            "study_role" : 1
+            })
+        self.assertEqual(response.json, dict(projectStaffID=1))
+        
 class TestProjectStatus(BlankDB):
     def test_empty_project_status(self):
         response = self.client.get("/api/projectstatuses/")

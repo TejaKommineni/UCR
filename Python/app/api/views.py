@@ -582,8 +582,6 @@ def delete_log(logID):
             return item_not_found("LogID {} not found".format(logID))
     except Exception as e:
         return internal_error(e)
-
-        
         
 ##############################################################################
 # Log Subject
@@ -639,9 +637,7 @@ def delete_log_subject(logSubjectLUTID):
             return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
     except Exception as e:
         return internal_error(e)
-
-        
-        
+    
 ##############################################################################
 # Patient
 ##############################################################################
@@ -785,6 +781,114 @@ def delete_phase_status(logPhaseID):
     except Exception as e:
         return internal_error(e)
     
+##############################################################################
+# PreApplication
+##############################################################################
+@api.route('/preapplications/', methods = ['GET'])
+@api.route('/preapplications/<int:preApplicationID>/', methods = ['GET'])
+def get_pre_application(preApplicationID=None):
+    if preApplicationID is None:
+        return jsonify(PreApplications = [i.dict() for i in query.get_pre_applications()])
+    else:
+        preApplication = query.get_pre_application(preApplicationID)
+        if preApplication is not None:
+            return preApplication.json()
+        else:
+            return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+            
+@api.route('/preapplications/<int:preApplicationID>/', methods = ['PUT'])
+def update_pre_application(preApplicationID):
+    preApplication = query.get_pre_application(preApplicationID)
+    print("test")
+    if preApplication is not None:
+        try:
+            preApplication.projectID = request.form['projectID']
+            preApplication.pi_fname = request.form['pi_fname']
+            preApplication.pi_lname = request.form['pi_lname']
+            preApplication.pi_phone = request.form['pi_phone']
+            preApplication.pi_email = request.form['pi_email']
+            preApplication.contact_fname = request.form['contact_fname']
+            preApplication.contact_lname = request.form['contact_lname']
+            preApplication.contact_phone = request.form['contact_phone']
+            preApplication.contact_email = request.form['contact_email']
+            preApplication.institution = request.form['institution']
+            preApplication.institution2 = request.form['institution2']
+            preApplication.uid = request.form['uid']
+            preApplication.udoh = request.form['udoh']
+            preApplication.project_title = request.form['project_title']
+            preApplication.purpose = request.form['purpose']
+            preApplication.irb0 = "true" == request.form['irb0'].lower()
+            preApplication.irb1 = "true" == request.form['irb1'].lower()
+            preApplication.irb2 = "true" == request.form['irb2'].lower()
+            preApplication.irb3 = "true" == request.form['irb3'].lower()
+            preApplication.irb4 = "true" == request.form['irb4'].lower()
+            preApplication.other_irb = request.form['other_irb']
+            preApplication.updb = "true" == request.form['updb'].lower()
+            preApplication.pt_contact = "true" == request.form['pt_contact'].lower()
+            preApplication.start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d")
+            preApplication.link = "true" == request.form['link'].lower()
+            preApplication.delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d")
+            preApplication.description = request.form['description']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return preApplication.json()
+    else:
+        return item_not_found("PreApplicationID {} not found".format(preApplicationID)) 
+
+@api.route('/preapplications/', methods=['POST'])
+def create_pre_application():
+    try:
+        preApplication = models.PreApplication(
+            projectID = request.form['projectID'],
+            pi_fname = request.form['pi_fname'],
+            pi_lname = request.form['pi_lname'],
+            pi_phone = request.form['pi_phone'],
+            pi_email = request.form['pi_email'],
+            contact_fname = request.form['contact_fname'],
+            contact_lname = request.form['contact_lname'],
+            contact_phone = request.form['contact_phone'],
+            contact_email = request.form['contact_email'],
+            institution = request.form['institution'],
+            institution2 = request.form['institution2'],
+            uid = request.form['uid'],
+            udoh = request.form['udoh'],
+            project_title = request.form['project_title'],
+            purpose = request.form['purpose'],
+            irb0 = "true" == request.form['irb0'].lower(),
+            irb1 = "true" == request.form['irb1'].lower(),
+            irb2 = "true" == request.form['irb2'].lower(),
+            irb3 = "true" == request.form['irb3'].lower(),
+            irb4 = "true" == request.form['irb4'].lower(),
+            other_irb = request.form['other_irb'],
+            updb = "true" == request.form['updb'].lower(),
+            pt_contact = "true" == request.form['pt_contact'].lower(),
+            start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d"),
+            link = "true" == request.form['link'].lower(),
+            delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d"),
+            description = request.form['description']
+        )
+        ret = query.add(preApplication)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'preApplicationID':preApplication.preApplicationID})        
+
+@api.route('/preapplications/<int:preApplicationID>/', methods = ['DELETE'])
+def delete_pre_application(preApplicationID):
+    try:
+        preApplication = query.get_pre_application(preApplicationID)
+        if preApplication is not None:
+            query.delete(preApplication)
+            return item_deleted("PreApplicationID {} deleted".format(preApplicationID))
+        else:
+            return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+    except Exception as e:
+        return internal_error(e)
+         
         
 ##############################################################################
 # Project 
@@ -982,7 +1086,81 @@ def delete_project_patient(participantID):
     except Exception as e:
         return internal_error(e)
     
-        
+##############################################################################
+# Project Staff
+##############################################################################
+@api.route('/projectstaff/', methods = ['GET'])
+@api.route('/projectstaff/<int:projectStaffID>/', methods = ['GET'])
+def get_project_staff(projectStaffID=None):
+    if projectStaffID is None:
+        return jsonify(ProjectStaff = [i.dict() for i in query.get_project_staffs()])
+    else:
+        projectStaff = query.get_project_staff(projectStaffID)
+        if projectStaff is not None:
+            return projectStaff.json()
+        else:
+            return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
+            
+@api.route('/projectstaff/<int:projectStaffID>/', methods = ['PUT'])
+def update_project_staff(projectStaffID):
+    projectStaff = query.get_project_staff(projectStaffID)
+    if projectStaff is not None:
+        try:
+            projectStaff.staffRoleLUTID = request.form['staffRoleLUTID']
+            projectStaff.projectID = request.form['projectID']
+            projectStaff.staffID = request.form['staffID']
+            projectStaff.role = request.form['role']
+            projectStaff.date_pledge = datetime.strptime(request.form['date_pledge'],"%Y-%m-%d")
+            projectStaff.date_revoked = datetime.strptime(request.form['date_revoked'],"%Y-%m-%d")
+            projectStaff.contact = request.form['contact']
+            projectStaff.inactive = request.form['inactive']
+            projectStaff.human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d")
+            projectStaff.human_sub_type_id = request.form['human_sub_type_id']
+            projectStaff.study_role = request.form['study_role']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return projectStaff.json()
+    else:
+        return item_not_found("ProjectStaffID {} not found".format(projectStaffID)) 
+
+@api.route('/projectstaff/', methods=['POST'])
+def create_project_staff():
+    try:
+        projectStaff = models.ProjectStaff(
+            staffRoleLUTID = request.form['staffRoleLUTID'],
+            projectID = request.form['projectID'],
+            staffID = request.form['staffID'],
+            role = request.form['role'],
+            date_pledge = datetime.strptime(request.form['date_pledge'],"%Y-%m-%d"),
+            date_revoked = datetime.strptime(request.form['date_revoked'],"%Y-%m-%d"),
+            contact = request.form['contact'],
+            inactive = request.form['inactive'],
+            human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d"),
+            human_sub_type_id = request.form['human_sub_type_id'],
+            study_role = request.form['study_role']
+        )
+        ret = query.add(projectStaff)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'projectStaffID':projectStaff.projectStaffID})        
+
+@api.route('/projectstaff/<int:projectStaffID>/', methods = ['DELETE'])
+def delete_project_staff(projectStaffID):
+    try:
+        projectStaff = query.get_project_staff(projectStaffID)
+        if projectStaff is not None:
+            query.delete(projectStaff)
+            return item_deleted("ProjectStaffID {} deleted".format(projectStaffID))
+        else:
+            return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
+    except Exception as e:
+        return internal_error(e)
+    
 ##############################################################################
 # Project Status
 ##############################################################################
@@ -1045,8 +1223,7 @@ def delete_project_status(projectStatusID):
             return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
     except Exception as e:
         return internal_error(e)
-    
-        
+         
 ##############################################################################
 # ProjectStatusLUT/Type
 ##############################################################################

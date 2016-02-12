@@ -115,6 +115,19 @@ class PopulatedDB(TestCase):
             note = "note",
             date = datetime(2016,2,2)
         )
+        projectStaff = models.ProjectStaff(
+            staffRoleLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            role = 1,
+            date_pledge = datetime(2016,2,2),
+            date_revoked = datetime(2016,2,2),
+            contact = "yes",
+            inactive = "no",
+            human_sub_training_exp = datetime(2016,2,2),
+            human_sub_type_id = 1,
+            study_role = 1
+        )
         
         rc.RCStatusList = rcsl
         rc.reviewCommitteeList = rcl
@@ -168,6 +181,36 @@ class PopulatedDB(TestCase):
             vital_status = "v1"
         )
         
+        preApp = models.PreApplication(
+            projectID = 1,
+            pi_fname = "pi_fname",
+            pi_lname = "pi_lname",
+            pi_email = "pi_email",
+            pi_phone = "pi_phone",
+            contact_fname = "contact_fname",
+            contact_lname = "contact_lname",
+            contact_phone = "contact_phone",
+            contact_email = "contact_email",
+            institution = "institution",
+            institution2 = "institution2",
+            uid = "uid",
+            udoh = 1,
+            project_title = "project_title",
+            purpose = "purpose",
+            irb0 = True,
+            irb1 = True,
+            irb2 = True,
+            irb3 = True,
+            irb4 = True,
+            other_irb = "other_irb",
+            updb = True,
+            pt_contact = True,
+            start_date = datetime(2016,2,2),
+            link = True,
+            delivery_date = datetime(2016,2,2),
+            description = "description"
+        )
+        
         projStatus = models.ProjectStatus(
             projectStatusLUTID = 1,
             projectID = 1,
@@ -214,6 +257,8 @@ class PopulatedDB(TestCase):
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
         ) 
+        db.session.add(preApp)
+        db.session.add(projectStaff)
         db.session.add(log)
         db.session.add(logSubject)
         db.session.add(phaseStatus)
@@ -552,8 +597,7 @@ class TestLogSubject(PopulatedDB):
         response = self.client.delete("/api/logsubjects/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "LogSubjectLUTID 1 deleted")       
-         
-        
+               
 class TestPatient(PopulatedDB):
     def test_get_patients(self):
         response = self.client.get("/api/patients/")
@@ -658,6 +702,130 @@ class TestPhaseStatus(PopulatedDB):
         response = self.client.delete("/api/phasestatuses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "LogPhaseID 1 deleted")       
+
+class TestPreApplication(PopulatedDB):
+    def test_get_pre_applications(self):
+        response = self.client.get("/api/preapplications/")
+        self.assertEqual(response.json["PreApplications"][0]["projectID"], 1)
+        self.assertEqual(response.json["PreApplications"][0]["pi_fname"], "pi_fname")
+        self.assertEqual(response.json["PreApplications"][0]["pi_lname"], "pi_lname")
+        self.assertEqual(response.json["PreApplications"][0]["pi_phone"], "pi_phone")
+        self.assertEqual(response.json["PreApplications"][0]["pi_email"], "pi_email")
+        self.assertEqual(response.json["PreApplications"][0]["contact_fname"], "contact_fname")
+        self.assertEqual(response.json["PreApplications"][0]["contact_lname"], "contact_lname")
+        self.assertEqual(response.json["PreApplications"][0]["contact_phone"], "contact_phone")
+        self.assertEqual(response.json["PreApplications"][0]["contact_email"], "contact_email")
+        self.assertEqual(response.json["PreApplications"][0]["institution"], "institution")
+        self.assertEqual(response.json["PreApplications"][0]["institution2"], "institution2")        
+        self.assertEqual(response.json["PreApplications"][0]["uid"], "uid")
+        self.assertEqual(response.json["PreApplications"][0]["udoh"], 1)
+        self.assertEqual(response.json["PreApplications"][0]["project_title"], "project_title")
+        self.assertEqual(response.json["PreApplications"][0]["purpose"], "purpose")
+        self.assertEqual(response.json["PreApplications"][0]["irb0"], True)
+        self.assertEqual(response.json["PreApplications"][0]["irb1"], True)
+        self.assertEqual(response.json["PreApplications"][0]["irb2"], True)
+        self.assertEqual(response.json["PreApplications"][0]["irb3"], True)
+        self.assertEqual(response.json["PreApplications"][0]["irb4"], True)
+        self.assertEqual(response.json["PreApplications"][0]["other_irb"], "other_irb") 
+        self.assertEqual(response.json["PreApplications"][0]["updb"], True)
+        self.assertEqual(response.json["PreApplications"][0]["pt_contact"], True)
+        self.assertEqual(response.json["PreApplications"][0]["start_date"], "2016-02-02")
+        self.assertEqual(response.json["PreApplications"][0]["link"], True)
+        self.assertEqual(response.json["PreApplications"][0]["delivery_date"], "2016-02-02")
+        self.assertEqual(response.json["PreApplications"][0]["description"], "description")
+        
+    def test_get_pre_application(self):
+        response = self.client.get("/api/preapplications/1/")
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["pi_fname"], "pi_fname")
+        self.assertEqual(response.json["pi_lname"], "pi_lname")
+        self.assertEqual(response.json["pi_phone"], "pi_phone")
+        self.assertEqual(response.json["pi_email"], "pi_email")
+        self.assertEqual(response.json["contact_fname"], "contact_fname")
+        self.assertEqual(response.json["contact_lname"], "contact_lname")
+        self.assertEqual(response.json["contact_phone"], "contact_phone")
+        self.assertEqual(response.json["contact_email"], "contact_email")
+        self.assertEqual(response.json["institution"], "institution")
+        self.assertEqual(response.json["institution2"], "institution2")        
+        self.assertEqual(response.json["uid"], "uid")
+        self.assertEqual(response.json["udoh"], 1)
+        self.assertEqual(response.json["project_title"], "project_title")
+        self.assertEqual(response.json["purpose"], "purpose")
+        self.assertEqual(response.json["irb0"], True)
+        self.assertEqual(response.json["irb1"], True)
+        self.assertEqual(response.json["irb2"], True)
+        self.assertEqual(response.json["irb3"], True)
+        self.assertEqual(response.json["irb4"], True)
+        self.assertEqual(response.json["other_irb"], "other_irb") 
+        self.assertEqual(response.json["updb"], True)
+        self.assertEqual(response.json["pt_contact"], True)
+        self.assertEqual(response.json["start_date"], "2016-02-02")
+        self.assertEqual(response.json["link"], True)
+        self.assertEqual(response.json["delivery_date"], "2016-02-02")
+        self.assertEqual(response.json["description"], "description")
+        
+    def test_update_pre_application(self):
+        response = self.client.put("/api/preapplications/1/", data = {
+            "projectID" : 2,
+            "pi_fname" : "pi_fname2",
+            "pi_lname" : "pi_lname2",
+            "pi_email" : "pi_email2",
+            "pi_phone" : "pi_phone2",
+            "contact_fname" : "contact_fname2",
+            "contact_lname" : "contact_lname2",
+            "contact_phone" : "contact_phone2",
+            "contact_email" : "contact_email2",
+            "institution" : "institution2",
+            "institution2" : "institution22",
+            "uid" : "uid2",
+            "udoh" : 2,
+            "project_title" : "project_title2",
+            "purpose" : "purpose2",
+            "irb0" : False,
+            "irb1" : False,
+            "irb2" : False,
+            "irb3" : False,
+            "irb4" : False,
+            "other_irb" : "other_irb2",
+            "updb" : False,
+            "pt_contact" : False,
+            "start_date" : "2016-02-03",
+            "link" : False,
+            "delivery_date" : "2016-02-03",
+            "description" : "description2"
+        })
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["pi_fname"], "pi_fname2")
+        self.assertEqual(response.json["pi_lname"], "pi_lname2")
+        self.assertEqual(response.json["pi_phone"], "pi_phone2")
+        self.assertEqual(response.json["pi_email"], "pi_email2")
+        self.assertEqual(response.json["contact_fname"], "contact_fname2")
+        self.assertEqual(response.json["contact_lname"], "contact_lname2")
+        self.assertEqual(response.json["contact_phone"], "contact_phone2")
+        self.assertEqual(response.json["contact_email"], "contact_email2")
+        self.assertEqual(response.json["institution"], "institution2")
+        self.assertEqual(response.json["institution2"], "institution22")        
+        self.assertEqual(response.json["uid"], "uid2")
+        self.assertEqual(response.json["udoh"], 2)
+        self.assertEqual(response.json["project_title"], "project_title2")
+        self.assertEqual(response.json["purpose"], "purpose2")
+        self.assertEqual(response.json["irb0"], False)
+        self.assertEqual(response.json["irb1"], False)
+        self.assertEqual(response.json["irb2"], False)
+        self.assertEqual(response.json["irb3"], False)
+        self.assertEqual(response.json["irb4"], False)
+        self.assertEqual(response.json["other_irb"], "other_irb2") 
+        self.assertEqual(response.json["updb"], False)
+        self.assertEqual(response.json["pt_contact"], False)
+        self.assertEqual(response.json["start_date"], "2016-02-03")
+        self.assertEqual(response.json["link"], False)
+        self.assertEqual(response.json["delivery_date"], "2016-02-03")
+        self.assertEqual(response.json["description"], "description2")
+        
+    def test_delete_pre_application(self):
+        response = self.client.delete("/api/preapplications/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PreApplicationID 1 deleted")    
         
 class TestProject(PopulatedDB):   
     # test getting list of projects
@@ -879,7 +1047,67 @@ class TestProjectPatient(PopulatedDB):
         response = self.client.delete("/api/projectpatients/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ParticipantID 1 deleted")       
-             
+
+class TestProjectStaff(PopulatedDB):
+    def test_get_staffs(self):
+        response = self.client.get("/api/projectstaff/")
+        self.assertEqual(response.json["ProjectStaff"][0]["staffRoleLUTID"], 1)
+        self.assertEqual(response.json["ProjectStaff"][0]["projectID"], 1)
+        self.assertEqual(response.json["ProjectStaff"][0]["staffID"], 1)
+        self.assertEqual(response.json["ProjectStaff"][0]["role"], 1)
+        self.assertEqual(response.json["ProjectStaff"][0]["date_pledge"], "2016-02-02")
+        self.assertEqual(response.json["ProjectStaff"][0]["date_revoked"], "2016-02-02")
+        self.assertEqual(response.json["ProjectStaff"][0]["contact"], "yes")
+        self.assertEqual(response.json["ProjectStaff"][0]["inactive"], "no")
+        self.assertEqual(response.json["ProjectStaff"][0]["human_sub_training_exp"], "2016-02-02")
+        self.assertEqual(response.json["ProjectStaff"][0]["human_sub_type_id"], 1)
+        self.assertEqual(response.json["ProjectStaff"][0]["study_role"], 1)
+
+    def test_get_staff(self):
+        response = self.client.get("/api/projectstaff/1/")
+        self.assertEqual(response.json["staffRoleLUTID"], 1)
+        self.assertEqual(response.json["projectID"], 1)
+        self.assertEqual(response.json["staffID"], 1)
+        self.assertEqual(response.json["role"], 1)
+        self.assertEqual(response.json["date_pledge"], "2016-02-02")
+        self.assertEqual(response.json["date_revoked"], "2016-02-02")
+        self.assertEqual(response.json["contact"], "yes")
+        self.assertEqual(response.json["inactive"], "no")
+        self.assertEqual(response.json["human_sub_training_exp"], "2016-02-02")
+        self.assertEqual(response.json["human_sub_type_id"], 1)
+        self.assertEqual(response.json["study_role"], 1)
+        
+    def test_update_staff(self):
+        response = self.client.put("/api/projectstaff/1/", data = {
+            "staffRoleLUTID" : 2,
+            "projectID" : 2,
+            "staffID" : 2,
+            "role" : 2,
+            "date_pledge" : "2016-02-03",
+            "date_revoked" : "2016-02-03",
+            "contact" : "no",
+            "inactive" : "yes",
+            "human_sub_training_exp" : "2016-02-03",
+            "human_sub_type_id" : 2,
+            "study_role" : 2
+        })
+        self.assertEqual(response.json["staffRoleLUTID"], 2)
+        self.assertEqual(response.json["projectID"], 2)
+        self.assertEqual(response.json["staffID"], 2)
+        self.assertEqual(response.json["role"], 2)
+        self.assertEqual(response.json["date_pledge"], "2016-02-03")
+        self.assertEqual(response.json["date_revoked"], "2016-02-03")
+        self.assertEqual(response.json["contact"], "no")
+        self.assertEqual(response.json["inactive"], "yes")
+        self.assertEqual(response.json["human_sub_training_exp"], "2016-02-03")
+        self.assertEqual(response.json["human_sub_type_id"], 2)
+        self.assertEqual(response.json["study_role"], 2)
+        
+    def test_delete_staff(self):
+        response = self.client.delete("/api/projectstaff/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ProjectStaffID 1 deleted")       
+              
 class TestProjectStatus(PopulatedDB):
     def test_get_project_statuses(self):
         response = self.client.get("/api/projectstatuses/")
@@ -1062,8 +1290,8 @@ class TestReviewCommitteeList(PopulatedDB):
             "reviewCommittee" : "rc Updated",
             "rc_description" : "rc desc Updated"
             })
-        self.assertEquals(response.json["reviewCommittee"],"rc Updated")
-        self.assertEquals(response.json["rc_description"],"rc desc Updated")
+        self.assertEqual(response.json["reviewCommittee"],"rc Updated")
+        self.assertEqual(response.json["rc_description"],"rc desc Updated")
         
     def test_delete_review_committee_list(self):
         response = self.client.delete("/api/reviewcommitteelist/1/")

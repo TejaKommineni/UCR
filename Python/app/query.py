@@ -63,6 +63,12 @@ def get_phase_statuses():
     
 def get_phase_status(id):
     return db.session.query(PhaseStatus).filter_by(logPhaseID=id).first()
+
+def get_pre_applications():
+    return db.session.query(PreApplication).all()
+    
+def get_pre_application(id):
+    return db.session.query(PreApplication).filter_by(preApplicationID=id).first()
     
 def get_project(id):
     return Project.query.filter_by(projectID=id).first()
@@ -75,6 +81,12 @@ def get_project_patients():
     
 def get_project_patient(id):
     return db.session.query(ProjectPatient).filter_by(participantID = id).first()
+
+def get_project_staffs():
+    return db.session.query(ProjectStaff).all()
+    
+def get_project_staff(id):
+    return db.session.query(ProjectStaff).filter_by(projectStaffID = id).first()
     
 def get_project_statuses():
     return db.session.query(ProjectStatus).all()

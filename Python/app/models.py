@@ -1285,7 +1285,7 @@ class PreApplication(CustomModel):
     other_irb = db.Column(db.String)
     updb = db.Column(db.Boolean)
     pt_contact = db.Column(db.Boolean)
-    start_date = db.Column(db.Boolean)
+    start_date = db.Column(db.Date)
     link = db.Column(db.Boolean)
     delivery_date = db.Column(db.Date)
     description = db.Column(db.String)
