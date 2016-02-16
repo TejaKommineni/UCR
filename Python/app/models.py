@@ -597,7 +597,7 @@ class GrantStatusLUT(CustomModel):
 class HumanSubjectTrainingLUT(CustomModel):
     __tablename__ = 'humanSubjectTrainingLUT'
     
-    human_sub_type_id = db.Column(db.Integer, primary_key=True)
+    humanSubjectTrainingID = db.Column(db.Integer, primary_key=True)
     training_type = db.Column(db.String)
     
     # Relationships
@@ -1856,7 +1856,7 @@ class StaffTraining(CustomModel):
     
     staffTrainingID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    humanSubjectTrainingLUTID = db.Column(db.Integer,db.ForeignKey('humanSubjectTrainingLUT.human_sub_type_id'))
+    humanSubjectTrainingLUTID = db.Column(db.Integer,db.ForeignKey('humanSubjectTrainingLUT.humanSubjectTrainingID'))
     date_taken = db.Column(db.Date)
     exp_date = db.Column(db.Date)
     

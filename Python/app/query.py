@@ -70,6 +70,12 @@ def get_grant_statuses():
 def get_grant_status(id):
     return db.session.query(GrantStatusLUT).filter_by(grantStatusLUTID = id).first()
 
+def get_human_subject_trainings():
+    return db.session.query(HumanSubjectTrainingLUT).all()
+    
+def get_human_subject_training(id):
+    return db.session.query(HumanSubjectTrainingLUT).filter_by(humanSubjectTrainingID = id).first()
+    
 def get_informants():
     return db.session.query(Informant).all()
     
@@ -148,6 +154,12 @@ def get_phase_statuses():
 def get_phase_status(id):
     return db.session.query(PhaseStatus).filter_by(logPhaseID=id).first()
 
+def get_physician_to_ctcs():
+    return db.session.query(PhysicianToCTC).all()
+    
+def get_physician_to_ctc(id):
+    return db.session.query(PhysicianToCTC).filter_by(physicianCTCID = id).first()
+    
 def get_pre_applications():
     return db.session.query(PreApplication).all()
     
@@ -213,6 +225,18 @@ def get_staffs():
     
 def get_staff(id):
     return db.session.query(Staff).filter_by(staffID = id).first()
+
+def get_staff_roles():
+    return db.session.query(StaffRoleLUT).all()
+    
+def get_staff_role(id):
+    return db.session.query(StaffRoleLUT).filter_by(staffRoleLUTID = id).first()
+    
+def get_staff_trainings():
+    return db.session.query(StaffTraining).all()
+    
+def get_staff_training(id):
+    return db.session.query(StaffTraining).filter_by(staffTrainingID = id).first()
     
 def get_tracings():
     return db.session.query(Tracing).all()

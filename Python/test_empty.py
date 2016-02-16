@@ -270,6 +270,21 @@ class TestGrantStatus(BlankDB):
         })
         self.assertEqual(response.json, {"grantStatusLUTID": 1})
 
+class TestHumanSubjectTraining(BlankDB):
+    def test_empty_human_subject_training(self):
+        response = self.client.get("/api/humansubjecttrainings/")
+        self.assertEqual(response.json, dict(HumanSubjectTrainings = []))
+   
+    def test_human_subject_training__no_id(self):
+        response = self.client.get("/api/humansubjecttrainings/1/")
+        self.assertEqual(response.json, {"Error" : "HumanSubjectTrainingID 1 not found"})
+
+    def test_create_human_subject_training(self):
+        response = self.client.post("/api/humansubjecttrainings/", data = {
+            "training_type" : "type",
+        })
+        self.assertEqual(response.json, {"humanSubjectTrainingID": 1})
+
 class TestInformant(BlankDB):
         
     def test_empty_informant(self):
@@ -534,6 +549,22 @@ class TestPhaseStatus(BlankDB):
             "phase_description" : "description"
         })
         self.assertEqual(response.json, {"logPhaseID": 1})
+
+class TestPhysicianToCTC(BlankDB):
+    def test_empty_physician_to_ctc(self):
+        response = self.client.get("/api/physiciantoctcs/")
+        self.assertEqual(response.json, dict(PhysicianToCTCs = []))
+   
+    def test_physician_to_ctc_no_id(self):
+        response = self.client.get("/api/physiciantoctcs/1/")
+        self.assertEqual(response.json, {"Error" : "PhysicianCTCID 1 not found"})
+
+    def test_create_physician_to_ctc(self):
+        response = self.client.post("/api/physiciantoctcs/", data = {
+            "physicianID" : 1,
+            "ctcID" : 1
+        })
+        self.assertEqual(response.json, {"physicianCTCID": 1})
 
 class TestPreApplication(BlankDB):         
     def test_empty_pre_application(self):
@@ -816,6 +847,40 @@ class TestStaff(BlankDB):
             })
         self.assertEqual(response.json, {"staffID" : 1 })
 
+class TestStaffRole(BlankDB):
+    def test_empty_staff_role(self):
+        response = self.client.get("/api/staffroles/")
+        self.assertEqual(response.json, dict(StaffRoles = []))
+        
+    def test_staff_role_no_id(self):
+        response = self.client.get("/api/staffroles/1/")
+        self.assertEqual(response.json, {"Error": "StaffRoleLUTID 1 not found"})
+        
+    def test_create_staff_role(self):
+        response = self.client.post("/api/staffroles/", data = {
+            "staffRole" : "role",
+            "staffRoleDescription" : "desc"
+            })
+        self.assertEqual(response.json, {"staffRoleLUTID" : 1 })        
+                
+class TestStaffTraining(BlankDB):
+    def test_empty_staff_training(self):
+        response = self.client.get("/api/stafftrainings/")
+        self.assertEqual(response.json, dict(StaffTrainings = []))
+        
+    def test_staff_training_no_id(self):
+        response = self.client.get("/api/stafftrainings/1/")
+        self.assertEqual(response.json, {"Error": "StaffTrainingID 1 not found"})
+        
+    def test_create_staff_training(self):
+        response = self.client.post("/api/stafftrainings/", data = {
+            "staffID" : 1,
+            "humanSubjectTrainingLUTID" : 1,
+            "date_taken" : "2016-02-02",
+            "exp_date" : "2016-02-02"
+            })
+        self.assertEqual(response.json, {"staffTrainingID" : 1 })        
+        
 class TestTracing(BlankDB):
     def test_empty_tracing(self):
         response = self.client.get("/api/tracings/")

@@ -853,6 +853,61 @@ def delete_grant_status(grantStatusLUTID):
         return internal_error(e)
 
 ##############################################################################
+# Humand Subject Training LUT
+##############################################################################
+@api.route('/humansubjecttrainings/', methods = ['GET'])
+@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['GET'])
+def get_human_subject_training(humanSubjectTrainingID=None):
+    if humanSubjectTrainingID is None:
+        return jsonify(HumanSubjectTrainings = [i.dict() for i in query.get_human_subject_trainings()])
+    else:
+        humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
+        if humanSubjectTraining is not None:
+            return humanSubjectTraining.json()
+        else:
+            return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
+            
+@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['PUT'])
+def update_human_subject_training(humanSubjectTrainingID):
+    humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
+    if humanSubjectTraining is not None:
+        try:
+            humanSubjectTraining.training_type = request.form['training_type']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return humanSubjectTraining.json()
+    else:
+        return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID)) 
+
+@api.route('/humansubjecttrainings/', methods=['POST'])
+def create_human_subject_training():
+    try:
+        humanSubjectTraining = models.HumanSubjectTrainingLUT(
+            training_type = request.form['training_type']
+        )
+        ret = query.add(humanSubjectTraining)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})        
+
+@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['DELETE'])
+def delete_human_subject_training(humanSubjectTrainingID):
+    try:
+        humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
+        if humanSubjectTraining is not None:
+            query.delete(humanSubjectTraining)
+            return item_deleted("HumanSubjectTrainingID {} deleted".format(humanSubjectTrainingID))
+        else:
+            return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
 # Informant
 ##############################################################################
 @api.route('/informants/', methods=['GET'])
@@ -1701,7 +1756,64 @@ def delete_phase_status(logPhaseID):
             return item_not_found("LogPhaseID {} not found".format(logPhaseID))
     except Exception as e:
         return internal_error(e)
-    
+
+##############################################################################
+# PhysicianToCTC
+##############################################################################
+@api.route('/physiciantoctcs/', methods = ['GET'])
+@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['GET'])
+def get_physician_to_ctc(physicianCTCID=None):
+    if physicianCTCID is None:
+        return jsonify(PhysicianToCTCs = [i.dict() for i in query.get_physician_to_ctcs()])
+    else:
+        physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
+        if physicianToCTC is not None:
+            return physicianToCTC.json()
+        else:
+            return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
+            
+@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['PUT'])
+def update_physician_to_ctc(physicianCTCID):
+    physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
+    if physicianToCTC is not None:
+        try:
+            physicianToCTC.physicianID = request.form['physicianID']
+            physicianToCTC.ctcID = request.form['ctcID']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return physicianToCTC.json()
+    else:
+        return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID)) 
+
+@api.route('/physiciantoctcs/', methods=['POST'])
+def create_physician_to_ctc():
+    try:
+        physicianToCTC = models.PhysicianToCTC(
+           physicianID = request.form['physicianID'],
+           ctcID = request.form['ctcID']
+        )
+        ret = query.add(physicianToCTC)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'physicianCTCID':physicianToCTC.physicianCTCID})        
+
+@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['DELETE'])
+def delete_physician_to_ctc(physicianCTCID):
+    try:
+        physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
+        if physicianToCTC is not None:
+            query.delete(physicianToCTC)
+            return item_deleted("PhysicianCTCID {} deleted".format(physicianCTCID))
+        else:
+            return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
+    except Exception as e:
+        return internal_error(e)
+            
 ##############################################################################
 # PreApplication
 ##############################################################################
@@ -1810,7 +1922,6 @@ def delete_pre_application(preApplicationID):
     except Exception as e:
         return internal_error(e)
          
-        
 ##############################################################################
 # Project 
 ##############################################################################
@@ -2258,8 +2369,7 @@ def delete_project_type(projectTypeID):
             return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
         return internal_error(e)
-
-        
+      
 ##############################################################################
 # RCStatusList
 ##############################################################################
@@ -2316,7 +2426,6 @@ def delete_rc_status_list(rcStatusID):
             return item_not_found("RCStatusListID {} not found".format(rcStatusID))
     except Exception as e:
         return internal_error(e)
-
 
 ##############################################################################
 # ReviewCommittee
@@ -2520,7 +2629,7 @@ def create_staff():
 @api.route('/staff/<int:staffID>/', methods = ['DELETE'])
 def delete_staff(staffID):
     try:
-        staff = query.get_rc_status(staffID)
+        staff = query.get_staff(staffID)
         if staff is not None:
             query.delete(staff)
             return item_deleted("StaffID {} deleted".format(staffID))
@@ -2528,7 +2637,125 @@ def delete_staff(staffID):
             return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
         return internal_error(e)
-
+        
+##############################################################################
+# Staff Role
+##############################################################################
+@api.route('/staffroles/', methods = ['GET'])
+@api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['GET'])
+def get_staff_role(staffRoleLUTID=None):
+    if staffRoleLUTID is None:
+        return jsonify(StaffRoles = [i.dict() for i in query.get_staff_roles()])
+    else:
+        staffRole = query.get_staff_role(staffRoleLUTID)
+        if staffRole is not None:
+            return staffRole.json()
+        else:
+            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+            
+@api.route('/staffroles/<int:staffRoleLUTID>/',methods = ['PUT'])
+def update_staff_role(staffRoleLUTID):
+    staffRole = query.get_staff_role(staffRoleLUTID)
+    if staffRole is not None:
+        try:
+            staffRole.staffRole = request.form['staffRole']
+            staffRole.staffRoleDescription = request.form['staffRoleDescription']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return staffRole.json()
+    else:
+        return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+        
+@api.route('/staffroles/',methods = ['POST'])
+def create_staff_role():
+    try:
+        staffRole = models.StaffRoleLUT(
+            staffRole = request.form['staffRole'],
+            staffRoleDescription = request.form['staffRoleDescription'],
+        )
+        ret = query.add(staffRole)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'staffRoleLUTID':staffRole.staffRoleLUTID})
+    
+@api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['DELETE'])
+def delete_staff_role(staffRoleLUTID):
+    try:
+        staffRole = query.get_staff_role(staffRoleLUTID)
+        if staffRole is not None:
+            query.delete(staffRole)
+            return item_deleted("StaffRoleLUTID {} deleted".format(staffRoleLUTID))
+        else:
+            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+    except Exception as e:
+        return internal_error(e)
+       
+##############################################################################
+# Staff Training
+##############################################################################
+@api.route('/stafftrainings/', methods = ['GET'])
+@api.route('/stafftrainings/<int:staffTrainingID>/', methods = ['GET'])
+def get_staff_training(staffTrainingID=None):
+    if staffTrainingID is None:
+        return jsonify(StaffTrainings = [i.dict() for i in query.get_staff_trainings()])
+    else:
+        stafftraining = query.get_staff_training(staffTrainingID)
+        if stafftraining is not None:
+            return stafftraining.json()
+        else:
+            return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
+            
+@api.route('/stafftrainings/<int:staffTrainingID>/',methods = ['PUT'])
+def update_staff_training(staffTrainingID):
+    stafftraining = query.get_staff_training(staffTrainingID)
+    if stafftraining is not None:
+        try:
+            stafftraining.staffID = request.form['staffID']
+            stafftraining.humanSubjectTrainingLUTID = request.form['humanSubjectTrainingLUTID']
+            stafftraining.date_taken = datetime.strptime(request.form['date_taken'],"%Y-%m-%d")
+            stafftraining.exp_date = datetime.strptime(request.form['exp_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return stafftraining.json()
+    else:
+        return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
+        
+@api.route('/stafftrainings/',methods = ['POST'])
+def create_staff_training():
+    try:
+        stafftraining = models.StaffTraining(
+            staffID = request.form['staffID'],
+            humanSubjectTrainingLUTID = request.form['humanSubjectTrainingLUTID'],
+            date_taken = datetime.strptime(request.form['date_taken'],"%Y-%m-%d"),
+            exp_date = datetime.strptime(request.form['exp_date'],"%Y-%m-%d")
+            )
+        ret = query.add(stafftraining)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'staffTrainingID':stafftraining.staffTrainingID})
+    
+@api.route('/stafftrainings/<int:staffTrainingID>/', methods = ['DELETE'])
+def delete_staff_training(staffTrainingID):
+    try:
+        stafftraining = query.get_staff_training(staffTrainingID)
+        if stafftraining is not None:
+            query.delete(stafftraining)
+            return item_deleted("StaffTrainingID {} deleted".format(staffTrainingID))
+        else:
+            return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
+    except Exception as e:
+        return internal_error(e)
+             
 ##############################################################################
 # Tracing
 ##############################################################################

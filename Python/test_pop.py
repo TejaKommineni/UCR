@@ -212,6 +212,11 @@ class PopulatedDB(TestCase):
         fundingSourceLUT = models.FundingSourceLUT(
             fundingSource = "fs"
         )
+        
+        humanSubjectTraining = models.HumanSubjectTrainingLUT(
+            training_type = "type"
+        )
+        
         informant = models.Informant(
             patAutoID = 1,
             fname = "fname",
@@ -313,6 +318,11 @@ class PopulatedDB(TestCase):
             status_description = "desc"
         )
         
+        physicianToCTC = models.PhysicianToCTC(
+            physicianID = 1,
+            ctcID = 1
+        )
+        
         preApp = models.PreApplication(
             projectID = 1,
             pi_fname = "pi_fname",
@@ -407,6 +417,17 @@ class PopulatedDB(TestCase):
             UCR_role = 1
         )
         
+        staffRole = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+        staffTraining = models.StaffTraining(
+            staffID = 1,
+            humanSubjectTrainingLUTID = 1,
+            date_taken = datetime(2016,2,2),
+            exp_date = datetime(2016,2,2)
+        )
+        
         tracing = models.Tracing(
             tracingSourceLUTID = 1,
             projectPatientID = 1,
@@ -417,6 +438,10 @@ class PopulatedDB(TestCase):
         tracingSource = models.TracingSourceLUT(
             description = "desc"
         )
+        db.session.add(physicianToCTC)
+        db.session.add(humanSubjectTraining)
+        db.session.add(staffRole)
+        db.session.add(staffTraining)
         db.session.add(staff)
         db.session.add(ctc)
         db.session.add(contact)
@@ -956,6 +981,28 @@ class TestGrantStatus(PopulatedDB):
         response = self.client.delete("/api/grantstatuses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "GrantStatusLUTID 1 deleted")     
+
+class TestHumanSubjectTraining(PopulatedDB):
+    def test_get_human_subject_trainings(self):
+        response = self.client.get("/api/humansubjecttrainings/")
+        self.assertEqual(response.json["HumanSubjectTrainings"][0]["humanSubjectTrainingID"], 1)
+        self.assertEqual(response.json["HumanSubjectTrainings"][0]["training_type"], "type")
+
+    def test_get_human_subject_training(self):
+        response = self.client.get("/api/humansubjecttrainings/1/")
+        self.assertEqual(response.json["humanSubjectTrainingID"], 1)
+        self.assertEqual(response.json["training_type"], "type")
+        
+    def test_update_human_subject_training(self):
+        response = self.client.put("/api/humansubjecttrainings/1/", data = {
+            "training_type" : "type Updated",
+        })
+        self.assertEqual(response.json["training_type"], "type Updated")
+        
+    def test_delete_human_subject_training(self):
+        response = self.client.delete("/api/humansubjecttrainings/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "HumanSubjectTrainingID 1 deleted")     
 
 class TestInformant(PopulatedDB):
     def test_get_informants(self):
@@ -1509,6 +1556,30 @@ class TestPhaseStatus(PopulatedDB):
         response = self.client.delete("/api/phasestatuses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "LogPhaseID 1 deleted")       
+
+class TestPhysicianToCTC(PopulatedDB):
+    def test_get_physician_to_ctcs(self):
+        response = self.client.get("/api/physiciantoctcs/")
+        self.assertEqual(response.json["PhysicianToCTCs"][0]["physicianID"], 1)
+        self.assertEqual(response.json["PhysicianToCTCs"][0]["ctcID"], 1)
+        
+    def test_get_physician_to_ctc(self):
+        response = self.client.get("/api/physiciantoctcs/1/")
+        self.assertEqual(response.json["physicianID"], 1)
+        self.assertEqual(response.json["ctcID"], 1)
+        
+    def test_update_physician_to_ctc(self):
+        response = self.client.put("/api/physiciantoctcs/1/", data = {
+            "physicianID" : 2,
+            "ctcID": 2
+        })
+        self.assertEqual(response.json["physicianID"], 2)
+        self.assertEqual(response.json["ctcID"], 2)
+        
+    def test_delete_physician_to_ctc(self):
+        response = self.client.delete("/api/physiciantoctcs/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhysicianCTCID 1 deleted")       
 
 class TestPreApplication(PopulatedDB):
     def test_get_pre_applications(self):
@@ -2180,7 +2251,69 @@ class TestStaff(PopulatedDB):
         response = self.client.delete("/api/staff/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "StaffID 1 deleted")
-               
+
+class TestStaffRole(PopulatedDB):
+    def test_get_staff_roles(self):
+        response = self.client.get("/api/staffroles/")
+        self.assertEqual(response.json["StaffRoles"][0]["staffRoleLUTID"], 1)
+        self.assertEqual(response.json["StaffRoles"][0]["staffRole"], "role")
+        self.assertEqual(response.json["StaffRoles"][0]["staffRoleDescription"], "desc")
+
+    def test_get_staff_role(self):
+        response = self.client.get("/api/staffroles/1/")
+        self.assertEqual(response.json["staffRoleLUTID"], 1)
+        self.assertEqual(response.json["staffRole"], "role")
+        self.assertEqual(response.json["staffRoleDescription"], "desc")
+        
+    def test_update_staff_role(self):
+        response = self.client.put("/api/staffroles/1/", data = {
+            "staffRole" : "role Updated",
+            "staffRoleDescription" : "desc Updated",
+            })
+        self.assertEqual(response.json["staffRoleLUTID"], 1)
+        self.assertEqual(response.json["staffRole"], "role Updated")
+        self.assertEqual(response.json["staffRoleDescription"], "desc Updated")
+        
+    def test_delete_staff_role(self):
+        response = self.client.delete("/api/staffroles/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "StaffRoleLUTID 1 deleted")
+           
+class TestStaffTraining(PopulatedDB):
+    def test_get_staff_trainings(self):
+        response = self.client.get("/api/stafftrainings/")
+        self.assertEqual(response.json["StaffTrainings"][0]["staffTrainingID"], 1)
+        self.assertEqual(response.json["StaffTrainings"][0]["staffID"], 1)
+        self.assertEqual(response.json["StaffTrainings"][0]["humanSubjectTrainingLUTID"], 1)
+        self.assertEqual(response.json["StaffTrainings"][0]["date_taken"], "2016-02-02")
+        self.assertEqual(response.json["StaffTrainings"][0]["exp_date"], "2016-02-02")
+
+    def test_get_staff_training(self):
+        response = self.client.get("/api/stafftrainings/1/")
+        self.assertEqual(response.json["staffTrainingID"], 1)
+        self.assertEqual(response.json["staffID"], 1)
+        self.assertEqual(response.json["humanSubjectTrainingLUTID"], 1)
+        self.assertEqual(response.json["date_taken"], "2016-02-02")
+        self.assertEqual(response.json["exp_date"], "2016-02-02")
+        
+    def test_update_staff_training(self):
+        response = self.client.put("/api/stafftrainings/1/", data = {
+            "staffID" : 2,
+            "humanSubjectTrainingLUTID" : 2,
+            "date_taken" : "2016-02-03",
+            "exp_date" : "2016-02-03"
+            })
+        self.assertEqual(response.json["staffTrainingID"], 1)
+        self.assertEqual(response.json["staffID"], 2)
+        self.assertEqual(response.json["humanSubjectTrainingLUTID"], 2)
+        self.assertEqual(response.json["date_taken"], "2016-02-03")
+        self.assertEqual(response.json["exp_date"], "2016-02-03")
+        
+    def test_delete_staff_training(self):
+        response = self.client.delete("/api/stafftrainings/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "StaffTrainingID 1 deleted")
+           
 class TestTracing(PopulatedDB):
     def test_get_tracings(self):
         response = self.client.get("/api/tracings/")
