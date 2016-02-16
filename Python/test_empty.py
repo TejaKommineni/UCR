@@ -187,6 +187,22 @@ class TestCTC(BlankDB):
             "dnc_reason" : "dnc_reason"
         })
         self.assertEqual(response.json, dict(ctcID=1))
+
+class TestCTCFacility(BlankDB):
+    def test_empty_ctc_facility(self):
+        response = self.client.get("/api/ctcfacilities/")
+        self.assertEqual(response.json, dict(CTCFacilities = []))
+   
+    def test_ctc_facility_no_id(self):
+        response = self.client.get("/api/ctcfacilities/1/")
+        self.assertEqual(response.json, {"Error" : "CTCFacilityID 1 not found"})
+
+    def test_create_ctc_facility(self):
+        response = self.client.post("/api/ctcfacilities/", data = {
+            "ctcID" : 1,
+            "facilityID" : 1
+        })
+        self.assertEqual(response.json, {"CTCFacilityID": 1})  
         
 class TestFacilityPhone(BlankDB):
     def test_empty_facility_phone(self):
@@ -210,7 +226,28 @@ class TestFacilityPhone(BlankDB):
             "facility_phone_status_date" : "2016-02-02"
         })
         self.assertEqual(response.json, {"facilityPhoneID": 1})  
-        
+
+class TestFacility(BlankDB):
+    def test_empty_facility_phone(self):
+        response = self.client.get("/api/facilities/")
+        self.assertEqual(response.json, dict(Facilities = []))
+   
+    def test_facility_phone_no_id(self):
+        response = self.client.get("/api/facilities/1/")
+        self.assertEqual(response.json, {"Error" : "FacilityID 1 not found"})
+
+    def test_create_facility_phone(self):
+        response = self.client.post("/api/facilities/", data = {
+            "facility_name" : "name",
+            "contact_fname" : "fname:",
+            "contact_lname" : "lname",
+            "facility_status" : 1,
+            "facility_status_date" : "2016-02-02",
+            "contact2_fname" : "fname",
+            "contact2_lname" : "lname"
+        })
+        self.assertEqual(response.json, {"facilityID": 1})  
+              
 class TestFunding(BlankDB):
 
     def test_empty_funding(self):
@@ -550,6 +587,31 @@ class TestPhaseStatus(BlankDB):
         })
         self.assertEqual(response.json, {"logPhaseID": 1})
 
+class TestPhysician(BlankDB):
+    def test_empty_physician(self):
+        response = self.client.get("/api/physicians/")
+        self.assertEqual(response.json, dict(Physicians = []))
+   
+    def test_physician_no_id(self):
+        response = self.client.get("/api/physicians/1/")
+        self.assertEqual(response.json, {"Error" : "PhysicianID 1 not found"})
+
+    def test_create_physician(self):
+        response = self.client.post("/api/physicians/", data = {
+            "fname" : "fname",
+            "lname" : "lname",
+            "middle_name" : "middle_name",
+            "credentials" : "credentials",
+            "specialty" : "specialty",
+            "alias_fname" : "alias_fname",
+            "alias_lname" : "alias_lname",
+            "alias_middle_name" : "alias_middle_name",
+            "physician_status" : 1,
+            "physician_status_date" : "2016-02-02",
+            "email" : "email"
+        })
+        self.assertEqual(response.json, {"physicianID": 1})
+        
 class TestPhysicianToCTC(BlankDB):
     def test_empty_physician_to_ctc(self):
         response = self.client.get("/api/physiciantoctcs/")

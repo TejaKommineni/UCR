@@ -45,6 +45,18 @@ def get_ctcs():
 
 def get_ctc(id):
     return db.session.query(CTC).filter_by(ctcID = id).first()
+
+def get_ctc_facilities():
+    return db.session.query(CTCFacility).all()
+    
+def get_ctc_facility(id):
+    return db.session.query(CTCFacility).filter_by(CTCFacilityID = id).first()
+    
+def get_facilities():
+    return db.session.query(Facility).all()
+    
+def get_facility(id):
+    return db.session.query(Facility).filter_by(facilityID= id).first()
     
 def get_facility_phones():
     return db.session.query(FacilityPhone).all()
@@ -154,6 +166,12 @@ def get_phase_statuses():
 def get_phase_status(id):
     return db.session.query(PhaseStatus).filter_by(logPhaseID=id).first()
 
+def get_physicians():
+    return db.session.query(Physician).all()
+    
+def get_physician(id):
+    return db.session.query(Physician).filter_by(physicianID = id).first()
+    
 def get_physician_to_ctcs():
     return db.session.query(PhysicianToCTC).all()
     
