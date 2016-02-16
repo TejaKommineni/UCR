@@ -294,7 +294,7 @@ class CTC(CustomModel):
     dx_street1 = db.Column(db.String)
     dx_street2 = db.Column(db.String)
     dx_city = db.Column(db.String)
-    cx_state = db.Column(db.String)
+    dx_state = db.Column(db.String)
     dx_zip = db.Column(db.Integer)
     dx_county = db.Column(db.String)
     dnc = db.Column(db.String)
@@ -324,7 +324,7 @@ class CTC(CustomModel):
         dx_street1 = = {},\
         dx_street2 = = {},\
         dx_city = = {},\
-        cx_state = = {},\
+        dx_state = = {},\
         dx_zip = = {},\
         dx_county = = {},\
         dnc = = {},\
@@ -341,7 +341,7 @@ class CTC(CustomModel):
         self.dx_street1,
         self.dx_street2,
         self.dx_city,
-        self.cx_state, 
+        self.dx_state, 
         self.dx_zip,
         self.dx_county, 
         self.dnc,

@@ -16,6 +16,18 @@ def get_budgets():
 def get_budget(id):
     return db.session.query(Budget).filter_by(budgetID = id).first()
 
+def get_contacts():
+    return db.session.query(Contact).all()
+    
+def get_contact(id):
+    return db.session.query(Contact).filter_by(contactID = id).first()
+    
+def get_contact_types():
+    return db.session.query(ContactTypeLUT).all()
+    
+def get_contact_type(id):
+    return db.session.query(ContactTypeLUT).filter_by(contactTypeLUTID = id).first()
+    
 def get_contact_info_sources():
     return db.session.query(ContactInfoSourceLUT).all()
     
@@ -28,6 +40,12 @@ def get_contact_info_statuses():
 def get_contact_info_status(id):
     return db.session.query(ContactInfoStatusLUT).filter_by(contactInfoStatusID = id).first()
 
+def get_ctcs():
+    return db.session.query(CTC).all()
+
+def get_ctc(id):
+    return db.session.query(CTC).filter_by(ctcID = id).first()
+    
 def get_facility_phones():
     return db.session.query(FacilityPhone).all()
     
@@ -190,6 +208,12 @@ def get_review_committee_list(id):
 def get_review_committee_lists():
     return db.session.query(ReviewCommitteeList).all()
 
+def get_staffs():
+    return db.session.query(Staff).all()
+    
+def get_staff(id):
+    return db.session.query(Staff).filter_by(staffID = id).first()
+    
 def get_tracings():
     return db.session.query(Tracing).all()
     

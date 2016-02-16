@@ -272,6 +272,134 @@ def delete_budget(budgetID):
         return internal_error(e)
 
 #############################################################################
+# Contact 
+#############################################################################
+@api.route('/contacts/', methods = ['GET'])
+@api.route('/contacts/<int:contactID>/', methods = ['GET'])
+def get_contact(contactID = None):
+    if contactID is None:
+        return jsonify(Contacts = [i.dict() for i in query.get_contacts()])
+    else:
+        contact = query.get_contact(contactID)
+        if contact is not None:
+            return contact.json()
+        else:
+            return item_not_found("ContactID {} not found".format(contactID))
+            
+@api.route('/contacts/<int:contactID>/',methods = ['PUT'])
+def update_contact(contactID):
+    contact = query.get_contact(contactID)
+    if contact is not None:
+        try:
+            contact.contactTypeLUTID = request.form['contactTypeLUTID']
+            contact.projectPatientID = request.form['projectPatientID']
+            contact.staffID = request.form['staffID']
+            contact.informantID = request.form['informantID']
+            contact.facilityID = request.form['facilityID']
+            contact.physicianID = request.form['physicianID']
+            contact.description = request.form['description']
+            contact.contact_date = datetime.strptime(request.form['contact_date'],"%Y-%m-%d")
+            contact.initials = request.form['initials']
+            contact.notes = request.form['notes']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return contact.json()
+    else:
+        return item_not_found("ContactID {} not found".format(contactID))
+        
+@api.route('/contacts/',methods=['POST'])
+def create_contact():
+    try:
+        contact = models.Contact(
+            contactTypeLUTID = request.form['contactTypeLUTID'],
+            projectPatientID = request.form['projectPatientID'],
+            staffID = request.form['staffID'],
+            informantID = request.form['informantID'],
+            facilityID = request.form['facilityID'],
+            physicianID = request.form['physicianID'],
+            description = request.form['description'],
+            contact_date = datetime.strptime(request.form['contact_date'],"%Y-%m-%d"),
+            initials = request.form['initials'],
+            notes = request.form['notes'],
+        )
+        ret = query.add(contact)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"contactID" : contact.contactID})
+    
+@api.route('/contacts/<int:contactID>/', methods = ['DELETE'])
+def delete_contact(contactID):
+    try:
+        contact = query.get_contact(contactID)
+        if contact is not None:
+            query.delete(contact)
+            return item_deleted("ContactID {} deleted".format(contactID))
+        else:
+            return item_not_found("ContactID {} not found".format(contactID))
+    except Exception as e:
+        return internal_error(e)        
+       
+#############################################################################
+# Contact Type 
+#############################################################################
+@api.route('/contacttypes/', methods = ['GET'])
+@api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['GET'])
+def get_contact_type(contactTypeLUTID = None):
+    if contactTypeLUTID is None:
+        return jsonify(ContactTypes = [i.dict() for i in query.get_contact_types()])
+    else:
+        contactType = query.get_contact_type(contactTypeLUTID)
+        if contactType is not None:
+            return contactType.json()
+        else:
+            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+            
+@api.route('/contacttypes/<int:contactTypeLUTID>/',methods = ['PUT'])
+def update_contact_type(contactTypeLUTID):
+    contactType = query.get_contact_type(contactTypeLUTID)
+    if contactType is not None:
+        try:
+            contactType.contact_definition = request.form['contact_definition']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return contactType.json()
+    else:
+        return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+        
+@api.route('/contacttypes/',methods=['POST'])
+def create_contact_type():
+    try:
+        contactType = models.ContactTypeLUT(
+            contact_definition = request.form['contact_definition'],
+        )
+        ret = query.add(contactType)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"contactTypeLUTID" : contactType.contactTypeLUTID})
+    
+@api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['DELETE'])
+def delete_contact_type(contactTypeLUTID):
+    try:
+        contactType = query.get_contact_type(contactTypeLUTID)
+        if contactType is not None:
+            query.delete(contactType)
+            return item_deleted("ContactTypeLUTID {} deleted".format(contactTypeLUTID))
+        else:
+            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+    except Exception as e:
+        return internal_error(e)        
+        
+#############################################################################
 # Contact Info Source
 #############################################################################
 @api.route('/contactinfosources/', methods = ['GET'])
@@ -380,7 +508,92 @@ def delete_contact_info_status(contactInfoStatusID):
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
     except Exception as e:
         return internal_error(e)
-      
+
+#############################################################################
+# ctc
+#############################################################################
+@api.route('/ctcs/', methods = ['GET'])
+@api.route('/ctcs/<int:ctcID>/', methods = ['GET'])
+def get_ctc(ctcID = None):
+    if ctcID is None:
+        return jsonify(CTCs = [i.dict() for i in query.get_ctcs()])
+    else:
+        ctc = query.get_ctc(ctcID)
+        if ctc is not None:
+            return ctc.json()
+        else:
+            return item_not_found("CtcID {} not found".format(ctcID))
+            
+@api.route('/ctcs/<int:ctcID>/',methods = ['PUT'])
+def update_ctc(ctcID):
+    ctc = query.get_ctc(ctcID)
+    if ctc is not None:
+        try:
+            ctc.patientID = request.form['patientID']
+            ctc.dx_date = datetime.strptime(request.form['dx_date'],"%Y-%m-%d")
+            ctc.site = request.form['site']
+            ctc.histology = request.form['histology']
+            ctc.behavior = request.form['behavior']
+            ctc.ctc_sequence = request.form['ctc_sequence']
+            ctc.stage = request.form['stage']
+            ctc.dx_age = request.form['dx_age']
+            ctc.dx_street1 = request.form['dx_street1']
+            ctc.dx_street2 = request.form['dx_street2']
+            ctc.dx_city = request.form['dx_city']
+            ctc.dx_state = request.form['dx_state']
+            ctc.dx_zip = request.form['dx_zip']
+            ctc.dx_county = request.form['dx_county']
+            ctc.dnc = request.form['dnc']
+            ctc.dnc_reason = request.form['dnc_reason']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return ctc.json()
+    else:
+        return item_not_found("CtcID {} not found".format(ctcID))
+        
+@api.route('/ctcs/',methods=['POST'])
+def create_ctc():
+    try:
+        ctc = models.CTC(
+            patientID = request.form['patientID'],
+            dx_date = datetime.strptime(request.form['dx_date'],"%Y-%m-%d"),
+            site = request.form['site'],
+            histology = request.form['histology'],
+            behavior = request.form['behavior'],
+            ctc_sequence = request.form['ctc_sequence'],
+            stage = request.form['stage'],
+            dx_age = request.form['dx_age'],
+            dx_street1 = request.form['dx_street1'],
+            dx_street2 = request.form['dx_street2'],
+            dx_city = request.form['dx_city'],
+            cx_state = request.form['dx_state'],
+            dx_zip = request.form['dx_zip'],
+            dx_county = request.form['dx_county'],
+            dnc = request.form['dnc'],
+            dnc_reason = request.form['dnc_reason']
+        )
+        ret = query.add(ctc)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"ctcID" : ctc.ctcID})
+    
+@api.route('/ctcs/<int:ctcID>/', methods = ['DELETE'])
+def delete_ctc(ctcID):
+    try:
+        ctc = query.get_ctc(ctcID)
+        if ctc is not None:
+            query.delete(ctc)
+            return item_deleted("CtcID {} deleted".format(ctcID))
+        else:
+            return item_not_found("CtcID {} not found".format(ctcID))
+    except Exception as e:
+        return internal_error(e)
+              
 ##############################################################################
 # Funding
 ##############################################################################
@@ -2230,6 +2443,89 @@ def delete_review_committee_list(rcListID):
             return item_deleted("RCListID {} deleted".format(rcListID))
         else:
             return item_not_found("RCListID {} not found".format(rcListID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Staff
+##############################################################################
+@api.route('/staff/', methods = ['GET'])
+@api.route('/staff/<int:staffID>/', methods = ['GET'])
+def get_staff(staffID=None):
+    if staffID is None:
+        return jsonify(Staff = [i.dict() for i in query.get_staffs()])
+    else:
+        staff = query.get_staff(staffID)
+        if staff is not None:
+            return staff.json()
+        else:
+            return item_not_found("StaffID {} not found".format(staffID))
+            
+@api.route('/staff/<int:staffID>/',methods = ['PUT'])
+def update_staff(staffID):
+    staff = query.get_staff(staffID)
+    if staff is not None:
+        try:
+            staff.fname = request.form['fname']
+            staff.lname = request.form['lname']
+            staff.middle_name = request.form['middle_name']
+            staff.email = request.form['email']
+            staff.phone = request.form['phone']
+            staff.phoneComment = request.form['phoneComment']
+            staff.institution = request.form['institution']
+            staff.department = request.form['department']
+            staff.position = request.form['position']
+            staff.credentials = request.form['credentials']
+            staff.street = request.form['street']
+            staff.city = request.form['city']
+            staff.state = request.form['state']
+            staff.human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d")
+            staff.UCR_role = request.form['UCR_role']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return staff.json()
+    else:
+        return item_not_found("StaffID {} not found".format(staffID))
+        
+@api.route('/staff/',methods = ['POST'])
+def create_staff():
+    try:
+        staff = models.Staff(
+            fname = request.form['fname'],
+            lname = request.form['lname'],
+            middle_name = request.form['middle_name'],
+            email = request.form['email'],
+            phone = request.form['phone'],
+            phoneComment = request.form['phoneComment'],
+            institution = request.form['institution'],
+            department = request.form['department'],
+            position = request.form['position'],
+            credentials = request.form['credentials'],
+            street = request.form['street'],
+            city = request.form['city'],
+            state = request.form['state'],
+            human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d"),
+            UCR_role = request.form['UCR_role']
+            )
+        ret = query.add(staff)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'staffID':staff.staffID})
+    
+@api.route('/staff/<int:staffID>/', methods = ['DELETE'])
+def delete_staff(staffID):
+    try:
+        staff = query.get_rc_status(staffID)
+        if staff is not None:
+            query.delete(staff)
+            return item_deleted("StaffID {} deleted".format(staffID))
+        else:
+            return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
         return internal_error(e)
 
