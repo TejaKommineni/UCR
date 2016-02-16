@@ -33,6 +33,24 @@ def get_grant_statuses():
     
 def get_grant_status(id):
     return db.session.query(GrantStatusLUT).filter_by(grantStatusLUTID = id).first()
+
+def get_informants():
+    return db.session.query(Informant).all()
+    
+def get_informant(id):
+    return db.session.query(Informant).filter_by(informantID = id).first()
+    
+def get_informant_addresses():
+    return db.session.query(InformantAddress).all()
+    
+def get_informant_address(id):
+    return db.session.query(InformantAddress).filter_by(informantAddressID = id).first()    
+    
+def get_informant_phones():
+    return db.session.query(InformantPhone).all()
+    
+def get_informant_phone(id):
+    return db.session.query(InformantPhone).filter_by(informantPhoneID = id).first()
     
 def get_irb_holders():
     return db.session.query(IRBHolderLUT).all()
@@ -141,7 +159,19 @@ def get_review_committee_list(id):
     
 def get_review_committee_lists():
     return db.session.query(ReviewCommitteeList).all()
+
+def get_tracings():
+    return db.session.query(Tracing).all()
     
+def get_tracing(id):
+    return db.session.query(Tracing).filter_by(tracingID = id).first()
+    
+def get_tracing_sources():
+    return db.session.query(TracingSourceLUT).all()
+    
+def get_tracing_source(id):
+    return db.session.query(TracingSourceLUT).filter_by(tracingSourceLUTID = id).first()
+     
 def get_ucr_reports():
     return db.session.query(UCRReport).all()
     

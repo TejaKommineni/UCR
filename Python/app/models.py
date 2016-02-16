@@ -635,11 +635,11 @@ class Informant(CustomModel):
     __tablename__ = "informant"
     
     informantID = db.Column(db.Integer, primary_key=True)
-    patientID = db.Column(db.Integer, db.ForeignKey("patient.patAutoID"))
+    patAutoID = db.Column(db.Integer, db.ForeignKey("patient.patAutoID"))
     fname = db.Column(db.String)
     lname = db.Column(db.String)
     middle_name = db.Column(db.String)
-    informant_primay = db.Column(db.String)
+    informant_primary = db.Column(db.String)
     informant_relationship = db.Column(db.String)
     notes = db.Column(db.String)
     

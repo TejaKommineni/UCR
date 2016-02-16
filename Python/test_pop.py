@@ -156,6 +156,39 @@ class PopulatedDB(TestCase):
         fundingSourceLUT = models.FundingSourceLUT(
             fundingSource = "fs"
         )
+        informant = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+        
+        informantAddress = models.InformantAddress(
+            contactInfoSourceLUTID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+        
+        informantPhone = models.InformantPhone(
+            contactInfoSourceLUTID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            phone = "phone",
+            phone_status = 1,
+            phone_source = "s1",
+            phone_status_date = datetime(2016,2,2)
+        )
         
         grantStatus = models.GrantStatusLUT(
             grant_status = "status"
@@ -291,6 +324,21 @@ class PopulatedDB(TestCase):
             survey_to_researcher = datetime(2016,2,2),
             survey_to_researcher_staff = 1
         )
+        tracing = models.Tracing(
+            tracingSourceLUTID = 1,
+            projectPatientID = 1,
+            date = datetime(2016,2,2),
+            staff = 1,
+            notes = "notes"
+        )
+        tracingSource = models.TracingSourceLUT(
+            description = "desc"
+        )
+        db.session.add(tracing)
+        db.session.add(tracingSource)
+        db.session.add(informant)
+        db.session.add(informantAddress)
+        db.session.add(informantPhone)
         db.session.add(patientPhone)
         db.session.add(patientEmail)
         db.session.add(patientAddress)
@@ -550,6 +598,163 @@ class TestGrantStatus(PopulatedDB):
         response = self.client.delete("/api/grantstatuses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "GrantStatusLUTID 1 deleted")     
+
+class TestInformant(PopulatedDB):
+    def test_get_informants(self):
+        response = self.client.get("/api/informants/")
+        self.assertEqual(response.json["Informants"][0]["informantID"], 1)
+        self.assertEqual(response.json["Informants"][0]["patAutoID"], 1)
+        self.assertEqual(response.json["Informants"][0]["fname"], "fname")
+        self.assertEqual(response.json["Informants"][0]["lname"], "lname")
+        self.assertEqual(response.json["Informants"][0]["middle_name"], "middle_name")
+        self.assertEqual(response.json["Informants"][0]["informant_primary"], "informant_primary")
+        self.assertEqual(response.json["Informants"][0]["informant_relationship"], "informant_relationship")
+        self.assertEqual(response.json["Informants"][0]["notes"], "notes")
+        
+    def test_get_informant(self):
+        response = self.client.get("/api/informants/1/")
+        self.assertEqual(response.json["informantID"], 1)
+        self.assertEqual(response.json["patAutoID"], 1)
+        self.assertEqual(response.json["fname"], "fname")
+        self.assertEqual(response.json["lname"], "lname")
+        self.assertEqual(response.json["middle_name"], "middle_name")
+        self.assertEqual(response.json["informant_primary"], "informant_primary")
+        self.assertEqual(response.json["informant_relationship"], "informant_relationship")
+        self.assertEqual(response.json["notes"], "notes")
+        
+    def test_update_informant(self):
+        response = self.client.put("/api/informants/1/", data = {
+            "patAutoID" : 2,
+            "fname" : "fname Updated",
+            "lname" : "lname Updated",
+            "middle_name" : "middle_name Updated",
+            "informant_primary" : "informant_primary Updated",
+            "informant_relationship" : "informant_relationship Updated",
+            "notes" : "notes Updated"
+        }) 
+        self.assertEqual(response.json["informantID"], 1)
+        self.assertEqual(response.json["patAutoID"], 2)
+        self.assertEqual(response.json["fname"], "fname Updated")
+        self.assertEqual(response.json["lname"], "lname Updated")
+        self.assertEqual(response.json["middle_name"], "middle_name Updated")
+        self.assertEqual(response.json["informant_primary"], "informant_primary Updated")
+        self.assertEqual(response.json["informant_relationship"], "informant_relationship Updated")
+        self.assertEqual(response.json["notes"], "notes Updated")
+        
+    def test_delete_informant(self):
+        response = self.client.delete("/api/informants/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "InformantID 1 deleted")          
+        
+class TestInformantAddress(PopulatedDB):
+    def test_get_informant_addresses(self):
+        response = self.client.get("/api/informantaddresses/")
+        self.assertEqual(response.json["InformantAddresses"][0]["informantAddressID"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["informantID"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["street"], "street")
+        self.assertEqual(response.json["InformantAddresses"][0]["street2"], "street2")
+        self.assertEqual(response.json["InformantAddresses"][0]["city"], "city")
+        self.assertEqual(response.json["InformantAddresses"][0]["state"], "state")
+        self.assertEqual(response.json["InformantAddresses"][0]["zip"], "zip")
+        self.assertEqual(response.json["InformantAddresses"][0]["address_status"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["InformantAddresses"][0]["address_status_source"], "s1")
+        
+    def test_get_informant_address(self):
+        response = self.client.get("/api/informantaddresses/1/")
+        self.assertEqual(response.json["informantAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["informantID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["street"], "street")
+        self.assertEqual(response.json["street2"], "street2")
+        self.assertEqual(response.json["city"], "city")
+        self.assertEqual(response.json["state"], "state")
+        self.assertEqual(response.json["zip"], "zip")
+        self.assertEqual(response.json["address_status"], 1)
+        self.assertEqual(response.json["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["address_status_source"], "s1")
+        
+    def test_update_informant_address(self):
+        response = self.client.put("/api/informantaddresses/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "informantID" : 2,
+            "contactInfoStatusID" : 2,
+            "street" : "street Updated",
+            "street2" : "street2 Updated",
+            "city" : "city Updated",
+            "state" : "state Updated",
+            "zip" : "zip Updated",
+            "address_status" : 2,
+            "address_status_date" : "2016-02-03",
+            "address_status_source" : "s2"
+        })
+        self.assertEqual(response.json["informantAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["informantID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
+        self.assertEqual(response.json["street"], "street Updated")
+        self.assertEqual(response.json["street2"], "street2 Updated")
+        self.assertEqual(response.json["city"], "city Updated")
+        self.assertEqual(response.json["state"], "state Updated")
+        self.assertEqual(response.json["zip"], "zip Updated")
+        self.assertEqual(response.json["address_status"], 2)
+        self.assertEqual(response.json["address_status_date"], "2016-02-03")
+        self.assertEqual(response.json["address_status_source"], "s2")
+        
+    def test_delete_informant_address(self):
+        response = self.client.delete("/api/informantaddresses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "InformantAddressID 1 deleted")          
+        
+class TestInformantPhone(PopulatedDB):
+    def test_get_informant_phones(self):
+        response = self.client.get("/api/informantphones/")
+        self.assertEqual(response.json["InformantPhones"][0]["informantPhoneID"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["informantID"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["phone"], "phone")
+        self.assertEqual(response.json["InformantPhones"][0]["phone_status"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["phone_source"], "s1")
+        self.assertEqual(response.json["InformantPhones"][0]["phone_status_date"], "2016-02-02")
+        
+    def test_get_informant_phone(self):
+        response = self.client.get("/api/informantphones/1/")
+        self.assertEqual(response.json["informantPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["informantID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["phone"], "phone")
+        self.assertEqual(response.json["phone_status"], 1)
+        self.assertEqual(response.json["phone_source"], "s1")
+        self.assertEqual(response.json["phone_status_date"], "2016-02-02")
+        
+    def test_update_informant_phone(self):
+        response = self.client.put("/api/informantphones/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "informantID" : 2,
+            "contactInfoStatusID" : 2,
+            "phone" : "phone Updated",
+            "phone_status" : 2,
+            "phone_source" : "s2",
+            "phone_status_date" : "2016-02-03"
+        })
+        self.assertEqual(response.json["informantPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["informantID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
+        self.assertEqual(response.json["phone"], "phone Updated")
+        self.assertEqual(response.json["phone_status"], 2)
+        self.assertEqual(response.json["phone_source"], "s2")
+        self.assertEqual(response.json["phone_status_date"], "2016-02-03")
+        
+    def test_delete_informant_phone(self):
+        response = self.client.delete("/api/informantphones/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "InformantPhoneID 1 deleted")  
         
 class TestIRBHolder(PopulatedDB):
     def test_get_irb_holders(self):
@@ -1492,6 +1697,70 @@ class TestReviewCommitteeList(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "RCListID 1 deleted")
 
+class TestTracing(PopulatedDB):
+    def test_get_tracings(self):
+        response = self.client.get("/api/tracings/")
+        self.assertEqual(response.json["Tracings"][0]["tracingID"], 1)
+        self.assertEqual(response.json["Tracings"][0]["tracingSourceLUTID"], 1)
+        self.assertEqual(response.json["Tracings"][0]["projectPatientID"], 1)
+        self.assertEqual(response.json["Tracings"][0]["date"], "2016-02-02")
+        self.assertEqual(response.json["Tracings"][0]["staff"], 1)
+        self.assertEqual(response.json["Tracings"][0]["notes"], "notes")
+        
+    def test_get_tracing(self):
+        response = self.client.get("/api/tracings/1/")
+        self.assertEqual(response.json["tracingID"], 1)
+        self.assertEqual(response.json["tracingSourceLUTID"], 1)
+        self.assertEqual(response.json["projectPatientID"], 1)
+        self.assertEqual(response.json["date"], "2016-02-02")
+        self.assertEqual(response.json["staff"], 1)
+        self.assertEqual(response.json["notes"], "notes")
+        
+    def test_update_tracing(self):
+        response = self.client.put("/api/tracings/1/", data = {
+            "tracingSourceLUTID" : 2,
+            "projectPatientID" : 2,
+            "date" : "2016-02-03",
+            "staff" : 2,
+            "notes" : "notes Updated"
+            })
+        self.assertEqual(response.json["tracingID"], 1)
+        self.assertEqual(response.json["tracingSourceLUTID"], 2)
+        self.assertEqual(response.json["projectPatientID"], 2)
+        self.assertEqual(response.json["date"], "2016-02-03")
+        self.assertEqual(response.json["staff"], 2)
+        self.assertEqual(response.json["notes"], "notes Updated")
+        
+    def test_delete_tracing(self):
+        response = self.client.delete("/api/tracings/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "TracingID 1 deleted")
+                
+        
+class TestTracingSource(PopulatedDB):
+    def test_get_tracing_sources(self):
+        response = self.client.get("/api/tracingsources/")
+        self.assertEqual(response.json["TracingSources"][0]["tracingSourceLUTID"], 1)
+        self.assertEqual(response.json["TracingSources"][0]["description"], "desc")
+        
+    def test_get_tracing_source(self):
+        response = self.client.get("/api/tracingsources/1/")
+        self.assertEqual(response.json["tracingSourceLUTID"], 1)
+        self.assertEqual(response.json["description"], "desc")
+        
+    def test_update_tracing_source(self):
+        response = self.client.put("/api/tracingsources/1/", data = {
+            "description" : "desc Updated"
+            })
+        self.assertEqual(response.json["tracingSourceLUTID"], 1)
+        self.assertEqual(response.json["description"], "desc Updated")
+        
+    def test_delete_tracing_source(self):
+        response = self.client.delete("/api/tracingsources/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "TracingSourceLUTID 1 deleted")
+        
+        
 class TestUCRReport(PopulatedDB):
     def test_get_ucr_report(self):
         response = self.client.get("/api/ucrreports/")

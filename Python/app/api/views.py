@@ -460,7 +460,215 @@ def delete_grant_status(grantStatusLUTID):
     except Exception as e:
         return internal_error(e)
 
+##############################################################################
+# Informant
+##############################################################################
+@api.route('/informants/', methods=['GET'])
+@api.route('/informants/<int:informantID>/',methods = ['GET'])
+def get_informant(informantID=None):
+    if informantID is None:
+        return jsonify(Informants = [i.dict() for i in query.get_informants()])
+    else:
+        informant = query.get_informant(informantID)
+        if informant is not None:
+            return informant.json()
+        else:
+            return item_not_found("InformantID {} not found".format(informantID))
+
+@api.route('/informants/<int:informantID>/',methods = ['PUT'])
+def update_informant(informantID):
+    informant = query.get_informant(informantID)
+    if informant is not None:
+        try:
+            informant.patAutoID = request.form['patAutoID']
+            informant.fname = request.form['fname']
+            informant.lname = request.form['lname']
+            informant.middle_name = request.form['middle_name']
+            informant.informant_primary = request.form['informant_primary']
+            informant.informant_relationship = request.form['informant_relationship']
+            informant.notes = request.form['notes']        
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return informant.json()
+    else:
+        return item_not_found("InformantID {} not found".format(informantID))
+
+@api.route('/informants/', methods=['POST'])
+def create_informant():
+    try:
+        informant = models.Informant(
+            patAutoID = request.form['patAutoID'],
+            fname = request.form['fname'],
+            lname = request.form['lname'],
+            middle_name = request.form['middle_name'],
+            informant_primary = request.form['informant_primary'],
+            informant_relationship = request.form['informant_relationship'],
+            notes = request.form['notes']   
+            )
+        ret = query.add(informant)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'informantID':informant.informantID})
+
+@api.route('/informants/<int:informantID>/',methods = ['DELETE'])
+def delete_informant(informantID):
+    try:
+        informant = query.get_informant(informantID)
+        if informant is not None:
+            query.delete(informant)
+            return item_deleted("InformantID {} deleted".format(informantID))
+        else:
+            return item_not_found("InformantID {} not found".format(informantID))
+    except Exception as e:
+        return internal_error(e)
         
+##############################################################################
+# Informant Address
+##############################################################################
+@api.route('/informantaddresses/', methods=['GET'])
+@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['GET'])
+def get_informant_address(informantAddressID=None):
+    if informantAddressID is None:
+        return jsonify(InformantAddresses = [i.dict() for i in query.get_informant_addresses()])
+    else:
+        informantAddress = query.get_informant_address(informantAddressID)
+        if informantAddress is not None:
+            return informantAddress.json()
+        else:
+            return item_not_found("InformantAddressID {} not found".format(informantAddressID))
+
+@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['PUT'])
+def update_informant_address(informantAddressID):
+    informantAddress = query.get_informant_address(informantAddressID)
+    if informantAddress is not None:
+        try:
+            informantAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            informantAddress.informantID = request.form['informantID']
+            informantAddress.contactInfoStatusID = request.form['contactInfoStatusID']
+            informantAddress.street = request.form['street']
+            informantAddress.street2 = request.form['street2']
+            informantAddress.city = request.form['city']
+            informantAddress.state = request.form['state']
+            informantAddress.zip = request.form['zip']
+            informantAddress.address_status = request.form['address_status']
+            informantAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
+            informantAddress.address_status_source = request.form['address_status_source']          
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return informantAddress.json()
+    else:
+        return item_not_found("InformantAddressID {} not found".format(informantAddressID))
+
+@api.route('/informantaddresses/', methods=['POST'])
+def create_informant_address():
+    try:
+        informantAddress = models.InformantAddress(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            informantID = request.form['informantID'],
+            contactInfoStatusID = request.form['contactInfoStatusID'],
+            street = request.form['street'],
+            street2 = request.form['street2'],
+            city = request.form['city'],
+            state = request.form['state'],
+            zip = request.form['zip'],
+            address_status = request.form['address_status'],
+            address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
+            address_status_source = request.form['address_status_source']  
+            )
+        ret = query.add(informantAddress)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'informantAddressID':informantAddress.informantAddressID})
+
+@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['DELETE'])
+def delete_informant_address(informantAddressID):
+    try:
+        informantAddress = query.get_informant_address(informantAddressID)
+        if informantAddress is not None:
+            query.delete(informantAddress)
+            return item_deleted("InformantAddressID {} deleted".format(informantAddressID))
+        else:
+            return item_not_found("InformantAddressID {} not found".format(informantAddressID))
+    except Exception as e:
+        return internal_error(e)
+               
+##############################################################################
+# Informant Phone
+##############################################################################
+@api.route('/informantphones/', methods=['GET'])
+@api.route('/informantphones/<int:informantPhoneID>/',methods = ['GET'])
+def get_informant_phone(informantPhoneID=None):
+    if informantPhoneID is None:
+        return jsonify(InformantPhones = [i.dict() for i in query.get_informant_phones()])
+    else:
+        informantPhone = query.get_informant_phone(informantPhoneID)
+        if informantPhone is not None:
+            return informantPhone.json()
+        else:
+            return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
+
+@api.route('/informantphones/<int:informantPhoneID>/',methods = ['PUT'])
+def update_informant_phone(informantPhoneID):
+    informantPhone = query.get_informant_phone(informantPhoneID)
+    if informantPhone is not None:
+        try:
+            informantPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            informantPhone.informantID = request.form['informantID']
+            informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
+            informantPhone.phone = request.form['phone']  
+            informantPhone.phone_source = request.form['phone_source']  
+            informantPhone.phone_status = request.form['phone_status']  
+            informantPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return informantPhone.json()
+    else:
+        return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
+
+@api.route('/informantphones/', methods=['POST'])
+def create_informant_phone():
+    try:
+        informantPhone = models.InformantPhone(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            informantID = request.form['informantID'],
+            contactInfoStatusID = request.form['contactInfoStatusID'],
+            phone = request.form['phone'],
+            phone_source = request.form['phone_source'],
+            phone_status = request.form['phone_status'], 
+            phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            )
+        ret = query.add(informantPhone)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'informantPhoneID':informantPhone.informantPhoneID})
+
+@api.route('/informantphones/<int:informantPhoneID>/',methods = ['DELETE'])
+def delete_informant_phone(informantPhoneID):
+    try:
+        informantPhone = query.get_informant_phone(informantPhoneID)
+        if informantPhone is not None:
+            query.delete(informantPhone)
+            return item_deleted("InformantPhoneID {} deleted".format(informantPhoneID))
+        else:
+            return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
+    except Exception as e:
+        return internal_error(e)
+                             
 ##############################################################################
 # IRBHolderLUT
 ##############################################################################
@@ -1734,6 +1942,127 @@ def delete_review_committee_list(rcListID):
             return item_not_found("RCListID {} not found".format(rcListID))
     except Exception as e:
         return internal_error(e)
+
+##############################################################################
+# Tracing
+##############################################################################
+@api.route('/tracings/', methods = ['GET'])
+@api.route('/tracings/<int:tracingID>/', methods = ['GET'])
+def get_tracing(tracingID=None):
+    if tracingID is None:
+        return jsonify(Tracings = [i.dict() for i in query.get_tracings()])
+    else:
+        tracing = query.get_tracing(tracingID)
+        if tracing is not None:
+            return tracing.json()
+        else:
+            return item_not_found("TracingID {} not found".format(tracingID))
+            
+@api.route('/tracings/<int:tracingID>/',methods = ['PUT'])
+def update_tracing(tracingID):
+    tracing = query.get_tracing(tracingID)
+    if tracing is not None:
+        try:
+            tracing.tracingSourceLUTID = request.form['tracingSourceLUTID']
+            tracing.projectPatientID = request.form['projectPatientID']
+            tracing.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+            tracing.staff = request.form['staff']
+            tracing.notes = request.form['notes']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return tracing.json()
+    else:
+        return item_not_found("TracingID {} not found".format(tracingID))
+        
+@api.route('/tracings/',methods = ['POST'])
+def create_tracing():
+    try:
+        tracing = models.Tracing(
+            tracingSourceLUTID = request.form['tracingSourceLUTID'],
+            projectPatientID = request.form['projectPatientID'],
+            date = datetime.strptime(request.form['date'],"%Y-%m-%d"),
+            staff = request.form['staff'],
+            notes = request.form['notes']
+            )
+        ret = query.add(tracing)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'tracingID':tracing.tracingID})
+    
+@api.route('/tracings/<int:tracingID>/', methods = ['DELETE'])
+def delete_tracing(tracingID):
+    try:
+        tracing = query.get_tracing(tracingID)
+        if tracing is not None:
+            query.delete(tracing)
+            return item_deleted("TracingID {} deleted".format(tracingID))
+        else:
+            return item_not_found("TracingID {} not found".format(tracingID))
+    except Exception as e:
+        return internal_error(e)
+        
+                
+        
+##############################################################################
+# Tracing Source LUT
+##############################################################################
+@api.route('/tracingsources/', methods = ['GET'])
+@api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['GET'])
+def get_tracing_source(tracingSourceLUTID=None):
+    if tracingSourceLUTID is None:
+        return jsonify(TracingSources = [i.dict() for i in query.get_tracing_sources()])
+    else:
+        tracing = query.get_tracing_source(tracingSourceLUTID)
+        if tracing is not None:
+            return tracing.json()
+        else:
+            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+            
+@api.route('/tracingsources/<int:tracingSourceLUTID>/',methods = ['PUT'])
+def update_tracing_source(tracingSourceLUTID):
+    tracingSource = query.get_tracing_source(tracingSourceLUTID)
+    if tracingSource is not None:
+        try:
+            tracingSource.description = request.form['description']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return tracingSource.json()
+    else:
+        return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+        
+@api.route('/tracingsources/',methods = ['POST'])
+def create_tracing_source():
+    try:
+        tracingSource = models.TracingSourceLUT(
+            description = request.form['description']
+            )
+        ret = query.add(tracingSource)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'tracingSourceLUTID':tracingSource.tracingSourceLUTID})
+    
+@api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['DELETE'])
+def delete_tracing_source(tracingSourceLUTID):
+    try:
+        tracingSource = query.get_tracing_source(tracingSourceLUTID)
+        if tracingSource is not None:
+            query.delete(tracingSource)
+            return item_deleted("TracingSourceLUTID {} deleted".format(tracingSourceLUTID))
+        else:
+            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+    except Exception as e:
+        return internal_error(e)
+        
         
 ##############################################################################
 # UCR Report

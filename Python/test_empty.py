@@ -147,6 +147,75 @@ class TestGrantStatus(BlankDB):
             "grant_status" : "status",
         })
         self.assertEqual(response.json, {"grantStatusLUTID": 1})
+
+class TestInformant(BlankDB):
+        
+    def test_empty_informant(self):
+        response = self.client.get("/api/informants/")
+        self.assertEqual(response.json, dict(Informants = []))
+   
+    def test_informant_no_id(self):
+        response = self.client.get("/api/informants/1/")
+        self.assertEqual(response.json, {"Error" : "InformantID 1 not found"})
+
+    def test_create_informant(self):
+        response = self.client.post("/api/informants/", data = {
+            "patAutoID" : 1,
+            "fname" : "fname",
+            "lname" : "lname",
+            "middle_name" : "middle_name",
+            "informant_primary" : "informant_primary",
+            "informant_relationship" : "informant_relationship",
+            "notes" : "notes"
+        })
+        self.assertEqual(response.json, {"informantID": 1})              
+        
+class TestInformantAddress(BlankDB):
+        
+    def test_empty_informant_address(self):
+        response = self.client.get("/api/informantaddresses/")
+        self.assertEqual(response.json, dict(InformantAddresses = []))
+   
+    def test_informant_address_no_id(self):
+        response = self.client.get("/api/informantaddresses/1/")
+        self.assertEqual(response.json, {"Error" : "InformantAddressID 1 not found"})
+
+    def test_create_informant_address(self):
+        response = self.client.post("/api/informantaddresses/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "informantID" : 1,
+            "contactInfoStatusID" : 1,
+            "street" : "street",
+            "street2" : "street2",
+            "city" : "city",
+            "state" : "state",
+            "zip" : "zip",
+            "address_status" : 1,
+            "address_status_date" : "2016-02-02",
+            "address_status_source" : "s1"
+        })
+        self.assertEqual(response.json, {"informantAddressID": 1})        
+        
+class TestInformantPhone(BlankDB):         
+    def test_empty_informant_phone(self):
+        response = self.client.get("/api/informantphones/")
+        self.assertEqual(response.json, dict(InformantPhones = []))
+   
+    def test_informant_phone_no_id(self):
+        response = self.client.get("/api/informantphones/1/")
+        self.assertEqual(response.json, {"Error" : "InformantPhoneID 1 not found"})
+
+    def test_create_informant_phone(self):
+        response = self.client.post("/api/informantphones/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "informantID" : 1,
+            "contactInfoStatusID" : 1,
+            "phone" : "phone",
+            "phone_status" : 1,
+            "phone_source" : "s1",
+            "phone_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"informantPhoneID": 1})       
         
 class TestIRBHolder(BlankDB):
     def test_empty_irb_holder(self):
@@ -295,8 +364,7 @@ class TestPatientPhone(BlankDB):
             "phone_source" : "s1",
             "phone_status_date" : "2016-02-02"
         })
-        self.assertEqual(response.json, {"patPhoneID": 1})
-        
+        self.assertEqual(response.json, {"patPhoneID": 1})       
         
 class TestPhaseStatus(BlankDB):
     def test_empty_phase_status(self):
@@ -566,6 +634,41 @@ class TestReviewCommitteeList(BlankDB):
             })
         self.assertEqual(response.json, {"rcListID" : 1 })
 
+class TestTracing(BlankDB):
+    def test_empty_tracing(self):
+        response = self.client.get("/api/tracings/")
+        self.assertEqual(response.json, dict(Tracings = []))
+        
+    def test_tracing_no_id(self):
+        response = self.client.get("/api/tracings/1/")
+        self.assertEqual(response.json, {"Error": "TracingID 1 not found"})
+        
+    def test_create_tracing(self):
+        response = self.client.post("/api/tracings/", data = {
+            "tracingSourceLUTID" : 1,
+            "projectPatientID" : 1,
+            "date" : "2016-02-02",
+            "staff" : 1,
+            "notes" : "notes"
+            })
+        self.assertEqual(response.json, {"tracingID" : 1 })        
+        
+class TestTracingSource(BlankDB):
+    def test_empty_tracing_source(self):
+        response = self.client.get("/api/tracingsources/")
+        self.assertEqual(response.json, dict(TracingSources = []))
+        
+    def test_tracing_source_no_id(self):
+        response = self.client.get("/api/tracingsources/1/")
+        self.assertEqual(response.json, {"Error": "TracingSourceLUTID 1 not found"})
+        
+    def test_create_tracing_source(self):
+        response = self.client.post("/api/tracingsources/", data = {
+            "description" : "desc"
+            })
+        self.assertEqual(response.json, {"tracingSourceLUTID" : 1 })
+       
+        
 class TestUCRReport(BlankDB):
     def test_empty_ucr_report(self):
         response = self.client.get("/api/ucrreports/")
