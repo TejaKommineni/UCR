@@ -464,7 +464,7 @@ class FacilityPhone(CustomModel):
     __tablename__ = 'facilityPhone'
     
     facilityPhoneID = db.Column(db.Integer, primary_key=True)
-    contactInfoSourcelUTID = db.Column(db.Integer, db.ForeignKey('contactInfoSourceLUT.contactInfoSourceLUTID'))
+    contactInfoSourceLUTID = db.Column(db.Integer, db.ForeignKey('contactInfoSourceLUT.contactInfoSourceLUTID'))
     contactInfoStatusLUTID = db.Column(db.Integer, db.ForeignKey('contactInfoStatusLUT.contactInfoStatusID'))
     facilityID = db.Column(db.Integer, db.ForeignKey('facility.facilityID'))
     facility_phone = db.Column(db.Integer)

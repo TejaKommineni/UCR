@@ -380,7 +380,7 @@ def delete_contact_info_status(contactInfoStatusID):
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
     except Exception as e:
         return internal_error(e)
-   
+      
 ##############################################################################
 # Funding
 ##############################################################################
@@ -457,8 +457,78 @@ def delete_funding(fundingID):
             return item_not_found("FundingID {} not found".format(fundingID))
     except Exception as e:
         return internal_error(e)
-        
-        
+
+##############################################################################
+# Facility Phone
+##############################################################################
+@api.route('/facilityphones/', methods=['GET'])
+@api.route('/facilityphones/<int:faciltyPhoneID>/',methods = ['GET'])
+def get_facility_phone(faciltyPhoneID=None):
+    if faciltyPhoneID is None:
+        return jsonify(FacilityPhones = [i.dict() for i in query.get_facility_phones()])
+    else:
+        facilityPhone = query.get_facility_phone(faciltyPhoneID)
+        if facilityPhone is not None:
+            return facilityPhone.json()
+        else:
+            return item_not_found("FacilityPhoneID {} not found".format(faciltyPhoneID))
+
+@api.route('/facilityphones/<int:faciltyPhoneID>/',methods = ['PUT'])
+def update_facility_phone(faciltyPhoneID):
+    facilityPhone = query.get_facility_phone(faciltyPhoneID)
+    if facilityPhone is not None:
+        try:
+            facilityPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            facilityPhone.facilityID = request.form['facilityID']
+            facilityPhone.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']  
+            facilityPhone.facility_name = request.form['facility_name']
+            facilityPhone.clinic_name = request.form['clinic_name']
+            facilityPhone.facility_phone = request.form['facility_phone']  
+            facilityPhone.facility_phone_source = request.form['facility_phone_source']  
+            facilityPhone.facility_phone_status = request.form['facility_phone_status']  
+            facilityPhone.facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return facilityPhone.json()
+    else:
+        return item_not_found("FacilityPhoneID {} not found".format(faciltyPhoneID))
+
+@api.route('/facilityphones/', methods=['POST'])
+def create_facility_phone():
+    try:
+        facilityPhone = models.FacilityPhone(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            facilityID = request.form['facilityID'],
+            contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+            facility_name = request.form['facility_name'],
+            clinic_name = request.form['clinic_name'],
+            facility_phone = request.form['facility_phone'],
+            facility_phone_source = request.form['facility_phone_source'],
+            facility_phone_status = request.form['facility_phone_status'], 
+            facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
+            )
+        ret = query.add(facilityPhone)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'facilityPhoneID':facilityPhone.facilityPhoneID})
+
+@api.route('/facilityphones/<int:faciltyPhoneID>/',methods = ['DELETE'])
+def delete_facility_phone(faciltyPhoneID):
+    try:
+        facilityPhone = query.get_facility_phone(faciltyPhoneID)
+        if facilityPhone is not None:
+            query.delete(facilityPhone)
+            return item_deleted("FacilityPhoneID {} deleted".format(faciltyPhoneID))
+        else:
+            return item_not_found("FacilityPhoneID {} not found".format(faciltyPhoneID))
+    except Exception as e:
+        return internal_error(e)
+                   
 ##############################################################################
 # Funding Source LUT
 ##############################################################################
@@ -513,7 +583,6 @@ def delete_funding_source(fundingSourceLUTID):
             return item_not_found("fundingSourceLUTID {} not found".format(fundingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-
 
 ##############################################################################
 # Grant Status LUT

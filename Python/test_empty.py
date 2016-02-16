@@ -119,7 +119,29 @@ class TestContactInfoSource(BlankDB):
         })
         self.assertEqual(response.json, dict(contactInfoSourceLUTID=1))
 
+class TestFacilityPhone(BlankDB):
+    def test_empty_facility_phone(self):
+        response = self.client.get("/api/facilityphones/")
+        self.assertEqual(response.json, dict(FacilityPhones = []))
+   
+    def test_facility_phone_no_id(self):
+        response = self.client.get("/api/facilityphones/1/")
+        self.assertEqual(response.json, {"Error" : "FacilityPhoneID 1 not found"})
 
+    def test_create_facility_phone(self):
+        response = self.client.post("/api/facilityphones/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "facilityID" : 1,
+            "contactInfoStatusLUTID" : 1,
+            "facility_name" : "name",
+            "clinic_name" : "clinic",
+            "facility_phone" : "phone",
+            "facility_phone_status" : 1,
+            "facility_phone_source" : "s1",
+            "facility_phone_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"facilityPhoneID": 1})  
+        
 class TestFunding(BlankDB):
 
     def test_empty_funding(self):

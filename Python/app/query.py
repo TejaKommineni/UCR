@@ -27,6 +27,12 @@ def get_contact_info_statuses():
     
 def get_contact_info_status(id):
     return db.session.query(ContactInfoStatusLUT).filter_by(contactInfoStatusID = id).first()
+
+def get_facility_phones():
+    return db.session.query(FacilityPhone).all()
+    
+def get_facility_phone(id):
+    return db.session.query(FacilityPhone).filter_by(facilityPhoneID = id).first()
     
 def get_fundings():
     return db.session.query(Funding).all()

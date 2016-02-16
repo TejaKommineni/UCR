@@ -146,6 +146,18 @@ class PopulatedDB(TestCase):
             contact_info_source = "source"
         )
         
+        facilityPhone = models.FacilityPhone(
+            contactInfoSourceLUTID = 1,
+            facilityID = 1,
+            contactInfoStatusLUTID = 1,
+            facility_name = "name",
+            clinic_name = "clinic",
+            facility_phone = "phone",
+            facility_phone_status = 1,
+            facility_phone_source = "s1",
+            facility_phone_status_date = datetime(2016,2,2)
+        )
+        
         funding = models.Funding(
             grantStatusLUTID = 1,
             projectID = 1,
@@ -351,6 +363,7 @@ class PopulatedDB(TestCase):
         tracingSource = models.TracingSourceLUT(
             description = "desc"
         )
+        db.session.add(facilityPhone)
         db.session.add(contactInfoSource)
         db.session.add(contactInfoStatus)
         db.session.add(patientProjectStatusType)
@@ -553,6 +566,61 @@ class TestContactInfoStatus(PopulatedDB):
         response = self.client.delete("/api/contactinfostatuses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ContactInfoStatusID 1 deleted")
+
+class TestFacilityPhone(PopulatedDB):
+    def test_get_facility_phone(self):
+        response = self.client.get("/api/facilityphones/")
+        self.assertEqual(response.json["FacilityPhones"][0]["facilityPhoneID"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["facilityID"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_name"], "name")
+        self.assertEqual(response.json["FacilityPhones"][0]["clinic_name"], "clinic")
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_phone"], "phone")
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_status"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_source"], "s1")
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_status_date"], "2016-02-02")
+        
+    def test_get_facility_phone(self):
+        response = self.client.get("/api/facilityphones/1/")
+        self.assertEqual(response.json["facilityPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["facilityID"], 1)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["facility_name"], "name")
+        self.assertEqual(response.json["clinic_name"], "clinic")
+        self.assertEqual(response.json["facility_phone"], "phone")
+        self.assertEqual(response.json["facility_phone_status"], 1)
+        self.assertEqual(response.json["facility_phone_source"], "s1")
+        self.assertEqual(response.json["facility_phone_status_date"], "2016-02-02")
+        
+    def test_update_facility_phone(self):
+        response = self.client.put("/api/facilityphones/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "facilityID" : 2,
+            "contactInfoStatusLUTID" : 2,
+            "facility_name" : "name Updated",
+            "clinic_name" : "clinic Updated",
+            "facility_phone" : "phone Updated",
+            "facility_phone_status" : 2,
+            "facility_phone_source" : "s2",
+            "facility_phone_status_date" : "2016-02-03"
+        })
+        self.assertEqual(response.json["facilityPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["facilityID"], 2)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 2)
+        self.assertEqual(response.json["facility_name"], "name Updated")
+        self.assertEqual(response.json["clinic_name"], "clinic Updated")
+        self.assertEqual(response.json["facility_phone"], "phone Updated")
+        self.assertEqual(response.json["facility_phone_status"], 2)
+        self.assertEqual(response.json["facility_phone_source"], "s2")
+        self.assertEqual(response.json["facility_phone_status_date"], "2016-02-03")
+
+    def test_delete_facility_phone(self):
+        response = self.client.delete("/api/facilityphones/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "FacilityPhoneID 1 deleted")      
 
 class TestFunding(PopulatedDB):
     def test_get_fundings(self):
