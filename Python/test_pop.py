@@ -138,6 +138,14 @@ class PopulatedDB(TestCase):
         p.arcReview = arcReview
         p.ucrReports.append(ucr)
         
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+        
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+        
         funding = models.Funding(
             grantStatusLUTID = 1,
             projectID = 1,
@@ -248,6 +256,15 @@ class PopulatedDB(TestCase):
             phone_status_date = datetime(2016,2,2)
         )
         
+        patientProjectStatus = models.PatientProjectStatus(
+            patientProjectStatusLUTID =1,
+            projectPatientID = 1,
+        )
+        
+        patientProjectStatusType = models.PatientProjectStatusLUT(
+            status_description = "desc"
+        )
+        
         preApp = models.PreApplication(
             projectID = 1,
             pi_fname = "pi_fname",
@@ -334,6 +351,10 @@ class PopulatedDB(TestCase):
         tracingSource = models.TracingSourceLUT(
             description = "desc"
         )
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.add(patientProjectStatusType)
+        db.session.add(patientProjectStatus)
         db.session.add(tracing)
         db.session.add(tracingSource)
         db.session.add(informant)
@@ -486,6 +507,52 @@ class TestBudget(PopulatedDB):
         response = self.client.delete("/api/budgets/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "BudgetID 1 deleted")
+
+class TestContactInfoSource(PopulatedDB):
+    def test_get_contact_info_sourcees(self):
+        response = self.client.get("/api/contactinfosources/")
+        self.assertEqual(response.json["ContactInfoSources"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["ContactInfoSources"][0]["contact_info_source"], "source")
+        
+    def test_get_contact_info_source(self):
+        response = self.client.get("/api/contactinfosources/1/")
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["contact_info_source"], "source")
+        
+    def test_update_contact_info_source(self):
+        response = self.client.put("/api/contactinfosources/1/",data = {
+            "contact_info_source" : "source Updated",
+        })
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["contact_info_source"], "source Updated")
+        
+    def test_delete_contact_info_source(self):
+        response = self.client.delete("/api/contactinfosources/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ContactInfoSourceLUTID 1 deleted")        
+        
+class TestContactInfoStatus(PopulatedDB):
+    def test_get_contact_info_statuses(self):
+        response = self.client.get("/api/contactinfostatuses/")
+        self.assertEqual(response.json["ContactInfoStatuses"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["ContactInfoStatuses"][0]["contact_info_status"], "status")
+        
+    def test_get_contact_info_status(self):
+        response = self.client.get("/api/contactinfostatuses/1/")
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["contact_info_status"], "status")
+        
+    def test_update_contact_info_status(self):
+        response = self.client.put("/api/contactinfostatuses/1/",data = {
+            "contact_info_status" : "status Updated",
+        })
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["contact_info_status"], "status Updated")
+        
+    def test_delete_contact_info_status(self):
+        response = self.client.delete("/api/contactinfostatuses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "ContactInfoStatusID 1 deleted")
 
 class TestFunding(PopulatedDB):
     def test_get_fundings(self):
@@ -1077,6 +1144,56 @@ class TestPatientPhone(PopulatedDB):
         response = self.client.delete("/api/patientphones/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "PatPhoneID 1 deleted")      
+
+class TestPatientProjectStatus(PopulatedDB):
+    def test_get_patient_project_statuses(self):
+        response = self.client.get("/api/patientprojectstatuses/")
+        self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusID"], 1)
+        self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusLUTID"], 1)
+        self.assertEqual(response.json["PatientProjectStatuses"][0]["projectPatientID"], 1)
+        
+    def test_get_patient_project_status(self):
+        response = self.client.get("/api/patientprojectstatuses/1/")
+        self.assertEqual(response.json["patientProjectStatusID"], 1)
+        self.assertEqual(response.json["patientProjectStatusLUTID"], 1)
+        self.assertEqual(response.json["projectPatientID"], 1)
+        
+    def test_update_patient_project_status(self):
+        response = self.client.put("/api/patientprojectstatuses/1/", data = {
+            "patientProjectStatusLUTID" : 2,
+            "projectPatientID" : 2
+        })
+        self.assertEqual(response.json["patientProjectStatusID"], 1)
+        self.assertEqual(response.json["patientProjectStatusLUTID"], 2)
+        self.assertEqual(response.json["projectPatientID"], 2)
+        
+    def test_delete_patient_project_status(self):
+        response = self.client.delete("/api/patientprojectstatuses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PatientProjectStatusID 1 deleted")   
+
+class TestPatientProjectStatusLUT(PopulatedDB):
+    def test_get_patient_project_status_types(self):
+        response = self.client.get("/api/patientprojectstatustypes/")
+        self.assertEqual(response.json["PatientProjectStatusTypes"][0]["patientProjectStatusTypeID"], 1)
+        self.assertEqual(response.json["PatientProjectStatusTypes"][0]["status_description"], "desc")
+
+    def test_get_patient_project_status_type(self):
+        response = self.client.get("/api/patientprojectstatustypes/1/")
+        self.assertEqual(response.json["patientProjectStatusTypeID"], 1)
+        self.assertEqual(response.json["status_description"], "desc")
+
+    def test_update_patient_project_status_type(self):
+        response = self.client.put("/api/patientprojectstatustypes/1/", data = {
+            "status_description" : "desc Updated"
+        })
+        self.assertEqual(response.json["patientProjectStatusTypeID"], 1)
+        self.assertEqual(response.json["status_description"], "desc Updated")
+
+    def test_delete_patient_project_status_type(self):
+        response = self.client.delete("/api/patientprojectstatustypes/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PatientProjectStatusTypeID 1 deleted")             
         
 class TestPhaseStatus(PopulatedDB):
     def test_get_phase_statuses(self):
@@ -1735,8 +1852,7 @@ class TestTracing(PopulatedDB):
         response = self.client.delete("/api/tracings/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "TracingID 1 deleted")
-                
-        
+                     
 class TestTracingSource(PopulatedDB):
     def test_get_tracing_sources(self):
         response = self.client.get("/api/tracingsources/")
@@ -1759,7 +1875,6 @@ class TestTracingSource(PopulatedDB):
         response = self.client.delete("/api/tracingsources/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "TracingSourceLUTID 1 deleted")
-        
         
 class TestUCRReport(PopulatedDB):
     def test_get_ucr_report(self):

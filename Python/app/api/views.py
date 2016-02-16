@@ -271,6 +271,116 @@ def delete_budget(budgetID):
     except Exception as e:
         return internal_error(e)
 
+#############################################################################
+# Contact Info Source
+#############################################################################
+@api.route('/contactinfosources/', methods = ['GET'])
+@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['GET'])
+def get_contact_info_source(contactInfoSourceLUTID = None):
+    if contactInfoSourceLUTID is None:
+        return jsonify(ContactInfoSources = [i.dict() for i in query.get_contact_info_sources()])
+    else:
+        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+        if contactInfoSource is not None:
+            return contactInfoSource.json()
+        else:
+            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+            
+@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/',methods = ['PUT'])
+def update_contact_info_source(contactInfoSourceLUTID):
+    contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+    if contactInfoSource is not None:
+        try:
+            contactInfoSource.contact_info_source = request.form['contact_info_source']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return contactInfoSource.json()
+    else:
+        return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+        
+@api.route('/contactinfosources/',methods=['POST'])
+def create_contact_info_source():
+    try:
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = request.form['contact_info_source'],
+        )
+        ret = query.add(contactInfoSource)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"contactInfoSourceLUTID" : contactInfoSource.contactInfoSourceLUTID})
+    
+@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['DELETE'])
+def delete_contact_info_source(contactInfoSourceLUTID):
+    try:
+        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+        if contactInfoSource is not None:
+            query.delete(contactInfoSource)
+            return item_deleted("ContactInfoSourceLUTID {} deleted".format(contactInfoSourceLUTID))
+        else:
+            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+    except Exception as e:
+        return internal_error(e)        
+        
+#############################################################################
+# Contact Info Status
+#############################################################################
+@api.route('/contactinfostatuses/', methods = ['GET'])
+@api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['GET'])
+def get_contact_info_status(contactInfoStatusID = None):
+    if contactInfoStatusID is None:
+        return jsonify(ContactInfoStatuses = [i.dict() for i in query.get_contact_info_statuses()])
+    else:
+        contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
+        if contactInfoStatus is not None:
+            return contactInfoStatus.json()
+        else:
+            return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
+            
+@api.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods = ['PUT'])
+def update_contact_info_status(contactInfoStatusID):
+    contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
+    if contactInfoStatus is not None:
+        try:
+            contactInfoStatus.contact_info_status = request.form['contact_info_status']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return interal_error(e)
+        return contactInfoStatus.json()
+    else:
+        return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
+        
+@api.route('/contactinfostatuses/',methods=['POST'])
+def create_contact_info_status():
+    try:
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = request.form['contact_info_status'],
+        )
+        ret = query.add(contactInfoStatus)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
+    
+@api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['DELETE'])
+def delete_contact_info_status(contactInfoStatusID):
+    try:
+        contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
+        if contactInfoStatus is not None:
+            query.delete(contactInfoStatus)
+            return item_deleted("ContactInfoStatusID {} deleted".format(contactInfoStatusID))
+        else:
+            return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
+    except Exception as e:
+        return internal_error(e)
+   
 ##############################################################################
 # Funding
 ##############################################################################
@@ -1141,7 +1251,118 @@ def delete_patient_phone(patPhoneID):
     except Exception as e:
         return internal_error(e)
                  
-        
+##############################################################################
+# Patient Project Status
+##############################################################################
+@api.route('/patientprojectstatuses/', methods = ['GET'])
+@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['GET'])
+def get_patient_project_status(patientProjectStatusID=None):
+    if patientProjectStatusID is None:
+        return jsonify(PatientProjectStatuses = [i.dict() for i in query.get_patient_project_statuses()])
+    else:
+        patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
+        if patientProjectStatus is not None:
+            return patientProjectStatus.json()
+        else:
+            return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
+            
+@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['PUT'])
+def update_patient_project_status(patientProjectStatusID):
+    patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
+    if patientProjectStatus is not None:
+        try:
+            patientProjectStatus.patientProjectStatusLUTID = request.form['patientProjectStatusLUTID']
+            patientProjectStatus.projectPatientID = request.form['projectPatientID']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patientProjectStatus.json()
+    else:
+        return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID)) 
+
+@api.route('/patientprojectstatuses/', methods=['POST'])
+def create_patient_project_status():
+    try:
+        patientProjectStatus = models.PatientProjectStatus(
+            patientProjectStatusLUTID = request.form['patientProjectStatusLUTID'],
+            projectPatientID = request.form['projectPatientID']
+        )
+        ret = query.add(patientProjectStatus)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'patientProjectStatusID':patientProjectStatus.patientProjectStatusID})        
+
+@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['DELETE'])
+def delete_patient_project_status(patientProjectStatusID):
+    try:
+        patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
+        if patientProjectStatus is not None:
+            query.delete(patientProjectStatus)
+            return item_deleted("PatientProjectStatusID {} deleted".format(patientProjectStatusID))
+        else:
+            return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
+    except Exception as e:
+        return internal_error(e)
+    
+##############################################################################
+# Patient Project Status Type LUT
+##############################################################################
+@api.route('/patientprojectstatustypes/', methods = ['GET'])
+@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['GET'])
+def get_patient_project_status_type(patientProjectStatusTypeID=None):
+    if patientProjectStatusTypeID is None:
+        return jsonify(PatientProjectStatusTypes = [i.dict() for i in query.get_patient_project_status_types()])
+    else:
+        patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
+        if patientProjectStatusType is not None:
+            return patientProjectStatusType.json()
+        else:
+            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
+            
+@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['PUT'])
+def update_patient_project_status_type(patientProjectStatusTypeID):
+    patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
+    if patientProjectStatusType is not None:
+        try:
+            patientProjectStatusType.status_description = request.form['status_description']
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return patientProjectStatusType.json()
+    else:
+        return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID)) 
+
+@api.route('/patientprojectstatustypes/', methods=['POST'])
+def create_patient_project_status_type():
+    try:
+        patientProjectStatusType = models.PatientProjectStatusLUT(
+            status_description = request.form['status_description']
+        )
+        ret = query.add(patientProjectStatusType)
+    except KeyError as e:
+        return missing_params(e)
+    except Exception as e:
+        return internal_error(e)
+    return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})        
+
+@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['DELETE'])
+def delete_patient_project_status_type(patientProjectStatusTypeID):
+    try:
+        patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
+        if patientProjectStatusType is not None:
+            query.delete(patientProjectStatusType)
+            return item_deleted("PatientProjectStatusTypeID {} deleted".format(patientProjectStatusTypeID))
+        else:
+            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
+    except Exception as e:
+        return internal_error(e)
+                     
 ##############################################################################
 # Phase Status
 ##############################################################################
@@ -2006,8 +2227,6 @@ def delete_tracing(tracingID):
     except Exception as e:
         return internal_error(e)
         
-                
-        
 ##############################################################################
 # Tracing Source LUT
 ##############################################################################
@@ -2062,8 +2281,7 @@ def delete_tracing_source(tracingSourceLUTID):
             return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-        
-        
+              
 ##############################################################################
 # UCR Report
 ##############################################################################

@@ -89,6 +89,37 @@ class TestBudget(BlankDB):
         })
         self.assertEqual(response.json, dict(budgetID=1))
 
+class TestContactInfoStatus(BlankDB):
+    def test_empty_contact_info_status(self):
+        response = self.client.get("/api/contactinfostatuses/")
+        self.assertEqual(response.json, {"ContactInfoStatuses" : [] })
+        
+    def test_contact_info_status_no_id(self):
+        response = self.client.get('/api/contactinfostatuses/1/')
+        self.assertEqual(response.json, {"Error" : "ContactInfoStatusID 1 not found"})
+        
+    def test_create_contact_info_status(self):
+        response = self.client.post("/api/contactinfostatuses/", data = {
+            "contact_info_status" : "status",
+        })
+        self.assertEqual(response.json, dict(contactInfoStatusID=1))
+        
+class TestContactInfoSource(BlankDB):
+    def test_empty_contact_info_source(self):
+        response = self.client.get("/api/contactinfosources/")
+        self.assertEqual(response.json, {"ContactInfoSources" : [] })
+        
+    def test_contact_info_source_no_id(self):
+        response = self.client.get('/api/contactinfosources/1/')
+        self.assertEqual(response.json, {"Error" : "ContactInfoSourceLUTID 1 not found"})
+        
+    def test_create_contact_info_source(self):
+        response = self.client.post("/api/contactinfosources/", data = {
+            "contact_info_source" : "source",
+        })
+        self.assertEqual(response.json, dict(contactInfoSourceLUTID=1))
+
+
 class TestFunding(BlankDB):
 
     def test_empty_funding(self):
@@ -365,7 +396,38 @@ class TestPatientPhone(BlankDB):
             "phone_status_date" : "2016-02-02"
         })
         self.assertEqual(response.json, {"patPhoneID": 1})       
+
+class TestPatientProjectStatus(BlankDB):
+    def test_empty_patient_project_status(self):
+        response = self.client.get("/api/patientprojectstatuses/")
+        self.assertEqual(response.json, dict(PatientProjectStatuses = []))
+   
+    def test_patient_project_status_no_id(self):
+        response = self.client.get("/api/patientprojectstatuses/1/")
+        self.assertEqual(response.json, {"Error" : "PatientProjectStatusID 1 not found"})
+
+    def test_create_patient_project_status(self):
+        response = self.client.post("/api/patientprojectstatuses/", data = {
+            "patientProjectStatusLUTID" : 1,
+            "projectPatientID" : 1
+        })
+        self.assertEqual(response.json, {"patientProjectStatusID": 1})
         
+class TestPatientProjectStatusLUT(BlankDB):
+    def test_empty_patient_project_status_type(self):
+        response = self.client.get("/api/patientprojectstatustypes/")
+        self.assertEqual(response.json, dict(PatientProjectStatusTypes = []))
+   
+    def test_patient_project_status_type_no_id(self):
+        response = self.client.get("/api/patientprojectstatustypes/1/")
+        self.assertEqual(response.json, {"Error" : "PatientProjectStatusTypeID 1 not found"})
+
+    def test_create_patient_project_status_type(self):
+        response = self.client.post("/api/patientprojectstatustypes/", data = {
+            "status_description" : "desc"
+        })
+        self.assertEqual(response.json, {"patientProjectStatusTypeID": 1})
+
 class TestPhaseStatus(BlankDB):
     def test_empty_phase_status(self):
         response = self.client.get("/api/phasestatuses/")
@@ -667,8 +729,7 @@ class TestTracingSource(BlankDB):
             "description" : "desc"
             })
         self.assertEqual(response.json, {"tracingSourceLUTID" : 1 })
-       
-        
+             
 class TestUCRReport(BlankDB):
     def test_empty_ucr_report(self):
         response = self.client.get("/api/ucrreports/")

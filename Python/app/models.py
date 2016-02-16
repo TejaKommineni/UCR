@@ -1012,7 +1012,7 @@ class PatientProjectStatus(CustomModel):
     __tablename__ = 'patientProjectStatus'
     
     patientProjectStatusID = db.Column(db.Integer, primary_key=True)
-    patientProjectStatusLUTID = db.Column(db.Integer, db.ForeignKey('patientProjectStatusLUT.idpatientProjectStatusLUT'))
+    patientProjectStatusLUTID = db.Column(db.Integer, db.ForeignKey('patientProjectStatusLUT.patientProjectStatusTypeID'))
     projectPatientID = db.Column(db.Integer, db.ForeignKey('projectPatient.participantID'))
     
     # Relationships
@@ -1033,7 +1033,7 @@ class PatientProjectStatus(CustomModel):
 class PatientProjectStatusLUT(CustomModel):
     __tablename__ = 'patientProjectStatusLUT'
     
-    idpatientProjectStatusLUT = db.Column(db.Integer, primary_key=True)
+    patientProjectStatusTypeID = db.Column(db.Integer, primary_key=True)
     status_description = db.Column(db.String)
     
     # Relationships
@@ -1042,9 +1042,9 @@ class PatientProjectStatusLUT(CustomModel):
     
     def __repr__(self):
         return "<PatientProjectStatusLUT(\
-        idpatientProjectStatusLUT = {}\
+        patientProjectStatusTypeID = {}\
         status_description = {})>".format(
-        idpatientProjectStatusLUT,
+        patientProjectStatusTypeID,
         status_description)
     
 class PhaseStatus(CustomModel):

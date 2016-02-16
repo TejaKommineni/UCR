@@ -16,6 +16,18 @@ def get_budgets():
 def get_budget(id):
     return db.session.query(Budget).filter_by(budgetID = id).first()
 
+def get_contact_info_sources():
+    return db.session.query(ContactInfoSourceLUT).all()
+    
+def get_contact_info_source(id):
+    return db.session.query(ContactInfoSourceLUT).filter_by(contactInfoSourceLUTID = id).first()    
+    
+def get_contact_info_statuses():
+    return db.session.query(ContactInfoStatusLUT).all()
+    
+def get_contact_info_status(id):
+    return db.session.query(ContactInfoStatusLUT).filter_by(contactInfoStatusID = id).first()
+    
 def get_fundings():
     return db.session.query(Funding).all()
     
@@ -93,7 +105,19 @@ def get_patient_phones():
     
 def get_patient_phone(id):
     return db.session.query(PatientPhone).filter_by(patPhoneID = id).first()
-  
+
+def get_patient_project_statuses():
+    return db.session.query(PatientProjectStatus).all()
+    
+def get_patient_project_status(id):
+    return db.session.query(PatientProjectStatus).filter_by(patientProjectStatusID = id).first()
+
+def get_patient_project_status_types():
+    return db.session.query(PatientProjectStatusLUT).all()
+    
+def get_patient_project_status_type(id):
+    return db.session.query(PatientProjectStatusLUT).filter_by(patientProjectStatusTypeID=id).first()
+    
 def get_phase_statuses():
     return db.session.query(PhaseStatus).all()
     
