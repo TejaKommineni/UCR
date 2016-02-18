@@ -966,42 +966,49 @@ def delete_facility_address(facilityAddressID):
 @api.route('/fundingsources/', methods = ['GET'])
 @api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['GET'])
 def get_funding_source(fundingSourceLUTID=None):
-    if fundingSourceLUTID is None:
-        return jsonify(FundingSources = [i.dict() for i in query.get_funding_sources()])
-    else:
-        fundingSource = query.get_funding_source(fundingSourceLUTID)
-        if fundingSource is not None:
-            return fundingSource.json()
+    try:
+        if fundingSourceLUTID is None:
+            return jsonify(FundingSources = [i.dict() for i in query.get_funding_sources()])
         else:
-            return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
+            fundingSource = query.get_funding_source(fundingSourceLUTID)
+            if fundingSource is not None:
+                return fundingSource.json()
+            else:
+                return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['PUT'])
 def update_funding_source(fundingSourceLUTID):
-    fundingSource = query.get_funding_source(fundingSourceLUTID)
-    if fundingSource is not None:
-        try:
-            fundingSource.fundingSource = request.form['fundingSource']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return fundingSource.json()
-    else:
-        return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID)) 
-
+    try:
+        fundingSource = query.get_funding_source(fundingSourceLUTID)
+        if fundingSource is not None:
+            form = forms.FundingSourceLUTForm(request.form)
+            if form.validate():
+                fundingSource.fundingSource = request.form['fundingSource']
+                query.commit()
+                return fundingSource.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID)) 
+    except Exception as e:
+        return internal_error(e)
+        
 @api.route('/fundingsources/', methods=['POST'])
 def create_funding_source():
     try:
-        fundingSource = models.FundingSourceLUT(
-            fundingSource = request.form['fundingSource']
-        )
-        ret = query.add(fundingSource)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.FundingSourceLUTForm(request.form)
+        if form.validate():
+            fundingSource = models.FundingSourceLUT(
+                fundingSource = request.form['fundingSource']
+            )
+            query.add(fundingSource)
+            return jsonify({'fundingSourceLUTID':fundingSource.fundingSourceLUTID})  
+        else:
+            return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)
-    return jsonify({'fundingSourceLUTID':fundingSource.fundingSourceLUTID})        
+        return internal_error(e)      
 
 @api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['DELETE'])
 def delete_funding_source(fundingSourceLUTID):
@@ -1021,43 +1028,50 @@ def delete_funding_source(fundingSourceLUTID):
 @api.route('/grantstatuses/', methods = ['GET'])
 @api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['GET'])
 def get_grant_status(grantStatusLUTID=None):
-    if grantStatusLUTID is None:
-        return jsonify(GrantStatuses = [i.dict() for i in query.get_grant_statuses()])
-    else:
-        grantStatus = query.get_grant_status(grantStatusLUTID)
-        if grantStatus is not None:
-            return grantStatus.json()
+    try:
+        if grantStatusLUTID is None:
+            return jsonify(GrantStatuses = [i.dict() for i in query.get_grant_statuses()])
         else:
-            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
+            grantStatus = query.get_grant_status(grantStatusLUTID)
+            if grantStatus is not None:
+                return grantStatus.json()
+            else:
+                return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['PUT'])
 def update_grant_status(grantStatusLUTID):
-    grantStatus = query.get_grant_status(grantStatusLUTID)
-    if grantStatus is not None:
-        try:
-            grantStatus.grant_status = request.form['grant_status']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return grantStatus.json()
-    else:
-        return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID)) 
+    try:
+        grantStatus = query.get_grant_status(grantStatusLUTID)
+        if grantStatus is not None:
+            form = forms.GrantStatusLUTForm(request.form)
+            if form.validate():
+                grantStatus.grant_status = request.form['grant_status']
+                query.commit()
+                return grantStatus.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID)) 
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/grantstatuses/', methods=['POST'])
 def create_grant_status():
     try:
-        grantStatus = models.GrantStatusLUT(
-            grant_status = request.form['grant_status']
-        )
-        ret = query.add(grantStatus)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.GrantStatusLUTForm(request.form)
+        if form.validate():
+            grantStatus = models.GrantStatusLUT(
+                grant_status = request.form['grant_status']
+            )
+            query.add(grantStatus)
+            return jsonify({'grantStatusLUTID':grantStatus.grantStatusLUTID})   
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'grantStatusLUTID':grantStatus.grantStatusLUTID})        
-
+        
 @api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['DELETE'])
 def delete_grant_status(grantStatusLUTID):
     try:
@@ -1076,42 +1090,49 @@ def delete_grant_status(grantStatusLUTID):
 @api.route('/humansubjecttrainings/', methods = ['GET'])
 @api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['GET'])
 def get_human_subject_training(humanSubjectTrainingID=None):
-    if humanSubjectTrainingID is None:
-        return jsonify(HumanSubjectTrainings = [i.dict() for i in query.get_human_subject_trainings()])
-    else:
-        humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
-        if humanSubjectTraining is not None:
-            return humanSubjectTraining.json()
+    try:
+        if humanSubjectTrainingID is None:
+            return jsonify(HumanSubjectTrainings = [i.dict() for i in query.get_human_subject_trainings()])
         else:
-            return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
+            humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
+            if humanSubjectTraining is not None:
+                return humanSubjectTraining.json()
+            else:
+                return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['PUT'])
 def update_human_subject_training(humanSubjectTrainingID):
-    humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
-    if humanSubjectTraining is not None:
-        try:
-            humanSubjectTraining.training_type = request.form['training_type']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return humanSubjectTraining.json()
-    else:
-        return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID)) 
+    try:
+        humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
+        if humanSubjectTraining is not None:
+            form = forms.HumanSubjectTrainingLUTForm(request.form)
+            if form.validate():
+                humanSubjectTraining.training_type = request.form['training_type']
+                query.commit()
+                return humanSubjectTraining.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/humansubjecttrainings/', methods=['POST'])
 def create_human_subject_training():
     try:
-        humanSubjectTraining = models.HumanSubjectTrainingLUT(
-            training_type = request.form['training_type']
-        )
-        ret = query.add(humanSubjectTraining)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.HumanSubjectTrainingLUTForm(request.form)
+        if form.validate():
+            humanSubjectTraining = models.HumanSubjectTrainingLUT(
+                training_type = request.form['training_type']
+            )
+            query.add(humanSubjectTraining)
+            return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID}) 
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})        
 
 @api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['DELETE'])
 def delete_human_subject_training(humanSubjectTrainingID):
@@ -1340,44 +1361,51 @@ def delete_informant_phone(informantPhoneID):
 @api.route('/irbholders/',methods=['GET'])
 @api.route('/irbholders/<int:irbHolderID>/', methods = ['GET'])
 def get_irb_holder(irbHolderID=None):
-    if irbHolderID is None:
-        return jsonify(irbHolders = [i.dict() for i in query.get_irb_holders()])
-    else:
-        irb = query.get_irb_holder(irbHolderID)
-        if irb is not None:
-            return irb.json()
+    try:
+        if irbHolderID is None:
+            return jsonify(irbHolders = [i.dict() for i in query.get_irb_holders()])
         else:
-            return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+            irb = query.get_irb_holder(irbHolderID)
+            if irb is not None:
+                return irb.json()
+            else:
+                return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
 def update_irb_holder(irbHolderID):
-    irb = query.get_irb_holder(irbHolderID)
-    if irb is not None:
-        try:
-            irb.irb_holder = request.form['irb_holder']
-            irb.irb_holder_definition = request.form['irb_holder_definition']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return irb.json()
-    else:
-        return item_not_found("IrbHolderID {} not found".format(irbHolderID))
-        
+    try:
+        irb = query.get_irb_holder(irbHolderID)
+        if irb is not None:
+            form = forms.IRBHolderLUTForm(request.form)
+            if form.validate():
+                irb.irb_holder = request.form['irb_holder']
+                irb.irb_holder_definition = request.form['irb_holder_definition']
+                query.commit()
+                return irb.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("IrbHolderID {} not found".format(irbHolderID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/irbholders/', methods = ['POST'])
 def create_irb_holder():
     try:
-        irb = models.IRBHolderLUT(
-            irb_holder = request.form['irb_holder'],
-            irb_holder_definition = request.form['irb_holder_definition']
-        )
-        ret = query.add(irb)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.IRBHolderLUTForm(request.form)
+        if form.validate():
+            irb = models.IRBHolderLUT(
+                irb_holder = request.form['irb_holder'],
+                irb_holder_definition = request.form['irb_holder_definition']
+            )
+            query.add(irb)
+            return jsonify({"irbHolderID":irb.irbHolderID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"irbHolderID":irb.irbHolderID})
     
 @api.route('/irbholders/<int:irbHolderID>/',methods=['DELETE'])
 def delete_irb_holder(irbHolderID):
@@ -1938,44 +1966,51 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
 @api.route('/phasestatuses/', methods = ['GET'])
 @api.route('/phasestatuses/<int:logPhaseID>/', methods = ['GET'])
 def get_phase_status(logPhaseID=None):
-    if logPhaseID is None:
-        return jsonify(PhaseStatuses = [i.dict() for i in query.get_phase_statuses()])
-    else:
-        phaseStatus = query.get_phase_status(logPhaseID)
-        if phaseStatus is not None:
-            return phaseStatus.json()
+    try:
+        if logPhaseID is None:
+            return jsonify(PhaseStatuses = [i.dict() for i in query.get_phase_statuses()])
         else:
-            return item_not_found("LogPhaseID {} not found".format(logPhaseID))
+            phaseStatus = query.get_phase_status(logPhaseID)
+            if phaseStatus is not None:
+                return phaseStatus.json()
+            else:
+                return item_not_found("LogPhaseID {} not found".format(logPhaseID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/phasestatuses/<int:logPhaseID>/', methods = ['PUT'])
 def update_phase_status(logPhaseID):
-    phaseStatus = query.get_phase_status(logPhaseID)
-    if phaseStatus is not None:
-        try:
-            phaseStatus.phase_status = request.form['phase_status']
-            phaseStatus.phase_description = request.form['phase_description']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return phaseStatus.json()
-    else:
-        return item_not_found("LogPhaseID {} not found".format(logPhaseID)) 
+    try:
+        phaseStatus = query.get_phase_status(logPhaseID)
+        if phaseStatus is not None:
+            form = forms.PhaseStatusForm(request.form)
+            if form.validate():
+                phaseStatus.phase_status = request.form['phase_status']
+                phaseStatus.phase_description = request.form['phase_description']
+                query.commit()
+                return phaseStatus.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("LogPhaseID {} not found".format(logPhaseID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/phasestatuses/', methods=['POST'])
 def create_phase_status():
     try:
-        phaseStatus = models.PhaseStatus(
-            phase_status = request.form['phase_status'],
-            phase_description = request.form['phase_description']
-        )
-        ret = query.add(phaseStatus)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.PhaseStatusForm(request.form)
+        if form.validate():
+            phaseStatus = models.PhaseStatus(
+                phase_status = request.form['phase_status'],
+                phase_description = request.form['phase_description']
+            )
+            ret = query.add(phaseStatus)
+            return jsonify({'logPhaseID':phaseStatus.logPhaseID})  
+        else:
+            return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)
-    return jsonify({'logPhaseID':phaseStatus.logPhaseID})        
+        return internal_error(e)      
 
 @api.route('/phasestatuses/<int:logPhaseID>/', methods = ['DELETE'])
 def delete_phase_status(logPhaseID):
@@ -2774,44 +2809,51 @@ def delete_project_status(projectStatusID):
 @api.route('/projectstatustypes/', methods = ['GET'])
 @api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['GET'])
 def get_project_status_lut(projectStatusTypeID=None):
-    if projectStatusTypeID is None:
-        return jsonify(ProjectStatusTypes = [i.dict() for i in query.get_project_status_luts()])
-    else:
-        projectStatusType = query.get_project_status_lut(projectStatusTypeID)
-        if projectStatusType is not None:
-            return projectStatusType.json()
+    try:
+        if projectStatusTypeID is None:
+            return jsonify(ProjectStatusTypes = [i.dict() for i in query.get_project_status_luts()])
         else:
-            return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
+            projectStatusType = query.get_project_status_lut(projectStatusTypeID)
+            if projectStatusType is not None:
+                return projectStatusType.json()
+            else:
+                return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['PUT'])
 def update_project_status_lut(projectStatusTypeID):
-    projectStatusType = query.get_project_status_lut(projectStatusTypeID)
-    if projectStatusType is not None:
-        try:
-            projectStatusType.project_status = request.form['project_status']
-            projectStatusType.status_definition = request.form['status_definition']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return projectStatusType.json()
-    else:
-        return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID)) 
+    try:
+        projectStatusType = query.get_project_status_lut(projectStatusTypeID)
+        if projectStatusType is not None:
+            form = forms.ProjectStatusLUTForm(request.form)
+            if form.validate():
+                projectStatusType.project_status = request.form['project_status']
+                projectStatusType.status_definition = request.form['status_definition']
+                query.commit()
+                return projectStatusType.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/projectstatustypes/', methods=['POST'])
 def create_project_status_lut():
     try:
-        projectStatusType = models.ProjectStatusLUT(
-            project_status = request.form['project_status'],
-            status_definition = request.form['status_definition']
-        )
-        ret = query.add(projectStatusType)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ProjectStatusLUTForm(request.form)
+        if form.validate():
+            projectStatusType = models.ProjectStatusLUT(
+                project_status = request.form['project_status'],
+                status_definition = request.form['status_definition']
+            )
+            query.add(projectStatusType)
+            return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})  
+        else:
+            return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)
-    return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})        
+        return internal_error(e)      
 
 @api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['DELETE'])
 def delete_project_status_lut(projectStatusTypeID):
@@ -2826,49 +2868,56 @@ def delete_project_status_lut(projectStatusTypeID):
         return internal_error(e)
 
 ##############################################################################
-# ProjecType
+# ProjectType
 ##############################################################################
 @api.route('/projecttypes/', methods = ['GET'])
 @api.route('/projecttypes/<int:projectTypeID>/', methods = ['GET'])
 def get_project_type(projectTypeID=None):
-    if projectTypeID is None:
-        return jsonify(ProjectTypes = [i.dict() for i in query.get_project_types()])
-    else:
-        projectType = query.get_project_type(projectTypeID)
-        if projectType is not None:
-            return projectType.json()
+    try:
+        if projectTypeID is None:
+            return jsonify(ProjectTypes = [i.dict() for i in query.get_project_types()])
         else:
-            return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
+            projectType = query.get_project_type(projectTypeID)
+            if projectType is not None:
+                return projectType.json()
+            else:
+                return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/projecttypes/<int:projectTypeID>/', methods = ['PUT'])
 def update_project_type(projectTypeID):
-    projectType = query.get_project_type(projectTypeID)
-    if projectType is not None:
-        try:
-            projectType.project_type = request.form['project_type']
-            projectType.project_type_definition = request.form['project_type_definition']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return projectType.json()
-    else:
-        return item_not_found("ProjectTypeID {} not found".format(projectTypeID)) 
-
+    try:
+        projectType = query.get_project_type(projectTypeID)
+        if projectType is not None:
+            form = forms.ProjectTypeForm(request.form)
+            if form.validate():
+                projectType.project_type = request.form['project_type']
+                projectType.project_type_definition = request.form['project_type_definition']
+                query.commit()
+                return projectType.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ProjectTypeID {} not found".format(projectTypeID)) 
+    except Exception as e:
+        return internal_error(e)
+        
 @api.route('/projecttypes/', methods=['POST'])
 def create_project_type():
     try:
-        projectType = models.ProjectType(
-            project_type = request.form['project_type'],
-            project_type_definition = request.form['project_type_definition']
-        )
-        ret = query.add(projectType)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ProjectTypeForm(request.form)
+        if form.validate():
+            projectType = models.ProjectType(
+                project_type = request.form['project_type'],
+                project_type_definition = request.form['project_type_definition']
+            )
+            query.add(projectType)
+            return jsonify({'projectTypeID':projectType.projectTypeID}) 
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'projectTypeID':projectType.projectTypeID})        
 
 @api.route('/projecttypes/<int:projectTypeID>/', methods = ['DELETE'])
 def delete_project_type(projectTypeID):
@@ -2888,44 +2937,51 @@ def delete_project_type(projectTypeID):
 @api.route('/rcstatuslist/', methods = ['GET'])
 @api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['GET'])
 def get_rc_status_list(rcStatusID=None):
-    if rcStatusID is None:
-        return jsonify(RCStatusList = [i.dict() for i in query.get_rc_statuses()])
-    else:
-        rcStatus = query.get_rc_status(rcStatusID)
-        if rcStatus is not None:
-            return rcStatus.json()
+    try:
+        if rcStatusID is None:
+            return jsonify(RCStatusList = [i.dict() for i in query.get_rc_statuses()])
         else:
-            return item_not_found("RCStatusID {} not found".format(rcStatusID))
+            rcStatus = query.get_rc_status(rcStatusID)
+            if rcStatus is not None:
+                return rcStatus.json()
+            else:
+                return item_not_found("RCStatusID {} not found".format(rcStatusID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['PUT'])
 def update_rc_status_list(rcStatusID):
-    rcStatus = query.get_rc_status(rcStatusID)
-    if rcStatus is not None:
-        try:
-            rcStatus.rc_status = request.form['rc_status']
-            rcStatus.rc_status_definition = request.form['rc_status_definition']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return rcStatus.json()
-    else:
-        return item_not_found("RCStatusListID {} not found".format(rcStatusID))
-        
+    try:
+        rcStatus = query.get_rc_status(rcStatusID)
+        if rcStatus is not None:
+            form = forms.RCStatusListForm(request.form)
+            if form.validate():
+                rcStatus.rc_status = request.form['rc_status']
+                rcStatus.rc_status_definition = request.form['rc_status_definition']
+                query.commit()
+                return rcStatus.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("RCStatusListID {} not found".format(rcStatusID))
+    except Exception as e:
+        return internal_error(e)
+                
 @api.route('/rcstatuslist/', methods=['POST'])
 def create_rc_status_list():
     try:
-        rcStatus = models.RCStatusList(
-            rc_status = request.form['rc_status'],
-            rc_status_definition = request.form['rc_status_definition']
-        )
-        ret = query.add(rcStatus)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.RCStatusListForm(request.form)
+        if form.validate():
+            rcStatus = models.RCStatusList(
+                rc_status = request.form['rc_status'],
+                rc_status_definition = request.form['rc_status_definition']
+            )
+            query.add(rcStatus)
+            return jsonify({'rcStatusListID':rcStatus.rcStatusID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'rcStatusListID':rcStatus.rcStatusID})
 
 @api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['DELETE'])
 def delete_rc_status_list(rcStatusID):
@@ -3016,44 +3072,51 @@ def delete_review_committee(reviewCommitteeID):
 @api.route('/reviewcommitteelist/', methods = ['GET'])
 @api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['GET'])
 def get_review_committee_list(rcListID=None):
-    if rcListID is None:
-        return jsonify(reviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
-    else:
-        review_committee_list = query.get_review_committee_list(rcListID)
-        if review_committee_list is not None:
-            return review_committee_list.json()
+    try:
+        if rcListID is None:
+            return jsonify(reviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
         else:
-            return item_not_found("RCListID {} not found".format(rcListID))
+            review_committee_list = query.get_review_committee_list(rcListID)
+            if review_committee_list is not None:
+                return review_committee_list.json()
+            else:
+                return item_not_found("RCListID {} not found".format(rcListID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/reviewcommitteelist/<int:rcListID>/',methods = ['PUT'])
 def update_review_committee_list(rcListID):
-    rcList = query.get_review_committee_list(rcListID)
-    if rcList is not None:
-        try:
-            rcList.reviewCommittee = request.form['reviewCommittee']
-            rcList.rc_description = request.form['rc_description']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return rcList.json()
-    else:
-        return item_not_found("RCListID {} not found".format(rcListID))
+    try:
+        rcList = query.get_review_committee_list(rcListID)
+        if rcList is not None:
+            form = forms.ReviewCommitteeListForm(request.form)
+            if form.validate():
+                rcList.review_committee = request.form['review_committee']
+                rcList.rc_description = request.form['rc_description']
+                query.commit()
+                return rcList.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("RCListID {} not found".format(rcListID))
+    except Exception as e:
+        return internal_error(e)   
         
 @api.route('/reviewcommitteelist/',methods = ['POST'])
 def create_review_committee_list():
     try:
-        reviewCommitteeList = models.ReviewCommitteeList(
-            reviewCommittee = request.form['reviewCommittee'],
-            rc_description = request.form['rc_description']
-            )
-        ret = query.add(reviewCommitteeList)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ReviewCommitteeListForm(request.form)
+        if form.validate():
+            reviewCommitteeList = models.ReviewCommitteeList(
+                review_committee = request.form['review_committee'],
+                rc_description = request.form['rc_description']
+                )
+            query.add(reviewCommitteeList)
+            return jsonify({'rcListID':reviewCommitteeList.rcListID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'rcListID':reviewCommitteeList.rcListID})
     
 @api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['DELETE'])
 def delete_review_committee_list(rcListID):
@@ -3156,44 +3219,51 @@ def delete_staff(staffID):
 @api.route('/staffroles/', methods = ['GET'])
 @api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['GET'])
 def get_staff_role(staffRoleLUTID=None):
-    if staffRoleLUTID is None:
-        return jsonify(StaffRoles = [i.dict() for i in query.get_staff_roles()])
-    else:
-        staffRole = query.get_staff_role(staffRoleLUTID)
-        if staffRole is not None:
-            return staffRole.json()
+    try:
+        if staffRoleLUTID is None:
+            return jsonify(StaffRoles = [i.dict() for i in query.get_staff_roles()])
         else:
-            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+            staffRole = query.get_staff_role(staffRoleLUTID)
+            if staffRole is not None:
+                return staffRole.json()
+            else:
+                return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/staffroles/<int:staffRoleLUTID>/',methods = ['PUT'])
 def update_staff_role(staffRoleLUTID):
-    staffRole = query.get_staff_role(staffRoleLUTID)
-    if staffRole is not None:
-        try:
-            staffRole.staffRole = request.form['staffRole']
-            staffRole.staffRoleDescription = request.form['staffRoleDescription']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return staffRole.json()
-    else:
-        return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+    try:
+        staffRole = query.get_staff_role(staffRoleLUTID)
+        if staffRole is not None:
+            form = forms.StaffRoleLUTForm(request.form)
+            if form.validate():
+                staffRole.staffRole = request.form['staffRole']
+                staffRole.staffRoleDescription = request.form['staffRoleDescription']
+                query.commit()
+                return staffRole.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+    except Exception as e:
+        return internal_error(e)
         
 @api.route('/staffroles/',methods = ['POST'])
 def create_staff_role():
     try:
-        staffRole = models.StaffRoleLUT(
-            staffRole = request.form['staffRole'],
-            staffRoleDescription = request.form['staffRoleDescription'],
-        )
-        ret = query.add(staffRole)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.StaffRoleLUTForm(request.form)
+        if form.validate():
+            staffRole = models.StaffRoleLUT(
+                staffRole = request.form['staffRole'],
+                staffRoleDescription = request.form['staffRoleDescription'],
+            )
+            query.add(staffRole)
+            return jsonify({'staffRoleLUTID':staffRole.staffRoleLUTID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'staffRoleLUTID':staffRole.staffRoleLUTID})
     
 @api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['DELETE'])
 def delete_staff_role(staffRoleLUTID):

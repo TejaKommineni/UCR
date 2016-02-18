@@ -91,7 +91,7 @@ class PopulatedDB(TestCase):
             irb_holder_definition= "IRB 1")
             
         rcl = models.ReviewCommitteeList(
-            reviewCommittee = "rc",
+            review_committee = "rc",
             rc_description = "rc desc")
         
         phaseStatus = models.PhaseStatus(
@@ -781,8 +781,9 @@ class TestContactInfoSource(PopulatedDB):
         
     def test_update_contact_info_source(self):
         response = self.client.put("/api/contactinfosources/1/",data = {
-            "contact_info_source" : "source Updated",
+            "contact_info_source" : "source",
         })
+        print(response.json)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
         self.assertEqual(response.json["contact_info_source"], "source Updated")
         
@@ -2580,20 +2581,20 @@ class TestReviewCommittee(PopulatedDB):
 class TestReviewCommitteeList(PopulatedDB):
     def test_get_review_committee_lists(self):
         response = self.client.get("/api/reviewcommitteelist/")
-        self.assertEqual(response.json["reviewCommitteeList"][0]["reviewCommittee"], "rc")
+        self.assertEqual(response.json["reviewCommitteeList"][0]["review_committee"], "rc")
         self.assertEqual(response.json["reviewCommitteeList"][0]["rc_description"], "rc desc")
         
     def test_get_review_committee_list(self):
         response = self.client.get("/api/reviewcommitteelist/1/")
-        self.assertEqual(response.json["reviewCommittee"], "rc")
+        self.assertEqual(response.json["review_committee"], "rc")
         self.assertEqual(response.json["rc_description"], "rc desc")
         
     def test_update_review_committee_list(self):
         response = self.client.put("/api/reviewcommitteelist/1/", data = {
-            "reviewCommittee" : "rc Updated",
+            "review_committee" : "rc Updated",
             "rc_description" : "rc desc Updated"
             })
-        self.assertEqual(response.json["reviewCommittee"],"rc Updated")
+        self.assertEqual(response.json["review_committee"],"rc Updated")
         self.assertEqual(response.json["rc_description"],"rc desc Updated")
         
     def test_delete_review_committee_list(self):

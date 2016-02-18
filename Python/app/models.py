@@ -1746,7 +1746,7 @@ class ReviewCommitteeList(CustomModel):
     __tablename__ ='reviewCommitteeList'
     
     rcListID = db.Column(db.Integer,primary_key=True)
-    reviewCommittee = db.Column(db.String)
+    review_committee = db.Column(db.String)
     rc_description = db.Column(db.String)
     
     # Relationships

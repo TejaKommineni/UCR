@@ -965,7 +965,7 @@ class TestReviewCommitteeList(BlankDB):
         
     def test_create_review_committee_list(self):
         response = self.client.post("/api/reviewcommitteelist/", data = {
-            "reviewCommittee" : "rc test",
+            "review_committee" : "rc test",
             "rc_description" : "rc desc"
             })
         self.assertEqual(response.json, {"rcListID" : 1 })
