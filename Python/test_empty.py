@@ -247,7 +247,32 @@ class TestFacility(BlankDB):
             "contact2_lname" : "lname"
         })
         self.assertEqual(response.json, {"facilityID": 1})  
-              
+
+class TestFacilityAddress(BlankDB):         
+    def test_empty_facility_address(self):
+        response = self.client.get("/api/facilityaddresses/")
+        self.assertEqual(response.json, dict(FacilityAddresses = []))
+   
+    def test_facility_address_no_id(self):
+        response = self.client.get("/api/facilityaddresses/1/")
+        self.assertEqual(response.json, {"Error" : "FacilityAddressID 1 not found"})
+
+    def test_create_facility_address(self):
+        response = self.client.post("/api/facilityaddresses/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "facilityID" : 1,
+            "contactInfoStatusLUTID" : 1,
+            "street" : "street",
+            "street2" : "street2",
+            "city" : "city",
+            "state" : "state",
+            "zip" : "zip",
+            "address_status" : 1,
+            "address_status_date" : "2016-02-02",
+            "address_status_source" : "s1"
+        })
+        self.assertEqual(response.json, {"facilityAddressID": 1})
+        
 class TestFunding(BlankDB):
 
     def test_empty_funding(self):
@@ -611,6 +636,71 @@ class TestPhysician(BlankDB):
             "email" : "email"
         })
         self.assertEqual(response.json, {"physicianID": 1})
+
+class TestPhysicianAddress(BlankDB):         
+    def test_empty_physician_address(self):
+        response = self.client.get("/api/physicianaddresses/")
+        self.assertEqual(response.json, dict(PhysicianAddresses = []))
+   
+    def test_physician_address_no_id(self):
+        response = self.client.get("/api/physicianaddresses/1/")
+        self.assertEqual(response.json, {"Error" : "PhysicianAddressID 1 not found"})
+
+    def test_create_physician_address(self):
+        response = self.client.post("/api/physicianaddresses/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "physicianID" : 1,
+            "contactInfoStatusLUTID" : 1,
+            "street" : "street",
+            "street2" : "street2",
+            "city" : "city",
+            "state" : "state",
+            "zip" : "zip",
+            "address_status" : 1,
+            "address_status_date" : "2016-02-02",
+            "address_status_source" : "s1"
+        })
+        self.assertEqual(response.json, {"physicianAddressID": 1})
+
+class TestPhysicianFacility(BlankDB):         
+    def test_empty_physician_facility(self):
+        response = self.client.get("/api/physicianfacilities/")
+        self.assertEqual(response.json, dict(PhysicianFacilities = []))
+   
+    def test_physician_facility_no_id(self):
+        response = self.client.get("/api/physicianfacilities/1/")
+        self.assertEqual(response.json, {"Error" : "PhysFacilityID 1 not found"})
+
+    def test_create_physician_facility(self):
+        response = self.client.post("/api/physicianfacilities/", data = {
+            "facilityID" : 1,
+            "physicianID" : 1,
+            "phys_facility_status" : "s1",
+            "phys_facility_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"physFacilityID": 1})       
+         
+class TestPhysicianPhone(BlankDB):         
+    def test_empty_physician_phone(self):
+        response = self.client.get("/api/physicianphones/")
+        self.assertEqual(response.json, dict(PhysicianPhones = []))
+   
+    def test_physician_phone_no_id(self):
+        response = self.client.get("/api/physicianphones/1/")
+        self.assertEqual(response.json, {"Error" : "PhysicianPhoneID 1 not found"})
+
+    def test_create_phone_phone(self):
+        response = self.client.post("/api/physicianphones/", data = {
+            "contactInfoSourceLUTID" : 1,
+            "physicianID" : 1,
+            "contactInfoStatusID" : 1,
+            "phone" : "phone",
+            "phone_type" : "phone_type",
+            "phone_status" : 1,
+            "phone_source" : "s1",
+            "phone_status_date" : "2016-02-02"
+        })
+        self.assertEqual(response.json, {"physicianPhoneID": 1})       
         
 class TestPhysicianToCTC(BlankDB):
     def test_empty_physician_to_ctc(self):

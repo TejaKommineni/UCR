@@ -423,7 +423,7 @@ class FacilityAddress(CustomModel):
     city = db.Column(db.String)
     state = db.Column(db.String)
     zip = db.Column(db.Integer)
-    addresss_status = db.Column(db.Integer)
+    address_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
     address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
@@ -1135,7 +1135,7 @@ class PhysicianAddress(CustomModel):
     city = db.Column(db.String)
     state = db.Column(db.String)
     zip = db.Column(db.Integer)
-    addresss_status = db.Column(db.Integer)
+    address_status = db.Column(db.Integer)
     address_status_date = db.Column(db.Date)
     address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
@@ -1208,6 +1208,7 @@ class PhysicianPhone(CustomModel):
     physicianID = db.Column(db.Integer,db.ForeignKey("physician.physicianID"))
     contactInfoStatusID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
     phone = db.Column(db.String)
+    phone_type = db.Column(db.String)
     phone_source = db.Column(PHONE_SOURCES)
     phone_status = db.Column(db.Integer)
     phone_status_date = db.Column(db.Date)

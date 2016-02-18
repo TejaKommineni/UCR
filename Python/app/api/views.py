@@ -865,7 +865,82 @@ def delete_facility(facilityID):
             return item_not_found("FacilityID {} not found".format(facilityID))
     except Exception as e:
         return internal_error(e)
-                      
+
+##############################################################################
+# Facility Address
+##############################################################################
+@api.route('/facilityaddresses/', methods=['GET'])
+@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['GET'])
+def get_facility_address(facilityAddressID=None):
+    if facilityAddressID is None:
+        return jsonify(FacilityAddresses = [i.dict() for i in query.get_facility_addresses()])
+    else:
+        facilityAddress = query.get_facility_address(facilityAddressID)
+        if facilityAddress is not None:
+            return facilityAddress.json()
+        else:
+            return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
+
+@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['PUT'])
+def update_facility_address(facilityAddressID):
+    facilityAddress = query.get_facility_address(facilityAddressID)
+    if facilityAddress is not None:
+        try:
+            facilityAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            facilityAddress.facilityID = request.form['facilityID']
+            facilityAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+            facilityAddress.street = request.form['street']
+            facilityAddress.street2 = request.form['street2']
+            facilityAddress.city = request.form['city']
+            facilityAddress.state = request.form['state']
+            facilityAddress.zip = request.form['zip']
+            facilityAddress.address_status = request.form['address_status']
+            facilityAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
+            facilityAddress.address_status_source = request.form['address_status_source']          
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return facilityAddress.json()
+    else:
+        return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
+
+@api.route('/facilityaddresses/', methods=['POST'])
+def create_facility_address():
+    try:
+        facilityAddress = models.FacilityAddress(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            facilityID = request.form['facilityID'],
+            contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+            street = request.form['street'],
+            street2 = request.form['street2'],
+            city = request.form['city'],
+            state = request.form['state'],
+            zip = request.form['zip'],
+            address_status = request.form['address_status'],
+            address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
+            address_status_source = request.form['address_status_source']  
+            )
+        ret = query.add(facilityAddress)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'facilityAddressID':facilityAddress.facilityAddressID})
+
+@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['DELETE'])
+def delete_facility_address(facilityAddressID):
+    try:
+        facilityAddress = query.get_facility_address(facilityAddressID)
+        if facilityAddress is not None:
+            query.delete(facilityAddress)
+            return item_deleted("FacilityAddressID {} deleted".format(facilityAddressID))
+        else:
+            return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
+    except Exception as e:
+        return internal_error(e)
+
 ##############################################################################
 # Funding Source LUT
 ##############################################################################
@@ -1956,7 +2031,211 @@ def delete_physician(physicianID):
     except Exception as e:
         return internal_error(e)
 
-        
+##############################################################################
+# Physician Address
+##############################################################################
+@api.route('/physicianaddresses/', methods=['GET'])
+@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['GET'])
+def get_physician_address(physicianAddressID=None):
+    if physicianAddressID is None:
+        return jsonify(PhysicianAddresses = [i.dict() for i in query.get_physician_addresses()])
+    else:
+        physicianAddress = query.get_physician_address(physicianAddressID)
+        if physicianAddress is not None:
+            return physicianAddress.json()
+        else:
+            return item_not_found("PhysicianAddressID {} not found".format(physicianAddressID))
+
+@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['PUT'])
+def update_physician_address(physicianAddressID):
+    physicianAddress = query.get_physician_address(physicianAddressID)
+    if physicianAddress is not None:
+        try:
+            physicianAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            physicianAddress.physicianID = request.form['physicianID']
+            physicianAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+            physicianAddress.street = request.form['street']
+            physicianAddress.street2 = request.form['street2']
+            physicianAddress.city = request.form['city']
+            physicianAddress.state = request.form['state']
+            physicianAddress.zip = request.form['zip']
+            physicianAddress.address_status = request.form['address_status']
+            physicianAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
+            physicianAddress.address_status_source = request.form['address_status_source']          
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return physicianAddress.json()
+    else:
+        return item_not_found("PhysicianAddressID {} not found".format(physicianAddressID))
+
+@api.route('/physicianaddresses/', methods=['POST'])
+def create_physician_address():
+    try:
+        physicianAddress = models.PhysicianAddress(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            physicianID = request.form['physicianID'],
+            contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+            street = request.form['street'],
+            street2 = request.form['street2'],
+            city = request.form['city'],
+            state = request.form['state'],
+            zip = request.form['zip'],
+            address_status = request.form['address_status'],
+            address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
+            address_status_source = request.form['address_status_source']  
+            )
+        ret = query.add(physicianAddress)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'physicianAddressID':physicianAddress.physicianAddressID})
+
+@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['DELETE'])
+def delete_physician_address(physicianAddressID):
+    try:
+        physicianAddress = query.get_physician_address(physicianAddressID)
+        if physicianAddress is not None:
+            query.delete(physicianAddress)
+            return item_deleted("PhysicianAddressID {} deleted".format(physicianAddressID))
+        else:
+            return item_not_found("PhysicianAddressID {} not found".format(physicianAddressID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Physician Facility
+##############################################################################
+@api.route('/physicianfacilities/', methods=['GET'])
+@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['GET'])
+def get_physician_facility(physFacilityID=None):
+    if physFacilityID is None:
+        return jsonify(PhysicianFacilities = [i.dict() for i in query.get_physician_facilities()])
+    else:
+        physicianFacility = query.get_physician_facility(physFacilityID)
+        if physicianFacility is not None:
+            return physicianFacility.json()
+        else:
+            return item_not_found("PhysFacilityID {} not found".format(physFacilityID))
+
+@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['PUT'])
+def update_physician_facility(physFacilityID):
+    physicianFacility = query.get_physician_facility(physFacilityID)
+    if physicianFacility is not None:
+        try:
+            physicianFacility.facilityID = request.form['facilityID']
+            physicianFacility.physicianID = request.form['physicianID']
+            physicianFacility.phys_facility_status = request.form['phys_facility_status']
+            physicianFacility.phys_facility_status_date = datetime.strptime(request.form['phys_facility_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return physicianFacility.json()
+    else:
+        return item_not_found("PhysFacilityID {} not found".format(physFacilityID))
+
+@api.route('/physicianfacilities/', methods=['POST'])
+def create_physician_facility():
+    try:
+        physicianFacility = models.PhysicianFacility(
+            facilityID = request.form['facilityID'],
+            physicianID = request.form['physicianID'],
+            phys_facility_status = request.form['phys_facility_status'],
+            phys_facility_status_date = datetime.strptime(request.form['phys_facility_status_date'],"%Y-%m-%d"),
+            )
+        ret = query.add(physicianFacility)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'physFacilityID':physicianFacility.physFacilityID})
+
+@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['DELETE'])
+def delete_physician_facility(physFacilityID):
+    try:
+        physicianFacility = query.get_physician_facility(physFacilityID)
+        if physicianFacility is not None:
+            query.delete(physicianFacility)
+            return item_deleted("PhysFacilityID {} deleted".format(physFacilityID))
+        else:
+            return item_not_found("PhysFacilityID {} not found".format(physFacilityID))
+    except Exception as e:
+        return internal_error(e)
+          
+##############################################################################
+# Physician Phone
+##############################################################################
+@api.route('/physicianphones/', methods=['GET'])
+@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['GET'])
+def get_physician_phone(physicianPhoneID=None):
+    if physicianPhoneID is None:
+        return jsonify(PhysicianPhones = [i.dict() for i in query.get_physician_phones()])
+    else:
+        physicianPhone = query.get_physician_phone(physicianPhoneID)
+        if physicianPhone is not None:
+            return physicianPhone.json()
+        else:
+            return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
+
+@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['PUT'])
+def update_physician_phone(physicianPhoneID):
+    physicianPhone = query.get_physician_phone(physicianPhoneID)
+    if physicianPhone is not None:
+        try:
+            physicianPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+            physicianPhone.physicianID = request.form['physicianID']
+            physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
+            physicianPhone.phone = request.form['phone']  
+            physicianPhone.phone_type = request.form['phone_type']
+            physicianPhone.phone_source = request.form['phone_source']  
+            physicianPhone.phone_status = request.form['phone_status']  
+            physicianPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            query.commit()
+        except KeyError as e:
+            return missing_params(e)
+        except Exception as e:
+            return internal_error(e)
+        return physicianPhone.json()
+    else:
+        return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
+
+@api.route('/physicianphones/', methods=['POST'])
+def create_physician_phone():
+    try:
+        physicianPhone = models.PhysicianPhone(
+            contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+            physicianID = request.form['physicianID'],
+            contactInfoStatusID = request.form['contactInfoStatusID'],
+            phone = request.form['phone'],
+            phone_type = request.form['phone_type'],
+            phone_source = request.form['phone_source'],
+            phone_status = request.form['phone_status'], 
+            phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+            )
+        ret = query.add(physicianPhone)
+    except KeyError as e:
+       return missing_params(e)
+    except Exception as e:
+       return internal_error(e)
+    return jsonify({'physicianPhoneID':physicianPhone.physicianPhoneID})
+
+@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['DELETE'])
+def delete_physician_phone(physicianPhoneID):
+    try:
+        physicianPhone = query.get_physician_phone(physicianPhoneID)
+        if physicianPhone is not None:
+            query.delete(physicianPhone)
+            return item_deleted("PhysicianPhoneID {} deleted".format(physicianPhoneID))
+        else:
+            return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
+    except Exception as e:
+        return internal_error(e)
+               
 ##############################################################################
 # PhysicianToCTC
 ##############################################################################

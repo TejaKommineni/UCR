@@ -209,6 +209,20 @@ class PopulatedDB(TestCase):
             facility_phone_status_date = datetime(2016,2,2)
         )
         
+        facilityAddress = models.FacilityAddress(
+            contactInfoSourceLUTID = 1,
+            facilityID = 1,
+            contactInfoStatusLUTID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+        
         funding = models.Funding(
             grantStatusLUTID = 1,
             projectID = 1,
@@ -347,6 +361,38 @@ class PopulatedDB(TestCase):
             email = "email"
         )
         
+        physicianAddress = models.PhysicianAddress(
+            contactInfoSourceLUTID = 1,
+            physicianID = 1,
+            contactInfoStatusLUTID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+        
+        physicianFacility = models.PhysicianFacility(
+            facilityID = 1,
+            physicianID = 1,
+            phys_facility_status = "s1",
+            phys_facility_status_date = datetime(2016,2,2)
+        )
+        
+        physicianPhone = models.PhysicianPhone(
+            contactInfoSourceLUTID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            phone = "phone",
+            phone_type = "phone_type",
+            phone_status = 1,
+            phone_source = "s1",
+            phone_status_date = datetime(2016,2,2)
+        )
+        
         physicianToCTC = models.PhysicianToCTC(
             physicianID = 1,
             ctcID = 1
@@ -467,6 +513,10 @@ class PopulatedDB(TestCase):
         tracingSource = models.TracingSourceLUT(
             description = "desc"
         )
+        db.session.add(facilityAddress)
+        db.session.add(physicianFacility)
+        db.session.add(physicianPhone)
+        db.session.add(physicianAddress)
         db.session.add(physician)
         db.session.add(ctcFacility)
         db.session.add(facility)
@@ -973,6 +1023,69 @@ class TestFacility(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "FacilityID 1 deleted")      
 
+class TestFacilityAddress(PopulatedDB):
+    def test_get_facility_addresses(self):
+        response = self.client.get("/api/facilityaddresses/")
+        self.assertEqual(response.json["FacilityAddresses"][0]["facilityAddressID"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["facilityID"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["street"], "street")
+        self.assertEqual(response.json["FacilityAddresses"][0]["street2"], "street2")
+        self.assertEqual(response.json["FacilityAddresses"][0]["city"], "city")
+        self.assertEqual(response.json["FacilityAddresses"][0]["state"], "state")
+        self.assertEqual(response.json["FacilityAddresses"][0]["zip"], "zip")
+        self.assertEqual(response.json["FacilityAddresses"][0]["address_status"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["FacilityAddresses"][0]["address_status_source"], "s1")
+        
+    def test_get_facility_address(self):
+        response = self.client.get("/api/facilityaddresses/1/")
+        self.assertEqual(response.json["facilityAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["facilityID"], 1)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["street"], "street")
+        self.assertEqual(response.json["street2"], "street2")
+        self.assertEqual(response.json["city"], "city")
+        self.assertEqual(response.json["state"], "state")
+        self.assertEqual(response.json["zip"], "zip")
+        self.assertEqual(response.json["address_status"], 1)
+        self.assertEqual(response.json["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["address_status_source"], "s1")
+        
+    def test_update_facility_address(self):
+        response = self.client.put("/api/facilityaddresses/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "facilityID" : 2,
+            "contactInfoStatusLUTID" : 2,
+            "street" : "street Updated",
+            "street2" : "street2 Updated",
+            "city" : "city Updated",
+            "state" : "state Updated",
+            "zip" : "zip Updated",
+            "address_status" : 2,
+            "address_status_date" : "2016-02-03",
+            "address_status_source" : "s2"
+        })
+        self.assertEqual(response.json["facilityAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["facilityID"], 2)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 2)
+        self.assertEqual(response.json["street"], "street Updated")
+        self.assertEqual(response.json["street2"], "street2 Updated")
+        self.assertEqual(response.json["city"], "city Updated")
+        self.assertEqual(response.json["state"], "state Updated")
+        self.assertEqual(response.json["zip"], "zip Updated")
+        self.assertEqual(response.json["address_status"], 2)
+        self.assertEqual(response.json["address_status_date"], "2016-02-03")
+        self.assertEqual(response.json["address_status_source"], "s2")
+        
+    def test_delete_facility_address(self):
+        response = self.client.delete("/api/facilityaddresses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "FacilityAddressID 1 deleted")       
+        
 class TestFunding(PopulatedDB):
     def test_get_fundings(self):
         response = self.client.get("/api/fundings/")
@@ -1719,6 +1832,155 @@ class TestPhysician(PopulatedDB):
         response = self.client.delete("/api/physicians/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "PhysicianID 1 deleted")       
+
+class TestPhysicianAddress(PopulatedDB):
+    def test_get_physician_addresses(self):
+        response = self.client.get("/api/physicianaddresses/")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["physicianAddressID"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["physicianID"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["street"], "street")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["street2"], "street2")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["city"], "city")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["state"], "state")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["zip"], "zip")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status_source"], "s1")
+        
+    def test_get_physician_address(self):
+        response = self.client.get("/api/physicianaddresses/1/")
+        self.assertEqual(response.json["physicianAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["physicianID"], 1)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["street"], "street")
+        self.assertEqual(response.json["street2"], "street2")
+        self.assertEqual(response.json["city"], "city")
+        self.assertEqual(response.json["state"], "state")
+        self.assertEqual(response.json["zip"], "zip")
+        self.assertEqual(response.json["address_status"], 1)
+        self.assertEqual(response.json["address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["address_status_source"], "s1")
+        
+    def test_update_physician_address(self):
+        response = self.client.put("/api/physicianaddresses/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "physicianID" : 2,
+            "contactInfoStatusLUTID" : 2,
+            "street" : "street Updated",
+            "street2" : "street2 Updated",
+            "city" : "city Updated",
+            "state" : "state Updated",
+            "zip" : "zip Updated",
+            "address_status" : 2,
+            "address_status_date" : "2016-02-03",
+            "address_status_source" : "s2"
+        })
+        self.assertEqual(response.json["physicianAddressID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["physicianID"], 2)
+        self.assertEqual(response.json["contactInfoStatusLUTID"], 2)
+        self.assertEqual(response.json["street"], "street Updated")
+        self.assertEqual(response.json["street2"], "street2 Updated")
+        self.assertEqual(response.json["city"], "city Updated")
+        self.assertEqual(response.json["state"], "state Updated")
+        self.assertEqual(response.json["zip"], "zip Updated")
+        self.assertEqual(response.json["address_status"], 2)
+        self.assertEqual(response.json["address_status_date"], "2016-02-03")
+        self.assertEqual(response.json["address_status_source"], "s2")
+        
+    def test_delete_physician_address(self):
+        response = self.client.delete("/api/physicianaddresses/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhysicianAddressID 1 deleted")       
+
+class TestPhysicianFacility(PopulatedDB):
+    def test_get_physician_facilities(self):
+        response = self.client.get("/api/physicianfacilities/")
+        self.assertEqual(response.json["PhysicianFacilities"][0]["physFacilityID"], 1)
+        self.assertEqual(response.json["PhysicianFacilities"][0]["physicianID"], 1)
+        self.assertEqual(response.json["PhysicianFacilities"][0]["facilityID"], 1)
+        self.assertEqual(response.json["PhysicianFacilities"][0]["phys_facility_status"], "s1")
+        self.assertEqual(response.json["PhysicianFacilities"][0]["phys_facility_status_date"], "2016-02-02")
+        
+    def test_get_physician_facility(self):
+        response = self.client.get("/api/physicianfacilities/1/")
+        self.assertEqual(response.json["physFacilityID"], 1)
+        self.assertEqual(response.json["physicianID"], 1)
+        self.assertEqual(response.json["facilityID"], 1)
+        self.assertEqual(response.json["phys_facility_status"], "s1")
+        self.assertEqual(response.json["phys_facility_status_date"], "2016-02-02")
+        
+    def test_update_physician_facility(self):
+        response = self.client.put("/api/physicianfacilities/1/", data = {
+            "facilityID" : 2,
+            "physicianID" : 2,
+            "phys_facility_status" : "s2",
+            "phys_facility_status_date" : "2016-02-03"
+        })
+        self.assertEqual(response.json["physFacilityID"], 1)
+        self.assertEqual(response.json["physicianID"], 2)
+        self.assertEqual(response.json["facilityID"], 2)
+        self.assertEqual(response.json["phys_facility_status"], "s2")
+        self.assertEqual(response.json["phys_facility_status_date"], "2016-02-03")
+        
+    def test_delete_physician_facility(self):
+        response = self.client.delete("/api/physicianfacilities/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhysFacilityID 1 deleted")      
+        
+class TestPhysicianPhone(PopulatedDB):
+    def test_get_physician_phone(self):
+        response = self.client.get("/api/physicianphones/")
+        self.assertEqual(response.json["PhysicianPhones"][0]["physicianPhoneID"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["physicianID"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["phone"], "phone")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phone_type"], "phone_type")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phone_status"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["phone_source"], "s1")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phone_status_date"], "2016-02-02")
+        
+    def test_get_physician_phone(self):
+        response = self.client.get("/api/physicianphones/1/")
+        self.assertEqual(response.json["physicianPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
+        self.assertEqual(response.json["physicianID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["phone"], "phone")
+        self.assertEqual(response.json["phone_type"], "phone_type")
+        self.assertEqual(response.json["phone_status"], 1)
+        self.assertEqual(response.json["phone_source"], "s1")
+        self.assertEqual(response.json["phone_status_date"], "2016-02-02")
+        
+    def test_update_physician_phone(self):
+        response = self.client.put("/api/physicianphones/1/", data = {
+            "contactInfoSourceLUTID" : 2,
+            "physicianID" : 2,
+            "contactInfoStatusID" : 2,
+            "phone" : "phone Updated",
+            "phone_type": "phone_type Updated",
+            "phone_status" : 2,
+            "phone_source" : "s2",
+            "phone_status_date" : "2016-02-03"
+        })
+        self.assertEqual(response.json["physicianPhoneID"], 1)
+        self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
+        self.assertEqual(response.json["physicianID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
+        self.assertEqual(response.json["phone"], "phone Updated")
+        self.assertEqual(response.json["phone_type"], "phone_type Updated")
+        self.assertEqual(response.json["phone_status"], 2)
+        self.assertEqual(response.json["phone_source"], "s2")
+        self.assertEqual(response.json["phone_status_date"], "2016-02-03")
+        
+    def test_delete_physician_phone(self):
+        response = self.client.delete("/api/physicianphones/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhysicianPhoneID 1 deleted")      
         
 class TestPhysicianToCTC(PopulatedDB):
     def test_get_physician_to_ctcs(self):

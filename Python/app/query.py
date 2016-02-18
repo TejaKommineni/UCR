@@ -63,6 +63,12 @@ def get_facility_phones():
     
 def get_facility_phone(id):
     return db.session.query(FacilityPhone).filter_by(facilityPhoneID = id).first()
+
+def get_facility_addresses():
+    return db.session.query(FacilityAddress).all()
+    
+def get_facility_address(id):
+    return db.session.query(FacilityAddress).filter_by(facilityAddressID = id).first()
     
 def get_fundings():
     return db.session.query(Funding).all()
@@ -171,6 +177,24 @@ def get_physicians():
     
 def get_physician(id):
     return db.session.query(Physician).filter_by(physicianID = id).first()
+
+def get_physician_addresses():
+    return db.session.query(PhysicianAddress).all()
+    
+def get_physician_address(id):
+    return db.session.query(PhysicianAddress).filter_by(physicianAddressID = id).first()
+
+def get_physician_facilities():
+    return db.session.query(PhysicianFacility).all()
+    
+def get_physician_facility(id):
+    return db.session.query(PhysicianFacility).filter_by(physFacilityID = id).first()
+    
+def get_physician_phones():
+    return db.session.query(PhysicianPhone).all()
+    
+def get_physician_phone(id):
+    return db.session.query(PhysicianPhone).filter_by(physicianPhoneID = id).first()
     
 def get_physician_to_ctcs():
     return db.session.query(PhysicianToCTC).all()
