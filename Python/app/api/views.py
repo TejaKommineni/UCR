@@ -2,6 +2,7 @@ from flask import jsonify, request, url_for, redirect, abort, g, session, curren
 from flask import Blueprint, render_template, abort
 import app.query as query
 import app.models as models
+import app.forms as forms
 from datetime import datetime
 from app.database import db
 import json
@@ -350,42 +351,49 @@ def delete_contact(contactID):
 @api.route('/contacttypes/', methods = ['GET'])
 @api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['GET'])
 def get_contact_type(contactTypeLUTID = None):
-    if contactTypeLUTID is None:
-        return jsonify(ContactTypes = [i.dict() for i in query.get_contact_types()])
-    else:
-        contactType = query.get_contact_type(contactTypeLUTID)
-        if contactType is not None:
-            return contactType.json()
+    try:
+        if contactTypeLUTID is None:
+            return jsonify(ContactTypes = [i.dict() for i in query.get_contact_types()])
         else:
-            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+            contactType = query.get_contact_type(contactTypeLUTID)
+            if contactType is not None:
+                return contactType.json()
+            else:
+                return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/contacttypes/<int:contactTypeLUTID>/',methods = ['PUT'])
 def update_contact_type(contactTypeLUTID):
-    contactType = query.get_contact_type(contactTypeLUTID)
-    if contactType is not None:
-        try:
-            contactType.contact_definition = request.form['contact_definition']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return contactType.json()
-    else:
-        return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+    try:
+        contactType = query.get_contact_type(contactTypeLUTID)
+        if contactType is not None:
+            form = forms.ContactTypeLUTForm(request.form)
+            if form.validate():
+                contactType.contact_definition = request.form['contact_definition']
+                query.commit()
+                return contactType.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+    except Exception as e:
+        return internal_error(e)    
         
 @api.route('/contacttypes/',methods=['POST'])
 def create_contact_type():
     try:
-        contactType = models.ContactTypeLUT(
-            contact_definition = request.form['contact_definition'],
-        )
-        ret = query.add(contactType)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ContactTypeLUTForm(request.form)
+        if form.validate():
+            contactType = models.ContactTypeLUT(
+                contact_definition = request.form['contact_definition'],
+            )
+            query.add(contactType)
+            return jsonify({"contactTypeLUTID" : contactType.contactTypeLUTID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"contactTypeLUTID" : contactType.contactTypeLUTID})
     
 @api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['DELETE'])
 def delete_contact_type(contactTypeLUTID):
@@ -405,42 +413,49 @@ def delete_contact_type(contactTypeLUTID):
 @api.route('/contactinfosources/', methods = ['GET'])
 @api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['GET'])
 def get_contact_info_source(contactInfoSourceLUTID = None):
-    if contactInfoSourceLUTID is None:
-        return jsonify(ContactInfoSources = [i.dict() for i in query.get_contact_info_sources()])
-    else:
-        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
-        if contactInfoSource is not None:
-            return contactInfoSource.json()
+    try:
+        if contactInfoSourceLUTID is None:
+            return jsonify(ContactInfoSources = [i.dict() for i in query.get_contact_info_sources()])
         else:
-            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+            contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+            if contactInfoSource is not None:
+                return contactInfoSource.json()
+            else:
+                return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/contactinfosources/<int:contactInfoSourceLUTID>/',methods = ['PUT'])
 def update_contact_info_source(contactInfoSourceLUTID):
-    contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
-    if contactInfoSource is not None:
-        try:
-            contactInfoSource.contact_info_source = request.form['contact_info_source']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return contactInfoSource.json()
-    else:
-        return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+    try:
+        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+        if contactInfoSource is not None:
+            form = forms.ContactInfoSourceForm(request.form)
+            if form.validate():
+                contactInfoSource.contact_info_source = request.form['contact_info_source']
+                query.commit()
+                return contactInfoSource.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+    except Exception as e:
+        return internal_error(e)
         
 @api.route('/contactinfosources/',methods=['POST'])
 def create_contact_info_source():
     try:
-        contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = request.form['contact_info_source'],
-        )
-        ret = query.add(contactInfoSource)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ContactInfoSourceForm(request.form)
+        if form.validate():
+            contactInfoSource = models.ContactInfoSourceLUT(
+                contact_info_source = request.form['contact_info_source'],
+            )
+            query.add(contactInfoSource)
+            return jsonify({"contactInfoSourceLUTID" : contactInfoSource.contactInfoSourceLUTID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"contactInfoSourceLUTID" : contactInfoSource.contactInfoSourceLUTID})
     
 @api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['DELETE'])
 def delete_contact_info_source(contactInfoSourceLUTID):
@@ -471,31 +486,35 @@ def get_contact_info_status(contactInfoStatusID = None):
             
 @api.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods = ['PUT'])
 def update_contact_info_status(contactInfoStatusID):
-    contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
-    if contactInfoStatus is not None:
-        try:
-            contactInfoStatus.contact_info_status = request.form['contact_info_status']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return contactInfoStatus.json()
-    else:
-        return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
-        
+    try:
+        contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
+        if contactInfoStatus is not None:
+            form = forms.ContactInfoStatusForm(request.form)
+            if form.validate():
+                contactInfoStatus.contact_info_status = request.form['contact_info_status']
+                query.commit()
+                return contactInfoStatus.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
+    except Exception as e:
+        return internal_error(e)
+  
 @api.route('/contactinfostatuses/',methods=['POST'])
 def create_contact_info_status():
     try:
-        contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = request.form['contact_info_status'],
-        )
-        ret = query.add(contactInfoStatus)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ContactInfoStatusForm(request.form)
+        if form.validate():
+            contactInfoStatus = models.ContactInfoStatusLUT(
+                contact_info_status = request.form['contact_info_status'],
+            )
+            query.add(contactInfoStatus)
+            return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
+        else:
+            missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
     
 @api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['DELETE'])
 def delete_contact_info_status(contactInfoStatusID):
@@ -1443,43 +1462,50 @@ def delete_log(logID):
 @api.route('/logsubjects/',methods=['GET'])
 @api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['GET'])
 def get_log_subject(logSubjectLUTID=None):
-    if logSubjectLUTID is None:
-        return jsonify(LogSubjects = [i.dict() for i in query.get_log_subjects()])
-    else:
-        logSubject = query.get_log_subject(logSubjectLUTID)
-        if logSubject is not None:
-            return logSubject.json()
+    try:
+        if logSubjectLUTID is None:
+            return jsonify(LogSubjects = [i.dict() for i in query.get_log_subjects()])
         else:
-            return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+            logSubject = query.get_log_subject(logSubjectLUTID)
+            if logSubject is not None:
+                return logSubject.json()
+            else:
+                return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['PUT'])
 def update_log_subject(logSubjectLUTID):
-    logSubject = query.get_log_subject(logSubjectLUTID)
-    if logSubject is not None:
-        try:
-            logSubject.log_subject = request.form['log_subject']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return logSubject.json()
-    else:
-        return item_not_found("logSubjectLUTID {} not found".format(logSubjectLUTID))
+    try:
+        logSubject = query.get_log_subject(logSubjectLUTID)
+        if logSubject is not None:
+            form = forms.LogSubjectLUTForm(request.form)
+            if form.validate():
+                logSubject.log_subject = request.form['log_subject']
+                query.commit()
+                return logSubject.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("logSubjectLUTID {} not found".format(logSubjectLUTID))
+    except Exception as e:
+        internal_error(e)
         
 @api.route('/logsubjects/', methods = ['POST'])
 def create_log_subject():
     try:
-        logSubject = models.LogSubjectLUT(
-            log_subject = request.form['log_subject']
-        )
-        ret = query.add(logSubject)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.LogSubjectLUTForm(request.form)
+        if form.validate():
+            logSubject = models.LogSubjectLUT(
+                log_subject = request.form['log_subject']
+            )
+            query.add(logSubject)
+            return jsonify({"logSubjectLUTID":logSubject.logSubjectLUTID})
+        else:
+            return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"logSubjectLUTID":logSubject.logSubjectLUTID})
-    
+
 @api.route('/logsubjects/<int:logSubjectLUTID>/',methods=['DELETE'])
 def delete_log_subject(logSubjectLUTID):
     try:
@@ -1850,42 +1876,49 @@ def delete_patient_project_status(patientProjectStatusID):
 @api.route('/patientprojectstatustypes/', methods = ['GET'])
 @api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['GET'])
 def get_patient_project_status_type(patientProjectStatusTypeID=None):
-    if patientProjectStatusTypeID is None:
-        return jsonify(PatientProjectStatusTypes = [i.dict() for i in query.get_patient_project_status_types()])
-    else:
-        patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
-        if patientProjectStatusType is not None:
-            return patientProjectStatusType.json()
+    try:
+        if patientProjectStatusTypeID is None:
+            return jsonify(PatientProjectStatusTypes = [i.dict() for i in query.get_patient_project_status_types()])
         else:
-            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
+            patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
+            if patientProjectStatusType is not None:
+                return patientProjectStatusType.json()
+            else:
+                return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['PUT'])
 def update_patient_project_status_type(patientProjectStatusTypeID):
-    patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
-    if patientProjectStatusType is not None:
-        try:
-            patientProjectStatusType.status_description = request.form['status_description']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return patientProjectStatusType.json()
-    else:
-        return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID)) 
-
+    try:
+        patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
+        if patientProjectStatusType is not None:
+            form = forms.PatientProjectStatusLUTForm(request.form)
+            if form.validate():
+                patientProjectStatusType.status_description = request.form['status_description']
+                query.commit()
+                return patientProjectStatusType.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID)) 
+    except Exception as e:
+        return internal_error(e)
+        
 @api.route('/patientprojectstatustypes/', methods=['POST'])
 def create_patient_project_status_type():
     try:
-        patientProjectStatusType = models.PatientProjectStatusLUT(
-            status_description = request.form['status_description']
-        )
-        ret = query.add(patientProjectStatusType)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.PatientProjectStatusLUTForm(request.form)
+        if form.validate():
+            patientProjectStatusType = models.PatientProjectStatusLUT(
+                status_description = request.form['status_description']
+            )
+            query.add(patientProjectStatusType)
+            return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID}) 
+        else:
+            return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)
-    return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})        
+        return internal_error(e)       
 
 @api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['DELETE'])
 def delete_patient_project_status_type(patientProjectStatusTypeID):
@@ -3304,42 +3337,49 @@ def delete_tracing(tracingID):
 @api.route('/tracingsources/', methods = ['GET'])
 @api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['GET'])
 def get_tracing_source(tracingSourceLUTID=None):
-    if tracingSourceLUTID is None:
-        return jsonify(TracingSources = [i.dict() for i in query.get_tracing_sources()])
-    else:
-        tracing = query.get_tracing_source(tracingSourceLUTID)
-        if tracing is not None:
-            return tracing.json()
+    try:
+        if tracingSourceLUTID is None:
+            return jsonify(TracingSources = [i.dict() for i in query.get_tracing_sources()])
         else:
-            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+            tracing = query.get_tracing_source(tracingSourceLUTID)
+            if tracing is not None:
+                return tracing.json()
+            else:
+                return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+    except Exception as e:
+        return internal_error(e)
             
 @api.route('/tracingsources/<int:tracingSourceLUTID>/',methods = ['PUT'])
 def update_tracing_source(tracingSourceLUTID):
-    tracingSource = query.get_tracing_source(tracingSourceLUTID)
-    if tracingSource is not None:
-        try:
-            tracingSource.description = request.form['description']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return tracingSource.json()
-    else:
-        return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
-        
+    try:
+        tracingSource = query.get_tracing_source(tracingSourceLUTID)
+        if tracingSource is not None:
+            form = forms.TracingSourceLUTForm(request.form)
+            if form.validate():
+                tracingSource.description = request.form['description']
+                query.commit()
+                return tracingSource.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+    except Exception as e:
+        return internal_error(e)    
+
 @api.route('/tracingsources/',methods = ['POST'])
 def create_tracing_source():
     try:
-        tracingSource = models.TracingSourceLUT(
-            description = request.form['description']
-            )
-        ret = query.add(tracingSource)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.TracingSourceLUTForm(request.form)
+        if form.validate():
+            tracingSource = models.TracingSourceLUT(
+                description = request.form['description']
+                )
+            ret = query.add(tracingSource)
+            return jsonify({'tracingSourceLUTID':tracingSource.tracingSourceLUTID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'tracingSourceLUTID':tracingSource.tracingSourceLUTID})
     
 @api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['DELETE'])
 def delete_tracing_source(tracingSourceLUTID):
