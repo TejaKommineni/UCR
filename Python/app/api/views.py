@@ -32,14 +32,14 @@ def create_data():
         contact = True,
         engaged = True,
         non_public_data = True)
-        
+
     budget = models.Budget(
         numPeriods = 1,
         periodStart = datetime.now(),
         periodEnd = datetime.now(),
         periodTotal = 1.23,
         periodComment = "Budget Period")
-        
+
     p = models.Project(
         project_name = "Test Project",
         short_title = "Test Project",
@@ -61,23 +61,23 @@ def create_data():
         rc_note = "rc_note",
         rc_protocol = "rc_proto",
         rc_approval="rc_approval")
-    
+
     rcsl = models.RCStatusList(
         rc_status = "Status 1",
         rc_status_definition = "rc status def")
-        
+
     irb = models.IRBHolderLUT(
         irb_holder = "holder 1",
         irb_holder_definition= "IRB 1")
-        
+
     rcl = models.ReviewCommitteeList(
         reviewCommittee = "rc",
         rc_description = "rc desc")
-        
+
     pt = models.ProjectType(
         project_type = "Type 1",
         project_type_definition = "Def 1")
-    
+
     rc.RCStatusList = rcsl
     rc.reviewCommitteeList = rcl
     p.IRBHolderLUT = irb
@@ -94,11 +94,11 @@ def create_data():
 # Error Handlers
 ##############################################################################    
 def item_not_found(e):
-    return jsonify({"Error": str(e)}), 404   
+    return jsonify({"Error": str(e)}), 404
 
 def missing_params(e):
     return jsonify({"Error": str(e)}), 400
-    
+
 def internal_error(e):
     return jsonify({"Error": str(e)}), 500
 
@@ -107,7 +107,7 @@ def item_deleted(message):
         "Success": True,
         "Message": str(message)
         })
-    
+
 ##############################################################################
 # Root Node
 ##############################################################################    
@@ -120,81 +120,88 @@ def root():
         "staff"
     ]})
 
-    
+
 ##############################################################################
 # ArcReviews
 ##############################################################################    
 @api.route('/arcreviews/', methods = ['GET'])
 @api.route('/arcreviews/<int:arcReviewID>/', methods = ['GET'])
 def get_arc_review(arcReviewID = None):
-    if arcReviewID is None:
-        return jsonify(arcReviews = [i.dict() for i in query.get_arc_reviews()])
-    else:
-        arcReview = query.get_arc_review(arcReviewID)
-        if arcReview is not None:
-            return arcReview.json()
+    try:
+        if arcReviewID is None:
+            return jsonify(arcReviews = [i.dict() for i in query.get_arc_reviews()])
         else:
-            return item_not_found("ArcReviewID {} not found".format(arcReviewID))
-            
+            arcReview = query.get_arc_review(arcReviewID)
+            if arcReview is not None:
+                return arcReview.json()
+            else:
+                return item_not_found("ArcReviewID {} not found".format(arcReviewID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/arcreviews/<int:arcReviewID>/', methods = ['PUT'])
 def update_arc_review(arcReviewID):
-    arcReview = query.get_arc_review(arcReviewID)
-    if arcReviewID is not None:
-        try:
-            arcReview.projectID = request.form['projectID']
-            arcReview.review_type = request.form['review_type']
-            arcReview.date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d")
-            arcReview.reviewer1 = request.form['reviewer1']
-            arcReview.reviewer1_rec = request.form['reviewer1_rec']
-            arcReview.reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d")
-            arcReview.reviewer1_comments = request.form['reviewer1_comments']
-            arcReview.reviewer2 = request.form['reviewer2']
-            arcReview.reviewer2_rec = request.form['reviewer2_rec']
-            arcReview.reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d")
-            arcReview.reviewer2_comments = request.form['reviewer2_comments']
-            arcReview.research = request.form['research']
-            arcReview.contact = "true" == request.form['contact'].lower()
-            arcReview.contact = "true" == request.form['contact'].lower()
-            arcReview.lnkage = "true" == request.form['lnkage'].lower()
-            arcReview.engaged = "true" == request.form['engaged'].lower()
-            arcReview.non_public_data = "true" == request.form['non_public_data'].lower()
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return arcReview.json()
-    else:
-        return item_not_found("ArcReviewID {} not found".format(arcReviewID))
-        
+    try:
+        arcReview = query.get_arc_review(arcReviewID)
+        if arcReviewID is not None:
+            form = forms.ArcReviewForm(request.form)
+            if form.validate():
+                arcReview.projectID = request.form['projectID']
+                arcReview.review_type = request.form['review_type']
+                arcReview.date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d")
+                arcReview.reviewer1 = request.form['reviewer1']
+                arcReview.reviewer1_rec = request.form['reviewer1_rec']
+                arcReview.reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d")
+                arcReview.reviewer1_comments = request.form['reviewer1_comments']
+                arcReview.reviewer2 = request.form['reviewer2']
+                arcReview.reviewer2_rec = request.form['reviewer2_rec']
+                arcReview.reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d")
+                arcReview.reviewer2_comments = request.form['reviewer2_comments']
+                arcReview.research = request.form['research']
+                arcReview.contact = "true" == request.form['contact'].lower()
+                arcReview.contact = "true" == request.form['contact'].lower()
+                arcReview.lnkage = "true" == request.form['lnkage'].lower()
+                arcReview.engaged = "true" == request.form['engaged'].lower()
+                arcReview.non_public_data = "true" == request.form['non_public_data'].lower()
+                query.commit()
+                return arcReview.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ArcReviewID {} not found".format(arcReviewID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/arcreviews/', methods = ['POST'])
 def create_arc_review():
     try:
-        arcReview = models.ArcReview(
-            projectID = request.form['projectID'],
-            review_type = request.form['review_type'],
-            date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d"),
-            reviewer1 = request.form['reviewer1'],
-            reviewer1_rec = request.form['reviewer1_rec'],
-            reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d"),
-            reviewer1_comments = request.form['reviewer1_comments'],
-            reviewer2 = request.form['reviewer2'],
-            reviewer2_rec = request.form['reviewer2_rec'],
-            reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d"),
-            reviewer2_comments = request.form['reviewer2_comments'],
-            research = request.form['research'],
-            contact = "true" == request.form['contact'].lower(),
-            lnkage = "true" == request.form['lnkage'].lower(),
-            engaged = "true" == request.form['engaged'].lower(),
-            non_public_data = "true" == request.form['non_public_data'].lower()
-        )
-        ret = query.add(arcReview)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ArcReviewForm(request.form)
+        if form.validate():
+            arcReview = models.ArcReview(
+                projectID = request.form['projectID'],
+                review_type = request.form['review_type'],
+                date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d"),
+                reviewer1 = request.form['reviewer1'],
+                reviewer1_rec = request.form['reviewer1_rec'],
+                reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d"),
+                reviewer1_comments = request.form['reviewer1_comments'],
+                reviewer2 = request.form['reviewer2'],
+                reviewer2_rec = request.form['reviewer2_rec'],
+                reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d"),
+                reviewer2_comments = request.form['reviewer2_comments'],
+                research = request.form['research'],
+                contact = "true" == request.form['contact'].lower(),
+                lnkage = "true" == request.form['lnkage'].lower(),
+                engaged = "true" == request.form['engaged'].lower(),
+                non_public_data = "true" == request.form['non_public_data'].lower()
+            )
+            query.add(arcReview)
+            return jsonify({"arcReviewID" : arcReview.arcReviewID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"arcReviewID" : arcReview.arcReviewID})
-    
+
 @api.route('/arcreviews/<int:arcReviewID>/', methods = ['DELETE'])
 def delete_arc_review(arcReviewID):
     try:
@@ -206,60 +213,67 @@ def delete_arc_review(arcReviewID):
             return item_not_found("ArcReviewID {} not found".format(arcReviewID))
     except Exception as e:
         return internal_error(e)
-    
+
 #############################################################################
 # Budget
 #############################################################################
 @api.route('/budgets/', methods = ['GET'])
 @api.route('/budgets/<int:budgetID>/', methods = ['GET'])
 def get_budget(budgetID = None):
-    if budgetID is None:
-        return jsonify(budgets = [i.dict() for i in query.get_budgets()])
-    else:
-        budget = query.get_budget(budgetID)
-        if budget is not None:
-            return budget.json()
+    try:
+        if budgetID is None:
+            return jsonify(budgets = [i.dict() for i in query.get_budgets()])
         else:
-            return item_not_found("BudgetID {} not found".format(budgetID))
-            
+            budget = query.get_budget(budgetID)
+            if budget is not None:
+                return budget.json()
+            else:
+                return item_not_found("BudgetID {} not found".format(budgetID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/budgets/<int:budgetID>/',methods = ['PUT'])
 def update_budget(budgetID):
-    budget = query.get_budget(budgetID)
-    if budget is not None:
-        try:
-            budget.projectID = request.form['projectID']
-            budget.numPeriods = request.form['numPeriods']
-            budget.periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d")
-            budget.periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d")
-            budget.periodTotal = request.form['periodTotal']
-            budget.periodComment = request.form['periodComment']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return budget.json()
-    else:
-        return item_not_found("BudgetID {} not found".format(budgetID))
-        
+    try:
+        budget = query.get_budget(budgetID)
+        if budget is not None:
+            form = forms.BudgetForm(request.form)
+            if form.validate():
+                budget.projectID = request.form['projectID']
+                budget.numPeriods = request.form['numPeriods']
+                budget.periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d")
+                budget.periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d")
+                budget.periodTotal = request.form['periodTotal']
+                budget.periodComment = request.form['periodComment']
+                query.commit()
+                return budget.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("BudgetID {} not found".format(budgetID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/budgets/',methods=['POST'])
 def create_budget():
     try:
-        budget = models.Budget(
-            projectID = request.form['projectID'],
-            numPeriods = request.form['numPeriods'],
-            periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
-            periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
-            periodTotal = request.form['periodTotal'],
-            periodComment = request.form['periodComment']
-        )
-        ret = query.add(budget)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.BudgetForm(request.form)
+        if form.validate():
+            budget = models.Budget(
+                projectID = request.form['projectID'],
+                numPeriods = request.form['numPeriods'],
+                periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
+                periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
+                periodTotal = request.form['periodTotal'],
+                periodComment = request.form['periodComment']
+            )
+            query.add(budget)
+            return jsonify({"budgetID" : budget.budgetID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"budgetID" : budget.budgetID})
-    
+
 @api.route('/budgets/<int:budgetID>/', methods = ['DELETE'])
 def delete_budget(budgetID):
     try:
@@ -286,7 +300,7 @@ def get_contact(contactID = None):
             return contact.json()
         else:
             return item_not_found("ContactID {} not found".format(contactID))
-            
+
 @api.route('/contacts/<int:contactID>/',methods = ['PUT'])
 def update_contact(contactID):
     contact = query.get_contact(contactID)
@@ -310,7 +324,7 @@ def update_contact(contactID):
         return contact.json()
     else:
         return item_not_found("ContactID {} not found".format(contactID))
-        
+
 @api.route('/contacts/',methods=['POST'])
 def create_contact():
     try:
@@ -332,7 +346,7 @@ def create_contact():
     except Exception as e:
         return internal_error(e)
     return jsonify({"contactID" : contact.contactID})
-    
+
 @api.route('/contacts/<int:contactID>/', methods = ['DELETE'])
 def delete_contact(contactID):
     try:
@@ -343,10 +357,10 @@ def delete_contact(contactID):
         else:
             return item_not_found("ContactID {} not found".format(contactID))
     except Exception as e:
-        return internal_error(e)        
-       
+        return internal_error(e)
+
 #############################################################################
-# Contact Type 
+# Contact Type
 #############################################################################
 @api.route('/contacttypes/', methods = ['GET'])
 @api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['GET'])
@@ -362,7 +376,7 @@ def get_contact_type(contactTypeLUTID = None):
                 return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/contacttypes/<int:contactTypeLUTID>/',methods = ['PUT'])
 def update_contact_type(contactTypeLUTID):
     try:
@@ -378,8 +392,8 @@ def update_contact_type(contactTypeLUTID):
         else:
             return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
     except Exception as e:
-        return internal_error(e)    
-        
+        return internal_error(e)
+
 @api.route('/contacttypes/',methods=['POST'])
 def create_contact_type():
     try:
@@ -394,7 +408,7 @@ def create_contact_type():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['DELETE'])
 def delete_contact_type(contactTypeLUTID):
     try:
@@ -405,8 +419,8 @@ def delete_contact_type(contactTypeLUTID):
         else:
             return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
     except Exception as e:
-        return internal_error(e)        
-        
+        return internal_error(e)
+
 #############################################################################
 # Contact Info Source
 #############################################################################
@@ -424,7 +438,7 @@ def get_contact_info_source(contactInfoSourceLUTID = None):
                 return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/contactinfosources/<int:contactInfoSourceLUTID>/',methods = ['PUT'])
 def update_contact_info_source(contactInfoSourceLUTID):
     try:
@@ -441,7 +455,7 @@ def update_contact_info_source(contactInfoSourceLUTID):
             return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/contactinfosources/',methods=['POST'])
 def create_contact_info_source():
     try:
@@ -456,7 +470,7 @@ def create_contact_info_source():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['DELETE'])
 def delete_contact_info_source(contactInfoSourceLUTID):
     try:
@@ -467,8 +481,8 @@ def delete_contact_info_source(contactInfoSourceLUTID):
         else:
             return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
     except Exception as e:
-        return internal_error(e)        
-        
+        return internal_error(e)
+
 #############################################################################
 # Contact Info Status
 #############################################################################
@@ -483,7 +497,7 @@ def get_contact_info_status(contactInfoStatusID = None):
             return contactInfoStatus.json()
         else:
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
-            
+
 @api.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods = ['PUT'])
 def update_contact_info_status(contactInfoStatusID):
     try:
@@ -500,7 +514,7 @@ def update_contact_info_status(contactInfoStatusID):
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
     except Exception as e:
         return internal_error(e)
-  
+
 @api.route('/contactinfostatuses/',methods=['POST'])
 def create_contact_info_status():
     try:
@@ -515,7 +529,7 @@ def create_contact_info_status():
             missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['DELETE'])
 def delete_contact_info_status(contactInfoStatusID):
     try:
@@ -542,7 +556,7 @@ def get_ctc(ctcID = None):
             return ctc.json()
         else:
             return item_not_found("CtcID {} not found".format(ctcID))
-            
+
 @api.route('/ctcs/<int:ctcID>/',methods = ['PUT'])
 def update_ctc(ctcID):
     ctc = query.get_ctc(ctcID)
@@ -572,7 +586,7 @@ def update_ctc(ctcID):
         return ctc.json()
     else:
         return item_not_found("CtcID {} not found".format(ctcID))
-        
+
 @api.route('/ctcs/',methods=['POST'])
 def create_ctc():
     try:
@@ -588,7 +602,7 @@ def create_ctc():
             dx_street1 = request.form['dx_street1'],
             dx_street2 = request.form['dx_street2'],
             dx_city = request.form['dx_city'],
-            cx_state = request.form['dx_state'],
+            dx_state = request.form['dx_state'],
             dx_zip = request.form['dx_zip'],
             dx_county = request.form['dx_county'],
             dnc = request.form['dnc'],
@@ -600,7 +614,7 @@ def create_ctc():
     except Exception as e:
         return internal_error(e)
     return jsonify({"ctcID" : ctc.ctcID})
-    
+
 @api.route('/ctcs/<int:ctcID>/', methods = ['DELETE'])
 def delete_ctc(ctcID):
     try:
@@ -627,7 +641,7 @@ def get_ctc_facility(CTCFacilityID = None):
             return ctcFacility.json()
         else:
             return item_not_found("CTCFacilityID {} not found".format(CTCFacilityID))
-            
+
 @api.route('/ctcfacilities/<int:CTCFacilityID>/',methods = ['PUT'])
 def update_ctc_facility(CTCFacilityID):
     ctcFacility = query.get_ctc_facility(CTCFacilityID)
@@ -643,7 +657,7 @@ def update_ctc_facility(CTCFacilityID):
         return ctcFacility.json()
     else:
         return item_not_found("CTCFacilityID {} not found".format(CTCFacilityID))
-        
+
 @api.route('/ctcfacilities/',methods=['POST'])
 def create_ctc_facility():
     try:
@@ -657,7 +671,7 @@ def create_ctc_facility():
     except Exception as e:
         return internal_error(e)
     return jsonify({"CTCFacilityID" : ctcFacility.CTCFacilityID})
-    
+
 @api.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['DELETE'])
 def delete_ctc_facility(CTCFacilityID):
     try:
@@ -669,7 +683,7 @@ def delete_ctc_facility(CTCFacilityID):
             return item_not_found("CTCFacilityID {} not found".format(CTCFacilityID))
     except Exception as e:
         return internal_error(e)
-       
+
 ##############################################################################
 # Funding
 ##############################################################################
@@ -684,7 +698,7 @@ def get_funding(fundingID=None):
             return funding.json()
         else:
             return item_not_found("FundingID {} not found".format(fundingID))
-            
+
 @api.route('/fundings/<int:fundingID>/', methods = ['PUT'])
 def update_funding(fundingID):
     funding = query.get_funding(fundingID)
@@ -709,7 +723,7 @@ def update_funding(fundingID):
             return internal_error(e)
         return funding.json()
     else:
-        return item_not_found("FundingID {} not found".format(fundingID)) 
+        return item_not_found("FundingID {} not found".format(fundingID))
 
 @api.route('/fundings/', methods=['POST'])
 def create_funding():
@@ -733,7 +747,7 @@ def create_funding():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'fundingID':funding.fundingID})        
+    return jsonify({'fundingID':funding.fundingID})
 
 @api.route('/fundings/<int:fundingID>/', methods = ['DELETE'])
 def delete_funding(fundingID):
@@ -769,12 +783,12 @@ def update_facility_phone(facilityPhoneID):
         try:
             facilityPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
             facilityPhone.facilityID = request.form['facilityID']
-            facilityPhone.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']  
+            facilityPhone.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
             facilityPhone.facility_name = request.form['facility_name']
             facilityPhone.clinic_name = request.form['clinic_name']
-            facilityPhone.facility_phone = request.form['facility_phone']  
-            facilityPhone.facility_phone_source = request.form['facility_phone_source']  
-            facilityPhone.facility_phone_status = request.form['facility_phone_status']  
+            facilityPhone.facility_phone = request.form['facility_phone']
+            facilityPhone.facility_phone_source = request.form['facility_phone_source']
+            facilityPhone.facility_phone_status = request.form['facility_phone_status']
             facilityPhone.facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
@@ -796,7 +810,7 @@ def create_facility_phone():
             clinic_name = request.form['clinic_name'],
             facility_phone = request.form['facility_phone'],
             facility_phone_source = request.form['facility_phone_source'],
-            facility_phone_status = request.form['facility_phone_status'], 
+            facility_phone_status = request.form['facility_phone_status'],
             facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
             )
         ret = query.add(facilityPhone)
@@ -840,11 +854,11 @@ def update_facility(facilityID):
         try:
             facility.facility_name = request.form['facility_name']
             facility.contact_fname = request.form['contact_fname']
-            facility.contact_lname = request.form['contact_lname']  
+            facility.contact_lname = request.form['contact_lname']
             facility.facility_status = request.form['facility_status']
             facility.facility_status_date = datetime.strptime(request.form['facility_status_date'],"%Y-%m-%d")
-            facility.contact2_fname = request.form['contact2_fname']  
-            facility.contact2_lname = request.form['contact2_lname']  
+            facility.contact2_fname = request.form['contact2_fname']
+            facility.contact2_lname = request.form['contact2_lname']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -864,7 +878,7 @@ def create_facility():
             facility_status = request.form['facility_status'],
             facility_status_date = datetime.strptime(request.form['facility_status_date'],"%Y-%m-%d"),
             contact2_fname = request.form['contact2_fname'],
-            contact2_lname = request.form['contact2_lname']  
+            contact2_lname = request.form['contact2_lname']
             )
         ret = query.add(facility)
     except KeyError as e:
@@ -915,7 +929,7 @@ def update_facility_address(facilityAddressID):
             facilityAddress.zip = request.form['zip']
             facilityAddress.address_status = request.form['address_status']
             facilityAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-            facilityAddress.address_status_source = request.form['address_status_source']          
+            facilityAddress.address_status_source = request.form['address_status_source']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -939,7 +953,7 @@ def create_facility_address():
             zip = request.form['zip'],
             address_status = request.form['address_status'],
             address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-            address_status_source = request.form['address_status_source']  
+            address_status_source = request.form['address_status_source']
             )
         ret = query.add(facilityAddress)
     except KeyError as e:
@@ -977,7 +991,7 @@ def get_funding_source(fundingSourceLUTID=None):
                 return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['PUT'])
 def update_funding_source(fundingSourceLUTID):
     try:
@@ -991,10 +1005,10 @@ def update_funding_source(fundingSourceLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID)) 
+            return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/fundingsources/', methods=['POST'])
 def create_funding_source():
     try:
@@ -1004,11 +1018,11 @@ def create_funding_source():
                 fundingSource = request.form['fundingSource']
             )
             query.add(fundingSource)
-            return jsonify({'fundingSourceLUTID':fundingSource.fundingSourceLUTID})  
+            return jsonify({'fundingSourceLUTID':fundingSource.fundingSourceLUTID})
         else:
             return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)      
+        return internal_error(e)
 
 @api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['DELETE'])
 def delete_funding_source(fundingSourceLUTID):
@@ -1039,7 +1053,7 @@ def get_grant_status(grantStatusLUTID=None):
                 return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['PUT'])
 def update_grant_status(grantStatusLUTID):
     try:
@@ -1053,7 +1067,7 @@ def update_grant_status(grantStatusLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID)) 
+            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
     except Exception as e:
         return internal_error(e)
 
@@ -1066,12 +1080,12 @@ def create_grant_status():
                 grant_status = request.form['grant_status']
             )
             query.add(grantStatus)
-            return jsonify({'grantStatusLUTID':grantStatus.grantStatusLUTID})   
+            return jsonify({'grantStatusLUTID':grantStatus.grantStatusLUTID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['DELETE'])
 def delete_grant_status(grantStatusLUTID):
     try:
@@ -1101,7 +1115,7 @@ def get_human_subject_training(humanSubjectTrainingID=None):
                 return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['PUT'])
 def update_human_subject_training(humanSubjectTrainingID):
     try:
@@ -1128,7 +1142,7 @@ def create_human_subject_training():
                 training_type = request.form['training_type']
             )
             query.add(humanSubjectTraining)
-            return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID}) 
+            return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1172,7 +1186,7 @@ def update_informant(informantID):
             informant.middle_name = request.form['middle_name']
             informant.informant_primary = request.form['informant_primary']
             informant.informant_relationship = request.form['informant_relationship']
-            informant.notes = request.form['notes']        
+            informant.notes = request.form['notes']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -1192,7 +1206,7 @@ def create_informant():
             middle_name = request.form['middle_name'],
             informant_primary = request.form['informant_primary'],
             informant_relationship = request.form['informant_relationship'],
-            notes = request.form['notes']   
+            notes = request.form['notes']
             )
         ret = query.add(informant)
     except KeyError as e:
@@ -1212,7 +1226,7 @@ def delete_informant(informantID):
             return item_not_found("InformantID {} not found".format(informantID))
     except Exception as e:
         return internal_error(e)
-        
+
 ##############################################################################
 # Informant Address
 ##############################################################################
@@ -1243,7 +1257,7 @@ def update_informant_address(informantAddressID):
             informantAddress.zip = request.form['zip']
             informantAddress.address_status = request.form['address_status']
             informantAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-            informantAddress.address_status_source = request.form['address_status_source']          
+            informantAddress.address_status_source = request.form['address_status_source']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -1267,7 +1281,7 @@ def create_informant_address():
             zip = request.form['zip'],
             address_status = request.form['address_status'],
             address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-            address_status_source = request.form['address_status_source']  
+            address_status_source = request.form['address_status_source']
             )
         ret = query.add(informantAddress)
     except KeyError as e:
@@ -1287,7 +1301,7 @@ def delete_informant_address(informantAddressID):
             return item_not_found("InformantAddressID {} not found".format(informantAddressID))
     except Exception as e:
         return internal_error(e)
-               
+
 ##############################################################################
 # Informant Phone
 ##############################################################################
@@ -1310,10 +1324,10 @@ def update_informant_phone(informantPhoneID):
         try:
             informantPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
             informantPhone.informantID = request.form['informantID']
-            informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
-            informantPhone.phone = request.form['phone']  
-            informantPhone.phone_source = request.form['phone_source']  
-            informantPhone.phone_status = request.form['phone_status']  
+            informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']
+            informantPhone.phone = request.form['phone']
+            informantPhone.phone_source = request.form['phone_source']
+            informantPhone.phone_status = request.form['phone_status']
             informantPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
@@ -1333,7 +1347,7 @@ def create_informant_phone():
             contactInfoStatusID = request.form['contactInfoStatusID'],
             phone = request.form['phone'],
             phone_source = request.form['phone_source'],
-            phone_status = request.form['phone_status'], 
+            phone_status = request.form['phone_status'],
             phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             )
         ret = query.add(informantPhone)
@@ -1354,7 +1368,7 @@ def delete_informant_phone(informantPhoneID):
             return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
     except Exception as e:
         return internal_error(e)
-                             
+
 ##############################################################################
 # IRBHolderLUT
 ##############################################################################
@@ -1372,7 +1386,7 @@ def get_irb_holder(irbHolderID=None):
                 return item_not_found("IrbHolderID {} not found".format(irbHolderID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
 def update_irb_holder(irbHolderID):
     try:
@@ -1406,7 +1420,7 @@ def create_irb_holder():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/irbholders/<int:irbHolderID>/',methods=['DELETE'])
 def delete_irb_holder(irbHolderID):
     try:
@@ -1433,7 +1447,7 @@ def get_log(logID=None):
             return log.json()
         else:
             return item_not_found("LogID {} not found".format(logID))
-            
+
 @api.route('/logs/<int:logID>/', methods = ['PUT'])
 def update_log(logID):
     log = query.get_log(logID)
@@ -1444,7 +1458,7 @@ def update_log(logID):
             log.staffID = request.form['staffID']
             log.phaseStatusID = request.form['phaseStatusID']
             log.note = request.form['note']
-            log.date = datetime.strptime(request.form['date'],"%Y-%m-%d") 
+            log.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -1453,7 +1467,7 @@ def update_log(logID):
         return log.json()
     else:
         return item_not_found("LogID {} not found".format(logID))
-        
+
 @api.route('/logs/', methods = ['POST'])
 def create_log():
     try:
@@ -1463,7 +1477,7 @@ def create_log():
             staffID = request.form['staffID'],
             phaseStatusID = request.form['phaseStatusID'],
             note = request.form['note'],
-            date = datetime.strptime(request.form['date'],"%Y-%m-%d") 
+            date = datetime.strptime(request.form['date'],"%Y-%m-%d")
         )
         ret = query.add(log)
     except KeyError as e:
@@ -1471,7 +1485,7 @@ def create_log():
     except Exception as e:
         return internal_error(e)
     return jsonify({"logID":log.logID})
-    
+
 @api.route('/logs/<int:logID>/',methods=['DELETE'])
 def delete_log(logID):
     try:
@@ -1483,7 +1497,7 @@ def delete_log(logID):
             return item_not_found("LogID {} not found".format(logID))
     except Exception as e:
         return internal_error(e)
-        
+
 ##############################################################################
 # Log Subject
 ##############################################################################
@@ -1501,7 +1515,7 @@ def get_log_subject(logSubjectLUTID=None):
                 return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['PUT'])
 def update_log_subject(logSubjectLUTID):
     try:
@@ -1518,7 +1532,7 @@ def update_log_subject(logSubjectLUTID):
             return item_not_found("logSubjectLUTID {} not found".format(logSubjectLUTID))
     except Exception as e:
         internal_error(e)
-        
+
 @api.route('/logsubjects/', methods = ['POST'])
 def create_log_subject():
     try:
@@ -1545,7 +1559,7 @@ def delete_log_subject(logSubjectLUTID):
             return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
     except Exception as e:
         return internal_error(e)
-    
+
 ##############################################################################
 # Patient
 ##############################################################################
@@ -1662,7 +1676,7 @@ def update_patient_address(patAddressID):
             patientAddress.zip = request.form['zip']
             patientAddress.address_status = request.form['address_status']
             patientAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-            patientAddress.address_status_source = request.form['address_status_source']          
+            patientAddress.address_status_source = request.form['address_status_source']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -1686,7 +1700,7 @@ def create_patient_address():
             zip = request.form['zip'],
             address_status = request.form['address_status'],
             address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-            address_status_source = request.form['address_status_source']  
+            address_status_source = request.form['address_status_source']
             )
         ret = query.add(patientaddress)
     except KeyError as e:
@@ -1729,10 +1743,10 @@ def update_patient_email(emailID):
         try:
             patientEmail.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
             patientEmail.patientID = request.form['patientID']
-            patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']  
-            patientEmail.email = request.form['email']  
-            patientEmail.email_status = request.form['email_status']  
-            patientEmail.email_source = request.form['email_source']  
+            patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']
+            patientEmail.email = request.form['email']
+            patientEmail.email_status = request.form['email_status']
+            patientEmail.email_source = request.form['email_source']
             patientEmail.email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
@@ -1752,7 +1766,7 @@ def create_patient_email():
             contactInfoStatusID = request.form['contactInfoStatusID'],
             email = request.form['email'],
             email_status = request.form['email_status'],
-            email_source = request.form['email_source'], 
+            email_source = request.form['email_source'],
             email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
             )
         ret = query.add(patientEmail)
@@ -1796,10 +1810,10 @@ def update_patient_phone(patPhoneID):
         try:
             patientPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
             patientPhone.patientID = request.form['patientID']
-            patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
-            patientPhone.phone = request.form['phone']  
-            patientPhone.phone_source = request.form['phone_source']  
-            patientPhone.phone_status = request.form['phone_status']  
+            patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']
+            patientPhone.phone = request.form['phone']
+            patientPhone.phone_source = request.form['phone_source']
+            patientPhone.phone_status = request.form['phone_status']
             patientPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
@@ -1819,7 +1833,7 @@ def create_patient_phone():
             contactInfoStatusID = request.form['contactInfoStatusID'],
             phone = request.form['phone'],
             phone_source = request.form['phone_source'],
-            phone_status = request.form['phone_status'], 
+            phone_status = request.form['phone_status'],
             phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             )
         ret = query.add(patientPhone)
@@ -1840,7 +1854,7 @@ def delete_patient_phone(patPhoneID):
             return item_not_found("PatPhoneID {} not found".format(patPhoneID))
     except Exception as e:
         return internal_error(e)
-                 
+
 ##############################################################################
 # Patient Project Status
 ##############################################################################
@@ -1855,7 +1869,7 @@ def get_patient_project_status(patientProjectStatusID=None):
             return patientProjectStatus.json()
         else:
             return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
-            
+
 @api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['PUT'])
 def update_patient_project_status(patientProjectStatusID):
     patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
@@ -1870,7 +1884,7 @@ def update_patient_project_status(patientProjectStatusID):
             return internal_error(e)
         return patientProjectStatus.json()
     else:
-        return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID)) 
+        return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
 
 @api.route('/patientprojectstatuses/', methods=['POST'])
 def create_patient_project_status():
@@ -1884,7 +1898,7 @@ def create_patient_project_status():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'patientProjectStatusID':patientProjectStatus.patientProjectStatusID})        
+    return jsonify({'patientProjectStatusID':patientProjectStatus.patientProjectStatusID})
 
 @api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['DELETE'])
 def delete_patient_project_status(patientProjectStatusID):
@@ -1897,7 +1911,7 @@ def delete_patient_project_status(patientProjectStatusID):
             return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
     except Exception as e:
         return internal_error(e)
-    
+
 ##############################################################################
 # Patient Project Status Type LUT
 ##############################################################################
@@ -1915,7 +1929,7 @@ def get_patient_project_status_type(patientProjectStatusTypeID=None):
                 return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['PUT'])
 def update_patient_project_status_type(patientProjectStatusTypeID):
     try:
@@ -1929,10 +1943,10 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID)) 
+            return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/patientprojectstatustypes/', methods=['POST'])
 def create_patient_project_status_type():
     try:
@@ -1942,11 +1956,11 @@ def create_patient_project_status_type():
                 status_description = request.form['status_description']
             )
             query.add(patientProjectStatusType)
-            return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID}) 
+            return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})
         else:
             return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)       
+        return internal_error(e)
 
 @api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['DELETE'])
 def delete_patient_project_status_type(patientProjectStatusTypeID):
@@ -1959,7 +1973,7 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
             return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
     except Exception as e:
         return internal_error(e)
-                     
+
 ##############################################################################
 # Phase Status
 ##############################################################################
@@ -1977,7 +1991,7 @@ def get_phase_status(logPhaseID=None):
                 return item_not_found("LogPhaseID {} not found".format(logPhaseID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/phasestatuses/<int:logPhaseID>/', methods = ['PUT'])
 def update_phase_status(logPhaseID):
     try:
@@ -2006,11 +2020,11 @@ def create_phase_status():
                 phase_description = request.form['phase_description']
             )
             ret = query.add(phaseStatus)
-            return jsonify({'logPhaseID':phaseStatus.logPhaseID})  
+            return jsonify({'logPhaseID':phaseStatus.logPhaseID})
         else:
             return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)      
+        return internal_error(e)
 
 @api.route('/phasestatuses/<int:logPhaseID>/', methods = ['DELETE'])
 def delete_phase_status(logPhaseID):
@@ -2038,7 +2052,7 @@ def get_physician(physicianID=None):
             return physician.json()
         else:
             return item_not_found("PhysicianID {} not found".format(physicianID))
-            
+
 @api.route('/physicians/<int:physicianID>/', methods = ['PUT'])
 def update_physician(physicianID):
     physician = query.get_physician(physicianID)
@@ -2062,7 +2076,7 @@ def update_physician(physicianID):
             return internal_error(e)
         return physician.json()
     else:
-        return item_not_found("PhysicianID {} not found".format(physicianID)) 
+        return item_not_found("PhysicianID {} not found".format(physicianID))
 
 @api.route('/physicians/', methods=['POST'])
 def create_physician():
@@ -2085,7 +2099,7 @@ def create_physician():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'physicianID':physician.physicianID})        
+    return jsonify({'physicianID':physician.physicianID})
 
 @api.route('/physicians/<int:physicianID>/', methods = ['DELETE'])
 def delete_physician(physicianID):
@@ -2129,7 +2143,7 @@ def update_physician_address(physicianAddressID):
             physicianAddress.zip = request.form['zip']
             physicianAddress.address_status = request.form['address_status']
             physicianAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-            physicianAddress.address_status_source = request.form['address_status_source']          
+            physicianAddress.address_status_source = request.form['address_status_source']
             query.commit()
         except KeyError as e:
             return missing_params(e)
@@ -2153,7 +2167,7 @@ def create_physician_address():
             zip = request.form['zip'],
             address_status = request.form['address_status'],
             address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-            address_status_source = request.form['address_status_source']  
+            address_status_source = request.form['address_status_source']
             )
         ret = query.add(physicianAddress)
     except KeyError as e:
@@ -2234,7 +2248,7 @@ def delete_physician_facility(physFacilityID):
             return item_not_found("PhysFacilityID {} not found".format(physFacilityID))
     except Exception as e:
         return internal_error(e)
-          
+
 ##############################################################################
 # Physician Phone
 ##############################################################################
@@ -2257,11 +2271,11 @@ def update_physician_phone(physicianPhoneID):
         try:
             physicianPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
             physicianPhone.physicianID = request.form['physicianID']
-            physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']  
-            physicianPhone.phone = request.form['phone']  
+            physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']
+            physicianPhone.phone = request.form['phone']
             physicianPhone.phone_type = request.form['phone_type']
-            physicianPhone.phone_source = request.form['phone_source']  
-            physicianPhone.phone_status = request.form['phone_status']  
+            physicianPhone.phone_source = request.form['phone_source']
+            physicianPhone.phone_status = request.form['phone_status']
             physicianPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             query.commit()
         except KeyError as e:
@@ -2282,7 +2296,7 @@ def create_physician_phone():
             phone = request.form['phone'],
             phone_type = request.form['phone_type'],
             phone_source = request.form['phone_source'],
-            phone_status = request.form['phone_status'], 
+            phone_status = request.form['phone_status'],
             phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
             )
         ret = query.add(physicianPhone)
@@ -2303,7 +2317,7 @@ def delete_physician_phone(physicianPhoneID):
             return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
     except Exception as e:
         return internal_error(e)
-               
+
 ##############################################################################
 # PhysicianToCTC
 ##############################################################################
@@ -2318,7 +2332,7 @@ def get_physician_to_ctc(physicianCTCID=None):
             return physicianToCTC.json()
         else:
             return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
-            
+
 @api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['PUT'])
 def update_physician_to_ctc(physicianCTCID):
     physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
@@ -2333,7 +2347,7 @@ def update_physician_to_ctc(physicianCTCID):
             return internal_error(e)
         return physicianToCTC.json()
     else:
-        return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID)) 
+        return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
 
 @api.route('/physiciantoctcs/', methods=['POST'])
 def create_physician_to_ctc():
@@ -2347,7 +2361,7 @@ def create_physician_to_ctc():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'physicianCTCID':physicianToCTC.physicianCTCID})        
+    return jsonify({'physicianCTCID':physicianToCTC.physicianCTCID})
 
 @api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['DELETE'])
 def delete_physician_to_ctc(physicianCTCID):
@@ -2360,7 +2374,7 @@ def delete_physician_to_ctc(physicianCTCID):
             return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
     except Exception as e:
         return internal_error(e)
-            
+
 ##############################################################################
 # PreApplication
 ##############################################################################
@@ -2375,7 +2389,7 @@ def get_pre_application(preApplicationID=None):
             return preApplication.json()
         else:
             return item_not_found("PreApplicationID {} not found".format(preApplicationID))
-            
+
 @api.route('/preapplications/<int:preApplicationID>/', methods = ['PUT'])
 def update_pre_application(preApplicationID):
     preApplication = query.get_pre_application(preApplicationID)
@@ -2416,7 +2430,7 @@ def update_pre_application(preApplicationID):
             return internal_error(e)
         return preApplication.json()
     else:
-        return item_not_found("PreApplicationID {} not found".format(preApplicationID)) 
+        return item_not_found("PreApplicationID {} not found".format(preApplicationID))
 
 @api.route('/preapplications/', methods=['POST'])
 def create_pre_application():
@@ -2455,7 +2469,7 @@ def create_pre_application():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'preApplicationID':preApplication.preApplicationID})        
+    return jsonify({'preApplicationID':preApplication.preApplicationID})
 
 @api.route('/preapplications/<int:preApplicationID>/', methods = ['DELETE'])
 def delete_pre_application(preApplicationID):
@@ -2468,75 +2482,82 @@ def delete_pre_application(preApplicationID):
             return item_not_found("PreApplicationID {} not found".format(preApplicationID))
     except Exception as e:
         return internal_error(e)
-         
+
 ##############################################################################
 # Project 
 ##############################################################################
 @api.route('/projects/', methods=['GET'])
 @api.route('/projects/<int:projectID>/',methods = ['GET'])
 def get_project(projectID=None):
-    if projectID is None:
-        return jsonify(projects = [i.dict() for i in query.get_projects()])
-    else:
-        proj = query.get_project(projectID)
-        if proj is not None:
-            return proj.json()
+    try:
+        if projectID is None:
+            return jsonify(projects = [i.dict() for i in query.get_projects()])
         else:
-            return item_not_found("ProjectID {} not found".format(projectID))
+            proj = query.get_project(projectID)
+            if proj is not None:
+                return proj.json()
+            else:
+                return item_not_found("ProjectID {} not found".format(projectID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/projects/<int:projectID>/',methods = ['PUT'])
 def update_project(projectID):
-    proj = query.get_project(projectID)
-    if proj is not None:
-        try:
-            proj.projectType_projectTypeID = request.form['projectType_projectTypeID']
-            proj.IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID']
-            proj.project_name = request.form['project_name']
-            proj.short_title = request.form['short_title']
-            proj.project_summary = request.form['project_summary']
-            proj.sop = request.form['sop']
-            proj.UCR_proposal = request.form['UCR_proposal']
-            proj.budget_doc = request.form['budget_doc']
-            proj.UCR_fee = request.form['UCR_fee']
-            proj.UCR_no_fee = request.form['UCR_no_fee']
-            proj.budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d")
-            proj.previous_short_title = request.form['previous_short_title']
-            proj.date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d")
-            proj.final_recruitment_report = request.form['final_recruitment_report']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return proj.json()
-    else:
-        return item_not_found("ProjectID {} not found".format(projectID))
+    try:
+        proj = query.get_project(projectID)
+        if proj is not None:
+            form = forms.ProjectForm(request.form)
+            if form.validate():
+                proj.projectType_projectTypeID = request.form['projectType_projectTypeID']
+                proj.IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID']
+                proj.project_name = request.form['project_name']
+                proj.short_title = request.form['short_title']
+                proj.project_summary = request.form['project_summary']
+                proj.sop = request.form['sop']
+                proj.UCR_proposal = request.form['UCR_proposal']
+                proj.budget_doc = request.form['budget_doc']
+                proj.UCR_fee = request.form['UCR_fee']
+                proj.UCR_no_fee = request.form['UCR_no_fee']
+                proj.budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d")
+                proj.previous_short_title = request.form['previous_short_title']
+                proj.date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d")
+                proj.final_recruitment_report = request.form['final_recruitment_report']
+                query.commit()
+                return proj.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ProjectID {} not found".format(projectID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/projects/', methods=['POST'])
 def create_project():
     try:
-        proj = models.Project(
-            projectType_projectTypeID = request.form['projectType_projectTypeID'],
-            IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID'],
-            project_name = request.form['project_name'],
-            short_title = request.form['short_title'],
-            project_summary = request.form['project_summary'],
-            sop = request.form['sop'],
-            UCR_proposal = request.form['UCR_proposal'],
-            budget_doc = request.form['budget_doc'],
-            UCR_fee = request.form['UCR_fee'],
-            UCR_no_fee = request.form['UCR_no_fee'],
-            budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d"),
-            previous_short_title = request.form['previous_short_title'],
-            date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d"),
-            final_recruitment_report = request.form['final_recruitment_report']
-            )
-        ret = query.add(proj)
-    except KeyError as e:
-       return missing_params(e)
+        form = forms.ProjectForm(request.form)
+        if form.validate():
+            proj = models.Project(
+                projectType_projectTypeID = request.form['projectType_projectTypeID'],
+                IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID'],
+                project_name = request.form['project_name'],
+                short_title = request.form['short_title'],
+                project_summary = request.form['project_summary'],
+                sop = request.form['sop'],
+                UCR_proposal = request.form['UCR_proposal'],
+                budget_doc = request.form['budget_doc'],
+                UCR_fee = request.form['UCR_fee'],
+                UCR_no_fee = request.form['UCR_no_fee'],
+                budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d"),
+                previous_short_title = request.form['previous_short_title'],
+                date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d"),
+                final_recruitment_report = request.form['final_recruitment_report']
+                )
+            query.add(proj)
+            return jsonify({'projectID':proj.projectID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
-    return jsonify({'projectID':proj.projectID})
 
 @api.route('/projects/<int:projectID>/',methods = ['DELETE'])
 def delete_project(projectID):
@@ -2564,7 +2585,7 @@ def get_project_patient(participantID=None):
             return projectPatient.json()
         else:
             return item_not_found("ParticipantID {} not found".format(participantID))
-            
+
 @api.route('/projectpatients/<int:participantID>/', methods = ['PUT'])
 def update_project_patient(participantID):
     projectPatient = query.get_project_patient(participantID)
@@ -2608,7 +2629,7 @@ def update_project_patient(participantID):
             return internal_error(e)
         return projectPatient.json()
     else:
-        return item_not_found("ParticipantID {} not found".format(participantID)) 
+        return item_not_found("ParticipantID {} not found".format(participantID))
 
 @api.route('/projectpatients/', methods=['POST'])
 def create_project_patient():
@@ -2651,7 +2672,7 @@ def create_project_patient():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'participantID':projectPatient.participantID})        
+    return jsonify({'participantID':projectPatient.participantID})
 
 @api.route('/projectpatients/<int:participantID>/', methods = ['DELETE'])
 def delete_project_patient(participantID):
@@ -2664,7 +2685,7 @@ def delete_project_patient(participantID):
             return item_not_found("ParticipantID {} not found".format(participantID))
     except Exception as e:
         return internal_error(e)
-    
+
 ##############################################################################
 # Project Staff
 ##############################################################################
@@ -2679,7 +2700,7 @@ def get_project_staff(projectStaffID=None):
             return projectStaff.json()
         else:
             return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
-            
+
 @api.route('/projectstaff/<int:projectStaffID>/', methods = ['PUT'])
 def update_project_staff(projectStaffID):
     projectStaff = query.get_project_staff(projectStaffID)
@@ -2703,7 +2724,7 @@ def update_project_staff(projectStaffID):
             return internal_error(e)
         return projectStaff.json()
     else:
-        return item_not_found("ProjectStaffID {} not found".format(projectStaffID)) 
+        return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
 
 @api.route('/projectstaff/', methods=['POST'])
 def create_project_staff():
@@ -2726,7 +2747,7 @@ def create_project_staff():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'projectStaffID':projectStaff.projectStaffID})        
+    return jsonify({'projectStaffID':projectStaff.projectStaffID})
 
 @api.route('/projectstaff/<int:projectStaffID>/', methods = ['DELETE'])
 def delete_project_staff(projectStaffID):
@@ -2739,7 +2760,7 @@ def delete_project_staff(projectStaffID):
             return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
     except Exception as e:
         return internal_error(e)
-    
+
 ##############################################################################
 # Project Status
 ##############################################################################
@@ -2754,7 +2775,7 @@ def get_project_status(projectStatusID=None):
             return projectStatus.json()
         else:
             return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
-            
+
 @api.route('/projectstatuses/<int:projectStatusID>/', methods = ['PUT'])
 def update_project_status(projectStatusID):
     projectStatus = query.get_project_status(projectStatusID)
@@ -2772,7 +2793,7 @@ def update_project_status(projectStatusID):
             return internal_error(e)
         return projectStatus.json()
     else:
-        return item_not_found("ProjectStatusID {} not found".format(projectStatusID)) 
+        return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
 
 @api.route('/projectstatuses/', methods=['POST'])
 def create_project_status():
@@ -2789,7 +2810,7 @@ def create_project_status():
         return missing_params(e)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'projectStatusID':projectStatus.projectStatusID})        
+    return jsonify({'projectStatusID':projectStatus.projectStatusID})
 
 @api.route('/projectstatuses/<int:projectStatusID>/', methods = ['DELETE'])
 def delete_project_status(projectStatusID):
@@ -2802,7 +2823,7 @@ def delete_project_status(projectStatusID):
             return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
     except Exception as e:
         return internal_error(e)
-         
+
 ##############################################################################
 # ProjectStatusLUT/Type
 ##############################################################################
@@ -2820,7 +2841,7 @@ def get_project_status_lut(projectStatusTypeID=None):
                 return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['PUT'])
 def update_project_status_lut(projectStatusTypeID):
     try:
@@ -2849,11 +2870,11 @@ def create_project_status_lut():
                 status_definition = request.form['status_definition']
             )
             query.add(projectStatusType)
-            return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})  
+            return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})
         else:
             return missing_params(form.errors)
     except Exception as e:
-        return internal_error(e)      
+        return internal_error(e)
 
 @api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['DELETE'])
 def delete_project_status_lut(projectStatusTypeID):
@@ -2884,7 +2905,7 @@ def get_project_type(projectTypeID=None):
                 return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/projecttypes/<int:projectTypeID>/', methods = ['PUT'])
 def update_project_type(projectTypeID):
     try:
@@ -2899,10 +2920,10 @@ def update_project_type(projectTypeID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("ProjectTypeID {} not found".format(projectTypeID)) 
+            return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/projecttypes/', methods=['POST'])
 def create_project_type():
     try:
@@ -2913,7 +2934,7 @@ def create_project_type():
                 project_type_definition = request.form['project_type_definition']
             )
             query.add(projectType)
-            return jsonify({'projectTypeID':projectType.projectTypeID}) 
+            return jsonify({'projectTypeID':projectType.projectTypeID})
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2930,7 +2951,7 @@ def delete_project_type(projectTypeID):
             return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
         return internal_error(e)
-      
+
 ##############################################################################
 # RCStatusList
 ##############################################################################
@@ -2948,7 +2969,7 @@ def get_rc_status_list(rcStatusID=None):
                 return item_not_found("RCStatusID {} not found".format(rcStatusID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['PUT'])
 def update_rc_status_list(rcStatusID):
     try:
@@ -2966,7 +2987,7 @@ def update_rc_status_list(rcStatusID):
             return item_not_found("RCStatusListID {} not found".format(rcStatusID))
     except Exception as e:
         return internal_error(e)
-                
+
 @api.route('/rcstatuslist/', methods=['POST'])
 def create_rc_status_list():
     try:
@@ -3001,59 +3022,66 @@ def delete_rc_status_list(rcStatusID):
 @api.route('/reviewcommittees/', methods = ['GET'])
 @api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['GET'])
 def get_review_committee(reviewCommitteeID = None):
-    if reviewCommitteeID is None:
-        return jsonify(reviewCommittees = [i.dict() for i in query.get_review_committees()])
-    else:
-        reviewCommittee = query.get_review_committee(reviewCommitteeID)
-        if reviewCommittee is not None:
-            return reviewCommittee.json()
+    try:
+        if reviewCommitteeID is None:
+            return jsonify(reviewCommittees = [i.dict() for i in query.get_review_committees()])
         else:
-            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
- 
+            reviewCommittee = query.get_review_committee(reviewCommitteeID)
+            if reviewCommittee is not None:
+                return reviewCommittee.json()
+            else:
+                return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
+    except Exception as e:
+        return interal_error(e)
+
 @api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['PUT'])
 def update_review_committee(reviewCommitteeID):
-    rc = query.get_review_committee(reviewCommitteeID)
-    if rc is not None:
-        try:
-            rc.project_projectID = request.form['project_projectID']
-            rc.RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID']
-            rc.reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID']
-            rc.review_committee_number = request.form['review_committee_number']
-            rc.date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d")
-            rc.date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d")
-            rc.rc_note = request.form['rc_note']
-            rc.rc_protocol = request.form['rc_protocol']
-            rc.rc_approval = request.form['rc_approval']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return rc.json()
-    else:
-        return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
- 
+    try:
+        rc = query.get_review_committee(reviewCommitteeID)
+        if rc is not None:
+            form = forms.ReviewCommitteeForm(request.form)
+            if form.validate():
+                rc.project_projectID = request.form['project_projectID']
+                rc.RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID']
+                rc.reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID']
+                rc.review_committee_number = request.form['review_committee_number']
+                rc.date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d")
+                rc.date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d")
+                rc.rc_note = request.form['rc_note']
+                rc.rc_protocol = request.form['rc_protocol']
+                rc.rc_approval = request.form['rc_approval']
+                query.commit()
+                return rc.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/reviewcommittees/', methods = ['POST'])
 def create_review_committee():
     try:
-        rc = models.ReviewCommittee(
-            project_projectID = request.form['project_projectID'],
-            RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID'],
-            reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID'],
-            review_committee_number = request.form['review_committee_number'],
-            date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d"),
-            date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d"),
-            rc_note = request.form['rc_note'],
-            rc_protocol = request.form['rc_protocol'],
-            rc_approval = request.form['rc_approval']
-        )
-        ret = query.add(rc)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ReviewCommitteeForm(request.form)
+        if form.validate():
+            rc = models.ReviewCommittee(
+                project_projectID = request.form['project_projectID'],
+                RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID'],
+                reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID'],
+                review_committee_number = request.form['review_committee_number'],
+                date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d"),
+                date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d"),
+                rc_note = request.form['rc_note'],
+                rc_protocol = request.form['rc_protocol'],
+                rc_approval = request.form['rc_approval']
+            )
+            query.add(rc)
+            return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
-    
+
 @api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['DELETE'])
 def delete_review_committee(reviewCommitteeID):
     try:
@@ -3065,7 +3093,7 @@ def delete_review_committee(reviewCommitteeID):
             return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
         return internal_error(e)
-        
+
 ##############################################################################
 # Review CommitteeList
 ##############################################################################
@@ -3083,7 +3111,7 @@ def get_review_committee_list(rcListID=None):
                 return item_not_found("RCListID {} not found".format(rcListID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/reviewcommitteelist/<int:rcListID>/',methods = ['PUT'])
 def update_review_committee_list(rcListID):
     try:
@@ -3100,8 +3128,8 @@ def update_review_committee_list(rcListID):
         else:
             return item_not_found("RCListID {} not found".format(rcListID))
     except Exception as e:
-        return internal_error(e)   
-        
+        return internal_error(e)
+
 @api.route('/reviewcommitteelist/',methods = ['POST'])
 def create_review_committee_list():
     try:
@@ -3117,7 +3145,7 @@ def create_review_committee_list():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['DELETE'])
 def delete_review_committee_list(rcListID):
     try:
@@ -3144,7 +3172,7 @@ def get_staff(staffID=None):
             return staff.json()
         else:
             return item_not_found("StaffID {} not found".format(staffID))
-            
+
 @api.route('/staff/<int:staffID>/',methods = ['PUT'])
 def update_staff(staffID):
     staff = query.get_staff(staffID)
@@ -3173,7 +3201,7 @@ def update_staff(staffID):
         return staff.json()
     else:
         return item_not_found("StaffID {} not found".format(staffID))
-        
+
 @api.route('/staff/',methods = ['POST'])
 def create_staff():
     try:
@@ -3200,7 +3228,7 @@ def create_staff():
     except Exception as e:
         return internal_error(e)
     return jsonify({'staffID':staff.staffID})
-    
+
 @api.route('/staff/<int:staffID>/', methods = ['DELETE'])
 def delete_staff(staffID):
     try:
@@ -3212,7 +3240,7 @@ def delete_staff(staffID):
             return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
         return internal_error(e)
-        
+
 ##############################################################################
 # Staff Role
 ##############################################################################
@@ -3230,7 +3258,7 @@ def get_staff_role(staffRoleLUTID=None):
                 return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/staffroles/<int:staffRoleLUTID>/',methods = ['PUT'])
 def update_staff_role(staffRoleLUTID):
     try:
@@ -3248,7 +3276,7 @@ def update_staff_role(staffRoleLUTID):
             return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
     except Exception as e:
         return internal_error(e)
-        
+
 @api.route('/staffroles/',methods = ['POST'])
 def create_staff_role():
     try:
@@ -3264,7 +3292,7 @@ def create_staff_role():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['DELETE'])
 def delete_staff_role(staffRoleLUTID):
     try:
@@ -3276,7 +3304,7 @@ def delete_staff_role(staffRoleLUTID):
             return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
     except Exception as e:
         return internal_error(e)
-       
+
 ##############################################################################
 # Staff Training
 ##############################################################################
@@ -3291,7 +3319,7 @@ def get_staff_training(staffTrainingID=None):
             return stafftraining.json()
         else:
             return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
-            
+
 @api.route('/stafftrainings/<int:staffTrainingID>/',methods = ['PUT'])
 def update_staff_training(staffTrainingID):
     stafftraining = query.get_staff_training(staffTrainingID)
@@ -3309,7 +3337,7 @@ def update_staff_training(staffTrainingID):
         return stafftraining.json()
     else:
         return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
-        
+
 @api.route('/stafftrainings/',methods = ['POST'])
 def create_staff_training():
     try:
@@ -3325,7 +3353,7 @@ def create_staff_training():
     except Exception as e:
         return internal_error(e)
     return jsonify({'staffTrainingID':stafftraining.staffTrainingID})
-    
+
 @api.route('/stafftrainings/<int:staffTrainingID>/', methods = ['DELETE'])
 def delete_staff_training(staffTrainingID):
     try:
@@ -3337,7 +3365,7 @@ def delete_staff_training(staffTrainingID):
             return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
     except Exception as e:
         return internal_error(e)
-             
+
 ##############################################################################
 # Tracing
 ##############################################################################
@@ -3352,7 +3380,7 @@ def get_tracing(tracingID=None):
             return tracing.json()
         else:
             return item_not_found("TracingID {} not found".format(tracingID))
-            
+
 @api.route('/tracings/<int:tracingID>/',methods = ['PUT'])
 def update_tracing(tracingID):
     tracing = query.get_tracing(tracingID)
@@ -3371,7 +3399,7 @@ def update_tracing(tracingID):
         return tracing.json()
     else:
         return item_not_found("TracingID {} not found".format(tracingID))
-        
+
 @api.route('/tracings/',methods = ['POST'])
 def create_tracing():
     try:
@@ -3388,7 +3416,7 @@ def create_tracing():
     except Exception as e:
         return internal_error(e)
     return jsonify({'tracingID':tracing.tracingID})
-    
+
 @api.route('/tracings/<int:tracingID>/', methods = ['DELETE'])
 def delete_tracing(tracingID):
     try:
@@ -3400,7 +3428,7 @@ def delete_tracing(tracingID):
             return item_not_found("TracingID {} not found".format(tracingID))
     except Exception as e:
         return internal_error(e)
-        
+
 ##############################################################################
 # Tracing Source LUT
 ##############################################################################
@@ -3418,7 +3446,7 @@ def get_tracing_source(tracingSourceLUTID=None):
                 return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-            
+
 @api.route('/tracingsources/<int:tracingSourceLUTID>/',methods = ['PUT'])
 def update_tracing_source(tracingSourceLUTID):
     try:
@@ -3434,7 +3462,7 @@ def update_tracing_source(tracingSourceLUTID):
         else:
             return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
     except Exception as e:
-        return internal_error(e)    
+        return internal_error(e)
 
 @api.route('/tracingsources/',methods = ['POST'])
 def create_tracing_source():
@@ -3450,7 +3478,7 @@ def create_tracing_source():
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    
+
 @api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['DELETE'])
 def delete_tracing_source(tracingSourceLUTID):
     try:
@@ -3462,59 +3490,66 @@ def delete_tracing_source(tracingSourceLUTID):
             return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
     except Exception as e:
         return internal_error(e)
-              
+
 ##############################################################################
 # UCR Report
 ##############################################################################
 @api.route('/ucrreports/', methods = ['GET'])
 @api.route('/ucrreports/<int:ucrReportID>/', methods = ['GET'])
 def get_ucr_report(ucrReportID=None):
-    if ucrReportID is None:
-        return jsonify(ucrReports = [i.dict() for i in query.get_ucr_reports()])
-    else:
-        ucr = query.get_ucr_report(ucrReportID)
-        if ucr is not None:
-            return ucr.json()
+    try:
+        if ucrReportID is None:
+            return jsonify(ucrReports = [i.dict() for i in query.get_ucr_reports()])
         else:
-            return item_not_found("UcrReportID {} not found".format(ucrReportID))
-            
+            ucr = query.get_ucr_report(ucrReportID)
+            if ucr is not None:
+                return ucr.json()
+            else:
+                return item_not_found("UcrReportID {} not found".format(ucrReportID))
+    except Exception as e:
+        internal_error(e)
+
 @api.route('/ucrreports/<int:ucrReportID>/', methods = ['PUT'])
 def update_ucr_report(ucrReportID):
-    ucr = query.get_ucr_report(ucrReportID)
-    if ucr is not None:
-        try:
-            ucr.projectID = request.form['projectID']
-            ucr.report_type = request.form['report_type']
-            ucr.report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d")
-            ucr.report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d")
-            ucr.report_doc = request.form['report_doc']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return ucr.json()
-    else:
-        return item_not_found("UcrReportID {} not found.".format(ucrReportID))
-        
+    try:
+        ucr = query.get_ucr_report(ucrReportID)
+        if ucr is not None:
+            form = forms.UCRReportForm(request.form)
+            if form.validate():
+                ucr.projectID = request.form['projectID']
+                ucr.report_type = request.form['report_type']
+                ucr.report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d")
+                ucr.report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d")
+                ucr.report_doc = request.form['report_doc']
+                query.commit()
+                return ucr.json()
+            else:
+                return missing_params(e)
+        else:
+            return item_not_found("UcrReportID {} not found.".format(ucrReportID))
+    except Exception as e:
+        return internal_error(e)
+
 @api.route('/ucrreports/', methods = ['POST'])
 def create_ucr_report():
     try:
-        ucr = models.UCRReport(
-            projectID = request.form['projectID'],
-            report_type = request.form['report_type'],
-            report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d"),
-            report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d"),
-            report_doc = request.form['report_doc']
-        )
-        query.add(ucr)
-        query.commit()
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.UCRReportForm(request.form)
+        if form.validate():
+            ucr = models.UCRReport(
+                projectID = request.form['projectID'],
+                report_type = request.form['report_type'],
+                report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d"),
+                report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d"),
+                report_doc = request.form['report_doc']
+            )
+            query.add(ucr)
+            query.commit()
+            return jsonify({'ucrReportID': ucr.ucrReportID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'ucrReportID': ucr.ucrReportID})
-    
+
 @api.route('/ucrreports/<int:ucrReportID>/',methods = ['DELETE'])
 def delete_ucr_report(ucrReportID):
     try:

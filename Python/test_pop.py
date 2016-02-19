@@ -17,12 +17,137 @@ class PopulatedDB(TestCase):
 
     def setUp(self):
         db.create_all()
-        self.populate_db()
+        self.populate_db2()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        
+
+    def populate_db2(self):
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        irb_holder2 = models.IRBHolderLUT(
+            irb_holder = "holder 2",
+            irb_holder_definition= "IRB 2")
+
+        project_type1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        project_type2 = models.ProjectType(
+            project_type = "Type 2",
+            project_type_definition = "Def 2")
+
+        project1 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        project2 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        budget1 = models.Budget(
+            projectID = 1,
+            numPeriods = 1,
+            periodStart = datetime(2016,2,2),
+            periodEnd = datetime(2016,2,2),
+            periodTotal = 1.23,
+            periodComment = "comment")
+
+        rcsl = models.RCStatusList(
+            rc_status = "Status 1",
+            rc_status_definition = "rc status def")
+
+        rcs2 = models.RCStatusList(
+            rc_status = "Status 2",
+            rc_status_definition = "rc status def 2")
+
+        rcl1 = models.ReviewCommitteeList(
+            review_committee = "rc 1",
+            rc_description = "rc desc 1")
+
+        rcl2 = models.ReviewCommitteeList(
+            review_committee = "rc 2",
+            rc_description = "rc des 2c")
+
+        rc = models.ReviewCommittee(
+            project_projectID=1,
+            RCStatusList_rc_StatusID=1,
+            reviewCommitteeList_rcListID=1,
+            review_committee_number="1",
+            date_initial_review=datetime(2016,2,2),
+            date_expires = datetime(2016,2,2),
+            rc_note = "rc_note",
+            rc_protocol = "rc_proto",
+            rc_approval="rc_approval")
+
+        ucr = models.UCRReport(
+            projectID = 1,
+            report_type= 1,
+            report_submitted= datetime(2016,2,2),
+            report_due= datetime(2016,2,2),
+            report_doc= "doc"
+        )
+        arcReview = models.ArcReview(
+            projectID = 1,
+            review_type = 1,
+            date_sent_to_reviewer = datetime(2016,2,2),
+            reviewer1 = 1,
+            reviewer1_rec = 1,
+            reviewer1_sig_date = datetime(2016,2,2),
+            reviewer1_comments = "test comment",
+            reviewer2 = 2,
+            reviewer2_rec  =2 ,
+            reviewer2_sig_date = datetime(2016,2,2),
+            reviewer2_comments = "test comment",
+            research = 1,
+            lnkage=False,
+            contact = True,
+            engaged = True,
+            non_public_data = True)
+
+        db.session.add(irb_holder1)
+        db.session.add(irb_holder2)
+        db.session.add(project_type1)
+        db.session.add(project_type2)
+        db.session.add(project1)
+        db.session.add(project2)
+        db.session.add(budget1)
+        db.session.add(rcsl)
+        db.session.add(rcs2)
+        db.session.add(rcl1)
+        db.session.add(rcl2)
+        db.session.add(rc)
+        db.session.add(ucr)
+        db.session.add(arcReview)
+        db.session.commit()
+
     def populate_db(self):
         arcReview = models.ArcReview(
             review_type = 1,
@@ -89,6 +214,10 @@ class PopulatedDB(TestCase):
         irb = models.IRBHolderLUT(
             irb_holder = "holder 1",
             irb_holder_definition= "IRB 1")
+
+        irb2 = models.IRBHolderLUT(
+            irb_holder = "holder 2",
+            irb_holder_definition= "IRB 2")
             
         rcl = models.ReviewCommitteeList(
             review_committee = "rc",
@@ -102,7 +231,11 @@ class PopulatedDB(TestCase):
         pt = models.ProjectType(
             project_type = "Type 1",
             project_type_definition = "Def 1")
-            
+
+        pt2 = models.ProjectType(
+            project_type = "Type 2",
+            project_type_definition = "Def 2")
+
         logSubject = models.LogSubjectLUT(
             log_subject = "subject"
         )
@@ -2131,7 +2264,8 @@ class TestPreApplication(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "PreApplicationID 1 deleted")    
         
-class TestProject(PopulatedDB):   
+class TestProject(PopulatedDB):
+
     # test getting list of projects
     def test_get_projects(self):
         response = self.client.get("/api/projects/")
@@ -2803,7 +2937,7 @@ class TestTracingSource(PopulatedDB):
         self.assertEqual(response.json["Message"], "TracingSourceLUTID 1 deleted")
         
 class TestUCRReport(PopulatedDB):
-    def test_get_ucr_report(self):
+    def test_get_ucr_reports(self):
         response = self.client.get("/api/ucrreports/")
         self.assertEqual(response.json["ucrReports"][0]["projectID"],1)
         self.assertEqual(response.json["ucrReports"][0]["report_type"],1)

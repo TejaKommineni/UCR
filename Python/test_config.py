@@ -5,7 +5,7 @@ DEBUG = True
 
 # Define the database - we are working with
 # SQLite for this example
-SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB\Python\test_tb.db"
+SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB_PyCharm\ucr_db\test_tb.db"
 DATABASE_CONNECT_OPTIONS = {}
 
 PRESERVE_CONTEXT_ON_EXCEPTION = False

@@ -28,6 +28,7 @@ class BlankDB(TestCase):
         db.session.remove()
         db.drop_all()
 
+
 class TestRoot(BlankDB):        
     # Test the root node    
     def test_root(self):
@@ -40,6 +41,39 @@ class TestRoot(BlankDB):
             ]})       
 
 class TestArcReview(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(p)
+        db.session.commit()
+
     def test_empty_arc_review(self):
         response = self.client.get("/api/arcreviews/")
         self.assertEqual(response.json, {"arcReviews" : []})
@@ -70,6 +104,39 @@ class TestArcReview(BlankDB):
         self.assertEqual(response.json, {"arcReviewID" : 1})
             
 class TestBudget(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(p)
+        db.session.commit()
+
     def test_empty_budget(self):
         response = self.client.get("/api/budgets/")
         self.assertEqual(response.json, {"budgets" : [] })
@@ -177,7 +244,7 @@ class TestCTC(BlankDB):
             "ctc_sequence" : "sequence",
             "stage" : "stage",
             "dx_age" : 1,
-            "dx_street" : "street",
+            "dx_street1" : "street",
             "dx_street2" : "street2",
             "dx_city" : "city",
             "dx_state" : "state",
@@ -760,6 +827,24 @@ class TestPreApplication(BlankDB):
         self.assertEqual(response.json, {"preApplicationID": 1})
                 
 class TestProject(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        db.session.add(pt1)
+        db.session.add(irb_holder1)
+        db.session.commit()
+
     # Test for empty array of projects        
     def test_empty_projects(self):
         response = self.client.get("/api/projects/")
@@ -772,7 +857,6 @@ class TestProject(BlankDB):
         self.assertEqual(response.json, {"Error" : 
             "ProjectID 1 not found"})
     # Test create a project
-    # TODO: insert foreign key items first (SQLITE doesn't care) 
     def test_create_project(self):
         response = self.client.post("/api/projects/", data = {
             "projectType_projectTypeID" : 1,
@@ -932,6 +1016,49 @@ class TestRCStatusList(BlankDB):
         self.assertEqual(response.json, {"rcStatusListID": 1})
 
 class TestReviewCommittee(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        rcsl = models.RCStatusList(
+            rc_status = "Status 1",
+            rc_status_definition = "rc status def")
+
+        rcl1 = models.ReviewCommitteeList(
+            review_committee = "rc 1",
+            rc_description = "rc desc 1")
+
+        db.session.add(pt1)
+        db.session.add(irb_holder1)
+        db.session.add(p)
+        db.session.add(rcsl)
+        db.session.add(rcl1)
+        db.session.commit()
+
     def test_empty_review_committee(self):
         response = self.client.get("/api/reviewcommittees/")
         self.assertEqual(response.json, dict(reviewCommittees = []))
@@ -1068,6 +1195,38 @@ class TestTracingSource(BlankDB):
         self.assertEqual(response.json, {"tracingSourceLUTID" : 1 })
              
 class TestUCRReport(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        db.session.add(pt1)
+        db.session.add(irb_holder1)
+        db.session.add(p)
+        db.session.commit()
     def test_empty_ucr_report(self):
         response = self.client.get("/api/ucrreports/")
         self.assertEqual(response.json, dict(ucrReports = []))
