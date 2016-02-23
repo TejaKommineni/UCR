@@ -215,6 +215,64 @@ class PopulatedDB(TestCase):
             status_notes = "notes"
         )
 
+        preApp = models.PreApplication(
+            projectID = 1,
+            pi_fname = "pi_fname",
+            pi_lname = "pi_lname",
+            pi_email = "pi_email",
+            pi_phone = "pi_phone",
+            contact_fname = "contact_fname",
+            contact_lname = "contact_lname",
+            contact_phone = "contact_phone",
+            contact_email = "contact_email",
+            institution = "institution",
+            institution2 = "institution2",
+            uid = "uid",
+            udoh = 1,
+            project_title = "project_title",
+            purpose = "purpose",
+            irb0 = True,
+            irb1 = True,
+            irb2 = True,
+            irb3 = True,
+            irb4 = True,
+            other_irb = "other_irb",
+            updb = True,
+            pt_contact = True,
+            start_date = datetime(2016,2,2),
+            link = True,
+            delivery_date = datetime(2016,2,2),
+            description = "description"
+        )
+
+        phaseStatus1 = models.PhaseStatus(
+            phase_status = "status",
+            phase_description = "desc"
+        )
+
+        phaseStatus2 = models.PhaseStatus(
+            phase_status = "status",
+            phase_description = "desc"
+        )
+        logSubject1 = models.LogSubjectLUT(
+            log_subject = "subject"
+        )
+        logSubject2 = models.LogSubjectLUT(
+            log_subject = "subject"
+        )
+        log = models.Log(
+            logSubjectLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            phaseStatusID = 1,
+            note = "note",
+            date = datetime(2016,2,2)
+        )
+
+        db.session.add(logSubject1)
+        db.session.add(logSubject2)
+        db.session.add(phaseStatus1)
+        db.session.add(phaseStatus2)
         db.session.add(projStatusType1)
         db.session.add(projStatusType2)
         db.session.add(projStatus)
@@ -239,6 +297,8 @@ class PopulatedDB(TestCase):
         db.session.add(rc)
         db.session.add(ucr)
         db.session.add(arcReview)
+        db.session.add(preApp)
+        db.session.add(log)
         db.session.commit()
 
     def populate_db(self):

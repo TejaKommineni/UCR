@@ -1446,52 +1446,59 @@ def delete_irb_holder(irbHolderID):
 @api.route('/logs/',methods=['GET'])
 @api.route('/logs/<int:logID>/', methods = ['GET'])
 def get_log(logID=None):
-    if logID is None:
-        return jsonify(Logs = [i.dict() for i in query.get_logs()])
-    else:
-        log = query.get_log(logID)
-        if log is not None:
-            return log.json()
+    try:
+        if logID is None:
+            return jsonify(Logs = [i.dict() for i in query.get_logs()])
         else:
-            return item_not_found("LogID {} not found".format(logID))
+            log = query.get_log(logID)
+            if log is not None:
+                return log.json()
+            else:
+                return item_not_found("LogID {} not found".format(logID))
+    except Exception as e:
+        internal_error(e)
 
 @api.route('/logs/<int:logID>/', methods = ['PUT'])
 def update_log(logID):
-    log = query.get_log(logID)
-    if log is not None:
-        try:
-            log.logSubjectLUTID = request.form['logSubjectLUTID']
-            log.projectID = request.form['projectID']
-            log.staffID = request.form['staffID']
-            log.phaseStatusID = request.form['phaseStatusID']
-            log.note = request.form['note']
-            log.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return log.json()
-    else:
-        return item_not_found("LogID {} not found".format(logID))
+    try:
+        log = query.get_log(logID)
+        if log is not None:
+            form = forms.LogForm(request.form)
+            if form.validate():
+                log.logSubjectLUTID = request.form['logSubjectLUTID']
+                log.projectID = request.form['projectID']
+                log.staffID = request.form['staffID']
+                log.phaseStatusID = request.form['phaseStatusID']
+                log.note = request.form['note']
+                log.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+                query.commit()
+                return log.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("LogID {} not found".format(logID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/logs/', methods = ['POST'])
 def create_log():
     try:
-        log  = models.Log(
-            logSubjectLUTID = request.form['logSubjectLUTID'],
-            projectID = request.form['projectID'],
-            staffID = request.form['staffID'],
-            phaseStatusID = request.form['phaseStatusID'],
-            note = request.form['note'],
-            date = datetime.strptime(request.form['date'],"%Y-%m-%d")
-        )
-        ret = query.add(log)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.LogForm(request.form)
+        if form.validate():
+            log  = models.Log(
+                logSubjectLUTID = request.form['logSubjectLUTID'],
+                projectID = request.form['projectID'],
+                staffID = request.form['staffID'],
+                phaseStatusID = request.form['phaseStatusID'],
+                note = request.form['note'],
+                date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+            )
+            query.add(log)
+            return jsonify({"logID":log.logID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({"logID":log.logID})
 
 @api.route('/logs/<int:logID>/',methods=['DELETE'])
 def delete_log(logID):
@@ -2388,95 +2395,105 @@ def delete_physician_to_ctc(physicianCTCID):
 @api.route('/preapplications/', methods = ['GET'])
 @api.route('/preapplications/<int:preApplicationID>/', methods = ['GET'])
 def get_pre_application(preApplicationID=None):
-    if preApplicationID is None:
-        return jsonify(PreApplications = [i.dict() for i in query.get_pre_applications()])
-    else:
-        preApplication = query.get_pre_application(preApplicationID)
-        if preApplication is not None:
-            return preApplication.json()
+    try:
+        if preApplicationID is None:
+            return jsonify(PreApplications = [i.dict() for i in query.get_pre_applications()])
         else:
-            return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+            preApplication = query.get_pre_application(preApplicationID)
+            if preApplication is not None:
+                return preApplication.json()
+            else:
+                return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/preapplications/<int:preApplicationID>/', methods = ['PUT'])
 def update_pre_application(preApplicationID):
-    preApplication = query.get_pre_application(preApplicationID)
-    print("test")
-    if preApplication is not None:
-        try:
-            preApplication.projectID = request.form['projectID']
-            preApplication.pi_fname = request.form['pi_fname']
-            preApplication.pi_lname = request.form['pi_lname']
-            preApplication.pi_phone = request.form['pi_phone']
-            preApplication.pi_email = request.form['pi_email']
-            preApplication.contact_fname = request.form['contact_fname']
-            preApplication.contact_lname = request.form['contact_lname']
-            preApplication.contact_phone = request.form['contact_phone']
-            preApplication.contact_email = request.form['contact_email']
-            preApplication.institution = request.form['institution']
-            preApplication.institution2 = request.form['institution2']
-            preApplication.uid = request.form['uid']
-            preApplication.udoh = request.form['udoh']
-            preApplication.project_title = request.form['project_title']
-            preApplication.purpose = request.form['purpose']
-            preApplication.irb0 = "true" == request.form['irb0'].lower()
-            preApplication.irb1 = "true" == request.form['irb1'].lower()
-            preApplication.irb2 = "true" == request.form['irb2'].lower()
-            preApplication.irb3 = "true" == request.form['irb3'].lower()
-            preApplication.irb4 = "true" == request.form['irb4'].lower()
-            preApplication.other_irb = request.form['other_irb']
-            preApplication.updb = "true" == request.form['updb'].lower()
-            preApplication.pt_contact = "true" == request.form['pt_contact'].lower()
-            preApplication.start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d")
-            preApplication.link = "true" == request.form['link'].lower()
-            preApplication.delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d")
-            preApplication.description = request.form['description']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return preApplication.json()
-    else:
-        return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+    try:
+        preApplication = query.get_pre_application(preApplicationID)
+        if preApplication is not None:
+            form = forms.PreApplicationForm(request.form)
+            if form.validate():
+                preApplication.projectID = request.form['projectID']
+                preApplication.pi_fname = request.form['pi_fname']
+                preApplication.pi_lname = request.form['pi_lname']
+                preApplication.pi_phone = request.form['pi_phone']
+                preApplication.pi_email = request.form['pi_email']
+                preApplication.contact_fname = request.form['contact_fname']
+                preApplication.contact_lname = request.form['contact_lname']
+                preApplication.contact_phone = request.form['contact_phone']
+                preApplication.contact_email = request.form['contact_email']
+                preApplication.institution = request.form['institution']
+                preApplication.institution2 = request.form['institution2']
+                preApplication.uid = request.form['uid']
+                preApplication.udoh = request.form['udoh']
+                preApplication.project_title = request.form['project_title']
+                preApplication.purpose = request.form['purpose']
+                preApplication.irb0 = "true" == request.form['irb0'].lower()
+                preApplication.irb1 = "true" == request.form['irb1'].lower()
+                preApplication.irb2 = "true" == request.form['irb2'].lower()
+                preApplication.irb3 = "true" == request.form['irb3'].lower()
+                preApplication.irb4 = "true" == request.form['irb4'].lower()
+                preApplication.other_irb = request.form['other_irb']
+                preApplication.updb = "true" == request.form['updb'].lower()
+                preApplication.pt_contact = "true" == request.form['pt_contact'].lower()
+                preApplication.start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d")
+                preApplication.link = "true" == request.form['link'].lower()
+                preApplication.delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d")
+                preApplication.description = request.form['description']
+                query.commit()
+                return preApplication.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PreApplicationID {} not found".format(preApplicationID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/preapplications/', methods=['POST'])
 def create_pre_application():
+    print("here")
     try:
-        preApplication = models.PreApplication(
-            projectID = request.form['projectID'],
-            pi_fname = request.form['pi_fname'],
-            pi_lname = request.form['pi_lname'],
-            pi_phone = request.form['pi_phone'],
-            pi_email = request.form['pi_email'],
-            contact_fname = request.form['contact_fname'],
-            contact_lname = request.form['contact_lname'],
-            contact_phone = request.form['contact_phone'],
-            contact_email = request.form['contact_email'],
-            institution = request.form['institution'],
-            institution2 = request.form['institution2'],
-            uid = request.form['uid'],
-            udoh = request.form['udoh'],
-            project_title = request.form['project_title'],
-            purpose = request.form['purpose'],
-            irb0 = "true" == request.form['irb0'].lower(),
-            irb1 = "true" == request.form['irb1'].lower(),
-            irb2 = "true" == request.form['irb2'].lower(),
-            irb3 = "true" == request.form['irb3'].lower(),
-            irb4 = "true" == request.form['irb4'].lower(),
-            other_irb = request.form['other_irb'],
-            updb = "true" == request.form['updb'].lower(),
-            pt_contact = "true" == request.form['pt_contact'].lower(),
-            start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d"),
-            link = "true" == request.form['link'].lower(),
-            delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d"),
-            description = request.form['description']
-        )
-        ret = query.add(preApplication)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.PreApplicationForm(request.form)
+        if form.validate():
+            print("validated")
+            preApplication = models.PreApplication(
+                projectID = request.form['projectID'],
+                pi_fname = request.form['pi_fname'],
+                pi_lname = request.form['pi_lname'],
+                pi_phone = request.form['pi_phone'],
+                pi_email = request.form['pi_email'],
+                contact_fname = request.form['contact_fname'],
+                contact_lname = request.form['contact_lname'],
+                contact_phone = request.form['contact_phone'],
+                contact_email = request.form['contact_email'],
+                institution = request.form['institution'],
+                institution2 = request.form['institution2'],
+                uid = request.form['uid'],
+                udoh = request.form['udoh'],
+                project_title = request.form['project_title'],
+                purpose = request.form['purpose'],
+                irb0 = "true" == request.form['irb0'].lower(),
+                irb1 = "true" == request.form['irb1'].lower(),
+                irb2 = "true" == request.form['irb2'].lower(),
+                irb3 = "true" == request.form['irb3'].lower(),
+                irb4 = "true" == request.form['irb4'].lower(),
+                other_irb = request.form['other_irb'],
+                updb = "true" == request.form['updb'].lower(),
+                pt_contact = "true" == request.form['pt_contact'].lower(),
+                start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d"),
+                link = "true" == request.form['link'].lower(),
+                delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d"),
+                description = request.form['description']
+            )
+            query.add(preApplication)
+            return jsonify({'preApplicationID':preApplication.preApplicationID})
+        else:
+            print("error")
+            print(form.errors)
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'preApplicationID':preApplication.preApplicationID})
 
 @api.route('/preapplications/<int:preApplicationID>/', methods = ['DELETE'])
 def delete_pre_application(preApplicationID):

@@ -542,6 +542,69 @@ class TestIRBHolder(BlankDB):
         self.assertEqual(response.json, dict(irbHolderID=1))
 
 class TestLog(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        phaseStatus = models.PhaseStatus(
+            phase_status = "status",
+            phase_description = "desc"
+        )
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        logSubject = models.LogSubjectLUT(
+            log_subject = "subject"
+        )
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(p)
+        db.session.add(staff)
+        db.session.add(logSubject)
+        db.session.add(phaseStatus)
+        db.session.commit()
+
     def test_empty_log(self):
         response = self.client.get("/api/logs/")
         self.assertEqual(response.json, {"Logs" : []})
@@ -827,7 +890,39 @@ class TestPhysicianToCTC(BlankDB):
         })
         self.assertEqual(response.json, {"physicianCTCID": 1})
 
-class TestPreApplication(BlankDB):         
+class TestPreApplication(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(p)
+        db.session.commit()
+
     def test_empty_pre_application(self):
         response = self.client.get("/api/preapplications/")
         self.assertEqual(response.json, dict(PreApplications = []))

@@ -178,6 +178,45 @@ class IRBHolderLUTForm(Form):
     irb_holder_definition = StringField('irb_holder_definition',
         []+COMMON_STRING_VALIDATORS)
 
+class LogForm(Form):
+    logSubjectLUTID =  IntegerField('logSubjectLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    staffID = IntegerField('staffID',
+        []+COMMON_INTEGER_VALIDATORS)
+    phaseStatusID = IntegerField('phaseStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    note = StringField('note',
+        []+COMMON_STRING_VALIDATORS)
+    date = DateField('date',
+        []+COMMON_DATE_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        # Check to make sure the project FK exists
+        project = query.get_project(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors =  True
+
+        logSubject = query.get_log_subject(self.logSubjectLUTID.data)
+        if logSubject is None:
+            self.logSubjectLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
+            hasErrors = True
+
+        phaseStatus = query.get_phase_status(self.phaseStatusID.data)
+        if phaseStatus is None:
+            self.phaseStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
 class LogSubjectLUTForm(Form):
     log_subject = StringField('log_subject',
         []+COMMON_STRING_VALIDATORS)
@@ -191,6 +230,75 @@ class PhaseStatusForm(Form):
         []+COMMON_STRING_VALIDATORS)
     phase_description = StringField('phase_description',
         []+COMMON_STRING_VALIDATORS)
+
+class PreApplicationForm(Form):
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    pi_fname = StringField('pi_fname',
+        []+COMMON_STRING_VALIDATORS)
+    pi_phone = StringField('pi_phone',
+        []+COMMON_STRING_VALIDATORS)
+    pi_email = StringField('pi_email',
+        []+COMMON_STRING_VALIDATORS)
+    contact_fname = StringField('contact_fname',
+        []+COMMON_STRING_VALIDATORS)
+    contact_lname = StringField('contact_lname',
+        []+COMMON_STRING_VALIDATORS)
+    contact_phone = StringField('contact_phone',
+        []+COMMON_STRING_VALIDATORS)
+    contact_email = StringField('contact_email',
+        []+COMMON_STRING_VALIDATORS)
+    institution = StringField('institution',
+        []+COMMON_STRING_VALIDATORS)
+    institution2 = StringField('institution2',
+        []+COMMON_STRING_VALIDATORS)
+    uid = StringField('uid',
+        []+COMMON_STRING_VALIDATORS)
+    udoh = IntegerField('udoh',
+        []+COMMON_INTEGER_VALIDATORS)
+    project_title = StringField('project_title',
+        []+COMMON_STRING_VALIDATORS)
+    purpose = StringField('purpose',
+        []+COMMON_STRING_VALIDATORS)
+    irb0 = BooleanField('irb0',
+        []+COMMON_BOOL_VALIDATORS)
+    irb1 = BooleanField('irb1',
+        []+COMMON_BOOL_VALIDATORS)
+    irb2 = BooleanField('irb2',
+        []+COMMON_BOOL_VALIDATORS)
+    irb3 = BooleanField('irb3',
+        []+COMMON_BOOL_VALIDATORS)
+    irb4 = BooleanField('irb4',
+        []+COMMON_BOOL_VALIDATORS)
+    other_irb = StringField('other_irb',
+        []+COMMON_STRING_VALIDATORS)
+    updb = BooleanField('updb',
+        []+COMMON_BOOL_VALIDATORS)
+    pt_contact = BooleanField('pt_contact',
+        []+COMMON_BOOL_VALIDATORS)
+    start_date = DateField('start_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    link = BooleanField('link',
+        []+COMMON_BOOL_VALIDATORS)
+    delivery_date = DateField('delivery_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    description = StringField('description',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        f = Form.validate(self)
+        hasErrors = False # are hasErrors detected?
+        if not f:
+            hasErrors = True
+
+        # Check to make sure the project type FK exists
+        project = query.get_project(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors =  True
+        return not hasErrors
 
 class ProjectForm(Form):
     projectType_projectTypeID = IntegerField('projectType_projectTypeID',
