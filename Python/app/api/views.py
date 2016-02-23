@@ -690,64 +690,71 @@ def delete_ctc_facility(CTCFacilityID):
 @api.route('/fundings/', methods = ['GET'])
 @api.route('/fundings/<int:fundingID>/', methods = ['GET'])
 def get_funding(fundingID=None):
-    if fundingID is None:
-        return jsonify(Fundings = [i.dict() for i in query.get_fundings()])
-    else:
-        funding = query.get_funding(fundingID)
-        if funding is not None:
-            return funding.json()
+    try:
+        if fundingID is None:
+            return jsonify(Fundings = [i.dict() for i in query.get_fundings()])
         else:
-            return item_not_found("FundingID {} not found".format(fundingID))
+            funding = query.get_funding(fundingID)
+            if funding is not None:
+                return funding.json()
+            else:
+                return item_not_found("FundingID {} not found".format(fundingID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/fundings/<int:fundingID>/', methods = ['PUT'])
 def update_funding(fundingID):
-    funding = query.get_funding(fundingID)
-    if funding is not None:
-        try:
-            funding.grantStatusLUTID = request.form['grantStatusLUTID']
-            funding.projectID = request.form['projectID']
-            funding.fundingSourceLUTID = request.form['fundingSourceLUTID']
-            funding.primary_funding_source = request.form['primary_funding_source']
-            funding.secondary_funding_source = request.form['secondary_funding_source']
-            funding.funding_number = request.form['funding_number']
-            funding.grant_title = request.form['grant_title']
-            funding.grantStatusID = request.form['grantStatusID']
-            funding.date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d")
-            funding.grant_pi = request.form['grant_pi']
-            funding.primary_chartfield = request.form['primary_chartfield']
-            funding.secondary_chartfield = request.form['secondary_chartfield']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return funding.json()
-    else:
-        return item_not_found("FundingID {} not found".format(fundingID))
+    try:
+        funding = query.get_funding(fundingID)
+        if funding is not None:
+            form = forms.FundingForm(request.form)
+            if form.validate():
+                funding.grantStatusLUTID = request.form['grantStatusLUTID']
+                funding.projectID = request.form['projectID']
+                funding.fundingSourceLUTID = request.form['fundingSourceLUTID']
+                funding.primary_funding_source = request.form['primary_funding_source']
+                funding.secondary_funding_source = request.form['secondary_funding_source']
+                funding.funding_number = request.form['funding_number']
+                funding.grant_title = request.form['grant_title']
+                funding.grantStatusID = request.form['grantStatusID']
+                funding.date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d")
+                funding.grant_pi = request.form['grant_pi']
+                funding.primary_chartfield = request.form['primary_chartfield']
+                funding.secondary_chartfield = request.form['secondary_chartfield']
+                query.commit()
+                return funding.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("FundingID {} not found".format(fundingID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/fundings/', methods=['POST'])
 def create_funding():
     try:
-        funding = models.Funding(
-            grantStatusLUTID = request.form['grantStatusLUTID'],
-            projectID = request.form['projectID'],
-            fundingSourceLUTID = request.form['fundingSourceLUTID'],
-            primary_funding_source = request.form['primary_funding_source'],
-            secondary_funding_source = request.form['secondary_funding_source'],
-            funding_number = request.form['funding_number'],
-            grant_title = request.form['grant_title'],
-            grantStatusID = request.form['grantStatusID'],
-            date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d"),
-            grant_pi = request.form['grant_pi'],
-            primary_chartfield = request.form['primary_chartfield'],
-            secondary_chartfield = request.form['secondary_chartfield']
-        )
-        ret = query.add(funding)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.FundingForm(request.form)
+        if form.validate():
+            funding = models.Funding(
+                grantStatusLUTID = request.form['grantStatusLUTID'],
+                projectID = request.form['projectID'],
+                fundingSourceLUTID = request.form['fundingSourceLUTID'],
+                primary_funding_source = request.form['primary_funding_source'],
+                secondary_funding_source = request.form['secondary_funding_source'],
+                funding_number = request.form['funding_number'],
+                grant_title = request.form['grant_title'],
+                grantStatusID = request.form['grantStatusID'],
+                date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d"),
+                grant_pi = request.form['grant_pi'],
+                primary_chartfield = request.form['primary_chartfield'],
+                secondary_chartfield = request.form['secondary_chartfield']
+            )
+            query.add(funding)
+            return jsonify({'fundingID':funding.fundingID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'fundingID':funding.fundingID})
 
 @api.route('/fundings/<int:fundingID>/', methods = ['DELETE'])
 def delete_funding(fundingID):
@@ -2767,50 +2774,57 @@ def delete_project_staff(projectStaffID):
 @api.route('/projectstatuses/', methods = ['GET'])
 @api.route('/projectstatuses/<int:projectStatusID>/', methods = ['GET'])
 def get_project_status(projectStatusID=None):
-    if projectStatusID is None:
-        return jsonify(ProjectStatuses = [i.dict() for i in query.get_project_statuses()])
-    else:
-        projectStatus = query.get_project_status(projectStatusID)
-        if projectStatus is not None:
-            return projectStatus.json()
+    try:
+        if projectStatusID is None:
+            return jsonify(ProjectStatuses = [i.dict() for i in query.get_project_statuses()])
         else:
-            return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
+            projectStatus = query.get_project_status(projectStatusID)
+            if projectStatus is not None:
+                return projectStatus.json()
+            else:
+                return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/projectstatuses/<int:projectStatusID>/', methods = ['PUT'])
 def update_project_status(projectStatusID):
-    projectStatus = query.get_project_status(projectStatusID)
-    if projectStatus is not None:
-        try:
-            projectStatus.projectStatusLUTID = request.form['projectStatusLUTID']
-            projectStatus.projectID = request.form['projectID']
-            projectStatus.staffID = request.form['staffID']
-            projectStatus.status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d")
-            projectStatus.status_notes = request.form['status_notes']
-            query.commit()
-        except KeyError as e:
-            return missing_params(e)
-        except Exception as e:
-            return internal_error(e)
-        return projectStatus.json()
-    else:
-        return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
+    try:
+        projectStatus = query.get_project_status(projectStatusID)
+        if projectStatus is not None:
+            form = forms.ProjectStatusForm(request.form)
+            if form.validate():
+                projectStatus.projectStatusLUTID = request.form['projectStatusLUTID']
+                projectStatus.projectID = request.form['projectID']
+                projectStatus.staffID = request.form['staffID']
+                projectStatus.status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d")
+                projectStatus.status_notes = request.form['status_notes']
+                query.commit()
+                return projectStatus.json()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
+    except Exception as e:
+        return internal_error(e)
 
 @api.route('/projectstatuses/', methods=['POST'])
 def create_project_status():
     try:
-        projectStatus = models.ProjectStatus(
-            projectStatusLUTID = request.form['projectStatusLUTID'],
-            projectID = request.form['projectID'],
-            staffID = request.form['staffID'],
-            status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d"),
-            status_notes = request.form['status_notes']
-        )
-        ret = query.add(projectStatus)
-    except KeyError as e:
-        return missing_params(e)
+        form = forms.ProjectStatusForm(request.form)
+        if form.validate():
+            projectStatus = models.ProjectStatus(
+                projectStatusLUTID = request.form['projectStatusLUTID'],
+                projectID = request.form['projectID'],
+                staffID = request.form['staffID'],
+                status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d"),
+                status_notes = request.form['status_notes']
+            )
+            query.add(projectStatus)
+            return jsonify({'projectStatusID':projectStatus.projectStatusID})
+        else:
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
-    return jsonify({'projectStatusID':projectStatus.projectStatusID})
 
 @api.route('/projectstatuses/<int:projectStatusID>/', methods = ['DELETE'])
 def delete_project_status(projectStatusID):

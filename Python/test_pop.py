@@ -132,6 +132,99 @@ class PopulatedDB(TestCase):
             engaged = True,
             non_public_data = True)
 
+        grantStatus1 = models.GrantStatusLUT(
+            grant_status = "status"
+        )
+
+        fundingSource1 = models.FundingSourceLUT(
+            fundingSource = "source"
+        )
+
+        grantStatus2 = models.GrantStatusLUT(
+            grant_status = "status2"
+        )
+
+        fundingSource2 = models.FundingSourceLUT(
+            fundingSource = "source2"
+        )
+
+        funding = models.Funding(
+            grantStatusLUTID = 1,
+            projectID = 1,
+            fundingSourceLUTID = 1,
+            primary_funding_source = "pfs",
+            secondary_funding_source = "sfs",
+            funding_number = "number",
+            grant_title = "title",
+            grantStatusID = 1,
+            date_status = datetime(2016,2,2),
+            grant_pi = 1,
+            primary_chartfield = "pcf",
+            secondary_chartfield = "scf"
+        )
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+        staff2 = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        projStatusType1 = models.ProjectStatusLUT(
+            project_status = "Status 1",
+            status_definition = "status def"
+        )
+        projStatusType2 = models.ProjectStatusLUT(
+            project_status = "Status 2",
+            status_definition = "status def 2"
+        )
+
+        projStatus = models.ProjectStatus(
+            projectStatusLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            status_date = datetime(2016,2,2),
+            status_notes = "notes"
+        )
+
+        db.session.add(projStatusType1)
+        db.session.add(projStatusType2)
+        db.session.add(projStatus)
+        db.session.add(staff)
+        db.session.add(staff2)
+        db.session.add(grantStatus1)
+        db.session.add(grantStatus2)
+        db.session.add(fundingSource1)
+        db.session.add(fundingSource2)
+        db.session.add(funding)
         db.session.add(irb_holder1)
         db.session.add(irb_holder2)
         db.session.add(project_type1)
@@ -1292,18 +1385,18 @@ class TestFundingSource(PopulatedDB):
     def test_get_funding_sources(self):
         response = self.client.get("/api/fundingsources/")
         self.assertEqual(response.json["FundingSources"][0]["fundingSourceLUTID"], 1)
-        self.assertEqual(response.json["FundingSources"][0]["fundingSource"], "fs")
+        self.assertEqual(response.json["FundingSources"][0]["fundingSource"], "source")
 
     def test_get_funding_source(self):
         response = self.client.get("/api/fundingsources/1/")
         self.assertEqual(response.json["fundingSourceLUTID"], 1)
-        self.assertEqual(response.json["fundingSource"], "fs") 
+        self.assertEqual(response.json["fundingSource"], "source")
         
     def test_update_funding_source(self):
         response = self.client.put("/api/fundingsources/1/", data = {
-            "fundingSource" : "fs Updated",
+            "fundingSource" : "source2",
         })
-        self.assertEqual(response.json["fundingSource"], "fs Updated")
+        self.assertEqual(response.json["fundingSource"], "source2")
         
     def test_delete_funding_source(self):
         response = self.client.delete("/api/fundingsources/1/")
@@ -1323,9 +1416,9 @@ class TestGrantStatus(PopulatedDB):
         
     def test_update_grant_status(self):
         response = self.client.put("/api/grantstatuses/1/", data = {
-            "grant_status" : "status Updated",
+            "grant_status" : "status2"
         })
-        self.assertEqual(response.json["grant_status"], "status Updated")
+        self.assertEqual(response.json["grant_status"], "status2")
         
     def test_delete_grant_status(self):
         response = self.client.delete("/api/grantstatuses/1/")
@@ -2571,6 +2664,7 @@ class TestProjectStatus(PopulatedDB):
             "status_date" : "2016-02-03",
             "status_notes": "notes Updated"
         })
+        print(response.json)
         self.assertEqual(response.json["projectStatusLUTID"], 2)
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["staffID"], 2)

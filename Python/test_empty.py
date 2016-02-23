@@ -341,6 +341,48 @@ class TestFacilityAddress(BlankDB):
         self.assertEqual(response.json, {"facilityAddressID": 1})
         
 class TestFunding(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        grantStatus = models.GrantStatusLUT(
+            grant_status = "status"
+        )
+
+        fundingSource = models.FundingSourceLUT(
+            fundingSource = "source"
+        )
+
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(grantStatus)
+        db.session.add(fundingSource)
+        db.session.add(p)
+        db.session.commit()
 
     def test_empty_funding(self):
         response = self.client.get("/api/fundings/")
@@ -946,6 +988,63 @@ class TestProjectStaff(BlankDB):
         self.assertEqual(response.json, dict(projectStaffID=1))
         
 class TestProjectStatus(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+        projStatusType = models.ProjectStatusLUT(
+            project_status = "Status 1",
+            status_definition = "status def"
+        )
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(staff)
+        db.session.add(projStatusType)
+        db.session.add(p)
+        db.session.commit()
+
     def test_empty_project_status(self):
         response = self.client.get("/api/projectstatuses/")
         self.assertEqual(response.json, dict(ProjectStatuses = []))

@@ -67,7 +67,7 @@ class ArcReviewForm(Form):
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
         if project is None:
-            self.projectID.hasErrors.append("ID not found")
+            self.projectID.errors.append("ID not found")
             hasErrors =  True
         return not hasErrors
 
@@ -96,7 +96,7 @@ class BudgetForm(Form):
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
         if project is None:
-            self.projectID.hasErrors.append("ID not found")
+            self.projectID.errors.append("ID not found")
             hasErrors =  True
         return not hasErrors
 
@@ -111,6 +111,54 @@ class ContactInfoStatusForm(Form):
 class ContactTypeLUTForm(Form):
     contact_definition = StringField('contact_definition',
         []+COMMON_STRING_VALIDATORS)
+
+class FundingForm(Form):
+    grantStatusLUTID = IntegerField('grantStatusLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    fundingSourceLUTID = IntegerField('fundingSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    primary_funding_source = StringField('primary_funding_source',
+        []+COMMON_STRING_VALIDATORS)
+    secondary_funding_source = StringField('secondary_funding_source',
+        []+COMMON_STRING_VALIDATORS)
+    funding_number = StringField('grant_title',
+        []+COMMON_STRING_VALIDATORS)
+    grantStatusID = IntegerField('grantStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    date_status = DateField('date_status',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    grant_pi = IntegerField('grant_pi',
+        []+COMMON_INTEGER_VALIDATORS)
+    primary_chartfield = StringField('primary_chartfield',
+        []+COMMON_STRING_VALIDATORS)
+    secondary_chartfield = StringField('secondary_chartfield',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        f = Form.validate(self)
+        hasErrors = False # are hasErrors detected?
+        if not f:
+            hasErrors = True
+
+        # Check to make sure the project FK exists
+        project = query.get_project(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors =  True
+
+        grantStatus = query.get_grant_status(self.grantStatusLUTID.data)
+        if grantStatus is None:
+            self.grantStatusLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        fundingSource = query.get_funding_source(self.fundingSourceLUTID.data)
+        if fundingSource is None:
+            self.fundingSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
 
 class FundingSourceLUTForm(Form):
     fundingSource = StringField('fundingSource',
@@ -185,13 +233,49 @@ class ProjectForm(Form):
         # Check to make sure the project type FK exists
         projType = query.get_project_type(self.projectType_projectTypeID.data)
         if projType is None:
-            self.projectType_projectTypeID.hasErrors.append("ID not found")
+            self.projectType_projectTypeID.errors.append("ID not found")
             hasErrors =  True
 
         # check the irbHolderLUT FK
         irbHolder = query.get_irb_holder(self.IRBHolderLUT_irbHolderID.data)
         if irbHolder is None:
-            self.IRBHolderLUT_irbHolderID.hasErrors.append("ID not found")
+            self.IRBHolderLUT_irbHolderID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class ProjectStatusForm(Form):
+    projectStatusLUTID = IntegerField('projectStatusLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    staffID = IntegerField('staffID',
+        []+COMMON_INTEGER_VALIDATORS)
+    status_date = DateField('status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format=DATE_FORMAT)
+    status_notes = StringField('status_notes',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        f = Form.validate(self)
+        hasErrors = False # are hasErrors detected?
+        if not f:
+            hasErrors = True
+
+        # Check to make sure the project type FK exists
+        project = query.get_project_type(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors =  True
+
+        projectStatus = query.get_project_status_lut(self.projectStatusLUTID.data)
+        if projectStatus is None:
+            self.projectStatusLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -245,19 +329,19 @@ class ReviewCommitteeForm(Form):
         # Check to make sure the project  FK exists
         project = query.get_project(self.project_projectID.data)
         if project is None:
-            self.project_projectID.hasErrors.append("ID not found")
+            self.project_projectID.errors.append("ID not found")
             hasErrors =  True
 
         # check the rcStatus FK
         rcStatus = query.get_rc_status(self.RCStatusList_rc_StatusID.data)
         if rcStatus is None:
-            self.RCStatusList_rc_StatusID.hasErrors.append("ID not found")
+            self.RCStatusList_rc_StatusID.errors.append("ID not found")
             hasErrors = True
 
         # check the reviewCommitteeList FK
         rc = query.get_rc_status(self.reviewCommitteeList_rcListID.data)
         if rc is None:
-            self.reviewCommitteeList_rcListID.hasErrors.append("ID not found")
+            self.reviewCommitteeList_rcListID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -300,6 +384,6 @@ class UCRReportForm(Form):
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
         if project is None:
-            self.projectID.hasErrors.append("ID not found")
+            self.projectID.errors.append("ID not found")
             hasErrors =  True
         return not hasErrors
