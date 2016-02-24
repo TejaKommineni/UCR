@@ -221,6 +221,122 @@ class LogSubjectLUTForm(Form):
     log_subject = StringField('log_subject',
         []+COMMON_STRING_VALIDATORS)
 
+class PatientForm(Form):
+    patID = StringField('patID',
+        []+COMMON_STRING_VALIDATORS)
+    recordID = IntegerField('recordID',
+        []+COMMON_INTEGER_VALIDATORS)
+    ucrDistID = IntegerField('ucrDistID',
+        []+COMMON_INTEGER_VALIDATORS)
+    UPDBID = IntegerField('UPDBID',
+        []+COMMON_INTEGER_VALIDATORS)
+    fname = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+    lname = StringField('lname',
+        []+COMMON_STRING_VALIDATORS)
+    middle_name = StringField('middle_name',
+        []+COMMON_STRING_VALIDATORS)
+    maiden_name = StringField('maiden_name',
+        []+COMMON_STRING_VALIDATORS)
+    alias_fname = StringField('alias_fname',
+        []+COMMON_STRING_VALIDATORS)
+    alias_lname = StringField('alias_lname',
+        []+COMMON_STRING_VALIDATORS)
+    alias_middle_name = StringField('alias_middle_name',
+        []+COMMON_STRING_VALIDATORS)
+    dob = DateField('dob',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    SSN = IntegerField('SSN',
+        []+COMMON_INTEGER_VALIDATORS)
+    sex = StringField('sex',
+        []+COMMON_STRING_VALIDATORS)
+    race = StringField('race',
+        []+COMMON_STRING_VALIDATORS)
+    ethnicity = StringField('ethnicity',
+        []+COMMON_STRING_VALIDATORS)
+    vital_status = StringField('vital_status',
+        []+COMMON_STRING_VALIDATORS)
+
+class PatientAddressForm(Form):
+    contactInfoSourceLUTID = IntegerField('contactInfoSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    patientID = IntegerField('patientID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusLUTID = IntegerField('contactInfoStatusLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    street = StringField('street',
+        []+COMMON_STRING_VALIDATORS)
+    street2 = StringField('street2',
+        []+COMMON_STRING_VALIDATORS)
+    city = StringField('city',
+        []+COMMON_STRING_VALIDATORS)
+    state = StringField('state',
+        []+COMMON_STRING_VALIDATORS)
+    zip = StringField('zip',
+        []+COMMON_STRING_VALIDATORS)
+    address_status = IntegerField('address_status',
+        []+COMMON_INTEGER_VALIDATORS)
+    address_status_date = DateField('address_status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    address_status_source = StringField('address_status_source',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceLUTID.data)
+        if contactSource is None:
+            self.contactInfoSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        patient = query.get_patient(self.patientID.data)
+        if patient is None:
+            self.patientID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusLUTID.data)
+        if contactStatus is None:
+            self.contactInfoStatusLUTID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class PatientEmailForm(Form):
+    contactInfoSourceLUTID = IntegerField('contactInfoSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    patientID = IntegerField('patientID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    email = StringField('email',
+        []+COMMON_STRING_VALIDATORS)
+    email_status = IntegerField('email_status',
+        []+COMMON_INTEGER_VALIDATORS)
+    email_source = IntegerField('email_source',
+        []+COMMON_INTEGER_VALIDATORS)
+    email_status_date = DateField('email_status_date',
+        []+COMMON_DATE_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceLUTID.data)
+        if contactSource is None:
+            self.contactInfoSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        patient = query.get_patient(self.patientID.data)
+        if patient is None:
+            self.patientID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+        if contactStatus is None:
+            self.contactInfoStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
 class PatientProjectStatusLUTForm(Form):
     status_description = StringField('status_description',
         []+COMMON_STRING_VALIDATORS)
@@ -351,6 +467,53 @@ class ProjectForm(Form):
             hasErrors = True
         return not hasErrors
 
+class ProjectStaffForm(Form):
+    staffRoleLUTID = IntegerField('staffRoleLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    staffID = IntegerField('staffID',
+        []+COMMON_INTEGER_VALIDATORS)
+    role = IntegerField('role',
+        []+COMMON_INTEGER_VALIDATORS)
+    date_pledge = DateField('date_pledge',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    date_revoked = DateField('date_revoked',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    contact = StringField('contact',
+        []+COMMON_STRING_VALIDATORS)
+    inactive = StringField('inactive',
+        []+COMMON_STRING_VALIDATORS)
+    human_sub_training_exp = DateField('human_sub_training_exp',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    human_sub_type_id = IntegerField('human_sub_type_id',
+        []+COMMON_INTEGER_VALIDATORS)
+    study_role = IntegerField('study_role',
+        []+COMMON_INTEGER_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        # Check to make sure the project type FK exists
+        project = query.get_project_type(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors =  True
+
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
+            hasErrors = True
+
+        staffRole = query.get_staff_role(self.staffRoleLUTID.data)
+        if staffRole is None:
+            self.staffRoleLUTID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
 class ProjectStatusForm(Form):
     projectStatusLUTID = IntegerField('projectStatusLUTID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -459,11 +622,72 @@ class ReviewCommitteeListForm(Form):
     rc_description = StringField('rc_description',
         []+COMMON_STRING_VALIDATORS)
 
+class StaffForm(Form):
+    fname = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+    lname = StringField('lname',
+        []+COMMON_STRING_VALIDATORS)
+    middle_name = StringField('middle_name',
+        []+COMMON_STRING_VALIDATORS)
+    email = StringField('email',
+        []+COMMON_STRING_VALIDATORS)
+    phone = StringField('phone',
+        []+COMMON_STRING_VALIDATORS)
+    phoneComment = StringField('phoneComment',
+        []+COMMON_STRING_VALIDATORS)
+    institution = StringField('institution',
+        []+COMMON_STRING_VALIDATORS)
+    department = StringField('department',
+        []+COMMON_STRING_VALIDATORS)
+    position = StringField('position',
+        []+COMMON_STRING_VALIDATORS)
+    credentials = StringField('credentials',
+        []+COMMON_STRING_VALIDATORS)
+    street = StringField('street',
+        []+COMMON_STRING_VALIDATORS)
+    city = StringField('city',
+        []+COMMON_STRING_VALIDATORS)
+    state = StringField('state',
+        []+COMMON_STRING_VALIDATORS)
+    human_sub_training_exp = DateField('human_sub_training',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    UCR_role = IntegerField('UCR_role',
+        []+COMMON_INTEGER_VALIDATORS)
+
 class StaffRoleLUTForm(Form):
     staffRole = StringField('staffRole',
         []+COMMON_STRING_VALIDATORS)
     staffRoleDescription = StringField('staffRoleDescription',
         []+COMMON_STRING_VALIDATORS)
+
+class StaffTrainingForm(Form):
+    staffID = IntegerField('staffID',
+        []+COMMON_INTEGER_VALIDATORS)
+    humanSubjectTrainingLUTID = IntegerField('humanSubjectTrainingLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    date_taken = DateField('date_taken',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    exp_date = DateField('exp_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        # Check to make sure the project  FK exists
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
+            hasErrors =  True
+
+        # check the rcStatus FK
+        hst = query.get_human_subject_training(self.humanSubjectTrainingLUTID.data)
+        if hst is None:
+            self.humanSubjectTrainingLUTID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
 
 class TracingSourceLUTForm(Form):
     description = StringField('description',

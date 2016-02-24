@@ -670,7 +670,45 @@ class TestPatient(BlankDB):
         })
         self.assertEqual(response.json, {"patAutoID": 1})
 
-class TestPatientAddress(BlankDB):         
+class TestPatientAddress(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_patient_address(self):
         response = self.client.get("/api/patientaddresses/")
         self.assertEqual(response.json, dict(PatientAddresses = []))
@@ -695,7 +733,44 @@ class TestPatientAddress(BlankDB):
         })
         self.assertEqual(response.json, {"patAddressID": 1})
 
-class TestPatientEmail(BlankDB):         
+class TestPatientEmail(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
     def test_empty_patient_email(self):
         response = self.client.get("/api/patientemails/")
         self.assertEqual(response.json, dict(PatientEmails = []))
@@ -1058,6 +1133,63 @@ class TestProjectPatient(BlankDB):
         self.assertEqual(response.json, {"participantID": 1})
 
 class TestProjectStaff(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        p = models.Project(
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+        staffRole = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+
+        p.irbHolder = irb_holder1
+        p.projectType = pt1
+        db.session.add(staff)
+        db.session.add(staffRole)
+        db.session.add(p)
+        db.session.commit()
+
     def test_empty_project_staff(self):
         response = self.client.get("/api/projectstaff/")
         self.assertEqual(response.json, {"ProjectStaff" : []})
@@ -1337,6 +1469,36 @@ class TestStaffRole(BlankDB):
         self.assertEqual(response.json, {"staffRoleLUTID" : 1 })        
                 
 class TestStaffTraining(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+        humanSubjectTraining = models.HumanSubjectTrainingLUT(
+            training_type = "type"
+        )
+        db.session.add(staff)
+        db.session.add(humanSubjectTraining)
+        db.session.commit()
+
     def test_empty_staff_training(self):
         response = self.client.get("/api/stafftrainings/")
         self.assertEqual(response.json, dict(StaffTrainings = []))

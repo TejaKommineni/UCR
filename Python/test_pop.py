@@ -268,7 +268,125 @@ class PopulatedDB(TestCase):
             note = "note",
             date = datetime(2016,2,2)
         )
+        projectStaff = models.ProjectStaff(
+            staffRoleLUTID = 1,
+            projectID = 1,
+            staffID = 1,
+            role = 1,
+            date_pledge = datetime(2016,2,2),
+            date_revoked = datetime(2016,2,2),
+            contact = "yes",
+            inactive = "no",
+            human_sub_training_exp = datetime(2016,2,2),
+            human_sub_type_id = 1,
+            study_role = 1
+        )
+        staffRole1 = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+        staffRole2 = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+        staffTraining = models.StaffTraining(
+            staffID = 1,
+            humanSubjectTrainingLUTID = 1,
+            date_taken = datetime(2016,2,2),
+            exp_date = datetime(2016,2,2)
+        )
+        humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
+            training_type = "type"
+        )
+        humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
+            training_type = "type"
+        )
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+        patient2 = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
 
+        contactInfoStatus1 = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource1 = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+        contactInfoStatus2 = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource2 = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        patientAddress = models.PatientAddress(
+            contactInfoSourceLUTID = 1,
+            patientID = 1,
+            contactInfoStatusLUTID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+
+        patientEmail = models.PatientEmail(
+            contactInfoSourceLUTID = 1,
+            patientID = 1,
+            contactInfoStatusID = 1,
+            email = "email",
+            email_status = 1,
+            email_source = 1,
+            email_status_date = datetime(2016,2,2)
+        )
+
+        db.session.add(contactInfoSource1)
+        db.session.add(contactInfoSource2)
+        db.session.add(contactInfoStatus1)
+        db.session.add(contactInfoStatus2)
+        db.session.add(humanSubjectTraining1)
+        db.session.add(humanSubjectTraining2)
+        db.session.add(staffRole1)
+        db.session.add(staffRole2)
         db.session.add(logSubject1)
         db.session.add(logSubject2)
         db.session.add(phaseStatus1)
@@ -299,6 +417,12 @@ class PopulatedDB(TestCase):
         db.session.add(arcReview)
         db.session.add(preApp)
         db.session.add(log)
+        db.session.add(projectStaff)
+        db.session.add(staffTraining)
+        db.session.add(patient)
+        db.session.add(patient2)
+        db.session.add(patientAddress)
+        db.session.add(patientEmail)
         db.session.commit()
 
     def populate_db(self):
@@ -1893,7 +2017,7 @@ class TestPatientAddress(PopulatedDB):
         self.assertEqual(response.json["Message"], "PatAddressID 1 deleted")       
 
 class TestPatientEmail(PopulatedDB):
-    def test_get_patient_email(self):
+    def test_get_patient_emails(self):
         response = self.client.get("/api/patientemails/")
         self.assertEqual(response.json["PatientEmails"][0]["emailID"], 1)
         self.assertEqual(response.json["PatientEmails"][0]["contactInfoSourceLUTID"], 1)
