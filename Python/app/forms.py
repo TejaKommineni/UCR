@@ -607,6 +607,101 @@ class ProjectForm(Form):
             hasErrors = True
         return not hasErrors
 
+class ProjectPatientForm(Form):
+    projectID = IntegerField('projectID',
+        []+COMMON_INTEGER_VALIDATORS)
+    staffID = IntegerField('staffID',
+        []+COMMON_INTEGER_VALIDATORS)
+    ctcID = IntegerField('ctcID',
+        []+COMMON_INTEGER_VALIDATORS)
+    current_age = IntegerField('current_age',
+        []+COMMON_INTEGER_VALIDATORS)
+    batch = IntegerField('batch',
+        []+COMMON_INTEGER_VALIDATORS)
+    sitegrp = IntegerField('sitegrp',
+        []+COMMON_INTEGER_VALIDATORS)
+    final_code = IntegerField('final_code',
+        []+COMMON_INTEGER_VALIDATORS)
+    final_code_date = DateField('final_code_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    enrollment_date = DateField('enrollment_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    date_coord_signed = DateField('date_coord_signed',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    import_date = DateField('import_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    final_code_staff = IntegerField('final_code_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    enrollment_staff = IntegerField('enrollment_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    date_coord_signed_staff = DateField('date_coord_signed_staff',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    abstract_status = IntegerField('abstract_status',
+        []+COMMON_INTEGER_VALIDATORS)
+    abstract_status_date = DateField('abstract_status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    abstract_status_staff = IntegerField('abstract_status_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    sent_to_abstractor = DateField('sent_to_abstractor',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    sent_to_abstractor_staff = IntegerField('sent_to_abstractor_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    abstracted_date = DateField('abstracted_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    abstractor_initials = StringField('abstractor_initials',
+        []+COMMON_STRING_VALIDATORS)
+    researcher_date = DateField('researcher_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    researcher_staff = IntegerField('researcher_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    consent_link = StringField('consent_link',
+        []+COMMON_STRING_VALIDATORS)
+    tracing_status = IntegerField('tracing_status',
+        []+COMMON_INTEGER_VALIDATORS)
+    med_record_release_signed = BooleanField('med_record_release_signed',
+        []+COMMON_BOOL_VALIDATORS)
+    med_record_release_link = StringField('med_record_release_link',
+        []+COMMON_STRING_VALIDATORS)
+    med_record_release_staff = IntegerField('med_record_release_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+    med_record_release_date = DateField('med_record_release_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    survey_to_researcher = DateField('survey_to_researcher',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    survey_to_researcher_staff = IntegerField('survey_to_researcher_staff',
+        []+COMMON_INTEGER_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        project = query.get_project(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors = True
+
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
+            hasErrors = True
+
+        ctc = query.get_ctc(self.ctcID.data)
+        if ctc is None:
+            self.ctcID.errors.append("ID not found")
+            hasErrors = True
+
+        return not hasErrors
+
 class ProjectStaffForm(Form):
     staffRoleLUTID = IntegerField('staffRoleLUTID',
         []+COMMON_INTEGER_VALIDATORS)

@@ -1257,6 +1257,101 @@ class TestProject(BlankDB):
         self.assertEqual(response.json,dict(projectID=1))
 
 class TestProjectPatient(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        # Need to populate the FK tables with stuff
+        pt1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        project1 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        ctc = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = "zip",
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        db.session.add(pt1)
+        db.session.add(irb_holder1)
+        db.session.add(staff)
+        db.session.add(project1)
+        db.session.add(patient)
+        db.session.add(ctc)
+        db.session.commit()
+
     def test_empty_project_patient(self):
         response = self.client.get("/api/projectpatients/")
         self.assertEqual(response.json, dict(ProjectPatients = []))

@@ -427,6 +427,75 @@ class PopulatedDB(TestCase):
             phone_source = "s1",
             phone_status_date = datetime(2016,2,2)
         )
+        ctc1 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = "zip",
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+        ctc2 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = "zip",
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )
 
 
         db.session.add(contactInfoSource1)
@@ -478,6 +547,9 @@ class PopulatedDB(TestCase):
         db.session.add(informant2)
         db.session.add(informantAddress)
         db.session.add(informantPhone)
+        db.session.add(ctc1)
+        db.session.add(ctc2)
+        db.session.add(projectPatient)
         db.session.commit()
 
     def populate_db(self):
@@ -2709,7 +2781,6 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["ProjectPatients"][0]["med_record_release_date"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["survey_to_researcher"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["survey_to_researcher_staff"], 1)
-
         
     def test_get_project_patient(self):
         response = self.client.get("/api/projectpatients/1/")
