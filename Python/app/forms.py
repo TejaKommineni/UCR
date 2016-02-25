@@ -178,6 +178,110 @@ class IRBHolderLUTForm(Form):
     irb_holder_definition = StringField('irb_holder_definition',
         []+COMMON_STRING_VALIDATORS)
 
+class InformantForm(Form):
+    patAutoID = IntegerField('patAutoID',
+        []+COMMON_INTEGER_VALIDATORS)
+    fname = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+    lname = StringField('lname',
+        []+COMMON_STRING_VALIDATORS)
+    middle_name = StringField('middle_name',
+        []+COMMON_STRING_VALIDATORS)
+    informant_primary = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+    informant_relationship = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+    notes = StringField('fname',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+        patient = query.get_patient(self.patAutoID.data)
+        if patient is None:
+            self.patAutoID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class InformantAddressForm(Form):
+    contactInfoSourceLUTID = IntegerField('contactInfoSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    informantID = IntegerField('informantID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    street = StringField('street',
+        []+COMMON_STRING_VALIDATORS)
+    street2 = StringField('street2',
+        []+COMMON_STRING_VALIDATORS)
+    city = StringField('city',
+        []+COMMON_STRING_VALIDATORS)
+    state = StringField('state',
+        []+COMMON_STRING_VALIDATORS)
+    zip = StringField('zip',
+        []+COMMON_STRING_VALIDATORS)
+    address_status = IntegerField('address_status',
+        []+COMMON_INTEGER_VALIDATORS)
+    address_status_date = DateField('address_status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+    address_status_source = StringField('address_status_source',
+        []+COMMON_STRING_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceLUTID.data)
+        if contactSource is None:
+            self.contactInfoSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        informant = query.get_informant(self.informantID.data)
+        if informant is None:
+            self.informantID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+        if contactStatus is None:
+            self.contactInfoStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class InformantPhoneForm(Form):
+    contactInfoSourceLUTID = IntegerField('contactInfoSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    informantID = IntegerField('informantID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    phone = StringField('phone',
+        []+COMMON_STRING_VALIDATORS)
+    phone_source = StringField('phone_source',
+        []+COMMON_STRING_VALIDATORS)
+    phone_status = StringField('phone_status',
+        []+COMMON_STRING_VALIDATORS)
+    phone_status_date = DateField('phone_status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceLUTID.data)
+        if contactSource is None:
+            self.contactInfoSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        informant = query.get_informant(self.informantID.data)
+        if informant is None:
+            self.informantID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+        if contactStatus is None:
+            self.contactInfoStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
 class LogForm(Form):
     logSubjectLUTID =  IntegerField('logSubjectLUTID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -317,6 +421,42 @@ class PatientEmailForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     email_status_date = DateField('email_status_date',
         []+COMMON_DATE_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceLUTID.data)
+        if contactSource is None:
+            self.contactInfoSourceLUTID.errors.append("ID not found")
+            hasErrors = True
+
+        patient = query.get_patient(self.patientID.data)
+        if patient is None:
+            self.patientID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+        if contactStatus is None:
+            self.contactInfoStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class PatientPhoneForm(Form):
+    contactInfoSourceLUTID = IntegerField('contactInfoSourceLUTID',
+        []+COMMON_INTEGER_VALIDATORS)
+    patientID = IntegerField('patientID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    phone = StringField('phone',
+        []+COMMON_STRING_VALIDATORS)
+    phone_source = StringField('phone_source',
+        []+COMMON_STRING_VALIDATORS)
+    phone_status = StringField('phone_status',
+        []+COMMON_STRING_VALIDATORS)
+    phone_status_date = DateField('phone_status_date',
+        []+COMMON_DATE_VALIDATORS,
+        format = DATE_FORMAT)
 
     def validate(self):
         hasErrors = not Form.validate(self)

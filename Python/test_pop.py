@@ -378,6 +378,56 @@ class PopulatedDB(TestCase):
             email_source = 1,
             email_status_date = datetime(2016,2,2)
         )
+        patientPhone = models.PatientPhone(
+            contactInfoSourceLUTID = 1,
+            patientID = 1,
+            contactInfoStatusID = 1,
+            phone = "phone",
+            phone_status = 1,
+            phone_source = "s1",
+            phone_status_date = datetime(2016,2,2)
+        )
+        informant1 = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+        informant2 = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+        informantAddress = models.InformantAddress(
+            contactInfoSourceLUTID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+        informantPhone = models.InformantPhone(
+            contactInfoSourceLUTID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            phone = "phone",
+            phone_status = 1,
+            phone_source = "s1",
+            phone_status_date = datetime(2016,2,2)
+        )
+
 
         db.session.add(contactInfoSource1)
         db.session.add(contactInfoSource2)
@@ -423,6 +473,11 @@ class PopulatedDB(TestCase):
         db.session.add(patient2)
         db.session.add(patientAddress)
         db.session.add(patientEmail)
+        db.session.add(patientPhone)
+        db.session.add(informant1)
+        db.session.add(informant2)
+        db.session.add(informantAddress)
+        db.session.add(informantPhone)
         db.session.commit()
 
     def populate_db(self):

@@ -457,7 +457,43 @@ class TestHumanSubjectTraining(BlankDB):
         self.assertEqual(response.json, {"humanSubjectTrainingID": 1})
 
 class TestInformant(BlankDB):
-        
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
     def test_empty_informant(self):
         response = self.client.get("/api/informants/")
         self.assertEqual(response.json, dict(Informants = []))
@@ -479,6 +515,53 @@ class TestInformant(BlankDB):
         self.assertEqual(response.json, {"informantID": 1})              
         
 class TestInformantAddress(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+        informant = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.add(informant)
+        db.session.commit()
         
     def test_empty_informant_address(self):
         response = self.client.get("/api/informantaddresses/")
@@ -504,7 +587,55 @@ class TestInformantAddress(BlankDB):
         })
         self.assertEqual(response.json, {"informantAddressID": 1})        
         
-class TestInformantPhone(BlankDB):         
+class TestInformantPhone(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+        informant = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.add(informant)
+        db.session.commit()
+
     def test_empty_informant_phone(self):
         response = self.client.get("/api/informantphones/")
         self.assertEqual(response.json, dict(InformantPhones = []))
@@ -791,7 +922,45 @@ class TestPatientEmail(BlankDB):
         })
         self.assertEqual(response.json, {"emailID": 1})
 
-class TestPatientPhone(BlankDB):         
+class TestPatientPhone(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_patient_phone(self):
         response = self.client.get("/api/patientphones/")
         self.assertEqual(response.json, dict(PatientPhones = []))
