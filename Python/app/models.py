@@ -303,8 +303,8 @@ class CTC(CustomModel):
     # Relationship
     # 1 - 1, one ctc per projectPatient
     projectPatient = db.relationship("ProjectPatient",back_populates="ctc")
-    #TODO Guessing 1-1 but can't tell
-    patient = db.relationship('Patient',uselist=False, back_populates='ctc')
+    # many ctcs to one patient
+    patient = db.relationship('Patient',uselist=False, back_populates='ctcs')
     # M - 1
     ctcFacility = db.relationship("CTCFacility",back_populates="ctc")
     # 
@@ -838,8 +838,8 @@ class Patient(CustomModel):
     # Relationships
     # M - 1, many patients can be at the same address
     patientAddress = db.relationship('PatientAddress',back_populates="patients")
-    #TODO 1 - 1 Guess? can't tell from schematic 
-    ctc = db.relationship('CTC',uselist=False,back_populates="patient")
+    # many to one
+    ctcs = db.relationship('CTC',back_populates="patient")
     # M - 1, many patients can be at the same email
     patientEmail = db.relationship('PatientEmail',back_populates="patients")
     # M - 1, many patients can be at the same phone

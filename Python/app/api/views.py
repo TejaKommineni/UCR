@@ -5,6 +5,8 @@ import app.models as models
 import app.forms as forms
 from datetime import datetime
 from app.database import db
+from sqlalchemy_utils import dependent_objects
+from sqlalchemy.inspection import inspect
 import json
 
 api = Blueprint('api',__name__,template_folder='templates')
@@ -105,9 +107,24 @@ def internal_error(e):
 def item_deleted(message):
     return jsonify({
         "Success": True,
-        "Message": str(message)
+        "Message": str(message),
+        "Dependencies" : []
         })
 
+def get_dependencies(record):
+    deps = list(dependent_objects(record).limit(5))
+    dependencies = []
+    if deps:
+        for item in deps:
+            dependencies.append({item.__class__.__name__: inspect(item).identity[0]})
+    return dependencies
+
+def dependency_detected(dependencies,message="Dependency Detected"):
+    return jsonify({
+        "Success": False,
+        "Message": message,
+        "Dependencies" : dependencies
+    }), 400
 ##############################################################################
 # Root Node
 ##############################################################################    
@@ -207,8 +224,12 @@ def delete_arc_review(arcReviewID):
     try:
         arcReview = query.get_arc_review(arcReviewID)
         if arcReview is not None:
-            query.delete(arcReview)
-            return item_deleted("ArcReviewID {} deleted".format(arcReviewID))
+            deps = get_dependencies(arcReview)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(arcReview)
+                return item_deleted("ArcReviewID {} deleted".format(arcReviewID))
         else:
             return item_not_found("ArcReviewID {} not found".format(arcReviewID))
     except Exception as e:
@@ -279,8 +300,12 @@ def delete_budget(budgetID):
     try:
         budget = query.get_budget(budgetID)
         if budget is not None:
-            query.delete(budget)
-            return item_deleted("BudgetID {} deleted".format(budgetID))
+            deps = get_dependencies(budget)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(budget)
+                return item_deleted("BudgetID {} deleted".format(budgetID))
         else:
             return item_not_found("BudgetID {} not found".format(budgetID))
     except Exception as e:
@@ -359,8 +384,12 @@ def delete_contact(contactID):
     try:
         contact = query.get_contact(contactID)
         if contact is not None:
-            query.delete(contact)
-            return item_deleted("ContactID {} deleted".format(contactID))
+            deps = get_dependencies(contact)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(contact)
+                return item_deleted("ContactID {} deleted".format(contactID))
         else:
             return item_not_found("ContactID {} not found".format(contactID))
     except Exception as e:
@@ -421,8 +450,12 @@ def delete_contact_type(contactTypeLUTID):
     try:
         contactType = query.get_contact_type(contactTypeLUTID)
         if contactType is not None:
-            query.delete(contactType)
-            return item_deleted("ContactTypeLUTID {} deleted".format(contactTypeLUTID))
+            deps = get_dependencies(contactType)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(contactType)
+                return item_deleted("ContactTypeLUTID {} deleted".format(contactTypeLUTID))
         else:
             return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
     except Exception as e:
@@ -483,8 +516,12 @@ def delete_contact_info_source(contactInfoSourceLUTID):
     try:
         contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
         if contactInfoSource is not None:
-            query.delete(contactInfoSource)
-            return item_deleted("ContactInfoSourceLUTID {} deleted".format(contactInfoSourceLUTID))
+            deps = get_dependencies(contactInfoSource)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(contactInfoSource)
+                return item_deleted("ContactInfoSourceLUTID {} deleted".format(contactInfoSourceLUTID))
         else:
             return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
     except Exception as e:
@@ -542,8 +579,12 @@ def delete_contact_info_status(contactInfoStatusID):
     try:
         contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
         if contactInfoStatus is not None:
-            query.delete(contactInfoStatus)
-            return item_deleted("ContactInfoStatusID {} deleted".format(contactInfoStatusID))
+            deps = get_dependencies(contactInfoStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(contactInfoStatus)
+                return item_deleted("ContactInfoStatusID {} deleted".format(contactInfoStatusID))
         else:
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
     except Exception as e:
@@ -634,8 +675,12 @@ def delete_ctc(ctcID):
     try:
         ctc = query.get_ctc(ctcID)
         if ctc is not None:
-            query.delete(ctc)
-            return item_deleted("CtcID {} deleted".format(ctcID))
+            deps = get_dependencies(ctc)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ctc)
+                return item_deleted("CtcID {} deleted".format(ctcID))
         else:
             return item_not_found("CtcID {} not found".format(ctcID))
     except Exception as e:
@@ -698,8 +743,12 @@ def delete_ctc_facility(CTCFacilityID):
     try:
         ctcFacility = query.get_ctc_facility(CTCFacilityID)
         if ctcFacility is not None:
-            query.delete(ctcFacility)
-            return item_deleted("CTCFacilityID {} deleted".format(CTCFacilityID))
+            deps = get_dependencies(ctcFacility)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ctcFacility)
+                return item_deleted("CTCFacilityID {} deleted".format(CTCFacilityID))
         else:
             return item_not_found("CTCFacilityID {} not found".format(CTCFacilityID))
     except Exception as e:
@@ -782,8 +831,12 @@ def delete_funding(fundingID):
     try:
         funding = query.get_funding(fundingID)
         if funding is not None:
-            query.delete(funding)
-            return item_deleted("FundingID {} deleted".format(fundingID))
+            deps = get_dependencies(funding)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(funding)
+                return item_deleted("FundingID {} deleted".format(fundingID))
         else:
             return item_not_found("FundingID {} not found".format(fundingID))
     except Exception as e:
@@ -861,8 +914,12 @@ def delete_facility_phone(facilityPhoneID):
     try:
         facilityPhone = query.get_facility_phone(facilityPhoneID)
         if facilityPhone is not None:
-            query.delete(facilityPhone)
-            return item_deleted("FacilityPhoneID {} deleted".format(facilityPhoneID))
+            deps = get_dependencies(facilityPhone)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(facilityPhone)
+                return item_deleted("FacilityPhoneID {} deleted".format(facilityPhoneID))
         else:
             return item_not_found("FacilityPhoneID {} not found".format(facilityPhoneID))
     except Exception as e:
@@ -933,8 +990,12 @@ def delete_facility(facilityID):
     try:
         facility = query.get_facility(facilityID)
         if facility is not None:
-            query.delete(facility)
-            return item_deleted("FacilityID {} deleted".format(facilityID))
+            deps = get_dependencies(facility)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(facility)
+                return item_deleted("FacilityID {} deleted".format(facilityID))
         else:
             return item_not_found("FacilityID {} not found".format(facilityID))
     except Exception as e:
@@ -1015,8 +1076,12 @@ def delete_facility_address(facilityAddressID):
     try:
         facilityAddress = query.get_facility_address(facilityAddressID)
         if facilityAddress is not None:
-            query.delete(facilityAddress)
-            return item_deleted("FacilityAddressID {} deleted".format(facilityAddressID))
+            deps = get_dependencies(facilityAddress)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(facilityAddress)
+                return item_deleted("FacilityAddressID {} deleted".format(facilityAddressID))
         else:
             return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
     except Exception as e:
@@ -1077,8 +1142,12 @@ def delete_funding_source(fundingSourceLUTID):
     try:
         fundingSource = query.get_funding_source(fundingSourceLUTID)
         if fundingSource is not None:
-            query.delete(fundingSource)
-            return item_deleted("FundingSourceLUTID {} deleted".format(fundingSourceLUTID))
+            deps = get_dependencies(fundingSource)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(fundingSource)
+                return item_deleted("FundingSourceLUTID {} deleted".format(fundingSourceLUTID))
         else:
             return item_not_found("fundingSourceLUTID {} not found".format(fundingSourceLUTID))
     except Exception as e:
@@ -1139,8 +1208,12 @@ def delete_grant_status(grantStatusLUTID):
     try:
         grantStatus = query.get_grant_status(grantStatusLUTID)
         if grantStatus is not None:
-            query.delete(grantStatus)
-            return item_deleted("GrantStatusLUTID {} deleted".format(grantStatusLUTID))
+            deps = get_dependencies(grantStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(grantStatus)
+                return item_deleted("GrantStatusLUTID {} deleted".format(grantStatusLUTID))
         else:
             return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
     except Exception as e:
@@ -1201,8 +1274,12 @@ def delete_human_subject_training(humanSubjectTrainingID):
     try:
         humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
         if humanSubjectTraining is not None:
-            query.delete(humanSubjectTraining)
-            return item_deleted("HumanSubjectTrainingID {} deleted".format(humanSubjectTrainingID))
+            deps = get_dependencies(humanSubjectTraining)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(humanSubjectTraining)
+                return item_deleted("HumanSubjectTrainingID {} deleted".format(humanSubjectTrainingID))
         else:
             return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
     except Exception as e:
@@ -1275,8 +1352,12 @@ def delete_informant(informantID):
     try:
         informant = query.get_informant(informantID)
         if informant is not None:
-            query.delete(informant)
-            return item_deleted("InformantID {} deleted".format(informantID))
+            deps = get_dependencies(informant)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(informant)
+                return item_deleted("InformantID {} deleted".format(informantID))
         else:
             return item_not_found("InformantID {} not found".format(informantID))
     except Exception as e:
@@ -1357,8 +1438,12 @@ def delete_informant_address(informantAddressID):
     try:
         informantAddress = query.get_informant_address(informantAddressID)
         if informantAddress is not None:
-            query.delete(informantAddress)
-            return item_deleted("InformantAddressID {} deleted".format(informantAddressID))
+            deps = get_dependencies(informantAddress)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(informantAddress)
+                return item_deleted("InformantAddressID {} deleted".format(informantAddressID))
         else:
             return item_not_found("InformantAddressID {} not found".format(informantAddressID))
     except Exception as e:
@@ -1431,8 +1516,12 @@ def delete_informant_phone(informantPhoneID):
     try:
         informantPhone = query.get_informant_phone(informantPhoneID)
         if informantPhone is not None:
-            query.delete(informantPhone)
-            return item_deleted("InformantPhoneID {} deleted".format(informantPhoneID))
+            deps = get_dependencies(informantPhone)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(informantPhone)
+                return item_deleted("InformantPhoneID {} deleted".format(informantPhoneID))
         else:
             return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
     except Exception as e:
@@ -1495,8 +1584,12 @@ def delete_irb_holder(irbHolderID):
     try:
         irb = query.get_irb_holder(irbHolderID)
         if irb is not None:
-            query.delete(irb)
-            return item_deleted("IrbHolderID {} deleted".format(irbHolderID))
+            deps = get_dependencies(irb)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(irb)
+                return item_deleted("IrbHolderID {} deleted".format(irbHolderID))
         else:
             return item_not_found("IrbHolderID {} not found".format(irbHolderID))
     except Exception as e:
@@ -1567,8 +1660,12 @@ def delete_log(logID):
     try:
         log = query.get_log(logID)
         if log is not None:
-            query.delete(log)
-            return item_deleted("LogID {} deleted".format(logID))
+            deps = get_dependencies(log)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(log)
+                return item_deleted("LogID {} deleted".format(logID))
         else:
             return item_not_found("LogID {} not found".format(logID))
     except Exception as e:
@@ -1620,7 +1717,7 @@ def create_log_subject():
             query.add(logSubject)
             return jsonify({"logSubjectLUTID":logSubject.logSubjectLUTID})
         else:
-            return missing_params(e)
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1629,8 +1726,12 @@ def delete_log_subject(logSubjectLUTID):
     try:
         logSubject = query.get_log_subject(logSubjectLUTID)
         if logSubject is not None:
-            query.delete(logSubject)
-            return item_deleted("LogSubjectLUTID {} deleted".format(logSubjectLUTID))
+            deps = get_dependencies(logSubject)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(logSubject)
+                return item_deleted("LogSubjectLUTID {} deleted".format(logSubjectLUTID))
         else:
             return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
     except Exception as e:
@@ -1722,8 +1823,12 @@ def delete_patient(patAutoID):
     try:
         patient = query.get_patient(patAutoID)
         if patient is not None:
-            query.delete(patient)
-            return item_deleted("PatAutoID {} deleted".format(patAutoID))
+            deps = get_dependencies(patient)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patient)
+                return item_deleted("PatAutoID {} deleted".format(patAutoID))
         else:
             return item_not_found("PatAutoID {} not found".format(patAutoID))
     except Exception as e:
@@ -1804,8 +1909,12 @@ def delete_patient_address(patAddressID):
     try:
         patientaddress = query.get_patient_address(patAddressID)
         if patientaddress is not None:
-            query.delete(patientaddress)
-            return item_deleted("PatAddressID {} deleted".format(patAddressID))
+            deps = get_dependencies(patientaddress)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patientaddress)
+                return item_deleted("PatAddressID {} deleted".format(patAddressID))
         else:
             return item_not_found("PatAddressID {} not found".format(patAddressID))
     except Exception as e:
@@ -1878,8 +1987,12 @@ def delete_patient_email(emailID):
     try:
         patientEmail = query.get_patient_email(emailID)
         if patientEmail is not None:
-            query.delete(patientEmail)
-            return item_deleted("EmailID {} deleted".format(emailID))
+            deps = get_dependencies(patientEmail)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patientEmail)
+                return item_deleted("EmailID {} deleted".format(emailID))
         else:
             return item_not_found("EmailID {} not found".format(emailID))
     except Exception as e:
@@ -1951,8 +2064,12 @@ def delete_patient_phone(patPhoneID):
     try:
         patientPhone = query.get_patient_phone(patPhoneID)
         if patientPhone is not None:
-            query.delete(patientPhone)
-            return item_deleted("PatPhoneID {} deleted".format(patPhoneID))
+            deps = get_dependencies(patientPhone)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patientPhone)
+                return item_deleted("PatPhoneID {} deleted".format(patPhoneID))
         else:
             return item_not_found("PatPhoneID {} not found".format(patPhoneID))
     except Exception as e:
@@ -2015,8 +2132,12 @@ def delete_patient_project_status(patientProjectStatusID):
     try:
         patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
         if patientProjectStatus is not None:
-            query.delete(patientProjectStatus)
-            return item_deleted("PatientProjectStatusID {} deleted".format(patientProjectStatusID))
+            deps = get_dependencies(patientProjectStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patientProjectStatus)
+                return item_deleted("PatientProjectStatusID {} deleted".format(patientProjectStatusID))
         else:
             return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
     except Exception as e:
@@ -2077,8 +2198,12 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
     try:
         patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
         if patientProjectStatusType is not None:
-            query.delete(patientProjectStatusType)
-            return item_deleted("PatientProjectStatusTypeID {} deleted".format(patientProjectStatusTypeID))
+            deps = get_dependencies(patientProjectStatusType)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(patientProjectStatusType)
+                return item_deleted("PatientProjectStatusTypeID {} deleted".format(patientProjectStatusTypeID))
         else:
             return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
     except Exception as e:
@@ -2141,8 +2266,12 @@ def delete_phase_status(logPhaseID):
     try:
         phaseStatus = query.get_phase_status(logPhaseID)
         if phaseStatus is not None:
-            query.delete(phaseStatus)
-            return item_deleted("LogPhaseID {} deleted".format(logPhaseID))
+            deps = get_dependencies(phaseStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(phaseStatus)
+                return item_deleted("LogPhaseID {} deleted".format(logPhaseID))
         else:
             return item_not_found("LogPhaseID {} not found".format(logPhaseID))
     except Exception as e:
@@ -2223,8 +2352,12 @@ def delete_physician(physicianID):
     try:
         physician = query.get_physician(physicianID)
         if physician is not None:
-            query.delete(physician)
-            return item_deleted("PhysicianID {} deleted".format(physicianID))
+            deps = get_dependencies(physician)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physician)
+                return item_deleted("PhysicianID {} deleted".format(physicianID))
         else:
             return item_not_found("PhysicianID {} not found".format(physicianID))
     except Exception as e:
@@ -2305,8 +2438,12 @@ def delete_physician_address(physicianAddressID):
     try:
         physicianAddress = query.get_physician_address(physicianAddressID)
         if physicianAddress is not None:
-            query.delete(physicianAddress)
-            return item_deleted("PhysicianAddressID {} deleted".format(physicianAddressID))
+            deps = get_dependencies(physicianAddress)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianAddress)
+                return item_deleted("PhysicianAddressID {} deleted".format(physicianAddressID))
         else:
             return item_not_found("PhysicianAddressID {} not found".format(physicianAddressID))
     except Exception as e:
@@ -2373,8 +2510,12 @@ def delete_physician_facility(physFacilityID):
     try:
         physicianFacility = query.get_physician_facility(physFacilityID)
         if physicianFacility is not None:
-            query.delete(physicianFacility)
-            return item_deleted("PhysFacilityID {} deleted".format(physFacilityID))
+            deps = get_dependencies(physicianFacility)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianFacility)
+                return item_deleted("PhysFacilityID {} deleted".format(physFacilityID))
         else:
             return item_not_found("PhysFacilityID {} not found".format(physFacilityID))
     except Exception as e:
@@ -2395,7 +2536,7 @@ def get_physician_phone(physicianPhoneID=None):
                 return physicianPhone.json()
             else:
                 return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
-    except:
+    except Exception as e:
         return internal_error(e)
 
 @api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['PUT'])
@@ -2449,8 +2590,12 @@ def delete_physician_phone(physicianPhoneID):
     try:
         physicianPhone = query.get_physician_phone(physicianPhoneID)
         if physicianPhone is not None:
-            query.delete(physicianPhone)
-            return item_deleted("PhysicianPhoneID {} deleted".format(physicianPhoneID))
+            deps = get_dependencies(physicianPhone)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianPhone)
+                return item_deleted("PhysicianPhoneID {} deleted".format(physicianPhoneID))
         else:
             return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
     except Exception as e:
@@ -2513,8 +2658,12 @@ def delete_physician_to_ctc(physicianCTCID):
     try:
         physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
         if physicianToCTC is not None:
-            query.delete(physicianToCTC)
-            return item_deleted("PhysicianCTCID {} deleted".format(physicianCTCID))
+            deps = get_dependencies(physicianToCTC)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianToCTC)
+                return item_deleted("PhysicianCTCID {} deleted".format(physicianCTCID))
         else:
             return item_not_found("PhysicianCTCID {} not found".format(physicianCTCID))
     except Exception as e:
@@ -2631,8 +2780,12 @@ def delete_pre_application(preApplicationID):
     try:
         preApplication = query.get_pre_application(preApplicationID)
         if preApplication is not None:
-            query.delete(preApplication)
-            return item_deleted("PreApplicationID {} deleted".format(preApplicationID))
+            deps = get_dependencies(preApplication)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(preApplication)
+                return item_deleted("PreApplicationID {} deleted".format(preApplicationID))
         else:
             return item_not_found("PreApplicationID {} not found".format(preApplicationID))
     except Exception as e:
@@ -2719,8 +2872,12 @@ def delete_project(projectID):
     try:
         proj = query.get_project(projectID)
         if proj is not None:
-            query.delete(proj)
-            return item_deleted("ProjectID {} deleted".format(projectID))
+            deps = get_dependencies(proj)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(proj)
+                return item_deleted("ProjectID {} deleted".format(projectID))
         else:
             return item_not_found("ProjectID {} not found".format(projectID))
     except Exception as e:
@@ -2841,8 +2998,12 @@ def delete_project_patient(participantID):
     try:
         projectPatient = query.get_project_patient(participantID)
         if projectPatient is not None:
-            query.delete(projectPatient)
-            return item_deleted("ParticipantID {} deleted".format(participantID))
+            deps = get_dependencies(projectPatient)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectPatient)
+                return item_deleted("ParticipantID {} deleted".format(participantID))
         else:
             return item_not_found("ParticipantID {} not found".format(participantID))
     except Exception as e:
@@ -2914,7 +3075,7 @@ def create_project_staff():
             query.add(projectStaff)
             return jsonify({'projectStaffID':projectStaff.projectStaffID})
         else:
-            return missing_params(e)
+            return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2923,8 +3084,12 @@ def delete_project_staff(projectStaffID):
     try:
         projectStaff = query.get_project_staff(projectStaffID)
         if projectStaff is not None:
-            query.delete(projectStaff)
-            return item_deleted("ProjectStaffID {} deleted".format(projectStaffID))
+            deps = get_dependencies(projectStaff)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectStaff)
+                return item_deleted("ProjectStaffID {} deleted".format(projectStaffID))
         else:
             return item_not_found("ProjectStaffID {} not found".format(projectStaffID))
     except Exception as e:
@@ -2993,8 +3158,12 @@ def delete_project_status(projectStatusID):
     try:
         projectStatus = query.get_project_status(projectStatusID)
         if projectStatus is not None:
-            query.delete(projectStatus)
-            return item_deleted("ProjectStatusID {} deleted".format(projectStatusID))
+            deps = get_dependencies(projectStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectStatus)
+                return item_deleted("ProjectStatusID {} deleted".format(projectStatusID))
         else:
             return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
     except Exception as e:
@@ -3057,8 +3226,12 @@ def delete_project_status_lut(projectStatusTypeID):
     try:
         projectStatusType = query.get_project_status_lut(projectStatusTypeID)
         if projectStatusType is not None:
-            query.delete(projectStatusType)
-            return item_deleted("ProjectStatusTypeID {} deleted".format(projectStatusTypeID))
+            deps = get_dependencies(projectStatusType)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectStatusType)
+                return item_deleted("ProjectStatusTypeID {} deleted".format(projectStatusTypeID))
         else:
             return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
     except Exception as e:
@@ -3121,8 +3294,12 @@ def delete_project_type(projectTypeID):
     try:
         projectType = query.get_project_type(projectTypeID)
         if projectType is not None:
-            query.delete(projectType)
-            return item_deleted("ProjectTypeID {} deleted".format(projectTypeID))
+            deps = get_dependencies(projectType)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectType)
+                return item_deleted("ProjectTypeID {} deleted".format(projectTypeID))
         else:
             return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
@@ -3185,8 +3362,12 @@ def delete_rc_status_list(rcStatusID):
     try:
         rcStatusList = query.get_rc_status(rcStatusID)
         if rcStatusList is not None:
-            query.delete(rcStatusList)
-            return item_deleted("RCStatusListID {} deleted".format(rcStatusID))
+            deps = get_dependencies(rcStatusList)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(rcStatusList)
+                return item_deleted("RCStatusListID {} deleted".format(rcStatusID))
         else:
             return item_not_found("RCStatusListID {} not found".format(rcStatusID))
     except Exception as e:
@@ -3208,7 +3389,7 @@ def get_review_committee(reviewCommitteeID = None):
             else:
                 return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
-        return interal_error(e)
+        return internal_error(e)
 
 @api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['PUT'])
 def update_review_committee(reviewCommitteeID):
@@ -3263,8 +3444,12 @@ def delete_review_committee(reviewCommitteeID):
     try:
         rc = query.get_review_committee(reviewCommitteeID)
         if rc is not None:
-            query.delete(rc)
-            return item_deleted("ReviewCommitteeID {} deleted".format(reviewCommitteeID))
+            deps = get_dependencies(rc)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(rc)
+                return item_deleted("ReviewCommitteeID {} deleted".format(reviewCommitteeID))
         else:
             return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
@@ -3327,8 +3512,12 @@ def delete_review_committee_list(rcListID):
     try:
         reviewCommittee = query.get_rc_status(rcListID)
         if reviewCommittee is not None:
-            query.delete(reviewCommittee)
-            return item_deleted("RCListID {} deleted".format(rcListID))
+            deps = get_dependencies(reviewCommittee)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(reviewCommittee)
+                return item_deleted("RCListID {} deleted".format(rcListID))
         else:
             return item_not_found("RCListID {} not found".format(rcListID))
     except Exception as e:
@@ -3377,7 +3566,7 @@ def update_staff(staffID):
                 query.commit()
                 return staff.json()
             else:
-                return missing_params(e)
+                return missing_params(form.errors)
         else:
             return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
@@ -3417,8 +3606,12 @@ def delete_staff(staffID):
     try:
         staff = query.get_staff(staffID)
         if staff is not None:
-            query.delete(staff)
-            return item_deleted("StaffID {} deleted".format(staffID))
+            deps = get_dependencies(staff)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(staff)
+                return item_deleted("StaffID {} deleted".format(staffID))
         else:
             return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
@@ -3481,8 +3674,12 @@ def delete_staff_role(staffRoleLUTID):
     try:
         staffRole = query.get_staff_role(staffRoleLUTID)
         if staffRole is not None:
-            query.delete(staffRole)
-            return item_deleted("StaffRoleLUTID {} deleted".format(staffRoleLUTID))
+            deps = get_dependencies(staffRole)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(staffRole)
+                return item_deleted("StaffRoleLUTID {} deleted".format(staffRoleLUTID))
         else:
             return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
     except Exception as e:
@@ -3549,8 +3746,12 @@ def delete_staff_training(staffTrainingID):
     try:
         stafftraining = query.get_staff_training(staffTrainingID)
         if stafftraining is not None:
-            query.delete(stafftraining)
-            return item_deleted("StaffTrainingID {} deleted".format(staffTrainingID))
+            deps = get_dependencies(stafftraining)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(stafftraining)
+                return item_deleted("StaffTrainingID {} deleted".format(staffTrainingID))
         else:
             return item_not_found("StaffTrainingID {} not found".format(staffTrainingID))
     except Exception as e:
@@ -3619,8 +3820,12 @@ def delete_tracing(tracingID):
     try:
         tracing = query.get_tracing(tracingID)
         if tracing is not None:
-            query.delete(tracing)
-            return item_deleted("TracingID {} deleted".format(tracingID))
+            deps = get_dependencies(tracing)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(tracing)
+                return item_deleted("TracingID {} deleted".format(tracingID))
         else:
             return item_not_found("TracingID {} not found".format(tracingID))
     except Exception as e:
@@ -3681,8 +3886,12 @@ def delete_tracing_source(tracingSourceLUTID):
     try:
         tracingSource = query.get_tracing_source(tracingSourceLUTID)
         if tracingSource is not None:
-            query.delete(tracingSource)
-            return item_deleted("TracingSourceLUTID {} deleted".format(tracingSourceLUTID))
+            deps = get_dependencies(tracingSource)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(tracingSource)
+                return item_deleted("TracingSourceLUTID {} deleted".format(tracingSourceLUTID))
         else:
             return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
     except Exception as e:
@@ -3721,7 +3930,7 @@ def update_ucr_report(ucrReportID):
                 query.commit()
                 return ucr.json()
             else:
-                return missing_params(e)
+                return missing_params(form.errors)
         else:
             return item_not_found("UcrReportID {} not found.".format(ucrReportID))
     except Exception as e:
@@ -3752,7 +3961,11 @@ def delete_ucr_report(ucrReportID):
     try:
         ucr = query.get_ucr_report(ucrReportID)
         if ucr is not None:
-            query.delete(ucr)
-            return item_deleted("UcrReportID {} deleted".format(ucrReportID))
+            deps = get_dependencies(ucr)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ucr)
+                return item_deleted("UcrReportID {} deleted".format(ucrReportID))
     except Exception as e:
         return internal_error(e)

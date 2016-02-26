@@ -446,7 +446,7 @@ class PopulatedDB(TestCase):
             dnc_reason = "dnc_reason"
         )
         ctc2 = models.CTC(
-            patientID = 2,
+            patientID = 1,
             dx_date = datetime(2016,2,2),
             site = 1,
             histology = "histology",
@@ -964,9 +964,9 @@ class TestContactType(PopulatedDB):
         self.assertEqual(response.json["contact_definition"], "def Updated")
         
     def test_delete_contact_type(self):
-        response = self.client.delete("/api/contacttypes/1/")
+        response = self.client.delete("/api/contacttypes/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ContactTypeLUTID 1 deleted")        
+        self.assertEqual(response.json["Message"], "ContactTypeLUTID 2 deleted")
         
 class TestContactInfoSource(PopulatedDB):
     def test_get_contact_info_sourcees(self):
@@ -983,14 +983,14 @@ class TestContactInfoSource(PopulatedDB):
         response = self.client.put("/api/contactinfosources/1/",data = {
             "contact_info_source" : "source Updated",
         })
-        print(response.json)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
         self.assertEqual(response.json["contact_info_source"], "source Updated")
         
     def test_delete_contact_info_source(self):
-        response = self.client.delete("/api/contactinfosources/1/")
+        response = self.client.delete("/api/contactinfosources/2/")
+        print(response.json)
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ContactInfoSourceLUTID 1 deleted")        
+        self.assertEqual(response.json["Message"], "ContactInfoSourceLUTID 2 deleted")
         
 class TestContactInfoStatus(PopulatedDB):
     def test_get_contact_info_statuses(self):
@@ -1011,9 +1011,9 @@ class TestContactInfoStatus(PopulatedDB):
         self.assertEqual(response.json["contact_info_status"], "status Updated")
         
     def test_delete_contact_info_status(self):
-        response = self.client.delete("/api/contactinfostatuses/1/")
+        response = self.client.delete("/api/contactinfostatuses/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ContactInfoStatusID 1 deleted")
+        self.assertEqual(response.json["Message"], "ContactInfoStatusID 2 deleted")
 
 class TestCTC(PopulatedDB):
     def test_get_ctcs(self):
@@ -1094,9 +1094,9 @@ class TestCTC(PopulatedDB):
         self.assertEqual(response.json["dnc_reason"], "dnc_reason2")
         
     def test_delete_ctc(self):
-        response = self.client.delete("/api/ctcs/1/")
+        response = self.client.delete("/api/ctcs/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "CtcID 1 deleted")
+        self.assertEqual(response.json["Message"], "CtcID 2 deleted")
 
 class TestCTCFacility(PopulatedDB):
     def test_get_ctc_facilities(self):
@@ -1224,9 +1224,9 @@ class TestFacility(PopulatedDB):
         self.assertEqual(response.json["contact2_lname"], "lname2")
 
     def test_delete_facility(self):
-        response = self.client.delete("/api/facilities/1/")
+        response = self.client.delete("/api/facilities/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "FacilityID 1 deleted")      
+        self.assertEqual(response.json["Message"], "FacilityID 2 deleted")
 
 class TestFacilityAddress(PopulatedDB):
     def test_get_facility_addresses(self):
@@ -1377,9 +1377,9 @@ class TestFundingSource(PopulatedDB):
         self.assertEqual(response.json["fundingSource"], "source2")
         
     def test_delete_funding_source(self):
-        response = self.client.delete("/api/fundingsources/1/")
+        response = self.client.delete("/api/fundingsources/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "FundingSourceLUTID 1 deleted")             
+        self.assertEqual(response.json["Message"], "FundingSourceLUTID 2 deleted")
         
 class TestGrantStatus(PopulatedDB):
     def test_get_grant_statuses(self):
@@ -1399,9 +1399,9 @@ class TestGrantStatus(PopulatedDB):
         self.assertEqual(response.json["grant_status"], "status2")
         
     def test_delete_grant_status(self):
-        response = self.client.delete("/api/grantstatuses/1/")
+        response = self.client.delete("/api/grantstatuses/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "GrantStatusLUTID 1 deleted")     
+        self.assertEqual(response.json["Message"], "GrantStatusLUTID 2 deleted")
 
 class TestHumanSubjectTraining(PopulatedDB):
     def test_get_human_subject_trainings(self):
@@ -1421,9 +1421,9 @@ class TestHumanSubjectTraining(PopulatedDB):
         self.assertEqual(response.json["training_type"], "type Updated")
         
     def test_delete_human_subject_training(self):
-        response = self.client.delete("/api/humansubjecttrainings/1/")
+        response = self.client.delete("/api/humansubjecttrainings/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "HumanSubjectTrainingID 1 deleted")     
+        self.assertEqual(response.json["Message"], "HumanSubjectTrainingID 2 deleted")
 
 class TestInformant(PopulatedDB):
     def test_get_informants(self):
@@ -1468,9 +1468,9 @@ class TestInformant(PopulatedDB):
         self.assertEqual(response.json["notes"], "notes Updated")
         
     def test_delete_informant(self):
-        response = self.client.delete("/api/informants/1/")
+        response = self.client.delete("/api/informants/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "InformantID 1 deleted")          
+        self.assertEqual(response.json["Message"], "InformantID 2 deleted")
         
 class TestInformantAddress(PopulatedDB):
     def test_get_informant_addresses(self):
@@ -1602,9 +1602,9 @@ class TestIRBHolder(PopulatedDB):
         self.assertEqual(response.json["irb_holder_definition"],"IRB 1 Updated")
         
     def test_delete_irb_holder(self):
-        response = self.client.delete("/api/irbholders/1/")
+        response = self.client.delete("/api/irbholders/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "IrbHolderID 1 deleted")
+        self.assertEqual(response.json["Message"], "IrbHolderID 2 deleted")
 
 class TestLog(PopulatedDB):
     def test_get_logs(self):
@@ -1662,9 +1662,9 @@ class TestLogSubject(PopulatedDB):
         self.assertEqual(response.json["log_subject"], "subject Updated")
         
     def test_delete_log_subject(self):
-        response = self.client.delete("/api/logsubjects/1/")
+        response = self.client.delete("/api/logsubjects/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "LogSubjectLUTID 1 deleted")       
+        self.assertEqual(response.json["Message"], "LogSubjectLUTID 2 deleted")
                
 class TestPatient(PopulatedDB):
     def test_get_patients(self):
@@ -1743,9 +1743,10 @@ class TestPatient(PopulatedDB):
         self.assertEqual(response.json["vital_status"], "v2")
         
     def test_delete_patient(self):
-        response = self.client.delete("/api/patients/1/")
+        response = self.client.delete("/api/patients/2/")
+        print(response.json)
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "PatAutoID 1 deleted")      
+        self.assertEqual(response.json["Message"], "PatAutoID 2 deleted")
 
 class TestPatientAddress(PopulatedDB):
     def test_get_patient_addresses(self):
@@ -1950,9 +1951,9 @@ class TestPatientProjectStatusLUT(PopulatedDB):
         self.assertEqual(response.json["status_description"], "desc Updated")
 
     def test_delete_patient_project_status_type(self):
-        response = self.client.delete("/api/patientprojectstatustypes/1/")
+        response = self.client.delete("/api/patientprojectstatustypes/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "PatientProjectStatusTypeID 1 deleted")             
+        self.assertEqual(response.json["Message"], "PatientProjectStatusTypeID 2 deleted")
         
 class TestPhaseStatus(PopulatedDB):
     def test_get_phase_statuses(self):
@@ -1974,9 +1975,9 @@ class TestPhaseStatus(PopulatedDB):
         self.assertEqual(response.json["phase_description"], "desc Updated")
         
     def test_delete_phase_status(self):
-        response = self.client.delete("/api/phasestatuses/1/")
+        response = self.client.delete("/api/phasestatuses/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "LogPhaseID 1 deleted")       
+        self.assertEqual(response.json["Message"], "LogPhaseID 2 deleted")
 
 class TestPhysician(PopulatedDB):
     def test_get_physicians(self):
@@ -2034,9 +2035,9 @@ class TestPhysician(PopulatedDB):
         self.assertEqual(response.json["email"], "email2")
         
     def test_delete_physician(self):
-        response = self.client.delete("/api/physicians/1/")
+        response = self.client.delete("/api/physicians/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "PhysicianID 1 deleted")       
+        self.assertEqual(response.json["Message"], "PhysicianID 2 deleted")
 
 class TestPhysicianAddress(PopulatedDB):
     def test_get_physician_addresses(self):
@@ -2409,9 +2410,9 @@ class TestProject(PopulatedDB):
         
      # Test deletetion of project
     def test_delete_project(self):
-        response = self.client.delete("/api/projects/1/")
+        response = self.client.delete("/api/projects/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ProjectID 1 deleted")
+        self.assertEqual(response.json["Message"], "ProjectID 2 deleted")
 
 class TestProjectPatient(PopulatedDB):
     def test_get_project_statuses(self):
@@ -2552,9 +2553,9 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["survey_to_researcher_staff"], 2)
         
     def test_delete_project_patient(self):
-        response = self.client.delete("/api/projectpatients/1/")
+        response = self.client.delete("/api/projectpatients/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ParticipantID 1 deleted")       
+        self.assertEqual(response.json["Message"], "ParticipantID 2 deleted")
 
 class TestProjectStaff(PopulatedDB):
     def test_get_staffs(self):
@@ -2676,9 +2677,9 @@ class TestProjectStatusType(PopulatedDB):
         self.assertEqual(response.json["status_definition"], "status def Updated")
         
     def test_delete_project_status_type(self):
-        response = self.client.delete("/api/projectstatustypes/1/")
+        response = self.client.delete("/api/projectstatustypes/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ProjectStatusTypeID 1 deleted")            
+        self.assertEqual(response.json["Message"], "ProjectStatusTypeID 2 deleted")
  
 class TestProjectType(PopulatedDB):
     def test_get_project_types(self):
@@ -2700,9 +2701,9 @@ class TestProjectType(PopulatedDB):
         self.assertEqual(response.json["project_type_definition"], "type def Updated")
         
     def test_delete_project_type(self):
-        response = self.client.delete("/api/projecttypes/1/")
+        response = self.client.delete("/api/projecttypes/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ProjectTypeID 1 deleted")      
+        self.assertEqual(response.json["Message"], "ProjectTypeID 2 deleted")
  
 class TestRCStatusList(PopulatedDB):
     def test_get_rcStatusList(self):
@@ -2727,9 +2728,9 @@ class TestRCStatusList(PopulatedDB):
         self.assertEqual(response.json["rc_status_definition"], "rc status def Updated")
         
     def test_delete_rcStatusList(self):
-        response = self.client.delete("/api/rcstatuslist/1/")
+        response = self.client.delete("/api/rcstatuslist/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "RCStatusListID 1 deleted")
+        self.assertEqual(response.json["Message"], "RCStatusListID 2 deleted")
                      
 class TestReviewCommittee(PopulatedDB):
     def test_get_review_committees(self):
@@ -2803,9 +2804,9 @@ class TestReviewCommitteeList(PopulatedDB):
         self.assertEqual(response.json["rc_description"],"rc desc Updated")
         
     def test_delete_review_committee_list(self):
-        response = self.client.delete("/api/reviewcommitteelist/1/")
+        response = self.client.delete("/api/reviewcommitteelist/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "RCListID 1 deleted")
+        self.assertEqual(response.json["Message"], "RCListID 2 deleted")
 
 class TestStaff(PopulatedDB):
     def test_get_staffs(self):
@@ -2879,9 +2880,9 @@ class TestStaff(PopulatedDB):
         self.assertEqual(response.json["UCR_role"], 2)
         
     def test_delete_staff(self):
-        response = self.client.delete("/api/staff/1/")
+        response = self.client.delete("/api/staff/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "StaffID 1 deleted")
+        self.assertEqual(response.json["Message"], "StaffID 2 deleted")
 
 class TestStaffRole(PopulatedDB):
     def test_get_staff_roles(self):
@@ -2906,9 +2907,9 @@ class TestStaffRole(PopulatedDB):
         self.assertEqual(response.json["staffRoleDescription"], "desc Updated")
         
     def test_delete_staff_role(self):
-        response = self.client.delete("/api/staffroles/1/")
+        response = self.client.delete("/api/staffroles/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "StaffRoleLUTID 1 deleted")
+        self.assertEqual(response.json["Message"], "StaffRoleLUTID 2 deleted")
            
 class TestStaffTraining(PopulatedDB):
     def test_get_staff_trainings(self):
@@ -3003,9 +3004,9 @@ class TestTracingSource(PopulatedDB):
         self.assertEqual(response.json["description"], "desc Updated")
         
     def test_delete_tracing_source(self):
-        response = self.client.delete("/api/tracingsources/1/")
+        response = self.client.delete("/api/tracingsources/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "TracingSourceLUTID 1 deleted")
+        self.assertEqual(response.json["Message"], "TracingSourceLUTID 2 deleted")
         
 class TestUCRReport(PopulatedDB):
     def test_get_ucr_reports(self):
