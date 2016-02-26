@@ -440,13 +440,13 @@ class PopulatedDB(TestCase):
             dx_street2 = "street2",
             dx_city = "city",
             dx_state = "state",
-            dx_zip = "zip",
+            dx_zip = 99999,
             dx_county = "county",
             dnc = "dnc",
             dnc_reason = "dnc_reason"
         )
         ctc2 = models.CTC(
-            patientID = 1,
+            patientID = 2,
             dx_date = datetime(2016,2,2),
             site = 1,
             histology = "histology",
@@ -458,7 +458,7 @@ class PopulatedDB(TestCase):
             dx_street2 = "street2",
             dx_city = "city",
             dx_state = "state",
-            dx_zip = "zip",
+            dx_zip = 99999,
             dx_county = "county",
             dnc = "dnc",
             dnc_reason = "dnc_reason"
@@ -497,6 +497,189 @@ class PopulatedDB(TestCase):
             survey_to_researcher_staff = 1
         )
 
+        projectPatient2 = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )
+
+        tracingSource1 = models.TracingSourceLUT(
+            description = "desc"
+        )
+        tracingSource2 = models.TracingSourceLUT(
+            description = "desc"
+        )
+        tracing = models.Tracing(
+            tracingSourceLUTID = 1,
+            projectPatientID = 1,
+            date = datetime(2016,2,2),
+            staff = 1,
+            notes = "notes"
+        )
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+
+        physician2 = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+        physicianAddress = models.PhysicianAddress(
+            contactInfoSourceLUTID = 1,
+            physicianID = 1,
+            contactInfoStatusLUTID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            address_status = 1,
+            address_status_date = datetime(2016,2,2),
+            address_status_source = "s1"
+        )
+        physicianPhone = models.PhysicianPhone(
+            contactInfoSourceLUTID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            phone = "phone",
+            phone_type = "phone_type",
+            phone_status = 1,
+            phone_source = "s1",
+            phone_status_date = datetime(2016,2,2)
+        )
+        physicianToCTC = models.PhysicianToCTC(
+            physicianID = 1,
+            ctcID = 1
+        )
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+        facility2 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+        facilityAddress = models.FacilityAddress(
+            contactInfoSourceLUTID = 1,
+            facilityID = 1,
+            contactInfoStatusLUTID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            facility_address_status = 1,
+            facility_address_status_date = datetime(2016,2,2),
+            facility_address_status_source = "s1"
+        )
+
+        facilityPhone = models.FacilityPhone(
+            contactInfoSourceLUTID = 1,
+            facilityID = 1,
+            contactInfoStatusID = 1,
+            facility_name = "name",
+            clinic_name = "clinic",
+            facility_phone_type = "cell",
+            facility_phone = "phone",
+            facility_phone_status = 1,
+            facility_phone_source = "s1",
+            facility_phone_status_date = datetime(2016,2,2)
+        )
+        patientProjectStatusType1 = models.PatientProjectStatusLUT(
+            status_description = "desc"
+        )
+        patientProjectStatusType2 = models.PatientProjectStatusLUT(
+            status_description = "desc"
+        )
+        patientProjectStatus = models.PatientProjectStatus(
+            patientProjectStatusLUTID =1,
+            projectPatientID = 1,
+        )
+        physicianFacility = models.PhysicianFacility(
+            facilityID = 1,
+            physicianID = 1,
+            phys_facility_status = "s1",
+            phys_facility_status_date = datetime(2016,2,2)
+        )
+        contactType1 = models.ContactTypeLUT(
+            contact_definition = "def"
+        )
+        contactType2 = models.ContactTypeLUT(
+            contact_definition = "def"
+        )
+        contact = models.Contact(
+            contactTypeLUTID = 1,
+            projectPatientID = 1,
+            staffID = 1,
+            informantID = 1,
+            facilityID = 1,
+            physicianID = 1,
+            description = "desc",
+            contact_date = datetime(2016,2,2),
+            initials = "atp",
+            notes = "notes"
+        )
+        ctcFacility = models.CTCFacility(
+            ctcID = 1,
+            facilityID = 1
+        )
 
         db.session.add(contactInfoSource1)
         db.session.add(contactInfoSource2)
@@ -550,547 +733,27 @@ class PopulatedDB(TestCase):
         db.session.add(ctc1)
         db.session.add(ctc2)
         db.session.add(projectPatient)
-        db.session.commit()
-
-    def populate_db(self):
-        arcReview = models.ArcReview(
-            review_type = 1,
-            date_sent_to_reviewer = datetime(2016,2,2),
-            reviewer1 = 1,
-            reviewer1_rec = 1,
-            reviewer1_sig_date = datetime(2016,2,2),
-            reviewer1_comments = "test comment",
-            reviewer2 = 2,
-            reviewer2_rec  =2 ,
-            reviewer2_sig_date = datetime(2016,2,2),
-            reviewer2_comments = "test comment",
-            research = 1,
-            lnkage=False,
-            contact = True,
-            engaged = True,
-            non_public_data = True)
-            
-        budget = models.Budget(
-            numPeriods = 1,
-            periodStart = datetime(2016,2,2),
-            periodEnd = datetime(2016,2,2),
-            periodTotal = 1.23,
-            periodComment = "comment")
-            
-        p = models.Project(
-            projectType_projectTypeID = 1,
-            IRBHolderLUT_irbHolderID = 1,
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
-            sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
-        rc = models.ReviewCommittee(
-            project_projectID=p.projectID,
-            RCStatusList_rc_StatusID=1,
-            reviewCommitteeList_rcListID=1,
-            review_committee_number="1",
-            date_initial_review=datetime(2016,2,2),
-            date_expires = datetime(2016,2,2),
-            rc_note = "rc_note",
-            rc_protocol = "rc_proto",
-            rc_approval="rc_approval")
-            
-        ucr = models.UCRReport(
-            projectID = 1,
-            report_type= 1,
-            report_submitted= datetime(2016,2,2),
-            report_due= datetime(2016,2,2),
-            report_doc= "doc"
-        )
-        
-        rcsl = models.RCStatusList(
-            rc_status = "Status 1",
-            rc_status_definition = "rc status def")
-            
-        irb = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
-
-        irb2 = models.IRBHolderLUT(
-            irb_holder = "holder 2",
-            irb_holder_definition= "IRB 2")
-            
-        rcl = models.ReviewCommitteeList(
-            review_committee = "rc",
-            rc_description = "rc desc")
-        
-        phaseStatus = models.PhaseStatus(
-            phase_status = "status",
-            phase_description = "desc"
-        )
-        
-        pt = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
-
-        pt2 = models.ProjectType(
-            project_type = "Type 2",
-            project_type_definition = "Def 2")
-
-        logSubject = models.LogSubjectLUT(
-            log_subject = "subject"
-        )
-        
-        log = models.Log(
-            logSubjectLUTID = 1,
-            projectID = 1,
-            staffID = 1,
-            phaseStatusID = 1,
-            note = "note",
-            date = datetime(2016,2,2)
-        )
-        projectStaff = models.ProjectStaff(
-            staffRoleLUTID = 1,
-            projectID = 1,
-            staffID = 1,
-            role = 1,
-            date_pledge = datetime(2016,2,2),
-            date_revoked = datetime(2016,2,2),
-            contact = "yes",
-            inactive = "no",
-            human_sub_training_exp = datetime(2016,2,2),
-            human_sub_type_id = 1,
-            study_role = 1
-        )
-        
-        rc.RCStatusList = rcsl
-        rc.reviewCommitteeList = rcl
-        p.irbHolder = irb
-        p.projectType = pt
-        p.reviewCommittees.append(rc)
-        p.budgets.append(budget)
-        p.arcReview = arcReview
-        p.ucrReports.append(ucr)
-        
-        contact = models.Contact(
-            contactTypeLUTID = 1,
-            projectPatientID = 1,
-            staffID = 1,
-            informantID = 1,
-            facilityID = 1,
-            physicianID = 1,
-            description = "desc",
-            contact_date = datetime(2016,2,2),
-            initials = "atp",
-            notes = "notes"
-        )
-        
-        contactType = models.ContactTypeLUT(
-            contact_definition = "def"
-        )
-        
-        contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
-        )
-        
-        contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
-        )
-        
-        ctc = models.CTC(
-            patientID = 1,
-            dx_date = datetime(2016,2,2),
-            site = 1,
-            histology = "histology",
-            behavior = "behavior",
-            ctc_sequence = "sequence",
-            stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = "zip",
-            dx_county = "county",
-            dnc = "dnc",
-            dnc_reason = "dnc_reason"
-        )
-        
-        ctcFacility = models.CTCFacility(
-            ctcID = 1,
-            facilityID = 1
-        )
-        
-        facility = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
-        )
-        
-        facilityPhone = models.FacilityPhone(
-            contactInfoSourceLUTID = 1,
-            facilityID = 1,
-            contactInfoStatusLUTID = 1,
-            facility_name = "name",
-            clinic_name = "clinic",
-            facility_phone = "phone",
-            facility_phone_status = 1,
-            facility_phone_source = "s1",
-            facility_phone_status_date = datetime(2016,2,2)
-        )
-        
-        facilityAddress = models.FacilityAddress(
-            contactInfoSourceLUTID = 1,
-            facilityID = 1,
-            contactInfoStatusLUTID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
-        )
-        
-        funding = models.Funding(
-            grantStatusLUTID = 1,
-            projectID = 1,
-            fundingSourceLUTID = 1,
-            primary_funding_source = "pfs",
-            secondary_funding_source = "sfs",
-            funding_number = "number",
-            grant_title = "title",
-            grantStatusID = 1,
-            date_status = datetime(2016,2,2),
-            grant_pi = 1,
-            primary_chartfield = "pcf",
-            secondary_chartfield = "scf"
-        )
-        
-        fundingSourceLUT = models.FundingSourceLUT(
-            fundingSource = "fs"
-        )
-        
-        humanSubjectTraining = models.HumanSubjectTrainingLUT(
-            training_type = "type"
-        )
-        
-        informant = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
-            notes = "notes"
-        )
-        
-        informantAddress = models.InformantAddress(
-            contactInfoSourceLUTID = 1,
-            informantID = 1,
-            contactInfoStatusID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
-        )
-        
-        informantPhone = models.InformantPhone(
-            contactInfoSourceLUTID = 1,
-            informantID = 1,
-            contactInfoStatusID = 1,
-            phone = "phone",
-            phone_status = 1,
-            phone_source = "s1",
-            phone_status_date = datetime(2016,2,2)
-        )
-        
-        grantStatus = models.GrantStatusLUT(
-            grant_status = "status"
-        )
-        
-        patient = models.Patient(
-            patID = "1",
-            recordID = 1,
-            ucrDistID = 1,
-            UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
-            dob = datetime(2016,2,2),
-            SSN = "999999999",
-            sex = "male",
-            race = "white",
-            ethnicity = "hispanic",
-            vital_status = "v1"
-        )
-        
-        patientAddress = models.PatientAddress(
-            contactInfoSourceLUTID = 1,
-            patientID = 1,
-            contactInfoStatusLUTID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
-        )
-        
-        patientEmail = models.PatientEmail(
-            contactInfoSourceLUTID = 1,
-            patientID = 1,
-            contactInfoStatusID = 1,
-            email = "email",
-            email_status = 1,
-            email_source = 1,
-            email_status_date = datetime(2016,2,2)
-        )
-        
-        patientPhone = models.PatientPhone(
-            contactInfoSourceLUTID = 1,
-            patientID = 1,
-            contactInfoStatusID = 1,
-            phone = "phone",
-            phone_status = 1,
-            phone_source = "s1",
-            phone_status_date = datetime(2016,2,2)
-        )
-        
-        patientProjectStatus = models.PatientProjectStatus(
-            patientProjectStatusLUTID =1,
-            projectPatientID = 1,
-        )
-        
-        patientProjectStatusType = models.PatientProjectStatusLUT(
-            status_description = "desc"
-        )
-        
-        physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            credentials = "credentials",
-            specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
-            email = "email"
-        )
-        
-        physicianAddress = models.PhysicianAddress(
-            contactInfoSourceLUTID = 1,
-            physicianID = 1,
-            contactInfoStatusLUTID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
-        )
-        
-        physicianFacility = models.PhysicianFacility(
-            facilityID = 1,
-            physicianID = 1,
-            phys_facility_status = "s1",
-            phys_facility_status_date = datetime(2016,2,2)
-        )
-        
-        physicianPhone = models.PhysicianPhone(
-            contactInfoSourceLUTID = 1,
-            physicianID = 1,
-            contactInfoStatusID = 1,
-            phone = "phone",
-            phone_type = "phone_type",
-            phone_status = 1,
-            phone_source = "s1",
-            phone_status_date = datetime(2016,2,2)
-        )
-        
-        physicianToCTC = models.PhysicianToCTC(
-            physicianID = 1,
-            ctcID = 1
-        )
-        
-        preApp = models.PreApplication(
-            projectID = 1,
-            pi_fname = "pi_fname",
-            pi_lname = "pi_lname",
-            pi_email = "pi_email",
-            pi_phone = "pi_phone",
-            contact_fname = "contact_fname",
-            contact_lname = "contact_lname",
-            contact_phone = "contact_phone",
-            contact_email = "contact_email",
-            institution = "institution",
-            institution2 = "institution2",
-            uid = "uid",
-            udoh = 1,
-            project_title = "project_title",
-            purpose = "purpose",
-            irb0 = True,
-            irb1 = True,
-            irb2 = True,
-            irb3 = True,
-            irb4 = True,
-            other_irb = "other_irb",
-            updb = True,
-            pt_contact = True,
-            start_date = datetime(2016,2,2),
-            link = True,
-            delivery_date = datetime(2016,2,2),
-            description = "description"
-        )
-        
-        projStatus = models.ProjectStatus(
-            projectStatusLUTID = 1,
-            projectID = 1,
-            staffID = 1,
-            status_date = datetime(2016,2,2),
-            status_notes = "notes"
-        
-        )
-        
-        projStatusType = models.ProjectStatusLUT(
-            project_status = "Status 1",
-            status_definition = "status def",)
-            
-        projectPatient = models.ProjectPatient(
-            projectID = 1,
-            staffID = 1,
-            ctcID = 1,
-            current_age = 1,
-            batch = 1,
-            sitegrp = 1,
-            final_code = 1,
-            final_code_date = datetime(2016,2,2),
-            enrollment_date = datetime(2016,2,2),
-            date_coord_signed = datetime(2016,2,2),
-            import_date = datetime(2016,2,2),
-            final_code_staff = 1,
-            enrollment_staff = 1,
-            date_coord_signed_staff = datetime(2016,2,2),
-            abstract_status = 1,
-            abstract_status_date = datetime(2016,2,2),
-            abstract_status_staff = 1,
-            sent_to_abstractor = datetime(2016,2,2),
-            sent_to_abstractor_staff = 1,
-            abstracted_date = datetime(2016,2,2),
-            abstractor_initials = "atp",
-            researcher_date = datetime(2016,2,2),
-            researcher_staff = 1,
-            consent_link = "link",
-            tracing_status = 1,
-            med_record_release_signed = True,
-            med_record_release_link = "link",
-            med_record_release_staff = 1,
-            med_record_release_date = datetime(2016,2,2),
-            survey_to_researcher = datetime(2016,2,2),
-            survey_to_researcher_staff = 1
-        )
-        staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            email = "email",
-            phone = "phone",
-            phoneComment = "phoneComment",
-            institution = "institution",
-            department = "department",
-            position = "position",
-            credentials = "credentials",
-            street = "street",
-            city = "city",
-            state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
-        )
-        
-        staffRole = models.StaffRoleLUT(
-            staffRole = "role",
-            staffRoleDescription = "desc"
-        )
-        staffTraining = models.StaffTraining(
-            staffID = 1,
-            humanSubjectTrainingLUTID = 1,
-            date_taken = datetime(2016,2,2),
-            exp_date = datetime(2016,2,2)
-        )
-        
-        tracing = models.Tracing(
-            tracingSourceLUTID = 1,
-            projectPatientID = 1,
-            date = datetime(2016,2,2),
-            staff = 1,
-            notes = "notes"
-        )
-        tracingSource = models.TracingSourceLUT(
-            description = "desc"
-        )
-        db.session.add(facilityAddress)
-        db.session.add(physicianFacility)
-        db.session.add(physicianPhone)
-        db.session.add(physicianAddress)
-        db.session.add(physician)
-        db.session.add(ctcFacility)
-        db.session.add(facility)
-        db.session.add(physicianToCTC)
-        db.session.add(humanSubjectTraining)
-        db.session.add(staffRole)
-        db.session.add(staffTraining)
-        db.session.add(staff)
-        db.session.add(ctc)
-        db.session.add(contact)
-        db.session.add(contactType)
-        db.session.add(facilityPhone)
-        db.session.add(contactInfoSource)
-        db.session.add(contactInfoStatus)
-        db.session.add(patientProjectStatusType)
-        db.session.add(patientProjectStatus)
+        db.session.add(projectPatient2)
+        db.session.add(tracingSource1)
+        db.session.add(tracingSource2)
         db.session.add(tracing)
-        db.session.add(tracingSource)
-        db.session.add(informant)
-        db.session.add(informantAddress)
-        db.session.add(informantPhone)
-        db.session.add(patientPhone)
-        db.session.add(patientEmail)
-        db.session.add(patientAddress)
-        db.session.add(preApp)
-        db.session.add(projectStaff)
-        db.session.add(log)
-        db.session.add(logSubject)
-        db.session.add(phaseStatus)
-        db.session.add(patient)
-        db.session.add(projectPatient)
-        db.session.add(projStatusType)
-        db.session.add(funding)
-        db.session.add(fundingSourceLUT)
-        db.session.add(grantStatus)
-        db.session.add(projStatus)
-        db.session.add(p)
+        db.session.add(physician)
+        db.session.add(physician2)
+        db.session.add(physicianAddress)
+        db.session.add(physicianPhone)
+        db.session.add(physicianToCTC)
+        db.session.add(facility1)
+        db.session.add(facility2)
+        db.session.add(facilityAddress)
+        db.session.add(facilityPhone)
+        db.session.add(patientProjectStatusType1)
+        db.session.add(patientProjectStatusType2)
+        db.session.add(patientProjectStatus)
+        db.session.add(physicianFacility)
+        db.session.add(contactType1)
+        db.session.add(contactType2)
+        db.session.add(contact)
+        db.session.add(ctcFacility)
         db.session.commit()
         
 class TestRoot(PopulatedDB):
@@ -1318,7 +981,7 @@ class TestContactInfoSource(PopulatedDB):
         
     def test_update_contact_info_source(self):
         response = self.client.put("/api/contactinfosources/1/",data = {
-            "contact_info_source" : "source",
+            "contact_info_source" : "source Updated",
         })
         print(response.json)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
@@ -1368,7 +1031,7 @@ class TestCTC(PopulatedDB):
         self.assertEqual(response.json["CTCs"][0]["dx_street2"], "street2")
         self.assertEqual(response.json["CTCs"][0]["dx_city"], "city")
         self.assertEqual(response.json["CTCs"][0]["dx_state"], "state")
-        self.assertEqual(response.json["CTCs"][0]["dx_zip"], "zip")
+        self.assertEqual(response.json["CTCs"][0]["dx_zip"], 99999)
         self.assertEqual(response.json["CTCs"][0]["dx_county"], "county")
         self.assertEqual(response.json["CTCs"][0]["dnc"], "dnc")
         self.assertEqual(response.json["CTCs"][0]["dnc_reason"], "dnc_reason")
@@ -1388,7 +1051,7 @@ class TestCTC(PopulatedDB):
         self.assertEqual(response.json["dx_street2"], "street2")
         self.assertEqual(response.json["dx_city"], "city")
         self.assertEqual(response.json["dx_state"], "state")
-        self.assertEqual(response.json["dx_zip"], "zip")
+        self.assertEqual(response.json["dx_zip"], 99999)
         self.assertEqual(response.json["dx_county"], "county")
         self.assertEqual(response.json["dnc"], "dnc")
         self.assertEqual(response.json["dnc_reason"], "dnc_reason")
@@ -1407,7 +1070,7 @@ class TestCTC(PopulatedDB):
             "dx_street2" : "street22",
             "dx_city" : "city2",
             "dx_state" : "state2",
-            "dx_zip" : "zip2",
+            "dx_zip" : 99991,
             "dx_county" : "county2",
             "dnc" : "dnc2",
             "dnc_reason" : "dnc_reason2"
@@ -1425,7 +1088,7 @@ class TestCTC(PopulatedDB):
         self.assertEqual(response.json["dx_street2"], "street22")
         self.assertEqual(response.json["dx_city"], "city2")
         self.assertEqual(response.json["dx_state"], "state2")
-        self.assertEqual(response.json["dx_zip"], "zip2")
+        self.assertEqual(response.json["dx_zip"], 99991)
         self.assertEqual(response.json["dx_county"], "county2")
         self.assertEqual(response.json["dnc"], "dnc2")
         self.assertEqual(response.json["dnc_reason"], "dnc_reason2")
@@ -1468,9 +1131,10 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["FacilityPhones"][0]["facilityPhoneID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["contactInfoSourceLUTID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["facilityID"], 1)
-        self.assertEqual(response.json["FacilityPhones"][0]["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["FacilityPhones"][0]["contactInfoStatusID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["facility_name"], "name")
         self.assertEqual(response.json["FacilityPhones"][0]["clinic_name"], "clinic")
+        self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_type"], "cell")
         self.assertEqual(response.json["FacilityPhones"][0]["facility_phone"], "phone")
         self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_status"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["facility_phone_source"], "s1")
@@ -1481,9 +1145,10 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["facilityPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 1)
         self.assertEqual(response.json["facilityID"], 1)
-        self.assertEqual(response.json["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["facility_name"], "name")
         self.assertEqual(response.json["clinic_name"], "clinic")
+        self.assertEqual(response.json["facility_phone_type"], "cell")
         self.assertEqual(response.json["facility_phone"], "phone")
         self.assertEqual(response.json["facility_phone_status"], 1)
         self.assertEqual(response.json["facility_phone_source"], "s1")
@@ -1493,9 +1158,10 @@ class TestFacilityPhone(PopulatedDB):
         response = self.client.put("/api/facilityphones/1/", data = {
             "contactInfoSourceLUTID" : 2,
             "facilityID" : 2,
-            "contactInfoStatusLUTID" : 2,
+            "contactInfoStatusID" : 2,
             "facility_name" : "name Updated",
             "clinic_name" : "clinic Updated",
+            "facility_phone_type" : "home",
             "facility_phone" : "phone Updated",
             "facility_phone_status" : 2,
             "facility_phone_source" : "s2",
@@ -1504,9 +1170,10 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["facilityPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
         self.assertEqual(response.json["facilityID"], 2)
-        self.assertEqual(response.json["contactInfoStatusLUTID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["facility_name"], "name Updated")
         self.assertEqual(response.json["clinic_name"], "clinic Updated")
+        self.assertEqual(response.json["facility_phone_type"], "home")
         self.assertEqual(response.json["facility_phone"], "phone Updated")
         self.assertEqual(response.json["facility_phone_status"], 2)
         self.assertEqual(response.json["facility_phone_source"], "s2")
@@ -1573,9 +1240,9 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["FacilityAddresses"][0]["city"], "city")
         self.assertEqual(response.json["FacilityAddresses"][0]["state"], "state")
         self.assertEqual(response.json["FacilityAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["FacilityAddresses"][0]["address_status"], 1)
-        self.assertEqual(response.json["FacilityAddresses"][0]["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["FacilityAddresses"][0]["address_status_source"], "s1")
+        self.assertEqual(response.json["FacilityAddresses"][0]["facility_address_status"], 1)
+        self.assertEqual(response.json["FacilityAddresses"][0]["facility_address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["FacilityAddresses"][0]["facility_address_status_source"], "s1")
         
     def test_get_facility_address(self):
         response = self.client.get("/api/facilityaddresses/1/")
@@ -1588,9 +1255,9 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["address_status"], 1)
-        self.assertEqual(response.json["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["address_status_source"], "s1")
+        self.assertEqual(response.json["facility_address_status"], 1)
+        self.assertEqual(response.json["facility_address_status_date"], "2016-02-02")
+        self.assertEqual(response.json["facility_address_status_source"], "s1")
         
     def test_update_facility_address(self):
         response = self.client.put("/api/facilityaddresses/1/", data = {
@@ -1602,9 +1269,9 @@ class TestFacilityAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "address_status" : 2,
-            "address_status_date" : "2016-02-03",
-            "address_status_source" : "s2"
+            "facility_address_status" : 2,
+            "facility_address_status_date" : "2016-02-03",
+            "facility_address_status_source" : "s2"
         })
         self.assertEqual(response.json["facilityAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceLUTID"], 2)
@@ -1615,9 +1282,9 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["address_status"], 2)
-        self.assertEqual(response.json["address_status_date"], "2016-02-03")
-        self.assertEqual(response.json["address_status_source"], "s2")
+        self.assertEqual(response.json["facility_address_status"], 2)
+        self.assertEqual(response.json["facility_address_status_date"], "2016-02-03")
+        self.assertEqual(response.json["facility_address_status_source"], "s2")
         
     def test_delete_facility_address(self):
         response = self.client.delete("/api/facilityaddresses/1/")
@@ -2455,13 +2122,13 @@ class TestPhysicianFacility(PopulatedDB):
         response = self.client.put("/api/physicianfacilities/1/", data = {
             "facilityID" : 2,
             "physicianID" : 2,
-            "phys_facility_status" : "s2",
+            "phys_facility_status" : 2,
             "phys_facility_status_date" : "2016-02-03"
         })
         self.assertEqual(response.json["physFacilityID"], 1)
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["facilityID"], 2)
-        self.assertEqual(response.json["phys_facility_status"], "s2")
+        self.assertEqual(response.json["phys_facility_status"], 2)
         self.assertEqual(response.json["phys_facility_status_date"], "2016-02-03")
         
     def test_delete_physician_facility(self):
@@ -3119,13 +2786,13 @@ class TestReviewCommittee(PopulatedDB):
 class TestReviewCommitteeList(PopulatedDB):
     def test_get_review_committee_lists(self):
         response = self.client.get("/api/reviewcommitteelist/")
-        self.assertEqual(response.json["reviewCommitteeList"][0]["review_committee"], "rc")
-        self.assertEqual(response.json["reviewCommitteeList"][0]["rc_description"], "rc desc")
+        self.assertEqual(response.json["reviewCommitteeList"][0]["review_committee"], "rc 1")
+        self.assertEqual(response.json["reviewCommitteeList"][0]["rc_description"], "rc desc 1")
         
     def test_get_review_committee_list(self):
         response = self.client.get("/api/reviewcommitteelist/1/")
-        self.assertEqual(response.json["review_committee"], "rc")
-        self.assertEqual(response.json["rc_description"], "rc desc")
+        self.assertEqual(response.json["review_committee"], "rc 1")
+        self.assertEqual(response.json["rc_description"], "rc desc 1")
         
     def test_update_review_committee_list(self):
         response = self.client.put("/api/reviewcommitteelist/1/", data = {

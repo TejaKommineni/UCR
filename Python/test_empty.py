@@ -157,6 +157,165 @@ class TestBudget(BlankDB):
         self.assertEqual(response.json, dict(budgetID=1))
 
 class TestContact(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        contactType = models.ContactTypeLUT(
+            contact_definition = "def"
+        )
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        informant = models.Informant(
+            patAutoID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            informant_primary = "informant_primary",
+            informant_relationship = "informant_relationship",
+            notes = "notes"
+        )
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+
+        project1 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        ctc1 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = 99999,
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )
+
+        db.session.add(contactType)
+        db.session.add(facility1)
+        db.session.add(patient)
+        db.session.add(informant)
+        db.session.add(physician)
+        db.session.add(staff)
+        db.session.add(project1)
+        db.session.add(ctc1)
+        db.session.add(staff)
+        db.session.add(projectPatient)
+        db.session.commit()
+
     def test_empty_contact(self):
         response = self.client.get("/api/contacts/")
         self.assertEqual(response.json, {"Contacts" : [] })
@@ -226,6 +385,34 @@ class TestContactInfoSource(BlankDB):
         self.assertEqual(response.json, dict(contactInfoSourceLUTID=1))
 
 class TestCTC(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        db.session.add(patient)
+        db.session.commit()
+
     def test_empty_ctc(self):
         response = self.client.get("/api/ctcs/")
         self.assertEqual(response.json, {"CTCs" : [] })
@@ -248,7 +435,7 @@ class TestCTC(BlankDB):
             "dx_street2" : "street2",
             "dx_city" : "city",
             "dx_state" : "state",
-            "dx_zip" : "zip",
+            "dx_zip" : 99999,
             "dx_county" : "county",
             "dnc" : "dnc",
             "dnc_reason" : "dnc_reason"
@@ -256,6 +443,64 @@ class TestCTC(BlankDB):
         self.assertEqual(response.json, dict(ctcID=1))
 
 class TestCTCFacility(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+        ctc1 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = 99999,
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        db.session.add(facility1)
+        db.session.add(patient)
+        db.session.add(ctc1)
+        db.session.commit()
+
     def test_empty_ctc_facility(self):
         response = self.client.get("/api/ctcfacilities/")
         self.assertEqual(response.json, dict(CTCFacilities = []))
@@ -272,6 +517,33 @@ class TestCTCFacility(BlankDB):
         self.assertEqual(response.json, {"CTCFacilityID": 1})  
         
 class TestFacilityPhone(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+        db.session.add(facility1)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_facility_phone(self):
         response = self.client.get("/api/facilityphones/")
         self.assertEqual(response.json, dict(FacilityPhones = []))
@@ -284,9 +556,10 @@ class TestFacilityPhone(BlankDB):
         response = self.client.post("/api/facilityphones/", data = {
             "contactInfoSourceLUTID" : 1,
             "facilityID" : 1,
-            "contactInfoStatusLUTID" : 1,
+            "contactInfoStatusID" : 1,
             "facility_name" : "name",
             "clinic_name" : "clinic",
+            "facility_phone_type" : "cell",
             "facility_phone" : "phone",
             "facility_phone_status" : 1,
             "facility_phone_source" : "s1",
@@ -315,7 +588,35 @@ class TestFacility(BlankDB):
         })
         self.assertEqual(response.json, {"facilityID": 1})  
 
-class TestFacilityAddress(BlankDB):         
+class TestFacilityAddress(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        db.session.add(facility1)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_facility_address(self):
         response = self.client.get("/api/facilityaddresses/")
         self.assertEqual(response.json, dict(FacilityAddresses = []))
@@ -334,9 +635,9 @@ class TestFacilityAddress(BlankDB):
             "city" : "city",
             "state" : "state",
             "zip" : "zip",
-            "address_status" : 1,
-            "address_status_date" : "2016-02-02",
-            "address_status_source" : "s1"
+            "facility_address_status" : 1,
+            "facility_address_status_date" : "2016-02-02",
+            "facility_address_status_source" : "s1"
         })
         self.assertEqual(response.json, {"facilityAddressID": 1})
         
@@ -982,6 +1283,138 @@ class TestPatientPhone(BlankDB):
         self.assertEqual(response.json, {"patPhoneID": 1})       
 
 class TestPatientProjectStatus(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        project_type1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        project1 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        ctc1 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = 99999,
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )
+        patientProjectStatusType = models.PatientProjectStatusLUT(
+            status_description = "desc"
+        )
+        db.session.add(patient)
+        db.session.add(irb_holder1)
+        db.session.add(project_type1)
+        db.session.add(project1)
+        db.session.add(staff)
+        db.session.add(ctc1)
+        db.session.add(projectPatient)
+        db.session.add(patientProjectStatusType)
+        db.session.commit()
+
     def test_empty_patient_project_status(self):
         response = self.client.get("/api/patientprojectstatuses/")
         self.assertEqual(response.json, dict(PatientProjectStatuses = []))
@@ -1029,6 +1462,7 @@ class TestPhaseStatus(BlankDB):
         self.assertEqual(response.json, {"logPhaseID": 1})
 
 class TestPhysician(BlankDB):
+
     def test_empty_physician(self):
         response = self.client.get("/api/physicians/")
         self.assertEqual(response.json, dict(Physicians = []))
@@ -1053,7 +1487,38 @@ class TestPhysician(BlankDB):
         })
         self.assertEqual(response.json, {"physicianID": 1})
 
-class TestPhysicianAddress(BlankDB):         
+class TestPhysicianAddress(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+        db.session.add(physician)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_physician_address(self):
         response = self.client.get("/api/physicianaddresses/")
         self.assertEqual(response.json, dict(PhysicianAddresses = []))
@@ -1078,7 +1543,39 @@ class TestPhysicianAddress(BlankDB):
         })
         self.assertEqual(response.json, {"physicianAddressID": 1})
 
-class TestPhysicianFacility(BlankDB):         
+class TestPhysicianFacility(BlankDB):
+
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        facility1 = models.Facility(
+            facility_name = "name",
+            contact_fname = "fname",
+            contact_lname = "lname",
+            facility_status = 1,
+            facility_status_date = datetime(2016,2,2),
+            contact2_fname = "fname",
+            contact2_lname = "lname"
+        )
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+        db.session.add(facility1)
+        db.session.add(physician)
+        db.session.commit()
+
     def test_empty_physician_facility(self):
         response = self.client.get("/api/physicianfacilities/")
         self.assertEqual(response.json, dict(PhysicianFacilities = []))
@@ -1091,12 +1588,43 @@ class TestPhysicianFacility(BlankDB):
         response = self.client.post("/api/physicianfacilities/", data = {
             "facilityID" : 1,
             "physicianID" : 1,
-            "phys_facility_status" : "s1",
+            "phys_facility_status" : 1,
             "phys_facility_status_date" : "2016-02-02"
         })
         self.assertEqual(response.json, {"physFacilityID": 1})       
          
-class TestPhysicianPhone(BlankDB):         
+class TestPhysicianPhone(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contact_info_status = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contact_info_source = "source"
+        )
+
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+        db.session.add(physician)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
     def test_empty_physician_phone(self):
         response = self.client.get("/api/physicianphones/")
         self.assertEqual(response.json, dict(PhysicianPhones = []))
@@ -1119,6 +1647,68 @@ class TestPhysicianPhone(BlankDB):
         self.assertEqual(response.json, {"physicianPhoneID": 1})       
         
 class TestPhysicianToCTC(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        ctc = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = "zip",
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        physician = models.Physician(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle_name",
+            physician_status = 1,
+            physician_status_date = datetime(2016,2,2),
+            email = "email"
+        )
+        db.session.add(patient)
+        db.session.add(physician)
+        db.session.add(ctc)
+        db.session.commit()
+
     def test_empty_physician_to_ctc(self):
         response = self.client.get("/api/physiciantoctcs/")
         self.assertEqual(response.json, dict(PhysicianToCTCs = []))
@@ -1781,6 +2371,140 @@ class TestStaffTraining(BlankDB):
         self.assertEqual(response.json, {"staffTrainingID" : 1 })        
         
 class TestTracing(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            fname = "fname",
+            lname = "lname",
+            middle_name = "mname",
+            maiden_name = "maiden_name",
+            alias_fname = "alias_fname",
+            alias_lname = "alias_lname",
+            alias_middle_name = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vital_status = "v1"
+        )
+
+        irb_holder1 = models.IRBHolderLUT(
+            irb_holder = "holder 1",
+            irb_holder_definition= "IRB 1")
+
+        project_type1 = models.ProjectType(
+            project_type = "Type 1",
+            project_type_definition = "Def 1")
+
+        project1 = models.Project(
+            projectType_projectTypeID = 1,
+            IRBHolderLUT_irbHolderID = 1,
+            project_name = "Test Project",
+            short_title = "Test Project",
+            project_summary = "Summary",
+            sop="sop",
+            UCR_proposal="ucr_proposal",
+            budget_doc = "budget_doc",
+            UCR_fee = "no",
+            UCR_no_fee = "yes",
+            budget_end_date = datetime(2016,2,2),
+            previous_short_title = "t short",
+            date_added = datetime(2016,2,2),
+            final_recruitment_report = "report")
+
+        staff = models.Staff(
+            fname = "fname",
+            lname = "lname",
+            middle_name = "middle_name",
+            email = "email",
+            phone = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            human_sub_training_exp = datetime(2016,2,2),
+            UCR_role = 1
+        )
+
+        ctc1 = models.CTC(
+            patientID = 1,
+            dx_date = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctc_sequence = "sequence",
+            stage = "stage",
+            dx_age = 1,
+            dx_street1 = "street1",
+            dx_street2 = "street2",
+            dx_city = "city",
+            dx_state = "state",
+            dx_zip = 99999,
+            dx_county = "county",
+            dnc = "dnc",
+            dnc_reason = "dnc_reason"
+        )
+
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            current_age = 1,
+            batch = 1,
+            sitegrp = 1,
+            final_code = 1,
+            final_code_date = datetime(2016,2,2),
+            enrollment_date = datetime(2016,2,2),
+            date_coord_signed = datetime(2016,2,2),
+            import_date = datetime(2016,2,2),
+            final_code_staff = 1,
+            enrollment_staff = 1,
+            date_coord_signed_staff = datetime(2016,2,2),
+            abstract_status = 1,
+            abstract_status_date = datetime(2016,2,2),
+            abstract_status_staff = 1,
+            sent_to_abstractor = datetime(2016,2,2),
+            sent_to_abstractor_staff = 1,
+            abstracted_date = datetime(2016,2,2),
+            abstractor_initials = "atp",
+            researcher_date = datetime(2016,2,2),
+            researcher_staff = 1,
+            consent_link = "link",
+            tracing_status = 1,
+            med_record_release_signed = True,
+            med_record_release_link = "link",
+            med_record_release_staff = 1,
+            med_record_release_date = datetime(2016,2,2),
+            survey_to_researcher = datetime(2016,2,2),
+            survey_to_researcher_staff = 1
+        )
+
+        tracingSource = models.TracingSourceLUT(
+            description = "desc"
+        )
+
+        db.session.add(patient)
+        db.session.add(irb_holder1)
+        db.session.add(project_type1)
+        db.session.add(project1)
+        db.session.add(staff)
+        db.session.add(ctc1)
+        db.session.add(projectPatient)
+        db.session.add(tracingSource)
+        db.session.commit()
+
     def test_empty_tracing(self):
         response = self.client.get("/api/tracings/")
         self.assertEqual(response.json, dict(Tracings = []))

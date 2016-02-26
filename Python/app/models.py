@@ -304,7 +304,7 @@ class CTC(CustomModel):
     # 1 - 1, one ctc per projectPatient
     projectPatient = db.relationship("ProjectPatient",back_populates="ctc")
     #TODO Guessing 1-1 but can't tell
-    patient = db.relationship('Patient', back_populates='ctc')
+    patient = db.relationship('Patient',uselist=False, back_populates='ctc')
     # M - 1
     ctcFacility = db.relationship("CTCFacility",back_populates="ctc")
     # 
@@ -423,9 +423,9 @@ class FacilityAddress(CustomModel):
     city = db.Column(db.String)
     state = db.Column(db.String)
     zip = db.Column(db.Integer)
-    address_status = db.Column(db.Integer)
-    address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
+    facility_address_status = db.Column(db.Integer)
+    facility_address_status_date = db.Column(db.Date)
+    facility_address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
     
     # Relationships
     # M - 1, many facilities can be at the same address
@@ -465,7 +465,7 @@ class FacilityPhone(CustomModel):
     
     facilityPhoneID = db.Column(db.Integer, primary_key=True)
     contactInfoSourceLUTID = db.Column(db.Integer, db.ForeignKey('contactInfoSourceLUT.contactInfoSourceLUTID'))
-    contactInfoStatusLUTID = db.Column(db.Integer, db.ForeignKey('contactInfoStatusLUT.contactInfoStatusID'))
+    contactInfoStatusID = db.Column(db.Integer, db.ForeignKey('contactInfoStatusLUT.contactInfoStatusID'))
     facilityID = db.Column(db.Integer, db.ForeignKey('facility.facilityID'))
     facility_phone = db.Column(db.Integer)
     facility_name = db.Column(db.String)
