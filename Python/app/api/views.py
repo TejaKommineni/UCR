@@ -164,22 +164,22 @@ def update_arc_review(arcReviewID):
             form = forms.ArcReviewForm(request.form)
             if form.validate():
                 arcReview.projectID = request.form['projectID']
-                arcReview.review_type = request.form['review_type']
-                arcReview.date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d")
+                arcReview.reviewType = request.form['reviewType']
+                arcReview.dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d")
                 arcReview.reviewer1 = request.form['reviewer1']
-                arcReview.reviewer1_rec = request.form['reviewer1_rec']
-                arcReview.reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d")
-                arcReview.reviewer1_comments = request.form['reviewer1_comments']
+                arcReview.reviewer1Rec = request.form['reviewer1Rec']
+                arcReview.reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d")
+                arcReview.reviewer1Comments = request.form['reviewer1Comments']
                 arcReview.reviewer2 = request.form['reviewer2']
-                arcReview.reviewer2_rec = request.form['reviewer2_rec']
-                arcReview.reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d")
-                arcReview.reviewer2_comments = request.form['reviewer2_comments']
+                arcReview.reviewer2Rec = request.form['reviewer2Rec']
+                arcReview.reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d")
+                arcReview.reviewer2Comments = request.form['reviewer2Comments']
                 arcReview.research = request.form['research']
                 arcReview.contact = "true" == request.form['contact'].lower()
                 arcReview.contact = "true" == request.form['contact'].lower()
                 arcReview.lnkage = "true" == request.form['lnkage'].lower()
                 arcReview.engaged = "true" == request.form['engaged'].lower()
-                arcReview.non_public_data = "true" == request.form['non_public_data'].lower()
+                arcReview.nonPublicData = "true" == request.form['nonPublicData'].lower()
                 query.commit()
                 return arcReview.json()
             else:
@@ -196,21 +196,21 @@ def create_arc_review():
         if form.validate():
             arcReview = models.ArcReview(
                 projectID = request.form['projectID'],
-                review_type = request.form['review_type'],
-                date_sent_to_reviewer = datetime.strptime(request.form['date_sent_to_reviewer'],"%Y-%m-%d"),
+                reviewType = request.form['reviewType'],
+                dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d"),
                 reviewer1 = request.form['reviewer1'],
-                reviewer1_rec = request.form['reviewer1_rec'],
-                reviewer1_sig_date = datetime.strptime(request.form['reviewer1_sig_date'],"%Y-%m-%d"),
-                reviewer1_comments = request.form['reviewer1_comments'],
+                reviewer1Rec = request.form['reviewer1Rec'],
+                reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d"),
+                reviewer1Comments = request.form['reviewer1Comments'],
                 reviewer2 = request.form['reviewer2'],
-                reviewer2_rec = request.form['reviewer2_rec'],
-                reviewer2_sig_date = datetime.strptime(request.form['reviewer2_sig_date'],"%Y-%m-%d"),
-                reviewer2_comments = request.form['reviewer2_comments'],
+                reviewer2Rec = request.form['reviewer2Rec'],
+                reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d"),
+                reviewer2Comments = request.form['reviewer2Comments'],
                 research = request.form['research'],
                 contact = "true" == request.form['contact'].lower(),
                 lnkage = "true" == request.form['lnkage'].lower(),
                 engaged = "true" == request.form['engaged'].lower(),
-                non_public_data = "true" == request.form['non_public_data'].lower()
+                nonPublicData = "true" == request.form['nonPublicData'].lower()
             )
             query.add(arcReview)
             return jsonify({"arcReviewID" : arcReview.arcReviewID})
@@ -343,7 +343,7 @@ def update_contact(contactID):
                 contact.facilityID = request.form['facilityID']
                 contact.physicianID = request.form['physicianID']
                 contact.description = request.form['description']
-                contact.contact_date = datetime.strptime(request.form['contact_date'],"%Y-%m-%d")
+                contact.contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d")
                 contact.initials = request.form['initials']
                 contact.notes = request.form['notes']
                 query.commit()
@@ -368,7 +368,7 @@ def create_contact():
                 facilityID = request.form['facilityID'],
                 physicianID = request.form['physicianID'],
                 description = request.form['description'],
-                contact_date = datetime.strptime(request.form['contact_date'],"%Y-%m-%d"),
+                contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d"),
                 initials = request.form['initials'],
                 notes = request.form['notes'],
             )
@@ -420,7 +420,7 @@ def update_contact_type(contactTypeLUTID):
         if contactType is not None:
             form = forms.ContactTypeLUTForm(request.form)
             if form.validate():
-                contactType.contact_definition = request.form['contact_definition']
+                contactType.contactDefinition = request.form['contactDefinition']
                 query.commit()
                 return contactType.json()
             else:
@@ -436,7 +436,7 @@ def create_contact_type():
         form = forms.ContactTypeLUTForm(request.form)
         if form.validate():
             contactType = models.ContactTypeLUT(
-                contact_definition = request.form['contact_definition'],
+                contactDefinition = request.form['contactDefinition'],
             )
             query.add(contactType)
             return jsonify({"contactTypeLUTID" : contactType.contactTypeLUTID})
@@ -486,7 +486,7 @@ def update_contact_info_source(contactInfoSourceLUTID):
         if contactInfoSource is not None:
             form = forms.ContactInfoSourceForm(request.form)
             if form.validate():
-                contactInfoSource.contact_info_source = request.form['contact_info_source']
+                contactInfoSource.contactInfoSource = request.form['contactInfoSource']
                 query.commit()
                 return contactInfoSource.json()
             else:
@@ -502,7 +502,7 @@ def create_contact_info_source():
         form = forms.ContactInfoSourceForm(request.form)
         if form.validate():
             contactInfoSource = models.ContactInfoSourceLUT(
-                contact_info_source = request.form['contact_info_source'],
+                contactInfoSource = request.form['contactInfoSource'],
             )
             query.add(contactInfoSource)
             return jsonify({"contactInfoSourceLUTID" : contactInfoSource.contactInfoSourceLUTID})
@@ -549,7 +549,7 @@ def update_contact_info_status(contactInfoStatusID):
         if contactInfoStatus is not None:
             form = forms.ContactInfoStatusForm(request.form)
             if form.validate():
-                contactInfoStatus.contact_info_status = request.form['contact_info_status']
+                contactInfoStatus.contactInfoStatus = request.form['contactInfoStatus']
                 query.commit()
                 return contactInfoStatus.json()
             else:
@@ -565,7 +565,7 @@ def create_contact_info_status():
         form = forms.ContactInfoStatusForm(request.form)
         if form.validate():
             contactInfoStatus = models.ContactInfoStatusLUT(
-                contact_info_status = request.form['contact_info_status'],
+                contactInfoStatus = request.form['contactInfoStatus'],
             )
             query.add(contactInfoStatus)
             return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
@@ -616,21 +616,21 @@ def update_ctc(ctcID):
             form = forms.CTCForm(request.form)
             if form.validate():
                 ctc.patientID = request.form['patientID']
-                ctc.dx_date = datetime.strptime(request.form['dx_date'],"%Y-%m-%d")
+                ctc.dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d")
                 ctc.site = request.form['site']
                 ctc.histology = request.form['histology']
                 ctc.behavior = request.form['behavior']
-                ctc.ctc_sequence = request.form['ctc_sequence']
+                ctc.ctcSequence = request.form['ctcSequence']
                 ctc.stage = request.form['stage']
-                ctc.dx_age = request.form['dx_age']
-                ctc.dx_street1 = request.form['dx_street1']
-                ctc.dx_street2 = request.form['dx_street2']
-                ctc.dx_city = request.form['dx_city']
-                ctc.dx_state = request.form['dx_state']
-                ctc.dx_zip = request.form['dx_zip']
-                ctc.dx_county = request.form['dx_county']
+                ctc.dxAge = request.form['dxAge']
+                ctc.dxStreet1 = request.form['dxStreet1']
+                ctc.dxStreet2 = request.form['dxStreet2']
+                ctc.dxCity = request.form['dxCity']
+                ctc.dxState = request.form['dxState']
+                ctc.dxZip = request.form['dxZip']
+                ctc.dxCounty = request.form['dxCounty']
                 ctc.dnc = request.form['dnc']
-                ctc.dnc_reason = request.form['dnc_reason']
+                ctc.dncReason = request.form['dncReason']
                 query.commit()
                 return ctc.json()
             else:
@@ -647,21 +647,21 @@ def create_ctc():
         if form.validate():
             ctc = models.CTC(
                 patientID = request.form['patientID'],
-                dx_date = datetime.strptime(request.form['dx_date'],"%Y-%m-%d"),
+                dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d"),
                 site = request.form['site'],
                 histology = request.form['histology'],
                 behavior = request.form['behavior'],
-                ctc_sequence = request.form['ctc_sequence'],
+                ctcSequence = request.form['ctcSequence'],
                 stage = request.form['stage'],
-                dx_age = request.form['dx_age'],
-                dx_street1 = request.form['dx_street1'],
-                dx_street2 = request.form['dx_street2'],
-                dx_city = request.form['dx_city'],
-                dx_state = request.form['dx_state'],
-                dx_zip = request.form['dx_zip'],
-                dx_county = request.form['dx_county'],
+                dxAge = request.form['dxAge'],
+                dxStreet1 = request.form['dxStreet1'],
+                dxStreet2 = request.form['dxStreet2'],
+                dxCity = request.form['dxCity'],
+                dxState = request.form['dxState'],
+                dxZip = request.form['dxZip'],
+                dxCounty = request.form['dxCounty'],
                 dnc = request.form['dnc'],
-                dnc_reason = request.form['dnc_reason']
+                dncReason = request.form['dncReason']
             )
             query.add(ctc)
             return jsonify({"ctcID" : ctc.ctcID})
@@ -779,18 +779,17 @@ def update_funding(fundingID):
         if funding is not None:
             form = forms.FundingForm(request.form)
             if form.validate():
-                funding.grantStatusLUTID = request.form['grantStatusLUTID']
-                funding.projectID = request.form['projectID']
-                funding.fundingSourceLUTID = request.form['fundingSourceLUTID']
-                funding.primary_funding_source = request.form['primary_funding_source']
-                funding.secondary_funding_source = request.form['secondary_funding_source']
-                funding.funding_number = request.form['funding_number']
-                funding.grant_title = request.form['grant_title']
                 funding.grantStatusID = request.form['grantStatusID']
-                funding.date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d")
-                funding.grant_pi = request.form['grant_pi']
-                funding.primary_chartfield = request.form['primary_chartfield']
-                funding.secondary_chartfield = request.form['secondary_chartfield']
+                funding.projectID = request.form['projectID']
+                funding.fundingSourceID = request.form['fundingSourceID']
+                funding.primaryFundingSource = request.form['primaryFundingSource']
+                funding.secondaryFundingSource = request.form['secondaryFundingSource']
+                funding.fundingNumber = request.form['fundingNumber']
+                funding.grantTitle = request.form['grantTitle']
+                funding.dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d")
+                funding.grantPi = request.form['grantPi']
+                funding.primaryChartfield = request.form['primaryChartfield']
+                funding.secondaryChartfield = request.form['secondaryChartfield']
                 query.commit()
                 return funding.json()
             else:
@@ -806,18 +805,17 @@ def create_funding():
         form = forms.FundingForm(request.form)
         if form.validate():
             funding = models.Funding(
-                grantStatusLUTID = request.form['grantStatusLUTID'],
-                projectID = request.form['projectID'],
-                fundingSourceLUTID = request.form['fundingSourceLUTID'],
-                primary_funding_source = request.form['primary_funding_source'],
-                secondary_funding_source = request.form['secondary_funding_source'],
-                funding_number = request.form['funding_number'],
-                grant_title = request.form['grant_title'],
                 grantStatusID = request.form['grantStatusID'],
-                date_status = datetime.strptime(request.form['date_status'],"%Y-%m-%d"),
-                grant_pi = request.form['grant_pi'],
-                primary_chartfield = request.form['primary_chartfield'],
-                secondary_chartfield = request.form['secondary_chartfield']
+                projectID = request.form['projectID'],
+                fundingSourceID = request.form['fundingSourceID'],
+                primaryFundingSource = request.form['primaryFundingSource'],
+                secondaryFundingSource = request.form['secondaryFundingSource'],
+                fundingNumber = request.form['fundingNumber'],
+                grantTitle = request.form['grantTitle'],
+                dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d"),
+                grantPi = request.form['grantPi'],
+                primaryChartfield = request.form['primaryChartfield'],
+                secondaryChartfield = request.form['secondaryChartfield']
             )
             query.add(funding)
             return jsonify({'fundingID':funding.fundingID})
@@ -867,16 +865,15 @@ def update_facility_phone(facilityPhoneID):
         if facilityPhone is not None:
             form = forms.FacilityPhoneForm(request.form)
             if form.validate():
-                facilityPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                facilityPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                 facilityPhone.facilityID = request.form['facilityID']
                 facilityPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                facilityPhone.facility_name = request.form['facility_name']
-                facilityPhone.clinic_name = request.form['clinic_name']
-                facilityPhone.facility_phone_type = request.form['facility_phone_type']
-                facilityPhone.facility_phone = request.form['facility_phone']
-                facilityPhone.facility_phone_source = request.form['facility_phone_source']
-                facilityPhone.facility_phone_status = request.form['facility_phone_status']
-                facilityPhone.facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
+                facilityPhone.clinicName = request.form['clinicName']
+                facilityPhone.phoneType = request.form['phoneType']
+                facilityPhone.phoneNumber = request.form['phoneNumber']
+                facilityPhone.phoneSource = request.form['phoneSource']
+                facilityPhone.phoneStatus = request.form['phoneStatus']
+                facilityPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return facilityPhone.json()
             else:
@@ -892,15 +889,14 @@ def create_facility_phone():
         form = forms.FacilityPhoneForm(request.form)
         if form.validate():
             facilityPhone = models.FacilityPhone(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 facilityID = request.form['facilityID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
-                facility_name = request.form['facility_name'],
-                clinic_name = request.form['clinic_name'],
-                facility_phone = request.form['facility_phone'],
-                facility_phone_source = request.form['facility_phone_source'],
-                facility_phone_status = request.form['facility_phone_status'],
-                facility_phone_status_date = datetime.strptime(request.form['facility_phone_status_date'],"%Y-%m-%d")
+                clinicName = request.form['clinicName'],
+                phoneNumber = request.form['phoneNumber'],
+                phoneSource = request.form['phoneSource'],
+                phoneStatus = request.form['phoneStatus'],
+                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(facilityPhone)
             return jsonify({'facilityPhoneID':facilityPhone.facilityPhoneID})
@@ -950,13 +946,13 @@ def update_facility(facilityID):
         if facility is not None:
             form = forms.FacilityForm(request.form)
             if form.validate():
-                facility.facility_name = request.form['facility_name']
-                facility.contact_fname = request.form['contact_fname']
-                facility.contact_lname = request.form['contact_lname']
-                facility.facility_status = request.form['facility_status']
-                facility.facility_status_date = datetime.strptime(request.form['facility_status_date'],"%Y-%m-%d")
-                facility.contact2_fname = request.form['contact2_fname']
-                facility.contact2_lname = request.form['contact2_lname']
+                facility.facilityName = request.form['facilityName']
+                facility.contactFirstName = request.form['contactFirstName']
+                facility.contactLastName = request.form['contactLastName']
+                facility.facilityStatus = request.form['facilityStatus']
+                facility.facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d")
+                facility.contact2FirstName = request.form['contact2FirstName']
+                facility.contact2LastName = request.form['contact2LastName']
                 query.commit()
                 return facility.json()
             else:
@@ -970,13 +966,13 @@ def update_facility(facilityID):
 def create_facility():
     try:
         facility = models.Facility(
-            facility_name = request.form['facility_name'],
-            contact_fname = request.form['contact_fname'],
-            contact_lname = request.form['contact_lname'],
-            facility_status = request.form['facility_status'],
-            facility_status_date = datetime.strptime(request.form['facility_status_date'],"%Y-%m-%d"),
-            contact2_fname = request.form['contact2_fname'],
-            contact2_lname = request.form['contact2_lname']
+            facilityName = request.form['facilityName'],
+            contactFirstName = request.form['contactFirstName'],
+            contactLastName = request.form['contactLastName'],
+            facilityStatus = request.form['facilityStatus'],
+            facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d"),
+            contact2FirstName = request.form['contact2FirstName'],
+            contact2LastName = request.form['contact2LastName']
             )
         ret = query.add(facility)
     except KeyError as e:
@@ -1026,17 +1022,17 @@ def update_facility_address(facilityAddressID):
         if facilityAddress is not None:
             form = forms.FacilityAddressForm(request.form)
             if form.validate():
-                facilityAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                facilityAddress.contactInfoSourceID = request.form['contactInfoSourceID']
                 facilityAddress.facilityID = request.form['facilityID']
-                facilityAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+                facilityAddress.contactInfoStatusID = request.form['contactInfoStatusID']
                 facilityAddress.street = request.form['street']
                 facilityAddress.street2 = request.form['street2']
                 facilityAddress.city = request.form['city']
                 facilityAddress.state = request.form['state']
                 facilityAddress.zip = request.form['zip']
-                facilityAddress.facility_address_status = request.form['facility_address_status']
-                facilityAddress.facility_address_status_date = datetime.strptime(request.form['facility_address_status_date'],"%Y-%m-%d")
-                facilityAddress.facility_address_status_source = request.form['facility_address_status_source']
+                facilityAddress.addressStatus = request.form['addressStatus']
+                facilityAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                facilityAddress.addressStatusSource = request.form['addressStatusSource']
                 query.commit()
             else:
                 return missing_params(form.errors)
@@ -1052,17 +1048,17 @@ def create_facility_address():
         form = forms.FacilityAddressForm(request.form)
         if form.validate():
             facilityAddress = models.FacilityAddress(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 facilityID = request.form['facilityID'],
-                contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+                contactInfoStatusID = request.form['contactInfoStatusID'],
                 street = request.form['street'],
                 street2 = request.form['street2'],
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                facility_address_status = request.form['facility_address_status'],
-                facility_address_status_date = datetime.strptime(request.form['facility_address_status_date'],"%Y-%m-%d"),
-                facility_address_status_source = request.form['facility_address_status_source']
+                addressStatus = request.form['addressStatus'],
+                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(facilityAddress)
             return jsonify({'facilityAddressID':facilityAddress.facilityAddressID})

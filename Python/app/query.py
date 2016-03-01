@@ -32,7 +32,7 @@ def get_contact_info_sources():
     return db.session.query(ContactInfoSourceLUT).all()
     
 def get_contact_info_source(id):
-    return db.session.query(ContactInfoSourceLUT).filter_by(contactInfoSourceLUTID = id).first()    
+    return db.session.query(ContactInfoSourceLUT).filter_by(contactInfoSourceID = id).first()
     
 def get_contact_info_statuses():
     return db.session.query(ContactInfoStatusLUT).all()
@@ -80,13 +80,13 @@ def get_funding_sources():
     return db.session.query(FundingSourceLUT).all()
     
 def get_funding_source(id):
-    return db.session.query(FundingSourceLUT).filter_by(fundingSourceLUTID = id).first()
+    return db.session.query(FundingSourceLUT).filter_by(fundingSourceID = id).first()
     
 def get_grant_statuses():
     return db.session.query(GrantStatusLUT).all()
     
 def get_grant_status(id):
-    return db.session.query(GrantStatusLUT).filter_by(grantStatusLUTID = id).first()
+    return db.session.query(GrantStatusLUT).filter_by(grantStatusID = id).first()
 
 def get_human_subject_trainings():
     return db.session.query(HumanSubjectTrainingLUT).all()

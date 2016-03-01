@@ -85,21 +85,21 @@ class TestArcReview(BlankDB):
     def test_create_arc_review(self):
         response = self.client.post("/api/arcreviews/", data = {
             "projectID" : 1,
-            "review_type" : 1,
-            "date_sent_to_reviewer" : "2016-02-02",
+            "reviewType" : 1,
+            "dateSentToReviewer" : "2016-02-02",
             "reviewer1" : 1,
-            "reviewer1_rec" : 1,
-            "reviewer1_sig_date" : "2016-02-02",
-            "reviewer1_comments" : "test comment",
+            "reviewer1Rec" : 1,
+            "reviewer1SigDate" : "2016-02-02",
+            "reviewer1Comments" : "test comment",
             "reviewer2" : 2,
-            "reviewer2_rec"  :2 ,
-            "reviewer2_sig_date" : "2016-02-02",
-            "reviewer2_comments" : "2016-02-02",
+            "reviewer2Rec"  :2 ,
+            "reviewer2SigDate" : "2016-02-02",
+            "reviewer2Comments" : "2016-02-02",
             "research" : 1,
             "lnkage":False,
             "contact" : True,
             "engaged" : True,
-            "non_public_data" : True
+            "nonPublicData" : True
         })
         self.assertEqual(response.json, {"arcReviewID" : 1})
             
@@ -333,7 +333,7 @@ class TestContact(BlankDB):
             "facilityID" : 1,
             "physicianID" : 1,
             "description" : "desc",
-            "contact_date" : "2016-02-02",
+            "contactDate" : "2016-02-02",
             "initials" : "atp",
             "notes" : "notes"
         })
@@ -350,7 +350,7 @@ class TestContactType(BlankDB):
         
     def test_create_contact_type(self):
         response = self.client.post("/api/contacttypes/", data = {
-            "contact_definition" : "contact_definition",
+            "contactDefinition" : "contactDefinition",
         })
         self.assertEqual(response.json, dict(contactTypeLUTID=1))
                 
@@ -365,7 +365,7 @@ class TestContactInfoStatus(BlankDB):
         
     def test_create_contact_info_status(self):
         response = self.client.post("/api/contactinfostatuses/", data = {
-            "contact_info_status" : "status",
+            "contactInfoStatus" : "status",
         })
         self.assertEqual(response.json, dict(contactInfoStatusID=1))
         
@@ -376,13 +376,13 @@ class TestContactInfoSource(BlankDB):
         
     def test_contact_info_source_no_id(self):
         response = self.client.get('/api/contactinfosources/1/')
-        self.assertEqual(response.json, {"Error" : "ContactInfoSourceLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "contactInfoSourceID 1 not found"})
         
     def test_create_contact_info_source(self):
         response = self.client.post("/api/contactinfosources/", data = {
-            "contact_info_source" : "source",
+            "contactInfoSource" : "source",
         })
-        self.assertEqual(response.json, dict(contactInfoSourceLUTID=1))
+        self.assertEqual(response.json, dict(contactInfoSourceID=1))
 
 class TestCTC(BlankDB):
     def setUp(self):
@@ -424,21 +424,21 @@ class TestCTC(BlankDB):
     def test_create_ctc(self):
         response = self.client.post("/api/ctcs/", data = {
             "patientID" : 1,
-            "dx_date" : "2016-02-02",
+            "dxDate" : "2016-02-02",
             "site" : 1,
             "histology" : "histology",
             "behavior" : "behavior",
-            "ctc_sequence" : "sequence",
+            "ctcSequence" : "sequence",
             "stage" : "stage",
-            "dx_age" : 1,
-            "dx_street1" : "street",
-            "dx_street2" : "street2",
-            "dx_city" : "city",
-            "dx_state" : "state",
-            "dx_zip" : 99999,
-            "dx_county" : "county",
+            "dxAge" : 1,
+            "dxStreet1" : "street",
+            "dxStreet2" : "street2",
+            "dxCity" : "city",
+            "dxState" : "state",
+            "dxZip" : 99999,
+            "dxCounty" : "county",
             "dnc" : "dnc",
-            "dnc_reason" : "dnc_reason"
+            "dncReason" : "dnc_reason"
         })
         self.assertEqual(response.json, dict(ctcID=1))
 
@@ -523,21 +523,21 @@ class TestFacilityPhone(BlankDB):
 
     def populate_db(self):
         facility1 = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
         db.session.add(facility1)
         db.session.add(contactInfoSource)
@@ -554,16 +554,15 @@ class TestFacilityPhone(BlankDB):
 
     def test_create_facility_phone(self):
         response = self.client.post("/api/facilityphones/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "facilityID" : 1,
             "contactInfoStatusID" : 1,
-            "facility_name" : "name",
-            "clinic_name" : "clinic",
-            "facility_phone_type" : "cell",
-            "facility_phone" : "phone",
-            "facility_phone_status" : 1,
-            "facility_phone_source" : "s1",
-            "facility_phone_status_date" : "2016-02-02"
+            "clinicName" : "clinic",
+            "phoneType" : "cell",
+            "phoneNumber" : "phone",
+            "phoneStatus" : 1,
+            "phoneSource" : "s1",
+            "phoneStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"facilityPhoneID": 1})  
 
@@ -578,13 +577,13 @@ class TestFacility(BlankDB):
 
     def test_create_facility_phone(self):
         response = self.client.post("/api/facilities/", data = {
-            "facility_name" : "name",
-            "contact_fname" : "fname:",
-            "contact_lname" : "lname",
-            "facility_status" : 1,
-            "facility_status_date" : "2016-02-02",
-            "contact2_fname" : "fname",
-            "contact2_lname" : "lname"
+            "facilityName" : "name",
+            "contactFirstName" : "fname:",
+            "contactLastName" : "lname",
+            "facilityStatus" : 1,
+            "facilityStatusDate" : "2016-02-02",
+            "contact2FirstName" : "fname",
+            "contact2LastName" : "lname"
         })
         self.assertEqual(response.json, {"facilityID": 1})  
 
@@ -595,21 +594,21 @@ class TestFacilityAddress(BlankDB):
 
     def populate_db(self):
         facility1 = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         db.session.add(facility1)
@@ -627,17 +626,17 @@ class TestFacilityAddress(BlankDB):
 
     def test_create_facility_address(self):
         response = self.client.post("/api/facilityaddresses/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "facilityID" : 1,
-            "contactInfoStatusLUTID" : 1,
+            "contactInfoStatusID" : 1,
             "street" : "street",
             "street2" : "street2",
             "city" : "city",
             "state" : "state",
             "zip" : "zip",
-            "facility_address_status" : 1,
-            "facility_address_status_date" : "2016-02-02",
-            "facility_address_status_source" : "s1"
+            "addressStatus" : 1,
+            "addressStatusDate" : "2016-02-02",
+            "addressStatusSource" : "s1"
         })
         self.assertEqual(response.json, {"facilityAddressID": 1})
         
@@ -695,18 +694,17 @@ class TestFunding(BlankDB):
 
     def test_create_funding(self):
         response = self.client.post("/api/fundings/", data = {
-            "grantStatusLUTID": 1,
+            "grantStatusID": 1,
             "projectID": 1,
-            "fundingSourceLUTID": 1,
-            "primary_funding_source" : "fs 1",
-            "secondary_funding_source": "fs 2",
-            "funding_number": "number",
-            "grant_title" : "title",
-            "grantStatusID" : 1,
-            "date_status" : "2016-02-02",
-            "grant_pi": 1,
-            "primary_chartfield" : "chartfield 1",
-            "secondary_chartfield" : "chartfield 2"
+            "fundingSourceID": 1,
+            "primaryFundingSource" : "fs 1",
+            "secondaryFundingSource": "fs 2",
+            "fundingNumber": "number",
+            "grantTitle" : "title",
+            "dateStatus" : "2016-02-02",
+            "grantPi": 1,
+            "primaryChartfield" : "chartfield 1",
+            "secondaryChartfield" : "chartfield 2"
         })
         self.assertEqual(response.json, {"fundingID": 1})
         
@@ -874,7 +872,7 @@ class TestInformantAddress(BlankDB):
 
     def test_create_informant_address(self):
         response = self.client.post("/api/informantaddresses/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "informantID" : 1,
             "contactInfoStatusID" : 1,
             "street" : "street",
@@ -947,7 +945,7 @@ class TestInformantPhone(BlankDB):
 
     def test_create_informant_phone(self):
         response = self.client.post("/api/informantphones/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "informantID" : 1,
             "contactInfoStatusID" : 1,
             "phone" : "phone",
@@ -1151,7 +1149,7 @@ class TestPatientAddress(BlankDB):
 
     def test_create_patient_address(self):
         response = self.client.post("/api/patientaddresses/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "patientID" : 1,
             "contactInfoStatusLUTID" : 1,
             "street" : "street",
@@ -1213,7 +1211,7 @@ class TestPatientEmail(BlankDB):
 
     def test_create_patient_email(self):
         response = self.client.post("/api/patientemails/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "patientID" : 1,
             "contactInfoStatusID" : 1,
             "email" : "email",
@@ -1272,7 +1270,7 @@ class TestPatientPhone(BlankDB):
 
     def test_create_phone_phone(self):
         response = self.client.post("/api/patientphones/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "patientID" : 1,
             "contactInfoStatusID" : 1,
             "phone" : "phone",
@@ -1529,7 +1527,7 @@ class TestPhysicianAddress(BlankDB):
 
     def test_create_physician_address(self):
         response = self.client.post("/api/physicianaddresses/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "physicianID" : 1,
             "contactInfoStatusLUTID" : 1,
             "street" : "street",
@@ -1635,7 +1633,7 @@ class TestPhysicianPhone(BlankDB):
 
     def test_create_phone_phone(self):
         response = self.client.post("/api/physicianphones/", data = {
-            "contactInfoSourceLUTID" : 1,
+            "contactInfoSourceID" : 1,
             "physicianID" : 1,
             "contactInfoStatusID" : 1,
             "phone" : "phone",
