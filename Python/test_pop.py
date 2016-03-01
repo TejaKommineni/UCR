@@ -25,12 +25,12 @@ class PopulatedDB(TestCase):
 
     def populate_db2(self):
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         irb_holder2 = models.IRBHolderLUT(
-            irb_holder = "holder 2",
-            irb_holder_definition= "IRB 2")
+            holder = "holder 2",
+            holderDefinition= "IRB 2")
 
         project_type1 = models.ProjectType(
             project_type = "Type 1",
@@ -132,7 +132,7 @@ class PopulatedDB(TestCase):
             nonPublicData = True)
 
         grantStatus1 = models.GrantStatusLUT(
-            grant_status = "status"
+            grantStatus = "status"
         )
 
         fundingSource1 = models.FundingSourceLUT(
@@ -140,7 +140,7 @@ class PopulatedDB(TestCase):
         )
 
         grantStatus2 = models.GrantStatusLUT(
-            grant_status = "status2"
+            grantStatus = "status2"
         )
 
         fundingSource2 = models.FundingSourceLUT(
@@ -253,13 +253,13 @@ class PopulatedDB(TestCase):
             phase_description = "desc"
         )
         logSubject1 = models.LogSubjectLUT(
-            log_subject = "subject"
+            logSubject = "subject"
         )
         logSubject2 = models.LogSubjectLUT(
-            log_subject = "subject"
+            logSubject = "subject"
         )
         log = models.Log(
-            logSubjectLUTID = 1,
+            logSubjectID = 1,
             projectID = 1,
             staffID = 1,
             phaseStatusID = 1,
@@ -294,48 +294,48 @@ class PopulatedDB(TestCase):
             exp_date = datetime(2016,2,2)
         )
         humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
-            training_type = "type"
+            trainingType = "type"
         )
         humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
-            training_type = "type"
+            trainingType = "type"
         )
         patient = models.Patient(
             patID = "1",
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
         patient2 = models.Patient(
             patID = "1",
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus1 = models.ContactInfoStatusLUT(
@@ -386,21 +386,21 @@ class PopulatedDB(TestCase):
             phone_status_date = datetime(2016,2,2)
         )
         informant1 = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
             notes = "notes"
         )
         informant2 = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
             notes = "notes"
         )
         informantAddress = models.InformantAddress(
@@ -412,18 +412,18 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
+            addressStatus = 1,
+            addressStatusDate = datetime(2016,2,2),
+            addressStatusSource = "s1"
         )
         informantPhone = models.InformantPhone(
             contactInfoSourceID = 1,
             informantID = 1,
             contactInfoStatusID = 1,
-            phone = "phone",
-            phone_status = 1,
-            phone_source = "s1",
-            phone_status_date = datetime(2016,2,2)
+            phoneNumber = "phone",
+            phoneStatus = 1,
+            phoneSource = "s1",
+            phoneStatusDate = datetime(2016,2,2)
         )
         ctc1 = models.CTC(
             patientID = 1,
@@ -964,7 +964,7 @@ class TestContactType(PopulatedDB):
     def test_delete_contact_type(self):
         response = self.client.delete("/api/contacttypes/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "ContactTypeLUTID 2 deleted")
+        self.assertEqual(response.json["Message"], "ContactTypeID 2 deleted")
         
 class TestContactInfoSource(PopulatedDB):
     def test_get_contact_info_sourcees(self):
@@ -1353,12 +1353,12 @@ class TestFunding(PopulatedDB):
 class TestFundingSource(PopulatedDB):
     def test_get_funding_sources(self):
         response = self.client.get("/api/fundingsources/")
-        self.assertEqual(response.json["FundingSources"][0]["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["FundingSources"][0]["fundingSourceID"], 1)
         self.assertEqual(response.json["FundingSources"][0]["fundingSource"], "source")
 
     def test_get_funding_source(self):
         response = self.client.get("/api/fundingsources/1/")
-        self.assertEqual(response.json["fundingSourceLUTID"], 1)
+        self.assertEqual(response.json["fundingSourceID"], 1)
         self.assertEqual(response.json["fundingSource"], "source")
         
     def test_update_funding_source(self):
@@ -1370,46 +1370,46 @@ class TestFundingSource(PopulatedDB):
     def test_delete_funding_source(self):
         response = self.client.delete("/api/fundingsources/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "FundingSourceLUTID 2 deleted")
+        self.assertEqual(response.json["Message"], "FundingSourceID 2 deleted")
         
 class TestGrantStatus(PopulatedDB):
     def test_get_grant_statuses(self):
         response = self.client.get("/api/grantstatuses/")
-        self.assertEqual(response.json["GrantStatuses"][0]["grantStatusLUTID"], 1)
-        self.assertEqual(response.json["GrantStatuses"][0]["grant_status"], "status")
+        self.assertEqual(response.json["GrantStatuses"][0]["grantStatusID"], 1)
+        self.assertEqual(response.json["GrantStatuses"][0]["grantStatus"], "status")
 
     def test_get_grant_status(self):
         response = self.client.get("/api/grantstatuses/1/")
-        self.assertEqual(response.json["grantStatusLUTID"], 1)
-        self.assertEqual(response.json["grant_status"], "status")
+        self.assertEqual(response.json["grantStatusID"], 1)
+        self.assertEqual(response.json["grantStatus"], "status")
         
     def test_update_grant_status(self):
         response = self.client.put("/api/grantstatuses/1/", data = {
             "grant_status" : "status2"
         })
-        self.assertEqual(response.json["grant_status"], "status2")
+        self.assertEqual(response.json["grantStatus"], "status2")
         
     def test_delete_grant_status(self):
         response = self.client.delete("/api/grantstatuses/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "GrantStatusLUTID 2 deleted")
+        self.assertEqual(response.json["Message"], "GrantStatusID 2 deleted")
 
 class TestHumanSubjectTraining(PopulatedDB):
     def test_get_human_subject_trainings(self):
         response = self.client.get("/api/humansubjecttrainings/")
         self.assertEqual(response.json["HumanSubjectTrainings"][0]["humanSubjectTrainingID"], 1)
-        self.assertEqual(response.json["HumanSubjectTrainings"][0]["training_type"], "type")
+        self.assertEqual(response.json["HumanSubjectTrainings"][0]["trainingType"], "type")
 
     def test_get_human_subject_training(self):
         response = self.client.get("/api/humansubjecttrainings/1/")
         self.assertEqual(response.json["humanSubjectTrainingID"], 1)
-        self.assertEqual(response.json["training_type"], "type")
+        self.assertEqual(response.json["trainingType"], "type")
         
     def test_update_human_subject_training(self):
         response = self.client.put("/api/humansubjecttrainings/1/", data = {
-            "training_type" : "type Updated",
+            "trainingType" : "type Updated",
         })
-        self.assertEqual(response.json["training_type"], "type Updated")
+        self.assertEqual(response.json["trainingType"], "type Updated")
         
     def test_delete_human_subject_training(self):
         response = self.client.delete("/api/humansubjecttrainings/2/")
@@ -1420,42 +1420,42 @@ class TestInformant(PopulatedDB):
     def test_get_informants(self):
         response = self.client.get("/api/informants/")
         self.assertEqual(response.json["Informants"][0]["informantID"], 1)
-        self.assertEqual(response.json["Informants"][0]["patAutoID"], 1)
-        self.assertEqual(response.json["Informants"][0]["fname"], "fname")
-        self.assertEqual(response.json["Informants"][0]["lname"], "lname")
-        self.assertEqual(response.json["Informants"][0]["middle_name"], "middle_name")
-        self.assertEqual(response.json["Informants"][0]["informant_primary"], "informant_primary")
-        self.assertEqual(response.json["Informants"][0]["informant_relationship"], "informant_relationship")
+        self.assertEqual(response.json["Informants"][0]["patientID"], 1)
+        self.assertEqual(response.json["Informants"][0]["firstName"], "fname")
+        self.assertEqual(response.json["Informants"][0]["lastName"], "lname")
+        self.assertEqual(response.json["Informants"][0]["middleName"], "middle_name")
+        self.assertEqual(response.json["Informants"][0]["informantPrimary"], "informant_primary")
+        self.assertEqual(response.json["Informants"][0]["informantRelationship"], "informant_relationship")
         self.assertEqual(response.json["Informants"][0]["notes"], "notes")
         
     def test_get_informant(self):
         response = self.client.get("/api/informants/1/")
         self.assertEqual(response.json["informantID"], 1)
-        self.assertEqual(response.json["patAutoID"], 1)
-        self.assertEqual(response.json["fname"], "fname")
-        self.assertEqual(response.json["lname"], "lname")
-        self.assertEqual(response.json["middle_name"], "middle_name")
-        self.assertEqual(response.json["informant_primary"], "informant_primary")
-        self.assertEqual(response.json["informant_relationship"], "informant_relationship")
+        self.assertEqual(response.json["patientID"], 1)
+        self.assertEqual(response.json["firstName"], "fname")
+        self.assertEqual(response.json["lastName"], "lname")
+        self.assertEqual(response.json["middleName"], "middle_name")
+        self.assertEqual(response.json["informantPrimary"], "informant_primary")
+        self.assertEqual(response.json["informantRelationship"], "informant_relationship")
         self.assertEqual(response.json["notes"], "notes")
         
     def test_update_informant(self):
         response = self.client.put("/api/informants/1/", data = {
-            "patAutoID" : 2,
-            "fname" : "fname Updated",
-            "lname" : "lname Updated",
-            "middle_name" : "middle_name Updated",
-            "informant_primary" : "informant_primary Updated",
-            "informant_relationship" : "informant_relationship Updated",
+            "patientID" : 2,
+            "firstName" : "fname Updated",
+            "lastName" : "lname Updated",
+            "middleName" : "middle_name Updated",
+            "informantPrimary" : "informant_primary Updated",
+            "informantRelationship" : "informant_relationship Updated",
             "notes" : "notes Updated"
         }) 
         self.assertEqual(response.json["informantID"], 1)
-        self.assertEqual(response.json["patAutoID"], 2)
-        self.assertEqual(response.json["fname"], "fname Updated")
-        self.assertEqual(response.json["lname"], "lname Updated")
-        self.assertEqual(response.json["middle_name"], "middle_name Updated")
-        self.assertEqual(response.json["informant_primary"], "informant_primary Updated")
-        self.assertEqual(response.json["informant_relationship"], "informant_relationship Updated")
+        self.assertEqual(response.json["patientID"], 2)
+        self.assertEqual(response.json["firstName"], "fname Updated")
+        self.assertEqual(response.json["lastName"], "lname Updated")
+        self.assertEqual(response.json["middleName"], "middle_name Updated")
+        self.assertEqual(response.json["informantPrimary"], "informant_primary Updated")
+        self.assertEqual(response.json["informantRelationship"], "informant_relationship Updated")
         self.assertEqual(response.json["notes"], "notes Updated")
         
     def test_delete_informant(self):
@@ -1475,9 +1475,9 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["InformantAddresses"][0]["city"], "city")
         self.assertEqual(response.json["InformantAddresses"][0]["state"], "state")
         self.assertEqual(response.json["InformantAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["InformantAddresses"][0]["address_status"], 1)
-        self.assertEqual(response.json["InformantAddresses"][0]["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["InformantAddresses"][0]["address_status_source"], "s1")
+        self.assertEqual(response.json["InformantAddresses"][0]["addressStatus"], 1)
+        self.assertEqual(response.json["InformantAddresses"][0]["addressStatusDate"], "2016-02-02")
+        self.assertEqual(response.json["InformantAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_informant_address(self):
         response = self.client.get("/api/informantaddresses/1/")
@@ -1490,9 +1490,9 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["address_status"], 1)
-        self.assertEqual(response.json["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["address_status_source"], "s1")
+        self.assertEqual(response.json["addressStatus"], 1)
+        self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
+        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_informant_address(self):
         response = self.client.put("/api/informantaddresses/1/", data = {
@@ -1504,9 +1504,9 @@ class TestInformantAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "address_status" : 2,
-            "address_status_date" : "2016-02-03",
-            "address_status_source" : "s2"
+            "addressStatus" : 2,
+            "addressStatusDate" : "2016-02-03",
+            "addressStatusSource" : "s2"
         })
         self.assertEqual(response.json["informantAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1517,9 +1517,9 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["address_status"], 2)
-        self.assertEqual(response.json["address_status_date"], "2016-02-03")
-        self.assertEqual(response.json["address_status_source"], "s2")
+        self.assertEqual(response.json["addressStatus"], 2)
+        self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["addressStatusSource"], "s2")
         
     def test_delete_informant_address(self):
         response = self.client.delete("/api/informantaddresses/1/")
@@ -1533,10 +1533,10 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["InformantPhones"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["InformantPhones"][0]["informantID"], 1)
         self.assertEqual(response.json["InformantPhones"][0]["contactInfoStatusID"], 1)
-        self.assertEqual(response.json["InformantPhones"][0]["phone"], "phone")
-        self.assertEqual(response.json["InformantPhones"][0]["phone_status"], 1)
-        self.assertEqual(response.json["InformantPhones"][0]["phone_source"], "s1")
-        self.assertEqual(response.json["InformantPhones"][0]["phone_status_date"], "2016-02-02")
+        self.assertEqual(response.json["InformantPhones"][0]["phoneNumber"], "phone")
+        self.assertEqual(response.json["InformantPhones"][0]["phoneStatus"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["phoneSource"], "s1")
+        self.assertEqual(response.json["InformantPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_informant_phone(self):
         response = self.client.get("/api/informantphones/1/")
@@ -1544,29 +1544,29 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["informantID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
-        self.assertEqual(response.json["phone"], "phone")
-        self.assertEqual(response.json["phone_status"], 1)
-        self.assertEqual(response.json["phone_source"], "s1")
-        self.assertEqual(response.json["phone_status_date"], "2016-02-02")
+        self.assertEqual(response.json["phoneNumber"], "phone")
+        self.assertEqual(response.json["phoneStatus"], 1)
+        self.assertEqual(response.json["phoneSource"], "s1")
+        self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_informant_phone(self):
         response = self.client.put("/api/informantphones/1/", data = {
             "contactInfoSourceID" : 2,
             "informantID" : 2,
             "contactInfoStatusID" : 2,
-            "phone" : "phone Updated",
-            "phone_status" : 2,
-            "phone_source" : "s2",
-            "phone_status_date" : "2016-02-03"
+            "phoneNumber" : "phone Updated",
+            "phoneStatus" : 2,
+            "phoneSource" : "s2",
+            "phoneStatusDate" : "2016-02-03"
         })
         self.assertEqual(response.json["informantPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
         self.assertEqual(response.json["informantID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
-        self.assertEqual(response.json["phone"], "phone Updated")
-        self.assertEqual(response.json["phone_status"], 2)
-        self.assertEqual(response.json["phone_source"], "s2")
-        self.assertEqual(response.json["phone_status_date"], "2016-02-03")
+        self.assertEqual(response.json["phoneNumber"], "phone Updated")
+        self.assertEqual(response.json["phoneStatus"], 2)
+        self.assertEqual(response.json["phoneSource"], "s2")
+        self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         
     def test_delete_informant_phone(self):
         response = self.client.delete("/api/informantphones/1/")
@@ -1576,21 +1576,21 @@ class TestInformantPhone(PopulatedDB):
 class TestIRBHolder(PopulatedDB):
     def test_get_irb_holders(self):
         response = self.client.get("/api/irbholders/")
-        self.assertEqual(response.json["irbHolders"][0]["irb_holder"],"holder 1")
-        self.assertEqual(response.json["irbHolders"][0]["irb_holder_definition"],"IRB 1")
+        self.assertEqual(response.json["irbHolders"][0]["holder"],"holder 1")
+        self.assertEqual(response.json["irbHolders"][0]["holderDefinition"],"IRB 1")
         
     def test_get_irb_holder(self):
         response = self.client.get("/api/irbholders/1/")
-        self.assertEqual(response.json["irb_holder"],"holder 1")
-        self.assertEqual(response.json["irb_holder_definition"],"IRB 1")
+        self.assertEqual(response.json["holder"],"holder 1")
+        self.assertEqual(response.json["holderDefinition"],"IRB 1")
         
     def test_update_irb_holder(self):
         response = self.client.put("/api/irbholders/1/", data = {
-            "irb_holder" : "holder 1 Updated",
-            "irb_holder_definition" : "IRB 1 Updated"
+            "holder" : "holder 1 Updated",
+            "holderDefinition" : "IRB 1 Updated"
         })
-        self.assertEqual(response.json["irb_holder"],"holder 1 Updated")
-        self.assertEqual(response.json["irb_holder_definition"],"IRB 1 Updated")
+        self.assertEqual(response.json["holder"],"holder 1 Updated")
+        self.assertEqual(response.json["holderDefinition"],"IRB 1 Updated")
         
     def test_delete_irb_holder(self):
         response = self.client.delete("/api/irbholders/2/")
@@ -1600,7 +1600,7 @@ class TestIRBHolder(PopulatedDB):
 class TestLog(PopulatedDB):
     def test_get_logs(self):
         response = self.client.get("/api/logs/")
-        self.assertEqual(response.json["Logs"][0]["logSubjectLUTID"],1)
+        self.assertEqual(response.json["Logs"][0]["logSubjectID"],1)
         self.assertEqual(response.json["Logs"][0]["projectID"],1)
         self.assertEqual(response.json["Logs"][0]["staffID"],1)
         self.assertEqual(response.json["Logs"][0]["phaseStatusID"],1)
@@ -1609,7 +1609,7 @@ class TestLog(PopulatedDB):
         
     def test_get_log(self):
         response = self.client.get("/api/logs/1/")
-        self.assertEqual(response.json["logSubjectLUTID"],1)
+        self.assertEqual(response.json["logSubjectID"],1)
         self.assertEqual(response.json["projectID"],1)
         self.assertEqual(response.json["staffID"],1)
         self.assertEqual(response.json["phaseStatusID"],1)
@@ -1618,14 +1618,14 @@ class TestLog(PopulatedDB):
         
     def test_update_log(self):
         response = self.client.put("/api/logs/1/", data = {
-            "logSubjectLUTID" : 2,
+            "logSubjectID" : 2,
             "projectID" : 2,
             "staffID" : 2,
             "phaseStatusID" : 2,
             "note" : "note Updated",
             "date" : "2016-02-03",
         })
-        self.assertEqual(response.json["logSubjectLUTID"],2)
+        self.assertEqual(response.json["logSubjectID"],2)
         self.assertEqual(response.json["projectID"],2)
         self.assertEqual(response.json["staffID"],2)
         self.assertEqual(response.json["phaseStatusID"],2)
@@ -1640,22 +1640,22 @@ class TestLog(PopulatedDB):
 class TestLogSubject(PopulatedDB):
     def test_get_log_subjects(self):
         response = self.client.get("/api/logsubjects/")
-        self.assertEqual(response.json["LogSubjects"][0]["log_subject"], "subject")
+        self.assertEqual(response.json["LogSubjects"][0]["logSubject"], "subject")
         
     def test_get_log_subject(self):
         response = self.client.get("/api/logsubjects/1/")
-        self.assertEqual(response.json["log_subject"], "subject")
+        self.assertEqual(response.json["logSubject"], "subject")
         
     def test_update_log_subject(self):
         response = self.client.put("/api/logsubjects/1/", data = {
-            "log_subject" : "subject Updated",
+            "logSubject" : "subject Updated",
         })
-        self.assertEqual(response.json["log_subject"], "subject Updated")
+        self.assertEqual(response.json["logSubject"], "subject Updated")
         
     def test_delete_log_subject(self):
         response = self.client.delete("/api/logsubjects/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "LogSubjectLUTID 2 deleted")
+        self.assertEqual(response.json["Message"], "LogSubjectID 2 deleted")
                
 class TestPatient(PopulatedDB):
     def test_get_patients(self):
@@ -1664,18 +1664,18 @@ class TestPatient(PopulatedDB):
         self.assertEqual(response.json["Patients"][0]["recordID"], 1)
         self.assertEqual(response.json["Patients"][0]["ucrDistID"], 1)
         self.assertEqual(response.json["Patients"][0]["UPDBID"], 1)
-        self.assertEqual(response.json["Patients"][0]["fname"], "fname")
-        self.assertEqual(response.json["Patients"][0]["lname"], "lname")
-        self.assertEqual(response.json["Patients"][0]["maiden_name"], "maiden_name")
-        self.assertEqual(response.json["Patients"][0]["alias_fname"], "alias_fname")
-        self.assertEqual(response.json["Patients"][0]["alias_lname"], "alias_lname")
-        self.assertEqual(response.json["Patients"][0]["alias_middle_name"], "alias_middle")
+        self.assertEqual(response.json["Patients"][0]["firstName"], "fname")
+        self.assertEqual(response.json["Patients"][0]["lastName"], "lname")
+        self.assertEqual(response.json["Patients"][0]["maidenName"], "maiden_name")
+        self.assertEqual(response.json["Patients"][0]["aliasFirstName"], "alias_fname")
+        self.assertEqual(response.json["Patients"][0]["aliasLastName"], "alias_lname")
+        self.assertEqual(response.json["Patients"][0]["aliasMiddleName"], "alias_middle")
         self.assertEqual(response.json["Patients"][0]["dob"], "2016-02-02")
         self.assertEqual(response.json["Patients"][0]["SSN"], 999999999)
         self.assertEqual(response.json["Patients"][0]["sex"], "male")
         self.assertEqual(response.json["Patients"][0]["race"], "white")
         self.assertEqual(response.json["Patients"][0]["ethnicity"], "hispanic")
-        self.assertEqual(response.json["Patients"][0]["vital_status"], "v1")
+        self.assertEqual(response.json["Patients"][0]["vitalStatus"], "v1")
         
     def test_get_patient(self):
         response = self.client.get("/api/patients/1/")
@@ -1683,18 +1683,18 @@ class TestPatient(PopulatedDB):
         self.assertEqual(response.json["recordID"], 1)
         self.assertEqual(response.json["ucrDistID"], 1)
         self.assertEqual(response.json["UPDBID"], 1)
-        self.assertEqual(response.json["fname"], "fname")
-        self.assertEqual(response.json["lname"], "lname")
-        self.assertEqual(response.json["maiden_name"], "maiden_name")
-        self.assertEqual(response.json["alias_fname"], "alias_fname")
-        self.assertEqual(response.json["alias_lname"], "alias_lname")
-        self.assertEqual(response.json["alias_middle_name"], "alias_middle")
+        self.assertEqual(response.json["firstName"], "fname")
+        self.assertEqual(response.json["lastName"], "lname")
+        self.assertEqual(response.json["maidenName"], "maiden_name")
+        self.assertEqual(response.json["aliasFirstName"], "alias_fname")
+        self.assertEqual(response.json["aliasLastName"], "alias_lname")
+        self.assertEqual(response.json["aliasMiddleName"], "alias_middle")
         self.assertEqual(response.json["dob"], "2016-02-02")
         self.assertEqual(response.json["SSN"], 999999999)
         self.assertEqual(response.json["sex"], "male")
         self.assertEqual(response.json["race"], "white")
         self.assertEqual(response.json["ethnicity"], "hispanic")
-        self.assertEqual(response.json["vital_status"], "v1")
+        self.assertEqual(response.json["vitalStatus"], "v1")
         
     def test_update_patient(self):
         response = self.client.put("/api/patients/1/", data = {
@@ -1702,42 +1702,42 @@ class TestPatient(PopulatedDB):
             "recordID" : 2,
             "ucrDistID" : 2,
             "UPDBID" : 2,
-            "fname" : "fname Updated",
-            "lname" : "lname Updated",
-            "middle_name" : "mname Updated",
-            "maiden_name" : "maiden_name Updated",
-            "alias_fname" : "alias_fname Updated",
-            "alias_lname" : "alias_lname Updated",
-            "alias_middle_name" : "alias_middle Updated",
+            "firstName" : "fname Updated",
+            "lastName" : "lname Updated",
+            "middleName" : "mname Updated",
+            "maidenName" : "maiden_name Updated",
+            "aliasFirstName" : "alias_fname Updated",
+            "aliasLastName" : "alias_lname Updated",
+            "aliasMiddleName" : "alias_middle Updated",
             "dob" : "2016-02-03",
             "SSN" : "999999990",
             "sex" : "female",
             "race" : "black",
             "ethnicity" : "non-hispanic",
-            "vital_status" : "v2"
+            "vitalStatus" : "v2"
         })
         self.assertEqual(response.json["patID"], "2")
         self.assertEqual(response.json["recordID"], 2)
         self.assertEqual(response.json["ucrDistID"], 2)
         self.assertEqual(response.json["UPDBID"], 2)
-        self.assertEqual(response.json["fname"], "fname Updated")
-        self.assertEqual(response.json["lname"], "lname Updated")
-        self.assertEqual(response.json["maiden_name"], "maiden_name Updated")
-        self.assertEqual(response.json["alias_fname"], "alias_fname Updated")
-        self.assertEqual(response.json["alias_lname"], "alias_lname Updated")
-        self.assertEqual(response.json["alias_middle_name"], "alias_middle Updated")
+        self.assertEqual(response.json["firstName"], "fname Updated")
+        self.assertEqual(response.json["lastName"], "lname Updated")
+        self.assertEqual(response.json["maidenName"], "maiden_name Updated")
+        self.assertEqual(response.json["aliasFirstName"], "alias_fname Updated")
+        self.assertEqual(response.json["aliasLastName"], "alias_lname Updated")
+        self.assertEqual(response.json["aliasMiddleName"], "alias_middle Updated")
         self.assertEqual(response.json["dob"], "2016-02-03")
         self.assertEqual(response.json["SSN"], 999999990)
         self.assertEqual(response.json["sex"], "female")
         self.assertEqual(response.json["race"], "black")
         self.assertEqual(response.json["ethnicity"], "non-hispanic")
-        self.assertEqual(response.json["vital_status"], "v2")
+        self.assertEqual(response.json["vitalStatus"], "v2")
         
     def test_delete_patient(self):
         response = self.client.delete("/api/patients/2/")
         print(response.json)
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "PatAutoID 2 deleted")
+        self.assertEqual(response.json["Message"], "PatientID 2 deleted")
 
 class TestPatientAddress(PopulatedDB):
     def test_get_patient_addresses(self):

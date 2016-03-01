@@ -400,40 +400,40 @@ class FundingSourceLUTForm(Form):
         []+COMMON_STRING_VALIDATORS)
 
 class GrantStatusLUTForm(Form):
-    grant_status = StringField('grant_status',
+    grantStatus = StringField('grantStatus',
         []+COMMON_STRING_VALIDATORS)
 
 class HumanSubjectTrainingLUTForm(Form):
-    training_type = StringField('training_type',
+    trainingType = StringField('trainingType',
         []+COMMON_STRING_VALIDATORS)
 
 class IRBHolderLUTForm(Form):
-    irb_holder = StringField('irb_holder',
+    holder = StringField('holder',
         []+COMMON_STRING_VALIDATORS)
-    irb_holder_definition = StringField('irb_holder_definition',
+    holderDefinition = StringField('holderDefinition',
         []+COMMON_STRING_VALIDATORS)
 
 class InformantForm(Form):
-    patAutoID = IntegerField('patAutoID',
+    patientID = IntegerField('patientID',
         []+COMMON_INTEGER_VALIDATORS)
-    fname = StringField('fname',
+    firstName = StringField('firstName',
         []+COMMON_STRING_VALIDATORS)
-    lname = StringField('lname',
+    lastName = StringField('lastName',
         []+COMMON_STRING_VALIDATORS)
-    middle_name = StringField('middle_name',
+    middleName = StringField('middleName',
         []+COMMON_STRING_VALIDATORS)
-    informant_primary = StringField('fname',
+    informantPrimary = StringField('informantPrimary',
         []+COMMON_STRING_VALIDATORS)
-    informant_relationship = StringField('fname',
+    informantRelationship = StringField('informantRelationship',
         []+COMMON_STRING_VALIDATORS)
-    notes = StringField('fname',
+    notes = StringField('notes',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
-        patient = query.get_patient(self.patAutoID.data)
+        patient = query.get_patient(self.patientID.data)
         if patient is None:
-            self.patAutoID.errors.append("ID not found")
+            self.patientID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -454,12 +454,12 @@ class InformantAddressForm(Form):
         []+COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
-    address_status = IntegerField('address_status',
+    addressStatus = IntegerField('addressStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    address_status_date = DateField('address_status_date',
+    addressStatusDate = DateField('addressStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    address_status_source = StringField('address_status_source',
+    addressStatusSource = StringField('addressStatusSource',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -488,13 +488,13 @@ class InformantPhoneForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
         []+COMMON_INTEGER_VALIDATORS)
-    phone = StringField('phone',
+    phoneNumber = StringField('phoneNumber',
         []+COMMON_STRING_VALIDATORS)
-    phone_source = StringField('phone_source',
+    phoneSource = StringField('phoneSource',
         []+COMMON_STRING_VALIDATORS)
-    phone_status = StringField('phone_status',
+    phoneStatus = StringField('phoneStatus',
         []+COMMON_STRING_VALIDATORS)
-    phone_status_date = DateField('phone_status_date',
+    phoneStatusDate = DateField('phoneStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
 
@@ -518,7 +518,7 @@ class InformantPhoneForm(Form):
         return not hasErrors
 
 class LogForm(Form):
-    logSubjectLUTID =  IntegerField('logSubjectLUTID',
+    logSubjectID =  IntegerField('logSubjectID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -540,9 +540,9 @@ class LogForm(Form):
             self.projectID.errors.append("ID not found")
             hasErrors =  True
 
-        logSubject = query.get_log_subject(self.logSubjectLUTID.data)
+        logSubject = query.get_log_subject(self.logSubjectID.data)
         if logSubject is None:
-            self.logSubjectLUTID.errors.append("ID not found")
+            self.logSubjectID.errors.append("ID not found")
             hasErrors = True
 
         staff = query.get_staff(self.staffID.data)
@@ -557,7 +557,7 @@ class LogForm(Form):
         return not hasErrors
 
 class LogSubjectLUTForm(Form):
-    log_subject = StringField('log_subject',
+    logSubject = StringField('logSubject',
         []+COMMON_STRING_VALIDATORS)
 
 class PatientForm(Form):
@@ -569,19 +569,19 @@ class PatientForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     UPDBID = IntegerField('UPDBID',
         []+COMMON_INTEGER_VALIDATORS)
-    fname = StringField('fname',
+    firstName = StringField('firstName',
         []+COMMON_STRING_VALIDATORS)
-    lname = StringField('lname',
+    lastName = StringField('lastName',
         []+COMMON_STRING_VALIDATORS)
-    middle_name = StringField('middle_name',
+    middleName = StringField('middleName',
         []+COMMON_STRING_VALIDATORS)
-    maiden_name = StringField('maiden_name',
+    maidenName = StringField('maidenName',
         []+COMMON_STRING_VALIDATORS)
-    alias_fname = StringField('alias_fname',
+    aliasFirstName = StringField('aliasFirstName',
         []+COMMON_STRING_VALIDATORS)
-    alias_lname = StringField('alias_lname',
+    aliasLastName = StringField('aliasLastName',
         []+COMMON_STRING_VALIDATORS)
-    alias_middle_name = StringField('alias_middle_name',
+    aliasMiddleName = StringField('aliasMiddleName',
         []+COMMON_STRING_VALIDATORS)
     dob = DateField('dob',
         []+COMMON_DATE_VALIDATORS,
@@ -594,7 +594,7 @@ class PatientForm(Form):
         []+COMMON_STRING_VALIDATORS)
     ethnicity = StringField('ethnicity',
         []+COMMON_STRING_VALIDATORS)
-    vital_status = StringField('vital_status',
+    vitalStatus = StringField('vitalStatus',
         []+COMMON_STRING_VALIDATORS)
 
 class PatientAddressForm(Form):

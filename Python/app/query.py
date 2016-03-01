@@ -128,13 +128,13 @@ def get_log_subjects():
     return db.session.query(LogSubjectLUT).all()
     
 def get_log_subject(id):
-    return db.session.query(LogSubjectLUT).filter_by(logSubjectLUTID = id).first()
+    return db.session.query(LogSubjectLUT).filter_by(logSubjectID = id).first()
     
 def get_patients():
     return db.session.query(Patient).all()
     
 def get_patient(id):
-    return db.session.query(Patient).filter_by(patAutoID = id).first()
+    return db.session.query(Patient).filter_by(patientID = id).first()
 
 def get_patient_addresses():
     return db.session.query(PatientAddress).all()

@@ -400,23 +400,23 @@ def delete_contact(contactID):
 #############################################################################
 @api.route('/contacttypes/', methods = ['GET'])
 @api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['GET'])
-def get_contact_type(contactTypeLUTID = None):
+def get_contact_type(contactTypeID = None):
     try:
-        if contactTypeLUTID is None:
+        if contactTypeID is None:
             return jsonify(ContactTypes = [i.dict() for i in query.get_contact_types()])
         else:
-            contactType = query.get_contact_type(contactTypeLUTID)
+            contactType = query.get_contact_type(contactTypeID)
             if contactType is not None:
                 return contactType.json()
             else:
-                return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+                return item_not_found("ContactTypeID {} not found".format(contactTypeID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacttypes/<int:contactTypeLUTID>/',methods = ['PUT'])
-def update_contact_type(contactTypeLUTID):
+@api.route('/contacttypes/<int:contactTypeID>/',methods = ['PUT'])
+def update_contact_type(contactTypeID):
     try:
-        contactType = query.get_contact_type(contactTypeLUTID)
+        contactType = query.get_contact_type(contactTypeID)
         if contactType is not None:
             form = forms.ContactTypeLUTForm(request.form)
             if form.validate():
@@ -426,7 +426,7 @@ def update_contact_type(contactTypeLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+            return item_not_found("ContactTypeID {} not found".format(contactTypeID))
     except Exception as e:
         return internal_error(e)
 
@@ -439,25 +439,25 @@ def create_contact_type():
                 contactDefinition = request.form['contactDefinition'],
             )
             query.add(contactType)
-            return jsonify({"contactTypeLUTID" : contactType.contactTypeLUTID})
+            return jsonify({"contactTypeID" : contactType.contactTypeID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['DELETE'])
-def delete_contact_type(contactTypeLUTID):
+@api.route('/contacttypes/<int:contactTypeID>/', methods = ['DELETE'])
+def delete_contact_type(contactTypeID):
     try:
-        contactType = query.get_contact_type(contactTypeLUTID)
+        contactType = query.get_contact_type(contactTypeID)
         if contactType is not None:
             deps = get_dependencies(contactType)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(contactType)
-                return item_deleted("ContactTypeLUTID {} deleted".format(contactTypeLUTID))
+                return item_deleted("ContactTypeID {} deleted".format(contactTypeID))
         else:
-            return item_not_found("ContactTypeLUTID {} not found".format(contactTypeLUTID))
+            return item_not_found("ContactTypeID {} not found".format(contactTypeID))
     except Exception as e:
         return internal_error(e)
 
@@ -465,24 +465,24 @@ def delete_contact_type(contactTypeLUTID):
 # Contact Info Source
 #############################################################################
 @api.route('/contactinfosources/', methods = ['GET'])
-@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['GET'])
-def get_contact_info_source(contactInfoSourceLUTID = None):
+@api.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['GET'])
+def get_contact_info_source(contactInfoSourceID = None):
     try:
-        if contactInfoSourceLUTID is None:
+        if contactInfoSourceID is None:
             return jsonify(ContactInfoSources = [i.dict() for i in query.get_contact_info_sources()])
         else:
-            contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+            contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
             if contactInfoSource is not None:
                 return contactInfoSource.json()
             else:
-                return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+                return item_not_found("ContactInfoSourceID {} not found".format(contactInfoSourceID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/',methods = ['PUT'])
-def update_contact_info_source(contactInfoSourceLUTID):
+@api.route('/contactinfosources/<int:contactInfoSourceID>/',methods = ['PUT'])
+def update_contact_info_source(contactInfoSourceID):
     try:
-        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+        contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
         if contactInfoSource is not None:
             form = forms.ContactInfoSourceForm(request.form)
             if form.validate():
@@ -492,7 +492,7 @@ def update_contact_info_source(contactInfoSourceLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+            return item_not_found("ContactInfoSourceID {} not found".format(contactInfoSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -505,25 +505,25 @@ def create_contact_info_source():
                 contactInfoSource = request.form['contactInfoSource'],
             )
             query.add(contactInfoSource)
-            return jsonify({"contactInfoSourceLUTID" : contactInfoSource.contactInfoSourceLUTID})
+            return jsonify({"contactInfoSourceID" : contactInfoSource.contactInfoSourceID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfosources/<int:contactInfoSourceLUTID>/', methods = ['DELETE'])
-def delete_contact_info_source(contactInfoSourceLUTID):
+@api.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['DELETE'])
+def delete_contact_info_source(contactInfoSourceID):
     try:
-        contactInfoSource = query.get_contact_info_source(contactInfoSourceLUTID)
+        contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
         if contactInfoSource is not None:
             deps = get_dependencies(contactInfoSource)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(contactInfoSource)
-                return item_deleted("ContactInfoSourceLUTID {} deleted".format(contactInfoSourceLUTID))
+                return item_deleted("ContactInfoSourceID {} deleted".format(contactInfoSourceID))
         else:
-            return item_not_found("ContactInfoSourceLUTID {} not found".format(contactInfoSourceLUTID))
+            return item_not_found("ContactInfoSourceID {} not found".format(contactInfoSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -1087,24 +1087,24 @@ def delete_facility_address(facilityAddressID):
 # Funding Source LUT
 ##############################################################################
 @api.route('/fundingsources/', methods = ['GET'])
-@api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['GET'])
-def get_funding_source(fundingSourceLUTID=None):
+@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['GET'])
+def get_funding_source(fundingSourceID=None):
     try:
-        if fundingSourceLUTID is None:
+        if fundingSourceID is None:
             return jsonify(FundingSources = [i.dict() for i in query.get_funding_sources()])
         else:
-            fundingSource = query.get_funding_source(fundingSourceLUTID)
+            fundingSource = query.get_funding_source(fundingSourceID)
             if fundingSource is not None:
                 return fundingSource.json()
             else:
-                return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
+                return item_not_found("FundingSourceID {} not found".format(fundingSourceID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['PUT'])
-def update_funding_source(fundingSourceLUTID):
+@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['PUT'])
+def update_funding_source(fundingSourceID):
     try:
-        fundingSource = query.get_funding_source(fundingSourceLUTID)
+        fundingSource = query.get_funding_source(fundingSourceID)
         if fundingSource is not None:
             form = forms.FundingSourceLUTForm(request.form)
             if form.validate():
@@ -1114,7 +1114,7 @@ def update_funding_source(fundingSourceLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("FundingSourceLUTID {} not found".format(fundingSourceLUTID))
+            return item_not_found("FundingSourceID {} not found".format(fundingSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -1127,25 +1127,25 @@ def create_funding_source():
                 fundingSource = request.form['fundingSource']
             )
             query.add(fundingSource)
-            return jsonify({'fundingSourceLUTID':fundingSource.fundingSourceLUTID})
+            return jsonify({'fundingSourceID':fundingSource.fundingSourceID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundingsources/<int:fundingSourceLUTID>/', methods = ['DELETE'])
-def delete_funding_source(fundingSourceLUTID):
+@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['DELETE'])
+def delete_funding_source(fundingSourceID):
     try:
-        fundingSource = query.get_funding_source(fundingSourceLUTID)
+        fundingSource = query.get_funding_source(fundingSourceID)
         if fundingSource is not None:
             deps = get_dependencies(fundingSource)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(fundingSource)
-                return item_deleted("FundingSourceLUTID {} deleted".format(fundingSourceLUTID))
+                return item_deleted("FundingSourceID {} deleted".format(fundingSourceID))
         else:
-            return item_not_found("fundingSourceLUTID {} not found".format(fundingSourceLUTID))
+            return item_not_found("fundingSourceID {} not found".format(fundingSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -1153,34 +1153,34 @@ def delete_funding_source(fundingSourceLUTID):
 # Grant Status LUT
 ##############################################################################
 @api.route('/grantstatuses/', methods = ['GET'])
-@api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['GET'])
-def get_grant_status(grantStatusLUTID=None):
+@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['GET'])
+def get_grant_status(grantStatusID=None):
     try:
-        if grantStatusLUTID is None:
+        if grantStatusID is None:
             return jsonify(GrantStatuses = [i.dict() for i in query.get_grant_statuses()])
         else:
-            grantStatus = query.get_grant_status(grantStatusLUTID)
+            grantStatus = query.get_grant_status(grantStatusID)
             if grantStatus is not None:
                 return grantStatus.json()
             else:
-                return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
+                return item_not_found("GrantStatusID {} not found".format(grantStatusID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['PUT'])
-def update_grant_status(grantStatusLUTID):
+@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['PUT'])
+def update_grant_status(grantStatusID):
     try:
-        grantStatus = query.get_grant_status(grantStatusLUTID)
+        grantStatus = query.get_grant_status(grantStatusID)
         if grantStatus is not None:
             form = forms.GrantStatusLUTForm(request.form)
             if form.validate():
-                grantStatus.grant_status = request.form['grant_status']
+                grantStatus.grantStatus = request.form['grantStatus']
                 query.commit()
                 return grantStatus.json()
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
+            return item_not_found("GrantStatusID {} not found".format(grantStatusID))
     except Exception as e:
         return internal_error(e)
 
@@ -1190,28 +1190,28 @@ def create_grant_status():
         form = forms.GrantStatusLUTForm(request.form)
         if form.validate():
             grantStatus = models.GrantStatusLUT(
-                grant_status = request.form['grant_status']
+                grantStatus = request.form['grantStatus']
             )
             query.add(grantStatus)
-            return jsonify({'grantStatusLUTID':grantStatus.grantStatusLUTID})
+            return jsonify({'grantStatusID':grantStatus.grantStatusID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/grantstatuses/<int:grantStatusLUTID>/', methods = ['DELETE'])
-def delete_grant_status(grantStatusLUTID):
+@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['DELETE'])
+def delete_grant_status(grantStatusID):
     try:
-        grantStatus = query.get_grant_status(grantStatusLUTID)
+        grantStatus = query.get_grant_status(grantStatusID)
         if grantStatus is not None:
             deps = get_dependencies(grantStatus)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(grantStatus)
-                return item_deleted("GrantStatusLUTID {} deleted".format(grantStatusLUTID))
+                return item_deleted("GrantStatusID {} deleted".format(grantStatusID))
         else:
-            return item_not_found("GrantStatusLUTID {} not found".format(grantStatusLUTID))
+            return item_not_found("GrantStatusID {} not found".format(grantStatusID))
     except Exception as e:
         return internal_error(e)
 
@@ -1240,7 +1240,7 @@ def update_human_subject_training(humanSubjectTrainingID):
         if humanSubjectTraining is not None:
             form = forms.HumanSubjectTrainingLUTForm(request.form)
             if form.validate():
-                humanSubjectTraining.training_type = request.form['training_type']
+                humanSubjectTraining.trainingType = request.form['trainingType']
                 query.commit()
                 return humanSubjectTraining.json()
             else:
@@ -1256,7 +1256,7 @@ def create_human_subject_training():
         form = forms.HumanSubjectTrainingLUTForm(request.form)
         if form.validate():
             humanSubjectTraining = models.HumanSubjectTrainingLUT(
-                training_type = request.form['training_type']
+                trainingType = request.form['trainingType']
             )
             query.add(humanSubjectTraining)
             return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})
@@ -1306,12 +1306,12 @@ def update_informant(informantID):
         if informant is not None:
             form = forms.InformantForm(request.form)
             if form.validate():
-                informant.patAutoID = request.form['patAutoID']
-                informant.fname = request.form['fname']
-                informant.lname = request.form['lname']
-                informant.middle_name = request.form['middle_name']
-                informant.informant_primary = request.form['informant_primary']
-                informant.informant_relationship = request.form['informant_relationship']
+                informant.patientID = request.form['patientID']
+                informant.firstName = request.form['firstName']
+                informant.lastName = request.form['lastName']
+                informant.middleName = request.form['middleName']
+                informant.informantPrimary = request.form['informantPrimary']
+                informant.informantRelationship = request.form['informantRelationship']
                 informant.notes = request.form['notes']
                 query.commit()
                 return informant.json()
@@ -1328,12 +1328,12 @@ def create_informant():
         form = forms.InformantForm(request.form)
         if form.validate():
             informant = models.Informant(
-                patAutoID = request.form['patAutoID'],
-                fname = request.form['fname'],
-                lname = request.form['lname'],
-                middle_name = request.form['middle_name'],
-                informant_primary = request.form['informant_primary'],
-                informant_relationship = request.form['informant_relationship'],
+                patientID = request.form['patientID'],
+                firstName = request.form['firstName'],
+                lastName = request.form['lastName'],
+                middleName = request.form['middleName'],
+                informantPrimary = request.form['informantPrimary'],
+                informantRelationship = request.form['informantRelationship'],
                 notes = request.form['notes']
                 )
             query.add(informant)
@@ -1384,7 +1384,7 @@ def update_informant_address(informantAddressID):
         if informantAddress is not None:
             form = forms.InformantAddressForm(request.form)
             if form.validate():
-                informantAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                informantAddress.contactInfoSourceID = request.form['contactInfoSourceID']
                 informantAddress.informantID = request.form['informantID']
                 informantAddress.contactInfoStatusID = request.form['contactInfoStatusID']
                 informantAddress.street = request.form['street']
@@ -1392,9 +1392,9 @@ def update_informant_address(informantAddressID):
                 informantAddress.city = request.form['city']
                 informantAddress.state = request.form['state']
                 informantAddress.zip = request.form['zip']
-                informantAddress.address_status = request.form['address_status']
-                informantAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-                informantAddress.address_status_source = request.form['address_status_source']
+                informantAddress.addressStatus = request.form['addressStatus']
+                informantAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                informantAddress.addressStatusSource = request.form['addressStatusSource']
                 query.commit()
                 return informantAddress.json()
             else:
@@ -1410,7 +1410,7 @@ def create_informant_address():
         form = forms.InformantAddressForm(request.form)
         if form.validate():
             informantAddress = models.InformantAddress(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 informantID = request.form['informantID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
                 street = request.form['street'],
@@ -1418,9 +1418,9 @@ def create_informant_address():
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                address_status = request.form['address_status'],
-                address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-                address_status_source = request.form['address_status_source']
+                addressStatus = request.form['addressStatus'],
+                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(informantAddress)
             return jsonify({'informantAddressID':informantAddress.informantAddressID})
@@ -1470,13 +1470,13 @@ def update_informant_phone(informantPhoneID):
         if informantPhone is not None:
             form = forms.InformantPhoneForm(request.form)
             if form.validate():
-                informantPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                informantPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                 informantPhone.informantID = request.form['informantID']
                 informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                informantPhone.phone = request.form['phone']
-                informantPhone.phone_source = request.form['phone_source']
-                informantPhone.phone_status = request.form['phone_status']
-                informantPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                informantPhone.phoneNumber = request.form['phoneNumber']
+                informantPhone.phoneSource = request.form['phoneSource']
+                informantPhone.phoneStatus = request.form['phoneStatus']
+                informantPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return informantPhone.json()
             else:
@@ -1492,13 +1492,13 @@ def create_informant_phone():
         form = forms.InformantPhoneForm(request.form)
         if form.validate():
             informantPhone = models.InformantPhone(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 informantID = request.form['informantID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
-                phone = request.form['phone'],
-                phone_source = request.form['phone_source'],
-                phone_status = request.form['phone_status'],
-                phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                phoneNumber = request.form['phoneNumber'],
+                phoneSource = request.form['phoneSource'],
+                phoneStatus = request.form['phoneStatus'],
+                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(informantPhone)
             return jsonify({'informantPhoneID':informantPhone.informantPhoneID})
@@ -1548,8 +1548,8 @@ def update_irb_holder(irbHolderID):
         if irb is not None:
             form = forms.IRBHolderLUTForm(request.form)
             if form.validate():
-                irb.irb_holder = request.form['irb_holder']
-                irb.irb_holder_definition = request.form['irb_holder_definition']
+                irb.holder = request.form['holder']
+                irb.holderDefinition = request.form['holderDefinition']
                 query.commit()
                 return irb.json()
             else:
@@ -1565,8 +1565,8 @@ def create_irb_holder():
         form = forms.IRBHolderLUTForm(request.form)
         if form.validate():
             irb = models.IRBHolderLUT(
-                irb_holder = request.form['irb_holder'],
-                irb_holder_definition = request.form['irb_holder_definition']
+                holder = request.form['holder'],
+                holderDefinition = request.form['holderDefinition']
             )
             query.add(irb)
             return jsonify({"irbHolderID":irb.irbHolderID})
@@ -1616,7 +1616,7 @@ def update_log(logID):
         if log is not None:
             form = forms.LogForm(request.form)
             if form.validate():
-                log.logSubjectLUTID = request.form['logSubjectLUTID']
+                log.logSubjectID = request.form['logSubjectID']
                 log.projectID = request.form['projectID']
                 log.staffID = request.form['staffID']
                 log.phaseStatusID = request.form['phaseStatusID']
@@ -1637,7 +1637,7 @@ def create_log():
         form = forms.LogForm(request.form)
         if form.validate():
             log  = models.Log(
-                logSubjectLUTID = request.form['logSubjectLUTID'],
+                logSubjectLUTID = request.form['logSubjectID'],
                 projectID = request.form['projectID'],
                 staffID = request.form['staffID'],
                 phaseStatusID = request.form['phaseStatusID'],
@@ -1671,34 +1671,34 @@ def delete_log(logID):
 # Log Subject
 ##############################################################################
 @api.route('/logsubjects/',methods=['GET'])
-@api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['GET'])
-def get_log_subject(logSubjectLUTID=None):
+@api.route('/logsubjects/<int:logSubjectID>/', methods = ['GET'])
+def get_log_subject(logSubjectID=None):
     try:
-        if logSubjectLUTID is None:
+        if logSubjectID is None:
             return jsonify(LogSubjects = [i.dict() for i in query.get_log_subjects()])
         else:
-            logSubject = query.get_log_subject(logSubjectLUTID)
+            logSubject = query.get_log_subject(logSubjectID)
             if logSubject is not None:
                 return logSubject.json()
             else:
-                return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+                return item_not_found("LogSubjectID {} not found".format(logSubjectID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logsubjects/<int:logSubjectLUTID>/', methods = ['PUT'])
-def update_log_subject(logSubjectLUTID):
+@api.route('/logsubjects/<int:logSubjectID>/', methods = ['PUT'])
+def update_log_subject(logSubjectID):
     try:
-        logSubject = query.get_log_subject(logSubjectLUTID)
+        logSubject = query.get_log_subject(logSubjectID)
         if logSubject is not None:
             form = forms.LogSubjectLUTForm(request.form)
             if form.validate():
-                logSubject.log_subject = request.form['log_subject']
+                logSubject.logSubject = request.form['logSubject']
                 query.commit()
                 return logSubject.json()
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("logSubjectLUTID {} not found".format(logSubjectLUTID))
+            return item_not_found("logSubjectID {} not found".format(logSubjectID))
     except Exception as e:
         internal_error(e)
 
@@ -1708,28 +1708,28 @@ def create_log_subject():
         form = forms.LogSubjectLUTForm(request.form)
         if form.validate():
             logSubject = models.LogSubjectLUT(
-                log_subject = request.form['log_subject']
+                logSubject = request.form['logSubject']
             )
             query.add(logSubject)
-            return jsonify({"logSubjectLUTID":logSubject.logSubjectLUTID})
+            return jsonify({"logSubjectID":logSubject.logSubjectID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logsubjects/<int:logSubjectLUTID>/',methods=['DELETE'])
-def delete_log_subject(logSubjectLUTID):
+@api.route('/logsubjects/<int:logSubjectID>/',methods=['DELETE'])
+def delete_log_subject(logSubjectID):
     try:
-        logSubject = query.get_log_subject(logSubjectLUTID)
+        logSubject = query.get_log_subject(logSubjectID)
         if logSubject is not None:
             deps = get_dependencies(logSubject)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(logSubject)
-                return item_deleted("LogSubjectLUTID {} deleted".format(logSubjectLUTID))
+                return item_deleted("LogSubjectID {} deleted".format(logSubjectID))
         else:
-            return item_not_found("LogSubjectLUTID {} not found".format(logSubjectLUTID))
+            return item_not_found("LogSubjectID {} not found".format(logSubjectID))
     except Exception as e:
         return internal_error(e)
 
@@ -1747,14 +1747,14 @@ def get_patient(patAutoID=None):
             if patient is not None:
                 return patient.json()
             else:
-                return item_not_found("PatAutoID {} not found".format(patAutoID))
+                return item_not_found("PatientID {} not found".format(patAutoID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patients/<int:patAutoID>/',methods = ['PUT'])
-def update_patient(patAutoID):
+@api.route('/patients/<int:patientID>/',methods = ['PUT'])
+def update_patient(patientID):
     try:
-        patient = query.get_patient(patAutoID)
+        patient = query.get_patient(patientID)
         if patient is not None:
             form = forms.PatientForm(request.form)
             if form.validate():
@@ -1762,25 +1762,25 @@ def update_patient(patAutoID):
                 patient.recordID = request.form['recordID']
                 patient.ucrDistID = request.form['ucrDistID']
                 patient.UPDBID = request.form['UPDBID']
-                patient.fname = request.form['fname']
-                patient.lname = request.form['lname']
-                patient.middle_name = request.form['middle_name']
-                patient.maiden_name = request.form['maiden_name']
-                patient.alias_fname = request.form['alias_fname']
-                patient.alias_lname = request.form['alias_lname']
-                patient.alias_middle_name = request.form['alias_middle_name']
+                patient.firstName = request.form['firstName']
+                patient.lastName = request.form['lastName']
+                patient.middleName = request.form['middleName']
+                patient.maidenName = request.form['maidenName']
+                patient.aliasFirstName = request.form['aliasFirstName']
+                patient.aliasLastName = request.form['aliasLastName']
+                patient.aliasMiddleName = request.form['aliasMiddleName']
                 patient.dob = datetime.strptime(request.form['dob'],"%Y-%m-%d")
                 patient.SSN = request.form['SSN']
                 patient.sex = request.form['sex']
                 patient.race = request.form['race']
                 patient.ethnicity = request.form['ethnicity']
-                patient.vital_status = request.form['vital_status']
+                patient.vitalStatus = request.form['vitalStatus']
                 query.commit()
                 return patient.json()
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("PatAutoID {} not found".format(patAutoID))
+            return item_not_found("PatientID {} not found".format(patientID))
     except Exception as e:
         return internal_error(e)
 
@@ -1794,39 +1794,39 @@ def create_patient():
                recordID = request.form['recordID'],
                ucrDistID = request.form['ucrDistID'],
                UPDBID = request.form['UPDBID'],
-               fname = request.form['fname'],
-               lname = request.form['lname'],
-               middle_name = request.form['middle_name'],
-               maiden_name = request.form['maiden_name'],
-               alias_fname = request.form['alias_fname'],
-               alias_lname = request.form['alias_lname'],
-               alias_middle_name = request.form['alias_middle_name'],
+               firstName = request.form['firstName'],
+               lastName = request.form['lastName'],
+               middleName = request.form['middleName'],
+               maidenName = request.form['maidenName'],
+               aliasFirstName = request.form['aliasFirstName'],
+               aliasLastName = request.form['aliasLastName'],
+               aliasMiddleName = request.form['aliasMiddleName'],
                dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
                SSN = request.form['SSN'],
                sex = request.form['sex'],
                ethnicity = request.form['ethnicity'],
-               vital_status = request.form['vital_status']
+               vitalStatus = request.form['vitalStatus']
                 )
             query.add(patient)
-            return jsonify({'patAutoID':patient.patAutoID})
+            return jsonify({'patientID':patient.patientID})
         else:
             return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
-@api.route('/patients/<int:patAutoID>/',methods = ['DELETE'])
-def delete_patient(patAutoID):
+@api.route('/patients/<int:patientID>/',methods = ['DELETE'])
+def delete_patient(patientID):
     try:
-        patient = query.get_patient(patAutoID)
+        patient = query.get_patient(patientID)
         if patient is not None:
             deps = get_dependencies(patient)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(patient)
-                return item_deleted("PatAutoID {} deleted".format(patAutoID))
+                return item_deleted("PatientID {} deleted".format(patientID))
         else:
-            return item_not_found("PatAutoID {} not found".format(patAutoID))
+            return item_not_found("PatientID {} not found".format(patientID))
     except Exception as e:
         return internal_error(e)
 

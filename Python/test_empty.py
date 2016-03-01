@@ -346,13 +346,13 @@ class TestContactType(BlankDB):
         
     def test_contact_type_no_id(self):
         response = self.client.get('/api/contacttypes/1/')
-        self.assertEqual(response.json, {"Error" : "ContactTypeLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "ContactTypeID 1 not found"})
         
     def test_create_contact_type(self):
         response = self.client.post("/api/contacttypes/", data = {
             "contactDefinition" : "contactDefinition",
         })
-        self.assertEqual(response.json, dict(contactTypeLUTID=1))
+        self.assertEqual(response.json, dict(contactTypeID=1))
                 
 class TestContactInfoStatus(BlankDB):
     def test_empty_contact_info_status(self):
@@ -716,13 +716,13 @@ class TestFundingSource(BlankDB):
    
     def test_funding_source__no_id(self):
         response = self.client.get("/api/fundingsources/1/")
-        self.assertEqual(response.json, {"Error" : "FundingSourceLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "FundingSourceID 1 not found"})
 
     def test_create_funding_source(self):
         response = self.client.post("/api/fundingsources/", data = {
             "fundingSource" : "fs",
         })
-        self.assertEqual(response.json, {"fundingSourceLUTID": 1})
+        self.assertEqual(response.json, {"fundingSourceID": 1})
         
 class TestGrantStatus(BlankDB):
 
@@ -732,13 +732,13 @@ class TestGrantStatus(BlankDB):
    
     def test_grant_status__no_id(self):
         response = self.client.get("/api/grantstatuses/1/")
-        self.assertEqual(response.json, {"Error" : "GrantStatusLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "GrantStatusID 1 not found"})
 
     def test_create_grant_status(self):
         response = self.client.post("/api/grantstatuses/", data = {
-            "grant_status" : "status",
+            "grantStatus" : "status",
         })
-        self.assertEqual(response.json, {"grantStatusLUTID": 1})
+        self.assertEqual(response.json, {"grantStatusID": 1})
 
 class TestHumanSubjectTraining(BlankDB):
     def test_empty_human_subject_training(self):
@@ -751,7 +751,7 @@ class TestHumanSubjectTraining(BlankDB):
 
     def test_create_human_subject_training(self):
         response = self.client.post("/api/humansubjecttrainings/", data = {
-            "training_type" : "type",
+            "trainingType" : "type",
         })
         self.assertEqual(response.json, {"humanSubjectTrainingID": 1})
 
@@ -782,17 +782,18 @@ class TestInformant(BlankDB):
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         db.session.add(patient)
         db.session.add(contactInfoSource)
         db.session.add(contactInfoStatus)
         db.session.commit()
+
     def test_empty_informant(self):
         response = self.client.get("/api/informants/")
         self.assertEqual(response.json, dict(Informants = []))
@@ -803,12 +804,12 @@ class TestInformant(BlankDB):
 
     def test_create_informant(self):
         response = self.client.post("/api/informants/", data = {
-            "patAutoID" : 1,
-            "fname" : "fname",
-            "lname" : "lname",
-            "middle_name" : "middle_name",
-            "informant_primary" : "informant_primary",
-            "informant_relationship" : "informant_relationship",
+            "patientID" : 1,
+            "firstName" : "fname",
+            "lastName" : "lname",
+            "middleName" : "middle_name",
+            "informantPrimary" : "informant_primary",
+            "informantRelationship" : "informant_relationship",
             "notes" : "notes"
         })
         self.assertEqual(response.json, {"informantID": 1})              
@@ -840,19 +841,19 @@ class TestInformantAddress(BlankDB):
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
         informant = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
             notes = "notes"
         )
 
@@ -880,9 +881,9 @@ class TestInformantAddress(BlankDB):
             "city" : "city",
             "state" : "state",
             "zip" : "zip",
-            "address_status" : 1,
-            "address_status_date" : "2016-02-02",
-            "address_status_source" : "s1"
+            "addressStatus" : 1,
+            "addressStatusDate" : "2016-02-02",
+            "addressStatusSource" : "s1"
         })
         self.assertEqual(response.json, {"informantAddressID": 1})        
         
@@ -913,19 +914,19 @@ class TestInformantPhone(BlankDB):
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
         informant = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
             notes = "notes"
         )
 
@@ -948,10 +949,10 @@ class TestInformantPhone(BlankDB):
             "contactInfoSourceID" : 1,
             "informantID" : 1,
             "contactInfoStatusID" : 1,
-            "phone" : "phone",
-            "phone_status" : 1,
-            "phone_source" : "s1",
-            "phone_status_date" : "2016-02-02"
+            "phoneNumber" : "phone",
+            "phoneStatus" : 1,
+            "phoneSource" : "s1",
+            "phoneStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"informantPhoneID": 1})       
         
@@ -966,8 +967,8 @@ class TestIRBHolder(BlankDB):
         
     def test_create_irb_holder(self):
         response = self.client.post("/api/irbholders/", data = {
-            "irb_holder" : "test holder",
-            "irb_holder_definition" : "test holder def"
+            "holder" : "test holder",
+            "holderDefinition" : "test holder def"
             })
         self.assertEqual(response.json, dict(irbHolderID=1))
 
@@ -983,8 +984,8 @@ class TestLog(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         phaseStatus = models.PhaseStatus(
             phase_status = "status",
@@ -1010,7 +1011,7 @@ class TestLog(BlankDB):
         )
 
         logSubject = models.LogSubjectLUT(
-            log_subject = "subject"
+            logSubject = "subject"
         )
 
         p = models.Project(
@@ -1045,7 +1046,7 @@ class TestLog(BlankDB):
         
     def test_create_log(self):
         response = self.client.post("/api/logs/", data = {
-            "logSubjectLUTID" : 1,
+            "logSubjectID" : 1,
             "projectID" : 1,
             "staffID" : 1,
             "phaseStatusID" : 1,
@@ -1076,7 +1077,7 @@ class TestPatient(BlankDB):
    
     def test_patient_no_id(self):
         response = self.client.get("/api/patients/1/")
-        self.assertEqual(response.json, {"Error" : "PatAutoID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "PatientID 1 not found"})
 
     def test_create_patient(self):
         response = self.client.post("/api/patients/", data = {
@@ -1084,21 +1085,21 @@ class TestPatient(BlankDB):
             "recordID" : 1,
             "ucrDistID" : 1,
             "UPDBID" : 1,
-            "fname" : "fname",
-            "lname" : "lname",
-            "middle_name" : "mname",
-            "maiden_name" : "madien_name",
-            "alias_fname" : "alias_fname",
-            "alias_lname" : "alias_lname",
-            "alias_middle_name" : "alias_middle",
+            "firstName" : "fname",
+            "lastName" : "lname",
+            "middleName" : "mname",
+            "maidenName" : "madien_name",
+            "aliasFirstName" : "alias_fname",
+            "aliasLastName" : "alias_lname",
+            "aliasMiddleName" : "alias_middle",
             "dob" : "2016-02-02",
             "SSN" : "999999999",
             "sex" : "male",
             "race" : "white",
             "ethnicity" : "hispanic",
-            "vital_status" : "v1"
+            "vitalStatus" : "v1"
         })
-        self.assertEqual(response.json, {"patAutoID": 1})
+        self.assertEqual(response.json, {"patientID": 1})
 
 class TestPatientAddress(BlankDB):
     def setUp(self):
