@@ -1112,27 +1112,27 @@ class TestPatientAddress(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         db.session.add(patient)
@@ -1152,15 +1152,15 @@ class TestPatientAddress(BlankDB):
         response = self.client.post("/api/patientaddresses/", data = {
             "contactInfoSourceID" : 1,
             "patientID" : 1,
-            "contactInfoStatusLUTID" : 1,
+            "contactInfoStatusID" : 1,
             "street" : "street",
             "street2" : "street2",
             "city" : "city",
             "state" : "state",
             "zip" : "zip",
-            "address_status" : 1,
-            "address_status_date" : "2016-02-02",
-            "address_status_source" : "s1"
+            "addressStatus" : 1,
+            "addressStatusDate" : "2016-02-02",
+            "addressStatusSource" : "s1"
         })
         self.assertEqual(response.json, {"patAddressID": 1})
 
@@ -1175,33 +1175,34 @@ class TestPatientEmail(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         db.session.add(patient)
         db.session.add(contactInfoSource)
         db.session.add(contactInfoStatus)
         db.session.commit()
+
     def test_empty_patient_email(self):
         response = self.client.get("/api/patientemails/")
         self.assertEqual(response.json, dict(PatientEmails = []))
@@ -1216,9 +1217,9 @@ class TestPatientEmail(BlankDB):
             "patientID" : 1,
             "contactInfoStatusID" : 1,
             "email" : "email",
-            "email_status" : 1,
-            "email_source" : 1,
-            "email_status_date" : "2016-02-02"
+            "emailStatus" : 1,
+            "emailSource" : 1,
+            "emailStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"emailID": 1})
 
@@ -1233,27 +1234,27 @@ class TestPatientPhone(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         db.session.add(patient)
@@ -1274,10 +1275,10 @@ class TestPatientPhone(BlankDB):
             "contactInfoSourceID" : 1,
             "patientID" : 1,
             "contactInfoStatusID" : 1,
-            "phone" : "phone",
-            "phone_status" : 1,
-            "phone_source" : "s1",
-            "phone_status_date" : "2016-02-02"
+            "phoneNumber" : "phone",
+            "phoneStatus" : 1,
+            "phoneSource" : "s1",
+            "phoneStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"patPhoneID": 1})       
 
@@ -1292,24 +1293,24 @@ class TestPatientProjectStatus(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         project_type1 = models.ProjectType(
             project_type = "Type 1",
@@ -1351,21 +1352,21 @@ class TestPatientProjectStatus(BlankDB):
 
         ctc1 = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = 99999,
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         projectPatient = models.ProjectPatient(
@@ -1402,7 +1403,7 @@ class TestPatientProjectStatus(BlankDB):
             survey_to_researcher_staff = 1
         )
         patientProjectStatusType = models.PatientProjectStatusLUT(
-            status_description = "desc"
+            statusDescription = "desc"
         )
         db.session.add(patient)
         db.session.add(irb_holder1)
@@ -1424,7 +1425,7 @@ class TestPatientProjectStatus(BlankDB):
 
     def test_create_patient_project_status(self):
         response = self.client.post("/api/patientprojectstatuses/", data = {
-            "patientProjectStatusLUTID" : 1,
+            "patientProjectStatusTypeID" : 1,
             "projectPatientID" : 1
         })
         self.assertEqual(response.json, {"patientProjectStatusID": 1})
@@ -1440,7 +1441,7 @@ class TestPatientProjectStatusLUT(BlankDB):
 
     def test_create_patient_project_status_type(self):
         response = self.client.post("/api/patientprojectstatustypes/", data = {
-            "status_description" : "desc"
+            "statusDescription" : "desc"
         })
         self.assertEqual(response.json, {"patientProjectStatusTypeID": 1})
 
@@ -1455,8 +1456,8 @@ class TestPhaseStatus(BlankDB):
 
     def test_create_phase_status(self):
         response = self.client.post("/api/phasestatuses/", data = {
-            "phase_status" : "status",
-            "phase_description" : "description"
+            "phaseStatus" : "status",
+            "phaseDescription" : "description"
         })
         self.assertEqual(response.json, {"logPhaseID": 1})
 

@@ -1855,17 +1855,17 @@ def update_patient_address(patAddressID):
         if patientAddress is not None:
             form = forms.PatientAddressForm(request.form)
             if form.validate():
-                patientAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                patientAddress.contactInfoSourceID = request.form['contactInfoSourceID']
                 patientAddress.patientID = request.form['patientID']
-                patientAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+                patientAddress.contactInfoStatusID = request.form['contactInfoStatusID']
                 patientAddress.street = request.form['street']
                 patientAddress.street2 = request.form['street2']
                 patientAddress.city = request.form['city']
                 patientAddress.state = request.form['state']
                 patientAddress.zip = request.form['zip']
-                patientAddress.address_status = request.form['address_status']
-                patientAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-                patientAddress.address_status_source = request.form['address_status_source']
+                patientAddress.addressStatus = request.form['addressStatus']
+                patientAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                patientAddress.addressStatusSource = request.form['addressStatusSource']
                 query.commit()
                 return patientAddress.json()
             else:
@@ -1881,17 +1881,17 @@ def create_patient_address():
         form = forms.PatientAddressForm(request.form)
         if form.validate():
             patientaddress = models.PatientAddress(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 patientID = request.form['patientID'],
-                contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+                contactInfoStatusID = request.form['contactInfoStatusID'],
                 street = request.form['street'],
                 street2 = request.form['street2'],
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                address_status = request.form['address_status'],
-                address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-                address_status_source = request.form['address_status_source']
+                addressStatus = request.form['addressStatus'],
+                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(patientaddress)
             return jsonify({'patAddressID':patientaddress.patAddressID})
@@ -1941,13 +1941,13 @@ def update_patient_email(emailID):
         if patientEmail is not None:
             form = forms.PatientEmailForm(request.form)
             if form.validate():
-                patientEmail.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                patientEmail.contactInfoSourceID = request.form['contactInfoSourceID']
                 patientEmail.patientID = request.form['patientID']
                 patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']
                 patientEmail.email = request.form['email']
-                patientEmail.email_status = request.form['email_status']
-                patientEmail.email_source = request.form['email_source']
-                patientEmail.email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
+                patientEmail.emailStatus = request.form['emailStatus']
+                patientEmail.emailSource = request.form['emailSource']
+                patientEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return patientEmail.json()
             else:
@@ -1963,13 +1963,13 @@ def create_patient_email():
         form = forms.PatientEmailForm(request.form)
         if form.validate():
             patientEmail = models.PatientEmail(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 patientID = request.form['patientID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
                 email = request.form['email'],
-                email_status = request.form['email_status'],
-                email_source = request.form['email_source'],
-                email_status_date = datetime.strptime(request.form['email_status_date'],"%Y-%m-%d")
+                emailStatus = request.form['emailStatus'],
+                emailSource = request.form['emailSource'],
+                emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                 )
             query.add(patientEmail)
             return jsonify({'emailID':patientEmail.emailID})
@@ -2019,13 +2019,13 @@ def update_patient_phone(patPhoneID):
         if patientPhone is not None:
             form = forms.PatientPhoneForm(request.form)
             if form.validate():
-                patientPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                patientPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                 patientPhone.patientID = request.form['patientID']
                 patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                patientPhone.phone = request.form['phone']
-                patientPhone.phone_source = request.form['phone_source']
-                patientPhone.phone_status = request.form['phone_status']
-                patientPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                patientPhone.phoneNumber = request.form['phoneNumber']
+                patientPhone.phoneSource = request.form['phoneSource']
+                patientPhone.phoneStatus = request.form['phoneStatus']
+                patientPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return patientPhone.json()
             else:
@@ -2034,19 +2034,20 @@ def update_patient_phone(patPhoneID):
             return item_not_found("PatPhoneID {} not found".format(patPhoneID))
     except Exception as e:
         return internal_error(e)
+
 @api.route('/patientphones/', methods=['POST'])
 def create_patient_phone():
     try:
         form = forms.PatientPhoneForm(request.form)
         if form.validate():
             patientPhone = models.PatientPhone(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 patientID = request.form['patientID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
-                phone = request.form['phone'],
-                phone_source = request.form['phone_source'],
-                phone_status = request.form['phone_status'],
-                phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                phoneNumber = request.form['phoneNumber'],
+                phoneSource = request.form['phoneSource'],
+                phoneStatus = request.form['phoneStatus'],
+                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(patientPhone)
             return jsonify({'patPhoneID':patientPhone.patPhoneID})
@@ -2096,7 +2097,7 @@ def update_patient_project_status(patientProjectStatusID):
         if patientProjectStatus is not None:
             form = forms.PatientProjectStatusForm(request.form)
             if form.validate():
-                patientProjectStatus.patientProjectStatusLUTID = request.form['patientProjectStatusLUTID']
+                patientProjectStatus.patientProjectStatusTypeID = request.form['patientProjectStatusTypeID']
                 patientProjectStatus.projectPatientID = request.form['projectPatientID']
                 query.commit()
                 return patientProjectStatus.json()
@@ -2113,7 +2114,7 @@ def create_patient_project_status():
         form = forms.PatientProjectStatusForm(request.form)
         if form.validate():
             patientProjectStatus = models.PatientProjectStatus(
-                patientProjectStatusLUTID = request.form['patientProjectStatusLUTID'],
+                patientProjectStatusTypeID = request.form['patientProjectStatusTypeID'],
                 projectPatientID = request.form['projectPatientID']
             )
             query.add(patientProjectStatus)
@@ -2164,7 +2165,7 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
         if patientProjectStatusType is not None:
             form = forms.PatientProjectStatusLUTForm(request.form)
             if form.validate():
-                patientProjectStatusType.status_description = request.form['status_description']
+                patientProjectStatusType.statusDescription = request.form['statusDescription']
                 query.commit()
                 return patientProjectStatusType.json()
             else:
@@ -2180,7 +2181,7 @@ def create_patient_project_status_type():
         form = forms.PatientProjectStatusLUTForm(request.form)
         if form.validate():
             patientProjectStatusType = models.PatientProjectStatusLUT(
-                status_description = request.form['status_description']
+                statusDescription = request.form['statusDescription']
             )
             query.add(patientProjectStatusType)
             return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})
@@ -2230,8 +2231,8 @@ def update_phase_status(logPhaseID):
         if phaseStatus is not None:
             form = forms.PhaseStatusForm(request.form)
             if form.validate():
-                phaseStatus.phase_status = request.form['phase_status']
-                phaseStatus.phase_description = request.form['phase_description']
+                phaseStatus.phaseStatus = request.form['phaseStatus']
+                phaseStatus.phaseDescription = request.form['phaseDescription']
                 query.commit()
                 return phaseStatus.json()
             else:
@@ -2247,10 +2248,10 @@ def create_phase_status():
         form = forms.PhaseStatusForm(request.form)
         if form.validate():
             phaseStatus = models.PhaseStatus(
-                phase_status = request.form['phase_status'],
-                phase_description = request.form['phase_description']
+                phaseStatus = request.form['phaseStatus'],
+                phaseDescription = request.form['phaseDescription']
             )
-            ret = query.add(phaseStatus)
+            query.add(phaseStatus)
             return jsonify({'logPhaseID':phaseStatus.logPhaseID})
         else:
             return missing_params(form.errors)

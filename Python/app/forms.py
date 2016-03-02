@@ -602,7 +602,7 @@ class PatientAddressForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     patientID = IntegerField('patientID',
         []+COMMON_INTEGER_VALIDATORS)
-    contactInfoStatusLUTID = IntegerField('contactInfoStatusLUTID',
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
         []+COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
         []+COMMON_STRING_VALIDATORS)
@@ -614,12 +614,12 @@ class PatientAddressForm(Form):
         []+COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
-    address_status = IntegerField('address_status',
+    addressStatus = IntegerField('addressStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    address_status_date = DateField('address_status_date',
+    addressStatusDate = DateField('addressStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    address_status_source = StringField('address_status_source',
+    addressStatusSource = StringField('addressStatusSource',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -635,9 +635,9 @@ class PatientAddressForm(Form):
             self.patientID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusLUTID.data)
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
         if contactStatus is None:
-            self.contactInfoStatusLUTID.errors.append("ID not found")
+            self.contactInfoStatusID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -650,11 +650,11 @@ class PatientEmailForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     email = StringField('email',
         []+COMMON_STRING_VALIDATORS)
-    email_status = IntegerField('email_status',
+    emailStatus = IntegerField('emailStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    email_source = IntegerField('email_source',
+    emailSource = IntegerField('emailSource',
         []+COMMON_INTEGER_VALIDATORS)
-    email_status_date = DateField('email_status_date',
+    emailStatusDate = DateField('emailStatusDate',
         []+COMMON_DATE_VALIDATORS)
 
     def validate(self):
@@ -683,13 +683,13 @@ class PatientPhoneForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
         []+COMMON_INTEGER_VALIDATORS)
-    phone = StringField('phone',
+    phoneNumber = StringField('phoneNumber',
         []+COMMON_STRING_VALIDATORS)
-    phone_source = StringField('phone_source',
+    phoneSource = StringField('phoneSource',
         []+COMMON_STRING_VALIDATORS)
-    phone_status = StringField('phone_status',
+    phoneStatus = StringField('phoneStatus',
         []+COMMON_STRING_VALIDATORS)
-    phone_status_date = DateField('phone_status_date',
+    phoneStatusDate = DateField('phoneStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
 
@@ -713,7 +713,7 @@ class PatientPhoneForm(Form):
         return not hasErrors
 
 class PatientProjectStatusForm(Form):
-    patientProjectStatusLUTID = IntegerField('patientProjectStatusLUT',
+    patientProjectStatusTypeID = IntegerField('patientProjectStatusTypeID',
         []+COMMON_INTEGER_VALIDATORS)
     projectPatientID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -721,9 +721,9 @@ class PatientProjectStatusForm(Form):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        patientProjectStatusLUT = query.get_patient_project_status_type(self.patientProjectStatusLUTID.data)
+        patientProjectStatusLUT = query.get_patient_project_status_type(self.patientProjectStatusTypeID.data)
         if patientProjectStatusLUT is None:
-            self.patientProjectStatusLUTID.errors.append("ID not found")
+            self.patientProjectStatusTypeID.errors.append("ID not found")
             hasErrors = True
 
         projectPatient = query.get_project_patient(self.projectPatientID.data)
@@ -733,13 +733,13 @@ class PatientProjectStatusForm(Form):
         return not hasErrors
 
 class PatientProjectStatusLUTForm(Form):
-    status_description = StringField('status_description',
+    statusDescription = StringField('statusDescription',
         []+COMMON_STRING_VALIDATORS)
 
 class PhaseStatusForm(Form):
-    phase_status = StringField('phase_status',
+    phaseStatus = StringField('phaseStatus',
         []+COMMON_STRING_VALIDATORS)
-    phase_description = StringField('phase_description',
+    phaseDescription = StringField('phaseDescription',
         []+COMMON_STRING_VALIDATORS)
 
 class PhysicianForm(Form):
