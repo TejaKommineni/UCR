@@ -1809,8 +1809,8 @@ class TestProject(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         db.session.add(pt1)
         db.session.add(irb_holder1)
@@ -1830,20 +1830,20 @@ class TestProject(BlankDB):
     # Test create a project
     def test_create_project(self):
         response = self.client.post("/api/projects/", data = {
-            "projectType_projectTypeID" : 1,
-            "IRBHolderLUT_irbHolderID" : 1,
-            "project_name" : "Test Project",
-            "short_title" : "Test Project",
-            "project_summary" : "Summary",
+            "projectTypeID" : 1,
+            "irbHolderID" : 1,
+            "projectName" : "Test Project",
+            "shortTitle" : "Test Project",
+            "projectSummary" : "Summary",
             "sop":"sop",
-            "UCR_proposal":"ucr_proposal",
-            "budget_doc" : "budget_doc",
-            "UCR_fee" : "no",
-            "UCR_no_fee" : "yes",
-            "budget_end_date" : "2016-02-02",
-            "previous_short_title" : "t short",
-            "date_added" : "2016-02-02",
-            "final_recruitment_report" : "report"})
+            "ucrProposal":"ucr_proposal",
+            "budgetDoc" : "budget_doc",
+            "ucrFee" : "no",
+            "ucrNoFee" : "yes",
+            "budgetEndDate" : "2016-02-02",
+            "previousShortTitle" : "t short",
+            "dateAdded" : "2016-02-02",
+            "finalRecruitmentReport" : "report"})
         self.assertEqual(response.json,dict(projectID=1))
 
 class TestProjectPatient(BlankDB):
@@ -1858,8 +1858,8 @@ class TestProjectPatient(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         staff = models.Staff(
             fname = "fname",
@@ -1880,58 +1880,58 @@ class TestProjectPatient(BlankDB):
         )
 
         project1 = models.Project(
-            projectType_projectTypeID = 1,
-            IRBHolderLUT_irbHolderID = 1,
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         patient = models.Patient(
             patID = "1",
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         ctc = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = "zip",
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         db.session.add(pt1)
@@ -1955,34 +1955,34 @@ class TestProjectPatient(BlankDB):
             "projectID" : 1,
             "staffID" : 1,
             "ctcID" : 1,
-            "current_age" : 1,
+            "currentAge" : 1,
             "batch"  : 1,
-            "sitegrp" : 1,
-            "final_code" : 1,
-            "final_code_date" : "2016-02-02",
-            "enrollment_date" : "2016-02-02",
-            "date_coord_signed" : "2016-02-02",
-            "import_date" : "2016-02-02",
-            "final_code_staff" : 1,
-            "enrollment_staff" : 1,
-            "date_coord_signed_staff"  : "2016-02-02",
-            "abstract_status" : 1,
-            "abstract_status_date" : "2016-02-02",
-            "abstract_status_staff" : 1,
-            "sent_to_abstractor"  : "2016-02-02",
-            "sent_to_abstractor_staff" : 1,
-            "abstracted_date" : "2016-02-02",
-            "abstractor_initials" : "atp",
-            "researcher_date" : "2016-02-02",
-            "researcher_staff" : 1,
-            "consent_link" : "consent",
-            "tracing_status" : 1,
-            "med_record_release_signed" : True,
-            "med_record_release_link" : "link",
-            "med_record_release_staff" : 1,
-            "med_record_release_date"  : "2016-02-02",
-            "survey_to_researcher"  : "2016-02-02",
-            "survey_to_researcher_staff" : 1
+            "siteGrp" : 1,
+            "finalCode" : 1,
+            "finalCodeDate" : "2016-02-02",
+            "enrollmentDate" : "2016-02-02",
+            "dateCoordSigned" : "2016-02-02",
+            "importDate" : "2016-02-02",
+            "finalCodeStaff" : 1,
+            "enrollmentStaff" : 1,
+            "dateCoordSignedStaff"  : "2016-02-02",
+            "abstractStatus" : 1,
+            "abstractStatusDate" : "2016-02-02",
+            "abstractStatusStaff" : 1,
+            "sentToAbstractorDate"  : "2016-02-02",
+            "sentToAbstractorStaff" : 1,
+            "abstractedDate" : "2016-02-02",
+            "abstractorInitials" : "atp",
+            "researcherDate" : "2016-02-02",
+            "researcherStaff" : 1,
+            "consentLink" : "consent",
+            "tracingStatus" : 1,
+            "medRecordReleaseSigned" : True,
+            "medRecordReleaseLink" : "link",
+            "medRecordReleaseStaff" : 1,
+            "medRecordReleaseDate"  : "2016-02-02",
+            "surveyToResearcher"  : "2016-02-02",
+            "surveyToResearcherStaff" : 1
         })
         self.assertEqual(response.json, {"participantID": 1})
 
@@ -1998,22 +1998,24 @@ class TestProjectStaff(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         staff = models.Staff(
             fname = "fname",
@@ -2054,17 +2056,17 @@ class TestProjectStaff(BlankDB):
         
     def test_create_project_staff(self):
         response = self.client.post("/api/projectstaff/", data = {
-            "staffRoleLUTID" : 1,
+            "staffRoleID" : 1,
             "projectID" : 1,
             "staffID" : 1,
             "role" : 1,
-            "date_pledge" : "2016-02-02",
-            "date_revoked" : "2016-02-02",
+            "datePledge" : "2016-02-02",
+            "dateRevoked" : "2016-02-02",
             "contact" : "yes",
             "inactive" : "no",
-            "human_sub_training_exp" : "2016-02-02",
-            "human_sub_type_id" : 1,
-            "study_role" : 1
+            "humanSubjectTrainingExp" : "2016-02-02",
+            "humanSubjectTrainingTypeID" : 1,
+            "studyRole" : 1
             })
         self.assertEqual(response.json, dict(projectStaffID=1))
         
@@ -2080,22 +2082,24 @@ class TestProjectStatus(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         staff = models.Staff(
             fname = "fname",
@@ -2136,11 +2140,11 @@ class TestProjectStatus(BlankDB):
 
     def test_create_project_status(self):
         response = self.client.post("/api/projectstatuses/", data = {
-            "projectStatusLUTID" : 1,
+            "projectStatusTypeID" : 1,
             "projectID" : 1,
             "staffID" : 1,
-            "status_date" : "2016-02-02",
-            "status_notes" : "note"
+            "statusDate" : "2016-02-02",
+            "statusNotes" : "note"
         })
         self.assertEqual(response.json, {"projectStatusID": 1})
         
@@ -2156,8 +2160,8 @@ class TestProjectStatusType(BlankDB):
 
     def test_create_project_status_type(self):
         response = self.client.post("/api/projectstatustypes/", data = {
-            "project_status" : "Status 1",
-            "status_definition" : "status def"
+            "projectStatus" : "Status 1",
+            "projectStatusDefinition" : "status def"
         })
         self.assertEqual(response.json, {"projectStatusTypeID": 1})
         
@@ -2173,8 +2177,8 @@ class TestProjectType(BlankDB):
 
     def test_create_project_type(self):
         response = self.client.post("/api/projecttypes/", data = {
-            "project_type" : 1,
-            "project_type_definition" : "type def"
+            "projectType" : 1,
+            "projectTypeDefinition" : "type def"
         })
         self.assertEqual(response.json, {"projectTypeID": 1})
  
@@ -2190,8 +2194,8 @@ class TestRCStatusList(BlankDB):
     # Test create RCStatusList
     def test_create_rcStatusList(self):
         response = self.client.post("/api/rcstatuslist/", data = {
-            "rc_status" : "Status 1",
-            "rc_status_definition" : "rc status def"
+            "rcStatus" : "Status 1",
+            "rcStatusDefinition" : "rc status def"
         })
         self.assertEqual(response.json, {"rcStatusListID": 1})
 

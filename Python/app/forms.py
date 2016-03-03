@@ -966,35 +966,35 @@ class PreApplicationForm(Form):
         return not hasErrors
 
 class ProjectForm(Form):
-    projectType_projectTypeID = IntegerField('projectType_projectTypeID',
+    projectTypeID = IntegerField('projectTypeID',
         [] + COMMON_INTEGER_VALIDATORS)
-    IRBHolderLUT_irbHolderID = IntegerField('IRBHolderLUT_irbHolderID',
+    irbHolderID = IntegerField('irbHolderID',
         []+COMMON_INTEGER_VALIDATORS)
-    project_name = StringField('project_name',
+    projectName = StringField('projectName',
         []+COMMON_STRING_VALIDATORS)
-    short_title = StringField('short_title',
+    shortTitle = StringField('shortTitle',
         []+COMMON_STRING_VALIDATORS)
-    project_summary = StringField('project_summary',
+    projectSummary = StringField('projectSummary',
         []+COMMON_STRING_VALIDATORS)
     sop = StringField('sop',
         []+COMMON_STRING_VALIDATORS)
-    UCR_proposal = StringField('UCR_proposal',
+    ucrProposal = StringField('ucrProposal',
         []+COMMON_STRING_VALIDATORS)
-    budget_doc = StringField('budget_doc',
+    budgetDoc = StringField('budgetDoc',
         []+COMMON_STRING_VALIDATORS)
-    UCR_fee = StringField('UCR_fee',
+    ucrFee = StringField('ucrFee',
         []+COMMON_STRING_VALIDATORS)
-    UCR_no_fee = StringField('UCR_no_fee',
+    ucrNoFee = StringField('ucrNoFee',
         []+COMMON_STRING_VALIDATORS)
-    budget_end_date = DateField('budget_end_date',
+    budgetEndDate = DateField('budgetEndDate',
         []+COMMON_DATE_VALIDATORS,
         format = "%Y-%m-%d")
-    previous_short_title = StringField('previous_short_title',
+    previousShortTitle = StringField('previousShortTitle',
         []+COMMON_STRING_VALIDATORS)
-    date_added = DateField('date_added',
+    dateAdded = DateField('dateAdded',
         []+COMMON_DATE_VALIDATORS,
         format=DATE_FORMAT)
-    final_recruitment_report = StringField('final_recruitment_report',
+    finalRecruitmentReport = StringField('finalRecruitmentReport',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -1004,15 +1004,15 @@ class ProjectForm(Form):
             hasErrors = True
 
         # Check to make sure the project type FK exists
-        projType = query.get_project_type(self.projectType_projectTypeID.data)
+        projType = query.get_project_type(self.projectTypeID.data)
         if projType is None:
-            self.projectType_projectTypeID.errors.append("ID not found")
+            self.projectTypeID.errors.append("ID not found")
             hasErrors =  True
 
         # check the irbHolderLUT FK
-        irbHolder = query.get_irb_holder(self.IRBHolderLUT_irbHolderID.data)
+        irbHolder = query.get_irb_holder(self.irbHolderID.data)
         if irbHolder is None:
-            self.IRBHolderLUT_irbHolderID.errors.append("ID not found")
+            self.irbHolderID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -1023,72 +1023,72 @@ class ProjectPatientForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     ctcID = IntegerField('ctcID',
         []+COMMON_INTEGER_VALIDATORS)
-    current_age = IntegerField('current_age',
+    currentAge = IntegerField('currentAge',
         []+COMMON_INTEGER_VALIDATORS)
     batch = IntegerField('batch',
         []+COMMON_INTEGER_VALIDATORS)
-    sitegrp = IntegerField('sitegrp',
+    siteGrp = IntegerField('siteGrp',
         []+COMMON_INTEGER_VALIDATORS)
-    final_code = IntegerField('final_code',
+    finalCode = IntegerField('finalCode',
         []+COMMON_INTEGER_VALIDATORS)
-    final_code_date = DateField('final_code_date',
+    finalCodeDate = DateField('finalCodeDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    enrollment_date = DateField('enrollment_date',
+    enrollmentDate = DateField('enrollmentDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    date_coord_signed = DateField('date_coord_signed',
+    dateCoordSigned = DateField('dateCoordSigned',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    import_date = DateField('import_date',
+    importDate = DateField('importDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    final_code_staff = IntegerField('final_code_staff',
+    finalCodeStaff = IntegerField('finalCodeStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    enrollment_staff = IntegerField('enrollment_staff',
+    enrollmentStaff = IntegerField('enrollmentStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    date_coord_signed_staff = DateField('date_coord_signed_staff',
+    dateCoordSignedStaff = DateField('dateCoordSignedStaff',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    abstract_status = IntegerField('abstract_status',
+    abstractStatus = IntegerField('abstractStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    abstract_status_date = DateField('abstract_status_date',
+    abstractStatusDate = DateField('abstractStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    abstract_status_staff = IntegerField('abstract_status_staff',
+    abstractStatusStaff = IntegerField('abstractStatusStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    sent_to_abstractor = DateField('sent_to_abstractor',
+    sentToAbstractorDate = DateField('sentToAbstractorDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    sent_to_abstractor_staff = IntegerField('sent_to_abstractor_staff',
+    sentToAbstractorStaff = IntegerField('sentToAbstractorStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    abstracted_date = DateField('abstracted_date',
+    abstractedDate = DateField('abstractedDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    abstractor_initials = StringField('abstractor_initials',
+    abstractorInitials = StringField('abstractorInitials',
         []+COMMON_STRING_VALIDATORS)
-    researcher_date = DateField('researcher_date',
+    researcherDate = DateField('researcherDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    researcher_staff = IntegerField('researcher_staff',
+    researcherStaff = IntegerField('researcherStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    consent_link = StringField('consent_link',
+    consentLink = StringField('consentLink',
         []+COMMON_STRING_VALIDATORS)
-    tracing_status = IntegerField('tracing_status',
+    tracingStatus = IntegerField('tracingStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    med_record_release_signed = BooleanField('med_record_release_signed',
+    medRecordReleaseSigned = BooleanField('medRecordReleaseSigned',
         []+COMMON_BOOL_VALIDATORS)
-    med_record_release_link = StringField('med_record_release_link',
+    medRecordReleaseLink = StringField('medRecordReleaseLink',
         []+COMMON_STRING_VALIDATORS)
-    med_record_release_staff = IntegerField('med_record_release_staff',
+    medRecordReleaseStaff = IntegerField('medRecordReleaseStaff',
         []+COMMON_INTEGER_VALIDATORS)
-    med_record_release_date = DateField('med_record_release_date',
+    medRecordReleaseDate = DateField('medRecordReleaseDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    survey_to_researcher = DateField('survey_to_researcher',
+    surveyToResearcher = DateField('surveyToResearcher',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    survey_to_researcher_staff = IntegerField('survey_to_researcher_staff',
+    surveyToResearcherStaff = IntegerField('surveyToResearcherStaff',
         []+COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
@@ -1112,7 +1112,7 @@ class ProjectPatientForm(Form):
         return not hasErrors
 
 class ProjectStaffForm(Form):
-    staffRoleLUTID = IntegerField('staffRoleLUTID',
+    staffRoleID = IntegerField('staffRoleID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -1120,22 +1120,22 @@ class ProjectStaffForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     role = IntegerField('role',
         []+COMMON_INTEGER_VALIDATORS)
-    date_pledge = DateField('date_pledge',
+    datePledge = DateField('datePledge',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    date_revoked = DateField('date_revoked',
+    dateRevoked = DateField('dateRevoked',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
     contact = StringField('contact',
         []+COMMON_STRING_VALIDATORS)
     inactive = StringField('inactive',
         []+COMMON_STRING_VALIDATORS)
-    human_sub_training_exp = DateField('human_sub_training_exp',
+    humanSubjectTrainingExp = DateField('humanSubjectTrainingExp',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    human_sub_type_id = IntegerField('human_sub_type_id',
+    humanSubjectTrainingTypeID = IntegerField('humanSubjectTrainingTypeID',
         []+COMMON_INTEGER_VALIDATORS)
-    study_role = IntegerField('study_role',
+    studyRole = IntegerField('studyRole',
         []+COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
@@ -1152,23 +1152,23 @@ class ProjectStaffForm(Form):
             self.staffID.errors.append("ID not found")
             hasErrors = True
 
-        staffRole = query.get_staff_role(self.staffRoleLUTID.data)
+        staffRole = query.get_staff_role(self.staffRoleID.data)
         if staffRole is None:
-            self.staffRoleLUTID.errors.append("ID not found")
+            self.staffRoleID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
 class ProjectStatusForm(Form):
-    projectStatusLUTID = IntegerField('projectStatusLUTID',
+    projectStatusTypeID = IntegerField('projectStatusTypeID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     staffID = IntegerField('staffID',
         []+COMMON_INTEGER_VALIDATORS)
-    status_date = DateField('status_date',
+    statusDate = DateField('statusDate',
         []+COMMON_DATE_VALIDATORS,
         format=DATE_FORMAT)
-    status_notes = StringField('status_notes',
+    statusNotes = StringField('statusNotes',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -1183,9 +1183,9 @@ class ProjectStatusForm(Form):
             self.projectID.errors.append("ID not found")
             hasErrors =  True
 
-        projectStatus = query.get_project_status_lut(self.projectStatusLUTID.data)
+        projectStatus = query.get_project_status_lut(self.projectStatusTypeID.data)
         if projectStatus is None:
-            self.projectStatusLUTID.errors.append("ID not found")
+            self.projectStatusTypeID.errors.append("ID not found")
             hasErrors = True
 
         staff = query.get_staff(self.staffID.data)
@@ -1195,21 +1195,21 @@ class ProjectStatusForm(Form):
         return not hasErrors
 
 class ProjectStatusLUTForm(Form):
-    project_status = StringField('project_status',
+    projectStatus = StringField('projectStatus',
         []+COMMON_STRING_VALIDATORS)
-    status_definition = StringField('status_definition',
+    projectStatusDefinition = StringField('projectStatusDefinition',
         []+COMMON_STRING_VALIDATORS)
 
 class ProjectTypeForm(Form):
-    project_type = StringField('project_type',
+    projectType = StringField('projectType',
         []+COMMON_STRING_VALIDATORS)
-    project_type_definition = StringField('project_type_definition',
+    projectTypeDefinition = StringField('projectTypeDefinition',
         []+COMMON_STRING_VALIDATORS)
 
 class RCStatusListForm(Form):
-    rc_status = StringField('rc_status',
+    rcStatus = StringField('rc_status',
         []+COMMON_STRING_VALIDATORS)
-    rc_status_definition = StringField('rc_status_definition',
+    rcStatusDefinition = StringField('rc_status_definition',
         []+COMMON_STRING_VALIDATORS)
 
 class ReviewCommitteeForm(Form):

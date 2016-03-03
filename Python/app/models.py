@@ -1362,21 +1362,21 @@ class PreApplication(CustomModel):
 class Project(CustomModel):
     __tablename__='project'
     
-    projectID = db.Column(db.Integer, primary_key=True)
-    projectType_projectTypeID = db.Column(db.Integer, db.ForeignKey('projectType.projectTypeID'))
-    IRBHolderLUT_irbHolderID = db.Column(db.Integer, db.ForeignKey('IRBHolderLUT.irbHolderID'))
-    project_name = db.Column(db.String)
-    short_title = db.Column(db.String)
-    project_summary = db.Column(db.String)
-    sop = db.Column(db.String)
-    UCR_proposal = db.Column(db.String)
-    budget_doc = db.Column(db.String)
-    UCR_fee = db.Column(db.String)
-    UCR_no_fee = db.Column(db.String)
-    budget_end_date = db.Column(db.Date)
-    previous_short_title = db.Column(db.String)
-    date_added = db.Column(db.Date)
-    final_recruitment_report = db.Column(db.String)
+    projectID = db.Column('projectID',db.Integer, primary_key=True)
+    projectTypeID = db.Column('projectTypeID',db.Integer, db.ForeignKey('projectType.projectTypeID'))
+    irbHolderID = db.Column('irbHolderID',db.Integer, db.ForeignKey('IRBHolderLUT.irbHolderID'))
+    projectName = db.Column('project_name',db.String)
+    shortTitle = db.Column('short_title',db.String)
+    projectSummary = db.Column('project_summary',db.String)
+    sop = db.Column('sop',db.String)
+    ucrProposal = db.Column('UCR_proposal',db.String)
+    budgetDoc = db.Column('budget_doc',db.String)
+    ucrFee = db.Column('UCR_fee',db.String)
+    ucrNoFee = db.Column('UCR_no_fee',db.String)
+    budgetEndDate = db.Column('budget_end_date',db.Date)
+    previousShortTitle = db.Column('previous_short_title',db.String)
+    dateAdded = db.Column('date_added',db.Date)
+    finalRecruitmentReport = db.Column('final_recruitment_report',db.String)
     
     # M - 1, Many projects with same IRB Holder
     irbHolder = db.relationship("IRBHolderLUT", back_populates="projects")
@@ -1408,71 +1408,71 @@ class Project(CustomModel):
     def __repr__(self):
         return "<Project(\
         projectID={},\
-        projectType_projectTypeID={},\
-        IRBHolderLUT_irbHolderID={},\
-        project_name={},\
-        short_title={},\
-        project_summary={},\
+        projectTypeID={},\
+        irbHolderID={},\
+        projectName={},\
+        shortTitle={},\
+        projectSummary={},\
         sop={},\
-        UCR_proposal={},\
-        budget_doc={},\
-        UCR_fee={},\
-        UCR_no_fee={},\
-        budget_end_db.Date={},\
-        previous_short_title={},\
-        db.Date_added={},\
-        final_recruitment_report={})>".format(
+        ucrProposal={},\
+        budgetDoc={},\
+        ucrFee={},\
+        ucrNoFee={},\
+        budgetEndDate={},\
+        previousShortTitle={},\
+        dateAdded={},\
+        finalRecruitmentReport={})>".format(
         self.projectID,
-        self.projectType_projectTypeID,
-        self.IRBHolderLUT_irbHolderID,
-        self.project_name,
-        self.short_title,
-        self.project_summary,
+        self.projectTypeID,
+        self.irbHolderID,
+        self.projectName,
+        self.shortTitle,
+        self.projectSummary,
         self.sop,
-        self.UCR_proposal,
-        self.budget_doc,
-        self.UCR_fee,
-        self.UCR_no_fee,
-        self.budget_end_date,
-        self.previous_short_title,
-        self.date_added,
-        self.final_recruitment_report)
+        self.ucrProposal,
+        self.budgetDoc,
+        self.ucrFee,
+        self.ucrNoFee,
+        self.budgetEndDate,
+        self.previousShortTitle,
+        self.dateAdded,
+        self.finalRecruitmentReport)
         
 class ProjectPatient(CustomModel):
     __tablename__ = 'projectPatient'
     
-    participantID = db.Column(db.Integer, primary_key=True)
-    projectID = db.Column(db.Integer, db.ForeignKey('project.projectID'))
-    staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    ctcID = db.Column(db.Integer, db.ForeignKey('ctc.ctcID'))
-    current_age = db.Column(db.Integer)
-    batch = db.Column(db.Integer)
-    sitegrp = db.Column(db.Integer)
-    final_code = db.Column(db.Integer)
-    final_code_date = db.Column(db.Date)
-    enrollment_date = db.Column(db.Date)
-    date_coord_signed = db.Column(db.Date)
-    import_date = db.Column(db.Date)
-    final_code_staff = db.Column(db.Integer) # FK?
-    enrollment_staff = db.Column(db.Integer) #FK?
-    date_coord_signed_staff = db.Column(db.Date)
-    abstract_status = db.Column(db.Integer)
-    abstract_status_date = db.Column(db.Date)
-    abstract_status_staff = db.Column(db.Integer) # FK?
-    sent_to_abstractor = db.Column(db.Date)
-    sent_to_abstractor_staff = db.Column(db.Integer) # FK
-    abstracted_date = db.Column(db.Date)
-    abstractor_initials = db.Column(db.String)
-    researcher_date = db.Column(db.Date)
-    researcher_staff = db.Column(db.Integer) # FK
-    consent_link = db.Column(db.String)
-    tracing_status = db.Column(db.Integer)
-    med_record_release_signed = db.Column(db.Boolean)
-    med_record_release_link = db.Column(db.String)
-    med_record_release_staff = db.Column(db.Integer) # FK
-    med_record_release_date = db.Column(db.Date)
-    survey_to_researcher = db.Column(db.Date)
-    survey_to_researcher_staff = db.Column(db.Integer) # FK
+    participantID = db.Column('participantID',db.Integer, primary_key=True)
+    projectID = db.Column('projectID',db.Integer, db.ForeignKey('project.projectID'))
+    staffID = db.Column('staffID',db.Integer, db.ForeignKey('staff.staffID'))
+    ctcID = db.Column('ctcID',db.Integer, db.ForeignKey('ctc.ctcID'))
+    currentAge = db.Column('current_age',db.Integer)
+    batch = db.Column('batch',db.Integer)
+    siteGrp = db.Column('sitegrp',db.Integer)
+    finalCode = db.Column('final_code',db.Integer)
+    finalCodeDate = db.Column('final_code_date',db.Date)
+    enrollmentDate= db.Column('enrollment_date',db.Date)
+    dateCoordSigned = db.Column('date_coord_signed',db.Date)
+    importDate = db.Column('import_date',db.Date)
+    finalCodeStaff = db.Column('final_code_staff',db.Integer) # FK?
+    enrollmentStaff = db.Column('enrollment_staff',db.Integer) #FK?
+    dateCoordSignedStaff = db.Column('date_coord_signed_staff',db.Date)
+    abstractStatus = db.Column('abstract_status',db.Integer)
+    abstractStatusDate = db.Column('abstract_status_date',db.Date)
+    abstractStatusStaff = db.Column('abstract_status_staff',db.Integer) # FK?
+    sentToAbstractorDate = db.Column('sent_to_abstractor',db.Date)
+    sentToAbstractorStaff = db.Column('sent_to_abstractor_staff',db.Integer) # FK
+    abstractedDate = db.Column('abstracted_date',db.Date)
+    abstractorInitials = db.Column('abstractor_initials',db.String)
+    researcherDate = db.Column('researcher_date',db.Date)
+    researcherStaff = db.Column('researcher_staff',db.Integer) # FK
+    consentLink = db.Column('consent_link',db.String)
+    tracingStatus = db.Column('tracing_status',db.Integer)
+    medRecordReleaseSigned = db.Column('med_record_release_signed',db.Boolean)
+    medRecordReleaseLink = db.Column('med_record_release_link',db.String)
+    medRecordReleaseStaff = db.Column('med_record_release_staff',db.Integer) # FK
+    medRecordReleaseDate = db.Column('med_record_release_date',db.Date)
+    surveyToResearcher = db.Column('survey_to_researcher',db.Date)
+    surveyToResearcherStaff = db.Column('survey_to_researcher_staff',db.Integer) # FK
     
     # Relationships
     # 1 - M, one PP with many PPStatuses
@@ -1494,82 +1494,82 @@ class ProjectPatient(CustomModel):
         projectID = {},\
         staffID = {},\
         ctcID = {},\
-        current_age = {},\
+        currentAge = {},\
         batch = {},\
-        sitegrp = {},\
-        final_code = {},\
-        final_code_date = {},\
-        enrollment_date = {},\
-        date_coord_signed = {},\
-        import_date = {},\
-        final_code_staff = {},\
-        enrollment_staff = {},\
-        date_coord_signed_staff = {},\
-        abstract_status = {},\
-        abstarct_status_date = {},\
-        abstract_status_staff = {},\
-        sent_to_abstractor = {},\
-        sent_to_abstractor_staff = {},\
-        abstracted_date = {},\
-        abstractor_initials = {},\
-        researcher_date = {},\
-        researcher_staff = {},\
-        consent_link = {},\
-        tracing_status = {},\
-        med_record_release_signed = {},\
-        med_record_relase_link = {},\
-        med_record_release_staff = {},\
-        med_record_release_date = {},\
-        survey_to_researcher = {},\
-        survey_to_researcher_staff = {})>".format(
+        siteGrp = {},\
+        finalCode = {},\
+        finalCodeDate = {},\
+        enrollmentDate = {},\
+        dateCoordSigned = {},\
+        importDate = {},\
+        finalCodeStaff = {},\
+        enrollmentStaff = {},\
+        dateCoordSignedStaff = {},\
+        abstractStatus = {},\
+        abstractStatusDate = {},\
+        abstractStatusStaff = {},\
+        sentToAbstractorDate = {},\
+        sentToAbstractorStaff = {},\
+        abstractedDate = {},\
+        abstractorInitials = {},\
+        researcherDate = {},\
+        researcherStaff = {},\
+        consentLink = {},\
+        tracingStatus = {},\
+        medRecordReleaseSigned = {},\
+        medRecordRelaseLink = {},\
+        medRecordReleaseStaff = {},\
+        medRecordReleaseDate = {},\
+        surveyToResearcher = {},\
+        surveyToResearcherStaff = {})>".format(
         self.participantID,
         self.projectID,
         self.staffID,
         self.ctcID,
-        self.current_age,
+        self.currentAge,
         self.batch,
-        self.sitegrp,
-        self.final_code,
-        self.final_code_date,
-        self.enrollment_date,
-        self.date_coord_signed,
-        self.import_date,
-        self.final_code_staff,
-        self.enrollment_staff,
-        self.date_coord_signed_staff,
-        self.abstract_status,
-        self.abstarct_status_date,
-        self.abstract_status_staff,
-        self.sent_to_abstractor,
-        self.sent_to_abstractor_staff,
-        self.abstracted_date,
-        self.abstractor_initials,
-        self.researcher_date,
-        self.researcher_staff,
-        self.consent_link,
-        self.tracing_status,
-        self.med_record_release_signed,
-        self.med_record_relase_link,
-        self.med_record_release_staff,
-        self.med_record_release_date,
-        self.survey_to_researcher,
-        self.survey_to_researcher_staff)
+        self.siteGrp,
+        self.finalCode,
+        self.finalCodeDate,
+        self.enrollmentDate,
+        self.dateCoordSigned,
+        self.importDate,
+        self.finalCodeStaff,
+        self.enrollmentStaff,
+        self.dateCoordSignedStaff,
+        self.abstractStatus,
+        self.abstractedDate,
+        self.abstractStatusStaff,
+        self.sentToAbstractorDate,
+        self.sentToAbstractorStaffe,
+        self.abstractedDate,
+        self.abstractorInitials,
+        self.researcherDate,
+        self.researcherStaff,
+        self.consentLink,
+        self.tracingStatus,
+        self.medRecordReleaseSigned,
+        self.medRecordReleaseLink,
+        self.medRecordReleaseStaff,
+        self.medRecordReleaseDate,
+        self.surveyToResearcher,
+        self.surveyToResearcherStaff)
         
 class ProjectStaff(CustomModel):
     __tablename__ =  'projectStaff'
     
-    projectStaffID = db.Column(db.Integer, primary_key=True)
-    staffRoleLUTID = db.Column(db.Integer, db.ForeignKey('staffRoleLUT.staffRoleLUTID'))
-    projectID = db.Column(db.Integer, db.ForeignKey('project.projectID'))
-    staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    role = db.Column(db.Integer)
-    date_pledge = db.Column(db.Date)
-    date_revoked = db.Column(db.Date)
-    contact = db.Column(CONTACTS)
-    inactive = db.Column(INACTIVES)
-    human_sub_training_exp = db.Column(db.Date)
-    human_sub_type_id = db.Column(db.Integer)
-    study_role = db.Column(db.Integer)
+    projectStaffID = db.Column('projectStaffID',db.Integer, primary_key=True)
+    staffRoleID = db.Column('staffRoleLUTID',db.Integer, db.ForeignKey('staffRoleLUT.staffRoleLUTID'))
+    projectID = db.Column('projectID',db.Integer, db.ForeignKey('project.projectID'))
+    staffID = db.Column('staffID',db.Integer, db.ForeignKey('staff.staffID'))
+    role = db.Column('role',db.Integer)
+    datePledge = db.Column('datePledge',db.Date)
+    dateRevoked = db.Column('dateRevoked',db.Date)
+    contact = db.Column('contact',CONTACTS)
+    inactive = db.Column('inactive',INACTIVES)
+    humanSubjectTrainingExp = db.Column('human_sub_training_exp',db.Date)
+    humanSubjectTrainingTypeID = db.Column('human_sub_type_id',db.Integer)
+    studyRole = db.Column('study_role',db.Integer)
     
     # Relationships
     # M - 1, Many projectStaff with the same role
@@ -1582,39 +1582,39 @@ class ProjectStaff(CustomModel):
     def __repr__(self):
         return "<ProjectStaff(\
         projectStaffID = {},\
-        staffRoleLUTID = {},\
+        staffRoleID = {},\
         projectID = {},\
         staffID = {},\
         role = {},\
-        date_pledge = {},\
-        date_revoked = {},\
+        datePledge = {},\
+        dateRevoked = {},\
         contact = {},\
         inactive = {},\
-        human_sub_training_exp = {},\
-        human_sub_type_id = {},\
-        study_role = {})>".format(
+        humanSubjectTrainingExp = {},\
+        humanSubjectTrainingTypeID = {},\
+        studyRole = {})>".format(
         self.projectStaffID,
-        self.staffRoleLUTID,
+        self.staffRoleID,
         self.projectID,
         self.staffID,
         self.role,
-        self.date_pledge,
-        self.date_revoked,
+        self.datePledge,
+        self.dateRevoked,
         self.contact,
         self.inactive,
-        self.human_sub_training_exp,
-        self.human_sub_type_id,
-        self.study_role)
+        self.humanSubjectTrainingExp,
+        self.humanSubjectTrainingTypeID,
+        self.studyRole)
         
 class ProjectStatus(CustomModel):
     __tablename__ = 'projectStatus'
 
-    projectStatusID = db.Column(db.Integer, primary_key=True)
-    projectStatusLUTID = db.Column(db.Integer, db.ForeignKey('projectStatusLUT.projectStatusTypeID'))
-    projectID = db.Column(db.Integer, db.ForeignKey('project.projectID'))
-    staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    status_date = db.Column(db.Date)
-    status_notes = db.Column(db.String)
+    projectStatusID = db.Column('projectStatusID',db.Integer, primary_key=True)
+    projectStatusTypeID = db.Column('projectStatusLUTID',db.Integer, db.ForeignKey('projectStatusLUT.projectStatusTypeID'))
+    projectID = db.Column('projectID',db.Integer, db.ForeignKey('project.projectID'))
+    staffID = db.Column('staffID',db.Integer, db.ForeignKey('staff.staffID'))
+    statusDate = db.Column('statusDate',db.Date)
+    statusNotes = db.Column('statusNotes',db.String)
     
     # Relationships
     # M -1 , many projectStatuses per projectStatusLUT
@@ -1628,24 +1628,24 @@ class ProjectStatus(CustomModel):
     def __repr__(self):
         return "<ProjectStatus(\
         projectStatusID = {},\
-        projectStatusLUTID = {},\
+        projectStatusTypeID = {},\
         projectID = {},\
         staffID = {},\
-        status_date = {},\
-        status_notes = {})>".format(
+        statusDate = {},\
+        statusNotes = {})>".format(
         self.projectStatusID,
-        self.projectStatusLUTID,
+        self.projectStatusTypeID,
         self.projectID,
         self.staffID,
-        self.status_date,
-        self.status_notes)
+        self.statusDate,
+        self.statusNotes)
     
 class ProjectStatusLUT(CustomModel):
     __tablename__ = 'projectStatusLUT'
     
-    projectStatusTypeID = db.Column(db.Integer, primary_key=True)
-    project_status = db.Column(db.String)
-    status_definition = db.Column(db.String)
+    projectStatusTypeID = db.Column('projectStatusTypeID',db.Integer, primary_key=True)
+    projectStatus = db.Column('project_status',db.String)
+    projectStatusDefinition = db.Column('status_definition',db.String)
     
     # Relationships
     # M - 1, many ProjectStatuses per projectStatusLUT
@@ -1654,18 +1654,18 @@ class ProjectStatusLUT(CustomModel):
     def __repr__(self):
         return "<ProjectStatusLUT(\
         projectStatusTypeID = {},\
-        project_status = {},\
-        status_definition = {})>".format(
+        projectStatus = {},\
+        projectStatusDefinition = {})>".format(
         self.projectStatusTypeID,
-        self.project_status,
-        self.status_definition)
+        self.projectStatus,
+        self.projectStatusDefinition)
           
 class ProjectType(CustomModel):
     __tablename__ = 'projectType'
     
     projectTypeID = db.Column(db.Integer,primary_key=True)
-    project_type = db.Column(db.String)
-    project_type_definition = db.Column(db.String)
+    projectType = db.Column(db.String)
+    projectTypeDefinition = db.Column(db.String)
     
     # Relationships
     # M - 1 Many projects with same project type
@@ -1677,15 +1677,15 @@ class ProjectType(CustomModel):
         project_type={},\
         project_type_definition={})>".format(
         self.projectTypeID,
-        self,project_type,
-        self.project_type_definition)
+        self.projectType,
+        self.projectTypeDefinition)
     
 class RCStatusList(CustomModel):
     __tablename__ = 'RCStatusList'
     
     rcStatusID = db.Column(db.Integer, primary_key=True)
-    rc_status = db.Column(db.String)
-    rc_status_definition = db.Column(db.String)
+    rcStatus = db.Column(db.String)
+    rcStatusDefinition = db.Column(db.String)
     
     # Relationships
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="RCStatusList")
@@ -1696,8 +1696,8 @@ class RCStatusList(CustomModel):
             rc_status = {},\
             rc_status_definition = {})>".format(
             self.rcStatusID,
-            self.rc_status,
-            self.rc_status_definition)
+            self.rcStatus,
+            self.rcStatusDefinition)
 
 class ReviewCommittee(CustomModel):
     __tablename__ = 'reviewCommittee'

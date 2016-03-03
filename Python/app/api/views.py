@@ -2811,20 +2811,20 @@ def update_project(projectID):
         if proj is not None:
             form = forms.ProjectForm(request.form)
             if form.validate():
-                proj.projectType_projectTypeID = request.form['projectType_projectTypeID']
-                proj.IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID']
-                proj.project_name = request.form['project_name']
-                proj.short_title = request.form['short_title']
-                proj.project_summary = request.form['project_summary']
+                proj.projectTypeID = request.form['projectTypeID']
+                proj.irbHolderID = request.form['irbHolderID']
+                proj.projectName = request.form['projectName']
+                proj.shortTitle = request.form['shortTitle']
+                proj.projectSummary = request.form['projectSummary']
                 proj.sop = request.form['sop']
-                proj.UCR_proposal = request.form['UCR_proposal']
-                proj.budget_doc = request.form['budget_doc']
-                proj.UCR_fee = request.form['UCR_fee']
-                proj.UCR_no_fee = request.form['UCR_no_fee']
-                proj.budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d")
-                proj.previous_short_title = request.form['previous_short_title']
-                proj.date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d")
-                proj.final_recruitment_report = request.form['final_recruitment_report']
+                proj.ucrProposal = request.form['ucrProposal']
+                proj.budgetDoc = request.form['budgetDoc']
+                proj.ucrFee = request.form['ucrFee']
+                proj.ucrNoFee = request.form['ucrNoFee']
+                proj.budgetEndDate = datetime.strptime(request.form['budgetEndDate'],"%Y-%m-%d")
+                proj.previousShortTitle = request.form['previousShortTitle']
+                proj.dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d")
+                proj.finalRecruitmentReport = request.form['finalRecruitmentReport']
                 query.commit()
                 return proj.json()
             else:
@@ -2840,20 +2840,20 @@ def create_project():
         form = forms.ProjectForm(request.form)
         if form.validate():
             proj = models.Project(
-                projectType_projectTypeID = request.form['projectType_projectTypeID'],
-                IRBHolderLUT_irbHolderID = request.form['IRBHolderLUT_irbHolderID'],
-                project_name = request.form['project_name'],
-                short_title = request.form['short_title'],
-                project_summary = request.form['project_summary'],
+                projectTypeID = request.form['projectTypeID'],
+                irbHolderID = request.form['irbHolderID'],
+                projectName = request.form['projectName'],
+                shortTitle = request.form['shortTitle'],
+                projectSummary = request.form['projectSummary'],
                 sop = request.form['sop'],
-                UCR_proposal = request.form['UCR_proposal'],
-                budget_doc = request.form['budget_doc'],
-                UCR_fee = request.form['UCR_fee'],
-                UCR_no_fee = request.form['UCR_no_fee'],
-                budget_end_date = datetime.strptime(request.form['budget_end_date'],"%Y-%m-%d"),
-                previous_short_title = request.form['previous_short_title'],
-                date_added = datetime.strptime(request.form['date_added'],"%Y-%m-%d"),
-                final_recruitment_report = request.form['final_recruitment_report']
+                ucrProposal = request.form['ucrProposal'],
+                budgetDoc = request.form['budgetDoc'],
+                ucrFee = request.form['ucrFee'],
+                ucrNoFee = request.form['ucrNoFee'],
+                budgetEndDate = datetime.strptime(request.form['budgetEndDate'],"%Y-%m-%d"),
+                previousShortTitle = request.form['previousShortTitle'],
+                dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d"),
+                finalRecruitmentReport = request.form['finalRecruitmentReport']
                 )
             query.add(proj)
             return jsonify({'projectID':proj.projectID})
@@ -2906,34 +2906,34 @@ def update_project_patient(participantID):
                 projectPatient.projectID = request.form['projectID']
                 projectPatient.staffID = request.form['staffID']
                 projectPatient.ctcID = request.form['ctcID']
-                projectPatient.current_age = request.form['current_age']
+                projectPatient.currentAge = request.form['currentAge']
                 projectPatient.batch = request.form['batch']
-                projectPatient.sitegrp = request.form['sitegrp']
-                projectPatient.final_code = request.form['final_code']
-                projectPatient.final_code_date = datetime.strptime(request.form['final_code_date'],"%Y-%m-%d")
-                projectPatient.enrollment_date = datetime.strptime(request.form['enrollment_date'],"%Y-%m-%d")
-                projectPatient.date_coord_signed = datetime.strptime(request.form['date_coord_signed'],"%Y-%m-%d")
-                projectPatient.import_date = datetime.strptime(request.form['import_date'],"%Y-%m-%d")
-                projectPatient.final_code_staff = request.form['final_code_staff']
-                projectPatient.enrollment_staff = request.form['enrollment_staff']
-                projectPatient.date_coord_signed_staff = datetime.strptime(request.form['date_coord_signed_staff'],"%Y-%m-%d")
-                projectPatient.abstract_status = request.form['abstract_status']
-                projectPatient.abstract_status_date = datetime.strptime(request.form['abstract_status_date'],"%Y-%m-%d")
-                projectPatient.abstract_status_staff = request.form['abstract_status_staff']
-                projectPatient.sent_to_abstractor = datetime.strptime(request.form['sent_to_abstractor'],"%Y-%m-%d")
-                projectPatient.sent_to_abstractor_staff = request.form['sent_to_abstractor_staff']
-                projectPatient.abstracted_date = datetime.strptime(request.form['abstracted_date'],"%Y-%m-%d")
-                projectPatient.abstractor_initials = request.form['abstractor_initials']
-                projectPatient.researcher_date = datetime.strptime(request.form['researcher_date'],"%Y-%m-%d")
-                projectPatient.researcher_staff = request.form['researcher_staff']
-                projectPatient.consent_link = request.form['consent_link']
-                projectPatient.tracing_status = request.form['tracing_status']
-                projectPatient.med_record_release_signed = "true" == request.form['med_record_release_signed'].lower()
-                projectPatient.med_record_release_link = request.form['med_record_release_link']
-                projectPatient.med_record_release_staff = request.form['med_record_release_staff']
-                projectPatient.med_record_release_date =  datetime.strptime(request.form['med_record_release_date'],"%Y-%m-%d")
-                projectPatient.survey_to_researcher =  datetime.strptime(request.form['survey_to_researcher'],"%Y-%m-%d")
-                projectPatient.survey_to_researcher_staff = request.form['survey_to_researcher_staff']
+                projectPatient.siteGrp = request.form['siteGrp']
+                projectPatient.finalCode = request.form['finalCode']
+                projectPatient.finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d")
+                projectPatient.enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d")
+                projectPatient.dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d")
+                projectPatient.importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d")
+                projectPatient.finalCodeStaff = request.form['finalCodeStaff']
+                projectPatient.enrollmentStaff = request.form['enrollmentStaff']
+                projectPatient.dateCoordSignedStaff = datetime.strptime(request.form['dateCoordSignedStaff'],"%Y-%m-%d")
+                projectPatient.abstractStatus = request.form['abstractStatus']
+                projectPatient.abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d")
+                projectPatient.abstractStatusStaff = request.form['abstractStatusStaff']
+                projectPatient.sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d")
+                projectPatient.sentToAbstractorStaff = request.form['sentToAbstractorStaff']
+                projectPatient.abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d")
+                projectPatient.abstractorInitials = request.form['abstractorInitials']
+                projectPatient.researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d")
+                projectPatient.researcherStaff = request.form['researcherStaff']
+                projectPatient.consentLink = request.form['consentLink']
+                projectPatient.tracingStatus = request.form['tracingStatus']
+                projectPatient.medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower()
+                projectPatient.medRecordReleaseLink = request.form['medRecordReleaseLink']
+                projectPatient.medRecordReleaseStaff = request.form['medRecordReleaseStaff']
+                projectPatient.medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d")
+                projectPatient.surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d")
+                projectPatient.surveyToResearcherStaff = request.form['surveyToResearcherStaff']
                 query.commit()
                 return projectPatient.json()
             else:
@@ -2952,34 +2952,34 @@ def create_project_patient():
                 projectID = request.form['projectID'],
                 staffID = request.form['staffID'],
                 ctcID = request.form['ctcID'],
-                current_age = request.form['current_age'],
+                currentAge = request.form['currentAge'],
                 batch = request.form['batch'],
-                sitegrp = request.form['sitegrp'],
-                final_code = request.form['final_code'],
-                final_code_date = datetime.strptime(request.form['final_code_date'],"%Y-%m-%d"),
-                enrollment_date = datetime.strptime(request.form['enrollment_date'],"%Y-%m-%d"),
-                date_coord_signed = datetime.strptime(request.form['date_coord_signed'],"%Y-%m-%d"),
-                import_date = datetime.strptime(request.form['import_date'],"%Y-%m-%d"),
-                final_code_staff = request.form['final_code_staff'],
-                enrollment_staff = request.form['enrollment_staff'],
-                date_coord_signed_staff = datetime.strptime(request.form['date_coord_signed_staff'],"%Y-%m-%d"),
-                abstract_status = request.form['abstract_status'],
-                abstract_status_date = datetime.strptime(request.form['abstract_status_date'],"%Y-%m-%d"),
-                abstract_status_staff = request.form['abstract_status_staff'],
-                sent_to_abstractor = datetime.strptime(request.form['sent_to_abstractor'],"%Y-%m-%d"),
-                sent_to_abstractor_staff = request.form['sent_to_abstractor_staff'],
-                abstracted_date = datetime.strptime(request.form['abstracted_date'],"%Y-%m-%d"),
-                abstractor_initials = request.form['abstractor_initials'],
-                researcher_date = datetime.strptime(request.form['researcher_date'],"%Y-%m-%d"),
-                researcher_staff = request.form['researcher_staff'],
-                consent_link = request.form['consent_link'],
-                tracing_status = request.form['tracing_status'],
-                med_record_release_signed = "true" == request.form['med_record_release_signed'].lower(),
-                med_record_release_link = request.form['med_record_release_link'],
-                med_record_release_staff = request.form['med_record_release_staff'],
-                med_record_release_date =  datetime.strptime(request.form['med_record_release_date'],"%Y-%m-%d"),
-                survey_to_researcher =  datetime.strptime(request.form['survey_to_researcher'],"%Y-%m-%d"),
-                survey_to_researcher_staff = request.form['survey_to_researcher_staff']
+                siteGrp = request.form['siteGrp'],
+                finalCode = request.form['finalCode'],
+                finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d"),
+                enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
+                dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
+                importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d"),
+                finalCodeStaff = request.form['finalCodeStaff'],
+                enrollmentStaff = request.form['enrollmentStaff'],
+                dateCoordSignedStaff = datetime.strptime(request.form['dateCoordSignedStaff'],"%Y-%m-%d"),
+                abstractStatus = request.form['abstractStatus'],
+                abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
+                abstractStatusStaff = request.form['abstractStatusStaff'],
+                sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
+                sentToAbstractorStaff = request.form['sentToAbstractorStaff'],
+                abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
+                abstractorInitials = request.form['abstractorInitials'],
+                researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
+                researcherStaff = request.form['researcherStaff'],
+                consentLink = request.form['consentLink'],
+                tracingStatus = request.form['tracingStatus'],
+                medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower(),
+                medRecordReleaseLink = request.form['medRecordReleaseLink'],
+                medRecordReleaseStaff = request.form['medRecordReleaseStaff'],
+                medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d"),
+                surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d"),
+                surveyToResearcherStaff = request.form['surveyToResearcherStaff']
             )
             query.add(projectPatient)
             return jsonify({'participantID':projectPatient.participantID})
@@ -3029,17 +3029,17 @@ def update_project_staff(projectStaffID):
         if projectStaff is not None:
             form = forms.ProjectStaffForm(request.form)
             if form.validate():
-                projectStaff.staffRoleLUTID = request.form['staffRoleLUTID']
+                projectStaff.staffRoleID = request.form['staffRoleID']
                 projectStaff.projectID = request.form['projectID']
                 projectStaff.staffID = request.form['staffID']
                 projectStaff.role = request.form['role']
-                projectStaff.date_pledge = datetime.strptime(request.form['date_pledge'],"%Y-%m-%d")
-                projectStaff.date_revoked = datetime.strptime(request.form['date_revoked'],"%Y-%m-%d")
+                projectStaff.datePledge = datetime.strptime(request.form['datePledge'],"%Y-%m-%d")
+                projectStaff.dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d")
                 projectStaff.contact = request.form['contact']
                 projectStaff.inactive = request.form['inactive']
-                projectStaff.human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d")
-                projectStaff.human_sub_type_id = request.form['human_sub_type_id']
-                projectStaff.study_role = request.form['study_role']
+                projectStaff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
+                projectStaff.humanSubjectTrainingTypeID = request.form['humanSubjectTrainingTypeID']
+                projectStaff.studyRole = request.form['studyRole']
                 query.commit()
                 return projectStaff.json()
             else:
@@ -3055,17 +3055,17 @@ def create_project_staff():
         form = forms.ProjectStaffForm(request.form)
         if form.validate():
             projectStaff = models.ProjectStaff(
-                staffRoleLUTID = request.form['staffRoleLUTID'],
+                staffRoleID = request.form['staffRoleID'],
                 projectID = request.form['projectID'],
                 staffID = request.form['staffID'],
                 role = request.form['role'],
-                date_pledge = datetime.strptime(request.form['date_pledge'],"%Y-%m-%d"),
-                date_revoked = datetime.strptime(request.form['date_revoked'],"%Y-%m-%d"),
+                datePledge = datetime.strptime(request.form['datePledge'],"%Y-%m-%d"),
+                dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d"),
                 contact = request.form['contact'],
                 inactive = request.form['inactive'],
-                human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d"),
-                human_sub_type_id = request.form['human_sub_type_id'],
-                study_role = request.form['study_role']
+                humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
+                humanSubjectTrainingTypeID = request.form['humanSubjectTrainingTypeID'],
+                studyRole = request.form['studyRole']
             )
             query.add(projectStaff)
             return jsonify({'projectStaffID':projectStaff.projectStaffID})
@@ -3115,11 +3115,11 @@ def update_project_status(projectStatusID):
         if projectStatus is not None:
             form = forms.ProjectStatusForm(request.form)
             if form.validate():
-                projectStatus.projectStatusLUTID = request.form['projectStatusLUTID']
+                projectStatus.projectStatusTypeID = request.form['projectStatusTypeID']
                 projectStatus.projectID = request.form['projectID']
                 projectStatus.staffID = request.form['staffID']
-                projectStatus.status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d")
-                projectStatus.status_notes = request.form['status_notes']
+                projectStatus.statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d")
+                projectStatus.statusNotes = request.form['statusNotes']
                 query.commit()
                 return projectStatus.json()
             else:
@@ -3135,11 +3135,11 @@ def create_project_status():
         form = forms.ProjectStatusForm(request.form)
         if form.validate():
             projectStatus = models.ProjectStatus(
-                projectStatusLUTID = request.form['projectStatusLUTID'],
+                projectStatusTypeID = request.form['projectStatusTypeID'],
                 projectID = request.form['projectID'],
                 staffID = request.form['staffID'],
-                status_date = datetime.strptime(request.form['status_date'],"%Y-%m-%d"),
-                status_notes = request.form['status_notes']
+                statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d"),
+                statusNotes = request.form['statusNotes']
             )
             query.add(projectStatus)
             return jsonify({'projectStatusID':projectStatus.projectStatusID})
@@ -3189,8 +3189,8 @@ def update_project_status_lut(projectStatusTypeID):
         if projectStatusType is not None:
             form = forms.ProjectStatusLUTForm(request.form)
             if form.validate():
-                projectStatusType.project_status = request.form['project_status']
-                projectStatusType.status_definition = request.form['status_definition']
+                projectStatusType.projectStatus = request.form['projectStatus']
+                projectStatusType.projectStatusDefinition = request.form['projectStatusDefinition']
                 query.commit()
                 return projectStatusType.json()
             else:
@@ -3206,8 +3206,8 @@ def create_project_status_lut():
         form = forms.ProjectStatusLUTForm(request.form)
         if form.validate():
             projectStatusType = models.ProjectStatusLUT(
-                project_status = request.form['project_status'],
-                status_definition = request.form['status_definition']
+                projectStatus = request.form['projectStatus'],
+                projectStatusDefinition = request.form['projectStatusDefinition']
             )
             query.add(projectStatusType)
             return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})
@@ -3257,8 +3257,8 @@ def update_project_type(projectTypeID):
         if projectType is not None:
             form = forms.ProjectTypeForm(request.form)
             if form.validate():
-                projectType.project_type = request.form['project_type']
-                projectType.project_type_definition = request.form['project_type_definition']
+                projectType.projectType = request.form['projectType']
+                projectType.projectTypeDefinition = request.form['projectTypeDefinition']
                 query.commit()
                 return projectType.json()
             else:
@@ -3274,8 +3274,8 @@ def create_project_type():
         form = forms.ProjectTypeForm(request.form)
         if form.validate():
             projectType = models.ProjectType(
-                project_type = request.form['project_type'],
-                project_type_definition = request.form['project_type_definition']
+                projectType = request.form['projectType'],
+                projectTypeDefinition = request.form['projectTypeDefinition']
             )
             query.add(projectType)
             return jsonify({'projectTypeID':projectType.projectTypeID})
@@ -3325,8 +3325,8 @@ def update_rc_status_list(rcStatusID):
         if rcStatus is not None:
             form = forms.RCStatusListForm(request.form)
             if form.validate():
-                rcStatus.rc_status = request.form['rc_status']
-                rcStatus.rc_status_definition = request.form['rc_status_definition']
+                rcStatus.rcStatus = request.form['rcStatus']
+                rcStatus.rcStatusDefinition = request.form['rcStatusDefinition']
                 query.commit()
                 return rcStatus.json()
             else:
@@ -3342,8 +3342,8 @@ def create_rc_status_list():
         form = forms.RCStatusListForm(request.form)
         if form.validate():
             rcStatus = models.RCStatusList(
-                rc_status = request.form['rc_status'],
-                rc_status_definition = request.form['rc_status_definition']
+                rcStatus = request.form['rcStatus'],
+                rcStatusDefinition = request.form['rcStatusDefinition']
             )
             query.add(rcStatus)
             return jsonify({'rcStatusListID':rcStatus.rcStatusID})
