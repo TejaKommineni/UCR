@@ -215,31 +215,31 @@ class PopulatedDB(TestCase):
 
         preApp = models.PreApplication(
             projectID = 1,
-            pi_fname = "pi_fname",
-            pi_lname = "pi_lname",
-            pi_email = "pi_email",
-            pi_phone = "pi_phone",
-            contact_fname = "contact_fname",
-            contact_lname = "contact_lname",
-            contact_phone = "contact_phone",
-            contact_email = "contact_email",
+            piFirstName = "pi_fname",
+            piLastName = "pi_lname",
+            piEmail = "pi_email",
+            piPhone = "pi_phone",
+            contactFirstName = "contact_fname",
+            contactLastName = "contact_lname",
+            contactPhone = "contact_phone",
+            contactEmail = "contact_email",
             institution = "institution",
             institution2 = "institution2",
             uid = "uid",
             udoh = 1,
-            project_title = "project_title",
+            projectTitle = "project_title",
             purpose = "purpose",
             irb0 = True,
             irb1 = True,
             irb2 = True,
             irb3 = True,
             irb4 = True,
-            other_irb = "other_irb",
+            otherIrb = "other_irb",
             updb = True,
-            pt_contact = True,
-            start_date = datetime(2016,2,2),
+            ptContact = True,
+            startDate = datetime(2016,2,2),
             link = True,
-            delivery_date = datetime(2016,2,2),
+            deliveryDate = datetime(2016,2,2),
             description = "description"
         )
 
@@ -543,54 +543,54 @@ class PopulatedDB(TestCase):
             notes = "notes"
         )
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
 
         physician2 = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
         physicianAddress = models.PhysicianAddress(
             contactInfoSourceID = 1,
             physicianID = 1,
-            contactInfoStatusLUTID = 1,
+            contactInfoStatusID = 1,
             street = "street",
             street2 = "street2",
             city = "city",
             state = "state",
             zip = "zip",
-            address_status = 1,
-            address_status_date = datetime(2016,2,2),
-            address_status_source = "s1"
+            addressStatus = 1,
+            addressStatusDate = datetime(2016,2,2),
+            addressStatusSource = "s1"
         )
         physicianPhone = models.PhysicianPhone(
             contactInfoSourceID = 1,
             physicianID = 1,
             contactInfoStatusID = 1,
-            phone = "phone",
-            phone_type = "phone_type",
-            phone_status = 1,
-            phone_source = "s1",
-            phone_status_date = datetime(2016,2,2)
+            phoneNumber = "phone",
+            phoneType = "phone_type",
+            phoneStatus = 1,
+            phoneSource = "s1",
+            phoneStatusDate = datetime(2016,2,2)
         )
         physicianToCTC = models.PhysicianToCTC(
             physicianID = 1,
@@ -652,8 +652,8 @@ class PopulatedDB(TestCase):
         physicianFacility = models.PhysicianFacility(
             facilityID = 1,
             physicianID = 1,
-            phys_facility_status = "s1",
-            phys_facility_status_date = datetime(2016,2,2)
+            physFacilityStatus = "s1",
+            physFacilityStatusDate = datetime(2016,2,2)
         )
         contactType1 = models.ContactTypeLUT(
             contactDefinition = "def"
@@ -1973,56 +1973,56 @@ class TestPhaseStatus(PopulatedDB):
 class TestPhysician(PopulatedDB):
     def test_get_physicians(self):
         response = self.client.get("/api/physicians/")
-        self.assertEqual(response.json["Physicians"][0]["fname"], "fname")
-        self.assertEqual(response.json["Physicians"][0]["lname"], "lname")
-        self.assertEqual(response.json["Physicians"][0]["middle_name"], "middle_name")
+        self.assertEqual(response.json["Physicians"][0]["firstName"], "fname")
+        self.assertEqual(response.json["Physicians"][0]["lastName"], "lname")
+        self.assertEqual(response.json["Physicians"][0]["middleName"], "middle_name")
         self.assertEqual(response.json["Physicians"][0]["credentials"], "credentials")
         self.assertEqual(response.json["Physicians"][0]["specialty"], "specialty")
-        self.assertEqual(response.json["Physicians"][0]["alias_fname"], "alias_fname")
-        self.assertEqual(response.json["Physicians"][0]["alias_lname"], "alias_lname")
-        self.assertEqual(response.json["Physicians"][0]["alias_middle_name"], "alias_middle_name")
-        self.assertEqual(response.json["Physicians"][0]["physician_status"], 1)
-        self.assertEqual(response.json["Physicians"][0]["physician_status_date"], "2016-02-02")
+        self.assertEqual(response.json["Physicians"][0]["aliasFirstName"], "alias_fname")
+        self.assertEqual(response.json["Physicians"][0]["aliasLastName"], "alias_lname")
+        self.assertEqual(response.json["Physicians"][0]["aliasMiddleName"], "alias_middle_name")
+        self.assertEqual(response.json["Physicians"][0]["physicianStatus"], 1)
+        self.assertEqual(response.json["Physicians"][0]["physicianStatusDate"], "2016-02-02")
         self.assertEqual(response.json["Physicians"][0]["email"], "email")
         
     def test_get_physician(self):
         response = self.client.get("/api/physicians/1/")
-        self.assertEqual(response.json["fname"], "fname")
-        self.assertEqual(response.json["lname"], "lname")
-        self.assertEqual(response.json["middle_name"], "middle_name")
+        self.assertEqual(response.json["firstName"], "fname")
+        self.assertEqual(response.json["lastName"], "lname")
+        self.assertEqual(response.json["middleName"], "middle_name")
         self.assertEqual(response.json["credentials"], "credentials")
         self.assertEqual(response.json["specialty"], "specialty")
-        self.assertEqual(response.json["alias_fname"], "alias_fname")
-        self.assertEqual(response.json["alias_lname"], "alias_lname")
-        self.assertEqual(response.json["alias_middle_name"], "alias_middle_name")
-        self.assertEqual(response.json["physician_status"], 1)
-        self.assertEqual(response.json["physician_status_date"], "2016-02-02")
+        self.assertEqual(response.json["aliasFirstName"], "alias_fname")
+        self.assertEqual(response.json["aliasLastName"], "alias_lname")
+        self.assertEqual(response.json["aliasMiddleName"], "alias_middle_name")
+        self.assertEqual(response.json["physicianStatus"], 1)
+        self.assertEqual(response.json["physicianStatusDate"], "2016-02-02")
         self.assertEqual(response.json["email"], "email")
         
     def test_update_physician(self):
         response = self.client.put("/api/physicians/1/", data = {
-            "fname" : "fname2",
-            "lname" : "lname2",
-            "middle_name" : "middle_name2",
+            "firstName" : "fname2",
+            "lastName" : "lname2",
+            "middleName" : "middle_name2",
             "credentials" : "credentials2",
             "specialty" : "specialty2",
-            "alias_fname" : "alias_fname2",
-            "alias_lname" : "alias_lname2",
-            "alias_middle_name" : "alias_middle_name2",
-            "physician_status" : 2,
-            "physician_status_date" : "2016-02-03",
+            "aliasFirstName" : "alias_fname2",
+            "aliasLastName" : "alias_lname2",
+            "aliasMiddleName" : "alias_middle_name2",
+            "physicianStatus" : 2,
+            "physicianStatusDate" : "2016-02-03",
             "email" : "email2"
         })
-        self.assertEqual(response.json["fname"], "fname2")
-        self.assertEqual(response.json["lname"], "lname2")
-        self.assertEqual(response.json["middle_name"], "middle_name2")
+        self.assertEqual(response.json["firstName"], "fname2")
+        self.assertEqual(response.json["lastName"], "lname2")
+        self.assertEqual(response.json["middleName"], "middle_name2")
         self.assertEqual(response.json["credentials"], "credentials2")
         self.assertEqual(response.json["specialty"], "specialty2")
-        self.assertEqual(response.json["alias_fname"], "alias_fname2")
-        self.assertEqual(response.json["alias_lname"], "alias_lname2")
-        self.assertEqual(response.json["alias_middle_name"], "alias_middle_name2")
-        self.assertEqual(response.json["physician_status"], 2)
-        self.assertEqual(response.json["physician_status_date"], "2016-02-03")
+        self.assertEqual(response.json["aliasFirstName"], "alias_fname2")
+        self.assertEqual(response.json["aliasLastName"], "alias_lname2")
+        self.assertEqual(response.json["aliasMiddleName"], "alias_middle_name2")
+        self.assertEqual(response.json["physicianStatus"], 2)
+        self.assertEqual(response.json["physicianStatusDate"], "2016-02-03")
         self.assertEqual(response.json["email"], "email2")
         
     def test_delete_physician(self):
@@ -2036,58 +2036,58 @@ class TestPhysicianAddress(PopulatedDB):
         self.assertEqual(response.json["PhysicianAddresses"][0]["physicianAddressID"], 1)
         self.assertEqual(response.json["PhysicianAddresses"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["PhysicianAddresses"][0]["physicianID"], 1)
-        self.assertEqual(response.json["PhysicianAddresses"][0]["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["contactInfoStatusID"], 1)
         self.assertEqual(response.json["PhysicianAddresses"][0]["street"], "street")
         self.assertEqual(response.json["PhysicianAddresses"][0]["street2"], "street2")
         self.assertEqual(response.json["PhysicianAddresses"][0]["city"], "city")
         self.assertEqual(response.json["PhysicianAddresses"][0]["state"], "state")
         self.assertEqual(response.json["PhysicianAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status"], 1)
-        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["PhysicianAddresses"][0]["address_status_source"], "s1")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatus"], 1)
+        self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatusDate"], "2016-02-02")
+        self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_physician_address(self):
         response = self.client.get("/api/physicianaddresses/1/")
         self.assertEqual(response.json["physicianAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["physicianID"], 1)
-        self.assertEqual(response.json["contactInfoStatusLUTID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["street"], "street")
         self.assertEqual(response.json["street2"], "street2")
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["address_status"], 1)
-        self.assertEqual(response.json["address_status_date"], "2016-02-02")
-        self.assertEqual(response.json["address_status_source"], "s1")
+        self.assertEqual(response.json["addressStatus"], 1)
+        self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
+        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_physician_address(self):
         response = self.client.put("/api/physicianaddresses/1/", data = {
             "contactInfoSourceID" : 2,
             "physicianID" : 2,
-            "contactInfoStatusLUTID" : 2,
+            "contactInfoStatusID" : 2,
             "street" : "street Updated",
             "street2" : "street2 Updated",
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "address_status" : 2,
-            "address_status_date" : "2016-02-03",
-            "address_status_source" : "s2"
+            "addressStatus" : 2,
+            "addressStatusDate" : "2016-02-03",
+            "addressStatusSource" : "s2"
         })
         self.assertEqual(response.json["physicianAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
         self.assertEqual(response.json["physicianID"], 2)
-        self.assertEqual(response.json["contactInfoStatusLUTID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["street"], "street Updated")
         self.assertEqual(response.json["street2"], "street2 Updated")
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["address_status"], 2)
-        self.assertEqual(response.json["address_status_date"], "2016-02-03")
-        self.assertEqual(response.json["address_status_source"], "s2")
-        
+        self.assertEqual(response.json["addressStatus"], 2)
+        self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["addressStatusSource"], "s2")
+
     def test_delete_physician_address(self):
         response = self.client.delete("/api/physicianaddresses/1/")
         self.assertEqual(response.json["Success"], True)
@@ -2099,29 +2099,29 @@ class TestPhysicianFacility(PopulatedDB):
         self.assertEqual(response.json["PhysicianFacilities"][0]["physFacilityID"], 1)
         self.assertEqual(response.json["PhysicianFacilities"][0]["physicianID"], 1)
         self.assertEqual(response.json["PhysicianFacilities"][0]["facilityID"], 1)
-        self.assertEqual(response.json["PhysicianFacilities"][0]["phys_facility_status"], "s1")
-        self.assertEqual(response.json["PhysicianFacilities"][0]["phys_facility_status_date"], "2016-02-02")
+        self.assertEqual(response.json["PhysicianFacilities"][0]["physFacilityStatus"], "s1")
+        self.assertEqual(response.json["PhysicianFacilities"][0]["physFacilityStatusDate"], "2016-02-02")
         
     def test_get_physician_facility(self):
         response = self.client.get("/api/physicianfacilities/1/")
         self.assertEqual(response.json["physFacilityID"], 1)
         self.assertEqual(response.json["physicianID"], 1)
         self.assertEqual(response.json["facilityID"], 1)
-        self.assertEqual(response.json["phys_facility_status"], "s1")
-        self.assertEqual(response.json["phys_facility_status_date"], "2016-02-02")
+        self.assertEqual(response.json["physFacilityStatus"], "s1")
+        self.assertEqual(response.json["physFacilityStatusDate"], "2016-02-02")
         
     def test_update_physician_facility(self):
         response = self.client.put("/api/physicianfacilities/1/", data = {
             "facilityID" : 2,
             "physicianID" : 2,
-            "phys_facility_status" : 2,
-            "phys_facility_status_date" : "2016-02-03"
+            "physFacilityStatus" : 2,
+            "physFacilityStatusDate" : "2016-02-03"
         })
         self.assertEqual(response.json["physFacilityID"], 1)
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["facilityID"], 2)
-        self.assertEqual(response.json["phys_facility_status"], 2)
-        self.assertEqual(response.json["phys_facility_status_date"], "2016-02-03")
+        self.assertEqual(response.json["physFacilityStatus"], 2)
+        self.assertEqual(response.json["physFacilityStatusDate"], "2016-02-03")
         
     def test_delete_physician_facility(self):
         response = self.client.delete("/api/physicianfacilities/1/")
@@ -2135,11 +2135,11 @@ class TestPhysicianPhone(PopulatedDB):
         self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["physicianID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoStatusID"], 1)
-        self.assertEqual(response.json["PhysicianPhones"][0]["phone"], "phone")
-        self.assertEqual(response.json["PhysicianPhones"][0]["phone_type"], "phone_type")
-        self.assertEqual(response.json["PhysicianPhones"][0]["phone_status"], 1)
-        self.assertEqual(response.json["PhysicianPhones"][0]["phone_source"], "s1")
-        self.assertEqual(response.json["PhysicianPhones"][0]["phone_status_date"], "2016-02-02")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneNumber"], "phone")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneType"], "phone_type")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneStatus"], 1)
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneSource"], "s1")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_physician_phone(self):
         response = self.client.get("/api/physicianphones/1/")
@@ -2147,32 +2147,32 @@ class TestPhysicianPhone(PopulatedDB):
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["physicianID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
-        self.assertEqual(response.json["phone"], "phone")
-        self.assertEqual(response.json["phone_type"], "phone_type")
-        self.assertEqual(response.json["phone_status"], 1)
-        self.assertEqual(response.json["phone_source"], "s1")
-        self.assertEqual(response.json["phone_status_date"], "2016-02-02")
+        self.assertEqual(response.json["phoneNumber"], "phone")
+        self.assertEqual(response.json["phoneType"], "phone_type")
+        self.assertEqual(response.json["phoneStatus"], 1)
+        self.assertEqual(response.json["phoneSource"], "s1")
+        self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_physician_phone(self):
         response = self.client.put("/api/physicianphones/1/", data = {
             "contactInfoSourceID" : 2,
             "physicianID" : 2,
             "contactInfoStatusID" : 2,
-            "phone" : "phone Updated",
-            "phone_type": "phone_type Updated",
-            "phone_status" : 2,
-            "phone_source" : "s2",
-            "phone_status_date" : "2016-02-03"
+            "phoneNumber" : "phone Updated",
+            "phoneType": "phone_type Updated",
+            "phoneStatus" : 2,
+            "phoneSource" : "s2",
+            "phoneStatusDate" : "2016-02-03"
         })
         self.assertEqual(response.json["physicianPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
-        self.assertEqual(response.json["phone"], "phone Updated")
-        self.assertEqual(response.json["phone_type"], "phone_type Updated")
-        self.assertEqual(response.json["phone_status"], 2)
-        self.assertEqual(response.json["phone_source"], "s2")
-        self.assertEqual(response.json["phone_status_date"], "2016-02-03")
+        self.assertEqual(response.json["phoneNumber"], "phone Updated")
+        self.assertEqual(response.json["phoneType"], "phone_type Updated")
+        self.assertEqual(response.json["phoneStatus"], 2)
+        self.assertEqual(response.json["phoneSource"], "s2")
+        self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         
     def test_delete_physician_phone(self):
         response = self.client.delete("/api/physicianphones/1/")
@@ -2207,119 +2207,119 @@ class TestPreApplication(PopulatedDB):
     def test_get_pre_applications(self):
         response = self.client.get("/api/preapplications/")
         self.assertEqual(response.json["PreApplications"][0]["projectID"], 1)
-        self.assertEqual(response.json["PreApplications"][0]["pi_fname"], "pi_fname")
-        self.assertEqual(response.json["PreApplications"][0]["pi_lname"], "pi_lname")
-        self.assertEqual(response.json["PreApplications"][0]["pi_phone"], "pi_phone")
-        self.assertEqual(response.json["PreApplications"][0]["pi_email"], "pi_email")
-        self.assertEqual(response.json["PreApplications"][0]["contact_fname"], "contact_fname")
-        self.assertEqual(response.json["PreApplications"][0]["contact_lname"], "contact_lname")
-        self.assertEqual(response.json["PreApplications"][0]["contact_phone"], "contact_phone")
-        self.assertEqual(response.json["PreApplications"][0]["contact_email"], "contact_email")
+        self.assertEqual(response.json["PreApplications"][0]["piFirstName"], "pi_fname")
+        self.assertEqual(response.json["PreApplications"][0]["piLastName"], "pi_lname")
+        self.assertEqual(response.json["PreApplications"][0]["piPhone"], "pi_phone")
+        self.assertEqual(response.json["PreApplications"][0]["piEmail"], "pi_email")
+        self.assertEqual(response.json["PreApplications"][0]["contactFirstName"], "contact_fname")
+        self.assertEqual(response.json["PreApplications"][0]["contactLastName"], "contact_lname")
+        self.assertEqual(response.json["PreApplications"][0]["contactPhone"], "contact_phone")
+        self.assertEqual(response.json["PreApplications"][0]["contactEmail"], "contact_email")
         self.assertEqual(response.json["PreApplications"][0]["institution"], "institution")
         self.assertEqual(response.json["PreApplications"][0]["institution2"], "institution2")        
         self.assertEqual(response.json["PreApplications"][0]["uid"], "uid")
         self.assertEqual(response.json["PreApplications"][0]["udoh"], 1)
-        self.assertEqual(response.json["PreApplications"][0]["project_title"], "project_title")
+        self.assertEqual(response.json["PreApplications"][0]["projectTitle"], "project_title")
         self.assertEqual(response.json["PreApplications"][0]["purpose"], "purpose")
         self.assertEqual(response.json["PreApplications"][0]["irb0"], True)
         self.assertEqual(response.json["PreApplications"][0]["irb1"], True)
         self.assertEqual(response.json["PreApplications"][0]["irb2"], True)
         self.assertEqual(response.json["PreApplications"][0]["irb3"], True)
         self.assertEqual(response.json["PreApplications"][0]["irb4"], True)
-        self.assertEqual(response.json["PreApplications"][0]["other_irb"], "other_irb") 
+        self.assertEqual(response.json["PreApplications"][0]["otherIrb"], "other_irb")
         self.assertEqual(response.json["PreApplications"][0]["updb"], True)
-        self.assertEqual(response.json["PreApplications"][0]["pt_contact"], True)
-        self.assertEqual(response.json["PreApplications"][0]["start_date"], "2016-02-02")
+        self.assertEqual(response.json["PreApplications"][0]["ptContact"], True)
+        self.assertEqual(response.json["PreApplications"][0]["startDate"], "2016-02-02")
         self.assertEqual(response.json["PreApplications"][0]["link"], True)
-        self.assertEqual(response.json["PreApplications"][0]["delivery_date"], "2016-02-02")
+        self.assertEqual(response.json["PreApplications"][0]["deliveryDate"], "2016-02-02")
         self.assertEqual(response.json["PreApplications"][0]["description"], "description")
         
     def test_get_pre_application(self):
         response = self.client.get("/api/preapplications/1/")
         self.assertEqual(response.json["projectID"], 1)
-        self.assertEqual(response.json["pi_fname"], "pi_fname")
-        self.assertEqual(response.json["pi_lname"], "pi_lname")
-        self.assertEqual(response.json["pi_phone"], "pi_phone")
-        self.assertEqual(response.json["pi_email"], "pi_email")
-        self.assertEqual(response.json["contact_fname"], "contact_fname")
-        self.assertEqual(response.json["contact_lname"], "contact_lname")
-        self.assertEqual(response.json["contact_phone"], "contact_phone")
-        self.assertEqual(response.json["contact_email"], "contact_email")
+        self.assertEqual(response.json["piFirstName"], "pi_fname")
+        self.assertEqual(response.json["piLastName"], "pi_lname")
+        self.assertEqual(response.json["piPhone"], "pi_phone")
+        self.assertEqual(response.json["piEmail"], "pi_email")
+        self.assertEqual(response.json["contactFirstName"], "contact_fname")
+        self.assertEqual(response.json["contactLastName"], "contact_lname")
+        self.assertEqual(response.json["contactPhone"], "contact_phone")
+        self.assertEqual(response.json["contactEmail"], "contact_email")
         self.assertEqual(response.json["institution"], "institution")
-        self.assertEqual(response.json["institution2"], "institution2")        
+        self.assertEqual(response.json["institution2"], "institution2")
         self.assertEqual(response.json["uid"], "uid")
         self.assertEqual(response.json["udoh"], 1)
-        self.assertEqual(response.json["project_title"], "project_title")
+        self.assertEqual(response.json["projectTitle"], "project_title")
         self.assertEqual(response.json["purpose"], "purpose")
         self.assertEqual(response.json["irb0"], True)
         self.assertEqual(response.json["irb1"], True)
         self.assertEqual(response.json["irb2"], True)
         self.assertEqual(response.json["irb3"], True)
         self.assertEqual(response.json["irb4"], True)
-        self.assertEqual(response.json["other_irb"], "other_irb") 
+        self.assertEqual(response.json["otherIrb"], "other_irb")
         self.assertEqual(response.json["updb"], True)
-        self.assertEqual(response.json["pt_contact"], True)
-        self.assertEqual(response.json["start_date"], "2016-02-02")
+        self.assertEqual(response.json["ptContact"], True)
+        self.assertEqual(response.json["startDate"], "2016-02-02")
         self.assertEqual(response.json["link"], True)
-        self.assertEqual(response.json["delivery_date"], "2016-02-02")
+        self.assertEqual(response.json["deliveryDate"], "2016-02-02")
         self.assertEqual(response.json["description"], "description")
         
     def test_update_pre_application(self):
         response = self.client.put("/api/preapplications/1/", data = {
             "projectID" : 2,
-            "pi_fname" : "pi_fname2",
-            "pi_lname" : "pi_lname2",
-            "pi_email" : "pi_email2",
-            "pi_phone" : "pi_phone2",
-            "contact_fname" : "contact_fname2",
-            "contact_lname" : "contact_lname2",
-            "contact_phone" : "contact_phone2",
-            "contact_email" : "contact_email2",
+            "piFirstName" : "pi_fname2",
+            "piLastName" : "pi_lname2",
+            "piEmail" : "pi_email2",
+            "piPhone" : "pi_phone2",
+            "contactFirstName" : "contact_fname2",
+            "contactLastName" : "contact_lname2",
+            "contactPhone" : "contact_phone2",
+            "contactEmail" : "contact_email2",
             "institution" : "institution2",
             "institution2" : "institution22",
             "uid" : "uid2",
             "udoh" : 2,
-            "project_title" : "project_title2",
+            "projectTitle" : "project_title2",
             "purpose" : "purpose2",
             "irb0" : False,
             "irb1" : False,
             "irb2" : False,
             "irb3" : False,
             "irb4" : False,
-            "other_irb" : "other_irb2",
+            "otherIrb" : "other_irb2",
             "updb" : False,
-            "pt_contact" : False,
-            "start_date" : "2016-02-03",
+            "ptContact" : False,
+            "startDate" : "2016-02-03",
             "link" : False,
-            "delivery_date" : "2016-02-03",
+            "deliveryDate" : "2016-02-03",
             "description" : "description2"
         })
         self.assertEqual(response.json["projectID"], 2)
-        self.assertEqual(response.json["pi_fname"], "pi_fname2")
-        self.assertEqual(response.json["pi_lname"], "pi_lname2")
-        self.assertEqual(response.json["pi_phone"], "pi_phone2")
-        self.assertEqual(response.json["pi_email"], "pi_email2")
-        self.assertEqual(response.json["contact_fname"], "contact_fname2")
-        self.assertEqual(response.json["contact_lname"], "contact_lname2")
-        self.assertEqual(response.json["contact_phone"], "contact_phone2")
-        self.assertEqual(response.json["contact_email"], "contact_email2")
+        self.assertEqual(response.json["piFirstName"], "pi_fname2")
+        self.assertEqual(response.json["piLastName"], "pi_lname2")
+        self.assertEqual(response.json["piPhone"], "pi_phone2")
+        self.assertEqual(response.json["piEmail"], "pi_email2")
+        self.assertEqual(response.json["contactFirstName"], "contact_fname2")
+        self.assertEqual(response.json["contactLastName"], "contact_lname2")
+        self.assertEqual(response.json["contactPhone"], "contact_phone2")
+        self.assertEqual(response.json["contactEmail"], "contact_email2")
         self.assertEqual(response.json["institution"], "institution2")
         self.assertEqual(response.json["institution2"], "institution22")        
         self.assertEqual(response.json["uid"], "uid2")
         self.assertEqual(response.json["udoh"], 2)
-        self.assertEqual(response.json["project_title"], "project_title2")
+        self.assertEqual(response.json["projectTitle"], "project_title2")
         self.assertEqual(response.json["purpose"], "purpose2")
         self.assertEqual(response.json["irb0"], False)
         self.assertEqual(response.json["irb1"], False)
         self.assertEqual(response.json["irb2"], False)
         self.assertEqual(response.json["irb3"], False)
         self.assertEqual(response.json["irb4"], False)
-        self.assertEqual(response.json["other_irb"], "other_irb2") 
+        self.assertEqual(response.json["otherIrb"], "other_irb2")
         self.assertEqual(response.json["updb"], False)
-        self.assertEqual(response.json["pt_contact"], False)
-        self.assertEqual(response.json["start_date"], "2016-02-03")
+        self.assertEqual(response.json["ptContact"], False)
+        self.assertEqual(response.json["startDate"], "2016-02-03")
         self.assertEqual(response.json["link"], False)
-        self.assertEqual(response.json["delivery_date"], "2016-02-03")
+        self.assertEqual(response.json["deliveryDate"], "2016-02-03")
         self.assertEqual(response.json["description"], "description2")
         
     def test_delete_pre_application(self):

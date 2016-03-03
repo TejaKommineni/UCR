@@ -743,25 +743,25 @@ class PhaseStatusForm(Form):
         []+COMMON_STRING_VALIDATORS)
 
 class PhysicianForm(Form):
-    fname = StringField('fname',
+    firstName = StringField('fname',
         []+COMMON_STRING_VALIDATORS)
-    lname = StringField('lname',
+    lastName = StringField('lname',
         []+COMMON_STRING_VALIDATORS)
-    middle_name = StringField('middle_name',
+    middleName = StringField('middle_name',
         []+COMMON_STRING_VALIDATORS)
     credentials = StringField('credentials',
         []+COMMON_STRING_VALIDATORS)
     specialty = StringField('specialty',
         []+COMMON_STRING_VALIDATORS)
-    alias_fname = StringField('alias_fname',
+    aliasFirstName = StringField('alias_fname',
         []+COMMON_STRING_VALIDATORS)
-    alias_lname = StringField('alias_lname',
+    aliasLastName = StringField('alias_lname',
         []+COMMON_STRING_VALIDATORS)
-    alias_middle_name = StringField('alias_middle_name',
+    aliasMiddleName = StringField('alias_middle_name',
         []+COMMON_STRING_VALIDATORS)
-    physician_status = IntegerField('physician_status',
+    physicianStatus = IntegerField('physician_status',
         []+COMMON_INTEGER_VALIDATORS)
-    physician_status_date = DateField('physician_status_date',
+    physicianStatusDate = DateField('physician_status_date',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
     email = StringField('email',
@@ -772,9 +772,9 @@ class PhysicianFacilityForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
         []+COMMON_INTEGER_VALIDATORS)
-    phys_facility_status = IntegerField('phys_facility_status',
+    physFacilityStatus = IntegerField('physFacilityStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    phys_facility_status_date = DateField('phys_facility_status_date',
+    physFacilityStatusDate = DateField('physFacilityStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
 
@@ -797,7 +797,7 @@ class PhysicianAddressForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
         []+COMMON_INTEGER_VALIDATORS)
-    contactInfoStatusLUTID = IntegerField('contactInfoStatusLUTID',
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
         []+COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
         []+COMMON_STRING_VALIDATORS)
@@ -809,12 +809,12 @@ class PhysicianAddressForm(Form):
         []+COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
-    address_status = IntegerField('address_status',
+    addressStatus = IntegerField('addressStatus',
         []+COMMON_INTEGER_VALIDATORS)
-    address_status_date = DateField('address_status_date',
+    addressStatusDate = DateField('addressStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    address_status_source = StringField('address_status_source',
+    addressStatusSource = StringField('addressStatusSource',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -830,9 +830,9 @@ class PhysicianAddressForm(Form):
             self.physicianID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusLUTID.data)
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
         if contactStatus is None:
-            self.contactInfoStatusLUTID.errors.append("ID not found")
+            self.contactInfoStatusID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -843,13 +843,15 @@ class PhysicianPhoneForm(Form):
         []+COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
         []+COMMON_INTEGER_VALIDATORS)
-    phone = StringField('phone',
+    phoneNumber = StringField('phoneNumber',
         []+COMMON_STRING_VALIDATORS)
-    phone_source = StringField('phone_source',
+    phoneType = StringField('phoneType',
         []+COMMON_STRING_VALIDATORS)
-    phone_status = StringField('phone_status',
+    phoneSource = StringField('phoneSource',
         []+COMMON_STRING_VALIDATORS)
-    phone_status_date = DateField('phone_status_date',
+    phoneStatus = StringField('phoneStatus',
+        []+COMMON_STRING_VALIDATORS)
+    phoneStatusDate = DateField('phoneStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
 
@@ -895,19 +897,21 @@ class PhysicianToCTCForm(Form):
 class PreApplicationForm(Form):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
-    pi_fname = StringField('pi_fname',
+    piFirstName = StringField('piFirstName',
         []+COMMON_STRING_VALIDATORS)
-    pi_phone = StringField('pi_phone',
+    piLastName = StringField('piLastName',
         []+COMMON_STRING_VALIDATORS)
-    pi_email = StringField('pi_email',
+    piPhone = StringField('piPhone',
         []+COMMON_STRING_VALIDATORS)
-    contact_fname = StringField('contact_fname',
+    piEmail = StringField('piEmail',
         []+COMMON_STRING_VALIDATORS)
-    contact_lname = StringField('contact_lname',
+    contactFirstName = StringField('contactFirstName',
         []+COMMON_STRING_VALIDATORS)
-    contact_phone = StringField('contact_phone',
+    contactLastName = StringField('contactLastName',
         []+COMMON_STRING_VALIDATORS)
-    contact_email = StringField('contact_email',
+    contactPhone = StringField('contactPhone',
+        []+COMMON_STRING_VALIDATORS)
+    contactEmail = StringField('contactEmail',
         []+COMMON_STRING_VALIDATORS)
     institution = StringField('institution',
         []+COMMON_STRING_VALIDATORS)
@@ -917,7 +921,7 @@ class PreApplicationForm(Form):
         []+COMMON_STRING_VALIDATORS)
     udoh = IntegerField('udoh',
         []+COMMON_INTEGER_VALIDATORS)
-    project_title = StringField('project_title',
+    projectTitle = StringField('projectTitle',
         []+COMMON_STRING_VALIDATORS)
     purpose = StringField('purpose',
         []+COMMON_STRING_VALIDATORS)
@@ -931,18 +935,18 @@ class PreApplicationForm(Form):
         []+COMMON_BOOL_VALIDATORS)
     irb4 = BooleanField('irb4',
         []+COMMON_BOOL_VALIDATORS)
-    other_irb = StringField('other_irb',
+    otherIrb = StringField('otherIrb',
         []+COMMON_STRING_VALIDATORS)
     updb = BooleanField('updb',
         []+COMMON_BOOL_VALIDATORS)
-    pt_contact = BooleanField('pt_contact',
+    ptContact = BooleanField('ptContact',
         []+COMMON_BOOL_VALIDATORS)
-    start_date = DateField('start_date',
+    startDate = DateField('startDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
     link = BooleanField('link',
         []+COMMON_BOOL_VALIDATORS)
-    delivery_date = DateField('delivery_date',
+    deliveryDate = DateField('deliveryDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
     description = StringField('description',

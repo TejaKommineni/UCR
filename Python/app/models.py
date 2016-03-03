@@ -1071,18 +1071,18 @@ class PhaseStatus(CustomModel):
 class Physician(CustomModel):
     __tablename__ = "physician"
     
-    physicianID = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String)
-    lname = db.Column(db.String)
-    middle_name = db.Column(db.String)
-    credentials = db.Column(db.String)
-    specialty = db.Column(db.String)
-    alias_fname = db.Column(db.String)
-    alias_lname = db.Column(db.String)
-    alias_middle_name = db.Column(db.String)
-    physician_status = db.Column(db.Integer)
-    physician_status_date = db.Column(db.Date)
-    email = db.Column(db.String)
+    physicianID = db.Column('physicianID',db.Integer, primary_key=True)
+    firstName = db.Column('fname',db.String)
+    lastName = db.Column('lastName',db.String)
+    middleName = db.Column('middleName',db.String)
+    credentials = db.Column('credentials',db.String)
+    specialty = db.Column('specialty',db.String)
+    aliasFirstName = db.Column('aliasFirstName',db.String)
+    aliasLastName = db.Column('aliasLastName',db.String)
+    aliasMiddleName = db.Column('aliasMiddleName',db.String)
+    physicianStatus = db.Column('physicianStatus',db.Integer)
+    physicianStatusDate = db.Column('physicianStatusDate',db.Date)
+    email = db.Column('email',db.String)
     
     # Relationships
     # M - 1, many physicians can be at the same address
@@ -1100,45 +1100,45 @@ class Physician(CustomModel):
     def __repr__(self):
         return "<Physician(\
         physicianID = {},\
-        fname = {},\
-        lname = {},\
-        middle_name = {},\
+        firstName = {},\
+        lastName = {},\
+        middleName = {},\
         credentials = {},\
         specialty = {},\
-        alias_fname = {},\
-        alias_lname = {},\
-        alias_middle_name = {},\
-        physician_status = {},\
-        physician_status_date = {},\
+        aliasFirstName = {},\
+        aliasLastName = {},\
+        aliasMiddleName = {},\
+        physicianStatus = {},\
+        physicianStatusDate = {},\
         email = {})>".format(
-        physicianID,
-        fname,
-        lname,
-        middle_name,
-        credentials,
-        specialty,
-        alias_fname,
-        alias_lname,
-        alias_middle_name,
-        physician_status,
-        physician_status_date,
-        email)
+        self.physicianID,
+        self.firstName,
+        self.lastName,
+        self.middleName,
+        self.credentials,
+        self.specialty,
+        self.aliasLastName,
+        self.aliasLastName,
+        self.aliasMiddleName,
+        self.physicianStatus,
+        self.physicianStatusDate,
+        self.email)
 
 class PhysicianAddress(CustomModel):
     __tablename__ = "physicianAddress"
     
-    physicianAddressID = db.Column(db.Integer, primary_key=True)
-    contactInfoSourceID = db.Column(db.Integer, db.ForeignKey("contactInfoSourceLUT.contactInfoSourceID"))
-    physicianID = db.Column(db.Integer, db.ForeignKey("physician.physicianID"))
-    contactInfoStatusLUTID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
-    street = db.Column(db.String)
-    street2 = db.Column(db.String)
-    city = db.Column(db.String)
-    state = db.Column(db.String)
-    zip = db.Column(db.Integer)
-    address_status = db.Column(db.Integer)
-    address_status_date = db.Column(db.Date)
-    address_status_source = db.Column(ADDRESS_STATUS_SOURCE)
+    physicianAddressID = db.Column('physicianAddressID',db.Integer, primary_key=True)
+    contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("contactInfoSourceLUT.contactInfoSourceID"))
+    physicianID = db.Column('physicianID',db.Integer, db.ForeignKey("physician.physicianID"))
+    contactInfoStatusID = db.Column('contactInfoSourceID',db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
+    street = db.Column('street',db.String)
+    street2 = db.Column('street2',db.String)
+    city = db.Column('city',db.String)
+    state = db.Column('state',db.String)
+    zip = db.Column('zip',db.Integer)
+    addressStatus = db.Column('address_status',db.Integer)
+    addressStatusDate = db.Column('address_status_date',db.Date)
+    addressStatusSource = db.Column('address_status_source',ADDRESS_STATUS_SOURCE)
     
     # Relationship
     # M - 1, many physicians can be at the same address
@@ -1169,9 +1169,9 @@ class PhysicianAddress(CustomModel):
         self.city,
         self.state,
         self.zip,
-        self.addresss_status,
-        self.address_status_date,
-        self.address_status_source)
+        self.addressStatus,
+        self.addressStatusDate,
+        self.addressStatusSource)
 
 class PhysicianFacility(CustomModel):
     __tablename__ = 'physicianFacility'
@@ -1179,8 +1179,8 @@ class PhysicianFacility(CustomModel):
     physFacilityID = db.Column(db.Integer, primary_key=True)
     facilityID = db.Column(db.Integer, db.ForeignKey('facility.facilityID'))
     physicianID = db.Column(db.Integer, db.ForeignKey('physician.physicianID'))
-    phys_facility_status = db.Column(db.Integer)
-    phys_facility_status_date = db.Column(db.Date)
+    physFacilityStatus = db.Column(db.Integer)
+    physFacilityStatusDate = db.Column(db.Date)
     
     # Relationships
     # M - 1 many physicians at the same physician facility
@@ -1198,21 +1198,21 @@ class PhysicianFacility(CustomModel):
         self.physFacilityID,
         self.facilityID,
         self.physicianID,
-        self.phys_facility_status,
-        self.phys_facility_status_date)      
+        self.physFacilityStatus,
+        self.physFacilityStatusDate)
         
 class PhysicianPhone(CustomModel):
     __tablename__ = "physicianPhone"
     
-    physicianPhoneID = db.Column(db.Integer, primary_key=True)
-    contactInfoSourceID = db.Column(db.Integer, db.ForeignKey("contactInfoSourceLUT.contactInfoSourceID"))
-    physicianID = db.Column(db.Integer,db.ForeignKey("physician.physicianID"))
-    contactInfoStatusID = db.Column(db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
-    phone = db.Column(db.String)
-    phone_type = db.Column(db.String)
-    phone_source = db.Column(PHONE_SOURCES)
-    phone_status = db.Column(db.Integer)
-    phone_status_date = db.Column(db.Date)
+    physicianPhoneID = db.Column('physicianPhoneID',db.Integer, primary_key=True)
+    contactInfoSourceID = db.Column('contactInfoSourceID',db.Integer, db.ForeignKey("contactInfoSourceLUT.contactInfoSourceID"))
+    physicianID = db.Column('physicianID',db.Integer,db.ForeignKey("physician.physicianID"))
+    contactInfoStatusID = db.Column('contactInfoStatus',db.Integer, db.ForeignKey("contactInfoStatusLUT.contactInfoStatusID"))
+    phoneNumber = db.Column('phoneNumber',db.String)
+    phoneType = db.Column('phoneType',db.String)
+    phoneSource = db.Column('phoneSource',PHONE_SOURCES)
+    phoneStatus = db.Column('phoneStatus',db.Integer)
+    phoneStatusDate = db.Column('phoneStatusDate',db.Date)
     
     # Relationship
     # M - 1, many physicians can be at the same phone
@@ -1227,6 +1227,7 @@ class PhysicianPhone(CustomModel):
         physicianID = {},\
         contactInfoStatusID = {},\
         phone = {},\
+        phoneType = {}, \
         phone_source = {},\
         phone_status = {},\
         phone_status_date = {})>".format(
@@ -1234,17 +1235,18 @@ class PhysicianPhone(CustomModel):
         self.contactInfoSource,
         self.physicianID,
         self.contactInfoStatusID,
-        self.phone,
-        self.phone_source,
-        self.phone_status,
-        self.phoen_status_date)
+        self.phoneNumber,
+        self.phoneType,
+        self.phoneSource,
+        self.phoneStatus,
+        self.phoneStatusDate)
        
 class PhysicianToCTC(CustomModel):
     __tablename__ = "physicianToCTC"
     
-    physicianCTCID = db.Column(db.Integer, primary_key=True)
-    physicianID = db.Column(db.Integer, db.ForeignKey('physician.physicianID'))
-    ctcID = db.Column(db.Integer, db.ForeignKey('ctc.ctcID'))
+    physicianCTCID = db.Column('physicianCTCID',db.Integer, primary_key=True)
+    physicianID = db.Column('physicianID',db.Integer, db.ForeignKey('physician.physicianID'))
+    ctcID = db.Column('ctcID',db.Integer, db.ForeignKey('ctc.ctcID'))
     
     # Relationships
     # M - 1
@@ -1266,31 +1268,31 @@ class PreApplication(CustomModel):
     
     preApplicationID = db.Column(db.Integer, primary_key=True)
     projectID = db.Column(db.Integer, db.ForeignKey('project.projectID'))
-    pi_fname = db.Column(db.String)
-    pi_lname = db.Column(db.String)
-    pi_phone = db.Column(db.String)
-    pi_email = db.Column(db.String)
-    contact_fname = db.Column(db.String)
-    contact_lname = db.Column(db.String)
-    contact_phone = db.Column(db.String)
-    contact_email = db.Column(db.String)
+    piFirstName = db.Column(db.String)
+    piLastName = db.Column(db.String)
+    piPhone = db.Column(db.String)
+    piEmail = db.Column(db.String)
+    contactFirstName = db.Column(db.String)
+    contactLastName = db.Column(db.String)
+    contactPhone = db.Column(db.String)
+    contactEmail = db.Column(db.String)
     institution = db.Column(db.String)
     institution2 = db.Column(db.String)
     uid = db.Column(db.String)
     udoh = db.Column(db.Integer)
-    project_title = db.Column(db.String)
+    projectTitle = db.Column(db.String)
     purpose = db.Column(db.String)
     irb0 = db.Column(db.Boolean)
     irb1 = db.Column(db.Boolean)
     irb2 = db.Column(db.Boolean)
     irb3 = db.Column(db.Boolean)
     irb4 = db.Column(db.Boolean)
-    other_irb = db.Column(db.String)
+    otherIrb = db.Column(db.String)
     updb = db.Column(db.Boolean)
-    pt_contact = db.Column(db.Boolean)
-    start_date = db.Column(db.Date)
+    ptContact = db.Column(db.Boolean)
+    startDate = db.Column(db.Date)
     link = db.Column(db.Boolean)
-    delivery_date = db.Column(db.Date)
+    deliveryDate = db.Column(db.Date)
     description = db.Column(db.String)
     
     # Relationships
@@ -1302,60 +1304,60 @@ class PreApplication(CustomModel):
         preApplicationID = {},\
         projectID = {},\
         projectID = {},\
-        pi_fname = {},\
-        pi_lname = {},\
-        pi_phone = {},\
-        pi_email = {},\
-        contact_fname = {},\
-        contact_lname = {},\
-        contact_phone = {},\
-        contact_email = {},\
+        piFirstName = {},\
+        piLastName = {},\
+        piPhone = {},\
+        piEmail = {},\
+        contactFirstName = {},\
+        contactLastName = {},\
+        contactPhone = {},\
+        contactEmail = {},\
         institution = {},\
         institution2 = {},\
         uid = {},\
         udoh = ={},\
-        project_title = {},\
+        projectTitle = {},\
         purpose = = {},\
         irb0 = {},\
         irb1 = {},\
         irb2 = {},\
         irb3 = {},\
         irb4 = {},\
-        other_irb = {},\
+        otherIrb = {},\
         updb = {},\
-        pt_contact = {},\
-        start_date = {},\
+        ptContact = {},\
+        startDate = {},\
         link = {},\
-        delivery_date = {},\
+        deliveryDate = {},\
         description = {})>".format(
-        preApplicationID,
-        projectID,
-        pi_fname,
-        pi_lname,
-        pi_phone,
-        pi_email,
-        contact_fname,
-        contact_lname,
-        contact_phone,
-        contact_email,
-        institution,
-        institution2,
-        uid,
-        udoh,
-        project_title,
-        purpose,
-        irb0,
-        irb1,
-        irb2,
-        irb3,
-        irb4,
-        other_irb,
-        updb,
-        pt_contact,
-        start_date,
-        link,
-        delivery_date,
-        description)
+        self.preApplicationID,
+        self.projectID,
+        self.piFirstName,
+        self.piLastName,
+        self.piPhone,
+        self.piEmail,
+        self.contactFirstName,
+        self.contactLastName,
+        self.contactPhone,
+        self.contactEmail,
+        self.institution,
+        self.institution2,
+        self.uid,
+        self.udoh,
+        self.projectTitle,
+        self.purpose,
+        self.irb0,
+        self.irb1,
+        self.irb2,
+        self.irb3,
+        self.irb4,
+        self.otherIrb,
+        self.updb,
+        self.ptContact,
+        self.startDate,
+        self.link,
+        self.deliveryDate,
+        self.description)
     
 class Project(CustomModel):
     __tablename__='project'

@@ -1473,16 +1473,16 @@ class TestPhysician(BlankDB):
 
     def test_create_physician(self):
         response = self.client.post("/api/physicians/", data = {
-            "fname" : "fname",
-            "lname" : "lname",
-            "middle_name" : "middle_name",
+            "firstName" : "fname",
+            "lastName" : "lname",
+            "middleName" : "middle_name",
             "credentials" : "credentials",
             "specialty" : "specialty",
-            "alias_fname" : "alias_fname",
-            "alias_lname" : "alias_lname",
-            "alias_middle_name" : "alias_middle_name",
-            "physician_status" : 1,
-            "physician_status_date" : "2016-02-02",
+            "aliasFirstName" : "alias_fname",
+            "aliasLastName" : "alias_lname",
+            "aliasMiddleName" : "alias_middle_name",
+            "physicianStatus" : 1,
+            "physicianStatusDate" : "2016-02-02",
             "email" : "email"
         })
         self.assertEqual(response.json, {"physicianID": 1})
@@ -1494,24 +1494,24 @@ class TestPhysicianAddress(BlankDB):
 
     def populate_db(self):
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
         db.session.add(physician)
@@ -1531,15 +1531,15 @@ class TestPhysicianAddress(BlankDB):
         response = self.client.post("/api/physicianaddresses/", data = {
             "contactInfoSourceID" : 1,
             "physicianID" : 1,
-            "contactInfoStatusLUTID" : 1,
+            "contactInfoStatusID" : 1,
             "street" : "street",
             "street2" : "street2",
             "city" : "city",
             "state" : "state",
             "zip" : "zip",
-            "address_status" : 1,
-            "address_status_date" : "2016-02-02",
-            "address_status_source" : "s1"
+            "addressStatus" : 1,
+            "addressStatusDate" : "2016-02-02",
+            "addressStatusSource" : "s1"
         })
         self.assertEqual(response.json, {"physicianAddressID": 1})
 
@@ -1551,25 +1551,25 @@ class TestPhysicianFacility(BlankDB):
 
     def populate_db(self):
         facility1 = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
         )
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
         db.session.add(facility1)
@@ -1588,8 +1588,8 @@ class TestPhysicianFacility(BlankDB):
         response = self.client.post("/api/physicianfacilities/", data = {
             "facilityID" : 1,
             "physicianID" : 1,
-            "phys_facility_status" : 1,
-            "phys_facility_status_date" : "2016-02-02"
+            "physFacilityStatus" : 1,
+            "physFacilityStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"physFacilityID": 1})       
          
@@ -1600,24 +1600,24 @@ class TestPhysicianPhone(BlankDB):
 
     def populate_db(self):
         contactInfoStatus = models.ContactInfoStatusLUT(
-            contact_info_status = "status"
+            contactInfoStatus = "status"
         )
 
         contactInfoSource = models.ContactInfoSourceLUT(
-            contact_info_source = "source"
+            contactInfoSource = "source"
         )
 
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
         db.session.add(physician)
@@ -1638,11 +1638,11 @@ class TestPhysicianPhone(BlankDB):
             "contactInfoSourceID" : 1,
             "physicianID" : 1,
             "contactInfoStatusID" : 1,
-            "phone" : "phone",
-            "phone_type" : "phone_type",
-            "phone_status" : 1,
-            "phone_source" : "s1",
-            "phone_status_date" : "2016-02-02"
+            "phoneNumber" : "phone",
+            "phoneType" : "phone_type",
+            "phoneStatus" : 1,
+            "phoneSource" : "s1",
+            "phoneStatusDate" : "2016-02-02"
         })
         self.assertEqual(response.json, {"physicianPhoneID": 1})       
         
@@ -1736,8 +1736,8 @@ class TestPreApplication(BlankDB):
             project_type_definition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
             project_name = "Test Project",
@@ -1768,31 +1768,31 @@ class TestPreApplication(BlankDB):
     def test_create_pre_application(self):
         response = self.client.post("/api/preapplications/", data = {
             "projectID" : 1,
-            "pi_fname" : "pi_fname",
-            "pi_lname" : "pi_lname",
-            "pi_email" : "pi_email",
-            "pi_phone" : "pi_phone",
-            "contact_fname" : "contact_fname",
-            "contact_lname" : "contact_lname",
-            "contact_phone" : "contact_phone",
-            "contact_email" : "contact_email",
+            "piFirstName" : "pi_fname",
+            "piLastName" : "pi_lname",
+            "piEmail" : "pi_email",
+            "piPhone" : "pi_phone",
+            "contactFirstName" : "contact_fname",
+            "contactLastName" : "contact_lname",
+            "contactPhone" : "contact_phone",
+            "contactEmail" : "contact_email",
             "institution" : "institution",
             "institution2" : "institution2",
             "uid" : "uid",
             "udoh" : 1,
-            "project_title" : "project_title",
+            "projectTitle" : "project_title",
             "purpose" : "purpose",
             "irb0" : True,
             "irb1" : True,
             "irb2" : True,
             "irb3" : True,
             "irb4" : True,
-            "other_irb" : "other_irb",
+            "otherIrb" : "other_irb",
             "updb" : True,
-            "pt_contact" : True,
-            "start_date" : "2016-02-02",
+            "ptContact" : True,
+            "startDate" : "2016-02-02",
             "link" : True,
-            "delivery_date" : "2016-02-02",
+            "deliveryDate" : "2016-02-02",
             "description" : "description"
         })
         self.assertEqual(response.json, {"preApplicationID": 1})

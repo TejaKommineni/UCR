@@ -2299,16 +2299,16 @@ def update_physician(physicianID):
         if physician is not None:
             form = forms.PhysicianForm(request.form)
             if form.validate():
-                physician.fname = request.form['fname']
-                physician.lname = request.form['lname']
-                physician.middle_name = request.form['middle_name']
+                physician.firstName = request.form['firstName']
+                physician.lastName = request.form['lastName']
+                physician.middleName = request.form['middleName']
                 physician.credentials = request.form['credentials']
                 physician.specialty = request.form['specialty']
-                physician.alias_fname = request.form['alias_fname']
-                physician.alias_lname = request.form['alias_lname']
-                physician.alias_middle_name = request.form['alias_middle_name']
-                physician.physician_status = request.form['physician_status']
-                physician.physician_status_date = datetime.strptime(request.form['physician_status_date'],"%Y-%m-%d")
+                physician.aliasFirstName = request.form['aliasFirstName']
+                physician.aliasLastName = request.form['aliasLastName']
+                physician.aliasMiddleName = request.form['aliasMiddleName']
+                physician.physicianStatus = request.form['physicianStatus']
+                physician.physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d")
                 physician.email = request.form['email']
                 query.commit()
                 return physician.json()
@@ -2325,16 +2325,16 @@ def create_physician():
         form = forms.PhysicianForm(request.form)
         if form.validate():
             physician = models.Physician(
-                fname = request.form['fname'],
-                lname = request.form['lname'],
-                middle_name = request.form['middle_name'],
+                firstName = request.form['firstName'],
+                lastName = request.form['lastName'],
+                middleName = request.form['middleName'],
                 credentials = request.form['credentials'],
                 specialty = request.form['specialty'],
-                alias_fname = request.form['alias_fname'],
-                alias_lname = request.form['alias_lname'],
-                alias_middle_name = request.form['alias_middle_name'],
-                physician_status = request.form['physician_status'],
-                physician_status_date = datetime.strptime(request.form['physician_status_date'],"%Y-%m-%d"),
+                aliasFirstName = request.form['aliasFirstName'],
+                aliasLastName = request.form['aliasLastName'],
+                aliasMiddleName = request.form['aliasMiddleName'],
+                physicianStatus = request.form['physicianStatus'],
+                physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
                 email = request.form['email']
             )
             query.add(physician)
@@ -2385,17 +2385,17 @@ def update_physician_address(physicianAddressID):
         if physicianAddress is not None:
             form = forms.PhysicianAddressForm(request.form)
             if form.validate():
-                physicianAddress.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                physicianAddress.contactInfoSourceID = request.form['contactInfoSourceID']
                 physicianAddress.physicianID = request.form['physicianID']
-                physicianAddress.contactInfoStatusLUTID = request.form['contactInfoStatusLUTID']
+                physicianAddress.contactInfoStatusID = request.form['contactInfoStatusID']
                 physicianAddress.street = request.form['street']
                 physicianAddress.street2 = request.form['street2']
                 physicianAddress.city = request.form['city']
                 physicianAddress.state = request.form['state']
                 physicianAddress.zip = request.form['zip']
-                physicianAddress.address_status = request.form['address_status']
-                physicianAddress.address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d")
-                physicianAddress.address_status_source = request.form['address_status_source']
+                physicianAddress.addressStatus = request.form['addressStatus']
+                physicianAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                physicianAddress.addressStatusSource = request.form['addressStatusSource']
                 query.commit()
                 return physicianAddress.json()
             else:
@@ -2411,17 +2411,17 @@ def create_physician_address():
         form = forms.PhysicianAddressForm(request.form)
         if form.validate():
             physicianAddress = models.PhysicianAddress(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 physicianID = request.form['physicianID'],
-                contactInfoStatusLUTID = request.form['contactInfoStatusLUTID'],
+                contactInfoStatusID = request.form['contactInfoStatusID'],
                 street = request.form['street'],
                 street2 = request.form['street2'],
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                address_status = request.form['address_status'],
-                address_status_date = datetime.strptime(request.form['address_status_date'],"%Y-%m-%d"),
-                address_status_source = request.form['address_status_source']
+                addressStatus = request.form['addressStatus'],
+                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(physicianAddress)
             return jsonify({'physicianAddressID':physicianAddress.physicianAddressID})
@@ -2473,8 +2473,8 @@ def update_physician_facility(physFacilityID):
             if form.validate():
                 physicianFacility.facilityID = request.form['facilityID']
                 physicianFacility.physicianID = request.form['physicianID']
-                physicianFacility.phys_facility_status = request.form['phys_facility_status']
-                physicianFacility.phys_facility_status_date = datetime.strptime(request.form['phys_facility_status_date'],"%Y-%m-%d")
+                physicianFacility.physFacilityStatus = request.form['physFacilityStatus']
+                physicianFacility.physFacilityStatusDate = datetime.strptime(request.form['physFacilityStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return physicianFacility.json()
             else:
@@ -2492,8 +2492,8 @@ def create_physician_facility():
             physicianFacility = models.PhysicianFacility(
                 facilityID = request.form['facilityID'],
                 physicianID = request.form['physicianID'],
-                phys_facility_status = request.form['phys_facility_status'],
-                phys_facility_status_date = datetime.strptime(request.form['phys_facility_status_date'],"%Y-%m-%d"),
+                physFacilityStatus = request.form['physFacilityStatus'],
+                physFacilityStatusDate = datetime.strptime(request.form['physFacilityStatusDate'],"%Y-%m-%d"),
                 )
             query.add(physicianFacility)
             return jsonify({'physFacilityID':physicianFacility.physFacilityID})
@@ -2543,14 +2543,14 @@ def update_physician_phone(physicianPhoneID):
         if physicianPhone is not None:
             form = forms.PhysicianPhoneForm(request.form)
             if form.validate():
-                physicianPhone.contactInfoSourceLUTID = request.form['contactInfoSourceLUTID']
+                physicianPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                 physicianPhone.physicianID = request.form['physicianID']
                 physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                physicianPhone.phone = request.form['phone']
-                physicianPhone.phone_type = request.form['phone_type']
-                physicianPhone.phone_source = request.form['phone_source']
-                physicianPhone.phone_status = request.form['phone_status']
-                physicianPhone.phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                physicianPhone.phoneNumber = request.form['phoneNumber']
+                physicianPhone.phoneType = request.form['phoneType']
+                physicianPhone.phoneSource = request.form['phoneSource']
+                physicianPhone.phoneStatus = request.form['phoneStatus']
+                physicianPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 query.commit()
                 return physicianPhone.json()
             else:
@@ -2566,14 +2566,14 @@ def create_physician_phone():
         form = forms.PhysicianPhoneForm(request.form)
         if form.validate():
             physicianPhone = models.PhysicianPhone(
-                contactInfoSourceLUTID = request.form['contactInfoSourceLUTID'],
+                contactInfoSourceID = request.form['contactInfoSourceID'],
                 physicianID = request.form['physicianID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
-                phone = request.form['phone'],
-                phone_type = request.form['phone_type'],
-                phone_source = request.form['phone_source'],
-                phone_status = request.form['phone_status'],
-                phone_status_date = datetime.strptime(request.form['phone_status_date'],"%Y-%m-%d")
+                phoneNumber = request.form['phoneNumber'],
+                phoneType = request.form['phoneType'],
+                phoneSource = request.form['phoneSource'],
+                phoneStatus = request.form['phoneStatus'],
+                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(physicianPhone)
             return jsonify({'physicianPhoneID':physicianPhone.physicianPhoneID})
@@ -2692,31 +2692,31 @@ def update_pre_application(preApplicationID):
             form = forms.PreApplicationForm(request.form)
             if form.validate():
                 preApplication.projectID = request.form['projectID']
-                preApplication.pi_fname = request.form['pi_fname']
-                preApplication.pi_lname = request.form['pi_lname']
-                preApplication.pi_phone = request.form['pi_phone']
-                preApplication.pi_email = request.form['pi_email']
-                preApplication.contact_fname = request.form['contact_fname']
-                preApplication.contact_lname = request.form['contact_lname']
-                preApplication.contact_phone = request.form['contact_phone']
-                preApplication.contact_email = request.form['contact_email']
+                preApplication.piFirstName = request.form['piFirstName']
+                preApplication.piLastName = request.form['piLastName']
+                preApplication.piPhone = request.form['piPhone']
+                preApplication.piEmail = request.form['piEmail']
+                preApplication.contactFirstName = request.form['contactFirstName']
+                preApplication.contactLastName = request.form['contactLastName']
+                preApplication.contactPhone = request.form['contactPhone']
+                preApplication.contactEmail = request.form['contactEmail']
                 preApplication.institution = request.form['institution']
                 preApplication.institution2 = request.form['institution2']
                 preApplication.uid = request.form['uid']
                 preApplication.udoh = request.form['udoh']
-                preApplication.project_title = request.form['project_title']
+                preApplication.projectTitle = request.form['projectTitle']
                 preApplication.purpose = request.form['purpose']
                 preApplication.irb0 = "true" == request.form['irb0'].lower()
                 preApplication.irb1 = "true" == request.form['irb1'].lower()
                 preApplication.irb2 = "true" == request.form['irb2'].lower()
                 preApplication.irb3 = "true" == request.form['irb3'].lower()
                 preApplication.irb4 = "true" == request.form['irb4'].lower()
-                preApplication.other_irb = request.form['other_irb']
+                preApplication.otherIrb = request.form['otherIrb']
                 preApplication.updb = "true" == request.form['updb'].lower()
-                preApplication.pt_contact = "true" == request.form['pt_contact'].lower()
-                preApplication.start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d")
+                preApplication.ptContact = "true" == request.form['ptContact'].lower()
+                preApplication.startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d")
                 preApplication.link = "true" == request.form['link'].lower()
-                preApplication.delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d")
+                preApplication.deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d")
                 preApplication.description = request.form['description']
                 query.commit()
                 return preApplication.json()
@@ -2729,38 +2729,36 @@ def update_pre_application(preApplicationID):
 
 @api.route('/preapplications/', methods=['POST'])
 def create_pre_application():
-    print("here")
     try:
         form = forms.PreApplicationForm(request.form)
         if form.validate():
-            print("validated")
             preApplication = models.PreApplication(
                 projectID = request.form['projectID'],
-                pi_fname = request.form['pi_fname'],
-                pi_lname = request.form['pi_lname'],
-                pi_phone = request.form['pi_phone'],
-                pi_email = request.form['pi_email'],
-                contact_fname = request.form['contact_fname'],
-                contact_lname = request.form['contact_lname'],
-                contact_phone = request.form['contact_phone'],
-                contact_email = request.form['contact_email'],
+                piFirstName = request.form['piFirstName'],
+                piLastName = request.form['piLastName'],
+                piPhone = request.form['piPhone'],
+                piEmail = request.form['piEmail'],
+                contactFirstName = request.form['contactFirstName'],
+                contactLastName = request.form['contactLastName'],
+                contactPhone = request.form['contactPhone'],
+                contactEmail = request.form['contactEmail'],
                 institution = request.form['institution'],
                 institution2 = request.form['institution2'],
                 uid = request.form['uid'],
                 udoh = request.form['udoh'],
-                project_title = request.form['project_title'],
+                projectTitle = request.form['projectTitle'],
                 purpose = request.form['purpose'],
                 irb0 = "true" == request.form['irb0'].lower(),
                 irb1 = "true" == request.form['irb1'].lower(),
                 irb2 = "true" == request.form['irb2'].lower(),
                 irb3 = "true" == request.form['irb3'].lower(),
                 irb4 = "true" == request.form['irb4'].lower(),
-                other_irb = request.form['other_irb'],
+                otherIrb = request.form['otherIrb'],
                 updb = "true" == request.form['updb'].lower(),
-                pt_contact = "true" == request.form['pt_contact'].lower(),
-                start_date = datetime.strptime(request.form['start_date'],"%Y-%m-%d"),
+                ptContact = "true" == request.form['ptContact'].lower(),
+                startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d"),
                 link = "true" == request.form['link'].lower(),
-                delivery_date = datetime.strptime(request.form['delivery_date'], "%Y-%m-%d"),
+                deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d"),
                 description = request.form['description']
             )
             query.add(preApplication)
