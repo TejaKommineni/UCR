@@ -101,7 +101,7 @@ class TestArcReview(BlankDB):
             "lnkage":False,
             "contact" : True,
             "engaged" : True,
-            "nonPublicData" : True
+            "nonPublicData" : True,
         })
         self.assertEqual(response.json, {"arcReviewID" : 1})
             

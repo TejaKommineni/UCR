@@ -819,7 +819,8 @@ class TestArcReview(PopulatedDB):
             "lnkage":True,
             "contact" : False,
             "engaged" : False,
-            "nonPublicData" : False
+            "nonPublicData" : False,
+            "versionID" : 0
         })
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["reviewType"], 2)
@@ -837,6 +838,7 @@ class TestArcReview(PopulatedDB):
         self.assertEqual(response.json["lnkage"], True)
         self.assertEqual(response.json["engaged"], False)
         self.assertEqual(response.json["nonPublicData"], False)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_arc_review(self):
         response = self.client.delete("/api/arcreviews/1/")
@@ -869,7 +871,8 @@ class TestBudget(PopulatedDB):
             "periodStart" : "2016-02-03",
             "periodEnd" : "2016-02-03",
             "periodTotal" : 1.5,
-            "periodComment" : "comment Updated"
+            "periodComment" : "comment Updated",
+            "versionID" : 1,
         })
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["numPeriods"], 2)
@@ -877,6 +880,7 @@ class TestBudget(PopulatedDB):
         self.assertEqual(response.json["periodEnd"], "2016-02-03")
         self.assertEqual(response.json["periodTotal"], 1.5)
         self.assertEqual(response.json["periodComment"], "comment Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_budget(self):
         response = self.client.delete("/api/budgets/1/")
@@ -923,7 +927,8 @@ class TestContact(PopulatedDB):
             "description" : "desc Updated",
             "contactDate" : "2016-02-03",
             "initials" : "atp Updated",
-            "notes" : "notes Updated"
+            "notes" : "notes Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["contactID"], 1)
         self.assertEqual(response.json["contactTypeLUTID"], 2)
@@ -936,6 +941,7 @@ class TestContact(PopulatedDB):
         self.assertEqual(response.json["contactDate"], "2016-02-03")
         self.assertEqual(response.json["initials"], "atp Updated")
         self.assertEqual(response.json["notes"], "notes Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_contact(self):
         response = self.client.delete("/api/contacts/1/")
@@ -956,9 +962,11 @@ class TestContactType(PopulatedDB):
     def test_update_contact_type(self):
         response = self.client.put("/api/contacttypes/1/",data = {
             "contactDefinition" : "def Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["contactTypeID"], 1)
         self.assertEqual(response.json["contactDefinition"], "def Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_contact_type(self):
         response = self.client.delete("/api/contacttypes/2/")
@@ -979,9 +987,11 @@ class TestContactInfoSource(PopulatedDB):
     def test_update_contact_info_source(self):
         response = self.client.put("/api/contactinfosources/1/",data = {
             "contactInfoSource" : "source Updated",
+            "versionID" : 0
         })
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["contactInfoSource"], "source Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_contact_info_source(self):
         response = self.client.delete("/api/contactinfosources/2/")
@@ -1003,9 +1013,11 @@ class TestContactInfoStatus(PopulatedDB):
     def test_update_contact_info_status(self):
         response = self.client.put("/api/contactinfostatuses/1/",data = {
             "contactInfoStatus" : "status Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["contactInfoStatus"], "status Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_contact_info_status(self):
         response = self.client.delete("/api/contactinfostatuses/2/")
@@ -1070,7 +1082,8 @@ class TestCTC(PopulatedDB):
             "dxZip" : 99991,
             "dxCounty" : "county2",
             "dnc" : "dnc2",
-            "dncReason" : "dnc_reason2"
+            "dncReason" : "dnc_reason2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["ctcID"], 1)
         self.assertEqual(response.json["patientID"], 2)
@@ -1089,6 +1102,7 @@ class TestCTC(PopulatedDB):
         self.assertEqual(response.json["dxCounty"], "county2")
         self.assertEqual(response.json["dnc"], "dnc2")
         self.assertEqual(response.json["dncReason"], "dnc_reason2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_ctc(self):
         response = self.client.delete("/api/ctcs/2/")
@@ -1111,11 +1125,13 @@ class TestCTCFacility(PopulatedDB):
     def test_update_ctc_facility(self):
         response = self.client.put("/api/ctcfacilities/1/",data = {
             "ctcID" : 2,
-            "facilityID" : 2
+            "facilityID" : 2,
+            "versionID" : 1
         })
         self.assertEqual(response.json["CTCFacilityID"], 1)
         self.assertEqual(response.json["ctcID"], 2)
         self.assertEqual(response.json["facilityID"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_ctc_facility(self):
         response = self.client.delete("/api/ctcfacilities/1/")
@@ -1160,7 +1176,8 @@ class TestFacilityPhone(PopulatedDB):
             "phoneNumber" : "phone Updated",
             "phoneStatus" : 2,
             "phoneSource" : "s2",
-            "phoneStatusDate" : "2016-02-03"
+            "phoneStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["facilityPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1172,6 +1189,7 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["phoneStatus"], 2)
         self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_facility_phone(self):
         response = self.client.delete("/api/facilityphones/1/")
@@ -1207,7 +1225,8 @@ class TestFacility(PopulatedDB):
             "facilityStatus" : 2,
             "facilityStatusDate" : "2016-02-03",
             "contact2FirstName" : "fname2",
-            "contact2LastName" : "lname2"
+            "contact2LastName" : "lname2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["facilityName"], "name2")
         self.assertEqual(response.json["contactFirstName"], "fname2")
@@ -1216,6 +1235,7 @@ class TestFacility(PopulatedDB):
         self.assertEqual(response.json["facilityStatusDate"], "2016-02-03")
         self.assertEqual(response.json["contact2FirstName"], "fname2")
         self.assertEqual(response.json["contact2LastName"], "lname2")
+        self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_facility(self):
         response = self.client.delete("/api/facilities/2/")
@@ -1265,7 +1285,8 @@ class TestFacilityAddress(PopulatedDB):
             "zip" : "zip Updated",
             "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2"
+            "addressStatusSource" : "s2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["facilityAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1279,6 +1300,7 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
         self.assertEqual(response.json["addressStatusSource"], "s2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_facility_address(self):
         response = self.client.delete("/api/facilityaddresses/1/")
@@ -1329,7 +1351,8 @@ class TestFunding(PopulatedDB):
             "dateStatus": "2016-02-03",
             "grantPi": 2,
             "primaryChartfield": "pcf Updated",
-            "secondaryChartfield": "scf Updated"
+            "secondaryChartfield": "scf Updated",
+            "versionID" :1
         })
         self.assertEqual(response.json["fundingID"], 1)
         self.assertEqual(response.json["grantStatusID"], 2)
@@ -1343,6 +1366,7 @@ class TestFunding(PopulatedDB):
         self.assertEqual(response.json["grantPi"], 2)
         self.assertEqual(response.json["primaryChartfield"], "pcf Updated")
         self.assertEqual(response.json["secondaryChartfield"], "scf Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_funding(self):
         response = self.client.delete("/api/fundings/1/")
@@ -1363,8 +1387,10 @@ class TestFundingSource(PopulatedDB):
     def test_update_funding_source(self):
         response = self.client.put("/api/fundingsources/1/", data = {
             "fundingSource" : "source2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["fundingSource"], "source2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_funding_source(self):
         response = self.client.delete("/api/fundingsources/2/")
@@ -1384,9 +1410,11 @@ class TestGrantStatus(PopulatedDB):
         
     def test_update_grant_status(self):
         response = self.client.put("/api/grantstatuses/1/", data = {
-            "grantStatus" : "status2"
+            "grantStatus" : "status2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["grantStatus"], "status2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_grant_status(self):
         response = self.client.delete("/api/grantstatuses/2/")
@@ -1407,8 +1435,10 @@ class TestHumanSubjectTraining(PopulatedDB):
     def test_update_human_subject_training(self):
         response = self.client.put("/api/humansubjecttrainings/1/", data = {
             "trainingType" : "type Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["trainingType"], "type Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_human_subject_training(self):
         response = self.client.delete("/api/humansubjecttrainings/2/")
@@ -1446,7 +1476,8 @@ class TestInformant(PopulatedDB):
             "middleName" : "middle_name Updated",
             "informantPrimary" : "informant_primary Updated",
             "informantRelationship" : "informant_relationship Updated",
-            "notes" : "notes Updated"
+            "notes" : "notes Updated",
+            "versionID" : 1
         }) 
         self.assertEqual(response.json["informantID"], 1)
         self.assertEqual(response.json["patientID"], 2)
@@ -1456,6 +1487,7 @@ class TestInformant(PopulatedDB):
         self.assertEqual(response.json["informantPrimary"], "informant_primary Updated")
         self.assertEqual(response.json["informantRelationship"], "informant_relationship Updated")
         self.assertEqual(response.json["notes"], "notes Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_informant(self):
         response = self.client.delete("/api/informants/2/")
@@ -1505,7 +1537,8 @@ class TestInformantAddress(PopulatedDB):
             "zip" : "zip Updated",
             "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2"
+            "addressStatusSource" : "s2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["informantAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1519,6 +1552,7 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
         self.assertEqual(response.json["addressStatusSource"], "s2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_informant_address(self):
         response = self.client.delete("/api/informantaddresses/1/")
@@ -1556,7 +1590,8 @@ class TestInformantPhone(PopulatedDB):
             "phoneNumber" : "phone Updated",
             "phoneStatus" : 2,
             "phoneSource" : "s2",
-            "phoneStatusDate" : "2016-02-03"
+            "phoneStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["informantPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1566,6 +1601,7 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["phoneStatus"], 2)
         self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_informant_phone(self):
         response = self.client.delete("/api/informantphones/1/")
@@ -1586,10 +1622,12 @@ class TestIRBHolder(PopulatedDB):
     def test_update_irb_holder(self):
         response = self.client.put("/api/irbholders/1/", data = {
             "holder" : "holder 1 Updated",
-            "holderDefinition" : "IRB 1 Updated"
+            "holderDefinition" : "IRB 1 Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["holder"],"holder 1 Updated")
         self.assertEqual(response.json["holderDefinition"],"IRB 1 Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_irb_holder(self):
         response = self.client.delete("/api/irbholders/2/")
@@ -1623,6 +1661,7 @@ class TestLog(PopulatedDB):
             "phaseStatusID" : 2,
             "note" : "note Updated",
             "date" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["logSubjectID"],2)
         self.assertEqual(response.json["projectID"],2)
@@ -1630,6 +1669,7 @@ class TestLog(PopulatedDB):
         self.assertEqual(response.json["phaseStatusID"],2)
         self.assertEqual(response.json["note"],"note Updated")
         self.assertEqual(response.json["date"],"2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_log(self):
         response = self.client.delete("/api/logs/1/")
@@ -1648,8 +1688,10 @@ class TestLogSubject(PopulatedDB):
     def test_update_log_subject(self):
         response = self.client.put("/api/logsubjects/1/", data = {
             "logSubject" : "subject Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["logSubject"], "subject Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_log_subject(self):
         response = self.client.delete("/api/logsubjects/2/")
@@ -1713,7 +1755,8 @@ class TestPatient(PopulatedDB):
             "sex" : "female",
             "race" : "black",
             "ethnicity" : "non-hispanic",
-            "vitalStatus" : "v2"
+            "vitalStatus" : "v2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["patID"], "2")
         self.assertEqual(response.json["recordID"], 2)
@@ -1731,6 +1774,7 @@ class TestPatient(PopulatedDB):
         self.assertEqual(response.json["race"], "black")
         self.assertEqual(response.json["ethnicity"], "non-hispanic")
         self.assertEqual(response.json["vitalStatus"], "v2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient(self):
         response = self.client.delete("/api/patients/2/")
@@ -1781,7 +1825,8 @@ class TestPatientAddress(PopulatedDB):
             "zip" : "zip Updated",
             "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2"
+            "addressStatusSource" : "s2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["patAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1795,6 +1840,7 @@ class TestPatientAddress(PopulatedDB):
         self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
         self.assertEqual(response.json["addressStatusSource"], "s2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient_address(self):
         response = self.client.delete("/api/patientaddresses/1/")
@@ -1832,7 +1878,8 @@ class TestPatientEmail(PopulatedDB):
             "email" : "email Updated",
             "emailStatus" : 2,
             "emailSource" : 2,
-            "emailStatusDate" : "2016-02-03"
+            "emailStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["emailID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1842,6 +1889,7 @@ class TestPatientEmail(PopulatedDB):
         self.assertEqual(response.json["emailStatus"], 2)
         self.assertEqual(response.json["emailSource"], 2)
         self.assertEqual(response.json["emailStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient_email(self):
         response = self.client.delete("/api/patientemails/1/")
@@ -1879,7 +1927,8 @@ class TestPatientPhone(PopulatedDB):
             "phoneNumber" : "phone Updated",
             "phoneStatus" : 2,
             "phoneSource" : "s2",
-            "phoneStatusDate" : "2016-02-03"
+            "phoneStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["patPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -1889,6 +1938,7 @@ class TestPatientPhone(PopulatedDB):
         self.assertEqual(response.json["phoneStatus"], 2)
         self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient_phone(self):
         response = self.client.delete("/api/patientphones/1/")
@@ -1911,11 +1961,13 @@ class TestPatientProjectStatus(PopulatedDB):
     def test_update_patient_project_status(self):
         response = self.client.put("/api/patientprojectstatuses/1/", data = {
             "patientProjectStatusTypeID" : 2,
-            "projectPatientID" : 2
+            "projectPatientID" : 2,
+            "versionID" : 1
         })
         self.assertEqual(response.json["patientProjectStatusID"], 1)
         self.assertEqual(response.json["patientProjectStatusTypeID"], 2)
         self.assertEqual(response.json["projectPatientID"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient_project_status(self):
         response = self.client.delete("/api/patientprojectstatuses/1/")
@@ -1935,10 +1987,12 @@ class TestPatientProjectStatusLUT(PopulatedDB):
 
     def test_update_patient_project_status_type(self):
         response = self.client.put("/api/patientprojectstatustypes/1/", data = {
-            "statusDescription" : "desc Updated"
+            "statusDescription" : "desc Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["patientProjectStatusTypeID"], 1)
         self.assertEqual(response.json["statusDescription"], "desc Updated")
+        self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_patient_project_status_type(self):
         response = self.client.delete("/api/patientprojectstatustypes/2/")
@@ -1959,10 +2013,12 @@ class TestPhaseStatus(PopulatedDB):
     def test_update_phase_status(self):
         response = self.client.put("/api/phasestatuses/1/", data = {
             "phaseStatus" : "status Updated",
-            "phaseDescription": "desc Updated"
+            "phaseDescription": "desc Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["phaseStatus"], "status Updated")
         self.assertEqual(response.json["phaseDescription"], "desc Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_phase_status(self):
         response = self.client.delete("/api/phasestatuses/2/")
@@ -2010,7 +2066,8 @@ class TestPhysician(PopulatedDB):
             "aliasMiddleName" : "alias_middle_name2",
             "physicianStatus" : 2,
             "physicianStatusDate" : "2016-02-03",
-            "email" : "email2"
+            "email" : "email2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["firstName"], "fname2")
         self.assertEqual(response.json["lastName"], "lname2")
@@ -2023,6 +2080,7 @@ class TestPhysician(PopulatedDB):
         self.assertEqual(response.json["physicianStatus"], 2)
         self.assertEqual(response.json["physicianStatusDate"], "2016-02-03")
         self.assertEqual(response.json["email"], "email2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_physician(self):
         response = self.client.delete("/api/physicians/2/")
@@ -2072,7 +2130,8 @@ class TestPhysicianAddress(PopulatedDB):
             "zip" : "zip Updated",
             "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2"
+            "addressStatusSource" : "s2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["physicianAddressID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -2086,6 +2145,7 @@ class TestPhysicianAddress(PopulatedDB):
         self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
         self.assertEqual(response.json["addressStatusSource"], "s2")
+        self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_physician_address(self):
         response = self.client.delete("/api/physicianaddresses/1/")
@@ -2114,13 +2174,15 @@ class TestPhysicianFacility(PopulatedDB):
             "facilityID" : 2,
             "physicianID" : 2,
             "physFacilityStatus" : 2,
-            "physFacilityStatusDate" : "2016-02-03"
+            "physFacilityStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["physFacilityID"], 1)
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["facilityID"], 2)
         self.assertEqual(response.json["physFacilityStatus"], 2)
         self.assertEqual(response.json["physFacilityStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_physician_facility(self):
         response = self.client.delete("/api/physicianfacilities/1/")
@@ -2161,7 +2223,8 @@ class TestPhysicianPhone(PopulatedDB):
             "phoneType": "phone_type Updated",
             "phoneStatus" : 2,
             "phoneSource" : "s2",
-            "phoneStatusDate" : "2016-02-03"
+            "phoneStatusDate" : "2016-02-03",
+            "versionID" : 1
         })
         self.assertEqual(response.json["physicianPhoneID"], 1)
         self.assertEqual(response.json["contactInfoSourceID"], 2)
@@ -2172,6 +2235,7 @@ class TestPhysicianPhone(PopulatedDB):
         self.assertEqual(response.json["phoneStatus"], 2)
         self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_physician_phone(self):
         response = self.client.delete("/api/physicianphones/1/")
@@ -2192,10 +2256,12 @@ class TestPhysicianToCTC(PopulatedDB):
     def test_update_physician_to_ctc(self):
         response = self.client.put("/api/physiciantoctcs/1/", data = {
             "physicianID" : 2,
-            "ctcID": 2
+            "ctcID": 2,
+            "versionID" : 1
         })
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["ctcID"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_physician_to_ctc(self):
         response = self.client.delete("/api/physiciantoctcs/1/")
@@ -2291,7 +2357,8 @@ class TestPreApplication(PopulatedDB):
             "startDate" : "2016-02-03",
             "link" : False,
             "deliveryDate" : "2016-02-03",
-            "description" : "description2"
+            "description" : "description2",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["piFirstName"], "pi_fname2")
@@ -2320,6 +2387,7 @@ class TestPreApplication(PopulatedDB):
         self.assertEqual(response.json["link"], False)
         self.assertEqual(response.json["deliveryDate"], "2016-02-03")
         self.assertEqual(response.json["description"], "description2")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_pre_application(self):
         response = self.client.delete("/api/preapplications/1/")
@@ -2381,7 +2449,8 @@ class TestProject(PopulatedDB):
             "budgetEndDate" : "2016-02-03",
             "previousShortTitle" : "t short Update",
             "dateAdded" : "2016-02-03",
-            "finalRecruitmentReport" : "report Update"
+            "finalRecruitmentReport" : "report Update",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectID"],1)
         self.assertEqual(response.json["projectTypeID"],2)
@@ -2398,6 +2467,7 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["previousShortTitle"],"t short Update")
         self.assertEqual(response.json["dateAdded"],"2016-02-03")
         self.assertEqual(response.json["finalRecruitmentReport"],"report Update")
+        self.assertEqual(response.json["versionID"], 2)
         
      # Test deletetion of project
     def test_delete_project(self):
@@ -2508,7 +2578,8 @@ class TestProjectPatient(PopulatedDB):
             "medRecordReleaseStaff" : 2,
             "medRecordReleaseDate"  : "2016-02-03",
             "surveyToResearcher"  : "2016-02-03",
-            "surveyToResearcherStaff" : 2
+            "surveyToResearcherStaff" : 2,
+            "versionID" : 1
         })
         self.assertEqual(response.json["participantID"], 1)
         self.assertEqual(response.json["projectID"], 2)
@@ -2542,6 +2613,7 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["medRecordReleaseDate"], "2016-02-03")
         self.assertEqual(response.json["surveyToResearcher"], "2016-02-03")
         self.assertEqual(response.json["surveyToResearcherStaff"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_project_patient(self):
         response = self.client.delete("/api/projectpatients/2/")
@@ -2589,7 +2661,8 @@ class TestProjectStaff(PopulatedDB):
             "inactive" : "yes",
             "humanSubjectTrainingExp" : "2016-02-03",
             "humanSubjectTrainingTypeID" : 2,
-            "studyRole" : 2
+            "studyRole" : 2,
+            "versionID" : 1
         })
         self.assertEqual(response.json["staffRoleID"], 2)
         self.assertEqual(response.json["projectID"], 2)
@@ -2602,6 +2675,7 @@ class TestProjectStaff(PopulatedDB):
         self.assertEqual(response.json["humanSubjectTrainingExp"], "2016-02-03")
         self.assertEqual(response.json["humanSubjectTrainingTypeID"], 2)
         self.assertEqual(response.json["studyRole"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_staff(self):
         response = self.client.delete("/api/projectstaff/1/")
@@ -2631,7 +2705,8 @@ class TestProjectStatus(PopulatedDB):
             "projectID": 2,
             "staffID" : 2,
             "statusDate" : "2016-02-03",
-            "statusNotes": "notes Updated"
+            "statusNotes": "notes Updated",
+            "versionID" : 1
         })
         print(response.json)
         self.assertEqual(response.json["projectStatusTypeID"], 2)
@@ -2639,6 +2714,7 @@ class TestProjectStatus(PopulatedDB):
         self.assertEqual(response.json["staffID"], 2)
         self.assertEqual(response.json["statusDate"], "2016-02-03")
         self.assertEqual(response.json["statusNotes"], "notes Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_project_status(self):
         response = self.client.delete("/api/projectstatuses/1/")
@@ -2661,11 +2737,13 @@ class TestProjectStatusType(PopulatedDB):
     def test_update_project_status_type(self):
         response = self.client.put("/api/projectstatustypes/1/", data = {
             "projectStatus" : "Status 1 Updated",
-            "projectStatusDefinition" : "status def Updated"
+            "projectStatusDefinition" : "status def Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectStatusTypeID"], 1)
         self.assertEqual(response.json["projectStatus"], "Status 1 Updated")
         self.assertEqual(response.json["projectStatusDefinition"], "status def Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_project_status_type(self):
         response = self.client.delete("/api/projectstatustypes/2/")
@@ -2686,10 +2764,12 @@ class TestProjectType(PopulatedDB):
     def test_update_project_type(self):
         response = self.client.put("/api/projecttypes/1/", data = {
             "projectType" : "2",
-            "projectTypeDefinition" : "type def Updated"
+            "projectTypeDefinition" : "type def Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectType"], "2")
         self.assertEqual(response.json["projectTypeDefinition"], "type def Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_project_type(self):
         response = self.client.delete("/api/projecttypes/2/")
@@ -2712,11 +2792,13 @@ class TestRCStatusList(PopulatedDB):
     def test_update_rcStatus(self):
         response = self.client.put("/api/rcstatuslist/1/", data = {
             "rcStatus" : "Status 1 Updated",
-            "rcStatusDefinition" : "rc status def Updated"
+            "rcStatusDefinition" : "rc status def Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["rcStatusID"], 1)
         self.assertEqual(response.json["rcStatus"], "Status 1 Updated")
         self.assertEqual(response.json["rcStatusDefinition"], "rc status def Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_rcStatusList(self):
         response = self.client.delete("/api/rcstatuslist/2/")
@@ -2758,7 +2840,8 @@ class TestReviewCommittee(PopulatedDB):
             "dateExpires" : "2016-02-03",
             "rcNote" : "rc_note Updated",
             "rcProtocol" : "rc_proto Updated",
-            "rcApproval":"rc_approval Updated"
+            "rcApproval":"rc_approval Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["rcStatusID"], 2)
@@ -2769,6 +2852,7 @@ class TestReviewCommittee(PopulatedDB):
         self.assertEqual(response.json["rcNote"], "rc_note Updated")
         self.assertEqual(response.json["rcProtocol"], "rc_proto Updated")
         self.assertEqual(response.json["rcApproval"], "rc_approval Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_review_committee(self):
         response = self.client.delete("/api/reviewcommittees/1/")
@@ -2789,10 +2873,12 @@ class TestReviewCommitteeList(PopulatedDB):
     def test_update_review_committee_list(self):
         response = self.client.put("/api/reviewcommitteelist/1/", data = {
             "reviewCommittee" : "rc Updated",
-            "rcDescription" : "rc desc Updated"
+            "rcDescription" : "rc desc Updated",
+            "versionID" : 1
             })
         self.assertEqual(response.json["reviewCommittee"],"rc Updated")
         self.assertEqual(response.json["rcDescription"],"rc desc Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_review_committee_list(self):
         response = self.client.delete("/api/reviewcommitteelist/2/")
@@ -2852,7 +2938,8 @@ class TestStaff(PopulatedDB):
             "city" : "city2",
             "state" : "state2",
             "humanSubjectTrainingExp" : "2016-02-03",
-            "ucrRole" : 2
+            "ucrRole" : 2,
+            "versionID" : 1
             })
         self.assertEqual(response.json["staffID"], 1)
         self.assertEqual(response.json["firstName"], "fname2")
@@ -2869,6 +2956,7 @@ class TestStaff(PopulatedDB):
         self.assertEqual(response.json["city"], "city2")
         self.assertEqual(response.json["humanSubjectTrainingExp"], "2016-02-03")
         self.assertEqual(response.json["ucrRole"], 2)
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_staff(self):
         response = self.client.delete("/api/staff/2/")
@@ -2892,10 +2980,12 @@ class TestStaffRole(PopulatedDB):
         response = self.client.put("/api/staffroles/1/", data = {
             "staffRole" : "role Updated",
             "staffRoleDescription" : "desc Updated",
+            "versionID" : 1
             })
         self.assertEqual(response.json["staffRoleID"], 1)
         self.assertEqual(response.json["staffRole"], "role Updated")
         self.assertEqual(response.json["staffRoleDescription"], "desc Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_staff_role(self):
         response = self.client.delete("/api/staffroles/2/")
@@ -2924,13 +3014,15 @@ class TestStaffTraining(PopulatedDB):
             "staffID" : 2,
             "humanSubjectTrainingID" : 2,
             "dateTaken" : "2016-02-03",
-            "dateExpires" : "2016-02-03"
+            "dateExpires" : "2016-02-03",
+            "versionID" : 1
             })
         self.assertEqual(response.json["staffTrainingID"], 1)
         self.assertEqual(response.json["staffID"], 2)
         self.assertEqual(response.json["humanSubjectTrainingID"], 2)
         self.assertEqual(response.json["dateTaken"], "2016-02-03")
         self.assertEqual(response.json["dateExpires"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_staff_training(self):
         response = self.client.delete("/api/stafftrainings/1/")
@@ -2962,7 +3054,8 @@ class TestTracing(PopulatedDB):
             "projectPatientID" : 2,
             "date" : "2016-02-03",
             "staff" : 2,
-            "notes" : "notes Updated"
+            "notes" : "notes Updated",
+            "versionID" : 1
             })
         self.assertEqual(response.json["tracingID"], 1)
         self.assertEqual(response.json["tracingSourceID"], 2)
@@ -2970,6 +3063,7 @@ class TestTracing(PopulatedDB):
         self.assertEqual(response.json["date"], "2016-02-03")
         self.assertEqual(response.json["staff"], 2)
         self.assertEqual(response.json["notes"], "notes Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_tracing(self):
         response = self.client.delete("/api/tracings/1/")
@@ -2989,10 +3083,12 @@ class TestTracingSource(PopulatedDB):
         
     def test_update_tracing_source(self):
         response = self.client.put("/api/tracingsources/1/", data = {
-            "description" : "desc Updated"
+            "description" : "desc Updated",
+            "versionID" : 1
             })
         self.assertEqual(response.json["tracingSourceID"], 1)
         self.assertEqual(response.json["description"], "desc Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_tracing_source(self):
         response = self.client.delete("/api/tracingsources/2/")
@@ -3022,13 +3118,15 @@ class TestUCRReport(PopulatedDB):
             "reportType": 2,
             "reportSubmitted": "2016-02-03",
             "reportDue": "2016-02-03",
-            "reportDoc": "doc Updated"
+            "reportDoc": "doc Updated",
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectID"],2)
         self.assertEqual(response.json["reportType"],2)
         self.assertEqual(response.json["reportSubmitted"],"2016-02-03")
         self.assertEqual(response.json["reportDue"],"2016-02-03")
         self.assertEqual(response.json["reportDoc"],"doc Updated")
+        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_ucr_report(self):
         response = self.client.delete("/api/ucrreports/1/")

@@ -4,6 +4,15 @@ from flask_sqlalchemy import SQLAlchemy
 from app.database import db
 from app.models import *
 
+def create_all():
+    db.create_all()
+
+def add(obj):
+    db.session.add(obj)
+
+def flush():
+    db.session.flush()
+
 def get_arc_reviews():
     return db.session.query(ArcReview).all()
     

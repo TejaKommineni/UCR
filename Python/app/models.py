@@ -7,6 +7,7 @@ import sqlalchemy
 from app.database import db
 from app.helpers import DateTimeEncoder
 from sqlalchemy.orm import class_mapper
+from sqlalchemy.ext.declarative import declared_attr
 
 STATES = db.Enum("AL",
         "AK",
@@ -73,10 +74,19 @@ ADDRESS_STATUS_SOURCE = db.Enum("s1", "s2")
 """
     A base class that all models derive from
 """
+
 class CustomModel(db.Model):
     __abstract__ = True
     #def __init__(self):
     #    super(CustomModel,self).__init__()
+
+    createdDate = db.Column(db.DateTime,server_default = db.func.now())
+    modifiedDate = db.Column(db.DateTime, server_default = db.func.now(), onupdate=db.func.now())
+    versionID = db.Column(db.Integer, nullable=False)
+
+    __mapper_args__ = {
+        "version_id_col": versionID
+    }
 
     def dict(self):
         result = {}
@@ -84,10 +94,10 @@ class CustomModel(db.Model):
             if isinstance(prop, sqlalchemy.orm.ColumnProperty):
                 result[prop.key] = getattr(self, prop.key)
         return result
-    
+
     def json(self):
         return jsonify(self.dict())
-            
+
 ##############################################################################
 # Models
 ##############################################################################  
@@ -112,7 +122,7 @@ class ArcReview(CustomModel):
     lnkage = db.Column('lnkage',db.Boolean)
     engaged = db.Column('engaged',db.Boolean)
     nonPublicData = db.Column('non_public_data',db.Boolean)
-    
+
     # Relationships
     # 1-1
     project = db.relationship('Project', back_populates='arcReview')
@@ -207,7 +217,7 @@ class Contact(CustomModel):
     # M - 1, many contacts may have the same patient
     projectPatient = db.relationship("ProjectPatient",back_populates = "contacts")
     # M - 1 many contacts can have the same staff
-    staff = db.relationship("Staff", back_populates="contacts")
+    staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="contacts")
     # M - 1, many contacts can have the same informant
     informant = db.relationship("Informant",back_populates="contacts")
     # M - 1, many contacts may have the same facility
@@ -776,7 +786,7 @@ class Log(CustomModel):
     # M - 1, many logs with the same subject
     phaseStatus = db.relationship("PhaseStatus", back_populates="logs")
     # 1 - M, one staff with many logs
-    staff = db.relationship("Staff", back_populates="logs")
+    staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="logs")
     # 1 - M, one project with many logs
     project = db.relationship("Project",back_populates="logs")
     
@@ -1484,7 +1494,7 @@ class ProjectPatient(CustomModel):
     # 1 - 1 one PP with one CTC
     ctc = db.relationship('CTC',back_populates="projectPatient")
     # 1 - M, on PP with many staff
-    staff = db.relationship("Staff", back_populates="projectPatient")
+    staff = db.relationship("Staff",foreign_keys=[staffID], back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact",back_populates="projectPatient")
     
@@ -1577,7 +1587,7 @@ class ProjectStaff(CustomModel):
     # M - 1, many projectStaff with the same project
     project = db.relationship("Project", back_populates="projectStaff")
     # 1  M one staff can have multiple project staff
-    staff = db.relationship("Staff", back_populates="projectStaff")
+    staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="projectStaff")
     
     def __repr__(self):
         return "<ProjectStaff(\
@@ -1618,12 +1628,12 @@ class ProjectStatus(CustomModel):
     
     # Relationships
     # M -1 , many projectStatuses per projectStatusLUT
-    projectStatus = db.relationship("ProjectStatusLUT", back_populates="projectStatuses")
+    projectStatus = db.relationship("ProjectStatusLUT", foreign_keys=[projectStatusTypeID], back_populates="projectStatuses")
     
     # 1 - M, one project, many statuses
-    project = db.relationship("Project", back_populates="projectStatuses")
+    project = db.relationship("Project", foreign_keys=[projectID], back_populates="projectStatuses")
     # 1 - M, many statuses per staff
-    staff = db.relationship("Staff", back_populates="projectStatuses")
+    staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="projectStatuses")
     
     def __repr__(self):
         return "<ProjectStatus(\
@@ -1766,7 +1776,7 @@ class ReviewCommitteeList(CustomModel):
         
 class Staff(CustomModel):
     __tablename__ = 'staff'
-    
+
     staffID = db.Column('staffID',db.Integer, primary_key=True)
     firstName = db.Column('fname',db.String)
     lastName = db.Column('lname',db.String)
@@ -1797,7 +1807,6 @@ class Staff(CustomModel):
     contacts = db.relationship("Contact",back_populates="staff")
     # 1 - M, one study/projectPatient can have many staff
     projectPatient = db.relationship("ProjectPatient",back_populates="staff")
-
     
     def __repr__(self):
         return "<Staff(\
@@ -1867,7 +1876,7 @@ class StaffTraining(CustomModel):
     # M - 1, many staffTrainings with the same HST
     humanSubjectTraining = db.relationship('HumanSubjectTrainingLUT',back_populates="staffTrainings")
     # 1 - M, one staff with many trainings
-    staff = db.relationship('Staff',back_populates='staffTraining')
+    staff = db.relationship('Staff', foreign_keys = [staffID],back_populates='staffTraining')
 
     def __repr__(self):
         return "<StaffTraining(\

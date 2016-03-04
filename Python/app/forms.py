@@ -23,7 +23,11 @@ COMMON_BOOL_VALIDATORS = [
 
 DATE_FORMAT = "%Y-%m-%d"
 
-class ArcReviewForm(Form):
+class BaseForm(Form):
+    versionID = IntegerField('versionID',
+        []+COMMON_INTEGER_VALIDATORS)
+
+class ArcReviewForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     reviewType = IntegerField('reviewType',
@@ -71,7 +75,7 @@ class ArcReviewForm(Form):
             hasErrors =  True
         return not hasErrors
 
-class BudgetForm(Form):
+class BudgetForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     numPeriods = IntegerField('numPeriods',
@@ -100,7 +104,7 @@ class BudgetForm(Form):
             hasErrors =  True
         return not hasErrors
 
-class ContactForm(Form):
+class ContactForm(BaseForm):
     contactTypeLUTID = IntegerField('contactTypeLUTID',
         []+COMMON_INTEGER_VALIDATORS)
     projectPatientID = IntegerField('projectPatientID',
@@ -161,19 +165,19 @@ class ContactForm(Form):
             hasErrors =  True
         return not hasErrors
 
-class ContactInfoSourceForm(Form):
+class ContactInfoSourceForm(BaseForm):
     contactInfoSource = StringField('contactInfoSource',
         []+COMMON_STRING_VALIDATORS)
 
-class ContactInfoStatusForm(Form):
+class ContactInfoStatusForm(BaseForm):
     contactInfoStatus = StringField('contactInfoStatus',
         []+COMMON_STRING_VALIDATORS)
 
-class ContactTypeLUTForm(Form):
+class ContactTypeLUTForm(BaseForm):
     contactDefinition = StringField('contactDefinition',
         []+COMMON_STRING_VALIDATORS)
 
-class CTCFacilityForm(Form):
+class CTCFacilityForm(BaseForm):
     ctcID = IntegerField('ctcID',
         []+COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
@@ -197,7 +201,7 @@ class CTCFacilityForm(Form):
             hasErrors =  True
         return not hasErrors
 
-class CTCForm(Form):
+class CTCForm(BaseForm):
     patientID = IntegerField('patientID',
         []+COMMON_INTEGER_VALIDATORS)
     dxDate = DateField('dxDate',
@@ -246,7 +250,7 @@ class CTCForm(Form):
 
         return not hasErrors
 
-class FacilityForm(Form):
+class FacilityForm(BaseForm):
     facilityName = StringField('facilityName',
         []+COMMON_STRING_VALIDATORS)
     contactFirstName = StringField('contactFirstName',
@@ -263,7 +267,7 @@ class FacilityForm(Form):
     contact2LastName = StringField('contact2LastName',
         []+COMMON_STRING_VALIDATORS)
 
-class FacilityAddressForm(Form):
+class FacilityAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
@@ -307,7 +311,7 @@ class FacilityAddressForm(Form):
             hasErrors = True
         return not hasErrors
 
-class FacilityPhoneForm(Form):
+class FacilityPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
@@ -347,7 +351,7 @@ class FacilityPhoneForm(Form):
             hasErrors = True
         return not hasErrors
 
-class FundingForm(Form):
+class FundingForm(BaseForm):
     grantStatusID = IntegerField('grantStatusID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
@@ -395,25 +399,25 @@ class FundingForm(Form):
             hasErrors = True
         return not hasErrors
 
-class FundingSourceLUTForm(Form):
+class FundingSourceLUTForm(BaseForm):
     fundingSource = StringField('fundingSource',
         []+COMMON_STRING_VALIDATORS)
 
-class GrantStatusLUTForm(Form):
+class GrantStatusLUTForm(BaseForm):
     grantStatus = StringField('grantStatus',
         []+COMMON_STRING_VALIDATORS)
 
-class HumanSubjectTrainingLUTForm(Form):
+class HumanSubjectTrainingLUTForm(BaseForm):
     trainingType = StringField('trainingType',
         []+COMMON_STRING_VALIDATORS)
 
-class IRBHolderLUTForm(Form):
+class IRBHolderLUTForm(BaseForm):
     holder = StringField('holder',
         []+COMMON_STRING_VALIDATORS)
     holderDefinition = StringField('holderDefinition',
         []+COMMON_STRING_VALIDATORS)
 
-class InformantForm(Form):
+class InformantForm(BaseForm):
     patientID = IntegerField('patientID',
         []+COMMON_INTEGER_VALIDATORS)
     firstName = StringField('firstName',
@@ -437,7 +441,7 @@ class InformantForm(Form):
             hasErrors = True
         return not hasErrors
 
-class InformantAddressForm(Form):
+class InformantAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     informantID = IntegerField('informantID',
@@ -481,7 +485,7 @@ class InformantAddressForm(Form):
             hasErrors = True
         return not hasErrors
 
-class InformantPhoneForm(Form):
+class InformantPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     informantID = IntegerField('informantID',
@@ -517,7 +521,7 @@ class InformantPhoneForm(Form):
             hasErrors = True
         return not hasErrors
 
-class LogForm(Form):
+class LogForm(BaseForm):
     logSubjectID =  IntegerField('logSubjectID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
@@ -556,11 +560,11 @@ class LogForm(Form):
             hasErrors = True
         return not hasErrors
 
-class LogSubjectLUTForm(Form):
+class LogSubjectLUTForm(BaseForm):
     logSubject = StringField('logSubject',
         []+COMMON_STRING_VALIDATORS)
 
-class PatientForm(Form):
+class PatientForm(BaseForm):
     patID = StringField('patID',
         []+COMMON_STRING_VALIDATORS)
     recordID = IntegerField('recordID',
@@ -597,7 +601,7 @@ class PatientForm(Form):
     vitalStatus = StringField('vitalStatus',
         []+COMMON_STRING_VALIDATORS)
 
-class PatientAddressForm(Form):
+class PatientAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     patientID = IntegerField('patientID',
@@ -641,7 +645,7 @@ class PatientAddressForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PatientEmailForm(Form):
+class PatientEmailForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     patientID = IntegerField('patientID',
@@ -676,7 +680,7 @@ class PatientEmailForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PatientPhoneForm(Form):
+class PatientPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     patientID = IntegerField('patientID',
@@ -712,7 +716,7 @@ class PatientPhoneForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PatientProjectStatusForm(Form):
+class PatientProjectStatusForm(BaseForm):
     patientProjectStatusTypeID = IntegerField('patientProjectStatusTypeID',
         []+COMMON_INTEGER_VALIDATORS)
     projectPatientID = IntegerField('projectID',
@@ -732,17 +736,17 @@ class PatientProjectStatusForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PatientProjectStatusLUTForm(Form):
+class PatientProjectStatusLUTForm(BaseForm):
     statusDescription = StringField('statusDescription',
         []+COMMON_STRING_VALIDATORS)
 
-class PhaseStatusForm(Form):
+class PhaseStatusForm(BaseForm):
     phaseStatus = StringField('phaseStatus',
         []+COMMON_STRING_VALIDATORS)
     phaseDescription = StringField('phaseDescription',
         []+COMMON_STRING_VALIDATORS)
 
-class PhysicianForm(Form):
+class PhysicianForm(BaseForm):
     firstName = StringField('fname',
         []+COMMON_STRING_VALIDATORS)
     lastName = StringField('lname',
@@ -767,7 +771,7 @@ class PhysicianForm(Form):
     email = StringField('email',
         []+COMMON_STRING_VALIDATORS)
 
-class PhysicianFacilityForm(Form):
+class PhysicianFacilityForm(BaseForm):
     facilityID = IntegerField('facilityID',
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
@@ -792,7 +796,7 @@ class PhysicianFacilityForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PhysicianAddressForm(Form):
+class PhysicianAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
@@ -836,7 +840,7 @@ class PhysicianAddressForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PhysicianPhoneForm(Form):
+class PhysicianPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
@@ -874,7 +878,7 @@ class PhysicianPhoneForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PhysicianToCTCForm(Form):
+class PhysicianToCTCForm(BaseForm):
     physicianID = IntegerField('physicianID',
         []+COMMON_INTEGER_VALIDATORS)
     ctcID = IntegerField('ctcID',
@@ -894,7 +898,7 @@ class PhysicianToCTCForm(Form):
             hasErrors = True
         return not hasErrors
 
-class PreApplicationForm(Form):
+class PreApplicationForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     piFirstName = StringField('piFirstName',
@@ -965,7 +969,7 @@ class PreApplicationForm(Form):
             hasErrors =  True
         return not hasErrors
 
-class ProjectForm(Form):
+class ProjectForm(BaseForm):
     projectTypeID = IntegerField('projectTypeID',
         [] + COMMON_INTEGER_VALIDATORS)
     irbHolderID = IntegerField('irbHolderID',
@@ -1016,7 +1020,7 @@ class ProjectForm(Form):
             hasErrors = True
         return not hasErrors
 
-class ProjectPatientForm(Form):
+class ProjectPatientForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     staffID = IntegerField('staffID',
@@ -1111,7 +1115,7 @@ class ProjectPatientForm(Form):
 
         return not hasErrors
 
-class ProjectStaffForm(Form):
+class ProjectStaffForm(BaseForm):
     staffRoleID = IntegerField('staffRoleID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
@@ -1158,7 +1162,7 @@ class ProjectStaffForm(Form):
             hasErrors = True
         return not hasErrors
 
-class ProjectStatusForm(Form):
+class ProjectStatusForm(BaseForm):
     projectStatusTypeID = IntegerField('projectStatusTypeID',
         []+COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
@@ -1194,25 +1198,25 @@ class ProjectStatusForm(Form):
             hasErrors = True
         return not hasErrors
 
-class ProjectStatusLUTForm(Form):
+class ProjectStatusLUTForm(BaseForm):
     projectStatus = StringField('projectStatus',
         []+COMMON_STRING_VALIDATORS)
     projectStatusDefinition = StringField('projectStatusDefinition',
         []+COMMON_STRING_VALIDATORS)
 
-class ProjectTypeForm(Form):
+class ProjectTypeForm(BaseForm):
     projectType = StringField('projectType',
         []+COMMON_STRING_VALIDATORS)
     projectTypeDefinition = StringField('projectTypeDefinition',
         []+COMMON_STRING_VALIDATORS)
 
-class RCStatusListForm(Form):
+class RCStatusListForm(BaseForm):
     rcStatus = StringField('rc_status',
         []+COMMON_STRING_VALIDATORS)
     rcStatusDefinition = StringField('rc_status_definition',
         []+COMMON_STRING_VALIDATORS)
 
-class ReviewCommitteeForm(Form):
+class ReviewCommitteeForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     rcStatusID = IntegerField('rcStatusID',
@@ -1260,13 +1264,13 @@ class ReviewCommitteeForm(Form):
             hasErrors = True
         return not hasErrors
 
-class ReviewCommitteeListForm(Form):
+class ReviewCommitteeListForm(BaseForm):
     reviewCommittee = StringField('reviewCommittee',
         []+COMMON_STRING_VALIDATORS)
     rcDescription = StringField('rcDescription',
         []+COMMON_STRING_VALIDATORS)
 
-class StaffForm(Form):
+class StaffForm(BaseForm):
     firstName = StringField('firstName',
         []+COMMON_STRING_VALIDATORS)
     lastName = StringField('lastName',
@@ -1299,13 +1303,13 @@ class StaffForm(Form):
     ucrRole = IntegerField('ucrRole',
         []+COMMON_INTEGER_VALIDATORS)
 
-class StaffRoleLUTForm(Form):
+class StaffRoleLUTForm(BaseForm):
     staffRole = StringField('staffRole',
         []+COMMON_STRING_VALIDATORS)
     staffRoleDescription = StringField('staffRoleDescription',
         []+COMMON_STRING_VALIDATORS)
 
-class StaffTrainingForm(Form):
+class StaffTrainingForm(BaseForm):
     staffID = IntegerField('staffID',
         []+COMMON_INTEGER_VALIDATORS)
     humanSubjectTrainingID = IntegerField('humanSubjectTrainingID',
@@ -1333,7 +1337,7 @@ class StaffTrainingForm(Form):
             hasErrors = True
         return not hasErrors
 
-class TracingForm(Form):
+class TracingForm(BaseForm):
     tracingSourceID = IntegerField('tracingSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     projectPatientID = IntegerField('projectPatientID',
@@ -1362,11 +1366,11 @@ class TracingForm(Form):
             hasErrors = True
         return not hasErrors
 
-class TracingSourceLUTForm(Form):
+class TracingSourceLUTForm(BaseForm):
     description = StringField('description',
         []+COMMON_STRING_VALIDATORS)
 
-class UCRReportForm(Form):
+class UCRReportForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
     reportType = IntegerField('reportType',
