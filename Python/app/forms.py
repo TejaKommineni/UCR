@@ -1213,25 +1213,25 @@ class RCStatusListForm(Form):
         []+COMMON_STRING_VALIDATORS)
 
 class ReviewCommitteeForm(Form):
-    project_projectID = IntegerField('project_projectID',
+    projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
-    RCStatusList_rc_StatusID = IntegerField('RCStatusList_rc_StatusID',
+    rcStatusID = IntegerField('rcStatusID',
         []+COMMON_INTEGER_VALIDATORS)
-    reviewCommitteeList_rcListID = IntegerField('reviewCommitteeList_rcListID',
+    rcListID = IntegerField('rcListID',
         []+COMMON_INTEGER_VALIDATORS)
-    review_committee_number = StringField('review_committee_number',
+    reviewCommitteeNumber = StringField('reviewCommitteeNumber',
         []+COMMON_STRING_VALIDATORS)
-    date_initial_review = DateField('date_initial_review',
+    dateInitialReview = DateField('dateInitialReview',
         []+COMMON_DATE_VALIDATORS,
         format=DATE_FORMAT)
-    date_expires = DateField('date_expires',
+    dateExpires = DateField('dateExpires',
         []+COMMON_DATE_VALIDATORS,
         format=DATE_FORMAT)
-    rc_note = StringField('rc_note',
+    rcNote = StringField('rcNote',
         []+COMMON_STRING_VALIDATORS)
-    rc_protocol = StringField('rc_protocol',
+    rcProtocol = StringField('rcProtocol',
         []+COMMON_STRING_VALIDATORS)
-    rc_approval = StringField('rc_approval',
+    rcApproval = StringField('rcApproval',
         []+COMMON_STRING_VALIDATORS)
 
 
@@ -1242,40 +1242,40 @@ class ReviewCommitteeForm(Form):
             hasErrors = True
 
         # Check to make sure the project  FK exists
-        project = query.get_project(self.project_projectID.data)
+        project = query.get_project(self.projectID.data)
         if project is None:
-            self.project_projectID.errors.append("ID not found")
+            self.projectID.errors.append("ID not found")
             hasErrors =  True
 
         # check the rcStatus FK
-        rcStatus = query.get_rc_status(self.RCStatusList_rc_StatusID.data)
+        rcStatus = query.get_rc_status(self.rcStatusID.data)
         if rcStatus is None:
-            self.RCStatusList_rc_StatusID.errors.append("ID not found")
+            self.rcStatusID.errors.append("ID not found")
             hasErrors = True
 
         # check the reviewCommitteeList FK
-        rc = query.get_rc_status(self.reviewCommitteeList_rcListID.data)
+        rc = query.get_rc_status(self.rcListID.data)
         if rc is None:
-            self.reviewCommitteeList_rcListID.errors.append("ID not found")
+            self.rcListID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
 class ReviewCommitteeListForm(Form):
-    review_committee = StringField('review_committee',
+    reviewCommittee = StringField('reviewCommittee',
         []+COMMON_STRING_VALIDATORS)
-    rc_description = StringField('rc_description',
+    rcDescription = StringField('rcDescription',
         []+COMMON_STRING_VALIDATORS)
 
 class StaffForm(Form):
-    fname = StringField('fname',
+    firstName = StringField('firstName',
         []+COMMON_STRING_VALIDATORS)
-    lname = StringField('lname',
+    lastName = StringField('lastName',
         []+COMMON_STRING_VALIDATORS)
-    middle_name = StringField('middle_name',
+    middleName = StringField('middleName',
         []+COMMON_STRING_VALIDATORS)
     email = StringField('email',
         []+COMMON_STRING_VALIDATORS)
-    phone = StringField('phone',
+    phoneNumber = StringField('phoneNumber',
         []+COMMON_STRING_VALIDATORS)
     phoneComment = StringField('phoneComment',
         []+COMMON_STRING_VALIDATORS)
@@ -1293,10 +1293,10 @@ class StaffForm(Form):
         []+COMMON_STRING_VALIDATORS)
     state = StringField('state',
         []+COMMON_STRING_VALIDATORS)
-    human_sub_training_exp = DateField('human_sub_training',
+    humanSubjectTrainingExp = DateField('humanSubjectTrainingExp',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    UCR_role = IntegerField('UCR_role',
+    ucrRole = IntegerField('ucrRole',
         []+COMMON_INTEGER_VALIDATORS)
 
 class StaffRoleLUTForm(Form):
@@ -1308,12 +1308,12 @@ class StaffRoleLUTForm(Form):
 class StaffTrainingForm(Form):
     staffID = IntegerField('staffID',
         []+COMMON_INTEGER_VALIDATORS)
-    humanSubjectTrainingLUTID = IntegerField('humanSubjectTrainingLUTID',
+    humanSubjectTrainingID = IntegerField('humanSubjectTrainingID',
         []+COMMON_INTEGER_VALIDATORS)
-    date_taken = DateField('date_taken',
+    dateTaken = DateField('dateTaken',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    exp_date = DateField('exp_date',
+    dateExpires = DateField('dateExpires',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
 
@@ -1327,14 +1327,14 @@ class StaffTrainingForm(Form):
             hasErrors =  True
 
         # check the rcStatus FK
-        hst = query.get_human_subject_training(self.humanSubjectTrainingLUTID.data)
+        hst = query.get_human_subject_training(self.humanSubjectTrainingID.data)
         if hst is None:
-            self.humanSubjectTrainingLUTID.errors.append("ID not found")
+            self.humanSubjectTrainingID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
 class TracingForm(Form):
-    tracingSourceLUTID = IntegerField('tracingSourceLUTID',
+    tracingSourceID = IntegerField('tracingSourceID',
         []+COMMON_INTEGER_VALIDATORS)
     projectPatientID = IntegerField('projectPatientID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -1356,9 +1356,9 @@ class TracingForm(Form):
             hasErrors =  True
 
         # check the irbHolderLUT FK
-        tracingSource = query.get_tracing_source(self.tracingSourceLUTID.data)
+        tracingSource = query.get_tracing_source(self.tracingSourceID.data)
         if tracingSource is None:
-            self.tracingSourceLUTID.errors.append("ID not found")
+            self.tracingSourceID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -1369,15 +1369,15 @@ class TracingSourceLUTForm(Form):
 class UCRReportForm(Form):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
-    report_type = IntegerField('report_type',
+    reportType = IntegerField('reportType',
         []+COMMON_INTEGER_VALIDATORS)
-    report_submitted = DateField('report_submitted',
+    reportSubmitted = DateField('reportSubmitted',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    report_due = DateField('report_due',
+    reportDue = DateField('reportDue',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    report_doc = StringField('report_doc',
+    reportDoc = StringField('reportDoc',
         []+COMMON_STRING_VALIDATORS)
 
     def validate(self):

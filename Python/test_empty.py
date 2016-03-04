@@ -48,26 +48,28 @@ class TestArcReview(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         p.irbHolder = irb_holder1
         p.projectType = pt1
@@ -111,26 +113,28 @@ class TestBudget(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         p.irbHolder = irb_holder1
         p.projectType = pt1
@@ -163,82 +167,82 @@ class TestContact(BlankDB):
 
     def populate_db(self):
         contactType = models.ContactTypeLUT(
-            contact_definition = "def"
+            contactDefinition = "def"
         )
         facility1 = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
         )
         patient = models.Patient(
             patID = "1",
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         informant = models.Informant(
-            patAutoID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
-            informant_primary = "informant_primary",
-            informant_relationship = "informant_relationship",
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
             notes = "notes"
         )
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
 
         project1 = models.Project(
-            projectType_projectTypeID = 1,
-            IRBHolderLUT_irbHolderID = 1,
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -247,61 +251,61 @@ class TestContact(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
 
         ctc1 = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = 99999,
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         projectPatient = models.ProjectPatient(
             projectID = 1,
             staffID = 1,
             ctcID = 1,
-            current_age = 1,
+            currentAge = 1,
             batch = 1,
-            sitegrp = 1,
-            final_code = 1,
-            final_code_date = datetime(2016,2,2),
-            enrollment_date = datetime(2016,2,2),
-            date_coord_signed = datetime(2016,2,2),
-            import_date = datetime(2016,2,2),
-            final_code_staff = 1,
-            enrollment_staff = 1,
-            date_coord_signed_staff = datetime(2016,2,2),
-            abstract_status = 1,
-            abstract_status_date = datetime(2016,2,2),
-            abstract_status_staff = 1,
-            sent_to_abstractor = datetime(2016,2,2),
-            sent_to_abstractor_staff = 1,
-            abstracted_date = datetime(2016,2,2),
-            abstractor_initials = "atp",
-            researcher_date = datetime(2016,2,2),
-            researcher_staff = 1,
-            consent_link = "link",
-            tracing_status = 1,
-            med_record_release_signed = True,
-            med_record_release_link = "link",
-            med_record_release_staff = 1,
-            med_record_release_date = datetime(2016,2,2),
-            survey_to_researcher = datetime(2016,2,2),
-            survey_to_researcher_staff = 1
+            siteGrp = 1,
+            finalCode = 1,
+            finalCodeDate = datetime(2016,2,2),
+            enrollmentDate = datetime(2016,2,2),
+            dateCoordSigned = datetime(2016,2,2),
+            importDate = datetime(2016,2,2),
+            finalCodeStaff = 1,
+            enrollmentStaff = 1,
+            dateCoordSignedStaff = datetime(2016,2,2),
+            abstractStatus = 1,
+            abstractStatusDate = datetime(2016,2,2),
+            abstractStatusStaff = 1,
+            sentToAbstractorDate = datetime(2016,2,2),
+            sentToAbstractorStaff = 1,
+            abstractedDate = datetime(2016,2,2),
+            abstractorInitials = "atp",
+            researcherDate = datetime(2016,2,2),
+            researcherStaff = 1,
+            consentLink = "link",
+            tracingStatus = 1,
+            medRecordReleaseSigned = True,
+            medRecordReleaseLink = "link",
+            medRecordReleaseStaff = 1,
+            medRecordReleaseDate = datetime(2016,2,2),
+            surveyToResearcher = datetime(2016,2,2),
+            surveyToResearcherStaff = 1
         )
 
         db.session.add(contactType)
@@ -376,7 +380,7 @@ class TestContactInfoSource(BlankDB):
         
     def test_contact_info_source_no_id(self):
         response = self.client.get('/api/contactinfosources/1/')
-        self.assertEqual(response.json, {"Error" : "contactInfoSourceID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "ContactInfoSourceID 1 not found"})
         
     def test_create_contact_info_source(self):
         response = self.client.post("/api/contactinfosources/", data = {
@@ -395,19 +399,19 @@ class TestCTC(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         db.session.add(patient)
@@ -449,13 +453,13 @@ class TestCTCFacility(BlankDB):
 
     def populate_db(self):
         facility1 = models.Facility(
-            facility_name = "name",
-            contact_fname = "fname",
-            contact_lname = "lname",
-            facility_status = 1,
-            facility_status_date = datetime(2016,2,2),
-            contact2_fname = "fname",
-            contact2_lname = "lname"
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
         )
 
         patient = models.Patient(
@@ -463,37 +467,37 @@ class TestCTCFacility(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
         ctc1 = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = 99999,
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         db.session.add(facility1)
@@ -647,7 +651,7 @@ class TestFunding(BlankDB):
 
     def populate_db(self):
         grantStatus = models.GrantStatusLUT(
-            grant_status = "status"
+            grantStatus = "status"
         )
 
         fundingSource = models.FundingSourceLUT(
@@ -656,26 +660,28 @@ class TestFunding(BlankDB):
 
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         p.irbHolder = irb_holder1
         p.projectType = pt1
@@ -766,19 +772,19 @@ class TestInformant(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
@@ -825,19 +831,19 @@ class TestInformantAddress(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
@@ -898,19 +904,19 @@ class TestInformantPhone(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         contactInfoStatus = models.ContactInfoStatusLUT(
@@ -980,24 +986,24 @@ class TestLog(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
             holderDefinition= "IRB 1")
 
         phaseStatus = models.PhaseStatus(
-            phase_status = "status",
-            phase_description = "desc"
+            phaseStatus = "status",
+            phaseDescription = "desc"
         )
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -1006,8 +1012,8 @@ class TestLog(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
 
         logSubject = models.LogSubjectLUT(
@@ -1015,18 +1021,20 @@ class TestLog(BlankDB):
         )
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         p.irbHolder = irb_holder1
         p.projectType = pt1
@@ -1062,13 +1070,13 @@ class TestLogSubject(BlankDB):
     
     def test_log_subject_no_id(self):
         response = self.client.get("/api/logsubjects/1/")
-        self.assertEqual(response.json, {"Error" : "LogSubjectLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error" : "LogSubjectID 1 not found"})
         
     def test_create_log_subject(self):
         response = self.client.post("/api/logsubjects/", data = {
-            "log_subject" : "subject",
+            "logSubject" : "subject",
             })
-        self.assertEqual(response.json, dict(logSubjectLUTID=1))
+        self.assertEqual(response.json, dict(logSubjectID=1))
         
 class TestPatient(BlankDB):
     def test_empty_patients(self):
@@ -1313,31 +1321,31 @@ class TestPatientProjectStatus(BlankDB):
             holderDefinition= "IRB 1")
 
         project_type1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         project1 = models.Project(
-            projectType_projectTypeID = 1,
-            IRBHolderLUT_irbHolderID = 1,
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -1346,8 +1354,8 @@ class TestPatientProjectStatus(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
 
         ctc1 = models.CTC(
@@ -1373,34 +1381,34 @@ class TestPatientProjectStatus(BlankDB):
             projectID = 1,
             staffID = 1,
             ctcID = 1,
-            current_age = 1,
+            currentAge = 1,
             batch = 1,
-            sitegrp = 1,
-            final_code = 1,
-            final_code_date = datetime(2016,2,2),
-            enrollment_date = datetime(2016,2,2),
-            date_coord_signed = datetime(2016,2,2),
-            import_date = datetime(2016,2,2),
-            final_code_staff = 1,
-            enrollment_staff = 1,
-            date_coord_signed_staff = datetime(2016,2,2),
-            abstract_status = 1,
-            abstract_status_date = datetime(2016,2,2),
-            abstract_status_staff = 1,
-            sent_to_abstractor = datetime(2016,2,2),
-            sent_to_abstractor_staff = 1,
-            abstracted_date = datetime(2016,2,2),
-            abstractor_initials = "atp",
-            researcher_date = datetime(2016,2,2),
-            researcher_staff = 1,
-            consent_link = "link",
-            tracing_status = 1,
-            med_record_release_signed = True,
-            med_record_release_link = "link",
-            med_record_release_staff = 1,
-            med_record_release_date = datetime(2016,2,2),
-            survey_to_researcher = datetime(2016,2,2),
-            survey_to_researcher_staff = 1
+            siteGrp = 1,
+            finalCode = 1,
+            finalCodeDate = datetime(2016,2,2),
+            enrollmentDate = datetime(2016,2,2),
+            dateCoordSigned = datetime(2016,2,2),
+            importDate = datetime(2016,2,2),
+            finalCodeStaff = 1,
+            enrollmentStaff = 1,
+            dateCoordSignedStaff = datetime(2016,2,2),
+            abstractStatus = 1,
+            abstractStatusDate = datetime(2016,2,2),
+            abstractStatusStaff = 1,
+            sentToAbstractorDate = datetime(2016,2,2),
+            sentToAbstractorStaff = 1,
+            abstractedDate = datetime(2016,2,2),
+            abstractorInitials = "atp",
+            researcherDate = datetime(2016,2,2),
+            researcherStaff = 1,
+            consentLink = "link",
+            tracingStatus = 1,
+            medRecordReleaseSigned = True,
+            medRecordReleaseLink = "link",
+            medRecordReleaseStaff = 1,
+            medRecordReleaseDate = datetime(2016,2,2),
+            surveyToResearcher = datetime(2016,2,2),
+            surveyToResearcherStaff = 1
         )
         patientProjectStatusType = models.PatientProjectStatusLUT(
             statusDescription = "desc"
@@ -1657,51 +1665,51 @@ class TestPhysicianToCTC(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         ctc = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = "zip",
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         physician = models.Physician(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             credentials = "credentials",
             specialty = "specialty",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle_name",
-            physician_status = 1,
-            physician_status_date = datetime(2016,2,2),
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
             email = "email"
         )
         db.session.add(patient)
@@ -1732,26 +1740,29 @@ class TestPreApplication(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
             holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
+
         p.irbHolder = irb_holder1
         p.projectType = pt1
         db.session.add(p)
@@ -1805,8 +1816,8 @@ class TestProject(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
@@ -1854,19 +1865,19 @@ class TestProjectPatient(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
             holderDefinition= "IRB 1")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -1875,8 +1886,8 @@ class TestProjectPatient(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
 
         project1 = models.Project(
@@ -1994,8 +2005,8 @@ class TestProjectStaff(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
@@ -2018,11 +2029,11 @@ class TestProjectStaff(BlankDB):
             finalRecruitmentReport = "report")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -2031,8 +2042,8 @@ class TestProjectStaff(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
         staffRole = models.StaffRoleLUT(
             staffRole = "role",
@@ -2078,8 +2089,8 @@ class TestProjectStatus(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
@@ -2102,11 +2113,11 @@ class TestProjectStatus(BlankDB):
             finalRecruitmentReport = "report")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -2115,12 +2126,12 @@ class TestProjectStatus(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
         projStatusType = models.ProjectStatusLUT(
-            project_status = "Status 1",
-            status_definition = "status def"
+            projectStatus = "Status 1",
+            projectStatusDefinition = "status def"
         )
 
         p.irbHolder = irb_holder1
@@ -2207,34 +2218,36 @@ class TestReviewCommittee(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         rcsl = models.RCStatusList(
-            rc_status = "Status 1",
-            rc_status_definition = "rc status def")
+            rcStatus = "Status 1",
+            rcStatusDefinition = "rc status def")
 
         rcl1 = models.ReviewCommitteeList(
-            review_committee = "rc 1",
-            rc_description = "rc desc 1")
+            reviewCommittee = "rc 1",
+            rcDescription = "rc desc 1")
 
         db.session.add(pt1)
         db.session.add(irb_holder1)
@@ -2253,15 +2266,15 @@ class TestReviewCommittee(BlankDB):
         
     def test_create_review_committee(self):
         response = self.client.post("/api/reviewcommittees/", data = {
-            "project_projectID" : 1,
-            "RCStatusList_rc_StatusID": 1,
-            "reviewCommitteeList_rcListID": 1,
-            "review_committee_number":"1",
-            "date_initial_review":"2016-02-02",
-            "date_expires" : "2016-02-02",
-            "rc_note" : "rc_note",
-            "rc_protocol" : "rc_proto",
-            "rc_approval":"rc_approval"
+            "projectID" : 1,
+            "rcStatusID": 1,
+            "rcListID": 1,
+            "reviewCommitteeNumber":"1",
+            "dateInitialReview":"2016-02-02",
+            "dateExpires" : "2016-02-02",
+            "rcNote" : "rc_note",
+            "rcProtocol" : "rc_proto",
+            "rcApproval":"rc_approval"
         })
         self.assertEqual(response.json, {"reviewCommitteeID" : 1})
         
@@ -2276,8 +2289,8 @@ class TestReviewCommitteeList(BlankDB):
         
     def test_create_review_committee_list(self):
         response = self.client.post("/api/reviewcommitteelist/", data = {
-            "review_committee" : "rc test",
-            "rc_description" : "rc desc"
+            "reviewCommittee" : "rc test",
+            "rcDescription" : "rc desc"
             })
         self.assertEqual(response.json, {"rcListID" : 1 })
 
@@ -2292,11 +2305,11 @@ class TestStaff(BlankDB):
         
     def test_create_staff(self):
         response = self.client.post("/api/staff/", data = {
-            "fname" : "fname",
-            "lname" : "lname",
-            "middle_name" : "middle_name",
+            "firstName" : "fname",
+            "lastName" : "lname",
+            "middleName" : "middle_name",
             "email" : "email",
-            "phone" : "phone",
+            "phoneNumber" : "phone",
             "phoneComment" : "phoneComment",
             "institution" : "institution",
             "department" : "department",
@@ -2305,8 +2318,8 @@ class TestStaff(BlankDB):
             "street" : "street",
             "city" : "city",
             "state" : "state",
-            "human_sub_training_exp" : "2016-02-02",
-            "UCR_role" : 1
+            "humanSubjectTrainingExp" : "2016-02-02",
+            "ucrRole" : 1
             })
         self.assertEqual(response.json, {"staffID" : 1 })
 
@@ -2317,14 +2330,14 @@ class TestStaffRole(BlankDB):
         
     def test_staff_role_no_id(self):
         response = self.client.get("/api/staffroles/1/")
-        self.assertEqual(response.json, {"Error": "StaffRoleLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error": "StaffRoleID 1 not found"})
         
     def test_create_staff_role(self):
         response = self.client.post("/api/staffroles/", data = {
             "staffRole" : "role",
             "staffRoleDescription" : "desc"
             })
-        self.assertEqual(response.json, {"staffRoleLUTID" : 1 })        
+        self.assertEqual(response.json, {"staffRoleID" : 1 })
                 
 class TestStaffTraining(BlankDB):
     def setUp(self):
@@ -2334,11 +2347,11 @@ class TestStaffTraining(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -2347,11 +2360,11 @@ class TestStaffTraining(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
         humanSubjectTraining = models.HumanSubjectTrainingLUT(
-            training_type = "type"
+            trainingType = "type"
         )
         db.session.add(staff)
         db.session.add(humanSubjectTraining)
@@ -2368,9 +2381,9 @@ class TestStaffTraining(BlankDB):
     def test_create_staff_training(self):
         response = self.client.post("/api/stafftrainings/", data = {
             "staffID" : 1,
-            "humanSubjectTrainingLUTID" : 1,
-            "date_taken" : "2016-02-02",
-            "exp_date" : "2016-02-02"
+            "humanSubjectTrainingID" : 1,
+            "dateTaken" : "2016-02-02",
+            "dateExpires" : "2016-02-02"
             })
         self.assertEqual(response.json, {"staffTrainingID" : 1 })        
         
@@ -2385,51 +2398,51 @@ class TestTracing(BlankDB):
             recordID = 1,
             ucrDistID = 1,
             UPDBID = 1,
-            fname = "fname",
-            lname = "lname",
-            middle_name = "mname",
-            maiden_name = "maiden_name",
-            alias_fname = "alias_fname",
-            alias_lname = "alias_lname",
-            alias_middle_name = "alias_middle",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
             sex = "male",
             race = "white",
             ethnicity = "hispanic",
-            vital_status = "v1"
+            vitalStatus = "v1"
         )
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         project_type1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         project1 = models.Project(
-            projectType_projectTypeID = 1,
-            IRBHolderLUT_irbHolderID = 1,
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         staff = models.Staff(
-            fname = "fname",
-            lname = "lname",
-            middle_name = "middle_name",
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
             email = "email",
-            phone = "phone",
+            phoneNumber = "phone",
             phoneComment = "phoneComment",
             institution = "institution",
             department = "department",
@@ -2438,61 +2451,61 @@ class TestTracing(BlankDB):
             street = "street",
             city = "city",
             state = "state",
-            human_sub_training_exp = datetime(2016,2,2),
-            UCR_role = 1
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
         )
 
         ctc1 = models.CTC(
             patientID = 1,
-            dx_date = datetime(2016,2,2),
+            dxDate = datetime(2016,2,2),
             site = 1,
             histology = "histology",
             behavior = "behavior",
-            ctc_sequence = "sequence",
+            ctcSequence = "sequence",
             stage = "stage",
-            dx_age = 1,
-            dx_street1 = "street1",
-            dx_street2 = "street2",
-            dx_city = "city",
-            dx_state = "state",
-            dx_zip = 99999,
-            dx_county = "county",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
             dnc = "dnc",
-            dnc_reason = "dnc_reason"
+            dncReason = "dnc_reason"
         )
 
         projectPatient = models.ProjectPatient(
             projectID = 1,
             staffID = 1,
             ctcID = 1,
-            current_age = 1,
+            currentAge = 1,
             batch = 1,
-            sitegrp = 1,
-            final_code = 1,
-            final_code_date = datetime(2016,2,2),
-            enrollment_date = datetime(2016,2,2),
-            date_coord_signed = datetime(2016,2,2),
-            import_date = datetime(2016,2,2),
-            final_code_staff = 1,
-            enrollment_staff = 1,
-            date_coord_signed_staff = datetime(2016,2,2),
-            abstract_status = 1,
-            abstract_status_date = datetime(2016,2,2),
-            abstract_status_staff = 1,
-            sent_to_abstractor = datetime(2016,2,2),
-            sent_to_abstractor_staff = 1,
-            abstracted_date = datetime(2016,2,2),
-            abstractor_initials = "atp",
-            researcher_date = datetime(2016,2,2),
-            researcher_staff = 1,
-            consent_link = "link",
-            tracing_status = 1,
-            med_record_release_signed = True,
-            med_record_release_link = "link",
-            med_record_release_staff = 1,
-            med_record_release_date = datetime(2016,2,2),
-            survey_to_researcher = datetime(2016,2,2),
-            survey_to_researcher_staff = 1
+            siteGrp = 1,
+            finalCode = 1,
+            finalCodeDate = datetime(2016,2,2),
+            enrollmentDate = datetime(2016,2,2),
+            dateCoordSigned = datetime(2016,2,2),
+            importDate = datetime(2016,2,2),
+            finalCodeStaff = 1,
+            enrollmentStaff = 1,
+            dateCoordSignedStaff = datetime(2016,2,2),
+            abstractStatus = 1,
+            abstractStatusDate = datetime(2016,2,2),
+            abstractStatusStaff = 1,
+            sentToAbstractorDate = datetime(2016,2,2),
+            sentToAbstractorStaff = 1,
+            abstractedDate = datetime(2016,2,2),
+            abstractorInitials = "atp",
+            researcherDate = datetime(2016,2,2),
+            researcherStaff = 1,
+            consentLink = "link",
+            tracingStatus = 1,
+            medRecordReleaseSigned = True,
+            medRecordReleaseLink = "link",
+            medRecordReleaseStaff = 1,
+            medRecordReleaseDate = datetime(2016,2,2),
+            surveyToResearcher = datetime(2016,2,2),
+            surveyToResearcherStaff = 1
         )
 
         tracingSource = models.TracingSourceLUT(
@@ -2519,7 +2532,7 @@ class TestTracing(BlankDB):
         
     def test_create_tracing(self):
         response = self.client.post("/api/tracings/", data = {
-            "tracingSourceLUTID" : 1,
+            "tracingSourceID" : 1,
             "projectPatientID" : 1,
             "date" : "2016-02-02",
             "staff" : 1,
@@ -2534,13 +2547,13 @@ class TestTracingSource(BlankDB):
         
     def test_tracing_source_no_id(self):
         response = self.client.get("/api/tracingsources/1/")
-        self.assertEqual(response.json, {"Error": "TracingSourceLUTID 1 not found"})
+        self.assertEqual(response.json, {"Error": "TracingSourceID 1 not found"})
         
     def test_create_tracing_source(self):
         response = self.client.post("/api/tracingsources/", data = {
             "description" : "desc"
             })
-        self.assertEqual(response.json, {"tracingSourceLUTID" : 1 })
+        self.assertEqual(response.json, {"tracingSourceID" : 1 })
              
 class TestUCRReport(BlankDB):
     def setUp(self):
@@ -2550,31 +2563,34 @@ class TestUCRReport(BlankDB):
     def populate_db(self):
         # Need to populate the FK tables with stuff
         pt1 = models.ProjectType(
-            project_type = "Type 1",
-            project_type_definition = "Def 1")
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
         irb_holder1 = models.IRBHolderLUT(
-            irb_holder = "holder 1",
-            irb_holder_definition= "IRB 1")
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
         p = models.Project(
-            project_name = "Test Project",
-            short_title = "Test Project",
-            project_summary = "Summary",
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectName = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
             sop="sop",
-            UCR_proposal="ucr_proposal",
-            budget_doc = "budget_doc",
-            UCR_fee = "no",
-            UCR_no_fee = "yes",
-            budget_end_date = datetime(2016,2,2),
-            previous_short_title = "t short",
-            date_added = datetime(2016,2,2),
-            final_recruitment_report = "report")
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            budgetEndDate = datetime(2016,2,2),
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report")
 
         db.session.add(pt1)
         db.session.add(irb_holder1)
         db.session.add(p)
         db.session.commit()
+
     def test_empty_ucr_report(self):
         response = self.client.get("/api/ucrreports/")
         self.assertEqual(response.json, dict(ucrReports = []))
@@ -2586,10 +2602,10 @@ class TestUCRReport(BlankDB):
     def test_create_ucr_report(self):
         response = self.client.post("/api/ucrreports/", data = {
             "projectID" : 1,
-            "report_type" : 1,
-            "report_submitted" : "2016-02-02",
-            "report_due" : "2016-02-02",
-            "report_doc" : "doc"
+            "reportType" : 1,
+            "reportSubmitted" : "2016-02-02",
+            "reportDue" : "2016-02-02",
+            "reportDoc" : "doc"
         })
         self.assertEqual(response.json, {"ucrReportID" : 1})
         

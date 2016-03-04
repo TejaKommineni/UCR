@@ -26,7 +26,7 @@ def get_contact_types():
     return db.session.query(ContactTypeLUT).all()
     
 def get_contact_type(id):
-    return db.session.query(ContactTypeLUT).filter_by(contactTypeLUTID = id).first()
+    return db.session.query(ContactTypeLUT).filter_by(contactTypeID = id).first()
     
 def get_contact_info_sources():
     return db.session.query(ContactInfoSourceLUT).all()
@@ -272,7 +272,7 @@ def get_staff_roles():
     return db.session.query(StaffRoleLUT).all()
     
 def get_staff_role(id):
-    return db.session.query(StaffRoleLUT).filter_by(staffRoleLUTID = id).first()
+    return db.session.query(StaffRoleLUT).filter_by(staffRoleID = id).first()
     
 def get_staff_trainings():
     return db.session.query(StaffTraining).all()
@@ -290,7 +290,7 @@ def get_tracing_sources():
     return db.session.query(TracingSourceLUT).all()
     
 def get_tracing_source(id):
-    return db.session.query(TracingSourceLUT).filter_by(tracingSourceLUTID = id).first()
+    return db.session.query(TracingSourceLUT).filter_by(tracingSourceID = id).first()
      
 def get_ucr_reports():
     return db.session.query(UCRReport).all()

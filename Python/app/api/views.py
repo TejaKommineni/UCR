@@ -399,7 +399,7 @@ def delete_contact(contactID):
 # Contact Type
 #############################################################################
 @api.route('/contacttypes/', methods = ['GET'])
-@api.route('/contacttypes/<int:contactTypeLUTID>/', methods = ['GET'])
+@api.route('/contacttypes/<int:contactTypeID>/', methods = ['GET'])
 def get_contact_type(contactTypeID = None):
     try:
         if contactTypeID is None:
@@ -1637,7 +1637,7 @@ def create_log():
         form = forms.LogForm(request.form)
         if form.validate():
             log  = models.Log(
-                logSubjectLUTID = request.form['logSubjectID'],
+                logSubjectID = request.form['logSubjectID'],
                 projectID = request.form['projectID'],
                 staffID = request.form['staffID'],
                 phaseStatusID = request.form['phaseStatusID'],
@@ -3393,15 +3393,15 @@ def update_review_committee(reviewCommitteeID):
         if rc is not None:
             form = forms.ReviewCommitteeForm(request.form)
             if form.validate():
-                rc.project_projectID = request.form['project_projectID']
-                rc.RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID']
-                rc.reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID']
-                rc.review_committee_number = request.form['review_committee_number']
-                rc.date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d")
-                rc.date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d")
-                rc.rc_note = request.form['rc_note']
-                rc.rc_protocol = request.form['rc_protocol']
-                rc.rc_approval = request.form['rc_approval']
+                rc.projectID = request.form['projectID']
+                rc.rcStatusID = request.form['rcStatusID']
+                rc.rcListID = request.form['rcListID']
+                rc.reviewCommitteeNumber = request.form['reviewCommitteeNumber']
+                rc.dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d")
+                rc.dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
+                rc.rcNote = request.form['rcNote']
+                rc.rcProtocol = request.form['rcProtocol']
+                rc.rcApproval = request.form['rcApproval']
                 query.commit()
                 return rc.json()
             else:
@@ -3417,15 +3417,15 @@ def create_review_committee():
         form = forms.ReviewCommitteeForm(request.form)
         if form.validate():
             rc = models.ReviewCommittee(
-                project_projectID = request.form['project_projectID'],
-                RCStatusList_rc_StatusID = request.form['RCStatusList_rc_StatusID'],
-                reviewCommitteeList_rcListID = request.form['reviewCommitteeList_rcListID'],
-                review_committee_number = request.form['review_committee_number'],
-                date_initial_review = datetime.strptime(request.form['date_initial_review'],"%Y-%m-%d"),
-                date_expires = datetime.strptime(request.form['date_expires'],"%Y-%m-%d"),
-                rc_note = request.form['rc_note'],
-                rc_protocol = request.form['rc_protocol'],
-                rc_approval = request.form['rc_approval']
+                projectID = request.form['projectID'],
+                rcStatusID = request.form['rcStatusID'],
+                rcListID = request.form['rcListID'],
+                reviewCommitteeNumber = request.form['reviewCommitteeNumber'],
+                dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d"),
+                dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d"),
+                rcNote = request.form['rcNote'],
+                rcProtocol = request.form['rcProtocol'],
+                rcApproval = request.form['rcApproval']
             )
             query.add(rc)
             return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
@@ -3475,8 +3475,8 @@ def update_review_committee_list(rcListID):
         if rcList is not None:
             form = forms.ReviewCommitteeListForm(request.form)
             if form.validate():
-                rcList.review_committee = request.form['review_committee']
-                rcList.rc_description = request.form['rc_description']
+                rcList.reviewCommittee = request.form['reviewCommittee']
+                rcList.rcDescription = request.form['rcDescription']
                 query.commit()
                 return rcList.json()
             else:
@@ -3492,8 +3492,8 @@ def create_review_committee_list():
         form = forms.ReviewCommitteeListForm(request.form)
         if form.validate():
             reviewCommitteeList = models.ReviewCommitteeList(
-                review_committee = request.form['review_committee'],
-                rc_description = request.form['rc_description']
+                reviewCommittee = request.form['reviewCommittee'],
+                rcDescription = request.form['rcDescription']
                 )
             query.add(reviewCommitteeList)
             return jsonify({'rcListID':reviewCommitteeList.rcListID})
@@ -3543,11 +3543,11 @@ def update_staff(staffID):
         if staff is not None:
             form = forms.StaffForm(request.form)
             if form.validate():
-                staff.fname = request.form['fname']
-                staff.lname = request.form['lname']
-                staff.middle_name = request.form['middle_name']
+                staff.firstName = request.form['firstName']
+                staff.lastName = request.form['lastName']
+                staff.middleName = request.form['middleName']
                 staff.email = request.form['email']
-                staff.phone = request.form['phone']
+                staff.phoneNumber = request.form['phoneNumber']
                 staff.phoneComment = request.form['phoneComment']
                 staff.institution = request.form['institution']
                 staff.department = request.form['department']
@@ -3556,8 +3556,8 @@ def update_staff(staffID):
                 staff.street = request.form['street']
                 staff.city = request.form['city']
                 staff.state = request.form['state']
-                staff.human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d")
-                staff.UCR_role = request.form['UCR_role']
+                staff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
+                staff.ucrRole = request.form['ucrRole']
                 query.commit()
                 return staff.json()
             else:
@@ -3573,11 +3573,11 @@ def create_staff():
         form = forms.StaffForm(request.form)
         if form.validate():
             staff = models.Staff(
-                fname = request.form['fname'],
-                lname = request.form['lname'],
-                middle_name = request.form['middle_name'],
+                firstName = request.form['firstName'],
+                lastName = request.form['lastName'],
+                middleName = request.form['middleName'],
                 email = request.form['email'],
-                phone = request.form['phone'],
+                phoneNumber = request.form['phoneNumber'],
                 phoneComment = request.form['phoneComment'],
                 institution = request.form['institution'],
                 department = request.form['department'],
@@ -3586,8 +3586,8 @@ def create_staff():
                 street = request.form['street'],
                 city = request.form['city'],
                 state = request.form['state'],
-                human_sub_training_exp = datetime.strptime(request.form['human_sub_training_exp'],"%Y-%m-%d"),
-                UCR_role = request.form['UCR_role']
+                humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
+                ucrRole = request.form['ucrRole']
             )
             query.add(staff)
             return jsonify({'staffID':staff.staffID})
@@ -3616,24 +3616,24 @@ def delete_staff(staffID):
 # Staff Role
 ##############################################################################
 @api.route('/staffroles/', methods = ['GET'])
-@api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['GET'])
-def get_staff_role(staffRoleLUTID=None):
+@api.route('/staffroles/<int:staffRoleID>/', methods = ['GET'])
+def get_staff_role(staffRoleID=None):
     try:
-        if staffRoleLUTID is None:
+        if staffRoleID is None:
             return jsonify(StaffRoles = [i.dict() for i in query.get_staff_roles()])
         else:
-            staffRole = query.get_staff_role(staffRoleLUTID)
+            staffRole = query.get_staff_role(staffRoleID)
             if staffRole is not None:
                 return staffRole.json()
             else:
-                return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+                return item_not_found("StaffRoleID {} not found".format(staffRoleID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staffroles/<int:staffRoleLUTID>/',methods = ['PUT'])
-def update_staff_role(staffRoleLUTID):
+@api.route('/staffroles/<int:staffRoleID>/',methods = ['PUT'])
+def update_staff_role(staffRoleID):
     try:
-        staffRole = query.get_staff_role(staffRoleLUTID)
+        staffRole = query.get_staff_role(staffRoleID)
         if staffRole is not None:
             form = forms.StaffRoleLUTForm(request.form)
             if form.validate():
@@ -3644,7 +3644,7 @@ def update_staff_role(staffRoleLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+            return item_not_found("StaffRoleID {} not found".format(staffRoleID))
     except Exception as e:
         return internal_error(e)
 
@@ -3658,25 +3658,25 @@ def create_staff_role():
                 staffRoleDescription = request.form['staffRoleDescription'],
             )
             query.add(staffRole)
-            return jsonify({'staffRoleLUTID':staffRole.staffRoleLUTID})
+            return jsonify({'staffRoleID':staffRole.staffRoleID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staffroles/<int:staffRoleLUTID>/', methods = ['DELETE'])
-def delete_staff_role(staffRoleLUTID):
+@api.route('/staffroles/<int:staffRoleID>/', methods = ['DELETE'])
+def delete_staff_role(staffRoleID):
     try:
-        staffRole = query.get_staff_role(staffRoleLUTID)
+        staffRole = query.get_staff_role(staffRoleID)
         if staffRole is not None:
             deps = get_dependencies(staffRole)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(staffRole)
-                return item_deleted("StaffRoleLUTID {} deleted".format(staffRoleLUTID))
+                return item_deleted("StaffRoleID {} deleted".format(staffRoleID))
         else:
-            return item_not_found("StaffRoleLUTID {} not found".format(staffRoleLUTID))
+            return item_not_found("StaffRoleID {} not found".format(staffRoleID))
     except Exception as e:
         return internal_error(e)
 
@@ -3706,9 +3706,9 @@ def update_staff_training(staffTrainingID):
             form = forms.StaffTrainingForm(request.form)
             if form.validate():
                 stafftraining.staffID = request.form['staffID']
-                stafftraining.humanSubjectTrainingLUTID = request.form['humanSubjectTrainingLUTID']
-                stafftraining.date_taken = datetime.strptime(request.form['date_taken'],"%Y-%m-%d")
-                stafftraining.exp_date = datetime.strptime(request.form['exp_date'],"%Y-%m-%d")
+                stafftraining.humanSubjectTrainingID = request.form['humanSubjectTrainingID']
+                stafftraining.dateTaken = datetime.strptime(request.form['dateTaken'],"%Y-%m-%d")
+                stafftraining.dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
                 query.commit()
                 return stafftraining.json()
             else:
@@ -3725,9 +3725,9 @@ def create_staff_training():
         if form.validate():
             stafftraining = models.StaffTraining(
                 staffID = request.form['staffID'],
-                humanSubjectTrainingLUTID = request.form['humanSubjectTrainingLUTID'],
-                date_taken = datetime.strptime(request.form['date_taken'],"%Y-%m-%d"),
-                exp_date = datetime.strptime(request.form['exp_date'],"%Y-%m-%d")
+                humanSubjectTrainingID = request.form['humanSubjectTrainingID'],
+                dateTaken = datetime.strptime(request.form['dateTaken'],"%Y-%m-%d"),
+                dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
                 )
             query.add(stafftraining)
             return jsonify({'staffTrainingID':stafftraining.staffTrainingID})
@@ -3777,7 +3777,7 @@ def update_tracing(tracingID):
         if tracing is not None:
             form = forms.TracingForm(request.form)
             if form.validate():
-                tracing.tracingSourceLUTID = request.form['tracingSourceLUTID']
+                tracing.tracingSourceID = request.form['tracingSourceID']
                 tracing.projectPatientID = request.form['projectPatientID']
                 tracing.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
                 tracing.staff = request.form['staff']
@@ -3797,7 +3797,7 @@ def create_tracing():
         form = forms.TracingForm(request.form)
         if form.validate():
             tracing = models.Tracing(
-                tracingSourceLUTID = request.form['tracingSourceLUTID'],
+                tracingSourceID = request.form['tracingSourceID'],
                 projectPatientID = request.form['projectPatientID'],
                 date = datetime.strptime(request.form['date'],"%Y-%m-%d"),
                 staff = request.form['staff'],
@@ -3830,24 +3830,24 @@ def delete_tracing(tracingID):
 # Tracing Source LUT
 ##############################################################################
 @api.route('/tracingsources/', methods = ['GET'])
-@api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['GET'])
-def get_tracing_source(tracingSourceLUTID=None):
+@api.route('/tracingsources/<int:tracingSourceID>/', methods = ['GET'])
+def get_tracing_source(tracingSourceID=None):
     try:
-        if tracingSourceLUTID is None:
+        if tracingSourceID is None:
             return jsonify(TracingSources = [i.dict() for i in query.get_tracing_sources()])
         else:
-            tracing = query.get_tracing_source(tracingSourceLUTID)
+            tracing = query.get_tracing_source(tracingSourceID)
             if tracing is not None:
                 return tracing.json()
             else:
-                return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+                return item_not_found("TracingSourceID {} not found".format(tracingSourceID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracingsources/<int:tracingSourceLUTID>/',methods = ['PUT'])
-def update_tracing_source(tracingSourceLUTID):
+@api.route('/tracingsources/<int:tracingSourceID>/',methods = ['PUT'])
+def update_tracing_source(tracingSourceID):
     try:
-        tracingSource = query.get_tracing_source(tracingSourceLUTID)
+        tracingSource = query.get_tracing_source(tracingSourceID)
         if tracingSource is not None:
             form = forms.TracingSourceLUTForm(request.form)
             if form.validate():
@@ -3857,7 +3857,7 @@ def update_tracing_source(tracingSourceLUTID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+            return item_not_found("TracingSourceID {} not found".format(tracingSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -3870,25 +3870,25 @@ def create_tracing_source():
                 description = request.form['description']
                 )
             ret = query.add(tracingSource)
-            return jsonify({'tracingSourceLUTID':tracingSource.tracingSourceLUTID})
+            return jsonify({'tracingSourceID':tracingSource.tracingSourceID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracingsources/<int:tracingSourceLUTID>/', methods = ['DELETE'])
-def delete_tracing_source(tracingSourceLUTID):
+@api.route('/tracingsources/<int:tracingSourceID>/', methods = ['DELETE'])
+def delete_tracing_source(tracingSourceID):
     try:
-        tracingSource = query.get_tracing_source(tracingSourceLUTID)
+        tracingSource = query.get_tracing_source(tracingSourceID)
         if tracingSource is not None:
             deps = get_dependencies(tracingSource)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(tracingSource)
-                return item_deleted("TracingSourceLUTID {} deleted".format(tracingSourceLUTID))
+                return item_deleted("TracingSourceID {} deleted".format(tracingSourceID))
         else:
-            return item_not_found("TracingSourceLUTID {} not found".format(tracingSourceLUTID))
+            return item_not_found("TracingSourceID {} not found".format(tracingSourceID))
     except Exception as e:
         return internal_error(e)
 
@@ -3918,10 +3918,10 @@ def update_ucr_report(ucrReportID):
             form = forms.UCRReportForm(request.form)
             if form.validate():
                 ucr.projectID = request.form['projectID']
-                ucr.report_type = request.form['report_type']
-                ucr.report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d")
-                ucr.report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d")
-                ucr.report_doc = request.form['report_doc']
+                ucr.reportType = request.form['reportType']
+                ucr.reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d")
+                ucr.reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d")
+                ucr.reportDoc = request.form['reportDoc']
                 query.commit()
                 return ucr.json()
             else:
@@ -3938,10 +3938,10 @@ def create_ucr_report():
         if form.validate():
             ucr = models.UCRReport(
                 projectID = request.form['projectID'],
-                report_type = request.form['report_type'],
-                report_submitted = datetime.strptime(request.form['report_submitted'],"%Y-%m-%d"),
-                report_due = datetime.strptime(request.form['report_due'],"%Y-%m-%d"),
-                report_doc = request.form['report_doc']
+                reportType = request.form['reportType'],
+                reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d"),
+                reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d"),
+                reportDoc = request.form['reportDoc']
             )
             query.add(ucr)
             query.commit()

@@ -270,7 +270,7 @@ class ContactInfoStatusLUT(CustomModel):
 class ContactTypeLUT(CustomModel):
     __tablename__ = "contactTypeLUT"
     
-    contactTypeLUTID = db.Column('contactTypeLUTID',db.Integer, primary_key=True)
+    contactTypeID = db.Column('contactTypeLUTID',db.Integer, primary_key=True)
     contactDefinition = db.Column('contact_definition',db.String)
     
     # Relationships
@@ -279,9 +279,9 @@ class ContactTypeLUT(CustomModel):
     
     def __repr__(self):
         return "<ContactTypeLUT(\
-        contactTypeLUTID = {},\
+        contactTypeID = {},\
         contactDefinition = {})>".format(
-        self.contactTypeLUTID,
+        self.contactTypeID,
         self.contactDefinition)
         
 class CTC(CustomModel):
@@ -1702,24 +1702,24 @@ class RCStatusList(CustomModel):
 class ReviewCommittee(CustomModel):
     __tablename__ = 'reviewCommittee'
     
-    reviewCommitteeID = db.Column(db.Integer,primary_key=True)
-    project_projectID = db.Column(db.Integer,db.ForeignKey('project.projectID'))
-    RCStatusList_rc_StatusID = db.Column(db.Integer, db.ForeignKey('RCStatusList.rcStatusID'))
-    reviewCommitteeList_rcListID = db.Column(db.Integer,db.ForeignKey('reviewCommitteeList.rcListID'))
-    review_committee_number=db.Column(db.String)
-    date_initial_review= db.Column(db.Date)
-    date_expires = db.Column(db.Date)
-    rc_note = db.Column(db.String)
-    rc_protocol = db.Column(db.String)
-    rc_approval = db.Column(db.String)
+    reviewCommitteeID = db.Column('reviewCommitteeID',db.Integer,primary_key=True)
+    projectID = db.Column('projectID',db.Integer,db.ForeignKey('project.projectID'))
+    rcStatusID = db.Column('rcStatusID',db.Integer, db.ForeignKey('RCStatusList.rcStatusID'))
+    rcListID = db.Column('rcListID',db.Integer,db.ForeignKey('reviewCommitteeList.rcListID'))
+    reviewCommitteeNumber=db.Column('review_committe_number',db.String)
+    dateInitialReview= db.Column('date_initial_review',db.Date)
+    dateExpires = db.Column('date_expires',db.Date)
+    rcNote = db.Column('rc_note',db.String)
+    rcProtocol = db.Column('rc_protocol',db.String)
+    rcApproval = db.Column('rc_approval',db.String)
     
     # Relationships
     # 1- M, one project many review committees
-    project = db.relationship("Project",foreign_keys=[project_projectID],back_populates="reviewCommittees")
+    project = db.relationship("Project",foreign_keys=[projectID],back_populates="reviewCommittees")
     # M - 1, Many review committees per rcStatus
-    RCStatusList = db.relationship("RCStatusList", foreign_keys=[RCStatusList_rc_StatusID], back_populates="reviewCommittees")
+    RCStatusList = db.relationship("RCStatusList", foreign_keys=[rcStatusID], back_populates="reviewCommittees")
     # M - 1, Many review committees per rcList
-    reviewCommitteeList = db.relationship("ReviewCommitteeList",foreign_keys=[reviewCommitteeList_rcListID],back_populates="reviewCommittees")
+    reviewCommitteeList = db.relationship("ReviewCommitteeList",foreign_keys=[rcListID],back_populates="reviewCommittees")
         
     def __repr__(self):
         return "<ReviewCommittee(\
@@ -1734,23 +1734,22 @@ class ReviewCommittee(CustomModel):
             rc_protocol={},\
             rc_approval={})>".format(
             self.reviewCommitteeID,
-            self.project_projectID,
-            self.RCStatusList_rc_StatusID,
-            self.reviewCommitteeList_rcListID,
-            self.review_committee_number,
-            self.date_initial_review,
-            self.date_initial_review,
-            self.date_expires,
-            self.rc_note,
-            self.rc_protocol,
-            self.rc_approval)
+            self.projectID,
+            self.rcStatusID,
+            self.rcListID,
+            self.reviewCommitteeNumber,
+            self.dateInitialReview,
+            self.dateExpires,
+            self.rcNote,
+            self.rcProtocol,
+            self.rcApproval)
             
 class ReviewCommitteeList(CustomModel):
     __tablename__ ='reviewCommitteeList'
     
-    rcListID = db.Column(db.Integer,primary_key=True)
-    review_committee = db.Column(db.String)
-    rc_description = db.Column(db.String)
+    rcListID = db.Column('rcListID',db.Integer,primary_key=True)
+    reviewCommittee = db.Column('review_committee',db.String)
+    rcDescription = db.Column('rc_description',db.String)
     
     # Relationships
     # M - 1 Many reviewCommittess per reviewCommitteeList
@@ -1760,30 +1759,30 @@ class ReviewCommitteeList(CustomModel):
         return "<ReviewCommitteeList(\
         rcListID={},\
         reviewCommittee={},\
-        rc_description={})>".format(
+        rcDescription={})>".format(
         self.rcListID,
         self.reviewComittee,
-        self.rc_description)
+        self.rcDescription)
         
 class Staff(CustomModel):
     __tablename__ = 'staff'
     
-    staffID = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String)
-    lname = db.Column(db.String)
-    middle_name = db.Column(db.String)
-    email = db.Column(db.String)
-    phone = db.Column(db.String)
-    phoneComment = db.Column(db.String)
-    institution = db.Column(db.String)
-    department = db.Column(db.String)
-    position = db.Column(db.String)
-    credentials = db.Column(db.String)
-    street = db.Column(db.String)
-    city = db.Column(db.String)
-    state = db.Column(db.String)
-    human_sub_training_exp = db.Column(db.Date)
-    UCR_role = db.Column(db.Integer)
+    staffID = db.Column('staffID',db.Integer, primary_key=True)
+    firstName = db.Column('fname',db.String)
+    lastName = db.Column('lname',db.String)
+    middleName = db.Column('middle-name',db.String)
+    email = db.Column('email',db.String)
+    phoneNumber = db.Column('phone',db.String)
+    phoneComment = db.Column('phoneComment',db.String)
+    institution = db.Column('institution',db.String)
+    department = db.Column('department',db.String)
+    position = db.Column('position',db.String)
+    credentials = db.Column('credentials',db.String)
+    street = db.Column('street',db.String)
+    city = db.Column('city',db.String)
+    state = db.Column('state',db.String)
+    humanSubjectTrainingExp = db.Column('human_sub_training_exp',db.Date)
+    ucrRole = db.Column('UCR_role',db.Integer)
     
     # Relationships
     # 1 - M, one staff with many statuses
@@ -1803,9 +1802,9 @@ class Staff(CustomModel):
     def __repr__(self):
         return "<Staff(\
         staffID = {},\
-        fname = {},\
-        lname = {},\
-        middle_name = {},\
+        firstName = {},\
+        lastName = {},\
+        middleName = {},\
         email = {},\
         phone = {},\
         phoneComment = {},\
@@ -1816,12 +1815,12 @@ class Staff(CustomModel):
         street = {},\
         city = {},\
         state = {},\
-        human_sub_training_exp = {},\
-        UCR_role = {})>".format(
+        humanSubjectTrainingExp = {},\
+        ucrRole = {})>".format(
         self.staffID,
-        self.fname,
-        self.lname,
-        self.middle_name,
+        self.firstName,
+        self.lastName,
+        self.middleName,
         self.email,
         self.phone,
         self.phoneComment,
@@ -1832,15 +1831,15 @@ class Staff(CustomModel):
         self.street,
         self.city,
         self.state,
-        self.human_sub_training_exp,
-        self.UCR_role)
+        self.humanSubjectTrainingExp,
+        self.ucrRole)
         
 class StaffRoleLUT(CustomModel):
     __tablename__ = 'staffRoleLUT'
     
-    staffRoleLUTID = db.Column(db.Integer,primary_key=True)
-    staffRole = db.Column(db.String)
-    staffRoleDescription = db.Column(db.String)
+    staffRoleID = db.Column('staffRoleLUTID',db.Integer,primary_key=True)
+    staffRole = db.Column('staffRole',db.String)
+    staffRoleDescription = db.Column('staffRoleDescription',db.String)
     
     # Relationships
     # M - 1, many projectStaff with the same role
@@ -1848,7 +1847,7 @@ class StaffRoleLUT(CustomModel):
     
     def __repr__(self):
         return "<StaffRoleLUT(\
-        staffRoleLUTID = {},\
+        staffRoleID = {},\
         staffRole = {},\
         staffRoleDescription = {})>".format(
         self.staffRoleLUTID,
@@ -1860,9 +1859,9 @@ class StaffTraining(CustomModel):
     
     staffTrainingID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    humanSubjectTrainingLUTID = db.Column(db.Integer,db.ForeignKey('humanSubjectTrainingLUT.humanSubjectTrainingID'))
-    date_taken = db.Column(db.Date)
-    exp_date = db.Column(db.Date)
+    humanSubjectTrainingID = db.Column(db.Integer,db.ForeignKey('humanSubjectTrainingLUT.humanSubjectTrainingID'))
+    dateTaken = db.Column(db.Date)
+    dateExpires = db.Column(db.Date)
     
     # Relationships
     # M - 1, many staffTrainings with the same HST
@@ -1874,24 +1873,24 @@ class StaffTraining(CustomModel):
         return "<StaffTraining(\
         staffTrainingID = {},\
         staffID = {},\
-        humanSubjectTrainingLUTID = {},\
-        date_taken = {},\
-        exp_date = {})>".format(
+        humanSubjectTrainingID = {},\
+        dateTaken = {},\
+        dateExpires = {})>".format(
         self.staffTrainingID,
         self.staffID,
-        self.humanSubjectTrainingLUTID,
-        self.date_taken,
-        self.exp_date)
+        self.humanSubjectTrainingID,
+        self.dateTaken,
+        self.dateExpires)
 
 class Tracing(CustomModel):
     __tablename__ = "tracing"
     
-    tracingID = db.Column(db.Integer, primary_key=True)
-    tracingSourceLUTID = db.Column(db.Integer, db.ForeignKey('tracingSourceLUT.tracingSourceLUTID'))
-    projectPatientID = db.Column(db.Integer, db.ForeignKey('projectPatient.participantID'))
-    date = db.Column(db.Date)
-    staff = db.Column(db.Integer)
-    notes = db.Column(db.String)
+    tracingID = db.Column('tracingID',db.Integer, primary_key=True)
+    tracingSourceID = db.Column('tracingSourceLUTID',db.Integer, db.ForeignKey('tracingSourceLUT.tracingSourceLUTID'))
+    projectPatientID = db.Column('projectPatientID',db.Integer, db.ForeignKey('projectPatient.participantID'))
+    date = db.Column('date',db.Date)
+    staff = db.Column('staff',db.Integer)
+    notes = db.Column('notes',db.String)
     
     # Relationships
     # M - 1, many trancings can have the same tracingSource
@@ -1902,7 +1901,7 @@ class Tracing(CustomModel):
     def __repr__(self):
         return "<Tracing(\
         tracingID = {},\
-        tracingSourceLUTID = {},\
+        tracingSourceID = {},\
         projectPatientID = {},\
         date = {},\
         staff = {},\
@@ -1917,8 +1916,8 @@ class Tracing(CustomModel):
 class TracingSourceLUT(CustomModel):
     __tablename__ = "tracingSourceLUT"
     
-    tracingSourceLUTID = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String)
+    tracingSourceID = db.Column('tracingSourceLUTID',db.Integer, primary_key=True)
+    description = db.Column('description',db.String)
     
     # Relationships
     tracings = db.relationship('Tracing',back_populates="tracingSource")
@@ -1933,12 +1932,12 @@ class TracingSourceLUT(CustomModel):
 class UCRReport(CustomModel):
     __tablename__ = 'ucrReport'
     
-    ucrReportID = db.Column(db.Integer, primary_key=True)
-    projectID = db.Column(db.Integer, db.ForeignKey('project.projectID'))
-    report_type = db.Column(db.Integer)
-    report_submitted = db.Column(db.Date)
-    report_due = db.Column(db.Date)
-    report_doc = db.Column(db.String)
+    ucrReportID = db.Column('ucrReport',db.Integer, primary_key=True)
+    projectID = db.Column('projectID',db.Integer, db.ForeignKey('project.projectID'))
+    reportType = db.Column('report_type',db.Integer)
+    reportSubmitted = db.Column('report_submitted',db.Date)
+    reportDue = db.Column('report_due',db.Date)
+    reportDoc = db.Column('report_doc',db.String)
     
     # Relationships
     # 1 - M, one project, many reports
