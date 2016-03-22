@@ -820,7 +820,7 @@ class TestArcReview(PopulatedDB):
             "contact" : False,
             "engaged" : False,
             "nonPublicData" : False,
-            "versionID" : 0
+            "versionID" : 1
         })
         self.assertEqual(response.json["projectID"], 2)
         self.assertEqual(response.json["reviewType"], 2)
@@ -987,7 +987,7 @@ class TestContactInfoSource(PopulatedDB):
     def test_update_contact_info_source(self):
         response = self.client.put("/api/contactinfosources/1/",data = {
             "contactInfoSource" : "source Updated",
-            "versionID" : 0
+            "versionID" : 1
         })
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["contactInfoSource"], "source Updated")
