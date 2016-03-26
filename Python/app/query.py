@@ -102,7 +102,13 @@ def get_human_subject_trainings():
     
 def get_human_subject_training(id):
     return db.session.query(HumanSubjectTrainingLUT).filter_by(humanSubjectTrainingID = id).first()
-    
+
+def get_incentives():
+    return db.session.query(Incentive).all()
+
+def get_incentive(id):
+    return db.session.query(Incentive).filter_by(incentiveID=id).first()
+
 def get_informants():
     return db.session.query(Informant).all()
     
@@ -181,6 +187,12 @@ def get_phase_statuses():
 def get_phase_status(id):
     return db.session.query(PhaseStatus).filter_by(logPhaseID=id).first()
 
+def get_phone_types():
+    return db.session.query(PhoneTypeLUT).all()
+
+def get_phone_type(id):
+    return db.session.query(PhoneTypeLUT).filter_by(phoneTypeID=id).first()
+
 def get_physicians():
     return db.session.query(Physician).all()
     
@@ -253,11 +265,11 @@ def get_project_types():
 def get_project_type(id):
     return db.session.query(ProjectType).filter_by(projectTypeID=id).first()
     
-def get_rc_status(id):
-    return db.session.query(RCStatusList).filter_by(rcStatusID=id).first()
+def get_review_committee_status(id):
+    return db.session.query(ReviewCommitteeStatusLUT).filter_by(reviewCommitteeStatusID=id).first()
     
-def get_rc_statuses():
-    return db.session.query(RCStatusList).all()
+def get_review_committee_statuses():
+    return db.session.query(ReviewCommitteeStatusLUT).all()
     
 def get_review_committees():
     return db.session.query(ReviewCommittee).all()
@@ -265,11 +277,11 @@ def get_review_committees():
 def get_review_committee(id):
     return db.session.query(ReviewCommittee).filter_by(reviewCommitteeID=id).first()
     
-def get_review_committee_list(id):
-    return db.session.query(ReviewCommitteeList).filter_by(rcListID=id).first()
+def get_review_committee_lut(id):
+    return db.session.query(ReviewCommitteeLUT).filter_by(reviewCommitteeID=id).first()
     
-def get_review_committee_lists():
-    return db.session.query(ReviewCommitteeList).all()
+def get_review_committee_luts():
+    return db.session.query(ReviewCommitteeLUT).all()
 
 def get_staffs():
     return db.session.query(Staff).all()

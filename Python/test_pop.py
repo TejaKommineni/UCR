@@ -24,6 +24,14 @@ class PopulatedDB(TestCase):
         db.drop_all()
 
     def populate_db2(self):
+
+        phoneType1 = models.PhoneTypeLUT(
+            phoneType = "cell"
+        )
+        phoneType2 = models.PhoneTypeLUT(
+            phoneType = "home"
+        )
+
         irb_holder1 = models.IRBHolderLUT(
             holder = "holder 1",
             holderDefinition= "IRB 1")
@@ -43,7 +51,7 @@ class PopulatedDB(TestCase):
         project1 = models.Project(
             projectTypeID = 1,
             irbHolderID = 1,
-            projectName = "Test Project",
+            projectTitle = "Test Project",
             shortTitle = "Test Project",
             projectSummary = "Summary",
             sop="sop",
@@ -51,15 +59,17 @@ class PopulatedDB(TestCase):
             budgetDoc = "budget_doc",
             ucrFee = "no",
             ucrNoFee = "yes",
-            budgetEndDate = datetime(2016,2,2),
             previousShortTitle = "t short",
             dateAdded = datetime(2016,2,2),
-            finalRecruitmentReport = "report")
+            finalRecruitmentReport = "report",
+            ongoingContact = True,
+            activityStartDate = datetime(2016,2,2),
+            activityEndDate = datetime(2016,2,2))
 
         project2 = models.Project(
             projectTypeID = 1,
             irbHolderID = 1,
-            projectName = "Test Project",
+            projectTitle = "Test Project",
             shortTitle = "Test Project",
             projectSummary = "Summary",
             sop="sop",
@@ -67,10 +77,12 @@ class PopulatedDB(TestCase):
             budgetDoc = "budget_doc",
             ucrFee = "no",
             ucrNoFee = "yes",
-            budgetEndDate = datetime(2016,2,2),
             previousShortTitle = "t short",
             dateAdded = datetime(2016,2,2),
-            finalRecruitmentReport = "report")
+            finalRecruitmentReport = "report",
+            ongoingContact = True,
+            activityStartDate = datetime(2016,2,2),
+            activityEndDate = datetime(2016,2,2))
 
         budget1 = models.Budget(
             projectID = 1,
@@ -80,26 +92,26 @@ class PopulatedDB(TestCase):
             periodTotal = 1.23,
             periodComment = "comment")
 
-        rcsl = models.RCStatusList(
-            rcStatus = "Status 1",
-            rcStatusDefinition = "rc status def")
+        rcsl = models.ReviewCommitteeStatusLUT(
+            reviewCommitteeStatus = "Status 1",
+            reviewCommitteeStatusDefinition = "rc status def")
 
-        rcs2 = models.RCStatusList(
-            rcStatus = "Status 2",
-            rcStatusDefinition = "rc status def 2")
+        rcs2 = models.ReviewCommitteeStatusLUT(
+            reviewCommitteeStatus = "Status 2",
+            reviewCommitteeStatusDefinition = "rc status def 2")
 
-        rcl1 = models.ReviewCommitteeList(
+        rcl1 = models.ReviewCommitteeLUT(
             reviewCommittee = "rc 1",
-            rcDescription = "rc desc 1")
+            reviewCommitteeDescription = "rc desc 1")
 
-        rcl2 = models.ReviewCommitteeList(
+        rcl2 = models.ReviewCommitteeLUT(
             reviewCommittee = "rc 2",
-            rcDescription = "rc des 2c")
+            reviewCommitteeDescription = "rc des 2c")
 
         rc = models.ReviewCommittee(
             projectID=1,
-            rcStatusID=1,
-            rcListID=1,
+            reviewCommitteeStatusID=1,
+            reviewCommitteeLUTID=1,
             reviewCommitteeNumber="1",
             dateInitialReview=datetime(2016,2,2),
             dateExpires = datetime(2016,2,2),
@@ -119,14 +131,15 @@ class PopulatedDB(TestCase):
             reviewType = 1,
             dateSentToReviewer = datetime(2016,2,2),
             reviewer1 = 1,
-            reviewer1Rec = 1,            reviewer1SigDate = datetime(2016,2,2),
+            reviewer1Rec = 1,
+            reviewer1SigDate = datetime(2016,2,2),
             reviewer1Comments = "test comment",
             reviewer2 = 2,
             reviewer2Rec  =2 ,
             reviewer2SigDate = datetime(2016,2,2),
             reviewer2Comments = "test comment",
             research = 1,
-            lnkage=False,
+            linkage=False,
             contact = True,
             engaged = True,
             nonPublicData = True)
@@ -274,10 +287,7 @@ class PopulatedDB(TestCase):
             datePledge = datetime(2016,2,2),
             dateRevoked = datetime(2016,2,2),
             contact = "yes",
-            inactive = "no",
-            humanSubjectTrainingExp = datetime(2016,2,2),
-            humanSubjectTrainingTypeID = 1,
-            studyRole = 1
+            inactive = "no"
         )
         staffRole1 = models.StaffRoleLUT(
             staffRole = "role",
@@ -362,9 +372,7 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             zip = "zip",
-            addressStatus = 1,
             addressStatusDate = datetime(2016,2,2),
-            addressStatusSource = "s1"
         )
 
         patientEmail = models.PatientEmail(
@@ -372,17 +380,14 @@ class PopulatedDB(TestCase):
             patientID = 1,
             contactInfoStatusID = 1,
             email = "email",
-            emailStatus = 1,
-            emailSource = 1,
             emailStatusDate = datetime(2016,2,2)
         )
         patientPhone = models.PatientPhone(
             contactInfoSourceID = 1,
             patientID = 1,
             contactInfoStatusID = 1,
+            phoneTypeID = 1,
             phoneNumber = "phone",
-            phoneStatus = 1,
-            phoneSource = "s1",
             phoneStatusDate = datetime(2016,2,2)
         )
         informant1 = models.Informant(
@@ -412,17 +417,14 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             zip = "zip",
-            addressStatus = 1,
             addressStatusDate = datetime(2016,2,2),
-            addressStatusSource = "s1"
         )
         informantPhone = models.InformantPhone(
             contactInfoSourceID = 1,
             informantID = 1,
             contactInfoStatusID = 1,
+            phoneTypeID = 1,
             phoneNumber = "phone",
-            phoneStatus = 1,
-            phoneSource = "s1",
             phoneStatusDate = datetime(2016,2,2)
         )
         ctc1 = models.CTC(
@@ -473,26 +475,25 @@ class PopulatedDB(TestCase):
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
             importDate = datetime(2016,2,2),
-            finalCodeStaff = 1,
-            enrollmentStaff = 1,
-            dateCoordSignedStaff = datetime(2016,2,2),
+            finalCodeStaffID = 1,
+            enrollmentStaffID = 1,
+            dateCoordSignedStaffID = 1,
             abstractStatus = 1,
             abstractStatusDate = datetime(2016,2,2),
-            abstractStatusStaff = 1,
+            abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
-            sentToAbstractorStaff = 1,
+            sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
             abstractorInitials = "atp",
             researcherDate = datetime(2016,2,2),
-            researcherStaff = 1,
+            researcherStaffID = 1,
             consentLink = "link",
-            tracingStatus = 1,
             medRecordReleaseSigned = True,
             medRecordReleaseLink = "link",
-            medRecordReleaseStaff = 1,
+            medRecordReleaseStaffID = 1,
             medRecordReleaseDate = datetime(2016,2,2),
             surveyToResearcher = datetime(2016,2,2),
-            surveyToResearcherStaff = 1
+            surveyToResearcherStaffID = 1
         )
 
         projectPatient2 = models.ProjectPatient(
@@ -507,26 +508,25 @@ class PopulatedDB(TestCase):
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
             importDate = datetime(2016,2,2),
-            finalCodeStaff = 1,
-            enrollmentStaff = 1,
-            dateCoordSignedStaff = datetime(2016,2,2),
+            finalCodeStaffID = 1,
+            enrollmentStaffID = 1,
+            dateCoordSignedStaffID = 1,
             abstractStatus = 1,
             abstractStatusDate = datetime(2016,2,2),
-            abstractStatusStaff = 1,
+            abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
-            sentToAbstractorStaff = 1,
+            sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
             abstractorInitials = "atp",
             researcherDate = datetime(2016,2,2),
-            researcherStaff = 1,
+            researcherStaffID = 1,
             consentLink = "link",
-            tracingStatus = 1,
             medRecordReleaseSigned = True,
             medRecordReleaseLink = "link",
-            medRecordReleaseStaff = 1,
+            medRecordReleaseStaffID = 1,
             medRecordReleaseDate = datetime(2016,2,2),
             surveyToResearcher = datetime(2016,2,2),
-            surveyToResearcherStaff = 1)
+            surveyToResearcherStaffID = 1)
 
         tracingSource1 = models.TracingSourceLUT(
             description = "desc"
@@ -577,18 +577,14 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             zip = "zip",
-            addressStatus = 1,
             addressStatusDate = datetime(2016,2,2),
-            addressStatusSource = "s1"
         )
         physicianPhone = models.PhysicianPhone(
             contactInfoSourceID = 1,
             physicianID = 1,
             contactInfoStatusID = 1,
             phoneNumber = "phone",
-            phoneType = "phone_type",
-            phoneStatus = 1,
-            phoneSource = "s1",
+            phoneTypeID = 1,
             phoneStatusDate = datetime(2016,2,2)
         )
         physicianToCTC = models.PhysicianToCTC(
@@ -622,9 +618,7 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             zip = "zip",
-            addressStatus = 1,
             addressStatusDate = datetime(2016,2,2),
-            addressStatusSource = "s1"
         )
 
         facilityPhone = models.FacilityPhone(
@@ -632,10 +626,8 @@ class PopulatedDB(TestCase):
             facilityID = 1,
             contactInfoStatusID = 1,
             clinicName = "clinic",
-            phoneType = "cell",
+            phoneTypeID = 1,
             phoneNumber = "phone",
-            phoneStatus = 1,
-            phoneSource = "s1",
             phoneStatusDate = datetime(2016,2,2)
         )
         patientProjectStatusType1 = models.PatientProjectStatusLUT(
@@ -676,7 +668,15 @@ class PopulatedDB(TestCase):
             ctcID = 1,
             facilityID = 1
         )
+        incentive = models.Incentive(
+            projectPatientID = 1,
+            incentiveDescription = "desc",
+            incentiveDate = datetime(2016,2,2)
+        )
 
+        db.session.add(incentive)
+        db.session.add(phoneType1)
+        db.session.add(phoneType2)
         db.session.add(contactInfoSource1)
         db.session.add(contactInfoSource2)
         db.session.add(contactInfoStatus1)
@@ -778,7 +778,7 @@ class TestArcReview(PopulatedDB):
         self.assertEqual(response.json["arcReviews"][0]["reviewer2Comments"], "test comment")
         self.assertEqual(response.json["arcReviews"][0]["research"], 1)
         self.assertEqual(response.json["arcReviews"][0]["contact"], True)
-        self.assertEqual(response.json["arcReviews"][0]["lnkage"], False)
+        self.assertEqual(response.json["arcReviews"][0]["linkage"], False)
         self.assertEqual(response.json["arcReviews"][0]["engaged"], True)
         self.assertEqual(response.json["arcReviews"][0]["nonPublicData"], True)
         
@@ -798,7 +798,7 @@ class TestArcReview(PopulatedDB):
         self.assertEqual(response.json["reviewer2Comments"], "test comment")
         self.assertEqual(response.json["research"], 1)
         self.assertEqual(response.json["contact"], True)
-        self.assertEqual(response.json["lnkage"], False)
+        self.assertEqual(response.json["linkage"], False)
         self.assertEqual(response.json["engaged"], True)
         self.assertEqual(response.json["nonPublicData"], True)
         
@@ -816,7 +816,7 @@ class TestArcReview(PopulatedDB):
             "reviewer2SigDate" : "2016-02-03",
             "reviewer2Comments" : "test comment Updated",
             "research" : 2,
-            "lnkage":True,
+            "linkage":True,
             "contact" : False,
             "engaged" : False,
             "nonPublicData" : False,
@@ -835,7 +835,7 @@ class TestArcReview(PopulatedDB):
         self.assertEqual(response.json["reviewer2Comments"], "test comment Updated")
         self.assertEqual(response.json["research"], 2)
         self.assertEqual(response.json["contact"], False)
-        self.assertEqual(response.json["lnkage"], True)
+        self.assertEqual(response.json["linkage"], True)
         self.assertEqual(response.json["engaged"], False)
         self.assertEqual(response.json["nonPublicData"], False)
         self.assertEqual(response.json["versionID"], 2)
@@ -1146,10 +1146,8 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["FacilityPhones"][0]["facilityID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["contactInfoStatusID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["clinicName"], "clinic")
-        self.assertEqual(response.json["FacilityPhones"][0]["phoneType"], "cell")
+        self.assertEqual(response.json["FacilityPhones"][0]["phoneTypeID"], 1)
         self.assertEqual(response.json["FacilityPhones"][0]["phoneNumber"], "phone")
-        self.assertEqual(response.json["FacilityPhones"][0]["phoneStatus"], 1)
-        self.assertEqual(response.json["FacilityPhones"][0]["phoneSource"], "s1")
         self.assertEqual(response.json["FacilityPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_facility_phone(self):
@@ -1159,10 +1157,8 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["facilityID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["clinicName"], "clinic")
-        self.assertEqual(response.json["phoneType"], "cell")
+        self.assertEqual(response.json["phoneTypeID"], 1)
         self.assertEqual(response.json["phoneNumber"], "phone")
-        self.assertEqual(response.json["phoneStatus"], 1)
-        self.assertEqual(response.json["phoneSource"], "s1")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_facility_phone(self):
@@ -1172,10 +1168,8 @@ class TestFacilityPhone(PopulatedDB):
             "contactInfoStatusID" : 2,
             "facilityName" : "name Updated",
             "clinicName" : "clinic Updated",
-            "phoneType" : "home",
+            "phoneTypeID" : 2,
             "phoneNumber" : "phone Updated",
-            "phoneStatus" : 2,
-            "phoneSource" : "s2",
             "phoneStatusDate" : "2016-02-03",
             "versionID" : 1
         })
@@ -1184,10 +1178,8 @@ class TestFacilityPhone(PopulatedDB):
         self.assertEqual(response.json["facilityID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["clinicName"], "clinic Updated")
-        self.assertEqual(response.json["phoneType"], "home")
+        self.assertEqual(response.json["phoneTypeID"], 2)
         self.assertEqual(response.json["phoneNumber"], "phone Updated")
-        self.assertEqual(response.json["phoneStatus"], 2)
-        self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
 
@@ -1254,9 +1246,7 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["FacilityAddresses"][0]["city"], "city")
         self.assertEqual(response.json["FacilityAddresses"][0]["state"], "state")
         self.assertEqual(response.json["FacilityAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["FacilityAddresses"][0]["addressStatus"], 1)
         self.assertEqual(response.json["FacilityAddresses"][0]["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["FacilityAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_facility_address(self):
         response = self.client.get("/api/facilityaddresses/1/")
@@ -1269,9 +1259,7 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["addressStatus"], 1)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_facility_address(self):
         response = self.client.put("/api/facilityaddresses/1/", data = {
@@ -1283,9 +1271,7 @@ class TestFacilityAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2",
             "versionID" : 1
         })
         self.assertEqual(response.json["facilityAddressID"], 1)
@@ -1297,9 +1283,7 @@ class TestFacilityAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["addressStatusSource"], "s2")
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_facility_address(self):
@@ -1445,6 +1429,35 @@ class TestHumanSubjectTraining(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "HumanSubjectTrainingID 2 deleted")
 
+class TestIncentive(PopulatedDB):
+    def test_get_incentives(self):
+        response = self.client.get("/api/incentives/")
+        self.assertEqual(response.json["Incentives"][0]["projectPatientID"],1)
+        self.assertEqual(response.json["Incentives"][0]["incentiveDescription"],"desc")
+        self.assertEqual(response.json["Incentives"][0]["incentiveDate"],"2016-02-02")
+
+    def test_get_incentive(self):
+        response = self.client.get("/api/incentives/1/")
+        self.assertEqual(response.json["projectPatientID"],1)
+        self.assertEqual(response.json["incentiveDescription"],"desc")
+        self.assertEqual(response.json["incentiveDate"],"2016-02-02")
+
+    def test_update_incentive(self):
+        response = self.client.put("/api/incentives/1/", data = {
+            "projectPatientID" : 2,
+            "incentiveDescription" : "desc Updated",
+            "incentiveDate" : "2016-02-03",
+            "versionID" : 1
+        })
+        self.assertEqual(response.json["projectPatientID"],2)
+        self.assertEqual(response.json["incentiveDescription"],"desc Updated")
+        self.assertEqual(response.json["incentiveDate"],"2016-02-03")
+
+    def test_delete_incentive(self):
+        response = self.client.delete("/api/incentives/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "IncentiveID 1 deleted")
+
 class TestInformant(PopulatedDB):
     def test_get_informants(self):
         response = self.client.get("/api/informants/")
@@ -1506,9 +1519,7 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["InformantAddresses"][0]["city"], "city")
         self.assertEqual(response.json["InformantAddresses"][0]["state"], "state")
         self.assertEqual(response.json["InformantAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["InformantAddresses"][0]["addressStatus"], 1)
         self.assertEqual(response.json["InformantAddresses"][0]["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["InformantAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_informant_address(self):
         response = self.client.get("/api/informantaddresses/1/")
@@ -1521,9 +1532,7 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["addressStatus"], 1)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_informant_address(self):
         response = self.client.put("/api/informantaddresses/1/", data = {
@@ -1535,9 +1544,7 @@ class TestInformantAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2",
             "versionID" : 1
         })
         self.assertEqual(response.json["informantAddressID"], 1)
@@ -1549,9 +1556,7 @@ class TestInformantAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["addressStatusSource"], "s2")
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_informant_address(self):
@@ -1566,9 +1571,8 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["InformantPhones"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["InformantPhones"][0]["informantID"], 1)
         self.assertEqual(response.json["InformantPhones"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["InformantPhones"][0]["phoneTypeID"], 1)
         self.assertEqual(response.json["InformantPhones"][0]["phoneNumber"], "phone")
-        self.assertEqual(response.json["InformantPhones"][0]["phoneStatus"], 1)
-        self.assertEqual(response.json["InformantPhones"][0]["phoneSource"], "s1")
         self.assertEqual(response.json["InformantPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_informant_phone(self):
@@ -1577,9 +1581,8 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["informantID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["phoneTypeID"], 1)
         self.assertEqual(response.json["phoneNumber"], "phone")
-        self.assertEqual(response.json["phoneStatus"], 1)
-        self.assertEqual(response.json["phoneSource"], "s1")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_informant_phone(self):
@@ -1587,9 +1590,8 @@ class TestInformantPhone(PopulatedDB):
             "contactInfoSourceID" : 2,
             "informantID" : 2,
             "contactInfoStatusID" : 2,
+            "phoneTypeID" : 2,
             "phoneNumber" : "phone Updated",
-            "phoneStatus" : 2,
-            "phoneSource" : "s2",
             "phoneStatusDate" : "2016-02-03",
             "versionID" : 1
         })
@@ -1597,9 +1599,8 @@ class TestInformantPhone(PopulatedDB):
         self.assertEqual(response.json["contactInfoSourceID"], 2)
         self.assertEqual(response.json["informantID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
+        self.assertEqual(response.json["phoneTypeID"], 2)
         self.assertEqual(response.json["phoneNumber"], "phone Updated")
-        self.assertEqual(response.json["phoneStatus"], 2)
-        self.assertEqual(response.json["phoneSource"], "s2")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
         
@@ -1794,9 +1795,7 @@ class TestPatientAddress(PopulatedDB):
         self.assertEqual(response.json["PatientAddresses"][0]["city"], "city")
         self.assertEqual(response.json["PatientAddresses"][0]["state"], "state")
         self.assertEqual(response.json["PatientAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["PatientAddresses"][0]["addressStatus"], 1)
         self.assertEqual(response.json["PatientAddresses"][0]["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["PatientAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_patient_address(self):
         response = self.client.get("/api/patientaddresses/1/")
@@ -1809,9 +1808,7 @@ class TestPatientAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["addressStatus"], 1)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_patient_address(self):
         response = self.client.put("/api/patientaddresses/1/", data = {
@@ -1823,9 +1820,7 @@ class TestPatientAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2",
             "versionID" : 1
         })
         self.assertEqual(response.json["patAddressID"], 1)
@@ -1837,9 +1832,7 @@ class TestPatientAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["addressStatusSource"], "s2")
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_patient_address(self):
@@ -1855,8 +1848,6 @@ class TestPatientEmail(PopulatedDB):
         self.assertEqual(response.json["PatientEmails"][0]["patientID"], 1)
         self.assertEqual(response.json["PatientEmails"][0]["contactInfoStatusID"], 1)
         self.assertEqual(response.json["PatientEmails"][0]["email"], "email")
-        self.assertEqual(response.json["PatientEmails"][0]["emailStatus"], 1)
-        self.assertEqual(response.json["PatientEmails"][0]["emailSource"], 1)
         self.assertEqual(response.json["PatientEmails"][0]["emailStatusDate"], "2016-02-02")
         
     def test_get_patient_email(self):
@@ -1866,8 +1857,6 @@ class TestPatientEmail(PopulatedDB):
         self.assertEqual(response.json["patientID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["email"], "email")
-        self.assertEqual(response.json["emailStatus"], 1)
-        self.assertEqual(response.json["emailSource"], 1)
         self.assertEqual(response.json["emailStatusDate"], "2016-02-02")
         
     def test_update_patient_email(self):
@@ -1876,8 +1865,6 @@ class TestPatientEmail(PopulatedDB):
             "patientID" : 2,
             "contactInfoStatusID" : 2,
             "email" : "email Updated",
-            "emailStatus" : 2,
-            "emailSource" : 2,
             "emailStatusDate" : "2016-02-03",
             "versionID" : 1
         })
@@ -1886,8 +1873,6 @@ class TestPatientEmail(PopulatedDB):
         self.assertEqual(response.json["patientID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["email"], "email Updated")
-        self.assertEqual(response.json["emailStatus"], 2)
-        self.assertEqual(response.json["emailSource"], 2)
         self.assertEqual(response.json["emailStatusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
         
@@ -1903,9 +1888,8 @@ class TestPatientPhone(PopulatedDB):
         self.assertEqual(response.json["PatientPhones"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["PatientPhones"][0]["patientID"], 1)
         self.assertEqual(response.json["PatientPhones"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["PatientPhones"][0]["phoneTypeID"], 1)
         self.assertEqual(response.json["PatientPhones"][0]["phoneNumber"], "phone")
-        self.assertEqual(response.json["PatientPhones"][0]["phoneStatus"], 1)
-        self.assertEqual(response.json["PatientPhones"][0]["phoneSource"], "s1")
         self.assertEqual(response.json["PatientPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_patient_phone(self):
@@ -1914,9 +1898,8 @@ class TestPatientPhone(PopulatedDB):
         self.assertEqual(response.json["contactInfoSourceID"], 1)
         self.assertEqual(response.json["patientID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["phoneTypeID"], 1)
         self.assertEqual(response.json["phoneNumber"], "phone")
-        self.assertEqual(response.json["phoneStatus"], 1)
-        self.assertEqual(response.json["phoneSource"], "s1")
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_patient_phone(self):
@@ -1924,9 +1907,8 @@ class TestPatientPhone(PopulatedDB):
             "contactInfoSourceID" : 2,
             "patientID" : 2,
             "contactInfoStatusID" : 2,
+            "phoneTypeID" : 2,
             "phoneNumber" : "phone Updated",
-            "phoneStatus" : 2,
-            "phoneSource" : "s2",
             "phoneStatusDate" : "2016-02-03",
             "versionID" : 1
         })
@@ -1935,8 +1917,7 @@ class TestPatientPhone(PopulatedDB):
         self.assertEqual(response.json["patientID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["phoneNumber"], "phone Updated")
-        self.assertEqual(response.json["phoneStatus"], 2)
-        self.assertEqual(response.json["phoneSource"], "s2")
+        self.assertEqual(response.json["phoneTypeID"], 2)
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
         
@@ -2025,6 +2006,30 @@ class TestPhaseStatus(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "LogPhaseID 2 deleted")
 
+class TestPhoneType(PopulatedDB):
+    def test_get_phone_types(self):
+        response = self.client.get("/api/phonetypes/")
+        self.assertEqual(response.json["PhoneTypes"][0]["phoneTypeID"], 1)
+        self.assertEqual(response.json["PhoneTypes"][0]["phoneType"], "cell")
+
+    def test_get_phone_type(self):
+        response = self.client.get("/api/phonetypes/1/")
+        self.assertEqual(response.json["phoneTypeID"], 1)
+        self.assertEqual(response.json["phoneType"], "cell")
+
+    def test_update_phone_type(self):
+        response = self.client.put("/api/phonetypes/1/", data = {
+            "phoneType" : "home",
+            "versionID" : 1
+        })
+        self.assertEqual(response.json["phoneTypeID"], 1)
+        self.assertEqual(response.json["phoneType"], "home")
+
+    def test_delete_phone_type(self):
+        response = self.client.delete("/api/phonetypes/2/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhoneTypeID 2 deleted")
+
 class TestPhysician(PopulatedDB):
     def test_get_physicians(self):
         response = self.client.get("/api/physicians/")
@@ -2099,9 +2104,7 @@ class TestPhysicianAddress(PopulatedDB):
         self.assertEqual(response.json["PhysicianAddresses"][0]["city"], "city")
         self.assertEqual(response.json["PhysicianAddresses"][0]["state"], "state")
         self.assertEqual(response.json["PhysicianAddresses"][0]["zip"], "zip")
-        self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatus"], 1)
         self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["PhysicianAddresses"][0]["addressStatusSource"], "s1")
         
     def test_get_physician_address(self):
         response = self.client.get("/api/physicianaddresses/1/")
@@ -2114,9 +2117,7 @@ class TestPhysicianAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city")
         self.assertEqual(response.json["state"], "state")
         self.assertEqual(response.json["zip"], "zip")
-        self.assertEqual(response.json["addressStatus"], 1)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["addressStatusSource"], "s1")
         
     def test_update_physician_address(self):
         response = self.client.put("/api/physicianaddresses/1/", data = {
@@ -2128,9 +2129,7 @@ class TestPhysicianAddress(PopulatedDB):
             "city" : "city Updated",
             "state" : "state Updated",
             "zip" : "zip Updated",
-            "addressStatus" : 2,
             "addressStatusDate" : "2016-02-03",
-            "addressStatusSource" : "s2",
             "versionID" : 1
         })
         self.assertEqual(response.json["physicianAddressID"], 1)
@@ -2142,9 +2141,7 @@ class TestPhysicianAddress(PopulatedDB):
         self.assertEqual(response.json["city"], "city Updated")
         self.assertEqual(response.json["state"], "state Updated")
         self.assertEqual(response.json["zip"], "zip Updated")
-        self.assertEqual(response.json["addressStatus"], 2)
         self.assertEqual(response.json["addressStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["addressStatusSource"], "s2")
         self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_physician_address(self):
@@ -2190,16 +2187,14 @@ class TestPhysicianFacility(PopulatedDB):
         self.assertEqual(response.json["Message"], "PhysFacilityID 1 deleted")      
         
 class TestPhysicianPhone(PopulatedDB):
-    def test_get_physician_phone(self):
+    def test_get_physician_phones(self):
         response = self.client.get("/api/physicianphones/")
         self.assertEqual(response.json["PhysicianPhones"][0]["physicianPhoneID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoSourceID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["physicianID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["contactInfoStatusID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["phoneNumber"], "phone")
-        self.assertEqual(response.json["PhysicianPhones"][0]["phoneType"], "phone_type")
-        self.assertEqual(response.json["PhysicianPhones"][0]["phoneStatus"], 1)
-        self.assertEqual(response.json["PhysicianPhones"][0]["phoneSource"], "s1")
+        self.assertEqual(response.json["PhysicianPhones"][0]["phoneTypeID"], 1)
         self.assertEqual(response.json["PhysicianPhones"][0]["phoneStatusDate"], "2016-02-02")
         
     def test_get_physician_phone(self):
@@ -2209,9 +2204,7 @@ class TestPhysicianPhone(PopulatedDB):
         self.assertEqual(response.json["physicianID"], 1)
         self.assertEqual(response.json["contactInfoStatusID"], 1)
         self.assertEqual(response.json["phoneNumber"], "phone")
-        self.assertEqual(response.json["phoneType"], "phone_type")
-        self.assertEqual(response.json["phoneStatus"], 1)
-        self.assertEqual(response.json["phoneSource"], "s1")
+        self.assertEqual(response.json["phoneTypeID"], 1)
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-02")
         
     def test_update_physician_phone(self):
@@ -2220,9 +2213,7 @@ class TestPhysicianPhone(PopulatedDB):
             "physicianID" : 2,
             "contactInfoStatusID" : 2,
             "phoneNumber" : "phone Updated",
-            "phoneType": "phone_type Updated",
-            "phoneStatus" : 2,
-            "phoneSource" : "s2",
+            "phoneTypeID": 2,
             "phoneStatusDate" : "2016-02-03",
             "versionID" : 1
         })
@@ -2231,9 +2222,7 @@ class TestPhysicianPhone(PopulatedDB):
         self.assertEqual(response.json["physicianID"], 2)
         self.assertEqual(response.json["contactInfoStatusID"], 2)
         self.assertEqual(response.json["phoneNumber"], "phone Updated")
-        self.assertEqual(response.json["phoneType"], "phone_type Updated")
-        self.assertEqual(response.json["phoneStatus"], 2)
-        self.assertEqual(response.json["phoneSource"], "s2")
+        self.assertEqual(response.json["phoneTypeID"], 2)
         self.assertEqual(response.json["phoneStatusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
         
@@ -2402,7 +2391,7 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["projects"][0]["projectID"],1)
         self.assertEqual(response.json["projects"][0]["projectTypeID"],1)
         self.assertEqual(response.json["projects"][0]["irbHolderID"],1)
-        self.assertEqual(response.json["projects"][0]["projectName"],"Test Project")
+        self.assertEqual(response.json["projects"][0]["projectTitle"],"Test Project")
         self.assertEqual(response.json["projects"][0]["shortTitle"],"Test Project")
         self.assertEqual(response.json["projects"][0]["projectSummary"],"Summary")
         self.assertEqual(response.json["projects"][0]["sop"],"sop")
@@ -2410,17 +2399,19 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["projects"][0]["budgetDoc"],"budget_doc")
         self.assertEqual(response.json["projects"][0]["ucrFee"],"no")
         self.assertEqual(response.json["projects"][0]["ucrNoFee"],"yes")
-        self.assertEqual(response.json["projects"][0]["budgetEndDate"],"2016-02-02")
         self.assertEqual(response.json["projects"][0]["previousShortTitle"],"t short")
         self.assertEqual(response.json["projects"][0]["dateAdded"],"2016-02-02")
         self.assertEqual(response.json["projects"][0]["finalRecruitmentReport"],"report")
+        self.assertEqual(response.json["projects"][0]["ongoingContact"],True)
+        self.assertEqual(response.json["projects"][0]["activityStartDate"],"2016-02-02")
+        self.assertEqual(response.json["projects"][0]["activityEndDate"],"2016-02-02")
     # Test getting single project
     def test_get_project(self):
         response = self.client.get("/api/projects/1/")
         self.assertEqual(response.json["projectID"],1)
         self.assertEqual(response.json["projectTypeID"],1)
         self.assertEqual(response.json["irbHolderID"],1)
-        self.assertEqual(response.json["projectName"],"Test Project")
+        self.assertEqual(response.json["projectTitle"],"Test Project")
         self.assertEqual(response.json["shortTitle"],"Test Project")
         self.assertEqual(response.json["projectSummary"],"Summary")
         self.assertEqual(response.json["sop"],"sop")
@@ -2428,17 +2419,19 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["budgetDoc"],"budget_doc")
         self.assertEqual(response.json["ucrFee"],"no")
         self.assertEqual(response.json["ucrNoFee"],"yes")
-        self.assertEqual(response.json["budgetEndDate"],"2016-02-02")
         self.assertEqual(response.json["previousShortTitle"],"t short")
         self.assertEqual(response.json["dateAdded"],"2016-02-02")
         self.assertEqual(response.json["finalRecruitmentReport"],"report")
+        self.assertEqual(response.json["ongoingContact"],True)
+        self.assertEqual(response.json["activityStartDate"],"2016-02-02")
+        self.assertEqual(response.json["activityEndDate"],"2016-02-02")
 
     # Test update project
     def test_update_project(self):
         response = self.client.put("/api/projects/1/",data = {
             "projectTypeID" : 2,
             "irbHolderID" : 2,
-            "projectName" : "Test Project Update",
+            "projectTitle" : "Test Project Update",
             "shortTitle" : "Test Project Update",
             "projectSummary" : "Summary Update",
             "sop":"sop Update",
@@ -2446,16 +2439,18 @@ class TestProject(PopulatedDB):
             "budgetDoc" : "budget_doc Update",
             "ucrFee" : "no Update",
             "ucrNoFee" : "yes Update",
-            "budgetEndDate" : "2016-02-03",
             "previousShortTitle" : "t short Update",
             "dateAdded" : "2016-02-03",
             "finalRecruitmentReport" : "report Update",
+            "ongoingContact" : False,
+            "activityStartDate" : "2016-02-03",
+            "activityEndDate" : "2016-02-03",
             "versionID" : 1
         })
         self.assertEqual(response.json["projectID"],1)
         self.assertEqual(response.json["projectTypeID"],2)
         self.assertEqual(response.json["irbHolderID"],2)
-        self.assertEqual(response.json["projectName"],"Test Project Update")
+        self.assertEqual(response.json["projectTitle"],"Test Project Update")
         self.assertEqual(response.json["shortTitle"],"Test Project Update")
         self.assertEqual(response.json["projectSummary"],"Summary Update")
         self.assertEqual(response.json["sop"],"sop Update")
@@ -2463,10 +2458,12 @@ class TestProject(PopulatedDB):
         self.assertEqual(response.json["budgetDoc"],"budget_doc Update")
         self.assertEqual(response.json["ucrFee"],"no Update")
         self.assertEqual(response.json["ucrNoFee"],"yes Update")
-        self.assertEqual(response.json["budgetEndDate"],"2016-02-03")
         self.assertEqual(response.json["previousShortTitle"],"t short Update")
         self.assertEqual(response.json["dateAdded"],"2016-02-03")
         self.assertEqual(response.json["finalRecruitmentReport"],"report Update")
+        self.assertEqual(response.json["ongoingContact"],False)
+        self.assertEqual(response.json["activityStartDate"],"2016-02-03")
+        self.assertEqual(response.json["activityEndDate"],"2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
         
      # Test deletetion of project
@@ -2490,26 +2487,25 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["ProjectPatients"][0]["enrollmentDate"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["dateCoordSigned"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["importDate"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["finalCodeStaff"], 1)
-        self.assertEqual(response.json["ProjectPatients"][0]["enrollmentStaff"], 1)
-        self.assertEqual(response.json["ProjectPatients"][0]["dateCoordSignedStaff"], "2016-02-02")
+        self.assertEqual(response.json["ProjectPatients"][0]["finalCodeStaffID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["enrollmentStaffID"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["dateCoordSignedStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["abstractStatus"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["abstractStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["abstractStatusStaff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["abstractStatusStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["sentToAbstractorDate"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["sentToAbstractorStaff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["sentToAbstractorStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["abstractedDate"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["abstractorInitials"], "atp")
         self.assertEqual(response.json["ProjectPatients"][0]["researcherDate"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["researcherStaff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["researcherStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["consentLink"], "link")
-        self.assertEqual(response.json["ProjectPatients"][0]["tracingStatus"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["medRecordReleaseSigned"], True)
         self.assertEqual(response.json["ProjectPatients"][0]["medRecordReleaseLink"], "link")
-        self.assertEqual(response.json["ProjectPatients"][0]["medRecordReleaseStaff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["medRecordReleaseStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["medRecordReleaseDate"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["surveyToResearcher"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["surveyToResearcherStaff"], 1)
+        self.assertEqual(response.json["ProjectPatients"][0]["surveyToResearcherStaffID"], 1)
         
     def test_get_project_patient(self):
         response = self.client.get("/api/projectpatients/1/")
@@ -2525,26 +2521,25 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["enrollmentDate"], "2016-02-02")
         self.assertEqual(response.json["dateCoordSigned"], "2016-02-02")
         self.assertEqual(response.json["importDate"], "2016-02-02")
-        self.assertEqual(response.json["finalCodeStaff"], 1)
-        self.assertEqual(response.json["enrollmentStaff"], 1)
-        self.assertEqual(response.json["dateCoordSignedStaff"], "2016-02-02")
+        self.assertEqual(response.json["finalCodeStaffID"], 1)
+        self.assertEqual(response.json["enrollmentStaffID"], 1)
+        self.assertEqual(response.json["dateCoordSignedStaffID"],1)
         self.assertEqual(response.json["abstractStatus"], 1)
         self.assertEqual(response.json["abstractStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["abstractStatusStaff"], 1)
+        self.assertEqual(response.json["abstractStatusStaffID"], 1)
         self.assertEqual(response.json["sentToAbstractorDate"], "2016-02-02")
-        self.assertEqual(response.json["sentToAbstractorStaff"], 1)
+        self.assertEqual(response.json["sentToAbstractorStaffID"], 1)
         self.assertEqual(response.json["abstractedDate"], "2016-02-02")
         self.assertEqual(response.json["abstractorInitials"], "atp")
         self.assertEqual(response.json["researcherDate"], "2016-02-02")
-        self.assertEqual(response.json["researcherStaff"], 1)
+        self.assertEqual(response.json["researcherStaffID"], 1)
         self.assertEqual(response.json["consentLink"], "link")
-        self.assertEqual(response.json["tracingStatus"], 1)
         self.assertEqual(response.json["medRecordReleaseSigned"], True)
         self.assertEqual(response.json["medRecordReleaseLink"], "link")
-        self.assertEqual(response.json["medRecordReleaseStaff"], 1)
+        self.assertEqual(response.json["medRecordReleaseStaffID"], 1)
         self.assertEqual(response.json["medRecordReleaseDate"], "2016-02-02")
         self.assertEqual(response.json["surveyToResearcher"], "2016-02-02")
-        self.assertEqual(response.json["surveyToResearcherStaff"], 1)
+        self.assertEqual(response.json["surveyToResearcherStaffID"], 1)
         
     def test_update_project_patient(self):
         response = self.client.put("/api/projectpatients/1/", data = {
@@ -2559,26 +2554,26 @@ class TestProjectPatient(PopulatedDB):
             "enrollmentDate" : "2016-02-03",
             "dateCoordSigned" : "2016-02-03",
             "importDate" : "2016-02-03",
-            "finalCodeStaff" : 2,
-            "enrollmentStaff" : 2,
-            "dateCoordSignedStaff"  : "2016-02-03",
+            "finalCodeStaffID" : 2,
+            "enrollmentStaffID" : 2,
+            "dateCoordSignedStaffID"  :2,
             "abstractStatus" : 2,
             "abstractStatusDate" : "2016-02-03",
-            "abstractStatusStaff" : 2,
+            "abstractStatusStaffID" : 2,
             "sentToAbstractorDate"  : "2016-02-03",
-            "sentToAbstractorStaff" : 2,
+            "sentToAbstractorStaffID" : 2,
             "abstractedDate" : "2016-02-03",
             "abstractorInitials" : "atp Updated",
             "researcherDate" : "2016-02-03",
-            "researcherStaff" : 2,
+            "researcherStaffID" : 2,
             "consentLink" : "link Updated",
             "tracingStatus" : 2,
             "medRecordReleaseSigned" : False,
             "medRecordReleaseLink" : "link Updated",
-            "medRecordReleaseStaff" : 2,
+            "medRecordReleaseStaffID" : 2,
             "medRecordReleaseDate"  : "2016-02-03",
             "surveyToResearcher"  : "2016-02-03",
-            "surveyToResearcherStaff" : 2,
+            "surveyToResearcherStaffID" : 2,
             "versionID" : 1
         })
         self.assertEqual(response.json["participantID"], 1)
@@ -2593,26 +2588,24 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["enrollmentDate"], "2016-02-03")
         self.assertEqual(response.json["dateCoordSigned"], "2016-02-03")
         self.assertEqual(response.json["importDate"], "2016-02-03")
-        self.assertEqual(response.json["finalCodeStaff"], 2)
-        self.assertEqual(response.json["enrollmentStaff"], 2)
-        self.assertEqual(response.json["dateCoordSignedStaff"], "2016-02-03")
+        self.assertEqual(response.json["finalCodeStaffID"], 2)
+        self.assertEqual(response.json["enrollmentStaffID"], 2)
         self.assertEqual(response.json["abstractStatus"], 2)
         self.assertEqual(response.json["abstractStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["abstractStatusStaff"], 2)
+        self.assertEqual(response.json["abstractStatusStaffID"], 2)
         self.assertEqual(response.json["sentToAbstractorDate"], "2016-02-03")
-        self.assertEqual(response.json["sentToAbstractorStaff"], 2)
+        self.assertEqual(response.json["sentToAbstractorStaffID"], 2)
         self.assertEqual(response.json["abstractedDate"], "2016-02-03")
         self.assertEqual(response.json["abstractorInitials"], "atp Updated")
         self.assertEqual(response.json["researcherDate"], "2016-02-03")
-        self.assertEqual(response.json["researcherStaff"], 2)
+        self.assertEqual(response.json["researcherStaffID"], 2)
         self.assertEqual(response.json["consentLink"], "link Updated")
-        self.assertEqual(response.json["tracingStatus"], 2)
         self.assertEqual(response.json["medRecordReleaseSigned"], False)
         self.assertEqual(response.json["medRecordReleaseLink"], "link Updated")
-        self.assertEqual(response.json["medRecordReleaseStaff"], 2)
+        self.assertEqual(response.json["medRecordReleaseStaffID"], 2)
         self.assertEqual(response.json["medRecordReleaseDate"], "2016-02-03")
         self.assertEqual(response.json["surveyToResearcher"], "2016-02-03")
-        self.assertEqual(response.json["surveyToResearcherStaff"], 2)
+        self.assertEqual(response.json["surveyToResearcherStaffID"], 2)
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_project_patient(self):
@@ -2631,9 +2624,6 @@ class TestProjectStaff(PopulatedDB):
         self.assertEqual(response.json["ProjectStaff"][0]["dateRevoked"], "2016-02-02")
         self.assertEqual(response.json["ProjectStaff"][0]["contact"], "yes")
         self.assertEqual(response.json["ProjectStaff"][0]["inactive"], "no")
-        self.assertEqual(response.json["ProjectStaff"][0]["humanSubjectTrainingExp"], "2016-02-02")
-        self.assertEqual(response.json["ProjectStaff"][0]["humanSubjectTrainingTypeID"], 1)
-        self.assertEqual(response.json["ProjectStaff"][0]["studyRole"], 1)
 
     def test_get_staff(self):
         response = self.client.get("/api/projectstaff/1/")
@@ -2645,9 +2635,6 @@ class TestProjectStaff(PopulatedDB):
         self.assertEqual(response.json["dateRevoked"], "2016-02-02")
         self.assertEqual(response.json["contact"], "yes")
         self.assertEqual(response.json["inactive"], "no")
-        self.assertEqual(response.json["humanSubjectTrainingExp"], "2016-02-02")
-        self.assertEqual(response.json["humanSubjectTrainingTypeID"], 1)
-        self.assertEqual(response.json["studyRole"], 1)
         
     def test_update_staff(self):
         response = self.client.put("/api/projectstaff/1/", data = {
@@ -2659,9 +2646,6 @@ class TestProjectStaff(PopulatedDB):
             "dateRevoked" : "2016-02-03",
             "contact" : "no",
             "inactive" : "yes",
-            "humanSubjectTrainingExp" : "2016-02-03",
-            "humanSubjectTrainingTypeID" : 2,
-            "studyRole" : 2,
             "versionID" : 1
         })
         self.assertEqual(response.json["staffRoleID"], 2)
@@ -2672,9 +2656,6 @@ class TestProjectStaff(PopulatedDB):
         self.assertEqual(response.json["dateRevoked"], "2016-02-03")
         self.assertEqual(response.json["contact"], "no")
         self.assertEqual(response.json["inactive"], "yes")
-        self.assertEqual(response.json["humanSubjectTrainingExp"], "2016-02-03")
-        self.assertEqual(response.json["humanSubjectTrainingTypeID"], 2)
-        self.assertEqual(response.json["studyRole"], 2)
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_staff(self):
@@ -2776,41 +2757,41 @@ class TestProjectType(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ProjectTypeID 2 deleted")
  
-class TestRCStatusList(PopulatedDB):
+class TestReviewCommitteeStatusLUT(PopulatedDB):
     def test_get_rcStatusList(self):
-        response = self.client.get("/api/rcstatuslist/")
-        self.assertEqual(response.json["RCStatusList"][0]["rcStatusID"], 1)
-        self.assertEqual(response.json["RCStatusList"][0]["rcStatus"], "Status 1")
-        self.assertEqual(response.json["RCStatusList"][0]["rcStatusDefinition"], "rc status def")
+        response = self.client.get("/api/reviewcommitteestatuses/")
+        self.assertEqual(response.json["ReviewCommitteeStatuses"][0]["reviewCommitteeStatusID"], 1)
+        self.assertEqual(response.json["ReviewCommitteeStatuses"][0]["reviewCommitteeStatus"], "Status 1")
+        self.assertEqual(response.json["ReviewCommitteeStatuses"][0]["reviewCommitteeStatusDefinition"], "rc status def")
         
     def test_get_rcStatus(self):
-        response = self.client.get("/api/rcstatuslist/1/")
-        self.assertEqual(response.json["rcStatusID"], 1)
-        self.assertEqual(response.json["rcStatus"], "Status 1")
-        self.assertEqual(response.json["rcStatusDefinition"], "rc status def")
+        response = self.client.get("/api/reviewcommitteestatuses/1/")
+        self.assertEqual(response.json["reviewCommitteeStatusID"], 1)
+        self.assertEqual(response.json["reviewCommitteeStatus"], "Status 1")
+        self.assertEqual(response.json["reviewCommitteeStatusDefinition"], "rc status def")
         
     def test_update_rcStatus(self):
-        response = self.client.put("/api/rcstatuslist/1/", data = {
-            "rcStatus" : "Status 1 Updated",
-            "rcStatusDefinition" : "rc status def Updated",
+        response = self.client.put("/api/reviewcommitteestatuses/1/", data = {
+            "reviewCommitteeStatus" : "Status 1 Updated",
+            "reviewCommitteeStatusDefinition" : "rc status def Updated",
             "versionID" : 1
         })
-        self.assertEqual(response.json["rcStatusID"], 1)
-        self.assertEqual(response.json["rcStatus"], "Status 1 Updated")
-        self.assertEqual(response.json["rcStatusDefinition"], "rc status def Updated")
+        self.assertEqual(response.json["reviewCommitteeStatusID"], 1)
+        self.assertEqual(response.json["reviewCommitteeStatus"], "Status 1 Updated")
+        self.assertEqual(response.json["reviewCommitteeStatusDefinition"], "rc status def Updated")
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_rcStatusList(self):
-        response = self.client.delete("/api/rcstatuslist/2/")
+        response = self.client.delete("/api/reviewcommitteestatuses/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "RCStatusListID 2 deleted")
+        self.assertEqual(response.json["Message"], "ReviewCommitteeStatusID 2 deleted")
                      
 class TestReviewCommittee(PopulatedDB):
     def test_get_review_committees(self):
         response = self.client.get("/api/reviewcommittees/")
         self.assertEqual(response.json['reviewCommittees'][0]["projectID"], 1)
-        self.assertEqual(response.json['reviewCommittees'][0]["rcStatusID"], 1)
-        self.assertEqual(response.json['reviewCommittees'][0]["rcListID"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["reviewCommitteeStatusID"], 1)
+        self.assertEqual(response.json['reviewCommittees'][0]["reviewCommitteeLUTID"], 1)
         self.assertEqual(response.json['reviewCommittees'][0]["reviewCommitteeNumber"], "1")
         self.assertEqual(response.json['reviewCommittees'][0]["dateInitialReview"], "2016-02-02")
         self.assertEqual(response.json['reviewCommittees'][0]["dateExpires"], "2016-02-02")
@@ -2821,8 +2802,8 @@ class TestReviewCommittee(PopulatedDB):
     def test_get_review_committee(self):
         response = self.client.get("/api/reviewcommittees/1/")
         self.assertEqual(response.json["projectID"], 1)
-        self.assertEqual(response.json["rcStatusID"], 1)
-        self.assertEqual(response.json["rcListID"], 1)
+        self.assertEqual(response.json["reviewCommitteeStatusID"], 1)
+        self.assertEqual(response.json["reviewCommitteeLUTID"], 1)
         self.assertEqual(response.json["reviewCommitteeNumber"], "1")
         self.assertEqual(response.json["dateInitialReview"], "2016-02-02")
         self.assertEqual(response.json["dateExpires"], "2016-02-02")
@@ -2833,8 +2814,8 @@ class TestReviewCommittee(PopulatedDB):
     def test_update_review_committee_list(self):
         response = self.client.put("/api/reviewcommittees/1/", data = {
             "projectID" : 2,
-            "rcStatusID": 2,
-            "rcListID": 2,
+            "reviewCommitteeStatusID": 2,
+            "reviewCommitteeLUTID": 2,
             "reviewCommitteeNumber":"2",
             "dateInitialReview":"2016-02-03",
             "dateExpires" : "2016-02-03",
@@ -2844,8 +2825,8 @@ class TestReviewCommittee(PopulatedDB):
             "versionID" : 1
         })
         self.assertEqual(response.json["projectID"], 2)
-        self.assertEqual(response.json["rcStatusID"], 2)
-        self.assertEqual(response.json["rcListID"], 2)
+        self.assertEqual(response.json["reviewCommitteeStatusID"], 2)
+        self.assertEqual(response.json["reviewCommitteeLUTID"], 2)
         self.assertEqual(response.json["reviewCommitteeNumber"], "2")
         self.assertEqual(response.json["dateInitialReview"], "2016-02-03")
         self.assertEqual(response.json["dateExpires"], "2016-02-03")
@@ -2859,31 +2840,31 @@ class TestReviewCommittee(PopulatedDB):
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "ReviewCommitteeID 1 deleted")
         
-class TestReviewCommitteeList(PopulatedDB):
+class TestReviewCommitteeLUT(PopulatedDB):
     def test_get_review_committee_lists(self):
         response = self.client.get("/api/reviewcommitteelist/")
-        self.assertEqual(response.json["reviewCommitteeList"][0]["reviewCommittee"], "rc 1")
-        self.assertEqual(response.json["reviewCommitteeList"][0]["rcDescription"], "rc desc 1")
+        self.assertEqual(response.json["ReviewCommitteeList"][0]["reviewCommittee"], "rc 1")
+        self.assertEqual(response.json["ReviewCommitteeList"][0]["reviewCommitteeDescription"], "rc desc 1")
         
     def test_get_review_committee_list(self):
         response = self.client.get("/api/reviewcommitteelist/1/")
         self.assertEqual(response.json["reviewCommittee"], "rc 1")
-        self.assertEqual(response.json["rcDescription"], "rc desc 1")
+        self.assertEqual(response.json["reviewCommitteeDescription"], "rc desc 1")
         
     def test_update_review_committee_list(self):
         response = self.client.put("/api/reviewcommitteelist/1/", data = {
             "reviewCommittee" : "rc Updated",
-            "rcDescription" : "rc desc Updated",
+            "reviewCommitteeDescription" : "rc desc Updated",
             "versionID" : 1
             })
         self.assertEqual(response.json["reviewCommittee"],"rc Updated")
-        self.assertEqual(response.json["rcDescription"],"rc desc Updated")
+        self.assertEqual(response.json["reviewCommitteeDescription"],"rc desc Updated")
         self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_review_committee_list(self):
         response = self.client.delete("/api/reviewcommitteelist/2/")
         self.assertEqual(response.json["Success"], True)
-        self.assertEqual(response.json["Message"], "RCListID 2 deleted")
+        self.assertEqual(response.json["Message"], "ReviewCommitteeID 2 deleted")
 
 class TestStaff(PopulatedDB):
     def test_get_staffs(self):

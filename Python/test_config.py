@@ -9,7 +9,7 @@ SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB_PyCharm\uc
 DATABASE_CONNECT_OPTIONS = {}
 
 PRESERVE_CONTEXT_ON_EXCEPTION = False
-SQLALCHEMY_ECHO=True
+SQLALCHEMY_ECHO=False
 
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle

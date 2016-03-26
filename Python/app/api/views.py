@@ -841,7 +841,7 @@ def update_arc_review(arcReviewID):
                     arcReview.research = request.form['research']
                     arcReview.contact = "true" == request.form['contact'].lower()
                     arcReview.contact = "true" == request.form['contact'].lower()
-                    arcReview.lnkage = "true" == request.form['lnkage'].lower()
+                    arcReview.linkage = "true" == request.form['linkage'].lower()
                     arcReview.engaged = "true" == request.form['engaged'].lower()
                     arcReview.nonPublicData = "true" == request.form['nonPublicData'].lower()
                     query.add(arcReview)
@@ -876,7 +876,7 @@ def create_arc_review():
                 reviewer2Comments = request.form['reviewer2Comments'],
                 research = request.form['research'],
                 contact = "true" == request.form['contact'].lower(),
-                lnkage = "true" == request.form['lnkage'].lower(),
+                linkage = "true" == request.form['linkage'].lower(),
                 engaged = "true" == request.form['engaged'].lower(),
                 nonPublicData = "true" == request.form['nonPublicData'].lower()
             )
@@ -1562,10 +1562,8 @@ def update_facility_phone(facilityPhoneID):
                     facilityPhone.facilityID = request.form['facilityID']
                     facilityPhone.contactInfoStatusID = request.form['contactInfoStatusID']
                     facilityPhone.clinicName = request.form['clinicName']
-                    facilityPhone.phoneType = request.form['phoneType']
+                    facilityPhone.phoneTypeID = request.form['phoneTypeID']
                     facilityPhone.phoneNumber = request.form['phoneNumber']
-                    facilityPhone.phoneSource = request.form['phoneSource']
-                    facilityPhone.phoneStatus = request.form['phoneStatus']
                     facilityPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return facilityPhone.json()
@@ -1589,8 +1587,7 @@ def create_facility_phone():
                 contactInfoStatusID = request.form['contactInfoStatusID'],
                 clinicName = request.form['clinicName'],
                 phoneNumber = request.form['phoneNumber'],
-                phoneSource = request.form['phoneSource'],
-                phoneStatus = request.form['phoneStatus'],
+                phoneTypeID = request.form['phoneTypeID'],
                 phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(facilityPhone)
@@ -1729,9 +1726,7 @@ def update_facility_address(facilityAddressID):
                     facilityAddress.city = request.form['city']
                     facilityAddress.state = request.form['state']
                     facilityAddress.zip = request.form['zip']
-                    facilityAddress.addressStatus = request.form['addressStatus']
                     facilityAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
-                    facilityAddress.addressStatusSource = request.form['addressStatusSource']
                     query.commit()
                 else:
                     return out_of_date_error()
@@ -1757,9 +1752,7 @@ def create_facility_address():
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                addressStatus = request.form['addressStatus'],
                 addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(facilityAddress)
             return jsonify({'facilityAddressID':facilityAddress.facilityAddressID})
@@ -1992,6 +1985,80 @@ def delete_human_subject_training(humanSubjectTrainingID):
         return internal_error(e)
 
 ##############################################################################
+# Incentive
+##############################################################################
+@api.route('/incentives/', methods = ['GET'])
+@api.route('/incentives/<int:incentiveID>/', methods = ['GET'])
+def get_incentive(incentiveID=None):
+    try:
+        if incentiveID is None:
+            return jsonify(Incentives = [i.dict() for i in query.get_incentives()])
+        else:
+            incentive = query.get_incentive(incentiveID)
+            if incentive is not None:
+                return incentive.json()
+            else:
+                return item_not_found("IncentiveID {} not found".format(incentiveID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/incentives/<int:incentiveID>/', methods = ['PUT'])
+def update_incentive(incentiveID):
+    try:
+        incentive = query.get_incentive(incentiveID)
+        if incentive is not None:
+            form = forms.IncentiveForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == incentive.versionID:
+                    incentive.projectPatientID = request.form["projectPatientID"]
+                    incentive.incentiveDescription = request.form['incentiveDescription']
+                    incentive.incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
+                    query.commit()
+                    return incentive.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("IncentiveID {} not found".format(incentiveID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/incentives/', methods=['POST'])
+def create_incentive():
+    try:
+        form = forms.IncentiveForm(request.form)
+        if form.validate():
+            incentive = models.Incentive(
+                projectPatientID = request.form['projectPatientID'],
+                incentiveDescription = request.form['incentiveDescription'],
+                incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
+            )
+            query.add(incentive)
+            return jsonify({'incentiveID':incentive.incentiveID})
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/incentives/<int:incentiveID>/', methods = ['DELETE'])
+def delete_incentive(incentiveID):
+    try:
+        incentive = query.get_incentive(incentiveID)
+        if incentive is not None:
+            deps = get_dependencies(incentive)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(incentive)
+                return item_deleted("IncentiveID {} deleted".format(incentiveID))
+        else:
+            return item_not_found("IncentiveID {} not found".format(incentiveID))
+    except Exception as e:
+        return internal_error(e)
+
+
+##############################################################################
 # Informant
 ##############################################################################
 @api.route('/informants/', methods=['GET'])
@@ -2106,9 +2173,7 @@ def update_informant_address(informantAddressID):
                     informantAddress.city = request.form['city']
                     informantAddress.state = request.form['state']
                     informantAddress.zip = request.form['zip']
-                    informantAddress.addressStatus = request.form['addressStatus']
                     informantAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
-                    informantAddress.addressStatusSource = request.form['addressStatusSource']
                     query.commit()
                     return informantAddress.json()
                 else:
@@ -2134,9 +2199,7 @@ def create_informant_address():
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                addressStatus = request.form['addressStatus'],
                 addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(informantAddress)
             return jsonify({'informantAddressID':informantAddress.informantAddressID})
@@ -2190,9 +2253,8 @@ def update_informant_phone(informantPhoneID):
                     informantPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                     informantPhone.informantID = request.form['informantID']
                     informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']
+                    informantPhone.phoneTypeID = request.form['phoneTypeID']
                     informantPhone.phoneNumber = request.form['phoneNumber']
-                    informantPhone.phoneSource = request.form['phoneSource']
-                    informantPhone.phoneStatus = request.form['phoneStatus']
                     informantPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return informantPhone.json()
@@ -2214,9 +2276,8 @@ def create_informant_phone():
                 contactInfoSourceID = request.form['contactInfoSourceID'],
                 informantID = request.form['informantID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
+                phoneTypeID = request.form['phoneTypeID'],
                 phoneNumber = request.form['phoneNumber'],
-                phoneSource = request.form['phoneSource'],
-                phoneStatus = request.form['phoneStatus'],
                 phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(informantPhone)
@@ -2595,9 +2656,7 @@ def update_patient_address(patAddressID):
                     patientAddress.city = request.form['city']
                     patientAddress.state = request.form['state']
                     patientAddress.zip = request.form['zip']
-                    patientAddress.addressStatus = request.form['addressStatus']
                     patientAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
-                    patientAddress.addressStatusSource = request.form['addressStatusSource']
                     query.commit()
                     return patientAddress.json()
                 else:
@@ -2623,9 +2682,7 @@ def create_patient_address():
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                addressStatus = request.form['addressStatus'],
                 addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(patientaddress)
             return jsonify({'patAddressID':patientaddress.patAddressID})
@@ -2680,8 +2737,6 @@ def update_patient_email(emailID):
                     patientEmail.patientID = request.form['patientID']
                     patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']
                     patientEmail.email = request.form['email']
-                    patientEmail.emailStatus = request.form['emailStatus']
-                    patientEmail.emailSource = request.form['emailSource']
                     patientEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return patientEmail.json()
@@ -2704,8 +2759,6 @@ def create_patient_email():
                 patientID = request.form['patientID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
                 email = request.form['email'],
-                emailStatus = request.form['emailStatus'],
-                emailSource = request.form['emailSource'],
                 emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                 )
             query.add(patientEmail)
@@ -2760,9 +2813,8 @@ def update_patient_phone(patPhoneID):
                     patientPhone.contactInfoSourceID = request.form['contactInfoSourceID']
                     patientPhone.patientID = request.form['patientID']
                     patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']
+                    patientPhone.phoneTypeID = request.form['phoneTypeID']
                     patientPhone.phoneNumber = request.form['phoneNumber']
-                    patientPhone.phoneSource = request.form['phoneSource']
-                    patientPhone.phoneStatus = request.form['phoneStatus']
                     patientPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return patientPhone.json()
@@ -2784,9 +2836,8 @@ def create_patient_phone():
                 contactInfoSourceID = request.form['contactInfoSourceID'],
                 patientID = request.form['patientID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
+                phoneTypeID = request.form['phoneTypeID'],
                 phoneNumber = request.form['phoneNumber'],
-                phoneSource = request.form['phoneSource'],
-                phoneStatus = request.form['phoneStatus'],
                 phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(patientPhone)
@@ -3023,6 +3074,76 @@ def delete_phase_status(logPhaseID):
     except Exception as e:
         return internal_error(e)
 
+#############################################################################
+# Phone Type
+#############################################################################
+@api.route('/phonetypes/', methods = ['GET'])
+@api.route('/phonetypes/<int:phoneTypeID>/', methods=['GET'])
+def get_phone_type(phoneTypeID = None):
+    try:
+        if phoneTypeID is None:
+            return jsonify(PhoneTypes = [i.dict() for i in query.get_phone_types()])
+        else:
+            phoneType = query.get_phone_type(phoneTypeID)
+            if phoneType is not None:
+                return phoneType.json()
+            else:
+                return item_not_found("PhoneTypeID {} not found".format(phoneTypeID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/phonetypes/<int:phoneTypeID>/',methods=['PUT'])
+def update_phone_type(phoneTypeID):
+    try:
+        phoneType = query.get_phone_type(phoneTypeID)
+        if phoneType is not None:
+            form = forms.PhoneTypeForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == phoneType.versionID:
+                    phoneType.phoneType = request.form['phoneType']
+                    query.commit()
+                    return phoneType.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PhoneTypeID {} not found".format(phoneTypeID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/phonetypes/', methods=['POST'])
+def create_phone_type():
+    try:
+        form = forms.PhoneTypeForm(request.form)
+        if form.validate():
+            phoneType = models.PhoneTypeLUT(
+                phoneType = request.form['phoneType']
+            )
+            query.add(phoneType)
+            return jsonify({"phoneTypeID": phoneType.phoneTypeID})
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/phonetypes/<int:phoneTypeID>/', methods=['DELETE'])
+def delete_phone_type(phoneTypeID):
+    try:
+        phoneType = query.get_phone_type(phoneTypeID)
+        if phoneType is not None:
+            deps = get_dependencies(phoneType)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(phoneType)
+                return item_deleted("PhoneTypeID {} deleted".format(phoneTypeID))
+        else:
+            return item_not_found("PhoneTypeID {} not found".format(phoneTypeID))
+    except Exception as e:
+        return internal_error(e)
+
+
 ##############################################################################
 # Physician
 ##############################################################################
@@ -3146,9 +3267,7 @@ def update_physician_address(physicianAddressID):
                     physicianAddress.city = request.form['city']
                     physicianAddress.state = request.form['state']
                     physicianAddress.zip = request.form['zip']
-                    physicianAddress.addressStatus = request.form['addressStatus']
                     physicianAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
-                    physicianAddress.addressStatusSource = request.form['addressStatusSource']
                     query.commit()
                     return physicianAddress.json()
                 else:
@@ -3174,9 +3293,7 @@ def create_physician_address():
                 city = request.form['city'],
                 state = request.form['state'],
                 zip = request.form['zip'],
-                addressStatus = request.form['addressStatus'],
                 addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                addressStatusSource = request.form['addressStatusSource']
                 )
             query.add(physicianAddress)
             return jsonify({'physicianAddressID':physicianAddress.physicianAddressID})
@@ -3306,9 +3423,7 @@ def update_physician_phone(physicianPhoneID):
                     physicianPhone.physicianID = request.form['physicianID']
                     physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']
                     physicianPhone.phoneNumber = request.form['phoneNumber']
-                    physicianPhone.phoneType = request.form['phoneType']
-                    physicianPhone.phoneSource = request.form['phoneSource']
-                    physicianPhone.phoneStatus = request.form['phoneStatus']
+                    physicianPhone.phoneTypeID = request.form['phoneTypeID']
                     physicianPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return physicianPhone.json()
@@ -3331,9 +3446,7 @@ def create_physician_phone():
                 physicianID = request.form['physicianID'],
                 contactInfoStatusID = request.form['contactInfoStatusID'],
                 phoneNumber = request.form['phoneNumber'],
-                phoneType = request.form['phoneType'],
-                phoneSource = request.form['phoneSource'],
-                phoneStatus = request.form['phoneStatus'],
+                phoneTypeID = request.form['phoneTypeID'],
                 phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                 )
             query.add(physicianPhone)
@@ -3581,7 +3694,7 @@ def update_project(projectID):
                 if int(request.form['versionID']) == proj.versionID:
                     proj.projectTypeID = request.form['projectTypeID']
                     proj.irbHolderID = request.form['irbHolderID']
-                    proj.projectName = request.form['projectName']
+                    proj.projectTitle = request.form['projectTitle']
                     proj.shortTitle = request.form['shortTitle']
                     proj.projectSummary = request.form['projectSummary']
                     proj.sop = request.form['sop']
@@ -3589,10 +3702,12 @@ def update_project(projectID):
                     proj.budgetDoc = request.form['budgetDoc']
                     proj.ucrFee = request.form['ucrFee']
                     proj.ucrNoFee = request.form['ucrNoFee']
-                    proj.budgetEndDate = datetime.strptime(request.form['budgetEndDate'],"%Y-%m-%d")
                     proj.previousShortTitle = request.form['previousShortTitle']
                     proj.dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d")
                     proj.finalRecruitmentReport = request.form['finalRecruitmentReport']
+                    proj.ongoingContact = "true" == request.form['ongoingContact'].lower()
+                    proj.activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
+                    proj.activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
                     query.commit()
                     return proj.json()
                 else:
@@ -3612,7 +3727,7 @@ def create_project():
             proj = models.Project(
                 projectTypeID = request.form['projectTypeID'],
                 irbHolderID = request.form['irbHolderID'],
-                projectName = request.form['projectName'],
+                projectTitle = request.form['projectTitle'],
                 shortTitle = request.form['shortTitle'],
                 projectSummary = request.form['projectSummary'],
                 sop = request.form['sop'],
@@ -3620,10 +3735,12 @@ def create_project():
                 budgetDoc = request.form['budgetDoc'],
                 ucrFee = request.form['ucrFee'],
                 ucrNoFee = request.form['ucrNoFee'],
-                budgetEndDate = datetime.strptime(request.form['budgetEndDate'],"%Y-%m-%d"),
                 previousShortTitle = request.form['previousShortTitle'],
                 dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d"),
-                finalRecruitmentReport = request.form['finalRecruitmentReport']
+                finalRecruitmentReport = request.form['finalRecruitmentReport'],
+                ongoingContact = "true" == request.form['ongoingContact'].lower(),
+                activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d"),
+                activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
                 )
             query.add(proj)
             return jsonify({'projectID':proj.projectID})
@@ -3685,26 +3802,26 @@ def update_project_patient(participantID):
                     projectPatient.enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d")
                     projectPatient.dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d")
                     projectPatient.importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d")
-                    projectPatient.finalCodeStaff = request.form['finalCodeStaff']
-                    projectPatient.enrollmentStaff = request.form['enrollmentStaff']
-                    projectPatient.dateCoordSignedStaff = datetime.strptime(request.form['dateCoordSignedStaff'],"%Y-%m-%d")
+                    projectPatient.finalCodeStaffID = request.form['finalCodeStaffID']
+                    projectPatient.enrollmentStaffID = request.form['enrollmentStaffID']
+                    projectPatient.dateCoordSignedStaffID = request.form['dateCoordSignedStaffID']
                     projectPatient.abstractStatus = request.form['abstractStatus']
                     projectPatient.abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d")
-                    projectPatient.abstractStatusStaff = request.form['abstractStatusStaff']
+                    projectPatient.abstractStatusStaffID = request.form['abstractStatusStaffID']
                     projectPatient.sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d")
-                    projectPatient.sentToAbstractorStaff = request.form['sentToAbstractorStaff']
+                    projectPatient.sentToAbstractorStaffID = request.form['sentToAbstractorStaffID']
                     projectPatient.abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d")
                     projectPatient.abstractorInitials = request.form['abstractorInitials']
                     projectPatient.researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d")
-                    projectPatient.researcherStaff = request.form['researcherStaff']
+                    projectPatient.researcherStaffID = request.form['researcherStaffID']
                     projectPatient.consentLink = request.form['consentLink']
                     projectPatient.tracingStatus = request.form['tracingStatus']
                     projectPatient.medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower()
                     projectPatient.medRecordReleaseLink = request.form['medRecordReleaseLink']
-                    projectPatient.medRecordReleaseStaff = request.form['medRecordReleaseStaff']
+                    projectPatient.medRecordReleaseStaffID = request.form['medRecordReleaseStaffID']
                     projectPatient.medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d")
                     projectPatient.surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d")
-                    projectPatient.surveyToResearcherStaff = request.form['surveyToResearcherStaff']
+                    projectPatient.surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
                     query.commit()
                     return projectPatient.json()
                 else:
@@ -3733,26 +3850,25 @@ def create_project_patient():
                 enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
                 dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
                 importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d"),
-                finalCodeStaff = request.form['finalCodeStaff'],
-                enrollmentStaff = request.form['enrollmentStaff'],
-                dateCoordSignedStaff = datetime.strptime(request.form['dateCoordSignedStaff'],"%Y-%m-%d"),
+                finalCodeStaffID = request.form['finalCodeStaffID'],
+                enrollmentStaffID = request.form['enrollmentStaffID'],
+                dateCoordSignedStaffID = request.form['dateCoordSignedStaffID'],
                 abstractStatus = request.form['abstractStatus'],
                 abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
-                abstractStatusStaff = request.form['abstractStatusStaff'],
+                abstractStatusStaffID = request.form['abstractStatusStaffID'],
                 sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
-                sentToAbstractorStaff = request.form['sentToAbstractorStaff'],
+                sentToAbstractorStaffID = request.form['sentToAbstractorStaffID'],
                 abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
                 abstractorInitials = request.form['abstractorInitials'],
                 researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
-                researcherStaff = request.form['researcherStaff'],
+                researcherStaffID = request.form['researcherStaffID'],
                 consentLink = request.form['consentLink'],
-                tracingStatus = request.form['tracingStatus'],
                 medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower(),
                 medRecordReleaseLink = request.form['medRecordReleaseLink'],
-                medRecordReleaseStaff = request.form['medRecordReleaseStaff'],
+                medRecordReleaseStaffID = request.form['medRecordReleaseStaffID'],
                 medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d"),
                 surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d"),
-                surveyToResearcherStaff = request.form['surveyToResearcherStaff']
+                surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
             )
             query.add(projectPatient)
             return jsonify({'participantID':projectPatient.participantID})
@@ -3811,9 +3927,6 @@ def update_project_staff(projectStaffID):
                     projectStaff.dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d")
                     projectStaff.contact = request.form['contact']
                     projectStaff.inactive = request.form['inactive']
-                    projectStaff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
-                    projectStaff.humanSubjectTrainingTypeID = request.form['humanSubjectTrainingTypeID']
-                    projectStaff.studyRole = request.form['studyRole']
                     query.commit()
                     return projectStaff.json()
                 else:
@@ -3839,9 +3952,6 @@ def create_project_staff():
                 dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d"),
                 contact = request.form['contact'],
                 inactive = request.form['inactive'],
-                humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
-                humanSubjectTrainingTypeID = request.form['humanSubjectTrainingTypeID'],
-                studyRole = request.form['studyRole']
             )
             query.add(projectStaff)
             return jsonify({'projectStaffID':projectStaff.projectStaffID})
@@ -4088,31 +4198,31 @@ def delete_project_type(projectTypeID):
 ##############################################################################
 # RCStatusList
 ##############################################################################
-@api.route('/rcstatuslist/', methods = ['GET'])
-@api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['GET'])
-def get_rc_status_list(rcStatusID=None):
+@api.route('/reviewcommitteestatuses/', methods = ['GET'])
+@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['GET'])
+def get_rc_status_list(reviewCommitteeStatusID=None):
     try:
-        if rcStatusID is None:
-            return jsonify(RCStatusList = [i.dict() for i in query.get_rc_statuses()])
+        if reviewCommitteeStatusID is None:
+            return jsonify(ReviewCommitteeStatuses = [i.dict() for i in query.get_review_committee_statuses()])
         else:
-            rcStatus = query.get_rc_status(rcStatusID)
+            rcStatus = query.get_review_committee_status(reviewCommitteeStatusID)
             if rcStatus is not None:
                 return rcStatus.json()
             else:
-                return item_not_found("RCStatusID {} not found".format(rcStatusID))
+                return item_not_found("ReviewCommitteeStatusID {} not found".format(reviewCommitteeStatusID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['PUT'])
-def update_rc_status_list(rcStatusID):
+@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['PUT'])
+def update_rc_status_list(reviewCommitteeStatusID):
     try:
-        rcStatus = query.get_rc_status(rcStatusID)
+        rcStatus = query.get_review_committee_status(reviewCommitteeStatusID)
         if rcStatus is not None:
-            form = forms.RCStatusListForm(request.form)
+            form = forms.ReviewCommitteeStatusLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == rcStatus.versionID:
-                    rcStatus.rcStatus = request.form['rcStatus']
-                    rcStatus.rcStatusDefinition = request.form['rcStatusDefinition']
+                    rcStatus.reviewCommitteeStatus = request.form['reviewCommitteeStatus']
+                    rcStatus.reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
                     query.commit()
                     return rcStatus.json()
                 else:
@@ -4120,39 +4230,39 @@ def update_rc_status_list(rcStatusID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("RCStatusListID {} not found".format(rcStatusID))
+            return item_not_found("ReviewCommitteeStatusID {} not found".format(reviewCommitteeStatusID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/rcstatuslist/', methods=['POST'])
+@api.route('/reviewcommitteestatuses/', methods=['POST'])
 def create_rc_status_list():
     try:
-        form = forms.RCStatusListForm(request.form)
+        form = forms.ReviewCommitteeStatusLUTForm(request.form)
         if form.validate():
-            rcStatus = models.RCStatusList(
-                rcStatus = request.form['rcStatus'],
-                rcStatusDefinition = request.form['rcStatusDefinition']
+            rcStatus = models.ReviewCommitteeStatusLUT(
+                reviewCommitteeStatus = request.form['reviewCommitteeStatus'],
+                reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
             )
             query.add(rcStatus)
-            return jsonify({'rcStatusListID':rcStatus.rcStatusID})
+            return jsonify({'reviewCommitteeStatusID':rcStatus.reviewCommitteeStatusID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/rcstatuslist/<int:rcStatusID>/', methods = ['DELETE'])
-def delete_rc_status_list(rcStatusID):
+@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['DELETE'])
+def delete_rc_status_list(reviewCommitteeStatusID):
     try:
-        rcStatusList = query.get_rc_status(rcStatusID)
+        rcStatusList = query.get_review_committee_status(reviewCommitteeStatusID)
         if rcStatusList is not None:
             deps = get_dependencies(rcStatusList)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(rcStatusList)
-                return item_deleted("RCStatusListID {} deleted".format(rcStatusID))
+                return item_deleted("ReviewCommitteeStatusID {} deleted".format(reviewCommitteeStatusID))
         else:
-            return item_not_found("RCStatusListID {} not found".format(rcStatusID))
+            return item_not_found("ReviewCommitteeStatusID {} not found".format(reviewCommitteeStatusID))
     except Exception as e:
         return internal_error(e)
 
@@ -4183,8 +4293,8 @@ def update_review_committee(reviewCommitteeID):
             if form.validate():
                 if int(request.form['versionID']) == rc.versionID:
                     rc.projectID = request.form['projectID']
-                    rc.rcStatusID = request.form['rcStatusID']
-                    rc.rcListID = request.form['rcListID']
+                    rc.reviewCommitteeStatusID = request.form['reviewCommitteeStatusID']
+                    rc.reviewCommitteeLUTID = request.form['reviewCommitteeLUTID']
                     rc.reviewCommitteeNumber = request.form['reviewCommitteeNumber']
                     rc.dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d")
                     rc.dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
@@ -4209,8 +4319,8 @@ def create_review_committee():
         if form.validate():
             rc = models.ReviewCommittee(
                 projectID = request.form['projectID'],
-                rcStatusID = request.form['rcStatusID'],
-                rcListID = request.form['rcListID'],
+                reviewCommitteeStatusID = request.form['reviewCommitteeStatusID'],
+                reviewCommitteeLUTID = request.form['reviewCommitteeLUTID'],
                 reviewCommitteeNumber = request.form['reviewCommitteeNumber'],
                 dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d"),
                 dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d"),
@@ -4245,30 +4355,30 @@ def delete_review_committee(reviewCommitteeID):
 # Review CommitteeList
 ##############################################################################
 @api.route('/reviewcommitteelist/', methods = ['GET'])
-@api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['GET'])
-def get_review_committee_list(rcListID=None):
+@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['GET'])
+def get_review_committee_list(reviewCommitteeID=None):
     try:
-        if rcListID is None:
-            return jsonify(reviewCommitteeList = [i.dict() for i in query.get_review_committee_lists()])
+        if reviewCommitteeID is None:
+            return jsonify(ReviewCommitteeList = [i.dict() for i in query.get_review_committee_luts()])
         else:
-            review_committee_list = query.get_review_committee_list(rcListID)
+            review_committee_list = query.get_review_committee_lut(reviewCommitteeID)
             if review_committee_list is not None:
                 return review_committee_list.json()
             else:
-                return item_not_found("RCListID {} not found".format(rcListID))
+                return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteelist/<int:rcListID>/',methods = ['PUT'])
-def update_review_committee_list(rcListID):
+@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/',methods = ['PUT'])
+def update_review_committee_list(reviewCommitteeID):
     try:
-        rcList = query.get_review_committee_list(rcListID)
+        rcList = query.get_review_committee_lut(reviewCommitteeID)
         if rcList is not None:
-            form = forms.ReviewCommitteeListForm(request.form)
+            form = forms.ReviewCommitteeLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == rcList.versionID:
                     rcList.reviewCommittee = request.form['reviewCommittee']
-                    rcList.rcDescription = request.form['rcDescription']
+                    rcList.reviewCommitteeDescription = request.form['reviewCommitteeDescription']
                     query.commit()
                     return rcList.json()
                 else:
@@ -4276,39 +4386,39 @@ def update_review_committee_list(rcListID):
             else:
                 return missing_params(form.errors)
         else:
-            return item_not_found("RCListID {} not found".format(rcListID))
+            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
         return internal_error(e)
 
 @api.route('/reviewcommitteelist/',methods = ['POST'])
 def create_review_committee_list():
     try:
-        form = forms.ReviewCommitteeListForm(request.form)
+        form = forms.ReviewCommitteeLUTForm(request.form)
         if form.validate():
-            reviewCommitteeList = models.ReviewCommitteeList(
+            reviewCommitteeList = models.ReviewCommitteeLUT(
                 reviewCommittee = request.form['reviewCommittee'],
-                rcDescription = request.form['rcDescription']
+                reviewCommitteeDescription = request.form['reviewCommitteeDescription']
                 )
             query.add(reviewCommitteeList)
-            return jsonify({'rcListID':reviewCommitteeList.rcListID})
+            return jsonify({'reviewCommitteeID':reviewCommitteeList.reviewCommitteeID})
         else:
             return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteelist/<int:rcListID>/', methods = ['DELETE'])
-def delete_review_committee_list(rcListID):
+@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['DELETE'])
+def delete_review_committee_list(reviewCommitteeID):
     try:
-        reviewCommittee = query.get_rc_status(rcListID)
+        reviewCommittee = query.get_review_committee_lut(reviewCommitteeID)
         if reviewCommittee is not None:
             deps = get_dependencies(reviewCommittee)
             if deps:
                 return dependency_detected(deps)
             else:
                 query.delete(reviewCommittee)
-                return item_deleted("RCListID {} deleted".format(rcListID))
+                return item_deleted("ReviewCommitteeID {} deleted".format(reviewCommitteeID))
         else:
-            return item_not_found("RCListID {} not found".format(rcListID))
+            return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
         return internal_error(e)
 
