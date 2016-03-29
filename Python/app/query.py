@@ -205,6 +205,12 @@ def get_physician_addresses():
 def get_physician_address(id):
     return db.session.query(PhysicianAddress).filter_by(physicianAddressID = id).first()
 
+def get_physician_emails():
+    return db.session.query(PhysicianEmail).all()
+
+def get_physician_email(id):
+    return db.session.query(PhysicianEmail).filter_by(physicianEmailID = id).first()
+
 def get_physician_facilities():
     return db.session.query(PhysicianFacility).all()
     

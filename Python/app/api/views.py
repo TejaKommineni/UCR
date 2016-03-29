@@ -16,735 +16,742 @@ api = Blueprint('api',__name__,template_folder='templates')
 #
 # A test endpoint that adds some junk to test with
 ##############################################################################
-def populate_db2():
-    query.create_all()
-    irb_holder1 = models.IRBHolderLUT(
-        holder = "holder 1",
-        holderDefinition= "IRB 1")
+def populate_db2(self):
 
-    irb_holder2 = models.IRBHolderLUT(
-        holder = "holder 2",
-        holderDefinition= "IRB 2")
+        phoneType1 = models.PhoneTypeLUT(
+            phoneType = "cell"
+        )
+        phoneType2 = models.PhoneTypeLUT(
+            phoneType = "home"
+        )
 
-    project_type1 = models.ProjectType(
-        projectType = "Type 1",
-        projectTypeDefinition = "Def 1")
+        irb_holder1 = models.IRBHolderLUT(
+            holder = "holder 1",
+            holderDefinition= "IRB 1")
 
-    project_type2 = models.ProjectType(
-        projectType = "Type 2",
-        projectTypeDefinition = "Def 2")
+        irb_holder2 = models.IRBHolderLUT(
+            holder = "holder 2",
+            holderDefinition= "IRB 2")
 
-    project1 = models.Project(
-        projectTypeID = 1,
-        irbHolderID = 1,
-        projectName = "Test Project",
-        shortTitle = "Test Project",
-        projectSummary = "Summary",
-        sop="sop",
-        ucrProposal="ucr_proposal",
-        budgetDoc = "budget_doc",
-        ucrFee = "no",
-        ucrNoFee = "yes",
-        budgetEndDate = datetime(2016,2,2),
-        previousShortTitle = "t short",
-        dateAdded = datetime(2016,2,2),
-        finalRecruitmentReport = "report")
+        project_type1 = models.ProjectType(
+            projectType = "Type 1",
+            projectTypeDefinition = "Def 1")
 
-    project2 = models.Project(
-        projectTypeID = 1,
-        irbHolderID = 1,
-        projectName = "Test Project",
-        shortTitle = "Test Project",
-        projectSummary = "Summary",
-        sop="sop",
-        ucrProposal="ucr_proposal",
-        budgetDoc = "budget_doc",
-        ucrFee = "no",
-        ucrNoFee = "yes",
-        budgetEndDate = datetime(2016,2,2),
-        previousShortTitle = "t short",
-        dateAdded = datetime(2016,2,2),
-        finalRecruitmentReport = "report")
+        project_type2 = models.ProjectType(
+            projectType = "Type 2",
+            projectTypeDefinition = "Def 2")
 
-    budget1 = models.Budget(
-        projectID = 1,
-        numPeriods = 1,
-        periodStart = datetime(2016,2,2),
-        periodEnd = datetime(2016,2,2),
-        periodTotal = 1.23,
-        periodComment = "comment")
+        project1 = models.Project(
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectTitle = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
+            sop="sop",
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report",
+            ongoingContact = True,
+            activityStartDate = datetime(2016,2,2),
+            activityEndDate = datetime(2016,2,2))
 
-    rcsl = models.RCStatusList(
-        rcStatus = "Status 1",
-        rcStatusDefinition = "rc status def")
+        project2 = models.Project(
+            projectTypeID = 1,
+            irbHolderID = 1,
+            projectTitle = "Test Project",
+            shortTitle = "Test Project",
+            projectSummary = "Summary",
+            sop="sop",
+            ucrProposal="ucr_proposal",
+            budgetDoc = "budget_doc",
+            ucrFee = "no",
+            ucrNoFee = "yes",
+            previousShortTitle = "t short",
+            dateAdded = datetime(2016,2,2),
+            finalRecruitmentReport = "report",
+            ongoingContact = True,
+            activityStartDate = datetime(2016,2,2),
+            activityEndDate = datetime(2016,2,2))
 
-    rcs2 = models.RCStatusList(
-        rcStatus = "Status 2",
-        rcStatusDefinition = "rc status def 2")
+        budget1 = models.Budget(
+            projectID = 1,
+            numPeriods = 1,
+            periodStart = datetime(2016,2,2),
+            periodEnd = datetime(2016,2,2),
+            periodTotal = 1.23,
+            periodComment = "comment")
 
-    rcl1 = models.ReviewCommitteeList(
-        reviewCommittee = "rc 1",
-        rcDescription = "rc desc 1")
+        rcsl = models.ReviewCommitteeStatusLUT(
+            reviewCommitteeStatus = "Status 1",
+            reviewCommitteeStatusDefinition = "rc status def")
 
-    rcl2 = models.ReviewCommitteeList(
-        reviewCommittee = "rc 2",
-        rcDescription = "rc des 2c")
+        rcs2 = models.ReviewCommitteeStatusLUT(
+            reviewCommitteeStatus = "Status 2",
+            reviewCommitteeStatusDefinition = "rc status def 2")
 
-    rc = models.ReviewCommittee(
-        projectID=1,
-        rcStatusID=1,
-        rcListID=1,
-        reviewCommitteeNumber="1",
-        dateInitialReview=datetime(2016,2,2),
-        dateExpires = datetime(2016,2,2),
-        rcNote = "rc_note",
-        rcProtocol = "rc_proto",
-        rcApproval="rc_approval")
+        rcl1 = models.ReviewCommitteeLUT(
+            reviewCommittee = "rc 1",
+            reviewCommitteeDescription = "rc desc 1")
 
-    ucr = models.UCRReport(
-        projectID = 1,
-        reportType= 1,
-        reportSubmitted= datetime(2016,2,2),
-        reportDue= datetime(2016,2,2),
-        reportDoc= "doc"
-    )
-    arcReview = models.ArcReview(
-        projectID = 1,
-        reviewType = 1,
-        dateSentToReviewer = datetime(2016,2,2),
-        reviewer1 = 1,
-        reviewer1Rec = 1,            reviewer1SigDate = datetime(2016,2,2),
-        reviewer1Comments = "test comment",
-        reviewer2 = 2,
-        reviewer2Rec  =2 ,
-        reviewer2SigDate = datetime(2016,2,2),
-        reviewer2Comments = "test comment",
-        research = 1,
-        lnkage=False,
-        contact = True,
-        engaged = True,
-        nonPublicData = True)
+        rcl2 = models.ReviewCommitteeLUT(
+            reviewCommittee = "rc 2",
+            reviewCommitteeDescription = "rc des 2c")
 
-    grantStatus1 = models.GrantStatusLUT(
-        grantStatus = "status"
-    )
+        rc = models.ReviewCommittee(
+            projectID=1,
+            reviewCommitteeStatusID=1,
+            reviewCommitteeLUTID=1,
+            reviewCommitteeNumber="1",
+            dateInitialReview=datetime(2016,2,2),
+            dateExpires = datetime(2016,2,2),
+            rcNote = "rc_note",
+            rcProtocol = "rc_proto",
+            rcApproval="rc_approval")
 
-    fundingSource1 = models.FundingSourceLUT(
-        fundingSource = "source"
-    )
+        ucr = models.UCRReport(
+            projectID = 1,
+            reportType= 1,
+            reportSubmitted= datetime(2016,2,2),
+            reportDue= datetime(2016,2,2),
+            reportDoc= "doc"
+        )
+        arcReview = models.ArcReview(
+            projectID = 1,
+            reviewType = 1,
+            dateSentToReviewer = datetime(2016,2,2),
+            reviewer1 = 1,
+            reviewer1Rec = 1,
+            reviewer1SigDate = datetime(2016,2,2),
+            reviewer1Comments = "test comment",
+            reviewer2 = 2,
+            reviewer2Rec  =2 ,
+            reviewer2SigDate = datetime(2016,2,2),
+            reviewer2Comments = "test comment",
+            research = 1,
+            linkage=False,
+            contact = True,
+            engaged = True,
+            nonPublicData = True)
 
-    grantStatus2 = models.GrantStatusLUT(
-        grantStatus = "status2"
-    )
+        grantStatus1 = models.GrantStatusLUT(
+            grantStatus = "status"
+        )
 
-    fundingSource2 = models.FundingSourceLUT(
-        fundingSource = "source2"
-    )
+        fundingSource1 = models.FundingSourceLUT(
+            fundingSource = "source"
+        )
 
-    funding = models.Funding(
-        grantStatusID = 1,
-        projectID = 1,
-        fundingSourceID = 1,
-        primaryFundingSource = "pfs",
-        secondaryFundingSource = "sfs",
-        fundingNumber = "number",
-        grantTitle = "title",
-        dateStatus = datetime(2016,2,2),
-        grantPi = 1,
-        primaryChartfield = "pcf",
-        secondaryChartfield = "scf"
-    )
+        grantStatus2 = models.GrantStatusLUT(
+            grantStatus = "status2"
+        )
 
-    staff = models.Staff(
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        email = "email",
-        phoneNumber = "phone",
-        phoneComment = "phoneComment",
-        institution = "institution",
-        department = "department",
-        position = "position",
-        credentials = "credentials",
-        street = "street",
-        city = "city",
-        state = "state",
-        humanSubjectTrainingExp = datetime(2016,2,2),
-        ucrRole = 1
-    )
-    staff2 = models.Staff(
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        email = "email",
-        phoneNumber = "phone",
-        phoneComment = "phoneComment",
-        institution = "institution",
-        department = "department",
-        position = "position",
-        credentials = "credentials",
-        street = "street",
-        city = "city",
-        state = "state",
-        humanSubjectTrainingExp = datetime(2016,2,2),
-        ucrRole = 1
-    )
+        fundingSource2 = models.FundingSourceLUT(
+            fundingSource = "source2"
+        )
 
-    projStatusType1 = models.ProjectStatusLUT(
-        projectStatus = "Status 1",
-        projectStatusDefinition = "status def"
-    )
-    projStatusType2 = models.ProjectStatusLUT(
-        projectStatus = "Status 2",
-        projectStatusDefinition = "status def 2"
-    )
+        funding = models.Funding(
+            grantStatusID = 1,
+            projectID = 1,
+            fundingSourceID = 1,
+            primaryFundingSource = "pfs",
+            secondaryFundingSource = "sfs",
+            fundingNumber = "number",
+            grantTitle = "title",
+            dateStatus = datetime(2016,2,2),
+            grantPi = 1,
+            primaryChartfield = "pcf",
+            secondaryChartfield = "scf"
+        )
 
-    projStatus = models.ProjectStatus(
-        projectStatusTypeID = 1,
-        projectID = 1,
-        staffID = 1,
-        statusDate = datetime(2016,2,2),
-        statusNotes = "notes"
-    )
+        staff = models.Staff(
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            email = "email",
+            phoneNumber = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
+        )
+        staff2 = models.Staff(
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            email = "email",
+            phoneNumber = "phone",
+            phoneComment = "phoneComment",
+            institution = "institution",
+            department = "department",
+            position = "position",
+            credentials = "credentials",
+            street = "street",
+            city = "city",
+            state = "state",
+            humanSubjectTrainingExp = datetime(2016,2,2),
+            ucrRole = 1
+        )
 
-    preApp = models.PreApplication(
-        projectID = 1,
-        piFirstName = "pi_fname",
-        piLastName = "pi_lname",
-        piEmail = "pi_email",
-        piPhone = "pi_phone",
-        contactFirstName = "contact_fname",
-        contactLastName = "contact_lname",
-        contactPhone = "contact_phone",
-        contactEmail = "contact_email",
-        institution = "institution",
-        institution2 = "institution2",
-        uid = "uid",
-        udoh = 1,
-        projectTitle = "project_title",
-        purpose = "purpose",
-        irb0 = True,
-        irb1 = True,
-        irb2 = True,
-        irb3 = True,
-        irb4 = True,
-        otherIrb = "other_irb",
-        updb = True,
-        ptContact = True,
-        startDate = datetime(2016,2,2),
-        link = True,
-        deliveryDate = datetime(2016,2,2),
-        description = "description"
-    )
+        projStatusType1 = models.ProjectStatusLUT(
+            projectStatus = "Status 1",
+            projectStatusDefinition = "status def"
+        )
+        projStatusType2 = models.ProjectStatusLUT(
+            projectStatus = "Status 2",
+            projectStatusDefinition = "status def 2"
+        )
 
-    phaseStatus1 = models.PhaseStatus(
-        phaseStatus = "status",
-        phaseDescription = "desc"
-    )
+        projStatus = models.ProjectStatus(
+            projectStatusTypeID = 1,
+            projectID = 1,
+            staffID = 1,
+            statusDate = datetime(2016,2,2),
+            statusNotes = "notes"
+        )
 
-    phaseStatus2 = models.PhaseStatus(
-        phaseStatus = "status",
-        phaseDescription = "desc"
-    )
-    logSubject1 = models.LogSubjectLUT(
-        logSubject = "subject"
-    )
-    logSubject2 = models.LogSubjectLUT(
-        logSubject = "subject"
-    )
-    log = models.Log(
-        logSubjectID = 1,
-        projectID = 1,
-        staffID = 1,
-        phaseStatusID = 1,
-        note = "note",
-        date = datetime(2016,2,2)
-    )
-    projectStaff = models.ProjectStaff(
-        staffRoleID = 1,
-        projectID = 1,
-        staffID = 1,
-        role = 1,
-        datePledge = datetime(2016,2,2),
-        dateRevoked = datetime(2016,2,2),
-        contact = "yes",
-        inactive = "no",
-        humanSubjectTrainingExp = datetime(2016,2,2),
-        humanSubjectTrainingTypeID = 1,
-        studyRole = 1
-    )
-    staffRole1 = models.StaffRoleLUT(
-        staffRole = "role",
-        staffRoleDescription = "desc"
-    )
-    staffRole2 = models.StaffRoleLUT(
-        staffRole = "role",
-        staffRoleDescription = "desc"
-    )
-    staffTraining = models.StaffTraining(
-        staffID = 1,
-        humanSubjectTrainingID = 1,
-        dateTaken = datetime(2016,2,2),
-        dateExpires = datetime(2016,2,2)
-    )
-    humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
-        trainingType = "type"
-    )
-    humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
-        trainingType = "type"
-    )
-    patient = models.Patient(
-        patID = "1",
-        recordID = 1,
-        ucrDistID = 1,
-        UPDBID = 1,
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "mname",
-        maidenName = "maiden_name",
-        aliasFirstName = "alias_fname",
-        aliasLastName = "alias_lname",
-        aliasMiddleName = "alias_middle",
-        dob = datetime(2016,2,2),
-        SSN = "999999999",
-        sex = "male",
-        race = "white",
-        ethnicity = "hispanic",
-        vitalStatus = "v1"
-    )
-    patient2 = models.Patient(
-        patID = "1",
-        recordID = 1,
-        ucrDistID = 1,
-        UPDBID = 1,
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "mname",
-        maidenName = "maiden_name",
-        aliasFirstName = "alias_fname",
-        aliasLastName = "alias_lname",
-        aliasMiddleName = "alias_middle",
-        dob = datetime(2016,2,2),
-        SSN = "999999999",
-        sex = "male",
-        race = "white",
-        ethnicity = "hispanic",
-        vitalStatus = "v1"
-    )
+        preApp = models.PreApplication(
+            projectID = 1,
+            piFirstName = "pi_fname",
+            piLastName = "pi_lname",
+            piEmail = "pi_email",
+            piPhone = "pi_phone",
+            contactFirstName = "contact_fname",
+            contactLastName = "contact_lname",
+            contactPhone = "contact_phone",
+            contactEmail = "contact_email",
+            institution = "institution",
+            institution2 = "institution2",
+            uid = "uid",
+            udoh = 1,
+            projectTitle = "project_title",
+            purpose = "purpose",
+            irb0 = True,
+            irb1 = True,
+            irb2 = True,
+            irb3 = True,
+            irb4 = True,
+            otherIrb = "other_irb",
+            updb = True,
+            ptContact = True,
+            startDate = datetime(2016,2,2),
+            link = True,
+            deliveryDate = datetime(2016,2,2),
+            description = "description"
+        )
 
-    contactInfoStatus1 = models.ContactInfoStatusLUT(
-        contactInfoStatus = "status"
-    )
+        phaseStatus1 = models.PhaseStatus(
+            phaseStatus = "status",
+            phaseDescription = "desc"
+        )
 
-    contactInfoSource1 = models.ContactInfoSourceLUT(
-        contactInfoSource = "source"
-    )
-    contactInfoStatus2 = models.ContactInfoStatusLUT(
-        contactInfoStatus = "status"
-    )
+        phaseStatus2 = models.PhaseStatus(
+            phaseStatus = "status",
+            phaseDescription = "desc"
+        )
+        logSubject1 = models.LogSubjectLUT(
+            logSubject = "subject"
+        )
+        logSubject2 = models.LogSubjectLUT(
+            logSubject = "subject"
+        )
+        log = models.Log(
+            logSubjectID = 1,
+            projectID = 1,
+            staffID = 1,
+            phaseStatusID = 1,
+            note = "note",
+            date = datetime(2016,2,2)
+        )
+        projectStaff = models.ProjectStaff(
+            staffRoleID = 1,
+            projectID = 1,
+            staffID = 1,
+            role = 1,
+            datePledge = datetime(2016,2,2),
+            dateRevoked = datetime(2016,2,2),
+            contact = "yes",
+            inactive = "no"
+        )
+        staffRole1 = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+        staffRole2 = models.StaffRoleLUT(
+            staffRole = "role",
+            staffRoleDescription = "desc"
+        )
+        staffTraining = models.StaffTraining(
+            staffID = 1,
+            humanSubjectTrainingID = 1,
+            dateTaken = datetime(2016,2,2),
+            dateExpires = datetime(2016,2,2)
+        )
+        humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
+            trainingType = "type"
+        )
+        humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
+            trainingType = "type"
+        )
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vitalStatus = "v1"
+        )
+        patient2 = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vitalStatus = "v1"
+        )
 
-    contactInfoSource2 = models.ContactInfoSourceLUT(
-        contactInfoSource = "source"
-    )
+        contactInfoStatus1 = models.ContactInfoStatusLUT(
+            contactInfoStatus = "status"
+        )
 
-    patientAddress = models.PatientAddress(
-        contactInfoSourceID = 1,
-        patientID = 1,
-        contactInfoStatusID = 1,
-        street = "street",
-        street2 = "street2",
-        city = "city",
-        state = "state",
-        zip = "zip",
-        addressStatus = 1,
-        addressStatusDate = datetime(2016,2,2),
-        addressStatusSource = "s1"
-    )
+        contactInfoSource1 = models.ContactInfoSourceLUT(
+            contactInfoSource = "source"
+        )
+        contactInfoStatus2 = models.ContactInfoStatusLUT(
+            contactInfoStatus = "status"
+        )
 
-    patientEmail = models.PatientEmail(
-        contactInfoSourceID = 1,
-        patientID = 1,
-        contactInfoStatusID = 1,
-        email = "email",
-        emailStatus = 1,
-        emailSource = 1,
-        emailStatusDate = datetime(2016,2,2)
-    )
-    patientPhone = models.PatientPhone(
-        contactInfoSourceID = 1,
-        patientID = 1,
-        contactInfoStatusID = 1,
-        phoneNumber = "phone",
-        phoneStatus = 1,
-        phoneSource = "s1",
-        phoneStatusDate = datetime(2016,2,2)
-    )
-    informant1 = models.Informant(
-        patientID = 1,
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        informantPrimary = "informant_primary",
-        informantRelationship = "informant_relationship",
-        notes = "notes"
-    )
-    informant2 = models.Informant(
-        patientID = 1,
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        informantPrimary = "informant_primary",
-        informantRelationship = "informant_relationship",
-        notes = "notes"
-    )
-    informantAddress = models.InformantAddress(
-        contactInfoSourceID = 1,
-        informantID = 1,
-        contactInfoStatusID = 1,
-        street = "street",
-        street2 = "street2",
-        city = "city",
-        state = "state",
-        zip = "zip",
-        addressStatus = 1,
-        addressStatusDate = datetime(2016,2,2),
-        addressStatusSource = "s1"
-    )
-    informantPhone = models.InformantPhone(
-        contactInfoSourceID = 1,
-        informantID = 1,
-        contactInfoStatusID = 1,
-        phoneNumber = "phone",
-        phoneStatus = 1,
-        phoneSource = "s1",
-        phoneStatusDate = datetime(2016,2,2)
-    )
-    ctc1 = models.CTC(
-        patientID = 1,
-        dxDate = datetime(2016,2,2),
-        site = 1,
-        histology = "histology",
-        behavior = "behavior",
-        ctcSequence = "sequence",
-        stage = "stage",
-        dxAge = 1,
-        dxStreet1 = "street1",
-        dxStreet2 = "street2",
-        dxCity = "city",
-        dxState = "state",
-        dxZip = 99999,
-        dxCounty = "county",
-        dnc = "dnc",
-        dncReason = "dnc_reason"
-    )
-    ctc2 = models.CTC(
-        patientID = 1,
-        dxDate = datetime(2016,2,2),
-        site = 1,
-        histology = "histology",
-        behavior = "behavior",
-        ctcSequence = "sequence",
-        stage = "stage",
-        dxAge = 1,
-        dxStreet1 = "street1",
-        dxStreet2 = "street2",
-        dxCity = "city",
-        dxState = "state",
-        dxZip = 99999,
-        dxCounty = "county",
-        dnc = "dnc",
-        dncReason = "dnc_reason"
-    )
-    projectPatient = models.ProjectPatient(
-        projectID = 1,
-        staffID = 1,
-        ctcID = 1,
-        currentAge = 1,
-        batch = 1,
-        siteGrp = 1,
-        finalCode = 1,
-        finalCodeDate = datetime(2016,2,2),
-        enrollmentDate = datetime(2016,2,2),
-        dateCoordSigned = datetime(2016,2,2),
-        importDate = datetime(2016,2,2),
-        finalCodeStaff = 1,
-        enrollmentStaff = 1,
-        dateCoordSignedStaff = datetime(2016,2,2),
-        abstractStatus = 1,
-        abstractStatusDate = datetime(2016,2,2),
-        abstractStatusStaff = 1,
-        sentToAbstractorDate = datetime(2016,2,2),
-        sentToAbstractorStaff = 1,
-        abstractedDate = datetime(2016,2,2),
-        abstractorInitials = "atp",
-        researcherDate = datetime(2016,2,2),
-        researcherStaff = 1,
-        consentLink = "link",
-        tracingStatus = 1,
-        medRecordReleaseSigned = True,
-        medRecordReleaseLink = "link",
-        medRecordReleaseStaff = 1,
-        medRecordReleaseDate = datetime(2016,2,2),
-        surveyToResearcher = datetime(2016,2,2),
-        surveyToResearcherStaff = 1
-    )
+        contactInfoSource2 = models.ContactInfoSourceLUT(
+            contactInfoSource = "source"
+        )
 
-    projectPatient2 = models.ProjectPatient(
-        projectID = 1,
-        staffID = 1,
-        ctcID = 1,
-        currentAge = 1,
-        batch = 1,
-        siteGrp = 1,
-        finalCode = 1,
-        finalCodeDate = datetime(2016,2,2),
-        enrollmentDate = datetime(2016,2,2),
-        dateCoordSigned = datetime(2016,2,2),
-        importDate = datetime(2016,2,2),
-        finalCodeStaff = 1,
-        enrollmentStaff = 1,
-        dateCoordSignedStaff = datetime(2016,2,2),
-        abstractStatus = 1,
-        abstractStatusDate = datetime(2016,2,2),
-        abstractStatusStaff = 1,
-        sentToAbstractorDate = datetime(2016,2,2),
-        sentToAbstractorStaff = 1,
-        abstractedDate = datetime(2016,2,2),
-        abstractorInitials = "atp",
-        researcherDate = datetime(2016,2,2),
-        researcherStaff = 1,
-        consentLink = "link",
-        tracingStatus = 1,
-        medRecordReleaseSigned = True,
-        medRecordReleaseLink = "link",
-        medRecordReleaseStaff = 1,
-        medRecordReleaseDate = datetime(2016,2,2),
-        surveyToResearcher = datetime(2016,2,2),
-        surveyToResearcherStaff = 1)
+        patientAddress = models.PatientAddress(
+            contactInfoSourceID = 1,
+            patientID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            addressStatusDate = datetime(2016,2,2),
+        )
 
-    tracingSource1 = models.TracingSourceLUT(
-        description = "desc"
-    )
-    tracingSource2 = models.TracingSourceLUT(
-        description = "desc"
-    )
-    tracing = models.Tracing(
-        tracingSourceID = 1,
-        projectPatientID = 1,
-        date = datetime(2016,2,2),
-        staff = 1,
-        notes = "notes"
-    )
-    physician = models.Physician(
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        credentials = "credentials",
-        specialty = "specialty",
-        aliasFirstName = "alias_fname",
-        aliasLastName = "alias_lname",
-        aliasMiddleName = "alias_middle_name",
-        physicianStatus = 1,
-        physicianStatusDate = datetime(2016,2,2),
-        email = "email"
-    )
+        patientEmail = models.PatientEmail(
+            contactInfoSourceID = 1,
+            patientID = 1,
+            contactInfoStatusID = 1,
+            email = "email",
+            emailStatusDate = datetime(2016,2,2)
+        )
+        patientPhone = models.PatientPhone(
+            contactInfoSourceID = 1,
+            patientID = 1,
+            contactInfoStatusID = 1,
+            phoneTypeID = 1,
+            phoneNumber = "phone",
+            phoneStatusDate = datetime(2016,2,2)
+        )
+        informant1 = models.Informant(
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
+            notes = "notes"
+        )
+        informant2 = models.Informant(
+            patientID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            informantPrimary = "informant_primary",
+            informantRelationship = "informant_relationship",
+            notes = "notes"
+        )
+        informantAddress = models.InformantAddress(
+            contactInfoSourceID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            addressStatusDate = datetime(2016,2,2),
+        )
+        informantPhone = models.InformantPhone(
+            contactInfoSourceID = 1,
+            informantID = 1,
+            contactInfoStatusID = 1,
+            phoneTypeID = 1,
+            phoneNumber = "phone",
+            phoneStatusDate = datetime(2016,2,2)
+        )
+        ctc1 = models.CTC(
+            patientID = 1,
+            dxDate = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctcSequence = "sequence",
+            stage = "stage",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
+            dnc = "dnc",
+            dncReason = "dnc_reason"
+        )
+        ctc2 = models.CTC(
+            patientID = 1,
+            dxDate = datetime(2016,2,2),
+            site = 1,
+            histology = "histology",
+            behavior = "behavior",
+            ctcSequence = "sequence",
+            stage = "stage",
+            dxAge = 1,
+            dxStreet1 = "street1",
+            dxStreet2 = "street2",
+            dxCity = "city",
+            dxState = "state",
+            dxZip = 99999,
+            dxCounty = "county",
+            dnc = "dnc",
+            dncReason = "dnc_reason"
+        )
+        projectPatient = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            currentAge = 1,
+            batch = 1,
+            siteGrp = 1,
+            finalCode = 1,
+            finalCodeDate = datetime(2016,2,2),
+            enrollmentDate = datetime(2016,2,2),
+            dateCoordSigned = datetime(2016,2,2),
+            importDate = datetime(2016,2,2),
+            finalCodeStaffID = 1,
+            enrollmentStaffID = 1,
+            dateCoordSignedStaffID = 1,
+            abstractStatus = 1,
+            abstractStatusDate = datetime(2016,2,2),
+            abstractStatusStaffID = 1,
+            sentToAbstractorDate = datetime(2016,2,2),
+            sentToAbstractorStaffID = 1,
+            abstractedDate = datetime(2016,2,2),
+            abstractorStaffID = 1,
+            researcherDate = datetime(2016,2,2),
+            researcherStaffID = 1,
+            consentLink = "link",
+            medRecordReleaseSigned = True,
+            medRecordReleaseLink = "link",
+            medRecordReleaseStaffID = 1,
+            medRecordReleaseDate = datetime(2016,2,2),
+            surveyToResearcher = datetime(2016,2,2),
+            surveyToResearcherStaffID = 1
+        )
 
-    physician2 = models.Physician(
-        firstName = "fname",
-        lastName = "lname",
-        middleName = "middle_name",
-        credentials = "credentials",
-        specialty = "specialty",
-        aliasFirstName = "alias_fname",
-        aliasLastName = "alias_lname",
-        aliasMiddleName = "alias_middle_name",
-        physicianStatus = 1,
-        physicianStatusDate = datetime(2016,2,2),
-        email = "email"
-    )
-    physicianAddress = models.PhysicianAddress(
-        contactInfoSourceID = 1,
-        physicianID = 1,
-        contactInfoStatusID = 1,
-        street = "street",
-        street2 = "street2",
-        city = "city",
-        state = "state",
-        zip = "zip",
-        addressStatus = 1,
-        addressStatusDate = datetime(2016,2,2),
-        addressStatusSource = "s1"
-    )
-    physicianPhone = models.PhysicianPhone(
-        contactInfoSourceID = 1,
-        physicianID = 1,
-        contactInfoStatusID = 1,
-        phoneNumber = "phone",
-        phoneType = "phone_type",
-        phoneStatus = 1,
-        phoneSource = "s1",
-        phoneStatusDate = datetime(2016,2,2)
-    )
-    physicianToCTC = models.PhysicianToCTC(
-        physicianID = 1,
-        ctcID = 1
-    )
-    facility1 = models.Facility(
-        facilityName = "name",
-        contactFirstName = "fname",
-        contactLastName = "lname",
-        facilityStatus = 1,
-        facilityStatusDate = datetime(2016,2,2),
-        contact2FirstName = "fname",
-        contact2LastName = "lname"
-    )
-    facility2 = models.Facility(
-        facilityName = "name",
-        contactFirstName = "fname",
-        contactLastName = "lname",
-        facilityStatus = 1,
-        facilityStatusDate = datetime(2016,2,2),
-        contact2FirstName = "fname",
-        contact2LastName = "lname"
-    )
-    facilityAddress = models.FacilityAddress(
-        contactInfoSourceID = 1,
-        facilityID = 1,
-        contactInfoStatusID = 1,
-        street = "street",
-        street2 = "street2",
-        city = "city",
-        state = "state",
-        zip = "zip",
-        addressStatus = 1,
-        addressStatusDate = datetime(2016,2,2),
-        addressStatusSource = "s1"
-    )
+        projectPatient2 = models.ProjectPatient(
+            projectID = 1,
+            staffID = 1,
+            ctcID = 1,
+            currentAge = 1,
+            batch = 1,
+            siteGrp = 1,
+            finalCode = 1,
+            finalCodeDate = datetime(2016,2,2),
+            enrollmentDate = datetime(2016,2,2),
+            dateCoordSigned = datetime(2016,2,2),
+            importDate = datetime(2016,2,2),
+            finalCodeStaffID = 1,
+            enrollmentStaffID = 1,
+            dateCoordSignedStaffID = 1,
+            abstractStatus = 1,
+            abstractStatusDate = datetime(2016,2,2),
+            abstractStatusStaffID = 1,
+            sentToAbstractorDate = datetime(2016,2,2),
+            sentToAbstractorStaffID = 1,
+            abstractedDate = datetime(2016,2,2),
+            abstractorStaffID = 1,
+            researcherDate = datetime(2016,2,2),
+            researcherStaffID = 1,
+            consentLink = "link",
+            medRecordReleaseSigned = True,
+            medRecordReleaseLink = "link",
+            medRecordReleaseStaffID = 1,
+            medRecordReleaseDate = datetime(2016,2,2),
+            surveyToResearcher = datetime(2016,2,2),
+            surveyToResearcherStaffID = 1)
 
-    facilityPhone = models.FacilityPhone(
-        contactInfoSourceID = 1,
-        facilityID = 1,
-        contactInfoStatusID = 1,
-        clinicName = "clinic",
-        phoneType = "cell",
-        phoneNumber = "phone",
-        phoneStatus = 1,
-        phoneSource = "s1",
-        phoneStatusDate = datetime(2016,2,2)
-    )
-    patientProjectStatusType1 = models.PatientProjectStatusLUT(
-        statusDescription = "desc"
-    )
-    patientProjectStatusType2 = models.PatientProjectStatusLUT(
-        statusDescription = "desc"
-    )
-    patientProjectStatus = models.PatientProjectStatus(
-        patientProjectStatusTypeID =1,
-        projectPatientID = 1,
-    )
-    physicianFacility = models.PhysicianFacility(
-        facilityID = 1,
-        physicianID = 1,
-        physFacilityStatus = "s1",
-        physFacilityStatusDate = datetime(2016,2,2)
-    )
-    contactType1 = models.ContactTypeLUT(
-        contactDefinition = "def"
-    )
-    contactType2 = models.ContactTypeLUT(
-        contactDefinition = "def"
-    )
-    contact = models.Contact(
-        contactTypeLUTID = 1,
-        projectPatientID = 1,
-        staffID = 1,
-        informantID = 1,
-        facilityID = 1,
-        physicianID = 1,
-        description = "desc",
-        contactDate = datetime(2016,2,2),
-        initials = "atp",
-        notes = "notes"
-    )
-    ctcFacility = models.CTCFacility(
-        ctcID = 1,
-        facilityID = 1
-    )
+        tracingSource1 = models.TracingSourceLUT(
+            description = "desc"
+        )
+        tracingSource2 = models.TracingSourceLUT(
+            description = "desc"
+        )
+        tracing = models.Tracing(
+            tracingSourceID = 1,
+            projectPatientID = 1,
+            date = datetime(2016,2,2),
+            staff = 1,
+            notes = "notes"
+        )
+        physician = models.Physician(
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
+        )
 
-    db.session.add(contactInfoSource1)
-    db.session.add(contactInfoSource2)
-    db.session.add(contactInfoStatus1)
-    db.session.add(contactInfoStatus2)
-    db.session.add(humanSubjectTraining1)
-    db.session.add(humanSubjectTraining2)
-    db.session.add(staffRole1)
-    db.session.add(staffRole2)
-    db.session.add(logSubject1)
-    db.session.add(logSubject2)
-    db.session.add(phaseStatus1)
-    db.session.add(phaseStatus2)
-    db.session.add(projStatusType1)
-    db.session.add(projStatusType2)
-    db.session.add(projStatus)
-    db.session.add(staff)
-    db.session.add(staff2)
-    db.session.add(grantStatus1)
-    db.session.add(grantStatus2)
-    db.session.add(fundingSource1)
-    db.session.add(fundingSource2)
-    db.session.add(funding)
-    db.session.add(irb_holder1)
-    db.session.add(irb_holder2)
-    db.session.add(project_type1)
-    db.session.add(project_type2)
-    db.session.add(project1)
-    db.session.add(project2)
-    db.session.add(budget1)
-    db.session.add(rcsl)
-    db.session.add(rcs2)
-    db.session.add(rcl1)
-    db.session.add(rcl2)
-    db.session.add(rc)
-    db.session.add(ucr)
-    db.session.add(arcReview)
-    db.session.add(preApp)
-    db.session.add(log)
-    db.session.add(projectStaff)
-    db.session.add(staffTraining)
-    db.session.add(patient)
-    db.session.add(patient2)
-    db.session.add(patientAddress)
-    db.session.add(patientEmail)
-    db.session.add(patientPhone)
-    db.session.add(informant1)
-    db.session.add(informant2)
-    db.session.add(informantAddress)
-    db.session.add(informantPhone)
-    db.session.add(ctc1)
-    db.session.add(ctc2)
-    db.session.add(projectPatient)
-    db.session.add(projectPatient2)
-    db.session.add(tracingSource1)
-    db.session.add(tracingSource2)
-    db.session.add(tracing)
-    db.session.add(physician)
-    db.session.add(physician2)
-    db.session.add(physicianAddress)
-    db.session.add(physicianPhone)
-    db.session.add(physicianToCTC)
-    db.session.add(facility1)
-    db.session.add(facility2)
-    db.session.add(facilityAddress)
-    db.session.add(facilityPhone)
-    db.session.add(patientProjectStatusType1)
-    db.session.add(patientProjectStatusType2)
-    db.session.add(patientProjectStatus)
-    db.session.add(physicianFacility)
-    db.session.add(contactType1)
-    db.session.add(contactType2)
-    db.session.add(contact)
-    db.session.add(ctcFacility)
-    db.session.commit()
+        physician2 = models.Physician(
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "middle_name",
+            credentials = "credentials",
+            specialty = "specialty",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle_name",
+            physicianStatus = 1,
+            physicianStatusDate = datetime(2016,2,2),
+        )
+        physicianAddress = models.PhysicianAddress(
+            contactInfoSourceID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            addressStatusDate = datetime(2016,2,2),
+        )
+
+        physicianEmail = models.PhysicianEmail(
+            contactInfoSourceID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            email = "email",
+            emailStatusDate = datetime(2016,2,2)
+        )
+
+        physicianPhone = models.PhysicianPhone(
+            contactInfoSourceID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            phoneNumber = "phone",
+            phoneTypeID = 1,
+            phoneStatusDate = datetime(2016,2,2)
+        )
+        physicianToCTC = models.PhysicianToCTC(
+            physicianID = 1,
+            ctcID = 1
+        )
+        facility1 = models.Facility(
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
+        )
+        facility2 = models.Facility(
+            facilityName = "name",
+            contactFirstName = "fname",
+            contactLastName = "lname",
+            facilityStatus = 1,
+            facilityStatusDate = datetime(2016,2,2),
+            contact2FirstName = "fname",
+            contact2LastName = "lname"
+        )
+        facilityAddress = models.FacilityAddress(
+            contactInfoSourceID = 1,
+            facilityID = 1,
+            contactInfoStatusID = 1,
+            street = "street",
+            street2 = "street2",
+            city = "city",
+            state = "state",
+            zip = "zip",
+            addressStatusDate = datetime(2016,2,2),
+        )
+
+        facilityPhone = models.FacilityPhone(
+            contactInfoSourceID = 1,
+            facilityID = 1,
+            contactInfoStatusID = 1,
+            clinicName = "clinic",
+            phoneTypeID = 1,
+            phoneNumber = "phone",
+            phoneStatusDate = datetime(2016,2,2)
+        )
+        patientProjectStatusType1 = models.PatientProjectStatusLUT(
+            statusDescription = "desc"
+        )
+        patientProjectStatusType2 = models.PatientProjectStatusLUT(
+            statusDescription = "desc"
+        )
+        patientProjectStatus = models.PatientProjectStatus(
+            patientProjectStatusTypeID =1,
+            projectPatientID = 1,
+        )
+        physicianFacility = models.PhysicianFacility(
+            facilityID = 1,
+            physicianID = 1,
+            physFacilityStatus = "s1",
+            physFacilityStatusDate = datetime(2016,2,2)
+        )
+        contactType1 = models.ContactTypeLUT(
+            contactDefinition = "def"
+        )
+        contactType2 = models.ContactTypeLUT(
+            contactDefinition = "def"
+        )
+        contact = models.Contact(
+            contactTypeLUTID = 1,
+            projectPatientID = 1,
+            staffID = 1,
+            informantID = 1,
+            facilityID = 1,
+            physicianID = 1,
+            description = "desc",
+            contactDate = datetime(2016,2,2),
+            initials = "atp",
+            notes = "notes"
+        )
+        ctcFacility = models.CTCFacility(
+            ctcID = 1,
+            facilityID = 1
+        )
+        incentive = models.Incentive(
+            projectPatientID = 1,
+            incentiveDescription = "desc",
+            incentiveDate = datetime(2016,2,2)
+        )
+
+        db.session.add(incentive)
+        db.session.add(phoneType1)
+        db.session.add(phoneType2)
+        db.session.add(contactInfoSource1)
+        db.session.add(contactInfoSource2)
+        db.session.add(contactInfoStatus1)
+        db.session.add(contactInfoStatus2)
+        db.session.add(humanSubjectTraining1)
+        db.session.add(humanSubjectTraining2)
+        db.session.add(staffRole1)
+        db.session.add(staffRole2)
+        db.session.add(logSubject1)
+        db.session.add(logSubject2)
+        db.session.add(phaseStatus1)
+        db.session.add(phaseStatus2)
+        db.session.add(projStatusType1)
+        db.session.add(projStatusType2)
+        db.session.add(projStatus)
+        db.session.add(staff)
+        db.session.add(staff2)
+        db.session.add(grantStatus1)
+        db.session.add(grantStatus2)
+        db.session.add(fundingSource1)
+        db.session.add(fundingSource2)
+        db.session.add(funding)
+        db.session.add(irb_holder1)
+        db.session.add(irb_holder2)
+        db.session.add(project_type1)
+        db.session.add(project_type2)
+        db.session.add(project1)
+        db.session.add(project2)
+        db.session.add(budget1)
+        db.session.add(rcsl)
+        db.session.add(rcs2)
+        db.session.add(rcl1)
+        db.session.add(rcl2)
+        db.session.add(rc)
+        db.session.add(ucr)
+        db.session.add(arcReview)
+        db.session.add(preApp)
+        db.session.add(log)
+        db.session.add(projectStaff)
+        db.session.add(staffTraining)
+        db.session.add(patient)
+        db.session.add(patient2)
+        db.session.add(patientAddress)
+        db.session.add(patientEmail)
+        db.session.add(patientPhone)
+        db.session.add(informant1)
+        db.session.add(informant2)
+        db.session.add(informantAddress)
+        db.session.add(informantPhone)
+        db.session.add(ctc1)
+        db.session.add(ctc2)
+        db.session.add(projectPatient)
+        db.session.add(projectPatient2)
+        db.session.add(tracingSource1)
+        db.session.add(tracingSource2)
+        db.session.add(tracing)
+        db.session.add(physician)
+        db.session.add(physician2)
+        db.session.add(physicianAddress)
+        db.session.add(physicianEmail)
+        db.session.add(physicianPhone)
+        db.session.add(physicianToCTC)
+        db.session.add(facility1)
+        db.session.add(facility2)
+        db.session.add(facilityAddress)
+        db.session.add(facilityPhone)
+        db.session.add(patientProjectStatusType1)
+        db.session.add(patientProjectStatusType2)
+        db.session.add(patientProjectStatus)
+        db.session.add(physicianFacility)
+        db.session.add(contactType1)
+        db.session.add(contactType2)
+        db.session.add(contact)
+        db.session.add(ctcFacility)
+        db.session.commit()
 
 @api.route('/createData')
 def create_data():
@@ -3180,7 +3187,6 @@ def update_physician(physicianID):
                     physician.aliasMiddleName = request.form['aliasMiddleName']
                     physician.physicianStatus = request.form['physicianStatus']
                     physician.physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d")
-                    physician.email = request.form['email']
                     query.commit()
                     return physician.json()
                 else:
@@ -3208,7 +3214,6 @@ def create_physician():
                 aliasMiddleName = request.form['aliasMiddleName'],
                 physicianStatus = request.form['physicianStatus'],
                 physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
-                email = request.form['email']
             )
             query.add(physician)
             return jsonify({'physicianID':physician.physicianID})
@@ -3315,6 +3320,83 @@ def delete_physician_address(physicianAddressID):
                 return item_deleted("PhysicianAddressID {} deleted".format(physicianAddressID))
         else:
             return item_not_found("PhysicianAddressID {} not found".format(physicianAddressID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Physician Email
+##############################################################################
+@api.route('/physicianemails/', methods=['GET'])
+@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['GET'])
+def get_physician_email(physicianEmailID=None):
+    try:
+        if physicianEmailID is None:
+            return jsonify(PhysicianEmails = [i.dict() for i in query.get_physician_emails()])
+        else:
+            physicianEmail = query.get_physician_email(physicianEmailID)
+            if physicianEmail is not None:
+                return physicianEmail.json()
+            else:
+                return item_not_found("PhysicianEmailID {} not found".format(physicianEmailID))
+    except Exception as e:
+        internal_error(e)
+
+@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['PUT'])
+def update_physician_email(physicianEmailID):
+    try:
+        physicianEmail = query.get_physician_email(physicianEmailID)
+        if physicianEmail is not None:
+            form = forms.PhysicianEmailForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == physicianEmail.versionID:
+                    physicianEmail.contactInfoSourceID = request.form['contactInfoSourceID']
+                    physicianEmail.physicianID = request.form['physicianID']
+                    physicianEmail.contactInfoStatusID = request.form['contactInfoStatusID']
+                    physicianEmail.email = request.form['email']
+                    physicianEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                    query.commit()
+                    return physicianEmail.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PhysicianEmailID {} not found".format(physicianEmailID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/physicianemails/', methods=['POST'])
+def create_physician_email():
+    try:
+        form = forms.PhysicianEmailForm(request.form)
+        if form.validate():
+            physicianEmail = models.PhysicianEmail(
+                contactInfoSourceID = request.form['contactInfoSourceID'],
+                physicianID = request.form['physicianID'],
+                contactInfoStatusID = request.form['contactInfoStatusID'],
+                email = request.form['email'],
+                emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                )
+            query.add(physicianEmail)
+            return jsonify({'physicianEmailID':physicianEmail.physicianEmailID})
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+       return internal_error(e)
+
+@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['DELETE'])
+def delete_physician_email(physicianEmailID):
+    try:
+        physicianEmail = query.get_patient_email(physicianEmailID)
+        if physicianEmail is not None:
+            deps = get_dependencies(physicianEmail)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianEmail)
+                return item_deleted("PhysicianEmailID {} deleted".format(physicianEmailID))
+        else:
+            return item_not_found("PhysicianEmailID {} not found".format(physicianEmailID))
     except Exception as e:
         return internal_error(e)
 
@@ -3811,7 +3893,7 @@ def update_project_patient(participantID):
                     projectPatient.sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d")
                     projectPatient.sentToAbstractorStaffID = request.form['sentToAbstractorStaffID']
                     projectPatient.abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d")
-                    projectPatient.abstractorInitials = request.form['abstractorInitials']
+                    projectPatient.abstractorStaffID = request.form['abstractorStaffID']
                     projectPatient.researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d")
                     projectPatient.researcherStaffID = request.form['researcherStaffID']
                     projectPatient.consentLink = request.form['consentLink']
@@ -3859,7 +3941,7 @@ def create_project_patient():
                 sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
                 sentToAbstractorStaffID = request.form['sentToAbstractorStaffID'],
                 abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
-                abstractorInitials = request.form['abstractorInitials'],
+                abstractorStaffID = request.form['abstractorStaffID'],
                 researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
                 researcherStaffID = request.form['researcherStaffID'],
                 consentLink = request.form['consentLink'],

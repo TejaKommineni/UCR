@@ -484,7 +484,7 @@ class PopulatedDB(TestCase):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
@@ -517,7 +517,7 @@ class PopulatedDB(TestCase):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
@@ -552,7 +552,6 @@ class PopulatedDB(TestCase):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
 
         physician2 = models.Physician(
@@ -566,7 +565,6 @@ class PopulatedDB(TestCase):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
         physicianAddress = models.PhysicianAddress(
             contactInfoSourceID = 1,
@@ -579,6 +577,15 @@ class PopulatedDB(TestCase):
             zip = "zip",
             addressStatusDate = datetime(2016,2,2),
         )
+
+        physicianEmail = models.PhysicianEmail(
+            contactInfoSourceID = 1,
+            physicianID = 1,
+            contactInfoStatusID = 1,
+            email = "email",
+            emailStatusDate = datetime(2016,2,2)
+        )
+
         physicianPhone = models.PhysicianPhone(
             contactInfoSourceID = 1,
             physicianID = 1,
@@ -736,6 +743,7 @@ class PopulatedDB(TestCase):
         db.session.add(physician)
         db.session.add(physician2)
         db.session.add(physicianAddress)
+        db.session.add(physicianEmail)
         db.session.add(physicianPhone)
         db.session.add(physicianToCTC)
         db.session.add(facility1)
@@ -2043,7 +2051,6 @@ class TestPhysician(PopulatedDB):
         self.assertEqual(response.json["Physicians"][0]["aliasMiddleName"], "alias_middle_name")
         self.assertEqual(response.json["Physicians"][0]["physicianStatus"], 1)
         self.assertEqual(response.json["Physicians"][0]["physicianStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["Physicians"][0]["email"], "email")
         
     def test_get_physician(self):
         response = self.client.get("/api/physicians/1/")
@@ -2057,7 +2064,6 @@ class TestPhysician(PopulatedDB):
         self.assertEqual(response.json["aliasMiddleName"], "alias_middle_name")
         self.assertEqual(response.json["physicianStatus"], 1)
         self.assertEqual(response.json["physicianStatusDate"], "2016-02-02")
-        self.assertEqual(response.json["email"], "email")
         
     def test_update_physician(self):
         response = self.client.put("/api/physicians/1/", data = {
@@ -2071,7 +2077,6 @@ class TestPhysician(PopulatedDB):
             "aliasMiddleName" : "alias_middle_name2",
             "physicianStatus" : 2,
             "physicianStatusDate" : "2016-02-03",
-            "email" : "email2",
             "versionID" : 1
         })
         self.assertEqual(response.json["firstName"], "fname2")
@@ -2084,8 +2089,6 @@ class TestPhysician(PopulatedDB):
         self.assertEqual(response.json["aliasMiddleName"], "alias_middle_name2")
         self.assertEqual(response.json["physicianStatus"], 2)
         self.assertEqual(response.json["physicianStatusDate"], "2016-02-03")
-        self.assertEqual(response.json["email"], "email2")
-        self.assertEqual(response.json["versionID"], 2)
         
     def test_delete_physician(self):
         response = self.client.delete("/api/physicians/2/")
@@ -2148,6 +2151,47 @@ class TestPhysicianAddress(PopulatedDB):
         response = self.client.delete("/api/physicianaddresses/1/")
         self.assertEqual(response.json["Success"], True)
         self.assertEqual(response.json["Message"], "PhysicianAddressID 1 deleted")       
+
+class TestPhysicianEmail(PopulatedDB):
+    def test_get_physician_emails(self):
+        response = self.client.get("/api/physicianemails/")
+        self.assertEqual(response.json["PhysicianEmails"][0]["physicianEmailID"], 1)
+        self.assertEqual(response.json["PhysicianEmails"][0]["contactInfoSourceID"], 1)
+        self.assertEqual(response.json["PhysicianEmails"][0]["physicianID"], 1)
+        self.assertEqual(response.json["PhysicianEmails"][0]["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["PhysicianEmails"][0]["email"], "email")
+        self.assertEqual(response.json["PhysicianEmails"][0]["emailStatusDate"], "2016-02-02")
+
+    def test_get_physician_email(self):
+        response = self.client.get("/api/physicianemails/1/")
+        self.assertEqual(response.json["physicianEmailID"], 1)
+        self.assertEqual(response.json["contactInfoSourceID"], 1)
+        self.assertEqual(response.json["physicianID"], 1)
+        self.assertEqual(response.json["contactInfoStatusID"], 1)
+        self.assertEqual(response.json["email"], "email")
+        self.assertEqual(response.json["emailStatusDate"], "2016-02-02")
+
+    def test_update_physician_email(self):
+        response = self.client.put("/api/physicianemails/1/", data = {
+            "contactInfoSourceID" : 2,
+            "physicianID" : 2,
+            "contactInfoStatusID" : 2,
+            "email" : "email Updated",
+            "emailStatusDate" : "2016-02-03",
+            "versionID" : 1
+        })
+        self.assertEqual(response.json["physicianEmailID"], 1)
+        self.assertEqual(response.json["contactInfoSourceID"], 2)
+        self.assertEqual(response.json["physicianID"], 2)
+        self.assertEqual(response.json["contactInfoStatusID"], 2)
+        self.assertEqual(response.json["email"], "email Updated")
+        self.assertEqual(response.json["emailStatusDate"], "2016-02-03")
+        self.assertEqual(response.json["versionID"], 2)
+
+    def test_delete_physician_email(self):
+        response = self.client.delete("/api/physicianemails/1/")
+        self.assertEqual(response.json["Success"], True)
+        self.assertEqual(response.json["Message"], "PhysicianEmailID 1 deleted")
 
 class TestPhysicianFacility(PopulatedDB):
     def test_get_physician_facilities(self):
@@ -2496,7 +2540,7 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["ProjectPatients"][0]["sentToAbstractorDate"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["sentToAbstractorStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["abstractedDate"], "2016-02-02")
-        self.assertEqual(response.json["ProjectPatients"][0]["abstractorInitials"], "atp")
+        self.assertEqual(response.json["ProjectPatients"][0]["abstractorStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["researcherDate"], "2016-02-02")
         self.assertEqual(response.json["ProjectPatients"][0]["researcherStaffID"], 1)
         self.assertEqual(response.json["ProjectPatients"][0]["consentLink"], "link")
@@ -2530,7 +2574,7 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["sentToAbstractorDate"], "2016-02-02")
         self.assertEqual(response.json["sentToAbstractorStaffID"], 1)
         self.assertEqual(response.json["abstractedDate"], "2016-02-02")
-        self.assertEqual(response.json["abstractorInitials"], "atp")
+        self.assertEqual(response.json["abstractorStaffID"], 1)
         self.assertEqual(response.json["researcherDate"], "2016-02-02")
         self.assertEqual(response.json["researcherStaffID"], 1)
         self.assertEqual(response.json["consentLink"], "link")
@@ -2563,7 +2607,7 @@ class TestProjectPatient(PopulatedDB):
             "sentToAbstractorDate"  : "2016-02-03",
             "sentToAbstractorStaffID" : 2,
             "abstractedDate" : "2016-02-03",
-            "abstractorInitials" : "atp Updated",
+            "abstractorStaffID" : 2,
             "researcherDate" : "2016-02-03",
             "researcherStaffID" : 2,
             "consentLink" : "link Updated",
@@ -2596,7 +2640,7 @@ class TestProjectPatient(PopulatedDB):
         self.assertEqual(response.json["sentToAbstractorDate"], "2016-02-03")
         self.assertEqual(response.json["sentToAbstractorStaffID"], 2)
         self.assertEqual(response.json["abstractedDate"], "2016-02-03")
-        self.assertEqual(response.json["abstractorInitials"], "atp Updated")
+        self.assertEqual(response.json["abstractorStaffID"], 2)
         self.assertEqual(response.json["researcherDate"], "2016-02-03")
         self.assertEqual(response.json["researcherStaffID"], 2)
         self.assertEqual(response.json["consentLink"], "link Updated")

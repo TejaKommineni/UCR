@@ -782,8 +782,6 @@ class PhysicianForm(BaseForm):
     physicianStatusDate = DateField('physician_status_date',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    email = StringField('email',
-        []+COMMON_STRING_VALIDATORS)
 
 class PhysicianFacilityForm(BaseForm):
     facilityID = IntegerField('facilityID',
@@ -840,6 +838,37 @@ class PhysicianAddressForm(BaseForm):
             hasErrors = True
 
         physician = query.get_physician(self.physicianID.data)
+        if physician is None:
+            self.physicianID.errors.append("ID not found")
+            hasErrors = True
+
+        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+        if contactStatus is None:
+            self.contactInfoStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+class PhysicianEmailForm(BaseForm):
+    contactInfoSourceID = IntegerField('contactInfoSourceID',
+        []+COMMON_INTEGER_VALIDATORS)
+    physicianID = IntegerField('physicianID',
+        []+COMMON_INTEGER_VALIDATORS)
+    contactInfoStatusID = IntegerField('contactInfoStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+    email = StringField('email',
+        []+COMMON_STRING_VALIDATORS)
+    emailStatusDate = DateField('emailStatusDate',
+        []+COMMON_DATE_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+        if contactSource is None:
+            self.contactInfoSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        physician = query.get_patient(self.physicianID.data)
         if physician is None:
             self.physicianID.errors.append("ID not found")
             hasErrors = True
@@ -1084,8 +1113,8 @@ class ProjectPatientForm(BaseForm):
     abstractedDate = DateField('abstractedDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    abstractorInitials = StringField('abstractorInitials',
-        []+COMMON_STRING_VALIDATORS)
+    abstractorStaffID = IntegerField('abstractorStaffID',
+        []+COMMON_INTEGER_VALIDATORS)
     researcherDate = DateField('researcherDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
@@ -1134,6 +1163,11 @@ class ProjectPatientForm(BaseForm):
         sentToAbstractorStaff = query.get_staff(self.sentToAbstractorStaffID.data)
         if sentToAbstractorStaff is None:
             self.sentToAbstractorStaffID.errors.append("ID not found")
+            hasErrors = True
+
+        abstractorStaff = query.get_staff(self.abstractorStaffID.data)
+        if abstractorStaff is None:
+            self.abstractorStaffID.errors.append("ID not found")
             hasErrors = True
 
         researcherStaff = query.get_staff(self.researcherStaffID.data)

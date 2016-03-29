@@ -1110,13 +1110,14 @@ class Physician(CustomModel):
     aliasMiddleName = db.Column('alias_middle_name',db.String)
     physicianStatus = db.Column('physician_status',db.Integer)
     physicianStatusDate = db.Column('physician_status_date',db.Date)
-    email = db.Column('email',db.String)
     
     # Relationships
     # M - 1, many physicians can be at the same address
     physicianAddress = db.relationship("PhysicianAddress",back_populates="physicians")
     # M - 1, many physicians can have the same phone
     physicianPhone = db.relationship("PhysicianPhone",back_populates="physicians")
+
+    physicianEmail = db.relationship("PhysicianEmail",back_populates="physicians")
     # M - 1, many phys at same facility
     physicianFacility = db.relationship("PhysicianFacility", back_populates="physicians")
     # M - 1
@@ -1198,6 +1199,35 @@ class PhysicianAddress(CustomModel):
         self.addressStatus,
         self.addressStatusDate,
         self.addressStatusSource)
+
+class PhysicianEmail(CustomModel):
+    __tablename__ = "PhysicianEmail"
+
+    physicianEmailID = db.Column('physicianEmailID', db.Integer, primary_key=True)
+    contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
+    physicianID = db.Column('physicianID',db.Integer, db.ForeignKey("Physician.physicianID"))
+    contactInfoStatusID = db.Column('contactInfoSourceID',db.Integer, db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
+    email = db.Column('email', db.String)
+    emailStatusDate = db.Column('email_status_date', db.Date)
+
+    physicians = db.relationship("Physician",back_populates="physicianEmail")
+    contactInfoStatus = db.relationship("ContactInfoStatusLUT")
+    contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
+
+    def __repr__(self):
+        return "<PhysicianEmail(\
+            physicianEmailID = {}\
+            contactInfoSourceID = {}\
+            contactInfoStatusID = {}\
+            physicianID ={}\
+            email = {}\
+            emailStatusDate = {})>".format(
+            self.physicianEmailID,
+            self.contactInfoSourceID,
+            self.contactInfoStatusID,
+            self.physicianID,
+            self.email,
+            self.emailStatusDate)
 
 class PhysicianFacility(CustomModel):
     __tablename__ = 'PhysicianFacility'
@@ -1489,7 +1519,7 @@ class ProjectPatient(CustomModel):
     sentToAbstractorDate = db.Column('sent_to_abstractor',db.Date)
     sentToAbstractorStaffID = db.Column('sent_to_abstractor_staff',db.Integer, db.ForeignKey('Staff.staffID')) # FK
     abstractedDate = db.Column('abstracted_date',db.Date)
-    abstractorInitials = db.Column('abstractor_initials',db.String)
+    abstractorStaffID = db.Column('abstractor_staff',db.Integer, db.ForeignKey('Staff.staffID'))
     researcherDate = db.Column('researcher_date',db.Date)
     researcherStaffID = db.Column('researcher_staff',db.Integer, db.ForeignKey('Staff.staffID')) # FK
     consentLink = db.Column('consent_link',db.String)

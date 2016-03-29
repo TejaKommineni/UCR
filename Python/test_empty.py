@@ -28,7 +28,6 @@ class BlankDB(TestCase):
         db.session.remove()
         db.drop_all()
 
-
 class TestRoot(BlankDB):        
     # Test the root node    
     def test_root(self):
@@ -224,7 +223,6 @@ class TestContact(BlankDB):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
 
         project1 = models.Project(
@@ -303,7 +301,7 @@ class TestContact(BlankDB):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
@@ -896,7 +894,7 @@ class TestIncentive(BlankDB):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
@@ -1590,7 +1588,7 @@ class TestPatientProjectStatus(BlankDB):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
@@ -1701,7 +1699,6 @@ class TestPhysician(BlankDB):
             "aliasMiddleName" : "alias_middle_name",
             "physicianStatus" : 1,
             "physicianStatusDate" : "2016-02-02",
-            "email" : "email",
             "versionID" : 1,
         })
         self.assertEqual(response.json, {"physicianID": 1})
@@ -1731,7 +1728,6 @@ class TestPhysicianAddress(BlankDB):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
         db.session.add(physician)
         db.session.add(contactInfoSource)
@@ -1763,6 +1759,64 @@ class TestPhysicianAddress(BlankDB):
         })
         self.assertEqual(response.json, {"physicianAddressID": 1})
 
+class TestPhysicianEmail(BlankDB):
+    def setUp(self):
+        db.create_all()
+        self.populate_db()
+
+    def populate_db(self):
+        patient = models.Patient(
+            patID = "1",
+            recordID = 1,
+            ucrDistID = 1,
+            UPDBID = 1,
+            firstName = "fname",
+            lastName = "lname",
+            middleName = "mname",
+            maidenName = "maiden_name",
+            aliasFirstName = "alias_fname",
+            aliasLastName = "alias_lname",
+            aliasMiddleName = "alias_middle",
+            dob = datetime(2016,2,2),
+            SSN = "999999999",
+            sex = "male",
+            race = "white",
+            ethnicity = "hispanic",
+            vitalStatus = "v1"
+        )
+
+        contactInfoStatus = models.ContactInfoStatusLUT(
+            contactInfoStatus = "status"
+        )
+
+        contactInfoSource = models.ContactInfoSourceLUT(
+            contactInfoSource = "source"
+        )
+
+        db.session.add(patient)
+        db.session.add(contactInfoSource)
+        db.session.add(contactInfoStatus)
+        db.session.commit()
+
+    def test_empty_physician_email(self):
+        response = self.client.get("/api/physicianemails/")
+        self.assertEqual(response.json, dict(PhysicianEmails = []))
+
+    def test_physician_email_no_id(self):
+        response = self.client.get("/api/physicianemails/1/")
+        self.assertEqual(response.json, {"Error" : "PhysicianEmailID 1 not found"})
+
+    def test_create_physician_email(self):
+        response = self.client.post("/api/physicianemails/", data = {
+            "contactInfoSourceID" : 1,
+            "physicianID" : 1,
+            "contactInfoStatusID" : 1,
+            "email" : "email",
+            "emailStatusDate" : "2016-02-02",
+            "versionID" : 1,
+        })
+        self.assertEqual(response.json, {"physicianEmailID": 1})
+
 class TestPhysicianFacility(BlankDB):
 
     def setUp(self):
@@ -1790,7 +1844,6 @@ class TestPhysicianFacility(BlankDB):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
         db.session.add(facility1)
         db.session.add(physician)
@@ -1842,7 +1895,6 @@ class TestPhysicianPhone(BlankDB):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
         db.session.add(phoneType)
         db.session.add(physician)
@@ -1926,7 +1978,6 @@ class TestPhysicianToCTC(BlankDB):
             aliasMiddleName = "alias_middle_name",
             physicianStatus = 1,
             physicianStatusDate = datetime(2016,2,2),
-            email = "email"
         )
         db.session.add(patient)
         db.session.add(physician)
@@ -2208,7 +2259,7 @@ class TestProjectPatient(BlankDB):
             "sentToAbstractorDate"  : "2016-02-02",
             "sentToAbstractorStaffID" : 1,
             "abstractedDate" : "2016-02-02",
-            "abstractorInitials" : "atp",
+            "abstractorStaffID" : 1,
             "researcherDate" : "2016-02-02",
             "researcherStaffID" : 1,
             "consentLink" : "consent",
@@ -2738,7 +2789,7 @@ class TestTracing(BlankDB):
             sentToAbstractorDate = datetime(2016,2,2),
             sentToAbstractorStaffID = 1,
             abstractedDate = datetime(2016,2,2),
-            abstractorInitials = "atp",
+            abstractorStaffID = 1,
             researcherDate = datetime(2016,2,2),
             researcherStaffID = 1,
             consentLink = "link",
