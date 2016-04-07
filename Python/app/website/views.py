@@ -8,8 +8,9 @@ from app.database import db
 from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
+from urllib.parse import urlparse, urljoin
 
-api = Blueprint('api',__name__,template_folder='api_templates')
+website = Blueprint('website',__name__, template_folder='website_templates')
 
 ##############################################################################
 # create_data
@@ -753,33 +754,53 @@ def populate_db2():
         db.session.add(ctcFacility)
         db.session.commit()
 
-@api.route('/createData')
+@website.route('/createData')
 def create_data():
     populate_db2()
     return "Added Data"
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
+
+def get_redirect_target():
+    for target in request.values.get('next'), request.referrer:
+        if not target:
+            continue
+        if is_safe_url(target):
+            return target
+
+def redirect_back(endpoint, **values):
+    target = get_redirect_target()
+    if not target or not is_safe_url(target):
+        target = url_for(endpoint, **values)
+    return redirect(target)
 
 ##############################################################################
 # Error Handlers
 ##############################################################################    
 def item_not_found(e):
-    return jsonify({"Error": str(e)}), 404
+    message = "Error: {}".format(e)
+    return render_template("error.html",message=message)  , 404
+
+def invalid_method():
+    message = "Invalid Method Detected"
+    return render_template("error.html",message = message), 400
 
 def missing_params(e):
-    return jsonify({"Error": str(e)}), 400
+    return "Error: {}".format(e), 400
 
 def out_of_date_error():
     message = "Conflict detected. Object has been changed. Please refresh data and update."
-    return jsonify({message}), 409
+    return message, 409
 
 def internal_error(e):
-    return jsonify({"Error": str(e)}), 500
+    return "Error: {}".format(e), 500
 
 def item_deleted(message):
-    return jsonify({
-        "Success": True,
-        "Message": str(message),
-        "Dependencies" : []
-        })
+    return message
 
 def get_dependencies(record):
     deps = list(dependent_objects(record).limit(5))
@@ -790,15 +811,11 @@ def get_dependencies(record):
     return dependencies
 
 def dependency_detected(dependencies,message="Dependency Detected"):
-    return jsonify({
-        "Success": False,
-        "Message": message,
-        "Dependencies" : dependencies
-    }), 400
+    return "{} - {}".format(message,dependencies), 400
 ##############################################################################
 # Root Node
 ##############################################################################    
-@api.route('/')
+@website.route('/')
 def root():
     return jsonify({
     "version" : 0.01,
@@ -807,12 +824,11 @@ def root():
         "staff"
     ]})
 
-
 ##############################################################################
 # ArcReviews
 ##############################################################################    
-@api.route('/arcreviews/', methods = ['GET'])
-@api.route('/arcreviews/<int:arcReviewID>/', methods = ['GET'])
+@website.route('/arcreviews/', methods = ['GET'])
+@website.route('/arcreviews/<int:arcReviewID>/', methods = ['GET'])
 def get_arc_review(arcReviewID = None):
     try:
         if arcReviewID is None:
@@ -826,7 +842,7 @@ def get_arc_review(arcReviewID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/arcreviews/<int:arcReviewID>/', methods = ['PUT'])
+@website.route('/arcreviews/<int:arcReviewID>/', methods = ['PUT'])
 def update_arc_review(arcReviewID):
     try:
         arcReview = query.get_arc_review(arcReviewID)
@@ -864,7 +880,7 @@ def update_arc_review(arcReviewID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/arcreviews/', methods = ['POST'])
+@website.route('/arcreviews/', methods = ['POST'])
 def create_arc_review():
     try:
         form = forms.ArcReviewForm(request.form)
@@ -894,7 +910,7 @@ def create_arc_review():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/arcreviews/<int:arcReviewID>/', methods = ['DELETE'])
+@website.route('/arcreviews/<int:arcReviewID>/', methods = ['DELETE'])
 def delete_arc_review(arcReviewID):
     try:
         arcReview = query.get_arc_review(arcReviewID)
@@ -913,8 +929,8 @@ def delete_arc_review(arcReviewID):
 #############################################################################
 # Budget
 #############################################################################
-@api.route('/budgets/', methods = ['GET'])
-@api.route('/budgets/<int:budgetID>/', methods = ['GET'])
+@website.route('/budgets/', methods = ['GET'])
+@website.route('/budgets/<int:budgetID>/', methods = ['GET'])
 def get_budget(budgetID = None):
     try:
         if budgetID is None:
@@ -928,7 +944,7 @@ def get_budget(budgetID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/budgets/<int:budgetID>/',methods = ['PUT'])
+@website.route('/budgets/<int:budgetID>/',methods = ['PUT'])
 def update_budget(budgetID):
     try:
         budget = query.get_budget(budgetID)
@@ -953,7 +969,7 @@ def update_budget(budgetID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/budgets/',methods=['POST'])
+@website.route('/budgets/',methods=['POST'])
 def create_budget():
     try:
         form = forms.BudgetForm(request.form)
@@ -973,7 +989,7 @@ def create_budget():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/budgets/<int:budgetID>/', methods = ['DELETE'])
+@website.route('/budgets/<int:budgetID>/', methods = ['DELETE'])
 def delete_budget(budgetID):
     try:
         budget = query.get_budget(budgetID)
@@ -992,8 +1008,8 @@ def delete_budget(budgetID):
 #############################################################################
 # Contact 
 #############################################################################
-@api.route('/contacts/', methods = ['GET'])
-@api.route('/contacts/<int:contactID>/', methods = ['GET'])
+@website.route('/contacts/', methods = ['GET'])
+@website.route('/contacts/<int:contactID>/', methods = ['GET'])
 def get_contact(contactID = None):
     try:
         if contactID is None:
@@ -1007,7 +1023,7 @@ def get_contact(contactID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacts/<int:contactID>/',methods = ['PUT'])
+@website.route('/contacts/<int:contactID>/',methods = ['PUT'])
 def update_contact(contactID):
     try:
         contact = query.get_contact(contactID)
@@ -1036,7 +1052,7 @@ def update_contact(contactID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacts/',methods=['POST'])
+@website.route('/contacts/',methods=['POST'])
 def create_contact():
     try:
         form = forms.ContactForm(request.form)
@@ -1060,7 +1076,7 @@ def create_contact():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacts/<int:contactID>/', methods = ['DELETE'])
+@website.route('/contacts/<int:contactID>/', methods = ['DELETE'])
 def delete_contact(contactID):
     try:
         contact = query.get_contact(contactID)
@@ -1079,8 +1095,8 @@ def delete_contact(contactID):
 #############################################################################
 # Contact Type
 #############################################################################
-@api.route('/contacttypes/', methods = ['GET'])
-@api.route('/contacttypes/<int:contactTypeID>/', methods = ['GET'])
+@website.route('/contacttypes/', methods = ['GET'])
+@website.route('/contacttypes/<int:contactTypeID>/', methods = ['GET'])
 def get_contact_type(contactTypeID = None):
     try:
         if contactTypeID is None:
@@ -1094,7 +1110,7 @@ def get_contact_type(contactTypeID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacttypes/<int:contactTypeID>/',methods = ['PUT'])
+@website.route('/contacttypes/<int:contactTypeID>/',methods = ['PUT'])
 def update_contact_type(contactTypeID):
     try:
         contactType = query.get_contact_type(contactTypeID)
@@ -1114,7 +1130,7 @@ def update_contact_type(contactTypeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacttypes/',methods=['POST'])
+@website.route('/contacttypes/',methods=['POST'])
 def create_contact_type():
     try:
         form = forms.ContactTypeLUTForm(request.form)
@@ -1129,7 +1145,7 @@ def create_contact_type():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contacttypes/<int:contactTypeID>/', methods = ['DELETE'])
+@website.route('/contacttypes/<int:contactTypeID>/', methods = ['DELETE'])
 def delete_contact_type(contactTypeID):
     try:
         contactType = query.get_contact_type(contactTypeID)
@@ -1148,8 +1164,8 @@ def delete_contact_type(contactTypeID):
 #############################################################################
 # Contact Info Source
 #############################################################################
-@api.route('/contactinfosources/', methods = ['GET'])
-@api.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['GET'])
+@website.route('/contactinfosources/', methods = ['GET'])
+@website.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['GET'])
 def get_contact_info_source(contactInfoSourceID = None):
     try:
         if contactInfoSourceID is None:
@@ -1163,7 +1179,7 @@ def get_contact_info_source(contactInfoSourceID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfosources/<int:contactInfoSourceID>/',methods = ['PUT'])
+@website.route('/contactinfosources/<int:contactInfoSourceID>/',methods = ['PUT'])
 def update_contact_info_source(contactInfoSourceID):
     try:
         contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
@@ -1183,7 +1199,7 @@ def update_contact_info_source(contactInfoSourceID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfosources/',methods=['POST'])
+@website.route('/contactinfosources/',methods=['POST'])
 def create_contact_info_source():
     try:
         form = forms.ContactInfoSourceForm(request.form)
@@ -1198,7 +1214,7 @@ def create_contact_info_source():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['DELETE'])
+@website.route('/contactinfosources/<int:contactInfoSourceID>/', methods = ['DELETE'])
 def delete_contact_info_source(contactInfoSourceID):
     try:
         contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
@@ -1217,8 +1233,8 @@ def delete_contact_info_source(contactInfoSourceID):
 #############################################################################
 # Contact Info Status
 #############################################################################
-@api.route('/contactinfostatuses/', methods = ['GET'])
-@api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['GET'])
+@website.route('/contactinfostatuses/', methods = ['GET'])
+@website.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['GET'])
 def get_contact_info_status(contactInfoStatusID = None):
     if contactInfoStatusID is None:
         return jsonify(ContactInfoStatuses = [i.dict() for i in query.get_contact_info_statuses()])
@@ -1229,7 +1245,7 @@ def get_contact_info_status(contactInfoStatusID = None):
         else:
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
 
-@api.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods = ['PUT'])
+@website.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods = ['PUT'])
 def update_contact_info_status(contactInfoStatusID):
     try:
         contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
@@ -1249,7 +1265,7 @@ def update_contact_info_status(contactInfoStatusID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfostatuses/',methods=['POST'])
+@website.route('/contactinfostatuses/',methods=['POST'])
 def create_contact_info_status():
     try:
         form = forms.ContactInfoStatusForm(request.form)
@@ -1264,7 +1280,7 @@ def create_contact_info_status():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['DELETE'])
+@website.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['DELETE'])
 def delete_contact_info_status(contactInfoStatusID):
     try:
         contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
@@ -1283,8 +1299,8 @@ def delete_contact_info_status(contactInfoStatusID):
 #############################################################################
 # ctc
 #############################################################################
-@api.route('/ctcs/', methods = ['GET'])
-@api.route('/ctcs/<int:ctcID>/', methods = ['GET'])
+@website.route('/ctcs/', methods = ['GET'])
+@website.route('/ctcs/<int:ctcID>/', methods = ['GET'])
 def get_ctc(ctcID = None):
     try:
         if ctcID is None:
@@ -1298,7 +1314,7 @@ def get_ctc(ctcID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcs/<int:ctcID>/',methods = ['PUT'])
+@website.route('/ctcs/<int:ctcID>/',methods = ['PUT'])
 def update_ctc(ctcID):
     try:
         ctc = query.get_ctc(ctcID)
@@ -1333,7 +1349,7 @@ def update_ctc(ctcID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcs/',methods=['POST'])
+@website.route('/ctcs/',methods=['POST'])
 def create_ctc():
     try:
         form = forms.CTCForm(request.form)
@@ -1363,7 +1379,7 @@ def create_ctc():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcs/<int:ctcID>/', methods = ['DELETE'])
+@website.route('/ctcs/<int:ctcID>/', methods = ['DELETE'])
 def delete_ctc(ctcID):
     try:
         ctc = query.get_ctc(ctcID)
@@ -1382,8 +1398,8 @@ def delete_ctc(ctcID):
 #############################################################################
 # CTCFacility
 #############################################################################
-@api.route('/ctcfacilities/', methods = ['GET'])
-@api.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['GET'])
+@website.route('/ctcfacilities/', methods = ['GET'])
+@website.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['GET'])
 def get_ctc_facility(CTCFacilityID = None):
     try:
         if CTCFacilityID is None:
@@ -1397,7 +1413,7 @@ def get_ctc_facility(CTCFacilityID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcfacilities/<int:CTCFacilityID>/',methods = ['PUT'])
+@website.route('/ctcfacilities/<int:CTCFacilityID>/',methods = ['PUT'])
 def update_ctc_facility(CTCFacilityID):
     try:
         ctcFacility = query.get_ctc_facility(CTCFacilityID)
@@ -1418,7 +1434,7 @@ def update_ctc_facility(CTCFacilityID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcfacilities/',methods=['POST'])
+@website.route('/ctcfacilities/',methods=['POST'])
 def create_ctc_facility():
     try:
         form = forms.CTCFacilityForm(request.form)
@@ -1434,7 +1450,7 @@ def create_ctc_facility():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['DELETE'])
+@website.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['DELETE'])
 def delete_ctc_facility(CTCFacilityID):
     try:
         ctcFacility = query.get_ctc_facility(CTCFacilityID)
@@ -1453,8 +1469,8 @@ def delete_ctc_facility(CTCFacilityID):
 ##############################################################################
 # Funding
 ##############################################################################
-@api.route('/fundings/', methods = ['GET'])
-@api.route('/fundings/<int:fundingID>/', methods = ['GET'])
+@website.route('/fundings/', methods = ['GET'])
+@website.route('/fundings/<int:fundingID>/', methods = ['GET'])
 def get_funding(fundingID=None):
     try:
         if fundingID is None:
@@ -1468,7 +1484,7 @@ def get_funding(fundingID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundings/<int:fundingID>/', methods = ['PUT'])
+@website.route('/fundings/<int:fundingID>/', methods = ['PUT'])
 def update_funding(fundingID):
     try:
         funding = query.get_funding(fundingID)
@@ -1498,7 +1514,7 @@ def update_funding(fundingID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundings/', methods=['POST'])
+@website.route('/fundings/', methods=['POST'])
 def create_funding():
     try:
         form = forms.FundingForm(request.form)
@@ -1523,7 +1539,7 @@ def create_funding():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundings/<int:fundingID>/', methods = ['DELETE'])
+@website.route('/fundings/<int:fundingID>/', methods = ['DELETE'])
 def delete_funding(fundingID):
     try:
         funding = query.get_funding(fundingID)
@@ -1542,8 +1558,8 @@ def delete_funding(fundingID):
 ##############################################################################
 # Facility Phone
 ##############################################################################
-@api.route('/facilityphones/', methods=['GET'])
-@api.route('/facilityphones/<int:facilityPhoneID>/',methods = ['GET'])
+@website.route('/facilityphones/', methods=['GET'])
+@website.route('/facilityphones/<int:facilityPhoneID>/',methods = ['GET'])
 def get_facility_phone(facilityPhoneID=None):
     try:
         if facilityPhoneID is None:
@@ -1557,7 +1573,7 @@ def get_facility_phone(facilityPhoneID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilityphones/<int:facilityPhoneID>/',methods = ['PUT'])
+@website.route('/facilityphones/<int:facilityPhoneID>/',methods = ['PUT'])
 def update_facility_phone(facilityPhoneID):
     try:
         facilityPhone = query.get_facility_phone(facilityPhoneID)
@@ -1583,7 +1599,7 @@ def update_facility_phone(facilityPhoneID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilityphones/', methods=['POST'])
+@website.route('/facilityphones/', methods=['POST'])
 def create_facility_phone():
     try:
         form = forms.FacilityPhoneForm(request.form)
@@ -1604,7 +1620,7 @@ def create_facility_phone():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/facilityphones/<int:facilityPhoneID>/',methods = ['DELETE'])
+@website.route('/facilityphones/<int:facilityPhoneID>/',methods = ['DELETE'])
 def delete_facility_phone(facilityPhoneID):
     try:
         facilityPhone = query.get_facility_phone(facilityPhoneID)
@@ -1623,8 +1639,8 @@ def delete_facility_phone(facilityPhoneID):
 ##############################################################################
 # Facility
 ##############################################################################
-@api.route('/facilities/', methods=['GET'])
-@api.route('/facilities/<int:facilityID>/',methods = ['GET'])
+@website.route('/facilities/', methods=['GET'])
+@website.route('/facilities/<int:facilityID>/',methods = ['GET'])
 def get_facility(facilityID=None):
     try:
         if facilityID is None:
@@ -1638,7 +1654,7 @@ def get_facility(facilityID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilities/<int:facilityID>/',methods = ['PUT'])
+@website.route('/facilities/<int:facilityID>/',methods = ['PUT'])
 def update_facility(facilityID):
     try:
         facility = query.get_facility(facilityID)
@@ -1664,7 +1680,7 @@ def update_facility(facilityID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilities/', methods=['POST'])
+@website.route('/facilities/', methods=['POST'])
 def create_facility():
     try:
         facility = models.Facility(
@@ -1683,7 +1699,7 @@ def create_facility():
        return internal_error(e)
     return jsonify({'facilityID':facility.facilityID})
 
-@api.route('/facilities/<int:facilityID>/',methods = ['DELETE'])
+@website.route('/facilities/<int:facilityID>/',methods = ['DELETE'])
 def delete_facility(facilityID):
     try:
         facility = query.get_facility(facilityID)
@@ -1702,8 +1718,8 @@ def delete_facility(facilityID):
 ##############################################################################
 # Facility Address
 ##############################################################################
-@api.route('/facilityaddresses/', methods=['GET'])
-@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['GET'])
+@website.route('/facilityaddresses/', methods=['GET'])
+@website.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['GET'])
 def get_facility_address(facilityAddressID=None):
     try:
         if facilityAddressID is None:
@@ -1717,7 +1733,7 @@ def get_facility_address(facilityAddressID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['PUT'])
+@website.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['PUT'])
 def update_facility_address(facilityAddressID):
     try:
         facilityAddress = query.get_facility_address(facilityAddressID)
@@ -1745,7 +1761,7 @@ def update_facility_address(facilityAddressID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/facilityaddresses/', methods=['POST'])
+@website.route('/facilityaddresses/', methods=['POST'])
 def create_facility_address():
     try:
         form = forms.FacilityAddressForm(request.form)
@@ -1768,7 +1784,7 @@ def create_facility_address():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['DELETE'])
+@website.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['DELETE'])
 def delete_facility_address(facilityAddressID):
     try:
         facilityAddress = query.get_facility_address(facilityAddressID)
@@ -1787,8 +1803,8 @@ def delete_facility_address(facilityAddressID):
 ##############################################################################
 # Funding Source LUT
 ##############################################################################
-@api.route('/fundingsources/', methods = ['GET'])
-@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['GET'])
+@website.route('/fundingsources/', methods = ['GET'])
+@website.route('/fundingsources/<int:fundingSourceID>/', methods = ['GET'])
 def get_funding_source(fundingSourceID=None):
     try:
         if fundingSourceID is None:
@@ -1802,7 +1818,7 @@ def get_funding_source(fundingSourceID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['PUT'])
+@website.route('/fundingsources/<int:fundingSourceID>/', methods = ['PUT'])
 def update_funding_source(fundingSourceID):
     try:
         fundingSource = query.get_funding_source(fundingSourceID)
@@ -1822,7 +1838,7 @@ def update_funding_source(fundingSourceID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundingsources/', methods=['POST'])
+@website.route('/fundingsources/', methods=['POST'])
 def create_funding_source():
     try:
         form = forms.FundingSourceLUTForm(request.form)
@@ -1837,7 +1853,7 @@ def create_funding_source():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/fundingsources/<int:fundingSourceID>/', methods = ['DELETE'])
+@website.route('/fundingsources/<int:fundingSourceID>/', methods = ['DELETE'])
 def delete_funding_source(fundingSourceID):
     try:
         fundingSource = query.get_funding_source(fundingSourceID)
@@ -1856,8 +1872,8 @@ def delete_funding_source(fundingSourceID):
 ##############################################################################
 # Grant Status LUT
 ##############################################################################
-@api.route('/grantstatuses/', methods = ['GET'])
-@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['GET'])
+@website.route('/grantstatuses/', methods = ['GET'])
+@website.route('/grantstatuses/<int:grantStatusID>/', methods = ['GET'])
 def get_grant_status(grantStatusID=None):
     try:
         if grantStatusID is None:
@@ -1871,7 +1887,7 @@ def get_grant_status(grantStatusID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['PUT'])
+@website.route('/grantstatuses/<int:grantStatusID>/', methods = ['PUT'])
 def update_grant_status(grantStatusID):
     try:
         grantStatus = query.get_grant_status(grantStatusID)
@@ -1891,7 +1907,7 @@ def update_grant_status(grantStatusID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/grantstatuses/', methods=['POST'])
+@website.route('/grantstatuses/', methods=['POST'])
 def create_grant_status():
     try:
         form = forms.GrantStatusLUTForm(request.form)
@@ -1906,7 +1922,7 @@ def create_grant_status():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/grantstatuses/<int:grantStatusID>/', methods = ['DELETE'])
+@website.route('/grantstatuses/<int:grantStatusID>/', methods = ['DELETE'])
 def delete_grant_status(grantStatusID):
     try:
         grantStatus = query.get_grant_status(grantStatusID)
@@ -1925,8 +1941,8 @@ def delete_grant_status(grantStatusID):
 ##############################################################################
 # Humand Subject Training LUT
 ##############################################################################
-@api.route('/humansubjecttrainings/', methods = ['GET'])
-@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['GET'])
+@website.route('/humansubjecttrainings/', methods = ['GET'])
+@website.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['GET'])
 def get_human_subject_training(humanSubjectTrainingID=None):
     try:
         if humanSubjectTrainingID is None:
@@ -1940,7 +1956,7 @@ def get_human_subject_training(humanSubjectTrainingID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['PUT'])
+@website.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['PUT'])
 def update_human_subject_training(humanSubjectTrainingID):
     try:
         humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
@@ -1960,7 +1976,7 @@ def update_human_subject_training(humanSubjectTrainingID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/humansubjecttrainings/', methods=['POST'])
+@website.route('/humansubjecttrainings/', methods=['POST'])
 def create_human_subject_training():
     try:
         form = forms.HumanSubjectTrainingLUTForm(request.form)
@@ -1975,7 +1991,7 @@ def create_human_subject_training():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['DELETE'])
+@website.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/', methods = ['DELETE'])
 def delete_human_subject_training(humanSubjectTrainingID):
     try:
         humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
@@ -1994,8 +2010,8 @@ def delete_human_subject_training(humanSubjectTrainingID):
 ##############################################################################
 # Incentive
 ##############################################################################
-@api.route('/incentives/', methods = ['GET'])
-@api.route('/incentives/<int:incentiveID>/', methods = ['GET'])
+@website.route('/incentives/', methods = ['GET'])
+@website.route('/incentives/<int:incentiveID>/', methods = ['GET'])
 def get_incentive(incentiveID=None):
     try:
         if incentiveID is None:
@@ -2009,7 +2025,7 @@ def get_incentive(incentiveID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/incentives/<int:incentiveID>/', methods = ['PUT'])
+@website.route('/incentives/<int:incentiveID>/', methods = ['PUT'])
 def update_incentive(incentiveID):
     try:
         incentive = query.get_incentive(incentiveID)
@@ -2031,7 +2047,7 @@ def update_incentive(incentiveID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/incentives/', methods=['POST'])
+@website.route('/incentives/', methods=['POST'])
 def create_incentive():
     try:
         form = forms.IncentiveForm(request.form)
@@ -2048,7 +2064,7 @@ def create_incentive():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/incentives/<int:incentiveID>/', methods = ['DELETE'])
+@website.route('/incentives/<int:incentiveID>/', methods = ['DELETE'])
 def delete_incentive(incentiveID):
     try:
         incentive = query.get_incentive(incentiveID)
@@ -2068,8 +2084,8 @@ def delete_incentive(incentiveID):
 ##############################################################################
 # Informant
 ##############################################################################
-@api.route('/informants/', methods=['GET'])
-@api.route('/informants/<int:informantID>/',methods = ['GET'])
+@website.route('/informants/', methods=['GET'])
+@website.route('/informants/<int:informantID>/',methods = ['GET'])
 def get_informant(informantID=None):
     try:
         if informantID is None:
@@ -2083,7 +2099,7 @@ def get_informant(informantID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informants/<int:informantID>/',methods = ['PUT'])
+@website.route('/informants/<int:informantID>/',methods = ['PUT'])
 def update_informant(informantID):
     try:
         informant = query.get_informant(informantID)
@@ -2109,7 +2125,7 @@ def update_informant(informantID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informants/', methods=['POST'])
+@website.route('/informants/', methods=['POST'])
 def create_informant():
     try:
         form = forms.InformantForm(request.form)
@@ -2130,7 +2146,7 @@ def create_informant():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/informants/<int:informantID>/',methods = ['DELETE'])
+@website.route('/informants/<int:informantID>/',methods = ['DELETE'])
 def delete_informant(informantID):
     try:
         informant = query.get_informant(informantID)
@@ -2149,8 +2165,8 @@ def delete_informant(informantID):
 ##############################################################################
 # Informant Address
 ##############################################################################
-@api.route('/informantaddresses/', methods=['GET'])
-@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['GET'])
+@website.route('/informantaddresses/', methods=['GET'])
+@website.route('/informantaddresses/<int:informantAddressID>/',methods = ['GET'])
 def get_informant_address(informantAddressID=None):
     try:
         if informantAddressID is None:
@@ -2164,7 +2180,7 @@ def get_informant_address(informantAddressID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['PUT'])
+@website.route('/informantaddresses/<int:informantAddressID>/',methods = ['PUT'])
 def update_informant_address(informantAddressID):
     try:
         informantAddress = query.get_informant_address(informantAddressID)
@@ -2192,7 +2208,7 @@ def update_informant_address(informantAddressID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informantaddresses/', methods=['POST'])
+@website.route('/informantaddresses/', methods=['POST'])
 def create_informant_address():
     try:
         form = forms.InformantAddressForm(request.form)
@@ -2215,7 +2231,7 @@ def create_informant_address():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/informantaddresses/<int:informantAddressID>/',methods = ['DELETE'])
+@website.route('/informantaddresses/<int:informantAddressID>/',methods = ['DELETE'])
 def delete_informant_address(informantAddressID):
     try:
         informantAddress = query.get_informant_address(informantAddressID)
@@ -2234,8 +2250,8 @@ def delete_informant_address(informantAddressID):
 ##############################################################################
 # Informant Phone
 ##############################################################################
-@api.route('/informantphones/', methods=['GET'])
-@api.route('/informantphones/<int:informantPhoneID>/',methods = ['GET'])
+@website.route('/informantphones/', methods=['GET'])
+@website.route('/informantphones/<int:informantPhoneID>/',methods = ['GET'])
 def get_informant_phone(informantPhoneID=None):
     try:
         if informantPhoneID is None:
@@ -2249,7 +2265,7 @@ def get_informant_phone(informantPhoneID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informantphones/<int:informantPhoneID>/',methods = ['PUT'])
+@website.route('/informantphones/<int:informantPhoneID>/',methods = ['PUT'])
 def update_informant_phone(informantPhoneID):
     try:
         informantPhone = query.get_informant_phone(informantPhoneID)
@@ -2274,7 +2290,7 @@ def update_informant_phone(informantPhoneID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/informantphones/', methods=['POST'])
+@website.route('/informantphones/', methods=['POST'])
 def create_informant_phone():
     try:
         form = forms.InformantPhoneForm(request.form)
@@ -2294,7 +2310,7 @@ def create_informant_phone():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/informantphones/<int:informantPhoneID>/',methods = ['DELETE'])
+@website.route('/informantphones/<int:informantPhoneID>/',methods = ['DELETE'])
 def delete_informant_phone(informantPhoneID):
     try:
         informantPhone = query.get_informant_phone(informantPhoneID)
@@ -2313,8 +2329,8 @@ def delete_informant_phone(informantPhoneID):
 ##############################################################################
 # IRBHolderLUT
 ##############################################################################
-@api.route('/irbholders/',methods=['GET'])
-@api.route('/irbholders/<int:irbHolderID>/', methods = ['GET'])
+@website.route('/irbholders/',methods=['GET'])
+@website.route('/irbholders/<int:irbHolderID>/', methods = ['GET'])
 def get_irb_holder(irbHolderID=None):
     try:
         if irbHolderID is None:
@@ -2328,7 +2344,7 @@ def get_irb_holder(irbHolderID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
+@website.route('/irbholders/<int:irbHolderID>/', methods = ['PUT'])
 def update_irb_holder(irbHolderID):
     try:
         irb = query.get_irb_holder(irbHolderID)
@@ -2349,7 +2365,7 @@ def update_irb_holder(irbHolderID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/irbholders/', methods = ['POST'])
+@website.route('/irbholders/', methods = ['POST'])
 def create_irb_holder():
     try:
         form = forms.IRBHolderLUTForm(request.form)
@@ -2365,7 +2381,7 @@ def create_irb_holder():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/irbholders/<int:irbHolderID>/',methods=['DELETE'])
+@website.route('/irbholders/<int:irbHolderID>/',methods=['DELETE'])
 def delete_irb_holder(irbHolderID):
     try:
         irb = query.get_irb_holder(irbHolderID)
@@ -2384,8 +2400,8 @@ def delete_irb_holder(irbHolderID):
 ##############################################################################
 # Log
 ##############################################################################
-@api.route('/logs/',methods=['GET'])
-@api.route('/logs/<int:logID>/', methods = ['GET'])
+@website.route('/logs/',methods=['GET'])
+@website.route('/logs/<int:logID>/', methods = ['GET'])
 def get_log(logID=None):
     try:
         if logID is None:
@@ -2399,7 +2415,7 @@ def get_log(logID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/logs/<int:logID>/', methods = ['PUT'])
+@website.route('/logs/<int:logID>/', methods = ['PUT'])
 def update_log(logID):
     try:
         log = query.get_log(logID)
@@ -2424,7 +2440,7 @@ def update_log(logID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logs/', methods = ['POST'])
+@website.route('/logs/', methods = ['POST'])
 def create_log():
     try:
         form = forms.LogForm(request.form)
@@ -2444,7 +2460,7 @@ def create_log():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logs/<int:logID>/',methods=['DELETE'])
+@website.route('/logs/<int:logID>/',methods=['DELETE'])
 def delete_log(logID):
     try:
         log = query.get_log(logID)
@@ -2463,8 +2479,8 @@ def delete_log(logID):
 ##############################################################################
 # Log Subject
 ##############################################################################
-@api.route('/logsubjects/',methods=['GET'])
-@api.route('/logsubjects/<int:logSubjectID>/', methods = ['GET'])
+@website.route('/logsubjects/',methods=['GET'])
+@website.route('/logsubjects/<int:logSubjectID>/', methods = ['GET'])
 def get_log_subject(logSubjectID=None):
     try:
         if logSubjectID is None:
@@ -2478,7 +2494,7 @@ def get_log_subject(logSubjectID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logsubjects/<int:logSubjectID>/', methods = ['PUT'])
+@website.route('/logsubjects/<int:logSubjectID>/', methods = ['PUT'])
 def update_log_subject(logSubjectID):
     try:
         logSubject = query.get_log_subject(logSubjectID)
@@ -2498,7 +2514,7 @@ def update_log_subject(logSubjectID):
     except Exception as e:
         internal_error(e)
 
-@api.route('/logsubjects/', methods = ['POST'])
+@website.route('/logsubjects/', methods = ['POST'])
 def create_log_subject():
     try:
         form = forms.LogSubjectLUTForm(request.form)
@@ -2513,7 +2529,7 @@ def create_log_subject():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/logsubjects/<int:logSubjectID>/',methods=['DELETE'])
+@website.route('/logsubjects/<int:logSubjectID>/',methods=['DELETE'])
 def delete_log_subject(logSubjectID):
     try:
         logSubject = query.get_log_subject(logSubjectID)
@@ -2532,22 +2548,36 @@ def delete_log_subject(logSubjectID):
 ##############################################################################
 # Patient
 ##############################################################################
-@api.route('/patients/', methods=['GET'])
-@api.route('/patients/<int:patAutoID>/',methods = ['GET'])
+@website.route('/patients/', methods = ['GET'])
+@website.route('/patients/<int:patAutoID>/',methods = ['GET'])
 def get_patient(patAutoID=None):
     try:
         if patAutoID is None:
-            return jsonify(Patients = [i.dict() for i in query.get_patients()])
+            form = {}
+            patients = query.get_patients()
+            form["patients"] = patients
+            return render_template("patient_table.html", form=form)
         else:
             patient = query.get_patient(patAutoID)
             if patient is not None:
-                return patient.json()
+                form = {}
+                form["patient"]=patient
+                form["patientAddress"] = patient.patientAddress
+                form["patientEmail"] = patient.patientEmail
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["races"] = query.get_races()
+                form["ethnicities"] = query.get_ethnicities()
+                form["sexes"] = query.get_sexes()
+                form["states"] = query.get_states()
+                form["vitalStatuses"] = query.get_vital_statues()
+                return render_template("patient_form.html", form = form)
             else:
                 return item_not_found("PatientID {} not found".format(patAutoID))
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patients/<int:patientID>/',methods = ['PUT'])
+@website.route('/patients/<int:patientID>/',methods = ['PUT'])
 def update_patient(patientID):
     try:
         patient = query.get_patient(patientID)
@@ -2583,37 +2613,46 @@ def update_patient(patientID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patients/', methods=['POST'])
-def create_patient():
+@website.route('/patients/', methods=['POST'])
+@website.route('/patientaddresses/<int:patientID>/', methods = ['POST'])
+def create_patient(patientID=None):
     try:
-        form = forms.PatientForm(request.form)
-        if form.validate():
-            patient = models.Patient(
-               patID = request.form['patID'],
-               recordID = request.form['recordID'],
-               ucrDistID = request.form['ucrDistID'],
-               UPDBID = request.form['UPDBID'],
-               firstName = request.form['firstName'],
-               lastName = request.form['lastName'],
-               middleName = request.form['middleName'],
-               maidenName = request.form['maidenName'],
-               aliasFirstName = request.form['aliasFirstName'],
-               aliasLastName = request.form['aliasLastName'],
-               aliasMiddleName = request.form['aliasMiddleName'],
-               dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
-               SSN = request.form['SSN'],
-               sex = request.form['sex'],
-               ethnicity = request.form['ethnicity'],
-               vitalStatus = request.form['vitalStatus']
-                )
-            query.add(patient)
-            return jsonify({'patientID':patient.patientID})
+        if patientID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient(patientID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient(patientID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientForm(request.form)
+            if form.validate():
+                patient = models.Patient(
+                   patID = request.form['patID'],
+                   recordID = request.form['recordID'],
+                   ucrDistID = request.form['ucrDistID'],
+                   UPDBID = request.form['UPDBID'],
+                   firstName = request.form['firstName'],
+                   lastName = request.form['lastName'],
+                   middleName = request.form['middleName'],
+                   maidenName = request.form['maidenName'],
+                   aliasFirstName = request.form['aliasFirstName'],
+                   aliasLastName = request.form['aliasLastName'],
+                   aliasMiddleName = request.form['aliasMiddleName'],
+                   dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
+                   SSN = request.form['SSN'],
+                   sex = request.form['sex'],
+                   ethnicity = request.form['ethnicity'],
+                   vitalStatus = request.form['vitalStatus']
+                    )
+                query.add(patient)
+                return jsonify({'patientID':patient.patientID})
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
-@api.route('/patients/<int:patientID>/',methods = ['DELETE'])
+@website.route('/patients/<int:patientID>/',methods = ['DELETE'])
 def delete_patient(patientID):
     try:
         patient = query.get_patient(patientID)
@@ -2632,8 +2671,8 @@ def delete_patient(patientID):
 ##############################################################################
 # Patient Address
 ##############################################################################
-@api.route('/patientaddresses/', methods=['GET'])
-@api.route('/patientaddresses/<int:patAddressID>/',methods = ['GET'])
+@website.route('/patientaddresses/', methods=['GET'])
+@website.route('/patientaddresses/<int:patAddressID>/',methods = ['GET'])
 def get_patient_address(patAddressID=None):
     try:
         if patAddressID is None:
@@ -2647,7 +2686,7 @@ def get_patient_address(patAddressID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientaddresses/<int:patAddressID>/',methods = ['PUT'])
+@website.route('/patientaddresses/<int:patAddressID>/',methods = ['PUT'])
 def update_patient_address(patAddressID):
     try:
         patientAddress = query.get_patient_address(patAddressID)
@@ -2665,7 +2704,7 @@ def update_patient_address(patAddressID):
                     patientAddress.zip = request.form['zip']
                     patientAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return patientAddress.json()
+                    return redirect_back('patientaddresses/{}/'.format(patAddressID))
                 else:
                     return out_of_date_error()
             else:
@@ -2675,30 +2714,39 @@ def update_patient_address(patAddressID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientaddresses/', methods=['POST'])
-def create_patient_address():
+@website.route('/patientaddresses/', methods=['POST'])
+@website.route('/patientaddresses/<int:patAddressID>/', methods = ['POST'])
+def create_patient_address(patAddressID = None):
     try:
-        form = forms.PatientAddressForm(request.form)
-        if form.validate():
-            patientaddress = models.PatientAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                )
-            query.add(patientaddress)
-            return jsonify({'patAddressID':patientaddress.patAddressID})
+        if patAddressID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient_address(patAddressID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient_address(patAddressID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientAddressForm(request.form)
+            if form.validate():
+                patientaddress = models.PatientAddress(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    patientID = request.form['patientID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    street = request.form['street'],
+                    street2 = request.form['street2'],
+                    city = request.form['city'],
+                    state = request.form['state'],
+                    zip = request.form['zip'],
+                    addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                    )
+                query.add(patientaddress)
+                return jsonify({'patAddressID':patientaddress.patAddressID})
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
-@api.route('/patientaddresses/<int:patAddressID>/',methods = ['DELETE'])
+@website.route('/patientaddresses/<int:patAddressID>/',methods = ['DELETE'])
 def delete_patient_address(patAddressID):
     try:
         patientaddress = query.get_patient_address(patAddressID)
@@ -2717,8 +2765,8 @@ def delete_patient_address(patAddressID):
 ##############################################################################
 # Patient Email
 ##############################################################################
-@api.route('/patientemails/', methods=['GET'])
-@api.route('/patientemails/<int:emailID>/',methods = ['GET'])
+@website.route('/patientemails/', methods=['GET'])
+@website.route('/patientemails/<int:emailID>/',methods = ['GET'])
 def get_patient_email(emailID=None):
     try:
         if emailID is None:
@@ -2732,7 +2780,7 @@ def get_patient_email(emailID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/patientemails/<int:emailID>/',methods = ['PUT'])
+@website.route('/patientemails/<int:emailID>/',methods = ['PUT'])
 def update_patient_email(emailID):
     try:
         patientEmail = query.get_patient_email(emailID)
@@ -2746,7 +2794,7 @@ def update_patient_email(emailID):
                     patientEmail.email = request.form['email']
                     patientEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return patientEmail.json()
+                    return redirect_back('patientemails/{}/'.format(emailID))
                 else:
                     return out_of_date_error()
             else:
@@ -2756,26 +2804,35 @@ def update_patient_email(emailID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientemails/', methods=['POST'])
-def create_patient_email():
+@website.route('/patientemails/', methods=['POST'])
+@website.route('/patientemails/<int:emailID>/', methods = ['POST'])
+def create_patient_email(emailID = None):
     try:
-        form = forms.PatientEmailForm(request.form)
-        if form.validate():
-            patientEmail = models.PatientEmail(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                email = request.form['email'],
-                emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
-                )
-            query.add(patientEmail)
-            return jsonify({'emailID':patientEmail.emailID})
+        if emailID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient_email(emailID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient_email(emailID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientEmailForm(request.form)
+            if form.validate():
+                patientEmail = models.PatientEmail(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    patientID = request.form['patientID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    email = request.form['email'],
+                    emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                    )
+                query.add(patientEmail)
+                return jsonify({'emailID':patientEmail.emailID})
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
-@api.route('/patientemails/<int:emailID>/',methods = ['DELETE'])
+@website.route('/patientemails/<int:emailID>/',methods = ['DELETE'])
 def delete_patient_email(emailID):
     try:
         patientEmail = query.get_patient_email(emailID)
@@ -2794,8 +2851,8 @@ def delete_patient_email(emailID):
 ##############################################################################
 # Patient Phone
 ##############################################################################
-@api.route('/patientphones/', methods=['GET'])
-@api.route('/patientphones/<int:patPhoneID>/',methods = ['GET'])
+@website.route('/patientphones/', methods=['GET'])
+@website.route('/patientphones/<int:patPhoneID>/',methods = ['GET'])
 def get_patient_phone(patPhoneID=None):
     try:
         if patPhoneID is None:
@@ -2809,7 +2866,7 @@ def get_patient_phone(patPhoneID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientphones/<int:patPhoneID>/',methods = ['PUT'])
+@website.route('/patientphones/<int:patPhoneID>/',methods = ['PUT'])
 def update_patient_phone(patPhoneID):
     try:
         patientPhone = query.get_patient_phone(patPhoneID)
@@ -2834,7 +2891,7 @@ def update_patient_phone(patPhoneID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientphones/', methods=['POST'])
+@website.route('/patientphones/', methods=['POST'])
 def create_patient_phone():
     try:
         form = forms.PatientPhoneForm(request.form)
@@ -2854,7 +2911,7 @@ def create_patient_phone():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/patientphones/<int:patPhoneID>/',methods = ['DELETE'])
+@website.route('/patientphones/<int:patPhoneID>/',methods = ['DELETE'])
 def delete_patient_phone(patPhoneID):
     try:
         patientPhone = query.get_patient_phone(patPhoneID)
@@ -2873,8 +2930,8 @@ def delete_patient_phone(patPhoneID):
 ##############################################################################
 # Patient Project Status
 ##############################################################################
-@api.route('/patientprojectstatuses/', methods = ['GET'])
-@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['GET'])
+@website.route('/patientprojectstatuses/', methods = ['GET'])
+@website.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['GET'])
 def get_patient_project_status(patientProjectStatusID=None):
     try:
         if patientProjectStatusID is None:
@@ -2888,7 +2945,7 @@ def get_patient_project_status(patientProjectStatusID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['PUT'])
+@website.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['PUT'])
 def update_patient_project_status(patientProjectStatusID):
     try:
         patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
@@ -2909,7 +2966,7 @@ def update_patient_project_status(patientProjectStatusID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatuses/', methods=['POST'])
+@website.route('/patientprojectstatuses/', methods=['POST'])
 def create_patient_project_status():
     try:
         form = forms.PatientProjectStatusForm(request.form)
@@ -2925,7 +2982,7 @@ def create_patient_project_status():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['DELETE'])
+@website.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['DELETE'])
 def delete_patient_project_status(patientProjectStatusID):
     try:
         patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
@@ -2944,8 +3001,8 @@ def delete_patient_project_status(patientProjectStatusID):
 ##############################################################################
 # Patient Project Status Type LUT
 ##############################################################################
-@api.route('/patientprojectstatustypes/', methods = ['GET'])
-@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['GET'])
+@website.route('/patientprojectstatustypes/', methods = ['GET'])
+@website.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['GET'])
 def get_patient_project_status_type(patientProjectStatusTypeID=None):
     try:
         if patientProjectStatusTypeID is None:
@@ -2959,7 +3016,7 @@ def get_patient_project_status_type(patientProjectStatusTypeID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['PUT'])
+@website.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['PUT'])
 def update_patient_project_status_type(patientProjectStatusTypeID):
     try:
         patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
@@ -2979,7 +3036,7 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatustypes/', methods=['POST'])
+@website.route('/patientprojectstatustypes/', methods=['POST'])
 def create_patient_project_status_type():
     try:
         form = forms.PatientProjectStatusLUTForm(request.form)
@@ -2994,7 +3051,7 @@ def create_patient_project_status_type():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['DELETE'])
+@website.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods = ['DELETE'])
 def delete_patient_project_status_type(patientProjectStatusTypeID):
     try:
         patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
@@ -3013,8 +3070,8 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
 ##############################################################################
 # Phase Status
 ##############################################################################
-@api.route('/phasestatuses/', methods = ['GET'])
-@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['GET'])
+@website.route('/phasestatuses/', methods = ['GET'])
+@website.route('/phasestatuses/<int:logPhaseID>/', methods = ['GET'])
 def get_phase_status(logPhaseID=None):
     try:
         if logPhaseID is None:
@@ -3028,7 +3085,7 @@ def get_phase_status(logPhaseID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['PUT'])
+@website.route('/phasestatuses/<int:logPhaseID>/', methods = ['PUT'])
 def update_phase_status(logPhaseID):
     try:
         phaseStatus = query.get_phase_status(logPhaseID)
@@ -3049,7 +3106,7 @@ def update_phase_status(logPhaseID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phasestatuses/', methods=['POST'])
+@website.route('/phasestatuses/', methods=['POST'])
 def create_phase_status():
     try:
         form = forms.PhaseStatusForm(request.form)
@@ -3065,7 +3122,7 @@ def create_phase_status():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phasestatuses/<int:logPhaseID>/', methods = ['DELETE'])
+@website.route('/phasestatuses/<int:logPhaseID>/', methods = ['DELETE'])
 def delete_phase_status(logPhaseID):
     try:
         phaseStatus = query.get_phase_status(logPhaseID)
@@ -3084,8 +3141,8 @@ def delete_phase_status(logPhaseID):
 #############################################################################
 # Phone Type
 #############################################################################
-@api.route('/phonetypes/', methods = ['GET'])
-@api.route('/phonetypes/<int:phoneTypeID>/', methods=['GET'])
+@website.route('/phonetypes/', methods = ['GET'])
+@website.route('/phonetypes/<int:phoneTypeID>/', methods=['GET'])
 def get_phone_type(phoneTypeID = None):
     try:
         if phoneTypeID is None:
@@ -3099,7 +3156,7 @@ def get_phone_type(phoneTypeID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phonetypes/<int:phoneTypeID>/',methods=['PUT'])
+@website.route('/phonetypes/<int:phoneTypeID>/',methods=['PUT'])
 def update_phone_type(phoneTypeID):
     try:
         phoneType = query.get_phone_type(phoneTypeID)
@@ -3119,7 +3176,7 @@ def update_phone_type(phoneTypeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phonetypes/', methods=['POST'])
+@website.route('/phonetypes/', methods=['POST'])
 def create_phone_type():
     try:
         form = forms.PhoneTypeForm(request.form)
@@ -3134,7 +3191,7 @@ def create_phone_type():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/phonetypes/<int:phoneTypeID>/', methods=['DELETE'])
+@website.route('/phonetypes/<int:phoneTypeID>/', methods=['DELETE'])
 def delete_phone_type(phoneTypeID):
     try:
         phoneType = query.get_phone_type(phoneTypeID)
@@ -3154,8 +3211,8 @@ def delete_phone_type(phoneTypeID):
 ##############################################################################
 # Physician
 ##############################################################################
-@api.route('/physicians/', methods = ['GET'])
-@api.route('/physicians/<int:physicianID>/', methods = ['GET'])
+@website.route('/physicians/', methods = ['GET'])
+@website.route('/physicians/<int:physicianID>/', methods = ['GET'])
 def get_physician(physicianID=None):
     try:
         if physicianID is None:
@@ -3169,7 +3226,7 @@ def get_physician(physicianID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicians/<int:physicianID>/', methods = ['PUT'])
+@website.route('/physicians/<int:physicianID>/', methods = ['PUT'])
 def update_physician(physicianID):
     try:
         physician = query.get_physician(physicianID)
@@ -3198,7 +3255,7 @@ def update_physician(physicianID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicians/', methods=['POST'])
+@website.route('/physicians/', methods=['POST'])
 def create_physician():
     try:
         form = forms.PhysicianForm(request.form)
@@ -3222,7 +3279,7 @@ def create_physician():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicians/<int:physicianID>/', methods = ['DELETE'])
+@website.route('/physicians/<int:physicianID>/', methods = ['DELETE'])
 def delete_physician(physicianID):
     try:
         physician = query.get_physician(physicianID)
@@ -3241,8 +3298,8 @@ def delete_physician(physicianID):
 ##############################################################################
 # Physician Address
 ##############################################################################
-@api.route('/physicianaddresses/', methods=['GET'])
-@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['GET'])
+@website.route('/physicianaddresses/', methods=['GET'])
+@website.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['GET'])
 def get_physician_address(physicianAddressID=None):
     try:
         if physicianAddressID is None:
@@ -3256,7 +3313,7 @@ def get_physician_address(physicianAddressID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['PUT'])
+@website.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['PUT'])
 def update_physician_address(physicianAddressID):
     try:
         physicianAddress = query.get_physician_address(physicianAddressID)
@@ -3284,7 +3341,7 @@ def update_physician_address(physicianAddressID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianaddresses/', methods=['POST'])
+@website.route('/physicianaddresses/', methods=['POST'])
 def create_physician_address():
     try:
         form = forms.PhysicianAddressForm(request.form)
@@ -3307,7 +3364,7 @@ def create_physician_address():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['DELETE'])
+@website.route('/physicianaddresses/<int:physicianAddressID>/',methods = ['DELETE'])
 def delete_physician_address(physicianAddressID):
     try:
         physicianAddress = query.get_physician_address(physicianAddressID)
@@ -3326,8 +3383,8 @@ def delete_physician_address(physicianAddressID):
 ##############################################################################
 # Physician Email
 ##############################################################################
-@api.route('/physicianemails/', methods=['GET'])
-@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['GET'])
+@website.route('/physicianemails/', methods=['GET'])
+@website.route('/physicianemails/<int:physicianEmailID>/',methods = ['GET'])
 def get_physician_email(physicianEmailID=None):
     try:
         if physicianEmailID is None:
@@ -3341,7 +3398,7 @@ def get_physician_email(physicianEmailID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['PUT'])
+@website.route('/physicianemails/<int:physicianEmailID>/',methods = ['PUT'])
 def update_physician_email(physicianEmailID):
     try:
         physicianEmail = query.get_physician_email(physicianEmailID)
@@ -3365,7 +3422,7 @@ def update_physician_email(physicianEmailID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianemails/', methods=['POST'])
+@website.route('/physicianemails/', methods=['POST'])
 def create_physician_email():
     try:
         form = forms.PhysicianEmailForm(request.form)
@@ -3384,7 +3441,7 @@ def create_physician_email():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/physicianemails/<int:physicianEmailID>/',methods = ['DELETE'])
+@website.route('/physicianemails/<int:physicianEmailID>/',methods = ['DELETE'])
 def delete_physician_email(physicianEmailID):
     try:
         physicianEmail = query.get_patient_email(physicianEmailID)
@@ -3403,8 +3460,8 @@ def delete_physician_email(physicianEmailID):
 ##############################################################################
 # Physician Facility
 ##############################################################################
-@api.route('/physicianfacilities/', methods=['GET'])
-@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['GET'])
+@website.route('/physicianfacilities/', methods=['GET'])
+@website.route('/physicianfacilities/<int:physFacilityID>/',methods = ['GET'])
 def get_physician_facility(physFacilityID=None):
     try:
         if physFacilityID is None:
@@ -3418,7 +3475,7 @@ def get_physician_facility(physFacilityID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['PUT'])
+@website.route('/physicianfacilities/<int:physFacilityID>/',methods = ['PUT'])
 def update_physician_facility(physFacilityID):
     try:
         physicianFacility = query.get_physician_facility(physFacilityID)
@@ -3441,7 +3498,7 @@ def update_physician_facility(physFacilityID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianfacilities/', methods=['POST'])
+@website.route('/physicianfacilities/', methods=['POST'])
 def create_physician_facility():
     try:
         form = forms.PhysicianFacilityForm(request.form)
@@ -3459,7 +3516,7 @@ def create_physician_facility():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/physicianfacilities/<int:physFacilityID>/',methods = ['DELETE'])
+@website.route('/physicianfacilities/<int:physFacilityID>/',methods = ['DELETE'])
 def delete_physician_facility(physFacilityID):
     try:
         physicianFacility = query.get_physician_facility(physFacilityID)
@@ -3478,8 +3535,8 @@ def delete_physician_facility(physFacilityID):
 ##############################################################################
 # Physician Phone
 ##############################################################################
-@api.route('/physicianphones/', methods=['GET'])
-@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['GET'])
+@website.route('/physicianphones/', methods=['GET'])
+@website.route('/physicianphones/<int:physicianPhoneID>/',methods = ['GET'])
 def get_physician_phone(physicianPhoneID=None):
     try:
         if physicianPhoneID is None:
@@ -3493,7 +3550,7 @@ def get_physician_phone(physicianPhoneID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['PUT'])
+@website.route('/physicianphones/<int:physicianPhoneID>/',methods = ['PUT'])
 def update_physician_phone(physicianPhoneID):
     try:
         physicianPhone = query.get_physician_phone(physicianPhoneID)
@@ -3518,7 +3575,7 @@ def update_physician_phone(physicianPhoneID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physicianphones/', methods=['POST'])
+@website.route('/physicianphones/', methods=['POST'])
 def create_physician_phone():
     try:
         form = forms.PhysicianPhoneForm(request.form)
@@ -3538,7 +3595,7 @@ def create_physician_phone():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/physicianphones/<int:physicianPhoneID>/',methods = ['DELETE'])
+@website.route('/physicianphones/<int:physicianPhoneID>/',methods = ['DELETE'])
 def delete_physician_phone(physicianPhoneID):
     try:
         physicianPhone = query.get_physician_phone(physicianPhoneID)
@@ -3557,8 +3614,8 @@ def delete_physician_phone(physicianPhoneID):
 ##############################################################################
 # PhysicianToCTC
 ##############################################################################
-@api.route('/physiciantoctcs/', methods = ['GET'])
-@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['GET'])
+@website.route('/physiciantoctcs/', methods = ['GET'])
+@website.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['GET'])
 def get_physician_to_ctc(physicianCTCID=None):
     try:
         if physicianCTCID is None:
@@ -3572,7 +3629,7 @@ def get_physician_to_ctc(physicianCTCID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['PUT'])
+@website.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['PUT'])
 def update_physician_to_ctc(physicianCTCID):
     try:
         physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
@@ -3593,7 +3650,7 @@ def update_physician_to_ctc(physicianCTCID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physiciantoctcs/', methods=['POST'])
+@website.route('/physiciantoctcs/', methods=['POST'])
 def create_physician_to_ctc():
     try:
         form = forms.PhysicianToCTCForm(request.form)
@@ -3609,7 +3666,7 @@ def create_physician_to_ctc():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['DELETE'])
+@website.route('/physiciantoctcs/<int:physicianCTCID>/', methods = ['DELETE'])
 def delete_physician_to_ctc(physicianCTCID):
     try:
         physicianToCTC = query.get_physician_to_ctc(physicianCTCID)
@@ -3628,8 +3685,8 @@ def delete_physician_to_ctc(physicianCTCID):
 ##############################################################################
 # PreApplication
 ##############################################################################
-@api.route('/preapplications/', methods = ['GET'])
-@api.route('/preapplications/<int:preApplicationID>/', methods = ['GET'])
+@website.route('/preapplications/', methods = ['GET'])
+@website.route('/preapplications/<int:preApplicationID>/', methods = ['GET'])
 def get_pre_application(preApplicationID=None):
     try:
         if preApplicationID is None:
@@ -3643,7 +3700,7 @@ def get_pre_application(preApplicationID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/preapplications/<int:preApplicationID>/', methods = ['PUT'])
+@website.route('/preapplications/<int:preApplicationID>/', methods = ['PUT'])
 def update_pre_application(preApplicationID):
     try:
         preApplication = query.get_pre_application(preApplicationID)
@@ -3689,7 +3746,7 @@ def update_pre_application(preApplicationID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/preapplications/', methods=['POST'])
+@website.route('/preapplications/', methods=['POST'])
 def create_pre_application():
     try:
         form = forms.PreApplicationForm(request.form)
@@ -3732,7 +3789,7 @@ def create_pre_application():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/preapplications/<int:preApplicationID>/', methods = ['DELETE'])
+@website.route('/preapplications/<int:preApplicationID>/', methods = ['DELETE'])
 def delete_pre_application(preApplicationID):
     try:
         preApplication = query.get_pre_application(preApplicationID)
@@ -3751,8 +3808,8 @@ def delete_pre_application(preApplicationID):
 ##############################################################################
 # Project 
 ##############################################################################
-@api.route('/projects/', methods=['GET'])
-@api.route('/projects/<int:projectID>/',methods = ['GET'])
+@website.route('/projects/', methods=['GET'])
+@website.route('/projects/<int:projectID>/',methods = ['GET'])
 def get_project(projectID=None):
     try:
         if projectID is None:
@@ -3766,7 +3823,7 @@ def get_project(projectID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projects/<int:projectID>/',methods = ['PUT'])
+@website.route('/projects/<int:projectID>/',methods = ['PUT'])
 def update_project(projectID):
     try:
         proj = query.get_project(projectID)
@@ -3801,7 +3858,7 @@ def update_project(projectID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projects/', methods=['POST'])
+@website.route('/projects/', methods=['POST'])
 def create_project():
     try:
         form = forms.ProjectForm(request.form)
@@ -3831,7 +3888,7 @@ def create_project():
     except Exception as e:
        return internal_error(e)
 
-@api.route('/projects/<int:projectID>/',methods = ['DELETE'])
+@website.route('/projects/<int:projectID>/',methods = ['DELETE'])
 def delete_project(projectID):
     try:
         proj = query.get_project(projectID)
@@ -3850,8 +3907,8 @@ def delete_project(projectID):
 ##############################################################################
 # Project Patient
 ##############################################################################
-@api.route('/projectpatients/', methods = ['GET'])
-@api.route('/projectpatients/<int:participantID>/', methods = ['GET'])
+@website.route('/projectpatients/', methods = ['GET'])
+@website.route('/projectpatients/<int:participantID>/', methods = ['GET'])
 def get_project_patient(participantID=None):
     try:
         if participantID is None:
@@ -3865,7 +3922,7 @@ def get_project_patient(participantID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectpatients/<int:participantID>/', methods = ['PUT'])
+@website.route('/projectpatients/<int:participantID>/', methods = ['PUT'])
 def update_project_patient(participantID):
     try:
         projectPatient = query.get_project_patient(participantID)
@@ -3915,7 +3972,7 @@ def update_project_patient(participantID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectpatients/', methods=['POST'])
+@website.route('/projectpatients/', methods=['POST'])
 def create_project_patient():
     try:
         form = forms.ProjectPatientForm(request.form)
@@ -3959,7 +4016,7 @@ def create_project_patient():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectpatients/<int:participantID>/', methods = ['DELETE'])
+@website.route('/projectpatients/<int:participantID>/', methods = ['DELETE'])
 def delete_project_patient(participantID):
     try:
         projectPatient = query.get_project_patient(participantID)
@@ -3978,8 +4035,8 @@ def delete_project_patient(participantID):
 ##############################################################################
 # Project Staff
 ##############################################################################
-@api.route('/projectstaff/', methods = ['GET'])
-@api.route('/projectstaff/<int:projectStaffID>/', methods = ['GET'])
+@website.route('/projectstaff/', methods = ['GET'])
+@website.route('/projectstaff/<int:projectStaffID>/', methods = ['GET'])
 def get_project_staff(projectStaffID=None):
     try:
         if projectStaffID is None:
@@ -3993,7 +4050,7 @@ def get_project_staff(projectStaffID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/projectstaff/<int:projectStaffID>/', methods = ['PUT'])
+@website.route('/projectstaff/<int:projectStaffID>/', methods = ['PUT'])
 def update_project_staff(projectStaffID):
     try:
         projectStaff = query.get_project_staff(projectStaffID)
@@ -4020,7 +4077,7 @@ def update_project_staff(projectStaffID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstaff/', methods=['POST'])
+@website.route('/projectstaff/', methods=['POST'])
 def create_project_staff():
     try:
         form = forms.ProjectStaffForm(request.form)
@@ -4042,7 +4099,7 @@ def create_project_staff():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstaff/<int:projectStaffID>/', methods = ['DELETE'])
+@website.route('/projectstaff/<int:projectStaffID>/', methods = ['DELETE'])
 def delete_project_staff(projectStaffID):
     try:
         projectStaff = query.get_project_staff(projectStaffID)
@@ -4061,8 +4118,8 @@ def delete_project_staff(projectStaffID):
 ##############################################################################
 # Project Status
 ##############################################################################
-@api.route('/projectstatuses/', methods = ['GET'])
-@api.route('/projectstatuses/<int:projectStatusID>/', methods = ['GET'])
+@website.route('/projectstatuses/', methods = ['GET'])
+@website.route('/projectstatuses/<int:projectStatusID>/', methods = ['GET'])
 def get_project_status(projectStatusID=None):
     try:
         if projectStatusID is None:
@@ -4076,7 +4133,7 @@ def get_project_status(projectStatusID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatuses/<int:projectStatusID>/', methods = ['PUT'])
+@website.route('/projectstatuses/<int:projectStatusID>/', methods = ['PUT'])
 def update_project_status(projectStatusID):
     try:
         projectStatus = query.get_project_status(projectStatusID)
@@ -4100,7 +4157,7 @@ def update_project_status(projectStatusID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatuses/', methods=['POST'])
+@website.route('/projectstatuses/', methods=['POST'])
 def create_project_status():
     try:
         form = forms.ProjectStatusForm(request.form)
@@ -4119,7 +4176,7 @@ def create_project_status():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatuses/<int:projectStatusID>/', methods = ['DELETE'])
+@website.route('/projectstatuses/<int:projectStatusID>/', methods = ['DELETE'])
 def delete_project_status(projectStatusID):
     try:
         projectStatus = query.get_project_status(projectStatusID)
@@ -4138,8 +4195,8 @@ def delete_project_status(projectStatusID):
 ##############################################################################
 # ProjectStatusLUT/Type
 ##############################################################################
-@api.route('/projectstatustypes/', methods = ['GET'])
-@api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['GET'])
+@website.route('/projectstatustypes/', methods = ['GET'])
+@website.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['GET'])
 def get_project_status_lut(projectStatusTypeID=None):
     try:
         if projectStatusTypeID is None:
@@ -4153,7 +4210,7 @@ def get_project_status_lut(projectStatusTypeID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['PUT'])
+@website.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['PUT'])
 def update_project_status_lut(projectStatusTypeID):
     try:
         projectStatusType = query.get_project_status_lut(projectStatusTypeID)
@@ -4174,7 +4231,7 @@ def update_project_status_lut(projectStatusTypeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatustypes/', methods=['POST'])
+@website.route('/projectstatustypes/', methods=['POST'])
 def create_project_status_lut():
     try:
         form = forms.ProjectStatusLUTForm(request.form)
@@ -4190,7 +4247,7 @@ def create_project_status_lut():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['DELETE'])
+@website.route('/projectstatustypes/<int:projectStatusTypeID>/', methods = ['DELETE'])
 def delete_project_status_lut(projectStatusTypeID):
     try:
         projectStatusType = query.get_project_status_lut(projectStatusTypeID)
@@ -4209,8 +4266,8 @@ def delete_project_status_lut(projectStatusTypeID):
 ##############################################################################
 # ProjectType
 ##############################################################################
-@api.route('/projecttypes/', methods = ['GET'])
-@api.route('/projecttypes/<int:projectTypeID>/', methods = ['GET'])
+@website.route('/projecttypes/', methods = ['GET'])
+@website.route('/projecttypes/<int:projectTypeID>/', methods = ['GET'])
 def get_project_type(projectTypeID=None):
     try:
         if projectTypeID is None:
@@ -4224,7 +4281,7 @@ def get_project_type(projectTypeID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projecttypes/<int:projectTypeID>/', methods = ['PUT'])
+@website.route('/projecttypes/<int:projectTypeID>/', methods = ['PUT'])
 def update_project_type(projectTypeID):
     try:
         projectType = query.get_project_type(projectTypeID)
@@ -4245,7 +4302,7 @@ def update_project_type(projectTypeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projecttypes/', methods=['POST'])
+@website.route('/projecttypes/', methods=['POST'])
 def create_project_type():
     try:
         form = forms.ProjectTypeForm(request.form)
@@ -4261,7 +4318,7 @@ def create_project_type():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/projecttypes/<int:projectTypeID>/', methods = ['DELETE'])
+@website.route('/projecttypes/<int:projectTypeID>/', methods = ['DELETE'])
 def delete_project_type(projectTypeID):
     try:
         projectType = query.get_project_type(projectTypeID)
@@ -4280,8 +4337,8 @@ def delete_project_type(projectTypeID):
 ##############################################################################
 # RCStatusList
 ##############################################################################
-@api.route('/reviewcommitteestatuses/', methods = ['GET'])
-@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['GET'])
+@website.route('/reviewcommitteestatuses/', methods = ['GET'])
+@website.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['GET'])
 def get_rc_status_list(reviewCommitteeStatusID=None):
     try:
         if reviewCommitteeStatusID is None:
@@ -4295,7 +4352,7 @@ def get_rc_status_list(reviewCommitteeStatusID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['PUT'])
+@website.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['PUT'])
 def update_rc_status_list(reviewCommitteeStatusID):
     try:
         rcStatus = query.get_review_committee_status(reviewCommitteeStatusID)
@@ -4316,7 +4373,7 @@ def update_rc_status_list(reviewCommitteeStatusID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteestatuses/', methods=['POST'])
+@website.route('/reviewcommitteestatuses/', methods=['POST'])
 def create_rc_status_list():
     try:
         form = forms.ReviewCommitteeStatusLUTForm(request.form)
@@ -4332,7 +4389,7 @@ def create_rc_status_list():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['DELETE'])
+@website.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods = ['DELETE'])
 def delete_rc_status_list(reviewCommitteeStatusID):
     try:
         rcStatusList = query.get_review_committee_status(reviewCommitteeStatusID)
@@ -4351,8 +4408,8 @@ def delete_rc_status_list(reviewCommitteeStatusID):
 ##############################################################################
 # ReviewCommittee
 ##############################################################################
-@api.route('/reviewcommittees/', methods = ['GET'])
-@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['GET'])
+@website.route('/reviewcommittees/', methods = ['GET'])
+@website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['GET'])
 def get_review_committee(reviewCommitteeID = None):
     try:
         if reviewCommitteeID is None:
@@ -4366,7 +4423,7 @@ def get_review_committee(reviewCommitteeID = None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['PUT'])
+@website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['PUT'])
 def update_review_committee(reviewCommitteeID):
     try:
         rc = query.get_review_committee(reviewCommitteeID)
@@ -4394,7 +4451,7 @@ def update_review_committee(reviewCommitteeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommittees/', methods = ['POST'])
+@website.route('/reviewcommittees/', methods = ['POST'])
 def create_review_committee():
     try:
         form = forms.ReviewCommitteeForm(request.form)
@@ -4417,7 +4474,7 @@ def create_review_committee():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['DELETE'])
+@website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['DELETE'])
 def delete_review_committee(reviewCommitteeID):
     try:
         rc = query.get_review_committee(reviewCommitteeID)
@@ -4436,8 +4493,8 @@ def delete_review_committee(reviewCommitteeID):
 ##############################################################################
 # Review CommitteeList
 ##############################################################################
-@api.route('/reviewcommitteelist/', methods = ['GET'])
-@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['GET'])
+@website.route('/reviewcommitteelist/', methods = ['GET'])
+@website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['GET'])
 def get_review_committee_list(reviewCommitteeID=None):
     try:
         if reviewCommitteeID is None:
@@ -4451,7 +4508,7 @@ def get_review_committee_list(reviewCommitteeID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/',methods = ['PUT'])
+@website.route('/reviewcommitteelist/<int:reviewCommitteeID>/',methods = ['PUT'])
 def update_review_committee_list(reviewCommitteeID):
     try:
         rcList = query.get_review_committee_lut(reviewCommitteeID)
@@ -4472,7 +4529,7 @@ def update_review_committee_list(reviewCommitteeID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteelist/',methods = ['POST'])
+@website.route('/reviewcommitteelist/',methods = ['POST'])
 def create_review_committee_list():
     try:
         form = forms.ReviewCommitteeLUTForm(request.form)
@@ -4488,7 +4545,7 @@ def create_review_committee_list():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['DELETE'])
+@website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods = ['DELETE'])
 def delete_review_committee_list(reviewCommitteeID):
     try:
         reviewCommittee = query.get_review_committee_lut(reviewCommitteeID)
@@ -4507,8 +4564,8 @@ def delete_review_committee_list(reviewCommitteeID):
 ##############################################################################
 # Staff
 ##############################################################################
-@api.route('/staff/', methods = ['GET'])
-@api.route('/staff/<int:staffID>/', methods = ['GET'])
+@website.route('/staff/', methods = ['GET'])
+@website.route('/staff/<int:staffID>/', methods = ['GET'])
 def get_staff(staffID=None):
     try:
         if staffID is None:
@@ -4522,7 +4579,7 @@ def get_staff(staffID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/staff/<int:staffID>/',methods = ['PUT'])
+@website.route('/staff/<int:staffID>/',methods = ['PUT'])
 def update_staff(staffID):
     try:
         staff = query.get_staff(staffID)
@@ -4556,7 +4613,7 @@ def update_staff(staffID):
     except Exception as e:
         internal_error(e)
 
-@api.route('/staff/',methods = ['POST'])
+@website.route('/staff/',methods = ['POST'])
 def create_staff():
     try:
         form = forms.StaffForm(request.form)
@@ -4585,7 +4642,7 @@ def create_staff():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staff/<int:staffID>/', methods = ['DELETE'])
+@website.route('/staff/<int:staffID>/', methods = ['DELETE'])
 def delete_staff(staffID):
     try:
         staff = query.get_staff(staffID)
@@ -4604,8 +4661,8 @@ def delete_staff(staffID):
 ##############################################################################
 # Staff Role
 ##############################################################################
-@api.route('/staffroles/', methods = ['GET'])
-@api.route('/staffroles/<int:staffRoleID>/', methods = ['GET'])
+@website.route('/staffroles/', methods = ['GET'])
+@website.route('/staffroles/<int:staffRoleID>/', methods = ['GET'])
 def get_staff_role(staffRoleID=None):
     try:
         if staffRoleID is None:
@@ -4619,7 +4676,7 @@ def get_staff_role(staffRoleID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staffroles/<int:staffRoleID>/',methods = ['PUT'])
+@website.route('/staffroles/<int:staffRoleID>/',methods = ['PUT'])
 def update_staff_role(staffRoleID):
     try:
         staffRole = query.get_staff_role(staffRoleID)
@@ -4640,7 +4697,7 @@ def update_staff_role(staffRoleID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staffroles/',methods = ['POST'])
+@website.route('/staffroles/',methods = ['POST'])
 def create_staff_role():
     try:
         form = forms.StaffRoleLUTForm(request.form)
@@ -4656,7 +4713,7 @@ def create_staff_role():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/staffroles/<int:staffRoleID>/', methods = ['DELETE'])
+@website.route('/staffroles/<int:staffRoleID>/', methods = ['DELETE'])
 def delete_staff_role(staffRoleID):
     try:
         staffRole = query.get_staff_role(staffRoleID)
@@ -4675,8 +4732,8 @@ def delete_staff_role(staffRoleID):
 ##############################################################################
 # Staff Training
 ##############################################################################
-@api.route('/stafftrainings/', methods = ['GET'])
-@api.route('/stafftrainings/<int:staffTrainingID>/', methods = ['GET'])
+@website.route('/stafftrainings/', methods = ['GET'])
+@website.route('/stafftrainings/<int:staffTrainingID>/', methods = ['GET'])
 def get_staff_training(staffTrainingID=None):
     try:
         if staffTrainingID is None:
@@ -4690,7 +4747,7 @@ def get_staff_training(staffTrainingID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/stafftrainings/<int:staffTrainingID>/',methods = ['PUT'])
+@website.route('/stafftrainings/<int:staffTrainingID>/',methods = ['PUT'])
 def update_staff_training(staffTrainingID):
     try:
         stafftraining = query.get_staff_training(staffTrainingID)
@@ -4713,7 +4770,7 @@ def update_staff_training(staffTrainingID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/stafftrainings/',methods = ['POST'])
+@website.route('/stafftrainings/',methods = ['POST'])
 def create_staff_training():
     try:
         form = forms.StaffTrainingForm(request.form)
@@ -4731,7 +4788,7 @@ def create_staff_training():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/stafftrainings/<int:staffTrainingID>/', methods = ['DELETE'])
+@website.route('/stafftrainings/<int:staffTrainingID>/', methods = ['DELETE'])
 def delete_staff_training(staffTrainingID):
     try:
         stafftraining = query.get_staff_training(staffTrainingID)
@@ -4750,8 +4807,8 @@ def delete_staff_training(staffTrainingID):
 ##############################################################################
 # Tracing
 ##############################################################################
-@api.route('/tracings/', methods = ['GET'])
-@api.route('/tracings/<int:tracingID>/', methods = ['GET'])
+@website.route('/tracings/', methods = ['GET'])
+@website.route('/tracings/<int:tracingID>/', methods = ['GET'])
 def get_tracing(tracingID=None):
     try:
         if tracingID is None:
@@ -4765,7 +4822,7 @@ def get_tracing(tracingID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracings/<int:tracingID>/',methods = ['PUT'])
+@website.route('/tracings/<int:tracingID>/',methods = ['PUT'])
 def update_tracing(tracingID):
     try:
         tracing = query.get_tracing(tracingID)
@@ -4789,7 +4846,7 @@ def update_tracing(tracingID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracings/',methods = ['POST'])
+@website.route('/tracings/',methods = ['POST'])
 def create_tracing():
     try:
         form = forms.TracingForm(request.form)
@@ -4808,7 +4865,7 @@ def create_tracing():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracings/<int:tracingID>/', methods = ['DELETE'])
+@website.route('/tracings/<int:tracingID>/', methods = ['DELETE'])
 def delete_tracing(tracingID):
     try:
         tracing = query.get_tracing(tracingID)
@@ -4827,8 +4884,8 @@ def delete_tracing(tracingID):
 ##############################################################################
 # Tracing Source LUT
 ##############################################################################
-@api.route('/tracingsources/', methods = ['GET'])
-@api.route('/tracingsources/<int:tracingSourceID>/', methods = ['GET'])
+@website.route('/tracingsources/', methods = ['GET'])
+@website.route('/tracingsources/<int:tracingSourceID>/', methods = ['GET'])
 def get_tracing_source(tracingSourceID=None):
     try:
         if tracingSourceID is None:
@@ -4842,7 +4899,7 @@ def get_tracing_source(tracingSourceID=None):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracingsources/<int:tracingSourceID>/',methods = ['PUT'])
+@website.route('/tracingsources/<int:tracingSourceID>/',methods = ['PUT'])
 def update_tracing_source(tracingSourceID):
     try:
         tracingSource = query.get_tracing_source(tracingSourceID)
@@ -4862,7 +4919,7 @@ def update_tracing_source(tracingSourceID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracingsources/',methods = ['POST'])
+@website.route('/tracingsources/',methods = ['POST'])
 def create_tracing_source():
     try:
         form = forms.TracingSourceLUTForm(request.form)
@@ -4877,7 +4934,7 @@ def create_tracing_source():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/tracingsources/<int:tracingSourceID>/', methods = ['DELETE'])
+@website.route('/tracingsources/<int:tracingSourceID>/', methods = ['DELETE'])
 def delete_tracing_source(tracingSourceID):
     try:
         tracingSource = query.get_tracing_source(tracingSourceID)
@@ -4896,8 +4953,8 @@ def delete_tracing_source(tracingSourceID):
 ##############################################################################
 # UCR Report
 ##############################################################################
-@api.route('/ucrreports/', methods = ['GET'])
-@api.route('/ucrreports/<int:ucrReportID>/', methods = ['GET'])
+@website.route('/ucrreports/', methods = ['GET'])
+@website.route('/ucrreports/<int:ucrReportID>/', methods = ['GET'])
 def get_ucr_report(ucrReportID=None):
     try:
         if ucrReportID is None:
@@ -4911,7 +4968,7 @@ def get_ucr_report(ucrReportID=None):
     except Exception as e:
         internal_error(e)
 
-@api.route('/ucrreports/<int:ucrReportID>/', methods = ['PUT'])
+@website.route('/ucrreports/<int:ucrReportID>/', methods = ['PUT'])
 def update_ucr_report(ucrReportID):
     try:
         ucr = query.get_ucr_report(ucrReportID)
@@ -4935,7 +4992,7 @@ def update_ucr_report(ucrReportID):
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ucrreports/', methods = ['POST'])
+@website.route('/ucrreports/', methods = ['POST'])
 def create_ucr_report():
     try:
         form = forms.UCRReportForm(request.form)
@@ -4955,7 +5012,7 @@ def create_ucr_report():
     except Exception as e:
         return internal_error(e)
 
-@api.route('/ucrreports/<int:ucrReportID>/',methods = ['DELETE'])
+@website.route('/ucrreports/<int:ucrReportID>/',methods = ['DELETE'])
 def delete_ucr_report(ucrReportID):
     try:
         ucr = query.get_ucr_report(ucrReportID)

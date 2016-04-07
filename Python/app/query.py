@@ -7,6 +7,21 @@ from app.models import *
 def create_all():
     db.create_all()
 
+def get_races():
+    return RACES
+
+def get_ethnicities():
+    return ETHNICITIES
+
+def get_sexes():
+    return SEXES
+
+def get_vital_statues():
+    return VITAL_STATUSES
+
+def get_states():
+    return STATES
+
 def add(obj):
     db.session.add(obj)
 

@@ -858,11 +858,11 @@ class Patient(CustomModel):
     
     # Relationships
     # M - 1, many patients can be at the same address
-    patientAddress = db.relationship('PatientAddress',back_populates="patients")
+    patientAddress = db.relationship('PatientAddress',uselist=False,back_populates="patients")
     # many to one
     ctcs = db.relationship('CTC',back_populates="patient")
     # M - 1, many patients can be at the same email
-    patientEmail = db.relationship('PatientEmail',back_populates="patients")
+    patientEmail = db.relationship('PatientEmail',uselist=False,back_populates="patients")
     # M - 1, many patients can be at the same phone
     patientPhone = db.relationship('PatientPhone',back_populates="patients")
     # M - 1, many informants may have multiple patients
