@@ -2614,7 +2614,7 @@ def update_patient(patientID):
         return internal_error(e)
 
 @website.route('/patients/', methods=['POST'])
-@website.route('/patientaddresses/<int:patientID>/', methods = ['POST'])
+@website.route('/patients/<int:patientID>/', methods = ['POST'])
 def create_patient(patientID=None):
     try:
         if patientID:
@@ -2671,7 +2671,7 @@ def delete_patient(patientID):
 ##############################################################################
 # Patient Address
 ##############################################################################
-@website.route('/patientaddresses/', methods=['GET'])
+#@website.route('/patientaddresses/', methods=['GET'])
 @website.route('/patientaddresses/<int:patAddressID>/',methods = ['GET'])
 def get_patient_address(patAddressID=None):
     try:
@@ -2679,8 +2679,13 @@ def get_patient_address(patAddressID=None):
             return jsonify(PatientAddresses = [i.dict() for i in query.get_patient_addresses()])
         else:
             patientaddress = query.get_patient_address(patAddressID)
+            form={}
+            form["patientAddress"] = patientaddress
+            form["states"] = query.get_states()
+            form["contactInfoSources"] = query.get_contact_info_sources()
+            form["contactInfoStatuses"] = query.get_contact_info_statuses()
             if patientaddress is not None:
-                return patientaddress.json()
+                return render_template('patient_address_form.html',form=form)
             else:
                 return item_not_found("PatAddressID {} not found".format(patAddressID))
     except Exception as e:
@@ -2740,7 +2745,7 @@ def create_patient_address(patAddressID = None):
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
                 query.add(patientaddress)
-                return jsonify({'patAddressID':patientaddress.patAddressID})
+                return redirect_back('patientaddresses/{}/'.format(patientaddress.patientID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
@@ -2765,7 +2770,7 @@ def delete_patient_address(patAddressID):
 ##############################################################################
 # Patient Email
 ##############################################################################
-@website.route('/patientemails/', methods=['GET'])
+#@website.route('/patientemails/', methods=['GET'])
 @website.route('/patientemails/<int:emailID>/',methods = ['GET'])
 def get_patient_email(emailID=None):
     try:
@@ -2773,8 +2778,13 @@ def get_patient_email(emailID=None):
             return jsonify(PatientEmails = [i.dict() for i in query.get_patient_emails()])
         else:
             patientEmail = query.get_patient_email(emailID)
+            form={}
+            form["email"] = patientEmail
+            form["states"] = query.get_states()
+            form["contactInfoSources"] = query.get_contact_info_sources()
+            form["contactInfoStatuses"] = query.get_contact_info_statuses()
             if patientEmail is not None:
-                return patientEmail.json()
+                return render_template('patient_email_form.html',form=form)
             else:
                 return item_not_found("EmailID {} not found".format(emailID))
     except Exception as e:
@@ -2826,7 +2836,7 @@ def create_patient_email(emailID = None):
                     emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                     )
                 query.add(patientEmail)
-                return jsonify({'emailID':patientEmail.emailID})
+                return redirect_back('patientemails/{}/'.format(patientEmail.patientID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
