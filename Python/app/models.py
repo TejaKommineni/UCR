@@ -669,9 +669,9 @@ class Informant(CustomModel):
     
     # Relationships
     # 1 - M, one patient may have multiple informants
-    patients = db.relationship("Patient",back_populates= "informant")
+    patients = db.relationship("Patient",back_populates= "informants")
     # 1 - M, one informant may have muleple addresses/phones
-    informantAddresses = db.relationship("InformantAddress")
+    informantAddress = db.relationship("InformantAddress", uselist=False)
     informantPhones = db.relationship("InformantPhone")
     # M - 1, many contacts can have the same informant
     contacts = db.relationship("Contact",back_populates="informant")
@@ -712,7 +712,7 @@ class InformantAddress(CustomModel):
     
     # Relationships
     # 1 - M, one informant may have multiple addresses
-    informant = db.relationship("Informant", back_populates = "informantAddresses")
+    informant = db.relationship("Informant", back_populates = "informantAddress")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     
@@ -864,9 +864,9 @@ class Patient(CustomModel):
     # M - 1, many patients can be at the same email
     patientEmail = db.relationship('PatientEmail',uselist=False,back_populates="patients")
     # M - 1, many patients can be at the same phone
-    patientPhone = db.relationship('PatientPhone',back_populates="patients")
+    patientPhone = db.relationship('PatientPhone', uselist=False,back_populates="patients")
     # M - 1, many informants may have multiple patients
-    informant = db.relationship('Informant',back_populates="patients")
+    informants = db.relationship('Informant',back_populates="patients")
     
     def __repr__(self):
         return "<Patient(\

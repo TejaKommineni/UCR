@@ -43,10 +43,6 @@
                   <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{form["patientEmail"]["emailStatusDate"]}}">
                 </div>
             </div>
-          </fieldset>
-          
-          <fieldset>
-                <legend>Database Information</legend>
                 <div class="form-group">
                   <div class="row">
                     <div class = "col-md-2">
@@ -68,8 +64,10 @@
                     <!-- Extra hidden fields -->
                     {% if form['patientEmail'] is not none %}
                         <input type="hidden" name="_method" value="put" />
-                    {% endif %}
+                        <input type="hidden" name="patientID" value="{{form["patientEmail"]["patientID"]}}"/>
+                    {% else %}
                         <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
+                    {% endif %}
                 </div>
               </div>
             </fieldset>

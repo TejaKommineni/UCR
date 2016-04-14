@@ -72,10 +72,7 @@
                   <input type="date" class="form-control" name="addressStatusDate" id="date_addressStatusDate" value="{{form["patientAddress"]["addressStatusDate"]}}">
                 </div>
             </div>
-          </fieldset>
-          
-          <fieldset>
-                <legend>Database Information</legend>
+      
                 <div class="form-group">
                   <div class="row">
                     <div class = "col-md-2">
@@ -96,9 +93,11 @@
                     </div>
                     <!-- Extra hidden fields -->
                     {% if form['patientAddress'] is not none %}
-                    <input class="form-control" type="hidden" id="text_method" name="_method" value="put" />
+                        <input type="hidden" name="_method" value="put" />
+                        <input type="hidden" name="patientID" value="{{form["patientAddress"]["patientID"]}}"/>
+                    {% else %}
+                        <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
                     {% endif %}
-                    <input class="form-contorl" type="hidden" id="text_method" name="patientID" value="{{form["patient"]["patientID"]}}"/>
                 </div>
               </div>
             </fieldset>

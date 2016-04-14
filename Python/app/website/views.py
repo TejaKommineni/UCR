@@ -790,17 +790,19 @@ def invalid_method():
     return render_template("error.html",message = message), 400
 
 def missing_params(e):
-    return "Error: {}".format(e), 400
+    message = "Error: {}".format(e)
+    return render_template("error.html", message=message)
 
 def out_of_date_error():
     message = "Conflict detected. Object has been changed. Please refresh data and update."
     return message, 409
 
 def internal_error(e):
-    return "Error: {}".format(e), 500
+    message = "Error: {}".format(e)
+    return render_template("error.html", message = message), 500
 
 def item_deleted(message):
-    return message
+    return render_template("error.html", message = message)
 
 def get_dependencies(record):
     deps = list(dependent_objects(record).limit(5))
@@ -1299,7 +1301,7 @@ def delete_contact_info_status(contactInfoStatusID):
 #############################################################################
 # ctc
 #############################################################################
-@website.route('/ctcs/', methods = ['GET'])
+#@website.route('/ctcs/', methods = ['GET'])
 @website.route('/ctcs/<int:ctcID>/', methods = ['GET'])
 def get_ctc(ctcID = None):
     try:
@@ -1308,7 +1310,9 @@ def get_ctc(ctcID = None):
         else:
             ctc = query.get_ctc(ctcID)
             if ctc is not None:
-                return ctc.json()
+                form = {'ctc' : ctc}
+                form["states"] = query.get_states()
+                return render_template('ctc_form.html',form=form)
             else:
                 return item_not_found("CtcID {} not found".format(ctcID))
     except Exception as e:
@@ -1339,7 +1343,7 @@ def update_ctc(ctcID):
                     ctc.dnc = request.form['dnc']
                     ctc.dncReason = request.form['dncReason']
                     query.commit()
-                    return ctc.json()
+                    return redirect_back('ctcs/{}/'.format(ctcID))
                 else:
                     return out_of_date_error()
             else:
@@ -1350,32 +1354,41 @@ def update_ctc(ctcID):
         return internal_error(e)
 
 @website.route('/ctcs/',methods=['POST'])
-def create_ctc():
+@website.route('/ctcs/<int:ctcID>/', methods = ['POST'])
+def create_ctc(ctcID=None):
     try:
-        form = forms.CTCForm(request.form)
-        if form.validate():
-            ctc = models.CTC(
-                patientID = request.form['patientID'],
-                dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d"),
-                site = request.form['site'],
-                histology = request.form['histology'],
-                behavior = request.form['behavior'],
-                ctcSequence = request.form['ctcSequence'],
-                stage = request.form['stage'],
-                dxAge = request.form['dxAge'],
-                dxStreet1 = request.form['dxStreet1'],
-                dxStreet2 = request.form['dxStreet2'],
-                dxCity = request.form['dxCity'],
-                dxState = request.form['dxState'],
-                dxZip = request.form['dxZip'],
-                dxCounty = request.form['dxCounty'],
-                dnc = request.form['dnc'],
-                dncReason = request.form['dncReason']
-            )
-            query.add(ctc)
-            return jsonify({"ctcID" : ctc.ctcID})
+        if ctcID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_ctc(ctcID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_ctc(ctcID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.CTCForm(request.form)
+            if form.validate():
+                ctc = models.CTC(
+                    patientID = request.form['patientID'],
+                    dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d"),
+                    site = request.form['site'],
+                    histology = request.form['histology'],
+                    behavior = request.form['behavior'],
+                    ctcSequence = request.form['ctcSequence'],
+                    stage = request.form['stage'],
+                    dxAge = request.form['dxAge'],
+                    dxStreet1 = request.form['dxStreet1'],
+                    dxStreet2 = request.form['dxStreet2'],
+                    dxCity = request.form['dxCity'],
+                    dxState = request.form['dxState'],
+                    dxZip = request.form['dxZip'],
+                    dxCounty = request.form['dxCounty'],
+                    dnc = request.form['dnc'],
+                    dncReason = request.form['dncReason']
+                )
+                query.add(ctc)
+                return redirect_back('ctcs/{}/'.format(ctc.ctcID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2084,7 +2097,7 @@ def delete_incentive(incentiveID):
 ##############################################################################
 # Informant
 ##############################################################################
-@website.route('/informants/', methods=['GET'])
+#@website.route('/informants/', methods=['GET'])
 @website.route('/informants/<int:informantID>/',methods = ['GET'])
 def get_informant(informantID=None):
     try:
@@ -2093,7 +2106,15 @@ def get_informant(informantID=None):
         else:
             informant = query.get_informant(informantID)
             if informant is not None:
-                return informant.json()
+                form={}
+                form["informant"] = informant
+                form["informantPhones"] = informant.informantPhones
+                form["informantAddress"] = informant.informantAddress
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["phoneTypes"] = query.get_phone_types()
+                return render_template("informant_form.html",form=form)
             else:
                 return item_not_found("InformantID {} not found".format(informantID))
     except Exception as e:
@@ -2115,7 +2136,7 @@ def update_informant(informantID):
                     informant.informantRelationship = request.form['informantRelationship']
                     informant.notes = request.form['notes']
                     query.commit()
-                    return informant.json()
+                    return redirect_back('informants/{}/'.format(informantID))
                 else:
                     return out_of_date_error()
             else:
@@ -2126,23 +2147,32 @@ def update_informant(informantID):
         return internal_error(e)
 
 @website.route('/informants/', methods=['POST'])
-def create_informant():
+@website.route('/informants/<int:informantID>/', methods = ['POST'])
+def create_informant(informantID = None):
     try:
-        form = forms.InformantForm(request.form)
-        if form.validate():
-            informant = models.Informant(
-                patientID = request.form['patientID'],
-                firstName = request.form['firstName'],
-                lastName = request.form['lastName'],
-                middleName = request.form['middleName'],
-                informantPrimary = request.form['informantPrimary'],
-                informantRelationship = request.form['informantRelationship'],
-                notes = request.form['notes']
-                )
-            query.add(informant)
-            return jsonify({'informantID':informant.informantID})
+        if informantID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_informant(informantID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_informant(informantID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.InformantForm(request.form)
+            if form.validate():
+                informant = models.Informant(
+                    patientID = request.form['patientID'],
+                    firstName = request.form['firstName'],
+                    lastName = request.form['lastName'],
+                    middleName = request.form['middleName'],
+                    informantPrimary = request.form['informantPrimary'],
+                    informantRelationship = request.form['informantRelationship'],
+                    notes = request.form['notes']
+                    )
+                query.add(informant)
+                return redirect_back('informants/{}/'.format(informant.informantID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -2165,7 +2195,7 @@ def delete_informant(informantID):
 ##############################################################################
 # Informant Address
 ##############################################################################
-@website.route('/informantaddresses/', methods=['GET'])
+#@website.route('/informantaddresses/', methods=['GET'])
 @website.route('/informantaddresses/<int:informantAddressID>/',methods = ['GET'])
 def get_informant_address(informantAddressID=None):
     try:
@@ -2174,7 +2204,12 @@ def get_informant_address(informantAddressID=None):
         else:
             informantAddress = query.get_informant_address(informantAddressID)
             if informantAddress is not None:
-                return informantAddress.json()
+                form={}
+                form["informantAddress"] = informantAddress
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                return render_template('informant_address_form.html',form=form)
             else:
                 return item_not_found("InformantAddressID {} not found".format(informantAddressID))
     except Exception as e:
@@ -2198,7 +2233,7 @@ def update_informant_address(informantAddressID):
                     informantAddress.zip = request.form['zip']
                     informantAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return informantAddress.json()
+                    return redirect_back('informantaddresses/{}/'.format(informantAddressID))
                 else:
                     return out_of_date_error()
             else:
@@ -2209,25 +2244,34 @@ def update_informant_address(informantAddressID):
         return internal_error(e)
 
 @website.route('/informantaddresses/', methods=['POST'])
-def create_informant_address():
+@website.route('/informantaddresses/<int:informantAddressID>/', methods = ['POST'])
+def create_informant_address(informantAddressID = None):
     try:
-        form = forms.InformantAddressForm(request.form)
-        if form.validate():
-            informantAddress = models.InformantAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                informantID = request.form['informantID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                )
-            query.add(informantAddress)
-            return jsonify({'informantAddressID':informantAddress.informantAddressID})
+        if informantAddressID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_informant_address(informantAddressID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_informant_address(informantAddressID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.InformantAddressForm(request.form)
+            if form.validate():
+                informantAddress = models.InformantAddress(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    informantID = request.form['informantID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    street = request.form['street'],
+                    street2 = request.form['street2'],
+                    city = request.form['city'],
+                    state = request.form['state'],
+                    zip = request.form['zip'],
+                    addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                    )
+                query.add(informantAddress)
+                return redirect_back('informantaddresses/{}/'.format(informantAddress.informantAddressID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -2250,7 +2294,7 @@ def delete_informant_address(informantAddressID):
 ##############################################################################
 # Informant Phone
 ##############################################################################
-@website.route('/informantphones/', methods=['GET'])
+#@website.route('/informantphones/', methods=['GET'])
 @website.route('/informantphones/<int:informantPhoneID>/',methods = ['GET'])
 def get_informant_phone(informantPhoneID=None):
     try:
@@ -2259,7 +2303,12 @@ def get_informant_phone(informantPhoneID=None):
         else:
             informantPhone = query.get_informant_phone(informantPhoneID)
             if informantPhone is not None:
-                return informantPhone.json()
+                form={}
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["phoneTypes"] = query.get_phone_types()
+                return render_template('informant_phone_form.html',form=form, informantPhone=informantPhone)
             else:
                 return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
     except Exception as e:
@@ -2280,7 +2329,7 @@ def update_informant_phone(informantPhoneID):
                     informantPhone.phoneNumber = request.form['phoneNumber']
                     informantPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return informantPhone.json()
+                    return redirect_back('informantphones/{}/'.format(informantPhoneID))
                 else:
                     return out_of_date_error()
             else:
@@ -2291,22 +2340,31 @@ def update_informant_phone(informantPhoneID):
         return internal_error(e)
 
 @website.route('/informantphones/', methods=['POST'])
-def create_informant_phone():
+@website.route('/informantphones/<int:informantPhoneID>/', methods = ['POST'])
+def create_informant_phone(informantPhoneID=None):
     try:
-        form = forms.InformantPhoneForm(request.form)
-        if form.validate():
-            informantPhone = models.InformantPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                informantID = request.form['informantID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
-                )
-            query.add(informantPhone)
-            return jsonify({'informantPhoneID':informantPhone.informantPhoneID})
+        if informantPhoneID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_informant_phone(informantPhoneID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_informant_phone(informantPhoneID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.InformantPhoneForm(request.form)
+            if form.validate():
+                informantPhone = models.InformantPhone(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    informantID = request.form['informantID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    phoneTypeID = request.form['phoneTypeID'],
+                    phoneNumber = request.form['phoneNumber'],
+                    phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    )
+                query.add(informantPhone)
+                return redirect_back('informantphones/{}/'.format(informantPhone.informantPhoneID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -2564,6 +2622,9 @@ def get_patient(patAutoID=None):
                 form["patient"]=patient
                 form["patientAddress"] = patient.patientAddress
                 form["patientEmail"] = patient.patientEmail
+                form["patientPhone"] = patient.patientPhone
+                form["ctcs"] = patient.ctcs
+                form["informants"] = patient.informants
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["races"] = query.get_races()
@@ -2571,6 +2632,7 @@ def get_patient(patAutoID=None):
                 form["sexes"] = query.get_sexes()
                 form["states"] = query.get_states()
                 form["vitalStatuses"] = query.get_vital_statues()
+                form["phoneTypes"] = query.get_phone_types()
                 return render_template("patient_form.html", form = form)
             else:
                 return item_not_found("PatientID {} not found".format(patAutoID))
@@ -2679,12 +2741,12 @@ def get_patient_address(patAddressID=None):
             return jsonify(PatientAddresses = [i.dict() for i in query.get_patient_addresses()])
         else:
             patientaddress = query.get_patient_address(patAddressID)
-            form={}
-            form["patientAddress"] = patientaddress
-            form["states"] = query.get_states()
-            form["contactInfoSources"] = query.get_contact_info_sources()
-            form["contactInfoStatuses"] = query.get_contact_info_statuses()
             if patientaddress is not None:
+                form={}
+                form["patientAddress"] = patientaddress
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 return render_template('patient_address_form.html',form=form)
             else:
                 return item_not_found("PatAddressID {} not found".format(patAddressID))
@@ -2745,7 +2807,7 @@ def create_patient_address(patAddressID = None):
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
                 query.add(patientaddress)
-                return redirect_back('patientaddresses/{}/'.format(patientaddress.patientID))
+                return redirect_back('patientaddresses/{}/'.format(patientaddress.patAddressID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
@@ -2778,17 +2840,17 @@ def get_patient_email(emailID=None):
             return jsonify(PatientEmails = [i.dict() for i in query.get_patient_emails()])
         else:
             patientEmail = query.get_patient_email(emailID)
-            form={}
-            form["email"] = patientEmail
-            form["states"] = query.get_states()
-            form["contactInfoSources"] = query.get_contact_info_sources()
-            form["contactInfoStatuses"] = query.get_contact_info_statuses()
             if patientEmail is not None:
+                form={}
+                form["patientEmail"] = patientEmail
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 return render_template('patient_email_form.html',form=form)
             else:
                 return item_not_found("EmailID {} not found".format(emailID))
     except Exception as e:
-        internal_error(e)
+        return internal_error(e)
 
 @website.route('/patientemails/<int:emailID>/',methods = ['PUT'])
 def update_patient_email(emailID):
@@ -2861,7 +2923,7 @@ def delete_patient_email(emailID):
 ##############################################################################
 # Patient Phone
 ##############################################################################
-@website.route('/patientphones/', methods=['GET'])
+#@website.route('/patientphones/', methods=['GET'])
 @website.route('/patientphones/<int:patPhoneID>/',methods = ['GET'])
 def get_patient_phone(patPhoneID=None):
     try:
@@ -2870,7 +2932,13 @@ def get_patient_phone(patPhoneID=None):
         else:
             patientPhone = query.get_patient_phone(patPhoneID)
             if patientPhone is not None:
-                return patientPhone.json()
+                form={}
+                form["patientPhone"] = patientPhone
+                form["states"] = query.get_states()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["phoneTypes"] = query.get_phone_types()
+                return render_template('patient_phone_form.html',form=form)
             else:
                 return item_not_found("PatPhoneID {} not found".format(patPhoneID))
     except Exception as e:
@@ -2891,7 +2959,7 @@ def update_patient_phone(patPhoneID):
                     patientPhone.phoneNumber = request.form['phoneNumber']
                     patientPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return patientPhone.json()
+                    return redirect_back('patientphones/{}/'.format(patPhoneID))
                 else:
                     return out_of_date_error()
             else:
@@ -2902,22 +2970,31 @@ def update_patient_phone(patPhoneID):
         return internal_error(e)
 
 @website.route('/patientphones/', methods=['POST'])
-def create_patient_phone():
+@website.route('/patientphones/<int:patPhoneID>/', methods = ['POST'])
+def create_patient_phone(patPhoneID=None):
     try:
-        form = forms.PatientPhoneForm(request.form)
-        if form.validate():
-            patientPhone = models.PatientPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
-                )
-            query.add(patientPhone)
-            return jsonify({'patPhoneID':patientPhone.patPhoneID})
+        if patPhoneID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient_phone(patPhoneID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient_phone(patPhoneID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientPhoneForm(request.form)
+            if form.validate():
+                patientPhone = models.PatientPhone(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    patientID = request.form['patientID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    phoneTypeID = request.form['phoneTypeID'],
+                    phoneNumber = request.form['phoneNumber'],
+                    phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    )
+                query.add(patientPhone)
+                return redirect_back('patientphones/{}/'.format(patientPhone.patientID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -3151,7 +3228,7 @@ def delete_phase_status(logPhaseID):
 #############################################################################
 # Phone Type
 #############################################################################
-@website.route('/phonetypes/', methods = ['GET'])
+#@website.route('/phonetypes/', methods = ['GET'])
 @website.route('/phonetypes/<int:phoneTypeID>/', methods=['GET'])
 def get_phone_type(phoneTypeID = None):
     try:
