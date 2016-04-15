@@ -1,0 +1,13 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+{% for staffRole in form["staffRoles"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/staff_role_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set staffRole = none %}
+    {% include 'helper_forms/staff_role_form.html' %}
+{% endif %}
+{% endblock %}

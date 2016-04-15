@@ -1102,11 +1102,19 @@ def delete_contact(contactID):
 def get_contact_type(contactTypeID = None):
     try:
         if contactTypeID is None:
-            return jsonify(ContactTypes = [i.dict() for i in query.get_contact_types()])
+            form={
+                "contactTypes" : query.get_contact_types(),
+                "add": True
+            }
+            return render_template("contact_types.html",form=form)
         else:
             contactType = query.get_contact_type(contactTypeID)
             if contactType is not None:
-                return contactType.json()
+                form={
+                    "contactTypes" : [contactType],
+                    "add" : False
+                }
+                return render_template('contact_types.html',form=form)
             else:
                 return item_not_found("ContactTypeID {} not found".format(contactTypeID))
     except Exception as e:
@@ -1122,7 +1130,7 @@ def update_contact_type(contactTypeID):
                 if int(request.form['versionID']) == contactType.versionID:
                     contactType.contactDefinition = request.form['contactDefinition']
                     query.commit()
-                    return contactType.json()
+                    return redirect_back('contacttypes/{}/'.format(contactTypeID))
                 else:
                     return out_of_date_error()
             else:
@@ -1133,17 +1141,26 @@ def update_contact_type(contactTypeID):
         return internal_error(e)
 
 @website.route('/contacttypes/',methods=['POST'])
-def create_contact_type():
+@website.route('/contacttypes/<int:contactTypeID>/',methods=['POST'])
+def create_contact_type(contactTypeID = None):
     try:
-        form = forms.ContactTypeLUTForm(request.form)
-        if form.validate():
-            contactType = models.ContactTypeLUT(
-                contactDefinition = request.form['contactDefinition'],
-            )
-            query.add(contactType)
-            return jsonify({"contactTypeID" : contactType.contactTypeID})
+        if contactTypeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_contact_type(contactTypeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_contact_type(contactTypeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ContactTypeLUTForm(request.form)
+            if form.validate():
+                contactType = models.ContactTypeLUT(
+                    contactDefinition = request.form['contactDefinition'],
+                )
+                query.add(contactType)
+                return redirect_back('contacttypes/{}/'.format(contactType.contactTypeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1171,11 +1188,19 @@ def delete_contact_type(contactTypeID):
 def get_contact_info_source(contactInfoSourceID = None):
     try:
         if contactInfoSourceID is None:
-            return jsonify(ContactInfoSources = [i.dict() for i in query.get_contact_info_sources()])
+            form={
+                "contactInfoSources" : query.get_contact_info_sources(),
+                "add": True
+            }
+            return render_template("contact_info_sources.html",form=form)
         else:
             contactInfoSource = query.get_contact_info_source(contactInfoSourceID)
             if contactInfoSource is not None:
-                return contactInfoSource.json()
+                form={
+                    "contactInfoSources" : [contactInfoSource],
+                    "add" : False
+                }
+                return render_template('contact_info_sources.html',form=form)
             else:
                 return item_not_found("ContactInfoSourceID {} not found".format(contactInfoSourceID))
     except Exception as e:
@@ -1191,7 +1216,7 @@ def update_contact_info_source(contactInfoSourceID):
                 if int(request.form['versionID']) == contactInfoSource.versionID:
                     contactInfoSource.contactInfoSource = request.form['contactInfoSource']
                     query.commit()
-                    return contactInfoSource.json()
+                    return redirect_back('contactinfosources/{}/'.format(contactInfoSourceID))
                 else:
                     return out_of_date_error()
             else:
@@ -1202,17 +1227,26 @@ def update_contact_info_source(contactInfoSourceID):
         return internal_error(e)
 
 @website.route('/contactinfosources/',methods=['POST'])
-def create_contact_info_source():
+@website.route('/contactinfosources/<int:contactInfoSourceID>/',methods=['POST'])
+def create_contact_info_source(contactInfoSourceID=None):
     try:
-        form = forms.ContactInfoSourceForm(request.form)
-        if form.validate():
-            contactInfoSource = models.ContactInfoSourceLUT(
-                contactInfoSource = request.form['contactInfoSource'],
-            )
-            query.add(contactInfoSource)
-            return jsonify({"contactInfoSourceID" : contactInfoSource.contactInfoSourceID})
+        if contactInfoSourceID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_contact_info_source(contactInfoSourceID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_contact_info_source(contactInfoSourceID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ContactInfoSourceForm(request.form)
+            if form.validate():
+                contactInfoSource = models.ContactInfoSourceLUT(
+                    contactInfoSource = request.form['contactInfoSource'],
+                )
+                query.add(contactInfoSource)
+                return redirect_back('contactinfosources/{}/'.format(contactInfoSource.contactInfoSourceID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1239,11 +1273,19 @@ def delete_contact_info_source(contactInfoSourceID):
 @website.route('/contactinfostatuses/<int:contactInfoStatusID>/', methods = ['GET'])
 def get_contact_info_status(contactInfoStatusID = None):
     if contactInfoStatusID is None:
-        return jsonify(ContactInfoStatuses = [i.dict() for i in query.get_contact_info_statuses()])
+        form={
+                "contactInfoStatuses" : query.get_contact_info_statuses(),
+                "add": True
+            }
+        return render_template("contact_info_statuses.html",form=form)
     else:
         contactInfoStatus = query.get_contact_info_status(contactInfoStatusID)
         if contactInfoStatus is not None:
-            return contactInfoStatus.json()
+            form={
+                    "contactInfoStatuses" : [contactInfoStatus],
+                    "add" : False
+                }
+            return render_template('contact_info_statuses.html',form=form)
         else:
             return item_not_found("ContactInfoStatusID {} not found".format(contactInfoStatusID))
 
@@ -1257,7 +1299,7 @@ def update_contact_info_status(contactInfoStatusID):
                 if int(request.form['versionID']) == contactInfoStatus.versionID:
                     contactInfoStatus.contactInfoStatus = request.form['contactInfoStatus']
                     query.commit()
-                    return contactInfoStatus.json()
+                    return redirect_back('contactinfostatuses/{}/'.format(contactInfoStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -1268,17 +1310,26 @@ def update_contact_info_status(contactInfoStatusID):
         return internal_error(e)
 
 @website.route('/contactinfostatuses/',methods=['POST'])
-def create_contact_info_status():
+@website.route('/contactinfostatuses/<int:contactInfoStatusID>/',methods=['POST'])
+def create_contact_info_status(contactInfoStatusID=None):
     try:
-        form = forms.ContactInfoStatusForm(request.form)
-        if form.validate():
-            contactInfoStatus = models.ContactInfoStatusLUT(
-                contactInfoStatus = request.form['contactInfoStatus'],
-            )
-            query.add(contactInfoStatus)
-            return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
+        if contactInfoStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_contact_info_status(contactInfoStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_contact_info_status(contactInfoStatusID)
+            else:
+                return invalid_method()
         else:
-            missing_params(form.errors)
+            form = forms.ContactInfoStatusForm(request.form)
+            if form.validate():
+                contactInfoStatus = models.ContactInfoStatusLUT(
+                    contactInfoStatus = request.form['contactInfoStatus'],
+                )
+                query.add(contactInfoStatus)
+                return redirect_back('contactinfostatuses/{}/'.format(contactInfoStatus.contactInfoStatusID))
+            else:
+                missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1821,11 +1872,19 @@ def delete_facility_address(facilityAddressID):
 def get_funding_source(fundingSourceID=None):
     try:
         if fundingSourceID is None:
-            return jsonify(FundingSources = [i.dict() for i in query.get_funding_sources()])
+            form={
+                "fundingSources" : query.get_funding_sources(),
+                "add": True
+            }
+            return render_template("funding_sources.html",form=form)
         else:
             fundingSource = query.get_funding_source(fundingSourceID)
             if fundingSource is not None:
-                return fundingSource.json()
+                form={
+                    "fundingSources" : [fundingSource],
+                    "add": False
+                }
+                return render_template("funding_sources.html",form=form)
             else:
                 return item_not_found("FundingSourceID {} not found".format(fundingSourceID))
     except Exception as e:
@@ -1841,7 +1900,7 @@ def update_funding_source(fundingSourceID):
                 if int(request.form['versionID']) == fundingSource.versionID:
                     fundingSource.fundingSource = request.form['fundingSource']
                     query.commit()
-                    return fundingSource.json()
+                    return redirect_back('fundingsources/{}/'.format(fundingSourceID))
                 else:
                     return out_of_date_error()
             else:
@@ -1852,17 +1911,26 @@ def update_funding_source(fundingSourceID):
         return internal_error(e)
 
 @website.route('/fundingsources/', methods=['POST'])
-def create_funding_source():
+@website.route('/fundingsources/<int:fundingSourceID>/',methods=['POST'])
+def create_funding_source(fundingSourceID=None):
     try:
-        form = forms.FundingSourceLUTForm(request.form)
-        if form.validate():
-            fundingSource = models.FundingSourceLUT(
-                fundingSource = request.form['fundingSource']
-            )
-            query.add(fundingSource)
-            return jsonify({'fundingSourceID':fundingSource.fundingSourceID})
+        if fundingSourceID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_funding_source(fundingSourceID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_funding_source(fundingSourceID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.FundingSourceLUTForm(request.form)
+            if form.validate():
+                fundingSource = models.FundingSourceLUT(
+                    fundingSource = request.form['fundingSource']
+                )
+                query.add(fundingSource)
+                return redirect_back('fundingsources/{}/'.format(fundingSource.fundingSourceID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1890,11 +1958,19 @@ def delete_funding_source(fundingSourceID):
 def get_grant_status(grantStatusID=None):
     try:
         if grantStatusID is None:
-            return jsonify(GrantStatuses = [i.dict() for i in query.get_grant_statuses()])
+            form={
+                "grantStatuses" : query.get_grant_statuses(),
+                "add": True
+            }
+            return render_template("grant_statuses.html",form=form)
         else:
             grantStatus = query.get_grant_status(grantStatusID)
             if grantStatus is not None:
-                return grantStatus.json()
+                form={
+                    "grantStatuses" : [grantStatus],
+                    "add": False
+                }
+                return render_template("grant_statuses.html",form=form)
             else:
                 return item_not_found("GrantStatusID {} not found".format(grantStatusID))
     except Exception as e:
@@ -1910,7 +1986,7 @@ def update_grant_status(grantStatusID):
                 if int(request.form['versionID']) == grantStatus.versionID:
                     grantStatus.grantStatus = request.form['grantStatus']
                     query.commit()
-                    return grantStatus.json()
+                    return redirect_back('grantstatuses/{}/'.format(grantStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -1921,17 +1997,26 @@ def update_grant_status(grantStatusID):
         return internal_error(e)
 
 @website.route('/grantstatuses/', methods=['POST'])
-def create_grant_status():
+@website.route('/grantstatuses/<int:grantStatusID>/',methods=['POST'])
+def create_grant_status(grantStatusID=None):
     try:
-        form = forms.GrantStatusLUTForm(request.form)
-        if form.validate():
-            grantStatus = models.GrantStatusLUT(
-                grantStatus = request.form['grantStatus']
-            )
-            query.add(grantStatus)
-            return jsonify({'grantStatusID':grantStatus.grantStatusID})
+        if grantStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_grant_status(grantStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_grant_status(grantStatusID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.GrantStatusLUTForm(request.form)
+            if form.validate():
+                grantStatus = models.GrantStatusLUT(
+                    grantStatus = request.form['grantStatus']
+                )
+                query.add(grantStatus)
+                return redirect_back('grantstatuses/{}/'.format(grantStatus.grantStatusID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1959,11 +2044,19 @@ def delete_grant_status(grantStatusID):
 def get_human_subject_training(humanSubjectTrainingID=None):
     try:
         if humanSubjectTrainingID is None:
-            return jsonify(HumanSubjectTrainings = [i.dict() for i in query.get_human_subject_trainings()])
+            form={
+                "humanSubjectTrainings" : query.get_human_subject_trainings(),
+                "add": True
+            }
+            return render_template("human_subject_trainings.html",form=form)
         else:
             humanSubjectTraining = query.get_human_subject_training(humanSubjectTrainingID)
             if humanSubjectTraining is not None:
-                return humanSubjectTraining.json()
+                form={
+                    "humanSubjectTrainings" : [humanSubjectTraining],
+                    "add": False
+                }
+                return render_template("human_subject_trainings.html",form=form)
             else:
                 return item_not_found("HumanSubjectTrainingID {} not found".format(humanSubjectTrainingID))
     except Exception as e:
@@ -1979,7 +2072,7 @@ def update_human_subject_training(humanSubjectTrainingID):
                 if int(request.form['versionID']) == humanSubjectTraining.versionID:
                     humanSubjectTraining.trainingType = request.form['trainingType']
                     query.commit()
-                    return humanSubjectTraining.json()
+                    return redirect_back('humansubjecttrainings/{}/'.format(humanSubjectTrainingID))
                 else:
                     return out_of_date_error()
             else:
@@ -1990,17 +2083,26 @@ def update_human_subject_training(humanSubjectTrainingID):
         return internal_error(e)
 
 @website.route('/humansubjecttrainings/', methods=['POST'])
-def create_human_subject_training():
+@website.route('/humansubjecttrainings/<int:humanSubjectTrainingID>/',methods=['POST'])
+def create_human_subject_training(humanSubjectTrainingID=None):
     try:
-        form = forms.HumanSubjectTrainingLUTForm(request.form)
-        if form.validate():
-            humanSubjectTraining = models.HumanSubjectTrainingLUT(
-                trainingType = request.form['trainingType']
-            )
-            query.add(humanSubjectTraining)
-            return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})
+        if humanSubjectTrainingID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_human_subject_training(humanSubjectTrainingID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_human_subject_training(humanSubjectTrainingID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.HumanSubjectTrainingLUTForm(request.form)
+            if form.validate():
+                humanSubjectTraining = models.HumanSubjectTrainingLUT(
+                    trainingType = request.form['trainingType']
+                )
+                query.add(humanSubjectTraining)
+                return redirect_back('humansubjecttrainings/{}/'.format(humanSubjectTraining.humanSubjectTrainingID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2392,11 +2494,19 @@ def delete_informant_phone(informantPhoneID):
 def get_irb_holder(irbHolderID=None):
     try:
         if irbHolderID is None:
-            return jsonify(irbHolders = [i.dict() for i in query.get_irb_holders()])
+            form={
+                "irbHolders" : query.get_irb_holders(),
+                "add": True
+            }
+            return render_template("irb_holders.html",form=form)
         else:
             irb = query.get_irb_holder(irbHolderID)
             if irb is not None:
-                return irb.json()
+                form={
+                    "irbHolders" : [irb],
+                    "add": False
+                }
+                return render_template("irb_holders.html",form=form)
             else:
                 return item_not_found("IrbHolderID {} not found".format(irbHolderID))
     except Exception as e:
@@ -2413,7 +2523,7 @@ def update_irb_holder(irbHolderID):
                     irb.holder = request.form['holder']
                     irb.holderDefinition = request.form['holderDefinition']
                     query.commit()
-                    return irb.json()
+                    return redirect_back('irbholders/{}/'.format(irbHolderID))
                 else:
                     return out_of_date_error()
             else:
@@ -2424,18 +2534,27 @@ def update_irb_holder(irbHolderID):
         return internal_error(e)
 
 @website.route('/irbholders/', methods = ['POST'])
-def create_irb_holder():
+@website.route('/irbholders/<int:irbHolderID>/',methods=['POST'])
+def create_irb_holder(irbHolderID=None):
     try:
-        form = forms.IRBHolderLUTForm(request.form)
-        if form.validate():
-            irb = models.IRBHolderLUT(
-                holder = request.form['holder'],
-                holderDefinition = request.form['holderDefinition']
-            )
-            query.add(irb)
-            return jsonify({"irbHolderID":irb.irbHolderID})
+        if irbHolderID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_irb_holder(irbHolderID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_irb_holder(irbHolderID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.IRBHolderLUTForm(request.form)
+            if form.validate():
+                irb = models.IRBHolderLUT(
+                    holder = request.form['holder'],
+                    holderDefinition = request.form['holderDefinition']
+                )
+                query.add(irb)
+                return redirect_back('irbholders/{}/'.format(irb.irbHolderID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2542,11 +2661,19 @@ def delete_log(logID):
 def get_log_subject(logSubjectID=None):
     try:
         if logSubjectID is None:
-            return jsonify(LogSubjects = [i.dict() for i in query.get_log_subjects()])
+            form={
+                "logSubjects" : query.get_log_subjects(),
+                "add": True
+            }
+            return render_template("log_subjects.html",form=form)
         else:
             logSubject = query.get_log_subject(logSubjectID)
             if logSubject is not None:
-                return logSubject.json()
+                form={
+                    "irbHolders" : query.get_log_subject(logSubjectID),
+                    "add": True
+                }
+                return render_template("log_subjects.html",form=form)
             else:
                 return item_not_found("LogSubjectID {} not found".format(logSubjectID))
     except Exception as e:
@@ -2562,7 +2689,7 @@ def update_log_subject(logSubjectID):
                 if int(request.form['versionID']) == logSubject.versionID:
                     logSubject.logSubject = request.form['logSubject']
                     query.commit()
-                    return logSubject.json()
+                    return redirect_back('logsubjects/{}/'.format(logSubjectID))
                 else:
                     return out_of_date_error()
             else:
@@ -2573,17 +2700,26 @@ def update_log_subject(logSubjectID):
         internal_error(e)
 
 @website.route('/logsubjects/', methods = ['POST'])
-def create_log_subject():
+@website.route('/logsubjects/<int:logSubjectID>/',methods=['POST'])
+def create_log_subject(logSubjectID=None):
     try:
-        form = forms.LogSubjectLUTForm(request.form)
-        if form.validate():
-            logSubject = models.LogSubjectLUT(
-                logSubject = request.form['logSubject']
-            )
-            query.add(logSubject)
-            return jsonify({"logSubjectID":logSubject.logSubjectID})
+        if logSubjectID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_log_subject(logSubjectID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_log_subject(logSubjectID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.LogSubjectLUTForm(request.form)
+            if form.validate():
+                logSubject = models.LogSubjectLUT(
+                    logSubject = request.form['logSubject']
+                )
+                query.add(logSubject)
+                return redirect_back('logsubjects/{}/'.format(logSubject.logSubjectID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3093,11 +3229,19 @@ def delete_patient_project_status(patientProjectStatusID):
 def get_patient_project_status_type(patientProjectStatusTypeID=None):
     try:
         if patientProjectStatusTypeID is None:
-            return jsonify(PatientProjectStatusTypes = [i.dict() for i in query.get_patient_project_status_types()])
+            form={
+                "patientProjectStatuses" : query.get_patient_project_status_types(),
+                "add": True
+            }
+            return render_template("patient_project_status_types.html",form=form)
         else:
             patientProjectStatusType = query.get_patient_project_status_type(patientProjectStatusTypeID)
             if patientProjectStatusType is not None:
-                return patientProjectStatusType.json()
+                form={
+                    "patientProjectStatuses" : [patientProjectStatusType],
+                    "add": False
+                }
+                return render_template("patient_project_status_types.html",form=form)
             else:
                 return item_not_found("PatientProjectStatusTypeID {} not found".format(patientProjectStatusTypeID))
     except Exception as e:
@@ -3113,7 +3257,7 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
                 if int(request.form['versionID']) == patientProjectStatusType.versionID:
                     patientProjectStatusType.statusDescription = request.form['statusDescription']
                     query.commit()
-                    return patientProjectStatusType.json()
+                    return redirect_back('patientprojectstatustypes/{}/'.format(patientProjectStatusTypeID))
                 else:
                     return out_of_date_error()
             else:
@@ -3124,17 +3268,26 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
         return internal_error(e)
 
 @website.route('/patientprojectstatustypes/', methods=['POST'])
-def create_patient_project_status_type():
+@website.route('/patientprojectstatustypes/<int:patientProjectStatusTypeID>/', methods=['POST'])
+def create_patient_project_status_type(patientProjectStatusTypeID = None):
     try:
-        form = forms.PatientProjectStatusLUTForm(request.form)
-        if form.validate():
-            patientProjectStatusType = models.PatientProjectStatusLUT(
-                statusDescription = request.form['statusDescription']
-            )
-            query.add(patientProjectStatusType)
-            return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})
+        if patientProjectStatusTypeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient_project_status_type(patientProjectStatusTypeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient_project_status_type(patientProjectStatusTypeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientProjectStatusLUTForm(request.form)
+            if form.validate():
+                patientProjectStatusType = models.PatientProjectStatusLUT(
+                    statusDescription = request.form['statusDescription']
+                )
+                query.add(patientProjectStatusType)
+                return redirect_back('patientprojectstatustypes/{}/'.format(patientProjectStatusType.patientProjectStatusTypeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3162,11 +3315,19 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
 def get_phase_status(logPhaseID=None):
     try:
         if logPhaseID is None:
-            return jsonify(PhaseStatuses = [i.dict() for i in query.get_phase_statuses()])
+            form={
+                "phaseStatuses" : query.get_phase_statuses(),
+                "add": True
+            }
+            return render_template("phase_statuses.html",form=form)
         else:
             phaseStatus = query.get_phase_status(logPhaseID)
             if phaseStatus is not None:
-                return phaseStatus.json()
+                form={
+                    "phaseStatuses" : [phaseStatus],
+                    "add": False
+                }
+                return render_template("phase_statuses.html",form=form)
             else:
                 return item_not_found("LogPhaseID {} not found".format(logPhaseID))
     except Exception as e:
@@ -3183,7 +3344,7 @@ def update_phase_status(logPhaseID):
                     phaseStatus.phaseStatus = request.form['phaseStatus']
                     phaseStatus.phaseDescription = request.form['phaseDescription']
                     query.commit()
-                    return phaseStatus.json()
+                    return redirect_back('phasestatuses/{}/'.format(logPhaseID))
                 else:
                     return out_of_date_error()
             else:
@@ -3194,18 +3355,27 @@ def update_phase_status(logPhaseID):
         return internal_error(e)
 
 @website.route('/phasestatuses/', methods=['POST'])
-def create_phase_status():
+@website.route('/phasestatuses/<int:logPhaseID>/', methods=['POST'])
+def create_phase_status(logPhaseID=None):
     try:
-        form = forms.PhaseStatusForm(request.form)
-        if form.validate():
-            phaseStatus = models.PhaseStatus(
-                phaseStatus = request.form['phaseStatus'],
-                phaseDescription = request.form['phaseDescription']
-            )
-            query.add(phaseStatus)
-            return jsonify({'logPhaseID':phaseStatus.logPhaseID})
+        if logPhaseID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_phase_status(logPhaseID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_phase_status(logPhaseID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PhaseStatusForm(request.form)
+            if form.validate():
+                phaseStatus = models.PhaseStatus(
+                    phaseStatus = request.form['phaseStatus'],
+                    phaseDescription = request.form['phaseDescription']
+                )
+                query.add(phaseStatus)
+                return redirect_back('patientprojectstatustypes/{}/'.format(phaseStatus.logPhaseID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3228,16 +3398,24 @@ def delete_phase_status(logPhaseID):
 #############################################################################
 # Phone Type
 #############################################################################
-#@website.route('/phonetypes/', methods = ['GET'])
+@website.route('/phonetypes/', methods = ['GET'])
 @website.route('/phonetypes/<int:phoneTypeID>/', methods=['GET'])
 def get_phone_type(phoneTypeID = None):
     try:
         if phoneTypeID is None:
-            return jsonify(PhoneTypes = [i.dict() for i in query.get_phone_types()])
+            form={
+                "phoneTypes" : query.get_phone_types(),
+                "add": True
+            }
+            return render_template("phone_types.html",form=form)
         else:
             phoneType = query.get_phone_type(phoneTypeID)
             if phoneType is not None:
-                return phoneType.json()
+                form={
+                    "phoneTypes" : [phoneType],
+                    "add": False
+                }
+                return render_template("phone_types.html",form=form)
             else:
                 return item_not_found("PhoneTypeID {} not found".format(phoneTypeID))
     except Exception as e:
@@ -3253,7 +3431,7 @@ def update_phone_type(phoneTypeID):
                 if int(request.form['versionID']) == phoneType.versionID:
                     phoneType.phoneType = request.form['phoneType']
                     query.commit()
-                    return phoneType.json()
+                    return redirect_back('phonetypes/{}/'.format(phoneTypeID))
                 else:
                     return out_of_date_error()
             else:
@@ -3264,17 +3442,26 @@ def update_phone_type(phoneTypeID):
         return internal_error(e)
 
 @website.route('/phonetypes/', methods=['POST'])
-def create_phone_type():
+@website.route('/phonetypes/<int:phoneTypeID>/', methods=['POST'])
+def create_phone_type(phoneTypeID=None):
     try:
-        form = forms.PhoneTypeForm(request.form)
-        if form.validate():
-            phoneType = models.PhoneTypeLUT(
-                phoneType = request.form['phoneType']
-            )
-            query.add(phoneType)
-            return jsonify({"phoneTypeID": phoneType.phoneTypeID})
+        if phoneTypeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_phone_type(phoneTypeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_phone_type(phoneTypeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PhoneTypeForm(request.form)
+            if form.validate():
+                phoneType = models.PhoneTypeLUT(
+                    phoneType = request.form['phoneType']
+                )
+                query.add(phoneType)
+                return redirect_back('phonetypes/{}/'.format(phoneType.phoneTypeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4287,11 +4474,19 @@ def delete_project_status(projectStatusID):
 def get_project_status_lut(projectStatusTypeID=None):
     try:
         if projectStatusTypeID is None:
-            return jsonify(ProjectStatusTypes = [i.dict() for i in query.get_project_status_luts()])
+            form={
+                "projectStatusTypes" : query.get_project_status_luts(),
+                "add": True
+            }
+            return render_template("project_status_types.html",form=form)
         else:
             projectStatusType = query.get_project_status_lut(projectStatusTypeID)
             if projectStatusType is not None:
-                return projectStatusType.json()
+                form={
+                    "projectStatusTypes" : [projectStatusType],
+                    "add": False
+                }
+                return render_template("project_status_types.html",form=form)
             else:
                 return item_not_found("ProjectStatusTypeID {} not found".format(projectStatusTypeID))
     except Exception as e:
@@ -4308,7 +4503,7 @@ def update_project_status_lut(projectStatusTypeID):
                     projectStatusType.projectStatus = request.form['projectStatus']
                     projectStatusType.projectStatusDefinition = request.form['projectStatusDefinition']
                     query.commit()
-                    return projectStatusType.json()
+                    return redirect_back('projectstatustypes/{}/'.format(projectStatusTypeID))
                 else:
                     return out_of_date_error()
             else:
@@ -4319,18 +4514,27 @@ def update_project_status_lut(projectStatusTypeID):
         return internal_error(e)
 
 @website.route('/projectstatustypes/', methods=['POST'])
-def create_project_status_lut():
+@website.route('/projectstatustypes/<int:projectStatusTypeID>/', methods=['POST'])
+def create_project_status_lut(projectStatusTypeID=None):
     try:
-        form = forms.ProjectStatusLUTForm(request.form)
-        if form.validate():
-            projectStatusType = models.ProjectStatusLUT(
-                projectStatus = request.form['projectStatus'],
-                projectStatusDefinition = request.form['projectStatusDefinition']
-            )
-            query.add(projectStatusType)
-            return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})
+        if projectStatusTypeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_project_status_lut(projectStatusTypeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_project_status(projectStatusTypeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ProjectStatusLUTForm(request.form)
+            if form.validate():
+                projectStatusType = models.ProjectStatusLUT(
+                    projectStatus = request.form['projectStatus'],
+                    projectStatusDefinition = request.form['projectStatusDefinition']
+                )
+                query.add(projectStatusType)
+                return redirect_back('patientprojectstatustypes/{}/'.format(projectStatusType.projectStatusTypeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4358,11 +4562,19 @@ def delete_project_status_lut(projectStatusTypeID):
 def get_project_type(projectTypeID=None):
     try:
         if projectTypeID is None:
-            return jsonify(ProjectTypes = [i.dict() for i in query.get_project_types()])
+            form={
+                "projectTypes" : query.get_project_types(),
+                "add": True
+            }
+            return render_template("project_types.html",form=form)
         else:
             projectType = query.get_project_type(projectTypeID)
             if projectType is not None:
-                return projectType.json()
+                form={
+                    "projectTypes" : [projectType],
+                    "add": False
+                }
+                return render_template("project_types.html",form=form)
             else:
                 return item_not_found("ProjectTypeID {} not found".format(projectTypeID))
     except Exception as e:
@@ -4379,7 +4591,7 @@ def update_project_type(projectTypeID):
                     projectType.projectType = request.form['projectType']
                     projectType.projectTypeDefinition = request.form['projectTypeDefinition']
                     query.commit()
-                    return projectType.json()
+                    return redirect_back('projecttypes/{}/'.format(projectTypeID))
                 else:
                     return out_of_date_error()
             else:
@@ -4390,18 +4602,27 @@ def update_project_type(projectTypeID):
         return internal_error(e)
 
 @website.route('/projecttypes/', methods=['POST'])
-def create_project_type():
+@website.route('/projecttypes/<int:projectTypeID>/', methods=['POST'])
+def create_project_type(projectTypeID=None):
     try:
-        form = forms.ProjectTypeForm(request.form)
-        if form.validate():
-            projectType = models.ProjectType(
-                projectType = request.form['projectType'],
-                projectTypeDefinition = request.form['projectTypeDefinition']
-            )
-            query.add(projectType)
-            return jsonify({'projectTypeID':projectType.projectTypeID})
+        if projectTypeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_project_type(projectTypeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_project_type(projectTypeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ProjectTypeForm(request.form)
+            if form.validate():
+                projectType = models.ProjectType(
+                    projectType = request.form['projectType'],
+                    projectTypeDefinition = request.form['projectTypeDefinition']
+                )
+                query.add(projectType)
+                return redirect_back('projecttypes/{}/'.format(projectType.projectTypeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4429,11 +4650,19 @@ def delete_project_type(projectTypeID):
 def get_rc_status_list(reviewCommitteeStatusID=None):
     try:
         if reviewCommitteeStatusID is None:
-            return jsonify(ReviewCommitteeStatuses = [i.dict() for i in query.get_review_committee_statuses()])
+            form={
+                "reviewCommitteeStatuses" : query.get_review_committee_statuses(),
+                "add": True
+            }
+            return render_template("review_committee_statuses.html",form=form)
         else:
             rcStatus = query.get_review_committee_status(reviewCommitteeStatusID)
             if rcStatus is not None:
-                return rcStatus.json()
+                form={
+                    "reviewCommitteeStatuses" : [rcStatus],
+                    "add": False
+                }
+                return render_template("review_committee_statuses.html",form=form)
             else:
                 return item_not_found("ReviewCommitteeStatusID {} not found".format(reviewCommitteeStatusID))
     except Exception as e:
@@ -4450,7 +4679,7 @@ def update_rc_status_list(reviewCommitteeStatusID):
                     rcStatus.reviewCommitteeStatus = request.form['reviewCommitteeStatus']
                     rcStatus.reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
                     query.commit()
-                    return rcStatus.json()
+                    return redirect_back('reviewcommitteestatuses/{}/'.format(reviewCommitteeStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -4461,18 +4690,27 @@ def update_rc_status_list(reviewCommitteeStatusID):
         return internal_error(e)
 
 @website.route('/reviewcommitteestatuses/', methods=['POST'])
-def create_rc_status_list():
+@website.route('/reviewcommitteestatuses/<int:reviewCommitteeStatusID>/', methods=['POST'])
+def create_rc_status_list(reviewCommitteeStatusID=None):
     try:
-        form = forms.ReviewCommitteeStatusLUTForm(request.form)
-        if form.validate():
-            rcStatus = models.ReviewCommitteeStatusLUT(
-                reviewCommitteeStatus = request.form['reviewCommitteeStatus'],
-                reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
-            )
-            query.add(rcStatus)
-            return jsonify({'reviewCommitteeStatusID':rcStatus.reviewCommitteeStatusID})
+        if reviewCommitteeStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_rc_status_list(reviewCommitteeStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_rc_status_list(reviewCommitteeStatusID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ReviewCommitteeStatusLUTForm(request.form)
+            if form.validate():
+                rcStatus = models.ReviewCommitteeStatusLUT(
+                    reviewCommitteeStatus = request.form['reviewCommitteeStatus'],
+                    reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
+                )
+                query.add(rcStatus)
+                return redirect_back('reviewcommitteestatuses/{}/'.format(rcStatus.reviewCommitteeStatusID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4585,11 +4823,19 @@ def delete_review_committee(reviewCommitteeID):
 def get_review_committee_list(reviewCommitteeID=None):
     try:
         if reviewCommitteeID is None:
-            return jsonify(ReviewCommitteeList = [i.dict() for i in query.get_review_committee_luts()])
+            form={
+                "reviewCommittees" : query.get_review_committee_luts(),
+                "add": True
+            }
+            return render_template("review_committee_lists.html",form=form)
         else:
             review_committee_list = query.get_review_committee_lut(reviewCommitteeID)
             if review_committee_list is not None:
-                return review_committee_list.json()
+                form={
+                    "reviewCommittees" : [review_committee_list],
+                    "add": False
+                }
+                return render_template("review_committee_lists.html",form=form)
             else:
                 return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
@@ -4606,7 +4852,7 @@ def update_review_committee_list(reviewCommitteeID):
                     rcList.reviewCommittee = request.form['reviewCommittee']
                     rcList.reviewCommitteeDescription = request.form['reviewCommitteeDescription']
                     query.commit()
-                    return rcList.json()
+                    return redirect_back('reviewcommitteelist/{}/'.format(reviewCommitteeID))
                 else:
                     return out_of_date_error()
             else:
@@ -4617,18 +4863,27 @@ def update_review_committee_list(reviewCommitteeID):
         return internal_error(e)
 
 @website.route('/reviewcommitteelist/',methods = ['POST'])
-def create_review_committee_list():
+@website.route('/reviewcommitteelist/<int:reviewCommitteeID>/',methods = ['POST'])
+def create_review_committee_list(reviewCommitteeID=None):
     try:
-        form = forms.ReviewCommitteeLUTForm(request.form)
-        if form.validate():
-            reviewCommitteeList = models.ReviewCommitteeLUT(
-                reviewCommittee = request.form['reviewCommittee'],
-                reviewCommitteeDescription = request.form['reviewCommitteeDescription']
-                )
-            query.add(reviewCommitteeList)
-            return jsonify({'reviewCommitteeID':reviewCommitteeList.reviewCommitteeID})
+        if reviewCommitteeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_review_committee_list(reviewCommitteeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_review_committee_list(reviewCommitteeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ReviewCommitteeLUTForm(request.form)
+            if form.validate():
+                reviewCommitteeList = models.ReviewCommitteeLUT(
+                    reviewCommittee = request.form['reviewCommittee'],
+                    reviewCommitteeDescription = request.form['reviewCommitteeDescription']
+                    )
+                query.add(reviewCommitteeList)
+                return redirect_back('reviewcommitteelist/{}/'.format(reviewCommitteeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4753,11 +5008,19 @@ def delete_staff(staffID):
 def get_staff_role(staffRoleID=None):
     try:
         if staffRoleID is None:
-            return jsonify(StaffRoles = [i.dict() for i in query.get_staff_roles()])
+            form={
+                "staffRoles" : query.get_staff_roles(),
+                "add": True
+            }
+            return render_template("staff_roles.html",form=form)
         else:
             staffRole = query.get_staff_role(staffRoleID)
             if staffRole is not None:
-                return staffRole.json()
+                form={
+                    "staffRoles" : [staffRole],
+                    "add": False
+                }
+                return render_template("staff_roles.html",form=form)
             else:
                 return item_not_found("StaffRoleID {} not found".format(staffRoleID))
     except Exception as e:
@@ -4774,7 +5037,7 @@ def update_staff_role(staffRoleID):
                     staffRole.staffRole = request.form['staffRole']
                     staffRole.staffRoleDescription = request.form['staffRoleDescription']
                     query.commit()
-                    return staffRole.json()
+                    return redirect_back('staffroles/{}/'.format(staffRoleID))
                 else:
                     return out_of_date_error()
             else:
@@ -4785,18 +5048,27 @@ def update_staff_role(staffRoleID):
         return internal_error(e)
 
 @website.route('/staffroles/',methods = ['POST'])
-def create_staff_role():
+@website.route('/staffroles/<int:staffRoleID>/',methods = ['POST'])
+def create_staff_role(staffRoleID=None):
     try:
-        form = forms.StaffRoleLUTForm(request.form)
-        if form.validate():
-            staffRole = models.StaffRoleLUT(
-                staffRole = request.form['staffRole'],
-                staffRoleDescription = request.form['staffRoleDescription'],
-            )
-            query.add(staffRole)
-            return jsonify({'staffRoleID':staffRole.staffRoleID})
+        if staffRoleID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_staff_role(staffRoleID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_staff_role(staffRoleID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.StaffRoleLUTForm(request.form)
+            if form.validate():
+                staffRole = models.StaffRoleLUT(
+                    staffRole = request.form['staffRole'],
+                    staffRoleDescription = request.form['staffRoleDescription'],
+                )
+                query.add(staffRole)
+                return redirect_back('staffroles/{}/'.format(staffRoleID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4976,11 +5248,19 @@ def delete_tracing(tracingID):
 def get_tracing_source(tracingSourceID=None):
     try:
         if tracingSourceID is None:
-            return jsonify(TracingSources = [i.dict() for i in query.get_tracing_sources()])
+            form={
+                "tracingSources" : query.get_tracing_sources(),
+                "add": True
+            }
+            return render_template("tracing_sources.html",form=form)
         else:
             tracing = query.get_tracing_source(tracingSourceID)
             if tracing is not None:
-                return tracing.json()
+                form={
+                    "tracingSources" : [tracing],
+                    "add": False
+                }
+                return render_template("tracing_sources.html",form=form)
             else:
                 return item_not_found("TracingSourceID {} not found".format(tracingSourceID))
     except Exception as e:
@@ -4996,7 +5276,7 @@ def update_tracing_source(tracingSourceID):
                 if int(request.form['versionID']) == tracingSource.versionID:
                     tracingSource.description = request.form['description']
                     query.commit()
-                    return tracingSource.json()
+                    return redirect_back('tracingsources/{}/'.format(tracingSourceID))
                 else:
                     return out_of_date_error()
             else:
@@ -5007,17 +5287,26 @@ def update_tracing_source(tracingSourceID):
         return internal_error(e)
 
 @website.route('/tracingsources/',methods = ['POST'])
-def create_tracing_source():
+@website.route('/tracingsources/<int:tracingSourceID>/',methods = ['POST'])
+def create_tracing_source(tracingSourceID=None):
     try:
-        form = forms.TracingSourceLUTForm(request.form)
-        if form.validate():
-            tracingSource = models.TracingSourceLUT(
-                description = request.form['description']
-                )
-            ret = query.add(tracingSource)
-            return jsonify({'tracingSourceID':tracingSource.tracingSourceID})
+        if tracingSourceID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_tracing_source(tracingSourceID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_tracing_source(tracingSourceID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.TracingSourceLUTForm(request.form)
+            if form.validate():
+                tracingSource = models.TracingSourceLUT(
+                    description = request.form['description']
+                    )
+                ret = query.add(tracingSource)
+                return redirect_back('tracingsources/{}/'.format(tracingSourceID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -5112,3 +5401,152 @@ def delete_ucr_report(ucrReportID):
                 return item_deleted("UcrReportID {} deleted".format(ucrReportID))
     except Exception as e:
         return internal_error(e)
+
+##############################################################################
+# Lookup Table
+##############################################################################
+@website.route('/lookuptables/', methods=['GET'])
+def get_lookup_tables():
+    form = {"tables": []}
+
+    contactInfoSources = query.get_contact_info_sources()
+    form["tables"].append({
+        "name": "Contact Info Sources",
+        "count" : len(contactInfoSources),
+        "values" : [cis.contactInfoSource for cis in contactInfoSources],
+        "endpoint" : "contactinfosources"
+    })
+
+    contactInfoStatuses = query.get_contact_info_statuses()
+    form["tables"].append({
+        "name": "Contact Info Statuses",
+        "count" : len(contactInfoStatuses),
+        "values" : [cis.contactInfoStatus for cis in contactInfoStatuses],
+        "endpoint" : "contactinfostatuses"
+    })
+
+    contactTypes = query.get_contact_types()
+    form["tables"].append({
+        "name" : "Contact Types",
+        "count" : len(contactTypes),
+        "values" : [ct.contactDefinition for ct in contactTypes],
+        "endpoint" : "contacttypes"
+    })
+
+    fundingSources = query.get_funding_sources()
+    form["tables"].append({
+        "name" : "Funding Sources",
+        "count" : len(fundingSources),
+        "values" : [fs.fundingSource for fs in fundingSources],
+        "endpoint" : "fundingsources"
+    })
+
+    grantStatuses = query.get_grant_statuses()
+    form["tables"].append({
+        "name" : "Grant Statuses",
+        "count" : len(grantStatuses),
+        "values" : [gs.grantStatus for gs in grantStatuses],
+        "endpoint" : "grantstatuses"
+    })
+
+    humanSubjectTrainings = query.get_human_subject_trainings()
+    form["tables"].append({
+        "name" : "Human Subject Trainings",
+        "count" : len(humanSubjectTrainings),
+        "values" : [hst.trainingType for hst in humanSubjectTrainings],
+        "endpoint" : "humansubjecttrainings"
+    })
+
+    irbHolders = query.get_irb_holders()
+    form["tables"].append({
+        "name" : "IRB Holders",
+        "count" : len(irbHolders),
+        "values" : [irb.holder for irb in irbHolders],
+        "endpoint" : "irbholders"
+    })
+
+    logSubjects = query.get_log_subjects()
+    form["tables"].append({
+        "name": "Log Subjects",
+        "count": len(logSubjects),
+        "values" : [ls.logSubject for ls in logSubjects],
+        "endpoint": "logsubjects"
+    })
+
+    patientProjectStatuses = query.get_patient_project_status_types()
+    form["tables"].append({
+        "name": "Patient Project Statuses",
+        "count": len(patientProjectStatuses),
+        "values": [pps.statusDescription for pps in patientProjectStatuses],
+        "endpoint" : "patientprojectstatustypes"
+    })
+
+    phaseStatuses = query.get_phase_statuses()
+    form["tables"].append({
+        "name" : "Phase Status",
+        "count" : len(phaseStatuses),
+        "values" : [ps.phaseStatus for ps in phaseStatuses],
+        "endpoint" : "phasestatuses"
+    })
+
+    phoneTypes = query.get_phone_types()
+    form["tables"].append({
+        "name" : "Phone Types",
+        "count" : len(phoneTypes),
+        "values" : [pt.phoneType for pt in phoneTypes],
+        "endpoint" : "phonetypes"
+    })
+
+    projectStatuses = query.get_project_status_luts()
+    form["tables"].append({
+        "name": "Project Statuses",
+        "count" : len(projectStatuses),
+        "values" : [ps.projectStatus for ps in projectStatuses],
+        "endpoint" : "projectstatustypes"
+    })
+
+    projectTypes = query.get_project_types()
+    form["tables"].append({
+        "name" : "Project Types",
+        "count" : len(projectTypes),
+        "values" : [pt.projectType for pt in projectTypes],
+        "endpoint" : "projecttypes"
+    })
+
+    reviewCommittees = query.get_review_committee_luts()
+    form["tables"].append({
+        "name" : "Review Committees",
+        "count" : len(reviewCommittees),
+        "values" : [rc.reviewCommittee for rc in reviewCommittees],
+        "endpoint" : "reviewcommitteelist"
+    })
+
+    reviewCommitteeStatuses = query.get_review_committee_statuses()
+    form["tables"].append({
+        "name" : "Review Committee Statuses",
+        "count" : len(reviewCommitteeStatuses),
+        "values" : [rcs.reviewCommitteeStatus for rcs in reviewCommitteeStatuses],
+        "endpoint" : "reviewcommitteestatuses"
+    })
+
+    staffRoles = query.get_staff_roles()
+    form["tables"].append({
+        "name" : "Staff Roles",
+        "count" : len(staffRoles),
+        "values" : [sr.staffRole for sr in staffRoles],
+        "endpoint" : "staffroles"
+    })
+
+    tracingSources = query.get_tracing_sources()
+    form["tables"].append({
+        "name" : "Tracing Sources",
+        "count" : len(tracingSources),
+        "values" : [ts.description for ts in tracingSources],
+        "endpoint" : "tracingsources"
+    })
+
+
+
+
+
+    return render_template("lookup_tables_table.html", form=form)

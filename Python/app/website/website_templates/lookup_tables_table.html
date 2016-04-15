@@ -1,0 +1,38 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Lookup Tables</h1>
+        </div>
+      </div>
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Table Name</th>
+                <th>Number of Items</th>
+                <th>Values</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for table in form["tables"] %}
+            <tr>
+                <td><a href="/website/{{table["endpoint"]}}"/>{{table["name"]}}</a></td>
+                <td><a href="/website/{{table["endpoint"]}}"/>{{table["count"]}}</a></td>
+                <td>
+                    <div class="dropdown">
+                        <a id = "dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="true">
+                            Values 
+                            <span class="caret"></span>
+                        </a>
+                    <ul class="dropdown-menu" aria-labelledby="dLabel">
+                        {% for value in table["values"] %}
+                        <li> {{value}}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td><a href="/website/{{table["endpoint"]}}"/>View/Add</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}

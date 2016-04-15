@@ -1,0 +1,13 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+{% for phoneType in form["phoneTypes"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/phone_type_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set phoneType = none %}
+    {% include 'helper_forms/phone_type_form.html' %}
+{% endif %}
+{% endblock %}

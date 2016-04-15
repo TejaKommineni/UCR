@@ -1,0 +1,50 @@
+{% if humanSubjectTraining is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="humanSubjectTraining{{loop.index}}" action='/website/humansubjecttrainings/{{humanSubjectTraining["humanSubjectTrainingID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="humanSubjectTraining{{loop.index}}" action='/website/humansubjecttrainings/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>Human Subject Training</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_humanSubjectTraining{{loop.index}}">Training Type</label>
+                  <input type="text" class="form-control" name="trainingType" id="text_humanSubjectTraining{{loop.index}}" value="{{humanSubjectTraining["trainingType"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{humanSubjectTraining["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{humanSubjectTraining["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>  
+                  {% if humanSubjectTraining is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{humanSubjectTraining["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if humanSubjectTraining is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add HST</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if humanSubjectTraining is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="humanSubjectTrainingID" value="{{humanSubjectTraining["humanSubjectTrainingID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="humanSubjectTrainingID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>

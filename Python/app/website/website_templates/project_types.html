@@ -1,0 +1,13 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+{% for projectType in form["projectTypes"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/project_type_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set projectType = none %}
+    {% include 'helper_forms/project_type_form.html' %}
+{% endif %}
+{% endblock %}

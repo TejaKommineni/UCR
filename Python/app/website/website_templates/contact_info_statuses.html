@@ -1,0 +1,13 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+{% for contactInfoStatus in form["contactInfoStatuses"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/contact_info_status_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set contactInfoStatus = none %}
+    {% include 'helper_forms/contact_info_status_form.html' %}
+{% endif %}
+{% endblock %}

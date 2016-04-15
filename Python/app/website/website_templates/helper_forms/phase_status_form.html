@@ -1,0 +1,54 @@
+{% if phaseStatus is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="phaseStatusForm{{loop.index}}" action='/website/phasestatuses/{{phaseStatus["logPhaseID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="phaseStatusForm{{loop.index}}" action='/website/phasestatuses/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>Phase Status</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_phaseStatus{{loop.index}}">Status</label>
+                  <input type="text" class="form-control" name="phaseStatus" id="text_phaseStatus{{loop.index}}" value="{{phaseStatus["phaseStatus"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_phaseDescription{{loop.index}}">Description</label>
+                  <input type="text" class="form-control" name="phaseDescription" id="text_phaseDescription{{loop.index}}" value="{{phaseStatus["phaseDescription"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{phaseStatus["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{phaseStatus["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>  
+                  {% if phaseStatus is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{phaseStatus["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if phaseStatus is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add Phase Status</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if phaseStatus is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="logPhaseID" value="{{phaseStatus["logPhaseID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="logPhaseID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>

@@ -1,0 +1,54 @@
+{% if irbHolder is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="irbHolderForm{{loop.index}}" action='/website/irbholders/{{irbHolder["irbHolderID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="irbHolderForm{{loop.index}}" action='/website/irbholders/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>IRB Holder</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_irbHolder{{loop.index}}">Holder</label>
+                  <input type="text" class="form-control" name="holder" id="text_irbHolder{{loop.index}}" value="{{irbHolder["holder"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_irbHolderDefinition{{loop.index}}">Holder Definitinon</label>
+                  <input type="text" class="form-control" name="holderDefinition" id="text_irbHolderDefinition{{loop.index}}" value="{{irbHolder["holderDefinition"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{irbHolder["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{irbHolder["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>  
+                  {% if irbHolder is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{irbHolder["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if irbHolder is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add IRB Holder</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if irbHolder is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="irbHolderID" value="{{irbHolder["irbHolderID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="irbHolderID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>
