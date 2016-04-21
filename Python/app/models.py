@@ -671,7 +671,7 @@ class Informant(CustomModel):
     # 1 - M, one patient may have multiple informants
     patients = db.relationship("Patient",back_populates= "informants")
     # 1 - M, one informant may have muleple addresses/phones
-    informantAddress = db.relationship("InformantAddress", uselist=False)
+    informantAddresses = db.relationship("InformantAddress")
     informantPhones = db.relationship("InformantPhone")
     # M - 1, many contacts can have the same informant
     contacts = db.relationship("Contact",back_populates="informant")
@@ -712,7 +712,7 @@ class InformantAddress(CustomModel):
     
     # Relationships
     # 1 - M, one informant may have multiple addresses
-    informant = db.relationship("Informant", back_populates = "informantAddress")
+    informant = db.relationship("Informant", back_populates = "informantAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     
@@ -858,13 +858,13 @@ class Patient(CustomModel):
     
     # Relationships
     # M - 1, many patients can be at the same address
-    patientAddress = db.relationship('PatientAddress',uselist=False,back_populates="patients")
+    patientAddresses = db.relationship('PatientAddress',back_populates="patients")
     # many to one
     ctcs = db.relationship('CTC',back_populates="patient")
     # M - 1, many patients can be at the same email
-    patientEmail = db.relationship('PatientEmail',uselist=False,back_populates="patients")
+    patientEmails = db.relationship('PatientEmail',back_populates="patients")
     # M - 1, many patients can be at the same phone
-    patientPhone = db.relationship('PatientPhone', uselist=False,back_populates="patients")
+    patientPhones = db.relationship('PatientPhone',back_populates="patients")
     # M - 1, many informants may have multiple patients
     informants = db.relationship('Informant',back_populates="patients")
     
@@ -922,7 +922,7 @@ class PatientAddress(CustomModel):
     addressStatusDate = db.Column('address_status_date',db.Date)
     
     # Relationships
-    patients = db.relationship("Patient",back_populates="patientAddress")
+    patients = db.relationship("Patient",back_populates="patientAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
     
@@ -965,7 +965,7 @@ class PatientEmail(CustomModel):
     
     # Relationships
     # 1 - M, one patient may have multiple emails
-    patients = db.relationship("Patient",back_populates="patientEmail")
+    patients = db.relationship("Patient",back_populates="patientEmails")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     
@@ -1001,7 +1001,7 @@ class PatientPhone(CustomModel):
     
     # Relationships
     # M - 1, many patients can be at the same phone
-    patients = db.relationship("Patient",back_populates="patientPhone")
+    patients = db.relationship("Patient",back_populates="patientPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     

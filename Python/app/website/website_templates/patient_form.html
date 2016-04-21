@@ -130,20 +130,91 @@
         <li><a href="#patientCTCsTab" role="tab" data-toggle="tab">CTCs</a></li>
         <li><a href="#patientInformantsTab" role="tab" data-toggle="tab">Informants</a></li>
     </ul>
-    <div class="tab-content">
+    <div class="tab-content">        
         <div class="tab-pane active" id="patientAddressTab">
-            {% include 'helper_forms/patient_address_form.html' %}
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientAddress in form["patientAddresses"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientAddress in form["patientAddresses"] %}
+                {% if loop.index == 1 %}
+                <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                {% else %}
+                <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                {% endif %}
+                    {% include 'helper_forms/patient_address_form.html' %}
+                </div>
+                {% endfor %}
+                <div class="tab-pane" id="newAddressTab">
+                {% set patientAddress = none %}
+                {% include 'helper_forms/patient_address_form.html' %}
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="patientEmailTab">
-            {% include 'helper_forms/patient_email_form.html' %}
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientEmail in form["patientEmails"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientEmail in form["patientEmails"] %}
+                {% if loop.index == 1 %}
+                <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
+                {% else %}
+                <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
+                {% endif %}
+                    {% include 'helper_forms/patient_email_form.html' %}
+                </div>
+                {% endfor %}
+                <div class="tab-pane" id="newEmailTab">
+                {% set patientEmail = none %}
+                {% include 'helper_forms/patient_email_form.html' %}
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="patientPhoneTab">
-            {% include 'helper_forms/patient_phone_form.html' %}
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientPhone in form["patientPhones"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientPhone in form["patientPhones"] %}
+                {% if loop.index == 1 %}
+                <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                {% else %}
+                <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                {% endif %}
+                    {% include 'helper_forms/patient_phone_form.html' %}
+                </div>
+                {% endfor %}
+                <div class="tab-pane" id="newPhoneTab">
+                {% set patientPhone = none %}
+                {% include 'helper_forms/patient_phone_form.html' %}
+                </div>
+            </div>
         </div>
         <div class = "tab-pane" id="patientCTCsTab">
             <form class="formOverride" id="patientCTC">
                 <fieldset>
-                    <legend>CTC Information</legend>
                     <table class="table table-striped no-spacing">
                           <thead>
                             <tr>
@@ -170,7 +241,6 @@
         <div class= "tab-pane" id="patientInformantsTab">
             <form class="formOverride" id="patientInformants">
                 <fieldset>
-                    <legend>Informants</legend>
                     <table class="table table-striped no-spacing">
                           <thead>
                             <tr>

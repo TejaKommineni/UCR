@@ -1,16 +1,15 @@
-{% if form['patientEmail'] is not none %}
+{% if patientEmail is not none %}
     <!-- action url is for update -->
-    <form class="formOverride" id="addressForm" action='/website/patientemails/{{form["patientEmail"]["patientID"]}}/', method='post'>
+    <form class="formOverride" id="addressForm" action='/website/patientemails/{{patientEmail["patientID"]}}/', method='post'>
 {% else %}
     <form class="formOverride" id="addressForm" action='/website/patientemails/', method='post'>
 {% endif %}
       <fieldset>
-        <legend>Email Information</legend>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_email">Email Address</label>
-                  <input type="text" class="form-control" name="email" id="text_email" value="{{form["patientEmail"]["email"]}}">
+                  <input type="text" class="form-control" name="email" id="text_email" value="{{patientEmail["email"]}}">
                 </div>
               </div>
               <div class="row">
@@ -18,7 +17,7 @@
                   <label for="select_contactInfoSource">Contact Info Source</label>        
                   <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       {% for contactInfoSource in form["contactInfoSources"] %}
-                        {% if contactInfoSource["contactInfoSourceID"] == form["patientEmail"]["contactInfoSourceID"] %}
+                        {% if contactInfoSource["contactInfoSourceID"] == patientEmail["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
                         {% else %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -30,7 +29,7 @@
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
                   <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
-                        {% if contactInfoStatus["contactInfoStatusID"] == form["patientEmail"]["contactInfoStatusID"] %}
+                        {% if contactInfoStatus["contactInfoStatusID"] == patientEmail["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>
                         {% else %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}">{{contactInfoStatus["contactInfoStatus"]}}</option>
@@ -40,31 +39,31 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_emailStatusDate">Email Status Date</label>
-                  <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{form["patientEmail"]["emailStatusDate"]}}">
+                  <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{patientEmail["emailStatusDate"]}}">
                 </div>
             </div>
                 <div class="form-group">
                   <div class="row">
                     <div class = "col-md-2">
                       <label for="text_createdDate">Created</label>
-                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{form["patientEmail"]["createdDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{patientEmail["createdDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class = "col-md-2">
                       <label for="text_modifiedDate">Last Modified</label>
-                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{form["patientEmail"]["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{patientEmail["modifiedDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_versionID">Version</label>
-                      {% if form['patientEmail'] is not none %}
-                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{form["patientEmail"]["versionID"]}}" readonly="readonly">
+                      {% if patientEmail is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{patientEmail["versionID"]}}" readonly="readonly">
                       {% else %}
                         <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
                       {% endif %}
                     </div>
                     <!-- Extra hidden fields -->
-                    {% if form['patientEmail'] is not none %}
+                    {% if patientEmail is not none %}
                         <input type="hidden" name="_method" value="put" />
-                        <input type="hidden" name="patientID" value="{{form["patientEmail"]["patientID"]}}"/>
+                        <input type="hidden" name="patientID" value="{{patientEmail["patientID"]}}"/>
                     {% else %}
                         <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
                     {% endif %}
@@ -75,7 +74,7 @@
                 <div class = "form-group">
                   <div class="row">
                     <div class="col-md-2">
-                    {% if form['patientEmail'] is not none %}
+                    {% if patientEmail is not none %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
                     {% else %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Add Email</button>

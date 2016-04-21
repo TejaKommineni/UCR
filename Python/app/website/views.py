@@ -2211,7 +2211,7 @@ def get_informant(informantID=None):
                 form={}
                 form["informant"] = informant
                 form["informantPhones"] = informant.informantPhones
-                form["informantAddress"] = informant.informantAddress
+                form["informantAddresses"] = informant.informantAddresses
                 form["states"] = query.get_states()
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
@@ -2756,9 +2756,9 @@ def get_patient(patAutoID=None):
             if patient is not None:
                 form = {}
                 form["patient"]=patient
-                form["patientAddress"] = patient.patientAddress
-                form["patientEmail"] = patient.patientEmail
-                form["patientPhone"] = patient.patientPhone
+                form["patientAddresses"] = patient.patientAddresses
+                form["patientEmails"] = patient.patientEmails
+                form["patientPhones"] = patient.patientPhones
                 form["ctcs"] = patient.ctcs
                 form["informants"] = patient.informants
                 form["contactInfoSources"] = query.get_contact_info_sources()
@@ -2876,14 +2876,13 @@ def get_patient_address(patAddressID=None):
         if patAddressID is None:
             return jsonify(PatientAddresses = [i.dict() for i in query.get_patient_addresses()])
         else:
-            patientaddress = query.get_patient_address(patAddressID)
-            if patientaddress is not None:
-                form={}
-                form["patientAddress"] = patientaddress
+            patientAddress = query.get_patient_address(patAddressID)
+            if patientAddress is not None:
+                form = {}
                 form["states"] = query.get_states()
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
-                return render_template('patient_address_form.html',form=form)
+                return render_template('patient_address_form.html',form=form, patientAddress = patientAddress)
             else:
                 return item_not_found("PatAddressID {} not found".format(patAddressID))
     except Exception as e:
@@ -2978,11 +2977,10 @@ def get_patient_email(emailID=None):
             patientEmail = query.get_patient_email(emailID)
             if patientEmail is not None:
                 form={}
-                form["patientEmail"] = patientEmail
                 form["states"] = query.get_states()
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
-                return render_template('patient_email_form.html',form=form)
+                return render_template('patient_email_form.html',form=form,patientEmail = patientEmail)
             else:
                 return item_not_found("EmailID {} not found".format(emailID))
     except Exception as e:
@@ -3069,12 +3067,11 @@ def get_patient_phone(patPhoneID=None):
             patientPhone = query.get_patient_phone(patPhoneID)
             if patientPhone is not None:
                 form={}
-                form["patientPhone"] = patientPhone
                 form["states"] = query.get_states()
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["phoneTypes"] = query.get_phone_types()
-                return render_template('patient_phone_form.html',form=form)
+                return render_template('patient_phone_form.html',form=form, patientPhone=patientPhone)
             else:
                 return item_not_found("PatPhoneID {} not found".format(patPhoneID))
     except Exception as e:
