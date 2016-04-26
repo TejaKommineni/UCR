@@ -22,6 +22,12 @@ def get_vital_statues():
 def get_states():
     return STATES
 
+def get_report_types():
+    return UCR_REPORT_TYPES
+
+def get_booleans():
+    return BOOLEANS
+
 def add(obj):
     db.session.add(obj)
 

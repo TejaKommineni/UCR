@@ -1453,8 +1453,8 @@ class TracingSourceLUTForm(BaseForm):
 class UCRReportForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
-    reportType = IntegerField('reportType',
-        []+COMMON_INTEGER_VALIDATORS)
+    reportType = StringField('reportType',
+        []+COMMON_STRING_VALIDATORS)
     reportSubmitted = DateField('reportSubmitted',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)

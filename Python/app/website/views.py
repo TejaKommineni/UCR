@@ -829,7 +829,7 @@ def root():
 ##############################################################################
 # ArcReviews
 ##############################################################################    
-@website.route('/arcreviews/', methods = ['GET'])
+#@website.route('/arcreviews/', methods = ['GET'])
 @website.route('/arcreviews/<int:arcReviewID>/', methods = ['GET'])
 def get_arc_review(arcReviewID = None):
     try:
@@ -838,7 +838,10 @@ def get_arc_review(arcReviewID = None):
         else:
             arcReview = query.get_arc_review(arcReviewID)
             if arcReview is not None:
-                return arcReview.json()
+                form = {}
+                form["staff"] = query.get_staffs()
+                form["projects"] = query.get_projects()
+                return render_template("arc_review_form.html",form=form,arcReview=arcReview)
             else:
                 return item_not_found("ArcReviewID {} not found".format(arcReviewID))
     except Exception as e:
@@ -872,7 +875,7 @@ def update_arc_review(arcReviewID):
                     query.add(arcReview)
                     query.flush()
                     query.commit()
-                    return arcReview.json()
+                    return redirect_back('arcreviews/{}/'.format(arcReviewID))
                 else:
                     return out_of_date_error()
             else:
@@ -883,32 +886,41 @@ def update_arc_review(arcReviewID):
         return internal_error(e)
 
 @website.route('/arcreviews/', methods = ['POST'])
-def create_arc_review():
+@website.route('/arcreviews/<int:arcReviewID>/', methods=['POST'])
+def create_arc_review(arcReviewID = None):
     try:
-        form = forms.ArcReviewForm(request.form)
-        if form.validate():
-            arcReview = models.ArcReview(
-                projectID = request.form['projectID'],
-                reviewType = request.form['reviewType'],
-                dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d"),
-                reviewer1 = request.form['reviewer1'],
-                reviewer1Rec = request.form['reviewer1Rec'],
-                reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d"),
-                reviewer1Comments = request.form['reviewer1Comments'],
-                reviewer2 = request.form['reviewer2'],
-                reviewer2Rec = request.form['reviewer2Rec'],
-                reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d"),
-                reviewer2Comments = request.form['reviewer2Comments'],
-                research = request.form['research'],
-                contact = "true" == request.form['contact'].lower(),
-                linkage = "true" == request.form['linkage'].lower(),
-                engaged = "true" == request.form['engaged'].lower(),
-                nonPublicData = "true" == request.form['nonPublicData'].lower()
-            )
-            query.add(arcReview)
-            return jsonify({"arcReviewID" : arcReview.arcReviewID})
+        if arcReviewID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_arc_review(arcReviewID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_arc_review(arcReviewID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ArcReviewForm(request.form)
+            if form.validate():
+                arcReview = models.ArcReview(
+                    projectID = request.form['projectID'],
+                    reviewType = request.form['reviewType'],
+                    dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d"),
+                    reviewer1 = request.form['reviewer1'],
+                    reviewer1Rec = request.form['reviewer1Rec'],
+                    reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d"),
+                    reviewer1Comments = request.form['reviewer1Comments'],
+                    reviewer2 = request.form['reviewer2'],
+                    reviewer2Rec = request.form['reviewer2Rec'],
+                    reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d"),
+                    reviewer2Comments = request.form['reviewer2Comments'],
+                    research = request.form['research'],
+                    contact = "true" == request.form['contact'].lower(),
+                    linkage = "true" == request.form['linkage'].lower(),
+                    engaged = "true" == request.form['engaged'].lower(),
+                    nonPublicData = "true" == request.form['nonPublicData'].lower()
+                )
+                query.add(arcReview)
+                return redirect_back('arcreviews/{}/'.format(arcReview.arcReviewID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -931,7 +943,7 @@ def delete_arc_review(arcReviewID):
 #############################################################################
 # Budget
 #############################################################################
-@website.route('/budgets/', methods = ['GET'])
+#@website.route('/budgets/', methods = ['GET'])
 @website.route('/budgets/<int:budgetID>/', methods = ['GET'])
 def get_budget(budgetID = None):
     try:
@@ -940,7 +952,9 @@ def get_budget(budgetID = None):
         else:
             budget = query.get_budget(budgetID)
             if budget is not None:
-                return budget.json()
+                form={}
+                form["projects"] = query.get_projects()
+                return render_template("budget_form.html",form=form,budget=budget)
             else:
                 return item_not_found("BudgetID {} not found".format(budgetID))
     except Exception as e:
@@ -961,7 +975,7 @@ def update_budget(budgetID):
                     budget.periodTotal = request.form['periodTotal']
                     budget.periodComment = request.form['periodComment']
                     query.commit()
-                    return budget.json()
+                    return redirect_back('budgets/{}/'.format(budgetID))
                 else:
                     return out_of_date_error()
             else:
@@ -972,22 +986,31 @@ def update_budget(budgetID):
         return internal_error(e)
 
 @website.route('/budgets/',methods=['POST'])
-def create_budget():
+@website.route('/budgets/<int:budgetID>/', methods=['POST'])
+def create_budget(budgetID = None):
     try:
-        form = forms.BudgetForm(request.form)
-        if form.validate():
-            budget = models.Budget(
-                projectID = request.form['projectID'],
-                numPeriods = request.form['numPeriods'],
-                periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
-                periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
-                periodTotal = request.form['periodTotal'],
-                periodComment = request.form['periodComment']
-            )
-            query.add(budget)
-            return jsonify({"budgetID" : budget.budgetID})
+        if budgetID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_budget(budgetID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_budget(budgetID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.BudgetForm(request.form)
+            if form.validate():
+                budget = models.Budget(
+                    projectID = request.form['projectID'],
+                    numPeriods = request.form['numPeriods'],
+                    periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
+                    periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
+                    periodTotal = request.form['periodTotal'],
+                    periodComment = request.form['periodComment']
+                )
+                query.add(budget)
+                return redirect_back('budgets/{}/'.format(budget.budgetID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -1533,7 +1556,7 @@ def delete_ctc_facility(CTCFacilityID):
 ##############################################################################
 # Funding
 ##############################################################################
-@website.route('/fundings/', methods = ['GET'])
+#@website.route('/fundings/', methods = ['GET'])
 @website.route('/fundings/<int:fundingID>/', methods = ['GET'])
 def get_funding(fundingID=None):
     try:
@@ -1542,7 +1565,12 @@ def get_funding(fundingID=None):
         else:
             funding = query.get_funding(fundingID)
             if funding is not None:
-                return funding.json()
+                form={}
+                form["fundingSources"] = query.get_funding_sources()
+                form["grantStatuses"] = query.get_grant_statuses()
+                form["projects"] = query.get_projects()
+                form["staff"] = query.get_staffs()
+                return render_template("funding_form.html",form=form,funding=funding)
             else:
                 return item_not_found("FundingID {} not found".format(fundingID))
     except Exception as e:
@@ -1568,7 +1596,7 @@ def update_funding(fundingID):
                     funding.primaryChartfield = request.form['primaryChartfield']
                     funding.secondaryChartfield = request.form['secondaryChartfield']
                     query.commit()
-                    return funding.json()
+                    return redirect_back('fundings/{}/'.format(fundingID))
                 else:
                     return out_of_date_error()
             else:
@@ -1579,27 +1607,36 @@ def update_funding(fundingID):
         return internal_error(e)
 
 @website.route('/fundings/', methods=['POST'])
-def create_funding():
+@website.route('/fundings/<int:fundingID>/', methods=['POST'])
+def create_funding(fundingID=None):
     try:
-        form = forms.FundingForm(request.form)
-        if form.validate():
-            funding = models.Funding(
-                grantStatusID = request.form['grantStatusID'],
-                projectID = request.form['projectID'],
-                fundingSourceID = request.form['fundingSourceID'],
-                primaryFundingSource = request.form['primaryFundingSource'],
-                secondaryFundingSource = request.form['secondaryFundingSource'],
-                fundingNumber = request.form['fundingNumber'],
-                grantTitle = request.form['grantTitle'],
-                dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d"),
-                grantPi = request.form['grantPi'],
-                primaryChartfield = request.form['primaryChartfield'],
-                secondaryChartfield = request.form['secondaryChartfield']
-            )
-            query.add(funding)
-            return jsonify({'fundingID':funding.fundingID})
+        if fundingID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_funding(fundingID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_funding(fundingID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.FundingForm(request.form)
+            if form.validate():
+                funding = models.Funding(
+                    grantStatusID = request.form['grantStatusID'],
+                    projectID = request.form['projectID'],
+                    fundingSourceID = request.form['fundingSourceID'],
+                    primaryFundingSource = request.form['primaryFundingSource'],
+                    secondaryFundingSource = request.form['secondaryFundingSource'],
+                    fundingNumber = request.form['fundingNumber'],
+                    grantTitle = request.form['grantTitle'],
+                    dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d"),
+                    grantPi = request.form['grantPi'],
+                    primaryChartfield = request.form['primaryChartfield'],
+                    secondaryChartfield = request.form['secondaryChartfield']
+                )
+                query.add(funding)
+                return redirect_back('fundings/{}/'.format(funding.fundingID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2195,7 +2232,6 @@ def delete_incentive(incentiveID):
     except Exception as e:
         return internal_error(e)
 
-
 ##############################################################################
 # Informant
 ##############################################################################
@@ -2577,7 +2613,7 @@ def delete_irb_holder(irbHolderID):
 ##############################################################################
 # Log
 ##############################################################################
-@website.route('/logs/',methods=['GET'])
+#@website.route('/logs/',methods=['GET'])
 @website.route('/logs/<int:logID>/', methods = ['GET'])
 def get_log(logID=None):
     try:
@@ -2586,7 +2622,12 @@ def get_log(logID=None):
         else:
             log = query.get_log(logID)
             if log is not None:
-                return log.json()
+                form={}
+                form["projects"] = query.get_projects()
+                form["staff"] = query.get_staffs()
+                form["phaseStatuses"] = query.get_phase_statuses()
+                form["logSubjects"] = query.get_log_subjects()
+                return render_template("log_form.html",form=form,log=log)
             else:
                 return item_not_found("LogID {} not found".format(logID))
     except Exception as e:
@@ -2607,7 +2648,7 @@ def update_log(logID):
                     log.note = request.form['note']
                     log.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
                     query.commit()
-                    return log.json()
+                    return redirect_back('logs/{}/'.format(logID))
                 else:
                     return out_of_date_error()
             else:
@@ -2618,22 +2659,31 @@ def update_log(logID):
         return internal_error(e)
 
 @website.route('/logs/', methods = ['POST'])
-def create_log():
+@website.route('/logs/<int:logID>/', methods = ['POST'])
+def create_log(logID = None):
     try:
-        form = forms.LogForm(request.form)
-        if form.validate():
-            log  = models.Log(
-                logSubjectID = request.form['logSubjectID'],
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                phaseStatusID = request.form['phaseStatusID'],
-                note = request.form['note'],
-                date = datetime.strptime(request.form['date'],"%Y-%m-%d")
-            )
-            query.add(log)
-            return jsonify({"logID":log.logID})
+        if logID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_log(logID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_log(logID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.LogForm(request.form)
+            if form.validate():
+                log  = models.Log(
+                    logSubjectID = request.form['logSubjectID'],
+                    projectID = request.form['projectID'],
+                    staffID = request.form['staffID'],
+                    phaseStatusID = request.form['phaseStatusID'],
+                    note = request.form['note'],
+                    date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+                )
+                query.add(log)
+                return redirect_back('logs/{}/'.format(log.logID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3478,7 +3528,6 @@ def delete_phone_type(phoneTypeID):
     except Exception as e:
         return internal_error(e)
 
-
 ##############################################################################
 # Physician
 ##############################################################################
@@ -3956,7 +4005,7 @@ def delete_physician_to_ctc(physicianCTCID):
 ##############################################################################
 # PreApplication
 ##############################################################################
-@website.route('/preapplications/', methods = ['GET'])
+#@website.route('/preapplications/', methods = ['GET'])
 @website.route('/preapplications/<int:preApplicationID>/', methods = ['GET'])
 def get_pre_application(preApplicationID=None):
     try:
@@ -3965,7 +4014,10 @@ def get_pre_application(preApplicationID=None):
         else:
             preApplication = query.get_pre_application(preApplicationID)
             if preApplication is not None:
-                return preApplication.json()
+                form= {}
+                form["projects"] = query.get_projects()
+                form["booleans"] = query.get_booleans()
+                return render_template("pre_application_form.html",form=form,preApplication=preApplication)
             else:
                 return item_not_found("PreApplicationID {} not found".format(preApplicationID))
     except Exception as e:
@@ -4007,7 +4059,7 @@ def update_pre_application(preApplicationID):
                     preApplication.deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d")
                     preApplication.description = request.form['description']
                     query.commit()
-                    return preApplication.json()
+                    return redirect_back("preapplications/{}/".format(preApplicationID))
                 else:
                     return out_of_date_error()
             else:
@@ -4018,45 +4070,52 @@ def update_pre_application(preApplicationID):
         return internal_error(e)
 
 @website.route('/preapplications/', methods=['POST'])
-def create_pre_application():
+@website.route('/preapplications/<int:preApplicationID>/', methods=['POST'])
+def create_pre_application(preApplicationID=None):
     try:
-        form = forms.PreApplicationForm(request.form)
-        if form.validate():
-            preApplication = models.PreApplication(
-                projectID = request.form['projectID'],
-                piFirstName = request.form['piFirstName'],
-                piLastName = request.form['piLastName'],
-                piPhone = request.form['piPhone'],
-                piEmail = request.form['piEmail'],
-                contactFirstName = request.form['contactFirstName'],
-                contactLastName = request.form['contactLastName'],
-                contactPhone = request.form['contactPhone'],
-                contactEmail = request.form['contactEmail'],
-                institution = request.form['institution'],
-                institution2 = request.form['institution2'],
-                uid = request.form['uid'],
-                udoh = request.form['udoh'],
-                projectTitle = request.form['projectTitle'],
-                purpose = request.form['purpose'],
-                irb0 = "true" == request.form['irb0'].lower(),
-                irb1 = "true" == request.form['irb1'].lower(),
-                irb2 = "true" == request.form['irb2'].lower(),
-                irb3 = "true" == request.form['irb3'].lower(),
-                irb4 = "true" == request.form['irb4'].lower(),
-                otherIrb = request.form['otherIrb'],
-                updb = "true" == request.form['updb'].lower(),
-                ptContact = "true" == request.form['ptContact'].lower(),
-                startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d"),
-                link = "true" == request.form['link'].lower(),
-                deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d"),
-                description = request.form['description']
-            )
-            query.add(preApplication)
-            return jsonify({'preApplicationID':preApplication.preApplicationID})
+        if preApplicationID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_pre_application(preApplicationID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_pre_application(preApplicationID)
+            else:
+                return invalid_method()
         else:
-            print("error")
-            print(form.errors)
-            return missing_params(form.errors)
+            form = forms.PreApplicationForm(request.form)
+            if form.validate():
+                preApplication = models.PreApplication(
+                    projectID = request.form['projectID'],
+                    piFirstName = request.form['piFirstName'],
+                    piLastName = request.form['piLastName'],
+                    piPhone = request.form['piPhone'],
+                    piEmail = request.form['piEmail'],
+                    contactFirstName = request.form['contactFirstName'],
+                    contactLastName = request.form['contactLastName'],
+                    contactPhone = request.form['contactPhone'],
+                    contactEmail = request.form['contactEmail'],
+                    institution = request.form['institution'],
+                    institution2 = request.form['institution2'],
+                    uid = request.form['uid'],
+                    udoh = request.form['udoh'],
+                    projectTitle = request.form['projectTitle'],
+                    purpose = request.form['purpose'],
+                    irb0 = "true" == request.form['irb0'].lower(),
+                    irb1 = "true" == request.form['irb1'].lower(),
+                    irb2 = "true" == request.form['irb2'].lower(),
+                    irb3 = "true" == request.form['irb3'].lower(),
+                    irb4 = "true" == request.form['irb4'].lower(),
+                    otherIrb = request.form['otherIrb'],
+                    updb = "true" == request.form['updb'].lower(),
+                    ptContact = "true" == request.form['ptContact'].lower(),
+                    startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d"),
+                    link = "true" == request.form['link'].lower(),
+                    deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d"),
+                    description = request.form['description']
+                )
+                query.add(preApplication)
+                return redirect_back("preapplications/{}/".format(preApplication.preApplicationID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4084,11 +4143,32 @@ def delete_pre_application(preApplicationID):
 def get_project(projectID=None):
     try:
         if projectID is None:
-            return jsonify(projects = [i.dict() for i in query.get_projects()])
+            projects = query.get_projects()
+            form={}
+            form["projects"] = projects
+            form["projectTypes"] = query.get_project_types()
+            return render_template("project_table.html",form=form)
         else:
             proj = query.get_project(projectID)
             if proj is not None:
-                return proj.json()
+                form= {}
+                form["project"] = proj
+                form["projects"] = query.get_projects()
+                form["irbHolders"] = query.get_irb_holders()
+                form["projectTypes"] = query.get_project_types()
+                form["projectStatuses"] = proj.projectStatuses
+                form["preApplication"] = proj.preApplication
+                form["staff"] = query.get_staffs()
+                form["fundingSources"] = query.get_funding_sources()
+                form["grantStatuses"] = query.get_grant_statuses()
+                form["phaseStatuses"] = query.get_phase_statuses()
+                form["logSubjects"] = query.get_log_subjects()
+                form["projectStatusTypes"] = query.get_project_status_luts()
+                form["reviewCommitteeStatuses"] = query.get_review_committee_statuses()
+                form["reviewCommitteeLUTs"] = query.get_review_committee_luts()
+                form["reportTypes"] = query.get_report_types()
+                form["booleans"] = query.get_booleans()
+                return render_template("project_form.html",form=form)
             else:
                 return item_not_found("ProjectID {} not found".format(projectID))
     except Exception as e:
@@ -4389,7 +4469,7 @@ def delete_project_staff(projectStaffID):
 ##############################################################################
 # Project Status
 ##############################################################################
-@website.route('/projectstatuses/', methods = ['GET'])
+#@website.route('/projectstatuses/', methods = ['GET'])
 @website.route('/projectstatuses/<int:projectStatusID>/', methods = ['GET'])
 def get_project_status(projectStatusID=None):
     try:
@@ -4398,7 +4478,11 @@ def get_project_status(projectStatusID=None):
         else:
             projectStatus = query.get_project_status(projectStatusID)
             if projectStatus is not None:
-                return projectStatus.json()
+                form= {}
+                form["staff"] = query.get_staffs()
+                form["projectStatusTypes"] = query.get_project_status_luts()
+                form["projects"] = query.get_projects()
+                return render_template("project_status_form.html",form=form, projectStatus=projectStatus)
             else:
                 return item_not_found("ProjectStatusID {} not found".format(projectStatusID))
     except Exception as e:
@@ -4418,7 +4502,7 @@ def update_project_status(projectStatusID):
                     projectStatus.statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d")
                     projectStatus.statusNotes = request.form['statusNotes']
                     query.commit()
-                    return projectStatus.json()
+                    return redirect_back('projectstatuses/{}/'.format(projectStatus.projectStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -4429,21 +4513,30 @@ def update_project_status(projectStatusID):
         return internal_error(e)
 
 @website.route('/projectstatuses/', methods=['POST'])
-def create_project_status():
+@website.route('/projectstatuses/<int:projectStatusID>/', methods=['POST'])
+def create_project_status(projectStatusID = None):
     try:
-        form = forms.ProjectStatusForm(request.form)
-        if form.validate():
-            projectStatus = models.ProjectStatus(
-                projectStatusTypeID = request.form['projectStatusTypeID'],
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d"),
-                statusNotes = request.form['statusNotes']
-            )
-            query.add(projectStatus)
-            return jsonify({'projectStatusID':projectStatus.projectStatusID})
+        if projectStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_project_status(projectStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_project_status(projectStatusID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ProjectStatusForm(request.form)
+            if form.validate():
+                projectStatus = models.ProjectStatus(
+                    projectStatusTypeID = request.form['projectStatusTypeID'],
+                    projectID = request.form['projectID'],
+                    staffID = request.form['staffID'],
+                    statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d"),
+                    statusNotes = request.form['statusNotes']
+                )
+                query.add(projectStatus)
+                return redirect_back('projectstatuses/{}/'.format(projectStatusID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4730,7 +4823,7 @@ def delete_rc_status_list(reviewCommitteeStatusID):
 ##############################################################################
 # ReviewCommittee
 ##############################################################################
-@website.route('/reviewcommittees/', methods = ['GET'])
+#@website.route('/reviewcommittees/', methods = ['GET'])
 @website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['GET'])
 def get_review_committee(reviewCommitteeID = None):
     try:
@@ -4739,7 +4832,11 @@ def get_review_committee(reviewCommitteeID = None):
         else:
             reviewCommittee = query.get_review_committee(reviewCommitteeID)
             if reviewCommittee is not None:
-                return reviewCommittee.json()
+                form = {}
+                form["projects"] = query.get_projects()
+                form["reviewCommitteeStatuses"] = query.get_review_committee_statuses()
+                form["reviewCommitteeLUTs"] = query.get_review_committee_luts()
+                return render_template("review_committee_form.html",form=form,reviewCommittee=reviewCommittee)
             else:
                 return item_not_found("ReviewCommitteeID {} not found".format(reviewCommitteeID))
     except Exception as e:
@@ -4763,7 +4860,7 @@ def update_review_committee(reviewCommitteeID):
                     rc.rcProtocol = request.form['rcProtocol']
                     rc.rcApproval = request.form['rcApproval']
                     query.commit()
-                    return rc.json()
+                    return redirect_back("reviewcommittees/{}/".format(reviewCommitteeID))
                 else:
                     return out_of_date_error()
             else:
@@ -4774,25 +4871,34 @@ def update_review_committee(reviewCommitteeID):
         return internal_error(e)
 
 @website.route('/reviewcommittees/', methods = ['POST'])
-def create_review_committee():
+@website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods = ['POST'])
+def create_review_committee(reviewCommitteeID = None):
     try:
-        form = forms.ReviewCommitteeForm(request.form)
-        if form.validate():
-            rc = models.ReviewCommittee(
-                projectID = request.form['projectID'],
-                reviewCommitteeStatusID = request.form['reviewCommitteeStatusID'],
-                reviewCommitteeLUTID = request.form['reviewCommitteeLUTID'],
-                reviewCommitteeNumber = request.form['reviewCommitteeNumber'],
-                dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d"),
-                dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d"),
-                rcNote = request.form['rcNote'],
-                rcProtocol = request.form['rcProtocol'],
-                rcApproval = request.form['rcApproval']
-            )
-            query.add(rc)
-            return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
+        if reviewCommitteeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_review_committee(reviewCommitteeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_review_committee(reviewCommitteeID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ReviewCommitteeForm(request.form)
+            if form.validate():
+                rc = models.ReviewCommittee(
+                    projectID = request.form['projectID'],
+                    reviewCommitteeStatusID = request.form['reviewCommitteeStatusID'],
+                    reviewCommitteeLUTID = request.form['reviewCommitteeLUTID'],
+                    reviewCommitteeNumber = request.form['reviewCommitteeNumber'],
+                    dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d"),
+                    dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d"),
+                    rcNote = request.form['rcNote'],
+                    rcProtocol = request.form['rcProtocol'],
+                    rcApproval = request.form['rcApproval']
+                )
+                query.add(rc)
+                return redirect_back("reviewcommittees/{}/".format(rc.reviewCommitteeID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -5326,7 +5432,7 @@ def delete_tracing_source(tracingSourceID):
 ##############################################################################
 # UCR Report
 ##############################################################################
-@website.route('/ucrreports/', methods = ['GET'])
+#@website.route('/ucrreports/', methods = ['GET'])
 @website.route('/ucrreports/<int:ucrReportID>/', methods = ['GET'])
 def get_ucr_report(ucrReportID=None):
     try:
@@ -5335,7 +5441,10 @@ def get_ucr_report(ucrReportID=None):
         else:
             ucr = query.get_ucr_report(ucrReportID)
             if ucr is not None:
-                return ucr.json()
+                form = {}
+                form["projects"] = query.get_projects()
+                form["reportTypes"] = query.get_report_types()
+                return render_template("ucr_report_form.html",form=form,ucrReport = ucr)
             else:
                 return item_not_found("UcrReportID {} not found".format(ucrReportID))
     except Exception as e:
@@ -5355,7 +5464,7 @@ def update_ucr_report(ucrReportID):
                     ucr.reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d")
                     ucr.reportDoc = request.form['reportDoc']
                     query.commit()
-                    return ucr.json()
+                    return redirect_back("ucrreports/{}/".format(ucrReportID))
                 else:
                     return out_of_date_error()
             else:
@@ -5366,22 +5475,31 @@ def update_ucr_report(ucrReportID):
         return internal_error(e)
 
 @website.route('/ucrreports/', methods = ['POST'])
-def create_ucr_report():
+@website.route('/ucrreports/<int:ucrReportID>/', methods = ['POST'])
+def create_ucr_report(ucrReportID=None):
     try:
-        form = forms.UCRReportForm(request.form)
-        if form.validate():
-            ucr = models.UCRReport(
-                projectID = request.form['projectID'],
-                reportType = request.form['reportType'],
-                reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d"),
-                reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d"),
-                reportDoc = request.form['reportDoc']
-            )
-            query.add(ucr)
-            query.commit()
-            return jsonify({'ucrReportID': ucr.ucrReportID})
+        if ucrReportID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_ucr_report(ucrReportID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_ucr_report(ucrReportID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.UCRReportForm(request.form)
+            if form.validate():
+                ucr = models.UCRReport(
+                    projectID = request.form['projectID'],
+                    reportType = request.form['reportType'],
+                    reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d"),
+                    reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d"),
+                    reportDoc = request.form['reportDoc']
+                )
+                query.add(ucr)
+                query.commit()
+                return redirect_back("ucrreports/{}/".format(ucr.ucrReportID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 

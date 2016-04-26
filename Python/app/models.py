@@ -69,6 +69,8 @@ VITAL_STATUSES = db.Enum("v1","v2")
 CONTACTS = db.Enum("yes","no")
 INACTIVES = db.Enum("yes", "no")
 ADDRESS_STATUS_SOURCE = db.Enum("s1", "s2")
+UCR_REPORT_TYPES = db.Enum("Annual Report","Final Report")
+BOOLEANS = db.Enum("True","False")
 
             
 """
@@ -125,7 +127,7 @@ class ArcReview(CustomModel):
 
     # Relationships
     # 1-1
-    project = db.relationship('Project', back_populates='arcReview')
+    project = db.relationship('Project', back_populates='arcReviews')
     
     def __repr__(self):
         return "<ArcReview(\
@@ -1440,7 +1442,7 @@ class Project(CustomModel):
     # M - 1, Many projects with same type
     projectType = db.relationship("ProjectType",back_populates="projects")
     # 1-1
-    arcReview = db.relationship("ArcReview", uselist=False, back_populates="project")
+    arcReviews = db.relationship("ArcReview", back_populates="project")
     # 1-M one project, many budgets
     budgets = db.relationship("Budget",back_populates="project")
     # 1-M, one project many review Committees
@@ -1458,10 +1460,8 @@ class Project(CustomModel):
     # M - 1, many project staff can have the same project
     projectStaff = db.relationship("ProjectStaff",back_populates="project")
     # M - 2, many project patients can have the same project
-    projectPatient = db.relationship("ProjectPatient", back_populates="project")
-    # 1 - M, one project, many statuses
-    projectStatus = db.relationship("ProjectStatus",back_populates="project")
-    
+    projectPatients = db.relationship("ProjectPatient", back_populates="project")
+
     def __repr__(self):
         return "<Project(\
         projectID={},\
@@ -1537,7 +1537,7 @@ class ProjectPatient(CustomModel):
     # 1 - M, one PP with many tracings
     tracings = db.relationship('Tracing', back_populates="projectPatient")
     # M -1 many projectPatient can have the same project
-    project = db.relationship('Project', foreign_keys=[projectID],back_populates='projectPatient')
+    project = db.relationship('Project', foreign_keys=[projectID],back_populates='projectPatients')
     # 1 - 1 one PP with one CTC
     ctc = db.relationship('CTC',foreign_keys=[ctcID],back_populates="projectPatient")
     # 1 - M, on PP with many staff
@@ -1996,7 +1996,7 @@ class UCRReport(CustomModel):
     
     ucrReportID = db.Column('ucrReport',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
-    reportType = db.Column('report_type',db.Integer)
+    reportType = db.Column('report_type',UCR_REPORT_TYPES)
     reportSubmitted = db.Column('report_submitted',db.Date)
     reportDue = db.Column('report_due',db.Date)
     reportDoc = db.Column('report_doc',db.String)

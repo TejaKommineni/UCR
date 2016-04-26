@@ -1,0 +1,211 @@
+{% if arcReview is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="arcReviewForm" action='/website/arcreviews/{{arcReview["arcReviewID"]}}/' method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="arcReviewForm" action='/website/arcreviews/' method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_projectID">Project</label>
+                  <select type="text" class="form-control" name="projectID" id="select_projectID">
+                      {% for proj in form["projects"] %}
+                        {% if proj.projectID == arcReview["projectID"] %}
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                        {% else %}
+                            <option value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_reviewType">Review Type</label>
+                  <input type="text" class="form-control" name="reviewType" id="text_reviewType" value="{{arcReview["reviewType"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_dateSentToReviewer">Date Sent to Reviewer</label>
+                  <input type="date" class="form-control" name="dateSentToReviewer" id="date_dateSentToReviewer" value="{{arcReview["dateSentToReviewer"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_research">Research</label>
+                  <input type="text" class="form-control" name="research" id="text_research" value="{{arcReview["research"]}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_reviewer1">Reviewer 1</label>
+                  <select type="text" class="form-control" name="reviewer1" id="select_reviewer1">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == arcReview["reviewer1"] %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_reviewer1Rec">Reviewer 1 Rec</label>
+                  <select type="text" class="form-control" name="reviewer1Rec" id="select_reviewer1Rec">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == arcReview["reviewer1Rec"] %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_reviewer1Comments">Reviewer 1 Comments</label>
+                  <input type="text" class="form-control" name="reviewer1Comments" id="text_reviewer1Comments" value="{{arcReview["reviewer1Comments"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_reviewer1SigDate">Reviewer 1 Sig Date</label>
+                  <input type="date" class="form-control" name="reviewer1SigDate" id="date_reviewer1SigDate" value="{{arcReview["reviewer1SigDate"]}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_reviewer2">Reviewer 2</label>
+                  <select type="text" class="form-control" name="reviewer2" id="select_reviewer2">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == arcReview["reviewer2"] %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_reviewer2Rec">Reviewer 2 Rec</label>
+                  <select type="text" class="form-control" name="reviewer2Rec" id="select_reviewer2Rec">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == arcReview["reviewer2Rec"] %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_reviewer2Comments">Reviewer 2 Comments</label>
+                  <input type="text" class="form-control" name="reviewer2Comments" id="text_reviewer2Comments" value="{{arcReview["reviewer2Comments"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_reviewer2SigDate">Reviewer 2 Sig Date</label>
+                  <input type="date" class="form-control" name="reviewer2SigDate" id="date_reviewer2SigDate" value="{{arcReview["reviewer2SigDate"]}}">
+                </div>
+            </div>
+            <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_contact">Contact</label>
+                  <select type="text" class="form-control" name="contact" id="select_contact">
+                        {% if arcReview.contact %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not arcReview.contact %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_linkage">Linkage</label>
+                  <select type="text" class="form-control" name="linkage" id="select_linkage">
+                        {% if arcReview.linkage %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not arcReview.linkage %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_engaged">Engaged</label>
+                  <select type="text" class="form-control" name="engaged" id="select_engaged">
+                        {% if arcReview.engaged %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not arcReview.engaged %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_nonPublicData">Non-Public Data</label>
+                  <select type="text" class="form-control" name="nonPublicData" id="select_nonPublicData">
+                        {% if arcReview.nonPublicData %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not arcReview.nonPublicData %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
+                </div>
+               </div>
+             </div>
+      
+                <div class="form-group">
+                  <div class="row">
+                    <div class = "col-md-2">
+                      <label for="text_createdDate">Created</label>
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{arcReview["createdDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class = "col-md-2">
+                      <label for="text_modifiedDate">Last Modified</label>
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{arcReview["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="text_versionID">Version</label>  
+                      {% if arcReview is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{arcReview["versionID"]}}" readonly="readonly">
+                      {% else %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                      {% endif %}  
+                    </div>
+                    <!-- Extra hidden fields -->
+                    {% if arcReview is not none %}
+                        <input type="hidden" name="_method" value="put" />
+                        <input type="hidden" name="arcReviewID" value="{{arcReview["arcReviewID"]}}"/>
+                    {% else %}
+                        <input type="hidden" name="arcReviewID" value="{{form["project"]["projectID"]}}"/>
+                    {% endif %}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if arcReview is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Arc Review</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>
