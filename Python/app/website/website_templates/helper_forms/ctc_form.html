@@ -1,66 +1,71 @@
-{% if form['ctc'] is not none %}
+{% if ctc is not none %}
     <!-- action url is for update -->
-    <!--<form class="formOverride" id="addressForm" action='/website/ctcs/{{form["ctc"]["ctcID"]}}/', method='post'>-->
+    <!--<form class="formOverride" id="addressForm" action='/website/ctcs/{{ctc["ctcID"]}}/', method='post'>-->
     <form class="formOverride" id="addressForm">
 {% else %}
     <!-- action url is for post/create -->
     <form class="formOverride" id="addressForm" action='/website/ctcs/', method='post'>
 {% endif %}
       <fieldset>
-        <legend>CTC Information</legend>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_dxDate">Dx Date</label>
-                  <input type="date" class="form-control" name="dxDate" id="date_dxDate" value="{{form["ctc"]["dxDate"]}}" readonly="readonly" disabled="disabled">
+                  <input type="date" class="form-control" name="dxDate" id="date_dxDate" value="{{ctc["dxDate"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_site">Site</label>
-                  <input type="text" class="form-control" name="site" id="text_site" value="{{form["ctc"]["site"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"]}}" readonly="readonly" disabled="disabled">
                 </div>
-              </div>
-              <div class = "row">
-                <div class = "col-md-6">
-                  <label for="text_histology">Histology</label>
-                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{form["ctc"]["histology"]}}" readonly="readonly" disabled="disabled">{{form["ctc"]["histology"]}}</textarea>
-                </div>
-                <div class = "col-md-6">
-                  <label for="text_behavior">Behavior</label>
-                  <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{form["ctc"]["behavior"]}}" readonly="readonly" disabled="disabled">{{form["ctc"]["behavior"]}}</textarea>
-                </div>
-              </div>
-              <div class = "row">
                 <div class = "col-md-2">
                   <label for="text_ctcSequence">CTC Sequence</label>
-                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{form["ctc"]["ctcSequence"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_stage">Stage</label>
-                  <input type="text" class="form-control" name="stage" id="text_stage" value="{{form["ctc"]["stage"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="stage" id="text_stage" value="{{ctc["stage"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class = "row">
+                <div class = "col-md-8">
+                  <label for="text_histology">Histology</label>
+                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"]}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
+                </div>
+             </div>
+             <div class="row">
+                <div class = "col-md-8">
+                  <label for="text_behavior">Behavior</label>
+                  <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{ctc["behavior"]}}</textarea>
                 </div>
               </div>
               <div class="row">
-                <div class = "col-md-2">
+                <div class = "col-md-4">
                   <label for="text_dxStreet">Dx Street</label>
-                  <input type="text" class="form-control" name="dxStreet" id="text_dx_street" value="{{form["ctc"]["dxStreet"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxStreet" id="text_dx_street" value="{{ctc["dxStreet"]}}" readonly="readonly" disabled="disabled">
                 </div>
-              </div>
-              <div class="row">
                 <div class = "col-md-2">
-                  <label for="text_dxStreet2">Dx Street 2</label>
-                  <input type="text" class="form-control" name="dxStreet2" id="text_dxStreet2" value="{{form["ctc"]["dxStreet2"]}}" readonly="readonly" disabled="disabled">
+                  <label for="text_dxZip">Dx Zip Code</label>
+                  <input type="text" class="form-control" name="dxZip" id="text_dxZip" value="{{ctc["dxZip"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                 <div class = "col-md-2">
+                  <label for="text_dxCounty">Dx County</label>
+                  <input type="text" class="form-control" name="dxCounty" id="text_dxCounty" value="{{ctc["dxCounty"]}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_dxStreet2">Dx Street 2</label>
+                  <input type="text" class="form-control" name="dxStreet2" id="text_dxStreet2" value="{{ctc["dxStreet2"]}}" readonly="readonly" disabled="disabled">
+                </div>
                 <div class = "col-md-2">
                   <label for="text_dxCity">Dx City</label>
-                  <input type="text" class="form-control" name="dxCity" id="text_dxCity" value="{{form["ctc"]["dxCity"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxCity" id="text_dxCity" value="{{ctc["dxCity"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">  
                   <label for="select_dxState">Dx State</label>        
-                  <select type="text" class="form-control" name="dxState" id="select_dxState" value="{{form["ctc"]["dxState"]}}" readonly="readonly" disabled="disabled">
+                  <select type="text" class="form-control" name="dxState" id="select_dxState" value="{{ctc["dxState"]}}" readonly="readonly" disabled="disabled">
                       {% for state in form["states"].enums %}
-                        {% if state == form["ctc"]["state"] %}
+                        {% if state == ctc["state"] %}
                             <option selected="selected">{{state}}</option>
                         {% else %}
                             <option>{{state}}</option>
@@ -68,23 +73,18 @@
                       {% endfor %}
                   </select>
                 </div>
-                <div class = "col-md-2">
-                  <label for="text_dxZip">Dx Zip Code</label>
-                  <input type="text" class="form-control" name="dxZip" id="text_dxZip" value="{{form["ctc"]["dxZip"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                 <div class = "col-md-2">
-                  <label for="text_dxCounty">Dx County</label>
-                  <input type="text" class="form-control" name="dxCounty" id="text_dxCounty" value="{{form["ctc"]["dxCounty"]}}" readonly="readonly" disabled="disabled">
-                </div>
+              </div>
+              <div class="row">
+                
             </div>
             <div class="row">
                 <div class = "col-md-2">
                   <label for="text_dnc">DNC</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{form["ctc"]["dnc"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_dncReason">DNC Reason</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{form["ctc"]["dncReason"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
                 </div>
             </div>
           </fieldset>
@@ -95,25 +95,25 @@
                   <div class="row">
                     <div class = "col-md-2">
                       <label for="text_createdDate">Created</label>
-                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{form["ctc"]["createdDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{ctc["createdDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class = "col-md-2">
                       <label for="text_modifiedDate">Last Modified</label>
-                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{form["ctc"]["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{ctc["modifiedDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_versionID">Version</label>  
-                      {% if form['ctc'] is not none %}
-                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{form["ctc"]["versionID"]}}" readonly="readonly">
+                      {% if ctc is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{ctc["versionID"]}}" readonly="readonly">
                       {% else %}
                         <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
                       {% endif %}  
                     </div>
                     <!-- Extra hidden fields -->
-                    {% if form['ctc'] is not none %}
+                    {% if ctc is not none %}
                     <input class="form-control" type="hidden" id="text_method" name="_method" value="put" />
                     {% endif %}
-                    <input class="form-contorl" type="hidden" id="text_method" name="patientID" value="{{form["ctc"]["patientID"]}}"/>
+                    <input class="form-contorl" type="hidden" id="text_method" name="patientID" value="{{ctc["patientID"]}}"/>
                 </div>
               </div>
             </fieldset>
@@ -121,7 +121,7 @@
                 <div class = "form-group">
                   <div class="row">
                     <div class="col-md-2">
-                      {% if form['ctc'] is not none %}
+                      {% if ctc is not none %}
                       <!--<button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>-->
                       {% else %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Add CTC</button>

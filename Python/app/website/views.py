@@ -1384,9 +1384,9 @@ def get_ctc(ctcID = None):
         else:
             ctc = query.get_ctc(ctcID)
             if ctc is not None:
-                form = {'ctc' : ctc}
+                form = {}
                 form["states"] = query.get_states()
-                return render_template('ctc_form.html',form=form)
+                return render_template('ctc_form.html',form=form,ctc=ctc)
             else:
                 return item_not_found("CtcID {} not found".format(ctcID))
     except Exception as e:
@@ -4210,32 +4210,41 @@ def update_project(projectID):
         return internal_error(e)
 
 @website.route('/projects/', methods=['POST'])
-def create_project():
+@website.route('/projects/<int:projectID>/', methods=['POST'])
+def create_project(projectID=None):
     try:
-        form = forms.ProjectForm(request.form)
-        if form.validate():
-            proj = models.Project(
-                projectTypeID = request.form['projectTypeID'],
-                irbHolderID = request.form['irbHolderID'],
-                projectTitle = request.form['projectTitle'],
-                shortTitle = request.form['shortTitle'],
-                projectSummary = request.form['projectSummary'],
-                sop = request.form['sop'],
-                ucrProposal = request.form['ucrProposal'],
-                budgetDoc = request.form['budgetDoc'],
-                ucrFee = request.form['ucrFee'],
-                ucrNoFee = request.form['ucrNoFee'],
-                previousShortTitle = request.form['previousShortTitle'],
-                dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d"),
-                finalRecruitmentReport = request.form['finalRecruitmentReport'],
-                ongoingContact = "true" == request.form['ongoingContact'].lower(),
-                activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d"),
-                activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
-                )
-            query.add(proj)
-            return jsonify({'projectID':proj.projectID})
+        if projectID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_project(projectID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_project(projectID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ProjectForm(request.form)
+            if form.validate():
+                proj = models.Project(
+                    projectTypeID = request.form['projectTypeID'],
+                    irbHolderID = request.form['irbHolderID'],
+                    projectTitle = request.form['projectTitle'],
+                    shortTitle = request.form['shortTitle'],
+                    projectSummary = request.form['projectSummary'],
+                    sop = request.form['sop'],
+                    ucrProposal = request.form['ucrProposal'],
+                    budgetDoc = request.form['budgetDoc'],
+                    ucrFee = request.form['ucrFee'],
+                    ucrNoFee = request.form['ucrNoFee'],
+                    previousShortTitle = request.form['previousShortTitle'],
+                    dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d"),
+                    finalRecruitmentReport = request.form['finalRecruitmentReport'],
+                    ongoingContact = "true" == request.form['ongoingContact'].lower(),
+                    activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d"),
+                    activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
+                    )
+                query.add(proj)
+                return redirect_back("projects/{}/".format(proj.projectID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -4267,7 +4276,12 @@ def get_project_patient(participantID=None):
         else:
             projectPatient = query.get_project_patient(participantID)
             if projectPatient is not None:
-                return projectPatient.json()
+                form = {}
+                form["projects"] = query.get_projects()
+                form["staff"] = query.get_staffs()
+                form["booleans"] = query.get_booleans()
+                form["states"] = query.get_states()
+                return render_template("project_patient_form.html",form=form,projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
     except Exception as e:
@@ -4305,7 +4319,6 @@ def update_project_patient(participantID):
                     projectPatient.researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d")
                     projectPatient.researcherStaffID = request.form['researcherStaffID']
                     projectPatient.consentLink = request.form['consentLink']
-                    projectPatient.tracingStatus = request.form['tracingStatus']
                     projectPatient.medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower()
                     projectPatient.medRecordReleaseLink = request.form['medRecordReleaseLink']
                     projectPatient.medRecordReleaseStaffID = request.form['medRecordReleaseStaffID']
@@ -4313,7 +4326,7 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d")
                     projectPatient.surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
                     query.commit()
-                    return projectPatient.json()
+                    return redirect_back("projectpatients/{}/".format(participantID))
                 else:
                     return out_of_date_error()
             else:
@@ -4324,46 +4337,55 @@ def update_project_patient(participantID):
         return internal_error(e)
 
 @website.route('/projectpatients/', methods=['POST'])
-def create_project_patient():
+@website.route('/projectpatients/<int:participantID>/', methods=['POST'])
+def create_project_patient(participantID=None):
     try:
-        form = forms.ProjectPatientForm(request.form)
-        if form.validate():
-            projectPatient = models.ProjectPatient(
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                ctcID = request.form['ctcID'],
-                currentAge = request.form['currentAge'],
-                batch = request.form['batch'],
-                siteGrp = request.form['siteGrp'],
-                finalCode = request.form['finalCode'],
-                finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d"),
-                enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
-                dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
-                importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d"),
-                finalCodeStaffID = request.form['finalCodeStaffID'],
-                enrollmentStaffID = request.form['enrollmentStaffID'],
-                dateCoordSignedStaffID = request.form['dateCoordSignedStaffID'],
-                abstractStatus = request.form['abstractStatus'],
-                abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
-                abstractStatusStaffID = request.form['abstractStatusStaffID'],
-                sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
-                sentToAbstractorStaffID = request.form['sentToAbstractorStaffID'],
-                abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
-                abstractorStaffID = request.form['abstractorStaffID'],
-                researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
-                researcherStaffID = request.form['researcherStaffID'],
-                consentLink = request.form['consentLink'],
-                medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower(),
-                medRecordReleaseLink = request.form['medRecordReleaseLink'],
-                medRecordReleaseStaffID = request.form['medRecordReleaseStaffID'],
-                medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d"),
-                surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d"),
-                surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
-            )
-            query.add(projectPatient)
-            return jsonify({'participantID':projectPatient.participantID})
+        if participantID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_project_patient(participantID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_project_patient(participantID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ProjectPatientForm(request.form)
+            if form.validate():
+                projectPatient = models.ProjectPatient(
+                    projectID = request.form['projectID'],
+                    staffID = request.form['staffID'],
+                    ctcID = request.form['ctcID'],
+                    currentAge = request.form['currentAge'],
+                    batch = request.form['batch'],
+                    siteGrp = request.form['siteGrp'],
+                    finalCode = request.form['finalCode'],
+                    finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d"),
+                    enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
+                    dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
+                    importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d"),
+                    finalCodeStaffID = request.form['finalCodeStaffID'],
+                    enrollmentStaffID = request.form['enrollmentStaffID'],
+                    dateCoordSignedStaffID = request.form['dateCoordSignedStaffID'],
+                    abstractStatus = request.form['abstractStatus'],
+                    abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
+                    abstractStatusStaffID = request.form['abstractStatusStaffID'],
+                    sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
+                    sentToAbstractorStaffID = request.form['sentToAbstractorStaffID'],
+                    abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
+                    abstractorStaffID = request.form['abstractorStaffID'],
+                    researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
+                    researcherStaffID = request.form['researcherStaffID'],
+                    consentLink = request.form['consentLink'],
+                    medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower(),
+                    medRecordReleaseLink = request.form['medRecordReleaseLink'],
+                    medRecordReleaseStaffID = request.form['medRecordReleaseStaffID'],
+                    medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d"),
+                    surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d"),
+                    surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
+                )
+                query.add(projectPatient)
+                return redirect_back("projectPatients/{}/".format(projectPatient.participantID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 

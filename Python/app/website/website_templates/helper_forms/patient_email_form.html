@@ -64,8 +64,7 @@
                     {% if patientEmail is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="patientID" value="{{patientEmail["patientID"]}}"/>
-                    {% else %}
-                        <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
+
                     {% endif %}
                 </div>
               </div>
