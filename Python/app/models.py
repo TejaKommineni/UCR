@@ -72,7 +72,7 @@ ADDRESS_STATUS_SOURCE = db.Enum("s1", "s2")
 UCR_REPORT_TYPES = db.Enum("Annual Report","Final Report")
 BOOLEANS = db.Enum("True","False")
 
-            
+
 """
     A base class that all models derive from
 """
@@ -102,7 +102,7 @@ class CustomModel(db.Model):
 
 ##############################################################################
 # Models
-##############################################################################  
+##############################################################################
 
 class ArcReview(CustomModel):
     __tablename__ = 'ArcReview'
@@ -128,7 +128,7 @@ class ArcReview(CustomModel):
     # Relationships
     # 1-1
     project = db.relationship('Project', back_populates='arcReviews')
-    
+
     def __repr__(self):
         return "<ArcReview(\
         arcReviewID = {},\
@@ -165,10 +165,10 @@ class ArcReview(CustomModel):
         self.lnkage,
         self.engaged,
         self.nonPublicData)
-    
+
 class Budget(CustomModel):
     __tablename__ = "Budget"
-    
+
     budgetID = db.Column('budgetID',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer,db.ForeignKey('Project.projectID'))
     numPeriods = db.Column('num_periods',db.Integer)
@@ -176,11 +176,11 @@ class Budget(CustomModel):
     periodEnd = db.Column('period_end',db.Date)
     periodTotal = db.Column('period_total',db.Float)
     periodComment = db.Column('period_comment',db.String)
-    
+
     # Relationships
     # 1 - M, 1 project, many budgets
     project = db.relationship("Project",back_populates="budgets")
-    
+
     def __repr__(self):
         return "<Budget(\
             budgetID = {},\
@@ -200,7 +200,7 @@ class Budget(CustomModel):
 
 class Contact(CustomModel):
     __tablename__ = 'Contact'
-    
+
     contactID = db.Column('contactID',db.Integer, primary_key=True)
     contactTypeLUTID = db.Column('contactTypeLUTID',db.Integer, db.ForeignKey("ContactTypeLUT.contactTypeLUTID"))
     projectPatientID = db.Column('particpantID',db.Integer, db.ForeignKey("ProjectPatient.participantID"))
@@ -212,7 +212,7 @@ class Contact(CustomModel):
     contactDate = db.Column('contact_date',db.Date)
     initials = db.Column('initials',db.String)
     notes = db.Column('notes',db.String)
-    
+
     # Relastionships
     # M - 1, many contacts can have the same type
     contactType = db.relationship("ContactTypeLUT", back_populates="contacts")
@@ -226,7 +226,7 @@ class Contact(CustomModel):
     facility = db.relationship("Facility",back_populates="contacts")
     # M - 1, many contacts may have the same facility
     physician = db.relationship("Physician", back_populates="contacts")
-    
+
     def __repr__(self):
         return "<Contact(\
         contactID = {},\
@@ -240,7 +240,7 @@ class Contact(CustomModel):
         contactDate = {},\
         initials = {},\
         notes = {})>".format(
-        
+
         self.contactID,
         self.contactTypeLUTID,
         self.projectPatientID,
@@ -252,26 +252,26 @@ class Contact(CustomModel):
         self.contactDate,
         self.initials,
         self.notes)
-            
+
 class ContactInfoSourceLUT(CustomModel):
     __tablename__ = "ContactInfoSourceLUT"
-    
+
     contactInfoSourceID = db.Column('contactInfoSourceID',db.Integer, primary_key=True)
     contactInfoSource = db.Column('contact_info_source',db.String)
-    
+
     def __repr__(self):
         return "<ContactInfoSourceLUT(\
         contactInfoSourceID = {},\
         contactInfoSource = {})>".format(
         self.contactInfoSourceID,
         self.contactInfoSource)
-            
+
 class ContactInfoStatusLUT(CustomModel):
     __tablename__ = "ContactInfoStatusLUT"
-    
+
     contactInfoStatusID = db.Column('contactInfoStatusID',db.Integer, primary_key=True)
     contactInfoStatus = db.Column('contact_info_status',db.String)
-    
+
     def __repr__(self):
         return "<ContactInfoStatus(\
         contactInfoStatusID = {},\
@@ -281,24 +281,24 @@ class ContactInfoStatusLUT(CustomModel):
 
 class ContactTypeLUT(CustomModel):
     __tablename__ = "ContactTypeLUT"
-    
+
     contactTypeID = db.Column('contactTypeLUTID',db.Integer, primary_key=True)
     contactDefinition = db.Column('contact_definition',db.String)
-    
+
     # Relationships
     # M - 1, many contacts can have the same type
     contacts = db.relationship("Contact",back_populates="contactType")
-    
+
     def __repr__(self):
         return "<ContactTypeLUT(\
         contactTypeID = {},\
         contactDefinition = {})>".format(
         self.contactTypeID,
         self.contactDefinition)
-        
+
 class CTC(CustomModel):
     __tablename__ = 'CTC'
-    
+
     ctcID = db.Column('ctcID',db.Integer, primary_key=True)
     patientID = db.Column('patAutoID',db.Integer, db.ForeignKey('Patient.patAutoID'))
     dxDate = db.Column('dx_date',db.Date)
@@ -316,7 +316,7 @@ class CTC(CustomModel):
     dxCounty = db.Column('dx_county',db.String)
     dnc = db.Column('dnc',db.String)
     dncReason = db.Column('dnc_reason',db.String)
-    
+
     # Relationship
     # 1 - 1, one ctc per projectPatient
     projectPatient = db.relationship("ProjectPatient",back_populates="ctc")
@@ -324,9 +324,9 @@ class CTC(CustomModel):
     patient = db.relationship('Patient',uselist=False, back_populates='ctcs')
     # M - 1
     ctcFacility = db.relationship("CTCFacility",back_populates="ctc")
-    # 
+    #
     physicianToCTC = db.relationship("PhysicianToCTC",back_populates="ctc")
-    
+
     def __repr__(self):
         return "<CTC(\
         ctcID = {},\
@@ -350,8 +350,8 @@ class CTC(CustomModel):
         self.patientID,
         self.dxDate,
         self.site,
-        self.histology, 
-        self.behavior, 
+        self.histology,
+        self.behavior,
         self.ctcSequence,
         self.stage,
         self.dxAge,
@@ -366,17 +366,17 @@ class CTC(CustomModel):
 
 class CTCFacility(CustomModel):
     __tablename__ = 'CTCFacility'
-    
+
     CTCFacilityID = db.Column('CTCFacilityID',db.Integer,primary_key=True)
     ctcID = db.Column('ctcID',db.Integer, db.ForeignKey('CTC.ctcID'))
     facilityID = db.Column('facilityID',db.Integer, db.ForeignKey('Facility.facilityID'))
-    
+
     # Relationships
     # 1 - M, one facilty may have many CTCFacilities
     facility = db.relationship("Facility",back_populates="ctcFacilities")
     # M - 1,many ctc to one ctcfacility
     ctc = db.relationship("CTC",back_populates="ctcFacility")
-    
+
     def __repr__(self):
         return "<CTCFacility(\
         CTCFacilityID = {},\
@@ -385,10 +385,10 @@ class CTCFacility(CustomModel):
         self.CTCFacilityID,
         self.ctcID,
         self.facilityID)
-        
+
 class Facility(CustomModel):
     __tablename__ = "Facility"
-    
+
     facilityID = db.Column('facilityID',db.Integer, primary_key=True)
     facilityName = db.Column('facility_name',db.String)
     contactFirstName = db.Column('contact_first_name',db.String)
@@ -397,7 +397,7 @@ class Facility(CustomModel):
     facilityStatusDate = db.Column('facility_status_date',db.Date)
     contact2FirstName = db.Column('contact2_first_name',db.String)
     contact2LastName = db.Column('contact2_last_name',db.String)
-    
+
     # Relationships
     # M - 1, many facilities can have the same phone
     facilityPhone = db.relationship("FacilityPhone", back_populates = "facilities")
@@ -408,7 +408,7 @@ class Facility(CustomModel):
     ctcFacilities = db.relationship("CTCFacility",back_populates="facility")
     # M - 1
     physicianFacility = db.relationship("PhysicianFacility",back_populates="facilities")
-    
+
     def __repr__(self):
         return "<Facility(\
         facilityID = {},\
@@ -430,7 +430,7 @@ class Facility(CustomModel):
 
 class FacilityAddress(CustomModel):
     __tablename__ = 'FacilityAddress'
-    
+
     facilityAddressID = db.Column('facilityAddressID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     facilityID = db.Column('facilityID',db.Integer, db.ForeignKey("Facility.facilityID"))
@@ -447,7 +447,7 @@ class FacilityAddress(CustomModel):
     facilities = db.relationship("Facility",back_populates="facilityAddress")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "FacilityAddress(\
         facilityAddressID = {},\
@@ -474,10 +474,10 @@ class FacilityAddress(CustomModel):
         self.addressStatus,
         self.addressStatusDate,
         self.addressStatusSource)
-        
+
 class FacilityPhone(CustomModel):
     __tablename__ = 'FacilityPhone'
-    
+
     facilityPhoneID = db.Column('facilityPhoneID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceID',db.Integer, db.ForeignKey('ContactInfoSourceLUT.contactInfoSourceID'))
     contactInfoStatusID = db.Column('contactInfoStatusID',db.Integer, db.ForeignKey('ContactInfoStatusLUT.contactInfoStatusID'))
@@ -486,13 +486,13 @@ class FacilityPhone(CustomModel):
     phoneNumber = db.Column('facility_phone',db.String)
     clinicName = db.Column('clinic_name',db.String)
     phoneStatusDate = db.Column('facility_phone_status_date',db.Date)
-    
+
     # Relationships
     # M - 1, many patients can be at the same phone
     facilities = db.relationship("Facility", back_populates = "facilityPhone")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "<FacilityPhone(\
         facilityPhoneID = {},\
@@ -515,10 +515,10 @@ class FacilityPhone(CustomModel):
         self.phoneStatus,
         self.phoneSource,
         self.phoneStatusDate)
-    
+
 class Funding(CustomModel):
     __tablename__ = "Funding"
-    
+
     fundingID = db.Column('fundingID',db.Integer, primary_key=True)
     grantStatusID = db.Column('grantStatusLUTID',db.Integer, db.ForeignKey('GrantStatusLUT.grantStatusID'))
     projectID = db.Column('projectID',db.Integer,db.ForeignKey('Project.projectID'))
@@ -568,69 +568,69 @@ class Funding(CustomModel):
             self.grantPi,
             self.primaryChartfield,
             self.secondaryChartfield)
-            
+
 class FundingSourceLUT(CustomModel):
     __tablename__ = 'FundingSourceLUT'
-    
+
     fundingSourceID = db.Column('fundingSourceID',db.Integer,primary_key=True)
     fundingSource = db.Column('funding_source',db.String)
-    
+
     # Relationships
     # M - 1, many fundings with the same source
     fundings = db.relationship("Funding",back_populates="fundingSource")
-    
+
     def __repr__(self):
         return "<FundingSourceLUT(\
         fundingSourceID = {},\
         fundingSource = {})>".format(
         self.fundingSourceLUTID,
         self.fundingSource)
-            
+
 class GrantStatusLUT(CustomModel):
     __tablename__ = 'GrantStatusLUT'
-    
+
     grantStatusID = db.Column('grantStatusID',db.Integer, primary_key=True)
     grantStatus = db.Column('grant_status',db.String)
-    
+
     # Relationships
     # M - 1, many fundings with the same grant status
     fundings = db.relationship("Funding",back_populates="grantStatus")
-    
+
     def __repr__(self):
         return "<GrantStatusLUT(\
             grantStatusID = {}\
             grantStatus = {})>".format(
             self.grantStatusID,
             self.grantStatus)
-            
+
 class HumanSubjectTrainingLUT(CustomModel):
     __tablename__ = 'HumanSubjectTrainingLUT'
-    
+
     humanSubjectTrainingID = db.Column('humanSubjectTrainingID',db.Integer, primary_key=True)
     trainingType = db.Column('training_type',db.String)
-    
+
     # Relationships
     # M - 1, many staff trainings with the same HST
     staffTrainings = db.relationship('StaffTraining',back_populates="humanSubjectTraining")
-    
+
     def __repr__(self):
         return "<HumanSubjectTrainginLUT(\
         human_sub_type_id = {},\
         trainingType = {})>".format(
         self.humanSubjectTrainingID,
         self.trainingType)
-            
+
 class IRBHolderLUT(CustomModel):
     __tablename__ = 'IRBHolderLUT'
-    
+
     irbHolderID = db.Column('irbHolderID',db.Integer,primary_key=True)
     holder = db.Column('irb_holder',db.String)
     holderDefinition = db.Column('irb_holder_definition',db.String)
-    
+
     # Relationships
     # M - 1, Many projects with the same IRB
     projects = db.relationship("Project",back_populates="irbHolder")
-    
+
     def __repr__(self):
         return "<IRBHolderLUT(\
             irbHolderID = {},\
@@ -659,7 +659,7 @@ class Incentive(CustomModel):
 
 class Informant(CustomModel):
     __tablename__ = "Informant"
-    
+
     informantID = db.Column('informantID',db.Integer, primary_key=True)
     patientID = db.Column('patAutoID',db.Integer, db.ForeignKey("Patient.patAutoID"))
     firstName = db.Column('first_name',db.String)
@@ -668,7 +668,7 @@ class Informant(CustomModel):
     informantPrimary = db.Column('informant_primary',db.String)
     informantRelationship = db.Column('informant_relationship',db.String)
     notes = db.Column('notes',db.String)
-    
+
     # Relationships
     # 1 - M, one patient may have multiple informants
     patients = db.relationship("Patient",back_populates= "informants")
@@ -677,8 +677,8 @@ class Informant(CustomModel):
     informantPhones = db.relationship("InformantPhone")
     # M - 1, many contacts can have the same informant
     contacts = db.relationship("Contact",back_populates="informant")
-    
-    
+
+
     def __repr__(self):
         return "<Informant(\
         informantID = {},\
@@ -700,7 +700,7 @@ class Informant(CustomModel):
 
 class InformantAddress(CustomModel):
     __tablename__ = 'InformantAddress'
-    
+
     informantAddressID = db.Column('informantAddressID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey('ContactInfoSourceLUT.contactInfoSourceID'))
     contactInfoStatusID = db.Column('contactInfoStatusID',db.Integer, db.ForeignKey('ContactInfoStatusLUT.contactInfoStatusID'))
@@ -711,13 +711,13 @@ class InformantAddress(CustomModel):
     state = db.Column('state',db.String)
     zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('address_status_date',db.Date)
-    
+
     # Relationships
     # 1 - M, one informant may have multiple addresses
     informant = db.relationship("Informant", back_populates = "informantAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "<InformantAddress(\
         informantAddressID = {},\
@@ -747,7 +747,7 @@ class InformantAddress(CustomModel):
 
 class InformantPhone(CustomModel):
     __tablename__ = 'InformantPhone'
-    
+
     informantPhoneID = db.Column('informantPhoneID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     informantID = db.Column('informantId',db.Integer,db.ForeignKey("Informant.informantID"))
@@ -755,13 +755,13 @@ class InformantPhone(CustomModel):
     phoneTypeID = db.Column('phoneTypeLUTID', db.Integer, db.ForeignKey("PhoneTypeLUT.phoneTypeLUTID"))
     phoneNumber = db.Column('phone',db.String)
     phoneStatusDate = db.Column('phone_status_date',db.Date)
-    
+
     # Relationships
     # 1 - M, one informant may have multiple phones
     informant = db.relationship("Informant",back_populates="informantPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "<InformantPhone(\
         informantPhoneID = {},\
@@ -780,10 +780,10 @@ class InformantPhone(CustomModel):
         self.phoneSource,
         self.phoneStatus,
         self.phoneStatusDate)
-        
+
 class Log(CustomModel):
     __tablename__ = 'Log3'
-    
+
     logID = db.Column('logID',db.Integer, primary_key=True)
     logSubjectID = db.Column('logSubjectLUTID',db.Integer, db.ForeignKey('LogSubjectLUT.logSubjectLUTID'))
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
@@ -791,7 +791,7 @@ class Log(CustomModel):
     phaseStatusID = db.Column('logPhaseID',db.Integer, db.ForeignKey('PhaseStatus.logPhaseID'))
     note = db.Column('note',db.String)
     date = db.Column('date',db.Date)
-    
+
     # Relationships
     # M - 1, many logs with the same subject
     logSubject = db.relationship("LogSubjectLUT", back_populates="logs")
@@ -801,7 +801,7 @@ class Log(CustomModel):
     staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="logs")
     # 1 - M, one project with many logs
     project = db.relationship("Project",back_populates="logs")
-    
+
     def __repr__(self):
         return "<Log<(\
         logID = {},\
@@ -818,27 +818,27 @@ class Log(CustomModel):
         self.phaseStatusID,
         self.note,
         self.date)
-        
+
 class LogSubjectLUT(CustomModel):
     __tablename__ = 'LogSubjectLUT'
-    
+
     logSubjectID = db.Column('logSubjectLUTID',db.Integer, primary_key=True)
     logSubject = db.Column('log_subject',db.String)
-    
+
     # Relationships
     # M - 1, many logs with the same subject
     logs = db.relationship("Log",back_populates="logSubject")
-    
+
     def __repr(self):
         return "<LogSubject(\
         logSubjectID = {},\
         logSubject = {})>".format(
         self.logSubjectID,
         self.logSubject)
- 
+
 class Patient(CustomModel):
     __tablename__ = 'Patient'
-    
+
     patientID = db.Column('patAutoID',db.Integer, primary_key=True)
     patID = db.Column('patID',db.String)
     recordID = db.Column('recordID',db.Integer)
@@ -857,7 +857,7 @@ class Patient(CustomModel):
     race = db.Column('race',RACES)
     ethnicity = db.Column('ethnicity',ETHNICITIES)
     vitalStatus = db.Column('viral_status',VITAL_STATUSES)
-    
+
     # Relationships
     # M - 1, many patients can be at the same address
     patientAddresses = db.relationship('PatientAddress',back_populates="patients")
@@ -869,7 +869,7 @@ class Patient(CustomModel):
     patientPhones = db.relationship('PatientPhone',back_populates="patients")
     # M - 1, many informants may have multiple patients
     informants = db.relationship('Informant',back_populates="patients")
-    
+
     def __repr__(self):
         return "<Patient(\
         patientID = {},\
@@ -911,7 +911,7 @@ class Patient(CustomModel):
 
 class PatientAddress(CustomModel):
     __tablename__  = "PatientAddress"
-    
+
     patAddressID = db.Column('patAddressID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     patientID = db.Column('patientId',db.Integer, db.ForeignKey("Patient.patAutoID"))
@@ -922,12 +922,12 @@ class PatientAddress(CustomModel):
     state = db.Column('state',db.String)
     zip = db.Column('zip',db.Integer)
     addressStatusDate = db.Column('address_status_date',db.Date)
-    
+
     # Relationships
     patients = db.relationship("Patient",back_populates="patientAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "PatientAddress(\
         patAddressID = {},\
@@ -954,23 +954,23 @@ class PatientAddress(CustomModel):
         self.addressStatus,
         self.addressStatusDate,
         self.addressStatusSource)
-        
+
 class PatientEmail(CustomModel):
     __tablename__ = 'PatientEmail'
-    
+
     emailID = db.Column('emailID',db.Integer,primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     patientID = db.Column('patientID',db.Integer, db.ForeignKey("Patient.patAutoID"))
     contactInfoStatusID = db.Column('contactInfoStatusID',db.Integer, db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     email = db.Column('email',db.String)
     emailStatusDate = db.Column('email_status_date',db.Date)
-    
+
     # Relationships
     # 1 - M, one patient may have multiple emails
     patients = db.relationship("Patient",back_populates="patientEmails")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "<PatientEmail(\
         emailID = {},\
@@ -992,7 +992,7 @@ class PatientEmail(CustomModel):
 
 class PatientPhone(CustomModel):
     __tablename__ = 'PatientPhone'
-    
+
     patPhoneID = db.Column('patPhoneID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     patientID = db.Column('patientID',db.Integer, db.ForeignKey("Patient.patAutoID"))
@@ -1000,13 +1000,13 @@ class PatientPhone(CustomModel):
     phoneTypeID = db.Column('phoneTypeLUTID', db.Integer, db.ForeignKey('PhoneTypeLUT.phoneTypeLUTID'))
     phoneNumber = db.Column('phone',db.String)
     phoneStatusDate = db.Column('phone_status_date',db.Date)
-    
+
     # Relationships
     # M - 1, many patients can be at the same phone
     patients = db.relationship("Patient",back_populates="patientPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "<PatientPhone(\
         patPhoneID = {},\
@@ -1028,17 +1028,17 @@ class PatientPhone(CustomModel):
 
 class PatientProjectStatus(CustomModel):
     __tablename__ = 'PatientProjectStatus'
-    
+
     patientProjectStatusID = db.Column('patientProjectStatusID',db.Integer, primary_key=True)
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID',db.Integer, db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
     projectPatientID = db.Column('participantID',db.Integer, db.ForeignKey('ProjectPatient.participantID'))
-    
+
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
     patientProjectStatus = db.relationship("PatientProjectStatusLUT", back_populates = "patientProjectStatuses")
     # 1 - M, one project Patient has many statuses
     projectPatient = db.relationship("ProjectPatient", back_populates ="patientProjectStatuses")
-    
+
     def __repr__(self):
         return "<PatientProjectStatus(\
         patientProjectStatusID = {},\
@@ -1047,35 +1047,35 @@ class PatientProjectStatus(CustomModel):
         self.patientProjectStatusID,
         self.patientProjectStatusTypeID,
         self.projectPatientID)
-        
+
 class PatientProjectStatusLUT(CustomModel):
     __tablename__ = 'PatientProjectStatusLUT'
-    
+
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID',db.Integer, primary_key=True)
     statusDescription = db.Column('status_description',db.String)
-    
+
     # Relationships
     # M - 1, many pps with same ppsLUT
     patientProjectStatuses = db.relationship("PatientProjectStatus",back_populates="patientProjectStatus")
-    
+
     def __repr__(self):
         return "<PatientProjectStatusLUT(\
         patientProjectStatusTypeID = {}\
         status_description = {})>".format(
         patientProjectStatusTypeID,
         status_description)
-    
+
 class PhaseStatus(CustomModel):
     __tablename__ = 'PhaseStatus'
-    
+
     logPhaseID = db.Column('logPhaseID',db.Integer, primary_key=True)
     phaseStatus = db.Column('phase_status',db.String)
     phaseDescription = db.Column('phase_description',db.String)
-    
+
     # Relationships
     # M - 1, many logs with the same phase
     logs = db.relationship("Log",back_populates="phaseStatus")
-    
+
     def __repr__(self):
         return "<PhaseStatus(\
         logPhaseID = {},\
@@ -1100,7 +1100,7 @@ class PhoneTypeLUT(CustomModel):
 
 class Physician(CustomModel):
     __tablename__ = "Physician"
-    
+
     physicianID = db.Column('physicianID',db.Integer, primary_key=True)
     firstName = db.Column('first_name',db.String)
     lastName = db.Column('last_name',db.String)
@@ -1112,7 +1112,7 @@ class Physician(CustomModel):
     aliasMiddleName = db.Column('alias_middle_name',db.String)
     physicianStatus = db.Column('physician_status',db.Integer)
     physicianStatusDate = db.Column('physician_status_date',db.Date)
-    
+
     # Relationships
     # M - 1, many physicians can be at the same address
     physicianAddress = db.relationship("PhysicianAddress",back_populates="physicians")
@@ -1126,8 +1126,8 @@ class Physician(CustomModel):
     physicianToCTC = db.relationship("PhysicianToCTC", back_populates="physicians")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact",back_populates="physician")
-    
-    
+
+
     def __repr__(self):
         return "<Physician(\
         physicianID = {},\
@@ -1157,7 +1157,7 @@ class Physician(CustomModel):
 
 class PhysicianAddress(CustomModel):
     __tablename__ = "PhysicianAddress"
-    
+
     physicianAddressID = db.Column('physicianAddressID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     physicianID = db.Column('physicianID',db.Integer, db.ForeignKey("Physician.physicianID"))
@@ -1174,7 +1174,7 @@ class PhysicianAddress(CustomModel):
     physicians = db.relationship("Physician",back_populates="physicianAddress")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
-    
+
     def __repr__(self):
         return "PhysicianAddress(\
         physicianAddressID = {},\
@@ -1233,19 +1233,19 @@ class PhysicianEmail(CustomModel):
 
 class PhysicianFacility(CustomModel):
     __tablename__ = 'PhysicianFacility'
-    
+
     physFacilityID = db.Column('physicianFacilityID',db.Integer, primary_key=True)
     facilityID = db.Column('facilityID',db.Integer, db.ForeignKey('Facility.facilityID'))
     physicianID = db.Column('physicianID',db.Integer, db.ForeignKey('Physician.physicianID'))
     physFacilityStatus = db.Column('physician_facility_status',db.Integer)
     physFacilityStatusDate = db.Column('physician_facility_date',db.Date)
-    
+
     # Relationships
     # M - 1 many physicians at the same physician facility
     physicians = db.relationship("Physician",back_populates="physicianFacility")
     # M - 1
     facilities = db.relationship("Facility",back_populates = "physicianFacility")
-    
+
     def __repr__(self):
         return "<PhysicianFacility(\
         physFacilityID = {},\
@@ -1258,10 +1258,10 @@ class PhysicianFacility(CustomModel):
         self.physicianID,
         self.physFacilityStatus,
         self.physFacilityStatusDate)
-        
+
 class PhysicianPhone(CustomModel):
     __tablename__ = "PhysicianPhone"
-    
+
     physicianPhoneID = db.Column('physicianPhoneID',db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceID',db.Integer, db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     physicianID = db.Column('physicianID',db.Integer,db.ForeignKey("Physician.physicianID"))
@@ -1269,14 +1269,14 @@ class PhysicianPhone(CustomModel):
     phoneTypeID = db.Column('phoneTypeID',db.Integer, db.ForeignKey("PhoneTypeLUT.phoneTypeLUTID"))
     phoneNumber = db.Column('physician_phone',db.String)
     phoneStatusDate = db.Column('phoneStatusDate',db.Date)
-    
+
     # Relationship
     # M - 1, many physicians can be at the same phone
     physicians = db.relationship("Physician",back_populates="physicianPhone")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
     phoneType = db.relationship("PhoneTypeLUT")
-    
+
     def __repr__(self):
         return "<PhysicianPhone(\
         physicianPhoneID = {},\
@@ -1297,20 +1297,20 @@ class PhysicianPhone(CustomModel):
         self.phoneSource,
         self.phoneStatus,
         self.phoneStatusDate)
-       
+
 class PhysicianToCTC(CustomModel):
     __tablename__ = "PhysicianToCTC"
-    
+
     physicianCTCID = db.Column('physicianCTCID',db.Integer, primary_key=True)
     physicianID = db.Column('physicianID',db.Integer, db.ForeignKey('Physician.physicianID'))
     ctcID = db.Column('ctcID',db.Integer, db.ForeignKey('CTC.ctcID'))
-    
+
     # Relationships
     # M - 1
     physicians = db.relationship("Physician",back_populates="physicianToCTC")
     # M - 1
     ctc = db.relationship("CTC",back_populates="physicianToCTC")
-    
+
     def __repr__(self):
         return "<PhysicianToCTC(\
         physicianCTCID = {},\
@@ -1319,10 +1319,10 @@ class PhysicianToCTC(CustomModel):
         self.physicianCTCID,
         self.physicianID,
         self.ctcID)
-        
+
 class PreApplication(CustomModel):
     __tablename__ = 'PreApplication'
-    
+
     preApplicationID = db.Column('preApplication',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
     piFirstName = db.Column('pi_first_name',db.String)
@@ -1351,11 +1351,11 @@ class PreApplication(CustomModel):
     link = db.Column('link',db.Boolean)
     deliveryDate = db.Column('delivery_date',db.Date)
     description = db.Column('description',db.String)
-    
+
     # Relationships
     # 1-1 one project, one preApp
     project = db.relationship('Project',back_populates='preApplication')
-    
+
     def __repr__(self):
         return "<(PreApplication(\
         preApplicationID = {},\
@@ -1415,10 +1415,10 @@ class PreApplication(CustomModel):
         self.link,
         self.deliveryDate,
         self.description)
-    
+
 class Project(CustomModel):
     __tablename__='Project'
-    
+
     projectID = db.Column('projectID',db.Integer, primary_key=True)
     projectTypeID = db.Column('projectTypeID',db.Integer, db.ForeignKey('ProjectType.projectTypeID'))
     irbHolderID = db.Column('irbHolderID',db.Integer, db.ForeignKey('IRBHolderLUT.irbHolderID'))
@@ -1436,7 +1436,7 @@ class Project(CustomModel):
     ongoingContact = db.Column('ongoing_contact', db.Boolean)
     activityStartDate = db.Column('activity_start_date', db.Date)
     activityEndDate = db.Column('activity_end_date', db.Date)
-    
+
     # M - 1, Many projects with same IRB Holder
     irbHolder = db.relationship("IRBHolderLUT", back_populates="projects")
     # M - 1, Many projects with same type
@@ -1494,10 +1494,10 @@ class Project(CustomModel):
         self.previousShortTitle,
         self.dateAdded,
         self.finalRecruitmentReport)
-        
+
 class ProjectPatient(CustomModel):
     __tablename__ = 'ProjectPatient'
-    
+
     participantID = db.Column('participantID',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
@@ -1620,10 +1620,10 @@ class ProjectPatient(CustomModel):
         self.medRecordReleaseDate,
         self.surveyToResearcher,
         self.surveyToResearcherStaff)
-        
+
 class ProjectStaff(CustomModel):
     __tablename__ =  'ProjectStaff'
-    
+
     projectStaffID = db.Column('projectStaffID',db.Integer, primary_key=True)
     staffRoleID = db.Column('staffRoleLUTID',db.Integer, db.ForeignKey('StaffRoleLUT.staffRoleLUTID'))
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
@@ -1633,7 +1633,7 @@ class ProjectStaff(CustomModel):
     dateRevoked = db.Column('date_revoked',db.Date)
     contact = db.Column('contact',CONTACTS)
     inactive = db.Column('inactive',INACTIVES)
-    
+
     # Relationships
     # M - 1, Many projectStaff with the same role
     staffRole = db.relationship("StaffRoleLUT", back_populates="projectStaff")
@@ -1641,7 +1641,7 @@ class ProjectStaff(CustomModel):
     project = db.relationship("Project", back_populates="projectStaff")
     # 1  M one staff can have multiple project staff
     staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="projectStaff")
-    
+
     def __repr__(self):
         return "<ProjectStaff(\
         projectStaffID = {},\
@@ -1668,7 +1668,7 @@ class ProjectStaff(CustomModel):
         self.humanSubjectTrainingExp,
         self.humanSubjectTrainingTypeID,
         self.studyRole)
-        
+
 class ProjectStatus(CustomModel):
     __tablename__ = 'ProjectStatus'
 
@@ -1678,16 +1678,16 @@ class ProjectStatus(CustomModel):
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
     statusDate = db.Column('statusDate',db.Date)
     statusNotes = db.Column('statusNotes',db.String)
-    
+
     # Relationships
     # M -1 , many projectStatuses per projectStatusLUT
     projectStatus = db.relationship("ProjectStatusLUT", foreign_keys=[projectStatusTypeID], back_populates="projectStatuses")
-    
+
     # 1 - M, one project, many statuses
     project = db.relationship("Project", foreign_keys=[projectID], back_populates="projectStatuses")
     # 1 - M, many statuses per staff
     staff = db.relationship("Staff", foreign_keys=[staffID], back_populates="projectStatuses")
-    
+
     def __repr__(self):
         return "<ProjectStatus(\
         projectStatusID = {},\
@@ -1702,18 +1702,18 @@ class ProjectStatus(CustomModel):
         self.staffID,
         self.statusDate,
         self.statusNotes)
-    
+
 class ProjectStatusLUT(CustomModel):
     __tablename__ = 'ProjectStatusLUT'
-    
+
     projectStatusTypeID = db.Column('projectStatusTypeID',db.Integer, primary_key=True)
     projectStatus = db.Column('project_status',db.String)
     projectStatusDefinition = db.Column('status_definition',db.String)
-    
+
     # Relationships
     # M - 1, many ProjectStatuses per projectStatusLUT
     projectStatuses = db.relationship("ProjectStatus",back_populates="projectStatus")
-    
+
     def __repr__(self):
         return "<ProjectStatusLUT(\
         projectStatusTypeID = {},\
@@ -1722,18 +1722,18 @@ class ProjectStatusLUT(CustomModel):
         self.projectStatusTypeID,
         self.projectStatus,
         self.projectStatusDefinition)
-          
+
 class ProjectType(CustomModel):
     __tablename__ = 'ProjectType'
-    
+
     projectTypeID = db.Column('projectTypeID',db.Integer,primary_key=True)
     projectType = db.Column('project_type',db.String)
     projectTypeDefinition = db.Column('project_type_defintion',db.String)
-    
+
     # Relationships
     # M - 1 Many projects with same project type
     projects = db.relationship("Project", back_populates="projectType")
-    
+
     def __repr__(self):
         return "<ProjectType(\
         projectTypeID={},\
@@ -1742,17 +1742,17 @@ class ProjectType(CustomModel):
         self.projectTypeID,
         self.projectType,
         self.projectTypeDefinition)
-    
+
 class ReviewCommitteeStatusLUT(CustomModel):
     __tablename__ = 'ReviewCommitteeStatusLUT'
-    
+
     reviewCommitteeStatusID = db.Column('reviewCommitteeStatusLUTID',db.Integer, primary_key=True)
     reviewCommitteeStatus = db.Column('review_committee_status',db.String)
     reviewCommitteeStatusDefinition = db.Column('review_committee_status_definition',db.String)
-    
+
     # Relationships
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="reviewCommitteeStatusLUT")
-    
+
     def __repr__(self):
         return "<RCStatusList(\
             rcStatusID = {},\
@@ -1764,7 +1764,7 @@ class ReviewCommitteeStatusLUT(CustomModel):
 
 class ReviewCommittee(CustomModel):
     __tablename__ = 'ReviewCommittee'
-    
+
     reviewCommitteeID = db.Column('reviewCommitteeID',db.Integer,primary_key=True)
     projectID = db.Column('projectID',db.Integer,db.ForeignKey('Project.projectID'))
     reviewCommitteeStatusID = db.Column('reviewCommitteeStatusLUTID',db.Integer, db.ForeignKey('ReviewCommitteeStatusLUT.reviewCommitteeStatusLUTID'))
@@ -1775,7 +1775,7 @@ class ReviewCommittee(CustomModel):
     rcNote = db.Column('review_committee_note',db.String)
     rcProtocol = db.Column('review_committee_protocol',db.String)
     rcApproval = db.Column('review_committee_approval',db.String)
-    
+
     # Relationships
     # 1- M, one project many review committees
     project = db.relationship("Project",foreign_keys=[projectID],back_populates="reviewCommittees")
@@ -1783,7 +1783,7 @@ class ReviewCommittee(CustomModel):
     reviewCommitteeStatusLUT = db.relationship("ReviewCommitteeStatusLUT", foreign_keys=[reviewCommitteeStatusID], back_populates="reviewCommittees")
     # M - 1, Many review committees per rcList
     reviewCommitteeLUT = db.relationship("ReviewCommitteeLUT",foreign_keys=[reviewCommitteeLUTID],back_populates="reviewCommittees")
-        
+
     def __repr__(self):
         return "<ReviewCommittee(\
             reviewCommitteeID ={},\
@@ -1806,18 +1806,18 @@ class ReviewCommittee(CustomModel):
             self.rcNote,
             self.rcProtocol,
             self.rcApproval)
-            
+
 class ReviewCommitteeLUT(CustomModel):
     __tablename__ ='ReviewCommitteeLUT'
-    
+
     reviewCommitteeID = db.Column('reviewCommitteeLUTID',db.Integer,primary_key=True)
     reviewCommittee = db.Column('review_committee',db.String)
     reviewCommitteeDescription = db.Column('review_committee_description',db.String)
-    
+
     # Relationships
     # M - 1 Many reviewCommittess per reviewCommitteeList
     reviewCommittees = db.relationship("ReviewCommittee",back_populates="reviewCommitteeLUT")
-    
+
     def __repr__(self):
         return "<ReviewCommitteeList(\
         rcListID={},\
@@ -1826,7 +1826,7 @@ class ReviewCommitteeLUT(CustomModel):
         self.rcListID,
         self.reviewComittee,
         self.rcDescription)
-        
+
 class Staff(CustomModel):
     __tablename__ = 'Staff'
 
@@ -1846,7 +1846,7 @@ class Staff(CustomModel):
     state = db.Column('state',db.String)
     humanSubjectTrainingExp = db.Column('human_sub_training_exp',db.Date)
     ucrRole = db.Column('UCR_role',db.Integer)
-    
+
     # Relationships
     # 1 - M, one staff with many statuses
     projectStatuses = db.relationship("ProjectStatus",back_populates="staff")
@@ -1860,7 +1860,8 @@ class Staff(CustomModel):
     contacts = db.relationship("Contact",back_populates="staff")
     # 1 - M, one study/projectPatient can have many staff
     #projectPatient = db.relationship("ProjectPatient",back_populates="staff")
-    
+    tracings = db.relationship("Tracing",back_populates="staff")
+
     def __repr__(self):
         return "<Staff(\
         staffID = {},\
@@ -1895,18 +1896,18 @@ class Staff(CustomModel):
         self.state,
         self.humanSubjectTrainingExp,
         self.ucrRole)
-        
+
 class StaffRoleLUT(CustomModel):
     __tablename__ = 'StaffRoleLUT'
-    
+
     staffRoleID = db.Column('staffRoleLUTID',db.Integer,primary_key=True)
     staffRole = db.Column('staff_role',db.String)
     staffRoleDescription = db.Column('staff_role_description',db.String)
-    
+
     # Relationships
     # M - 1, many projectStaff with the same role
     projectStaff = db.relationship("ProjectStaff",back_populates="staffRole")
-    
+
     def __repr__(self):
         return "<StaffRoleLUT(\
         staffRoleID = {},\
@@ -1915,16 +1916,16 @@ class StaffRoleLUT(CustomModel):
         self.staffRoleLUTID,
         self.staffRole,
         self.staffRoleDescription)
-        
+
 class StaffTraining(CustomModel):
     __tablename__ = 'StaffTraining'
-    
+
     staffTrainingID = db.Column('staffTrainingID',db.Integer, primary_key=True)
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
     humanSubjectTrainingID = db.Column('humanSubjectTrainingID',db.Integer,db.ForeignKey('HumanSubjectTrainingLUT.humanSubjectTrainingID'))
     dateTaken = db.Column('date_taken',db.Date)
     dateExpires = db.Column('exp_date',db.Date)
-    
+
     # Relationships
     # M - 1, many staffTrainings with the same HST
     humanSubjectTraining = db.relationship('HumanSubjectTrainingLUT',back_populates="staffTrainings")
@@ -1946,20 +1947,22 @@ class StaffTraining(CustomModel):
 
 class Tracing(CustomModel):
     __tablename__ = "Tracing"
-    
+
     tracingID = db.Column('tracingID',db.Integer, primary_key=True)
     tracingSourceID = db.Column('tracingSourceLUTID',db.Integer, db.ForeignKey('TracingSourceLUT.tracingSourceLUTID'))
     projectPatientID = db.Column('participantID',db.Integer, db.ForeignKey('ProjectPatient.participantID'))
     date = db.Column('date',db.Date)
-    staff = db.Column('staff',db.Integer)
+    staffID = db.Column('staff',db.Integer, db.ForeignKey('Staff.staffID'))
     notes = db.Column('notes',db.String)
-    
+
     # Relationships
     # M - 1, many trancings can have the same tracingSource
     tracingSource = db.relationship('TracingSourceLUT',back_populates="tracings")
     # 1 - M, one project patient with many tracings
     projectPatient = db.relationship('ProjectPatient', back_populates="tracings")
-    
+
+    staff = db.relationship('Staff',uselist=False,back_populates="tracings")
+
     def __repr__(self):
         return "<Tracing(\
         tracingID = {},\
@@ -1977,23 +1980,23 @@ class Tracing(CustomModel):
 
 class TracingSourceLUT(CustomModel):
     __tablename__ = "TracingSourceLUT"
-    
+
     tracingSourceID = db.Column('tracingSourceLUTID',db.Integer, primary_key=True)
     description = db.Column('tracing_source_description',db.String)
-    
+
     # Relationships
     tracings = db.relationship('Tracing',back_populates="tracingSource")
-    
+
     def __repr__(self):
         return "<TracingSourceLUT(\
         tracingSourceLUTID = {},\
         description = {})>".format(
         tracingSourceLUTID,
         description)
-        
+
 class UCRReport(CustomModel):
     __tablename__ = 'UcrReport'
-    
+
     ucrReportID = db.Column('ucrReport',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
     reportType = db.Column('report_type',UCR_REPORT_TYPES)

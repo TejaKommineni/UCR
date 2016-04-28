@@ -1425,7 +1425,7 @@ class TracingForm(BaseForm):
     date = DateField('date',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    staff = IntegerField('staff',
+    staffID = IntegerField('staffID',
         []+COMMON_INTEGER_VALIDATORS)
     notes = StringField('notes',
         []+COMMON_STRING_VALIDATORS)
@@ -1443,6 +1443,11 @@ class TracingForm(BaseForm):
         tracingSource = query.get_tracing_source(self.tracingSourceID.data)
         if tracingSource is None:
             self.tracingSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        staff = query.get_staff(self.staffID.data)
+        if staff is None:
+            self.staffID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 

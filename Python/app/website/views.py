@@ -1033,7 +1033,7 @@ def delete_budget(budgetID):
 #############################################################################
 # Contact 
 #############################################################################
-@website.route('/contacts/', methods = ['GET'])
+#@website.route('/contacts/', methods = ['GET'])
 @website.route('/contacts/<int:contactID>/', methods = ['GET'])
 def get_contact(contactID = None):
     try:
@@ -1042,7 +1042,15 @@ def get_contact(contactID = None):
         else:
             contact = query.get_contact(contactID)
             if contact is not None:
-                return contact.json()
+                form={}
+                form["staff"] = query.get_staffs()
+                form["contactTypes"] = query.get_contact_types()
+                form["projectPatients"] = query.get_project_patients()
+                form["staff"] = query.get_staffs()
+                form["informants"] = query.get_informants()
+                form["facilities"] = query.get_facilities()
+                form["physicians"] = query.get_physicians()
+                return render_template("contact_form.html",form=form,contact=contact)
             else:
                 return item_not_found("ContactID {} not found".format(contactID))
     except Exception as e:
@@ -1067,7 +1075,7 @@ def update_contact(contactID):
                     contact.initials = request.form['initials']
                     contact.notes = request.form['notes']
                     query.commit()
-                    return contact.json()
+                    return redirect_back("contacts/{}/".format(contactID))
                 else:
                     return out_of_date_error()
             else:
@@ -1078,26 +1086,35 @@ def update_contact(contactID):
         return internal_error(e)
 
 @website.route('/contacts/',methods=['POST'])
-def create_contact():
+@website.route('/contacts/<int:contactID>/',methods=['POST'])
+def create_contact(contactID=None):
     try:
-        form = forms.ContactForm(request.form)
-        if form.validate():
-            contact = models.Contact(
-                contactTypeLUTID = request.form['contactTypeLUTID'],
-                projectPatientID = request.form['projectPatientID'],
-                staffID = request.form['staffID'],
-                informantID = request.form['informantID'],
-                facilityID = request.form['facilityID'],
-                physicianID = request.form['physicianID'],
-                description = request.form['description'],
-                contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d"),
-                initials = request.form['initials'],
-                notes = request.form['notes'],
-            )
-            query.add(contact)
-            return jsonify({"contactID" : contact.contactID})
+        if contactID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_contact(contactID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_contact(contactID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.ContactForm(request.form)
+            if form.validate():
+                contact = models.Contact(
+                    contactTypeLUTID = request.form['contactTypeLUTID'],
+                    projectPatientID = request.form['projectPatientID'],
+                    staffID = request.form['staffID'],
+                    informantID = request.form['informantID'],
+                    facilityID = request.form['facilityID'],
+                    physicianID = request.form['physicianID'],
+                    description = request.form['description'],
+                    contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d"),
+                    initials = request.form['initials'],
+                    notes = request.form['notes'],
+                )
+                query.add(contact)
+                return redirect_back("contacts/{}/".format(contact.contactID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2162,7 +2179,7 @@ def delete_human_subject_training(humanSubjectTrainingID):
 ##############################################################################
 # Incentive
 ##############################################################################
-@website.route('/incentives/', methods = ['GET'])
+#@website.route('/incentives/', methods = ['GET'])
 @website.route('/incentives/<int:incentiveID>/', methods = ['GET'])
 def get_incentive(incentiveID=None):
     try:
@@ -2171,7 +2188,9 @@ def get_incentive(incentiveID=None):
         else:
             incentive = query.get_incentive(incentiveID)
             if incentive is not None:
-                return incentive.json()
+                form = {}
+                form["projectPatients"] = query.get_project_patients()
+                return render_template("incentive_form.html",form=form,incentive=incentive)
             else:
                 return item_not_found("IncentiveID {} not found".format(incentiveID))
     except Exception as e:
@@ -2189,7 +2208,7 @@ def update_incentive(incentiveID):
                     incentive.incentiveDescription = request.form['incentiveDescription']
                     incentive.incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
                     query.commit()
-                    return incentive.json()
+                    return redirect_back("incentives/{}/".format(incentiveID))
                 else:
                     return out_of_date_error()
             else:
@@ -2200,19 +2219,28 @@ def update_incentive(incentiveID):
         return internal_error(e)
 
 @website.route('/incentives/', methods=['POST'])
-def create_incentive():
+@website.route('/incentives/<int:incentiveID>/', methods=['POST'])
+def create_incentive(incentiveID=None):
     try:
-        form = forms.IncentiveForm(request.form)
-        if form.validate():
-            incentive = models.Incentive(
-                projectPatientID = request.form['projectPatientID'],
-                incentiveDescription = request.form['incentiveDescription'],
-                incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
-            )
-            query.add(incentive)
-            return jsonify({'incentiveID':incentive.incentiveID})
+        if incentiveID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_incentive(incentiveID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_incentive(incentiveID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.IncentiveForm(request.form)
+            if form.validate():
+                incentive = models.Incentive(
+                    projectPatientID = request.form['projectPatientID'],
+                    incentiveDescription = request.form['incentiveDescription'],
+                    incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
+                )
+                query.add(incentive)
+                return redirect_back("incentives/{}/".format(incentive.incentiveID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3200,7 +3228,7 @@ def delete_patient_phone(patPhoneID):
 ##############################################################################
 # Patient Project Status
 ##############################################################################
-@website.route('/patientprojectstatuses/', methods = ['GET'])
+#@website.route('/patientprojectstatuses/', methods = ['GET'])
 @website.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods = ['GET'])
 def get_patient_project_status(patientProjectStatusID=None):
     try:
@@ -3209,7 +3237,10 @@ def get_patient_project_status(patientProjectStatusID=None):
         else:
             patientProjectStatus = query.get_patient_project_status(patientProjectStatusID)
             if patientProjectStatus is not None:
-                return patientProjectStatus.json()
+                form={}
+                form["projectPatients"] = query.get_project_patients()
+                form["patientProjectStatusTypes"] = query.get_patient_project_status_types()
+                return render_template("patient_project_status_form.html",form=form,patientProjectStatus=patientProjectStatus)
             else:
                 return item_not_found("PatientProjectStatusID {} not found".format(patientProjectStatusID))
     except Exception as e:
@@ -3226,7 +3257,7 @@ def update_patient_project_status(patientProjectStatusID):
                     patientProjectStatus.patientProjectStatusTypeID = request.form['patientProjectStatusTypeID']
                     patientProjectStatus.projectPatientID = request.form['projectPatientID']
                     query.commit()
-                    return patientProjectStatus.json()
+                    return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -3237,18 +3268,27 @@ def update_patient_project_status(patientProjectStatusID):
         return internal_error(e)
 
 @website.route('/patientprojectstatuses/', methods=['POST'])
-def create_patient_project_status():
+@website.route('/patientprojectstatuses/<int:patientProjectStatusID>/', methods=['POST'])
+def create_patient_project_status(patientProjectStatusID=None):
     try:
-        form = forms.PatientProjectStatusForm(request.form)
-        if form.validate():
-            patientProjectStatus = models.PatientProjectStatus(
-                patientProjectStatusTypeID = request.form['patientProjectStatusTypeID'],
-                projectPatientID = request.form['projectPatientID']
-            )
-            query.add(patientProjectStatus)
-            return jsonify({'patientProjectStatusID':patientProjectStatus.patientProjectStatusID})
+        if patientProjectStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_patient_project_status(patientProjectStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_patient_project_status(patientProjectStatusID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PatientProjectStatusForm(request.form)
+            if form.validate():
+                patientProjectStatus = models.PatientProjectStatus(
+                    patientProjectStatusTypeID = request.form['patientProjectStatusTypeID'],
+                    projectPatientID = request.form['projectPatientID']
+                )
+                query.add(patientProjectStatus)
+                return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatus.patientProjectStatusID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -4281,6 +4321,17 @@ def get_project_patient(participantID=None):
                 form["staff"] = query.get_staffs()
                 form["booleans"] = query.get_booleans()
                 form["states"] = query.get_states()
+                form["staff"] = query.get_staffs()
+                form["contactTypes"] = query.get_contact_types()
+                form["projectPatients"] = query.get_project_patients()
+                form["informants"] = query.get_informants()
+                form["facilities"] = query.get_facilities()
+                form["physicians"] = query.get_physicians()
+                form["phoneTypes"] = query.get_phone_types()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["patientProjectStatusTypes"] = query.get_patient_project_status_types()
+                form["tracingSources"] = query.get_tracing_sources()
                 return render_template("project_patient_form.html",form=form,projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
@@ -5291,7 +5342,7 @@ def delete_staff_training(staffTrainingID):
 ##############################################################################
 # Tracing
 ##############################################################################
-@website.route('/tracings/', methods = ['GET'])
+#@website.route('/tracings/', methods = ['GET'])
 @website.route('/tracings/<int:tracingID>/', methods = ['GET'])
 def get_tracing(tracingID=None):
     try:
@@ -5300,7 +5351,11 @@ def get_tracing(tracingID=None):
         else:
             tracing = query.get_tracing(tracingID)
             if tracing is not None:
-                return tracing.json()
+                form={}
+                form["tracingSources"] = query.get_tracing_sources()
+                form["projectPatients"] = query.get_project_patients()
+                form["staff"] = query.get_staffs()
+                return render_template("tracing_form.html",form=form,tracing=tracing)
             else:
                 return item_not_found("TracingID {} not found".format(tracingID))
     except Exception as e:
@@ -5317,10 +5372,10 @@ def update_tracing(tracingID):
                     tracing.tracingSourceID = request.form['tracingSourceID']
                     tracing.projectPatientID = request.form['projectPatientID']
                     tracing.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
-                    tracing.staff = request.form['staff']
+                    tracing.staffID = request.form['staffID']
                     tracing.notes = request.form['notes']
                     query.commit()
-                    return tracing.json()
+                    return redirect_back("tracings/{}/".format(tracingID))
                 else:
                     return out_of_date_error()
             else:
@@ -5331,21 +5386,30 @@ def update_tracing(tracingID):
         return internal_error(e)
 
 @website.route('/tracings/',methods = ['POST'])
-def create_tracing():
+@website.route('/tracings/<int:tracingID>/',methods = ['POST'])
+def create_tracing(tracingID=None):
     try:
-        form = forms.TracingForm(request.form)
-        if form.validate():
-            tracing = models.Tracing(
-                tracingSourceID = request.form['tracingSourceID'],
-                projectPatientID = request.form['projectPatientID'],
-                date = datetime.strptime(request.form['date'],"%Y-%m-%d"),
-                staff = request.form['staff'],
-                notes = request.form['notes']
-                )
-            query.add(tracing)
-            return jsonify({'tracingID':tracing.tracingID})
+        if tracingID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_tracing(tracingID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_tracing(tracingID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.TracingForm(request.form)
+            if form.validate():
+                tracing = models.Tracing(
+                    tracingSourceID = request.form['tracingSourceID'],
+                    projectPatientID = request.form['projectPatientID'],
+                    date = datetime.strptime(request.form['date'],"%Y-%m-%d"),
+                    staffID = request.form['staffID'],
+                    notes = request.form['notes']
+                    )
+                query.add(tracing)
+                return redirect_back("tracings/{}/".format(tracing.tracingID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 

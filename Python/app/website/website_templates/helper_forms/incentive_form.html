@@ -1,0 +1,80 @@
+{% if incentive is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="incentiveForm" action='/website/incentives/{{incentive["incentiveID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="incentiveForm" action='/website/incentives/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_projectPatientID">Project Patient</label>
+                  <select type="text" class="form-control" name="projectPatientID" id="select_projectPatientID">
+                      {% for pp in form.projectPatients %}
+                        {% if pp.participantID == incentive.projectPatientID %}
+                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                        {% else %}
+                            <option value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-8">
+                  <label for="text_description">Description</label>
+                  <input type="text" class="form-control" name="incentiveDescription" id="text_incentiveDescription" value="{{incentive.incentiveDescription}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_incentiveDate">incentive Date</label>
+                  <input type="date" class="form-control" name="incentiveDate" id="date_incentiveDate" value="{{incentive.incentiveDate}}">
+                </div>
+              </div>
+            </div>
+            
+      
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{incentive.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{incentive.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if incentive is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{incentive.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if incentive is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="incentiveID" value="{{incentive.incentiveID}}"/>
+                {% else %}
+                    <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if incentive is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Incentive</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>

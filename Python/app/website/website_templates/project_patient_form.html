@@ -322,6 +322,33 @@
     </ul>
     <div class="tab-content">        
         <div class="tab-pane" id="contactsTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for contact in projectPatient.contacts %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#contact{{loop.index}}Tab" role="tab" data-toggle="tab">{{contact.contactDate}}</a></li>
+                    {% else %}
+                    <li><a href="#contact{{loop.index}}Tab" role="tab" data-toggle="tab">{{contact.contactDate}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newContactTab" role="tab" data-toggle="tab">New Contact</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for contact in projectPatient.contacts %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="contact{{loop.index}}Tab">
+                    {% include 'helper_forms/contact_form.html' %}
+                    </div>
+                    {% else %}
+                    <div class="tab-pane" id="contact{{loop.index}}Tab">
+                    {% include 'helper_forms/contact_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form.html' %}
+                </div>
+            </div>
         </div>
         
         <div class="tab-pane active" id="ctcTab">
@@ -330,15 +357,174 @@
         </div>
         
         <div class="tab-pane" id="incentivesTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for incentive in projectPatient.incentives %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#incentive{{loop.index}}Tab" role="tab" data-toggle="tab">Incentive {{loop.index}}</a></li>
+                    {% else %}
+                    <li><a href="#incentive{{loop.index}}Tab" role="tab" data-toggle="tab">Incentive {{loop.index}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newIncentiveTab" role="tab" data-toggle="tab">New Incentive</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for incentive in projectPatient.incentives %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="incentive{{loop.index}}Tab">
+                    {% include 'helper_forms/incentive_form.html' %}
+                    </div>
+                    {% else %}
+                    <div class="tab-pane" id="incentive{{loop.index}}Tab">
+                    {% include 'helper_forms/incentive_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newIncentiveTab">
+                {% set incentive = none %}
+                {% include 'helper_forms/incentive_form.html' %}
+                </div>
+            </div>
         </div>
         
         <div class="tab-pane" id="patientContactInfoTab">
+            <ul class = "nav nav-tabs" role="tablist">
+            <li><a href="#patientAddressTab"  role="tab" data-toggle="tab">Address</a></li>
+            <li><a href="#patientEmailTab" role="tab" data-toggle="tab">Email</a></li>
+            <li><a href="#patientPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+            </ul>
+            <div class="tab-content">        
+                <div class="tab-pane active" id="patientAddressTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                            {% include 'helper_forms/patient_address_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                            {% include 'helper_forms/patient_address_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="tab-pane" id="patientEmailTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails  %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
+                            {% include 'helper_forms/patient_email_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
+                            {% include 'helper_forms/patient_email_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="tab-pane" id="patientPhoneTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones  %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                            {% include 'helper_forms/patient_phone_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                            {% include 'helper_forms/patient_phone_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="tab-pane" id="statusesTab">
+        <ul class ="nav nav-tabs" role="tablist">
+            {% for patientProjectStatus in projectPatient.patientProjectStatuses %}
+                {% if loop.index == 1 %}
+                <li class="active"><a href="#patientProjectStatus{{loop.index}}Tab" role="tab" data-toggle="tab">Patient Project Status {{loop.index}}</a></li>
+                {% else %}
+                <li><a href="#patientProjectStatus{{loop.index}}Tab" role="tab" data-toggle="tab">Patient Project Status {{loop.index}}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li><a href="#newPatientProjectStatus" role="tab" data-toggle="tab">New Patient Project Status</a></li>
+        </ul>
+        <div class="tab-content">
+            {% for patientProjectStatus in projectPatient.patientProjectStatuses %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="patientProjectStatus{{loop.index}}Tab">
+                    {% include 'helper_forms/patient_project_status_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientProjectStatus{{loop.index}}Tab">
+                    {% include 'helper_forms/patient_project_status_form.html' %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="tab-pane" id="newPatientProjectStatus">
+            {% set patientProjectStatus = none %}
+            {% include 'helper_forms/patient_project_status_form.html' %}
+            </div>
         </div>
+    </div>
         
-        <div class="tab-pane" id="statusesTab">
+    <div class="tab-pane" id="tracingsTab">
+        <ul class ="nav nav-tabs" role="tablist">
+            {% for tracing in projectPatient.tracings %}
+                {% if loop.index == 1 %}
+                <li class="active"><a href="#tracing{{loop.index}}Tab" role="tab" data-toggle="tab">Tracing {{loop.index}}</a></li>
+                {% else %}
+                <li><a href="#tracing{{loop.index}}Tab" role="tab" data-toggle="tab">Tracing {{loop.index}}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li><a href="#newtracing" role="tab" data-toggle="tab">New Tracing</a></li>
+        </ul>
+        <div class="tab-content">
+            {% for tracing in projectPatient.tracings %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="tracing{{loop.index}}Tab">
+                    {% include 'helper_forms/tracing_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="tracing{{loop.index}}Tab">
+                    {% include 'helper_forms/tracing_form.html' %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="tab-pane" id="newtracing">
+            {% set tracing = none %}
+            {% include 'helper_forms/tracing_form.html' %}
+            </div>
         </div>
-        
-        <div class="tab-pane" id="tracingsTab">
-        </div>
+    </div>
     
 {% endblock %}
