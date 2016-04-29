@@ -1,0 +1,81 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Staff</h1>
+        </div>
+      </div>
+      <form class="formOverride" id="mainform" action='search/', method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName">
+                </div>
+                <div class="col-md-1">
+                  <label for="text_staffID">Staff ID</label>
+                  <input type="text" class="form-control" name="staffID" id="text_staffID">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_phoneNumber">Phone Number</label>
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_phoneNumber">Email</label>
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_institution">Insitution</label>
+                  <input type="text" class="form-control" name="institution" id="text_institution">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_department">Department</label>
+                  <input type="text" class="form-control" name="department" id="text_department">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_ucrRole">UCR Role</label>
+                  <input type="text" class="form-control" name="ucrRole" id="text_ucrRole">
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Staff ID</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Institution</th>
+                <th>Department</th>
+                <th>UCR Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for staff in staffs %}
+            <tr>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["lastName"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["firstName"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["staffID"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["phoneNumber"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["email"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"]}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}

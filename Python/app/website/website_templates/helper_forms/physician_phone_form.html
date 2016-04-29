@@ -1,15 +1,27 @@
-{% if patientEmail is not none %}
+{% if physicianPhone is not none %}
     <!-- action url is for update -->
-    <form class="formOverride" id="addressForm" action='/website/patientemails/{{patientEmail["patientID"]}}/', method='post'>
+    <form class="formOverride" id="phoneForm" action='/website/physicianphones/{{physicianPhone["physicianID"]}}/', method='post'>
 {% else %}
-    <form class="formOverride" id="addressForm" action='/website/patientemails/', method='post'>
+    <form class="formOverride" id="phoneForm" action='/website/physicianphones/', method='post'>
 {% endif %}
       <fieldset>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="text_email">Email Address</label>
-                  <input type="text" class="form-control" name="email" id="text_email" value="{{patientEmail["email"]}}">
+                  <label for="text_phoneNumber">Phone Number</label>
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{physicianPhone["phoneNumber"]}}">
+                </div>
+              <div class="col-md-2">  
+                  <label for="select_phoneTypeID">Phone Type</label>        
+                  <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
+                      {% for phoneType in form["phoneTypes"] %}
+                        {% if phoneType["phoneTypeID"] == physicianPhone["phoneTypeID"] %}
+                            <option value="{{phoneType["phoneTypeID"]}}" selected="selected">{{phoneType["phoneType"]}}</option>
+                        {% else %}
+                            <option value="{{phoneType["phoneTypeID"]}}">{{phoneType["phoneType"]}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
               </div>
               <div class="row">
@@ -17,7 +29,7 @@
                   <label for="select_contactInfoSource">Contact Info Source</label>        
                   <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       {% for contactInfoSource in form["contactInfoSources"] %}
-                        {% if contactInfoSource["contactInfoSourceID"] == patientEmail["contactInfoSourceID"] %}
+                        {% if contactInfoSource["contactInfoSourceID"] == physicianPhone["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
                         {% else %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -29,7 +41,7 @@
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
                   <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
-                        {% if contactInfoStatus["contactInfoStatusID"] == patientEmail["contactInfoStatusID"] %}
+                        {% if contactInfoStatus["contactInfoStatusID"] == physicianPhone["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>
                         {% else %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}">{{contactInfoStatus["contactInfoStatus"]}}</option>
@@ -38,34 +50,38 @@
                   </select>
                 </div>
                 <div class = "col-md-2">
-                  <label for="date_emailStatusDate">Email Status Date</label>
-                  <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{patientEmail["emailStatusDate"]}}">
+                  <label for="date_phoneStatusDate">Phone Status Date</label>
+                  <input type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
                 </div>
             </div>
+          </fieldset>
+          
+          <fieldset>
+                <legend>Database Information</legend>
                 <div class="form-group">
                   <div class="row">
                     <div class = "col-md-2">
                       <label for="text_createdDate">Created</label>
-                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{patientEmail["createdDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{physicianPhone["createdDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class = "col-md-2">
                       <label for="text_modifiedDate">Last Modified</label>
-                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{patientEmail["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{physicianPhone["modifiedDate"]}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_versionID">Version</label>
-                      {% if patientEmail is not none %}
-                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{patientEmail["versionID"]}}" readonly="readonly">
+                      {% if physicianPhone is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{physicianPhone["versionID"]}}" readonly="readonly">
                       {% else %}
                         <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
                       {% endif %}
                     </div>
                     <!-- Extra hidden fields -->
-                    {% if patientEmail is not none %}
+                    {% if physicianPhone is not none %}
                         <input type="hidden" name="_method" value="put" />
-                        <input type="hidden" name="patientID" value="{{patientEmail["patientID"]}}"/>
+                        <input type="hidden" name="physicianID" value="{{physicianPhone["physicianID"]}}"/>
                     {% else %}
-                        <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
+                        <input type="hidden" name="physicianID" value="{{form["physician"]["physicianID"]}}"/>
                     {% endif %}
                 </div>
               </div>
@@ -74,10 +90,10 @@
                 <div class = "form-group">
                   <div class="row">
                     <div class="col-md-2">
-                    {% if patientEmail is not none %}
+                    {% if physicianPhone is not none %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
                     {% else %}
-                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Email</button>
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Phone</button>
                     {% endif %}
                     </div>
                   </div>

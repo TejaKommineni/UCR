@@ -290,42 +290,55 @@
         </div>
         
         <div class = "tab-pane" id="projectStaffTab">
-            <form class="formOverride" id="projectStaff">
-                <fieldset>
-                    <table class="table table-striped no-spacing">
-                          <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Middle Name</th>
-                                <th>Last Name</th>
-                                <th>Credentials</th>
-                                <th>Role</th>
-                                <th>Date Pledge</th>
-                                <th>Date Revoked</th>
-                                <th>Contact</th>
-                                <th>Inactive</th>
-                                <th>Last Updated</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for ps in form.project.projectStaff %}
-                            <tr>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.contact}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.inactive}}</a></td>
-                                <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate}}</a></td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                    </table>
-                </fieldset>
-            </form>
+            <ul class ="nav nav-tabs" role="tablist">
+                <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>
+                <li><a href="#newProjectStaffTab" role="tab" data-toggle="tab">Add Staff to Project</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="projectStaffTableTab">
+                    <form class="formOverride" id="projectStaff">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Middle Name</th>
+                                        <th>Last Name</th>
+                                        <th>Credentials</th>
+                                        <th>Role</th>
+                                        <th>Date Pledge</th>
+                                        <th>Date Revoked</th>
+                                        <th>Contact</th>
+                                        <th>Inactive</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for ps in form.project.projectStaff %}
+                                    <tr>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.contact}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.inactive}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                    </div>
+                <div class="tab-pane" id="newProjectStaffTab">
+                {% set projectStaff = none %}
+                {% include 'helper_forms/project_staff_form.html' %}
+                </div>
+            </div>
+            
         </div>
         
         <div class = "tab-pane" id="projectStatusesTab">

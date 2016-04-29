@@ -1628,7 +1628,6 @@ class ProjectStaff(CustomModel):
     staffRoleID = db.Column('staffRoleLUTID',db.Integer, db.ForeignKey('StaffRoleLUT.staffRoleLUTID'))
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
-    role = db.Column('role',db.Integer)
     datePledge = db.Column('date_pledge',db.Date)
     dateRevoked = db.Column('date_revoked',db.Date)
     contact = db.Column('contact',CONTACTS)

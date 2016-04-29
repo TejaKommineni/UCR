@@ -1,0 +1,124 @@
+{% if projectStaff is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="projectStaffForm" action='/website/projectstaff/{{projectStaff["projectStaffID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="projectStaffForm" action='/website/projectstaff/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_projectID">Project</label>
+                  <select type="text" class="form-control" name="projectID" id="select_projectID">
+                      {% for project in form.projects %}
+                        {% if project.projectID == projectStaff.projectID %}
+                            <option selected="selected" value="{{project.projectID}}">{{project.shortTitle}}</option>
+                        {% else %}
+                            <option value="{{project.projectID}}">{{project.shortTitle}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+               <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectStaff.staffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_staffRoleID">Staff Role</label>
+                  <select type="text" class="form-control" name="staffRoleID" id="select_staffRoleID">
+                      {% for staffRole in form.staffRoles %}
+                        {% if staffRole.staffRoleID == projectStaff.staffRoleID %}
+                            <option selected="selected" value="{{staffRole.staffRoleID}}">{{staffRole.staffRole}}</option>
+                        {% else %}
+                            <option value="{{staffRole.staffRoleID}}">{{staffRole.staffRole}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_contact">Contact</label>
+                  <select type="text" class="form-control" name="contact" id="select_contact">
+                      {% for contact in form.contacts.enums %}
+                        {% if projectStaff.contact == contact %}
+                            <option selected="selected" >{{contact}}</option>
+                        {% else %}
+                            <option>{{contact}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_inactive">Inactive</label>
+                  <select type="text" class="form-control" name="inactive" id="select_inactive">
+                      {% for inactive in form.inactives.enums %}
+                        {% if projectStaff.inactive == inactive %}
+                            <option selected="selected">{{inactive}}</option>
+                        {% else %}
+                            <option>{{inactive}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="date_datePledge">Date Pledged</label>
+                  <input type="date" class="form-control" name="datePledge" id="date_datePledge" value="{{projectStaff.datePledge}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="date_dateRevoked">Date Revoked</label>
+                  <input type="date" class="form-control" name="dateRevoked" id="date_dateRevoked" value="{{projectStaff.dateRevoked}}">
+                </div>
+              </div>
+            
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{projectStaff.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{projectStaff.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if projectStaff is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{projectStaff.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if projectStaff is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="projectStaffID" value="{{projectStaff.projectStaffID}}"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if projectStaff is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Project Staff</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>

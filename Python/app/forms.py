@@ -1209,8 +1209,6 @@ class ProjectStaffForm(BaseForm):
         []+COMMON_INTEGER_VALIDATORS)
     staffID = IntegerField('staffID',
         []+COMMON_INTEGER_VALIDATORS)
-    role = IntegerField('role',
-        []+COMMON_INTEGER_VALIDATORS)
     datePledge = DateField('datePledge',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)

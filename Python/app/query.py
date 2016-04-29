@@ -28,6 +28,12 @@ def get_report_types():
 def get_booleans():
     return BOOLEANS
 
+def get_inactive_enums():
+    return INACTIVES
+
+def get_contact_enums():
+    return CONTACTS
+
 def add(obj):
     db.session.add(obj)
 

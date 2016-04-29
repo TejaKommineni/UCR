@@ -1,0 +1,208 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+{% if staff is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="staffForm" action='/website/staff/{{staff["staffID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="staffForm" action='/website/staff/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{staff.firstName}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_middleName">Middle Name</label>
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{staff.middleName}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{staff.lastName}}">
+                </div>
+                <div class = "col-md-1">
+                  <label for="text_credentials">Credentials</label>
+                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{staff.credentials}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_email">Email</label>
+                  <input type="text" class="form-control" name="email" id="text_email" value="{{staff.email}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_phone">Phone</label>
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phone" value="{{staff.phoneNumber}}">
+                </div>
+                <div class = "col-md-4">
+                  <label for="text_phoneComment">Phone Comment</label>
+                  <input type="text" class="form-control" name="phoneComment" id="text_phoneComment" value="{{staff.phoneComment}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_institution">Institution</label>
+                  <input type="text" class="form-control" name="institution" id="text_insitution" value="{{staff.institution}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_department">Department</label>
+                  <input type="text" class="form-control" name="department" id="text_department" value="{{staff.department}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_position">Position</label>
+                  <input type="text" class="form-control" name="position" id="text_position" value="{{staff.position}}">
+                </div>
+              </div>
+              <div class="row">
+               <div class = "col-md-2">
+                  <label for="text_street">Street</label>
+                  <input type="text" class="form-control" name="street" id="text_street" value="{{staff.street}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_city">City</label>
+                  <input type="text" class="form-control" name="city" id="text_city" value="{{staff.city}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_state">State</label>        
+                  <select type="text" class="form-control" name="state" id="select_state" value="{{staff.state}}">
+                      {% for state in form["states"].enums %}
+                        {% if state == staff.state %}
+                            <option selected="selected">{{state}}</option>
+                        {% else %}
+                            <option>{{state}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_humanSubjectTrainingExp">Human Subject Training Expires</label>
+                  <input type="date" class="form-control" name="humanSubjectTrainingExp" id="date_humanSubjectTrainingExp" value="{{staff.humanSubjectTrainingExp}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_ucrRole">UCR Role</label>
+                  <input type="text" class="form-control" name="ucrRole" id="text_ucrRole" value="{{staff.ucrRole}}">
+                </div>
+              </div>
+            
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{staff.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{staff.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if staff is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{staff.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if staff is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if staff is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add staff</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li class="active"><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
+        <li><a href="#staffTrainings" role="tab" data-toggle="tab">Trainings</a></li>
+    </ul>
+    <div class="tab-content"> 
+        <div class = "tab-pane active" id="projects">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#projectsTableTab" role="tab" data-toggle="tab">Table</a></li>
+                <li><a href="#newProjectTab" role="tab" data-toggle="tab">Add To Project</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="projectsTableTab">
+                    <table class="table table-striped no-spacing">
+                      <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Project Type</th>
+                            <th>Short Title</th>
+                            <th>Date Added</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for ps in staff.projectStaff %}
+                        <tr>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectTypeID}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.dateAdded}}</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="newProjectTab">
+                {% set projectStaff = none %}
+                {% include 'helper_forms/project_staff_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class = "tab-pane" id="staffTrainings">
+        <div class="tab-pane active" id="arcReviewTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#trainingTableTab" role="tab" data-toggle="tab">Table</a></li>
+                <li><a href="#newTraining" role="tab" data-toggle="tab">New Training</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="trainingTableTab">
+                <table class="table table-striped no-spacing">
+                  <thead>
+                    <tr>
+                        <th>Training Type</th>
+                        <th>Date Taken</th>
+                        <th>Date Expires</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for st in staff.staffTraining %}
+                    <tr>
+                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.humanSubjectTraining.trainingType}}</a></td>
+                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateTaken}}</a></td>
+                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateExpires}}</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                </div>
+                
+                <div class="tab-pane" id="newTraining">
+                {% set staffTraining = none %}
+                {% include 'helper_forms/staff_training_form.html' %}
+                </div>
+            </div>
+        </div>
+            
+        </div>
+    </div>
+    
+{% endblock %}

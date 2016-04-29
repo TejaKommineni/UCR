@@ -1,0 +1,86 @@
+{% if staffTraining is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="staffTrainingForm" action='/website/stafftrainings/{{staffTraining["staffTrainingID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="staffTrainingForm" action='/website/stafftrainings/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_humanSubjectTrainingID">Human Subject Training</label>
+                  <select type="text" class="form-control" name="humanSubjectTrainingID" id="select_humanSubjectTrainingID">
+                      {% for hst in form.humanSubjectTrainings %}
+                        {% if hst.humanSubjectTrainingID == staffTraining.humanSubjectTrainingID %}
+                            <option selected="selected" value="{{hst.humanSubjectTrainingID}}">{{hst.trainingType}}</option>
+                        {% else %}
+                            <option value="{{hst.humanSubjectTrainingID}}">{{hst.trainingType}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == staffTraining.staffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_dateTaken">Date Taken</label>
+                  <input type="date" class="form-control" name="dateTaken" id="date_dateTaken" value="{{staffTraining.dateTaken}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_dateExpires">Date Expires</label>
+                  <input type="date" class="form-control" name="dateExpires" id="date_dateExpires" value="{{staffTraining.dateExpires}}">
+                </div>
+              </div>
+            
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{staffTraining.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{staffTraining.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if staffTraining is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{staffTraining.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if staffTraining is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="staffTrainingID" value="{{staffTraining.staffTrainingID}}"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if staffTraining is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Staff Training</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>
