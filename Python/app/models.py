@@ -400,8 +400,8 @@ class Facility(CustomModel):
 
     # Relationships
     # M - 1, many facilities can have the same phone
-    facilityPhone = db.relationship("FacilityPhone", back_populates = "facilities")
-    facilityAddress = db.relationship("FacilityAddress", back_populates = "facilities")
+    facilityPhones = db.relationship("FacilityPhone", back_populates = "facilities")
+    facilityAddresses = db.relationship("FacilityAddress", back_populates = "facilities")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship('Contact',back_populates="facility")
     # 1 - M, one facility may have many CTCFacility
@@ -444,7 +444,7 @@ class FacilityAddress(CustomModel):
 
     # Relationships
     # M - 1, many facilities can be at the same address
-    facilities = db.relationship("Facility",back_populates="facilityAddress")
+    facilities = db.relationship("Facility",back_populates="facilityAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
 
@@ -489,9 +489,10 @@ class FacilityPhone(CustomModel):
 
     # Relationships
     # M - 1, many patients can be at the same phone
-    facilities = db.relationship("Facility", back_populates = "facilityPhone")
+    facilities = db.relationship("Facility", back_populates = "facilityPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
+    phoneType = db.relationship("PhoneTypeLUT")
 
     def __repr__(self):
         return "<FacilityPhone(\
@@ -1115,13 +1116,13 @@ class Physician(CustomModel):
 
     # Relationships
     # M - 1, many physicians can be at the same address
-    physicianAddress = db.relationship("PhysicianAddress",back_populates="physicians")
+    physicianAddresses = db.relationship("PhysicianAddress",back_populates="physicians")
     # M - 1, many physicians can have the same phone
-    physicianPhone = db.relationship("PhysicianPhone",back_populates="physicians")
+    physicianPhones = db.relationship("PhysicianPhone",back_populates="physicians")
 
-    physicianEmail = db.relationship("PhysicianEmail",back_populates="physicians")
+    physicianEmails = db.relationship("PhysicianEmail",back_populates="physicians")
     # M - 1, many phys at same facility
-    physicianFacility = db.relationship("PhysicianFacility", back_populates="physicians")
+    physicianFacilities = db.relationship("PhysicianFacility", back_populates="physicians")
     # M - 1
     physicianToCTC = db.relationship("PhysicianToCTC", back_populates="physicians")
     # M - 1, many contacts may have the same facility
@@ -1171,7 +1172,7 @@ class PhysicianAddress(CustomModel):
 
     # Relationship
     # M - 1, many physicians can be at the same address
-    physicians = db.relationship("Physician",back_populates="physicianAddress")
+    physicians = db.relationship("Physician",back_populates="physicianAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
 
@@ -1212,7 +1213,7 @@ class PhysicianEmail(CustomModel):
     email = db.Column('email', db.String)
     emailStatusDate = db.Column('email_status_date', db.Date)
 
-    physicians = db.relationship("Physician",back_populates="physicianEmail")
+    physicians = db.relationship("Physician",back_populates="physicianEmails")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
 
@@ -1242,7 +1243,7 @@ class PhysicianFacility(CustomModel):
 
     # Relationships
     # M - 1 many physicians at the same physician facility
-    physicians = db.relationship("Physician",back_populates="physicianFacility")
+    physicians = db.relationship("Physician",back_populates="physicianFacilities")
     # M - 1
     facilities = db.relationship("Facility",back_populates = "physicianFacility")
 
@@ -1272,7 +1273,7 @@ class PhysicianPhone(CustomModel):
 
     # Relationship
     # M - 1, many physicians can be at the same phone
-    physicians = db.relationship("Physician",back_populates="physicianPhone")
+    physicians = db.relationship("Physician",back_populates="physicianPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
     phoneType = db.relationship("PhoneTypeLUT")

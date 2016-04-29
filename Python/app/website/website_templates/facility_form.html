@@ -1,0 +1,163 @@
+{% extends "layout_patient.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Facility Information</h1>
+        </div>
+      </div>
+
+    {% if facility is not none %}
+        <!-- action url is for update -->
+        <form class="formOverride" id="facilityForm" action='/website/facilities/{{facility["facilityID"]}}/', method='post'>
+    {% else %}
+        <!-- action url is for post/create -->
+        <form class="formOverride" id="facilityForm" action='/website/facilities/', method='post'>
+    {% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-8"> 
+                  <label for="text_facilityName">Facility Name</label>
+                  <input type="text" class="form-control" name="facilityName" id="text_facilityName" value="{{facility["facilityName"]}}" >
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_contactFirstName">Contact First Name</label>
+                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{facility["contactFirstName"]}}" >
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_contactLastName">Contact Last Name</label>
+                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{facility["contactLastName"]}}" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_contact2FirstName">Contact 2 First Name</label>
+                  <input type="text" class="form-control" name="contact2FirstName" id="text_contact2FirstName" value="{{facility["contact2FirstName"]}}" >
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_contact2LastName">Contact 2 Last Name</label>
+                  <input type="text" class="form-control" name="contact2LastName" id="text_contact2LastName" value="{{facility["contact2LastName"]}}" >
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_facilityStatus">Status</label>
+                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus" value="{{facility["facilityStatus"]}}" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_facilityStatusDate">Status Date</label>
+                  <input type="date" class="form-control" name="facilityStatusDate" id="date_facilityStatusDate" value="{{facility["facilityStatusDate"]}}" >
+                </div>
+              </div>
+            </div>
+            
+      
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{facility.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{facility.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if facility is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{facility.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if facility is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="facilityID" value="{{facility.facilityID}}"/>
+                {% else %}
+                    <input type="hidden" name="facilityID" value="0"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+            <div class = "form-group">
+              <div class="row">
+                <div class="col-md-2">
+                  {% if facility is not none %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Add Facility</button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li><a href="#facilityAddressTab"  role="tab" data-toggle="tab">Address</a></li>
+        <li><a href="#facilityPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+    </ul>
+    <div class="tab-content">        
+        <div class="tab-pane active" id="facilityAddressTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for facilityAddress in facility.facilityAddresses %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for facilityAddress in facility.facilityAddresses %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="facilityAddress{{facilityAddress.facilityAddressID}}Tab">
+                    {% include 'helper_forms/facility_address_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="facilityAddress{{facilityAddress.facilityAddressID}}Tab">
+                    {% include 'helper_forms/facility_address_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newAddressTab">
+                {% set facilityAddress = none %}
+                {% include 'helper_forms/facility_address_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="facilityPhoneTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for facilityPhone in facility.facilityPhones %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for facilityPhone in facility.facilityPhones %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="facilityPhone{{facilityPhone.facilityPhoneID}}Tab">
+                    {% include 'helper_forms/facility_phone_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="facilityPhone{{facilityPhone.facilityPhoneID}}Tab">
+                    {% include 'helper_forms/facility_phone_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newPhoneTab">
+                {% set facilityPhone = none %}
+                {% include 'helper_forms/facility_phone_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

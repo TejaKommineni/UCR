@@ -1676,7 +1676,7 @@ def delete_funding(fundingID):
 ##############################################################################
 # Facility Phone
 ##############################################################################
-@website.route('/facilityphones/', methods=['GET'])
+#@website.route('/facilityphones/', methods=['GET'])
 @website.route('/facilityphones/<int:facilityPhoneID>/',methods = ['GET'])
 def get_facility_phone(facilityPhoneID=None):
     try:
@@ -1685,7 +1685,11 @@ def get_facility_phone(facilityPhoneID=None):
         else:
             facilityPhone = query.get_facility_phone(facilityPhoneID)
             if facilityPhone is not None:
-                return facilityPhone.json()
+                form = {}
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["phoneTypes"] = query.get_phone_types()
+                return render_template("facility_phone_form.html",form=form,facilityPhone=facilityPhone)
             else:
                 return item_not_found("FacilityPhoneID {} not found".format(facilityPhoneID))
     except Exception as e:
@@ -1707,7 +1711,7 @@ def update_facility_phone(facilityPhoneID):
                     facilityPhone.phoneNumber = request.form['phoneNumber']
                     facilityPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return facilityPhone.json()
+                    return redirect_back("facilityphones/{}/".format(facilityPhoneID))
                 else:
                     return out_of_date_error()
             else:
@@ -1718,23 +1722,32 @@ def update_facility_phone(facilityPhoneID):
         return internal_error(e)
 
 @website.route('/facilityphones/', methods=['POST'])
-def create_facility_phone():
+@website.route('/facilityphones/<int:facilityPhoneID>/', methods=['POST'])
+def create_facility_phone(facilityPhoneID=None):
     try:
-        form = forms.FacilityPhoneForm(request.form)
-        if form.validate():
-            facilityPhone = models.FacilityPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                facilityID = request.form['facilityID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                clinicName = request.form['clinicName'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
-                )
-            query.add(facilityPhone)
-            return jsonify({'facilityPhoneID':facilityPhone.facilityPhoneID})
+        if facilityPhoneID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_facility_phone(facilityPhoneID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_facility_phone(facilityPhoneID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.FacilityPhoneForm(request.form)
+            if form.validate():
+                facilityPhone = models.FacilityPhone(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    facilityID = request.form['facilityID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    clinicName = request.form['clinicName'],
+                    phoneNumber = request.form['phoneNumber'],
+                    phoneTypeID = request.form['phoneTypeID'],
+                    phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    )
+                query.add(facilityPhone)
+                return redirect_back("facilityphones/{}/".format(facilityPhone.facilityPhoneID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -1762,11 +1775,19 @@ def delete_facility_phone(facilityPhoneID):
 def get_facility(facilityID=None):
     try:
         if facilityID is None:
-            return jsonify(Facilities = [i.dict() for i in query.get_facilities()])
+            facilities = query.get_facilities()
+            form = {}
+            return render_template("facility_table.html",form=form,facilities=facilities)
         else:
             facility = query.get_facility(facilityID)
             if facility is not None:
-                return facility.json()
+                form = {}
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["phoneTypes"] = query.get_phone_types()
+                form["states"] = query.get_states()
+                form["phoneTypes"] = query.get_phone_types()
+                return render_template("facility_form.html",form=form,facility=facility)
             else:
                 return item_not_found("FacilityID {} not found".format(facilityID))
     except Exception as e:
@@ -1788,7 +1809,7 @@ def update_facility(facilityID):
                     facility.contact2FirstName = request.form['contact2FirstName']
                     facility.contact2LastName = request.form['contact2LastName']
                     query.commit()
-                    return facility.json()
+                    return redirect_back("facilties/{}/".format(facilityID))
                 else:
                     return out_of_date_error()
             else:
@@ -1799,23 +1820,34 @@ def update_facility(facilityID):
         return internal_error(e)
 
 @website.route('/facilities/', methods=['POST'])
-def create_facility():
+@website.route('/facilities/<int:facilityID>/', methods=['POST'])
+def create_facility(facilityID=None):
     try:
-        facility = models.Facility(
-            facilityName = request.form['facilityName'],
-            contactFirstName = request.form['contactFirstName'],
-            contactLastName = request.form['contactLastName'],
-            facilityStatus = request.form['facilityStatus'],
-            facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d"),
-            contact2FirstName = request.form['contact2FirstName'],
-            contact2LastName = request.form['contact2LastName']
-            )
-        ret = query.add(facility)
-    except KeyError as e:
-       return missing_params(e)
+        if facilityID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_facility(facilityID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_facility(facilityID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.FacilityForm(request.form)
+            if form.validate():
+                facility = models.Facility(
+                    facilityName = request.form['facilityName'],
+                    contactFirstName = request.form['contactFirstName'],
+                    contactLastName = request.form['contactLastName'],
+                    facilityStatus = request.form['facilityStatus'],
+                    facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d"),
+                    contact2FirstName = request.form['contact2FirstName'],
+                    contact2LastName = request.form['contact2LastName']
+                    )
+                ret = query.add(facility)
+                return redirect("facilities/{}/".format(facility.facilityID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
-    return jsonify({'facilityID':facility.facilityID})
 
 @website.route('/facilities/<int:facilityID>/',methods = ['DELETE'])
 def delete_facility(facilityID):
@@ -1836,7 +1868,7 @@ def delete_facility(facilityID):
 ##############################################################################
 # Facility Address
 ##############################################################################
-@website.route('/facilityaddresses/', methods=['GET'])
+#@website.route('/facilityaddresses/', methods=['GET'])
 @website.route('/facilityaddresses/<int:facilityAddressID>/',methods = ['GET'])
 def get_facility_address(facilityAddressID=None):
     try:
@@ -1845,7 +1877,11 @@ def get_facility_address(facilityAddressID=None):
         else:
             facilityAddress = query.get_facility_address(facilityAddressID)
             if facilityAddress is not None:
-                return facilityAddress.json()
+                form ={}
+                form["states"] = query.get_states()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                return render_template("facility_address_form.html",form=form,facilityAddress=facilityAddress)
             else:
                 return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
     except Exception as e:
@@ -1873,32 +1909,41 @@ def update_facility_address(facilityAddressID):
                     return out_of_date_error()
             else:
                 return missing_params(form.errors)
-            return facilityAddress.json()
+            return redirect_back("facilityaddresses/{}/".format(facilityAddressID))
         else:
             return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
     except Exception as e:
         return internal_error(e)
 
 @website.route('/facilityaddresses/', methods=['POST'])
-def create_facility_address():
+@website.route('/facilityaddresses/<int:facilityAddressID>/', methods=['POST'])
+def create_facility_address(facilityAddressID = None):
     try:
-        form = forms.FacilityAddressForm(request.form)
-        if form.validate():
-            facilityAddress = models.FacilityAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                facilityID = request.form['facilityID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
-                )
-            query.add(facilityAddress)
-            return jsonify({'facilityAddressID':facilityAddress.facilityAddressID})
+        if facilityAddressID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_facility_address(facilityAddressID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_facility_address(facilityAddressID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.FacilityAddressForm(request.form)
+            if form.validate():
+                facilityAddress = models.FacilityAddress(
+                    contactInfoSourceID = request.form['contactInfoSourceID'],
+                    facilityID = request.form['facilityID'],
+                    contactInfoStatusID = request.form['contactInfoStatusID'],
+                    street = request.form['street'],
+                    street2 = request.form['street2'],
+                    city = request.form['city'],
+                    state = request.form['state'],
+                    zip = request.form['zip'],
+                    addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                    )
+                query.add(facilityAddress)
+                return redirect_back("facilityaddresses/{}/".format(facilityAddressID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
 
@@ -3576,11 +3621,20 @@ def delete_phone_type(phoneTypeID):
 def get_physician(physicianID=None):
     try:
         if physicianID is None:
-            return jsonify(Physicians = [i.dict() for i in query.get_physicians()])
+            physicians = query.get_physicians()
+            form = {}
+            return render_template("physician_table.html",form=form,physicians=physicians)
         else:
             physician = query.get_physician(physicianID)
             if physician is not None:
-                return physician.json()
+                form={}
+                form["contactInfoSources"] = query.get_contact_info_sources()
+                form["contactInfoStatuses"] = query.get_contact_info_statuses()
+                form["states"] = query.get_states()
+                form["phoneTypes"] = query.get_phone_types()
+                form["physicians"] = query.get_physicians()
+                form["facilities"] = query.get_facilities()
+                return render_template("physician_form.html",form=form,physician=physician)
             else:
                 return item_not_found("PhysicianID {} not found".format(physicianID))
     except Exception as e:
@@ -3605,7 +3659,7 @@ def update_physician(physicianID):
                     physician.physicianStatus = request.form['physicianStatus']
                     physician.physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d")
                     query.commit()
-                    return physician.json()
+                    return redirect_back("physicians/{}/".format(physicianID))
                 else:
                     return out_of_date_error()
             else:
@@ -3616,26 +3670,35 @@ def update_physician(physicianID):
         return internal_error(e)
 
 @website.route('/physicians/', methods=['POST'])
-def create_physician():
+@website.route('/physicians/<int:physicianID>/', methods=['POST'])
+def create_physician(physicianID = None):
     try:
-        form = forms.PhysicianForm(request.form)
-        if form.validate():
-            physician = models.Physician(
-                firstName = request.form['firstName'],
-                lastName = request.form['lastName'],
-                middleName = request.form['middleName'],
-                credentials = request.form['credentials'],
-                specialty = request.form['specialty'],
-                aliasFirstName = request.form['aliasFirstName'],
-                aliasLastName = request.form['aliasLastName'],
-                aliasMiddleName = request.form['aliasMiddleName'],
-                physicianStatus = request.form['physicianStatus'],
-                physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
-            )
-            query.add(physician)
-            return jsonify({'physicianID':physician.physicianID})
+        if physicianID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_physician(physicianID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_physician(physicianID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.PhysicianForm(request.form)
+            if form.validate():
+                physician = models.Physician(
+                    firstName = request.form['firstName'],
+                    lastName = request.form['lastName'],
+                    middleName = request.form['middleName'],
+                    credentials = request.form['credentials'],
+                    specialty = request.form['specialty'],
+                    aliasFirstName = request.form['aliasFirstName'],
+                    aliasLastName = request.form['aliasLastName'],
+                    aliasMiddleName = request.form['aliasMiddleName'],
+                    physicianStatus = request.form['physicianStatus'],
+                    physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
+                )
+                query.add(physician)
+                return redirect_back("physicians/{}/".format(physician.physicianID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -3822,7 +3885,7 @@ def create_physician_email(physicianEmailID=None):
                     emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
                     )
                 query.add(physicianEmail)
-                return render_template("physicianemails/{}/".format(physicianEmail.physicianID))
+                return redirect_back("physicianemails/{}/".format(physicianEmail.physicianID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
