@@ -1,4 +1,4 @@
-{% extends "layout_patient.html" %}
+{% extends "layout_all.html" %}
 {% block content %}
       <div class="row">
         <div class="col-md-6">
@@ -144,12 +144,14 @@
             <div class="tab-content">
                 {% for patientAddress in form["patientAddresses"] %}
                 {% if loop.index == 1 %}
-                <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
-                {% else %}
-                <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
-                {% endif %}
+                    <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
                     {% include 'helper_forms/patient_address_form.html' %}
-                </div>
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                    {% include 'helper_forms/patient_address_form.html' %}
+                    </div>
+                {% endif %}
                 {% endfor %}
                 <div class="tab-pane" id="newAddressTab">
                 {% set patientAddress = none %}
@@ -171,12 +173,14 @@
             <div class="tab-content">
                 {% for patientEmail in form["patientEmails"] %}
                 {% if loop.index == 1 %}
-                <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
-                {% else %}
-                <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
-                {% endif %}
+                    <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
                     {% include 'helper_forms/patient_email_form.html' %}
-                </div>
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
+                    {% include 'helper_forms/patient_email_form.html' %}
+                    </div>
+                {% endif %}
                 {% endfor %}
                 <div class="tab-pane" id="newEmailTab">
                 {% set patientEmail = none %}
@@ -198,12 +202,14 @@
             <div class="tab-content">
                 {% for patientPhone in form["patientPhones"] %}
                 {% if loop.index == 1 %}
-                <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
-                {% else %}
-                <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
-                {% endif %}
+                    <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
                     {% include 'helper_forms/patient_phone_form.html' %}
-                </div>
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                    {% include 'helper_forms/patient_phone_form.html' %}
+                    </div>
+                {% endif %}
                 {% endfor %}
                 <div class="tab-pane" id="newPhoneTab">
                 {% set patientPhone = none %}
@@ -238,30 +244,42 @@
             </form>
         </div>
         <div class= "tab-pane" id="patientInformantsTab">
-            <form class="formOverride" id="patientInformants">
-                <fieldset>
-                    <table class="table table-striped no-spacing">
-                          <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Primary</th>
-                                <th>Relationship</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for informant in form["informants"] %}
-                            <tr>
-                                <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"]}}</a></td>
-                                <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"]}}</a></td>
-                                <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"]}}</a></td>
-                                <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"]}}</a></td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                    </table>
-                </fieldset>
-            </form>
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#informantTableTab" role="tab" data-toggle="tab">Table</a></li>
+                <li><a href="#newInformantTab" role="tab" data-toggle="tab">New Informant</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="informantTableTab">
+                    <form class="formOverride" id="patientInformants">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Primary</th>
+                                        <th>Relationship</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for informant in form["informants"] %}
+                                    <tr>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"]}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="newInformantTab">
+                    {% set informant = none %}
+                    {% include 'helper_forms/informant_form.html' %}
+                </div>
+            </div>
         </div>
     </div>
     

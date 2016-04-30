@@ -1,4 +1,4 @@
-{% extends "layout_patient.html" %}
+{% extends "layout_all.html" %}
 {% block content %}
       <div class="row">
         <div class="col-md-6">
@@ -202,27 +202,32 @@
         </div>
         <div class="tab-pane" id="physicianFacilityTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for physicianFacility in physician.physicianFacilities %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#physicianFacility{{physicianFacility.physFacilityID}}Tab" role="tab" data-toggle="tab">Facility {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#physicianFacility{{physicianFacility.physFacilityID}}Tab" role="tab" data-toggle="tab">Facility {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
                 <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
             </ul>
             <div class="tab-content">
+                <div class="tab-pane active" id="facilityTableTab">
+                <table class="table table-striped no-spacing">
+                    <thead>
+                        <tr>
+                            <th> Facility Name </th>
+                            <th> Contact First Name </th>
+                            <th> Contact Last Name </th>
+                            <th> Facility Status </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 {% for physicianFacility in physician.physicianFacilities %}
-                {% if loop.index == 1 %}
-                    <div class="tab-pane active" id="physicianFacility{{physicianFacility.physFacilityID}}Tab">
-                    {% include 'helper_forms/physician_facility_form.html' %}
-                    </div>
-                {% else %}
-                    <div class="tab-pane" id="physicianFacility{{physicianFacility.physFacilityID}}Tab">
-                    {% include 'helper_forms/physician_facility_form.html' %}
-                    </div>
-                {% endif %}
+                    <tr>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactFirstName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactLastName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityStatus"]}}</a></td>
+                    </tr>    
                 {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
                 <div class="tab-pane" id="newFacilityTab">
                 {% set physicianFacility = none %}
                 {% include 'helper_forms/physician_facility_form.html' %}

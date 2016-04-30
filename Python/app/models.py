@@ -319,11 +319,11 @@ class CTC(CustomModel):
 
     # Relationship
     # 1 - 1, one ctc per projectPatient
-    projectPatient = db.relationship("ProjectPatient",back_populates="ctc")
+    projectPatient = db.relationship("ProjectPatient",uselist=False,back_populates="ctc")
     # many ctcs to one patient
     patient = db.relationship('Patient',uselist=False, back_populates='ctcs')
     # M - 1
-    ctcFacility = db.relationship("CTCFacility",back_populates="ctc")
+    ctcFacilities = db.relationship("CTCFacility",back_populates="ctc")
     #
     physicianToCTC = db.relationship("PhysicianToCTC",back_populates="ctc")
 
@@ -375,7 +375,7 @@ class CTCFacility(CustomModel):
     # 1 - M, one facilty may have many CTCFacilities
     facility = db.relationship("Facility",back_populates="ctcFacilities")
     # M - 1,many ctc to one ctcfacility
-    ctc = db.relationship("CTC",back_populates="ctcFacility")
+    ctc = db.relationship("CTC",back_populates="ctcFacilities")
 
     def __repr__(self):
         return "<CTCFacility(\
@@ -407,7 +407,7 @@ class Facility(CustomModel):
     # 1 - M, one facility may have many CTCFacility
     ctcFacilities = db.relationship("CTCFacility",back_populates="facility")
     # M - 1
-    physicianFacility = db.relationship("PhysicianFacility",back_populates="facilities")
+    physicianFacilities = db.relationship("PhysicianFacility",back_populates="facility")
 
     def __repr__(self):
         return "<Facility(\
@@ -1122,9 +1122,9 @@ class Physician(CustomModel):
 
     physicianEmails = db.relationship("PhysicianEmail",back_populates="physicians")
     # M - 1, many phys at same facility
-    physicianFacilities = db.relationship("PhysicianFacility", back_populates="physicians")
+    physicianFacilities = db.relationship("PhysicianFacility", back_populates="physician")
     # M - 1
-    physicianToCTC = db.relationship("PhysicianToCTC", back_populates="physicians")
+    physicianToCTC = db.relationship("PhysicianToCTC", back_populates="physician")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact",back_populates="physician")
 
@@ -1243,9 +1243,9 @@ class PhysicianFacility(CustomModel):
 
     # Relationships
     # M - 1 many physicians at the same physician facility
-    physicians = db.relationship("Physician",back_populates="physicianFacilities")
+    physician = db.relationship("Physician",back_populates="physicianFacilities")
     # M - 1
-    facilities = db.relationship("Facility",back_populates = "physicianFacility")
+    facility = db.relationship("Facility",back_populates = "physicianFacilities")
 
     def __repr__(self):
         return "<PhysicianFacility(\
@@ -1308,9 +1308,9 @@ class PhysicianToCTC(CustomModel):
 
     # Relationships
     # M - 1
-    physicians = db.relationship("Physician",back_populates="physicianToCTC")
+    physician = db.relationship("Physician",uselist=False,back_populates="physicianToCTC")
     # M - 1
-    ctc = db.relationship("CTC",back_populates="physicianToCTC")
+    ctc = db.relationship("CTC",uselist=False,back_populates="physicianToCTC")
 
     def __repr__(self):
         return "<PhysicianToCTC(\

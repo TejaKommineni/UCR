@@ -2,7 +2,7 @@
 {% block content %}
       <div class="row">
         <div class="col-md-6">
-          <h1>Patients</h1>
+          <h1>Patient Projects</h1>
         </div>
       </div>
       <form class="formOverride" id="mainform" action='search/', method='get'>
@@ -18,20 +18,16 @@
                   <input type="text" class="form-control" name="lastName" id="text_lastName">
                 </div>
                 <div class="col-md-1">
-                  <label for="text_patID">Patient ID</label>
-                  <input type="text" class="form-control" name="patID" id="text_patID">
+                  <label for="text_finalCode">Final Code</label>
+                  <input type="text" class="form-control" name="finalCode" id="text_finalCode">
                 </div>
                 <div class = "col-md-1">
-                  <label for="text_updbid">UPDBID</label>
-                  <input type="text" class="form-control" name="UPDBID" id="text_updbid">
+                  <label for="text_batch">Batch</label>
+                  <input type="text" class="form-control" name="batch" id="text_batch">
                 </div>
                 <div class = "col-md-1">
-                  <label for="text_ucrDistID">UCRDistID</label>
-                  <input type="text" class="form-control" name="ucrDistID" id="text_ucrDistID">
-                </div>
-                <div class = "col-md-1">
-                  <label for="text_recordID">Record ID</label>
-                  <input type="text" class="form-control" name="recordID" id="text_recordID">
+                  <label for="text_siteGrp">Site Group</label>
+                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp">
                 </div>
                 <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>
@@ -47,21 +43,19 @@
             <tr>
                 <th>Last Name</th>
                 <th>First Name</th>
-                <th>Patient ID</th>
-                <th>Record ID</th>
-                <th>UCRDistID</th>
-                <th>UPDBID ID</th>
+                <th>Final Code</th>
+                <th>Batch</th>
+                <th>Site Group</th>
             </tr>
           </thead>
           <tbody>
-            {% for patient in form["patients"] %}
+            {% for projectPatient in projectPatients %}
             <tr>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["lastName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["firstName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["patID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["recordID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["ucrDistID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["UPDBID"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"]}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

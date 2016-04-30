@@ -1,10 +1,39 @@
+    <form class="formOverride" id="patientInfoForm">
+        <fieldset>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">  
+                      <label for="text_firstName">First Name</label>        
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_middleName">Middle Name</label>        
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{ctc.patient.middleName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_lastName">Last Name</label>        
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{ctc.patient.lastName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-1">
+                        <label>Link to Patient</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/patients/{{ctc.patient.patientID}}/">Full Patient Info</a>
+                    </div>
+                     <div class="col-md-2">
+                        <label>Link to Project Patient</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/projectpatients/{{ctc.projectPatient.participantID}}/">Project Patient Info</a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+      </form>
+
 {% if ctc is not none %}
     <!-- action url is for update -->
     <!--<form class="formOverride" id="addressForm" action='/website/ctcs/{{ctc["ctcID"]}}/', method='post'>-->
-    <form class="formOverride" id="addressForm">
+    <form class="formOverride" id="ctcForm">
 {% else %}
     <!-- action url is for post/create -->
-    <form class="formOverride" id="addressForm" action='/website/ctcs/', method='post'>
+    <form class="formOverride" id="ctcForm" action='/website/ctcs/', method='post'>
 {% endif %}
       <fieldset>
             <div class="form-group">
@@ -87,6 +116,7 @@
                   <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
                 </div>
             </div>
+            </div>
           </fieldset>
               
           <fieldset>
@@ -131,3 +161,79 @@
                 </div>
             </fieldset>
     </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li class="active"><a href="#facilitiesTab" role="tab" data-toggle="tab">Facilities</a></li>
+        <li><a href="#physiciansTab"  role="tab" data-toggle="tab">Physicians</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="facilitiesTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
+                <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="facilityTableTab">
+                <table class="table table-striped no-spacing">
+                    <thead>
+                        <tr>
+                            <th> Facility Name </th>
+                            <th> Contact First Name </th>
+                            <th> Contact Last Name </th>
+                            <th> Facility Status </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% for ctcFacility in ctc.ctcFacilities %}
+                    <tr>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactFirstName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactLastName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityStatus"]}}</a></td>
+                    </tr>    
+                {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="newFacilityTab">
+                {% set ctcFacility = none %}
+                {% include 'helper_forms/ctc_facility_form.html' %}
+                </div>
+            </div>
+        </div>
+           <div class="tab-pane" id="physiciansTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#physicianTableTab" role="tab" data-toggle="tab">Table </a></li>
+                    <li><a href="#newPhysicianTab" role="tab" data-toggle="tab">New Physician</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="physicianTableTab">
+                    <table class="table table-striped no-spacing">
+                      <thead>
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Specialty</th>
+                            <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for physicianToCTC in ctc.physicianToCTC %}
+                            <tr>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["lastName"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["firstName"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["specialty"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"]}}</a></td>
+                            </tr>
+                        {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="newPhysicianTab">
+                    {% set physicianToCTC = none %}
+                    {% include 'helper_forms/physician_to_ctc_form.html' %}
+                    </div>
+                </div>
+            </div>
+         </div>
+    
+    

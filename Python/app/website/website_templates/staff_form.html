@@ -1,4 +1,4 @@
-{% extends "layout_patient.html" %}
+{% extends "layout_all.html" %}
 {% block content %}
 {% if staff is not none %}
     <!-- action url is for update -->
@@ -8,6 +8,7 @@
     <form class="formOverride" id="staffForm" action='/website/staff/', method='post'>
 {% endif %}
       <fieldset>
+          <legend>Staff Information</legend>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
@@ -168,7 +169,6 @@
             </div>
         </div>
         <div class = "tab-pane" id="staffTrainings">
-        <div class="tab-pane active" id="arcReviewTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#trainingTableTab" role="tab" data-toggle="tab">Table</a></li>
                 <li><a href="#newTraining" role="tab" data-toggle="tab">New Training</a></li>

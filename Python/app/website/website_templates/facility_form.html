@@ -1,4 +1,4 @@
-{% extends "layout_patient.html" %}
+{% extends "layout_all.html" %}
 {% block content %}
       <div class="row">
         <div class="col-md-6">
@@ -98,6 +98,8 @@
     <ul class = "nav nav-tabs" role="tablist">
         <li><a href="#facilityAddressTab"  role="tab" data-toggle="tab">Address</a></li>
         <li><a href="#facilityPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+        <li><a href="#facilityPhysiciansTab" role="tab" data-toggle="tab">Physicians</a></li>
+        <li><a href="#ctcsTab" role="tab" data-toggle="tab">CTCs</a></li>
     </ul>
     <div class="tab-content">        
         <div class="tab-pane active" id="facilityAddressTab">
@@ -157,6 +159,48 @@
                 {% include 'helper_forms/facility_phone_form.html' %}
                 </div>
             </div>
+        </div>
+        <div class="tab-pane" id="facilityPhysiciansTab">
+            <table class="table table-striped no-spacing">
+              <thead>
+                <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Specialty</th>
+                    <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for facilityPhysician in facility.physicianFacilities %}
+                    <tr>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["lastName"]}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["firstName"]}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["specialty"]}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["physicianStatus"]}}</a></td>
+                    </tr>
+                {% endfor %}
+                  </tbody>
+                </table>
+        </div>
+        <div class="tab-pane" id="ctcsTab">
+            <table class="table table-striped no-spacing">
+              <thead>
+                <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Stage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ctcFacility in facility.ctcFacilities %}
+                    <tr>
+                        <td><a href="/website/ctcs/{{ctcFacility.ctc["ctcID"]}}">{{ctcFacility.ctc.patient["lastName"]}}</a></td>
+                        <td><a href="/website/ctcs/{{ctcFacility.ctc["ctcID"]}}">{{ctcFacility.ctc.patient["firstName"]}}</a></td>
+                        <td><a href="/website/ctcs/{{ctcFacility.ctc["ctcID"]}}">{{ctcFacility.ctc["stage"]}}</a></td>
+                    </tr>
+                {% endfor %}
+                  </tbody>
+                </table>
         </div>
     </div>
     

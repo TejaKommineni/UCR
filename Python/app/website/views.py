@@ -1403,6 +1403,9 @@ def get_ctc(ctcID = None):
             if ctc is not None:
                 form = {}
                 form["states"] = query.get_states()
+                form["ctcs"] = query.get_ctcs()
+                form["facilities"] = query.get_facilities()
+                form["physicians"] = query.get_physicians()
                 return render_template('ctc_form.html',form=form,ctc=ctc)
             else:
                 return item_not_found("CtcID {} not found".format(ctcID))
@@ -1502,7 +1505,7 @@ def delete_ctc(ctcID):
 #############################################################################
 # CTCFacility
 #############################################################################
-@website.route('/ctcfacilities/', methods = ['GET'])
+#@website.route('/ctcfacilities/', methods = ['GET'])
 @website.route('/ctcfacilities/<int:CTCFacilityID>/', methods = ['GET'])
 def get_ctc_facility(CTCFacilityID = None):
     try:
@@ -1511,7 +1514,10 @@ def get_ctc_facility(CTCFacilityID = None):
         else:
             ctcFacility = query.get_ctc_facility(CTCFacilityID)
             if ctcFacility is not None:
-                return ctcFacility.json()
+                form = {}
+                form["ctcs"] = query.get_ctcs()
+                form["facilities"] = query.get_facilities()
+                return render_template("ctc_facility_form.html",form=form,ctcFacility=ctcFacility)
             else:
                 return item_not_found("CTCFacilityID {} not found".format(CTCFacilityID))
     except Exception as e:
@@ -1528,7 +1534,7 @@ def update_ctc_facility(CTCFacilityID):
                     ctcFacility.ctcID = request.form['ctcID']
                     ctcFacility.facilityID = request.form['facilityID']
                     query.commit()
-                    return ctcFacility.json()
+                    return redirect_back("ctcfacilities/{}/".format(CTCFacilityID))
                 else:
                     return out_of_date_error()
             else:
@@ -1539,18 +1545,27 @@ def update_ctc_facility(CTCFacilityID):
         return internal_error(e)
 
 @website.route('/ctcfacilities/',methods=['POST'])
-def create_ctc_facility():
+@website.route('/ctcfacilities/<int:CTCFacilityID>/',methods=['POST'])
+def create_ctc_facility(CTCFacilityID=None):
     try:
-        form = forms.CTCFacilityForm(request.form)
-        if form.validate():
-            ctcFacility = models.CTCFacility(
-                ctcID = request.form['ctcID'],
-                facilityID = request.form['facilityID']
-            )
-            query.add(ctcFacility)
-            return jsonify({"CTCFacilityID" : ctcFacility.CTCFacilityID})
+        if CTCFacilityID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_ctc_facility(CTCFacilityID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_ctc_facility(CTCFacilityID)
+            else:
+                return invalid_method()
         else:
-            return missing_params(form.errors)
+            form = forms.CTCFacilityForm(request.form)
+            if form.validate():
+                ctcFacility = models.CTCFacility(
+                    ctcID = request.form['ctcID'],
+                    facilityID = request.form['facilityID']
+                )
+                query.add(ctcFacility)
+                return redirect_back("ctcfacilities/{}/".format(ctcFacility.CTCFacilityID))
+            else:
+                return missing_params(form.errors)
     except Exception as e:
         return internal_error(e)
 
@@ -2318,14 +2333,11 @@ def get_informant(informantID=None):
             informant = query.get_informant(informantID)
             if informant is not None:
                 form={}
-                form["informant"] = informant
-                form["informantPhones"] = informant.informantPhones
-                form["informantAddresses"] = informant.informantAddresses
                 form["states"] = query.get_states()
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["phoneTypes"] = query.get_phone_types()
-                return render_template("informant_form.html",form=form)
+                return render_template("informant_form.html",form=form,informant=informant)
             else:
                 return item_not_found("InformantID {} not found".format(informantID))
     except Exception as e:
@@ -4313,9 +4325,8 @@ def get_project(projectID=None):
         if projectID is None:
             projects = query.get_projects()
             form={}
-            form["projects"] = projects
             form["projectTypes"] = query.get_project_types()
-            return render_template("project_table.html",form=form)
+            return render_template("project_table.html",form=form,projects=projects)
         else:
             proj = query.get_project(projectID)
             if proj is not None:
@@ -4370,7 +4381,7 @@ def update_project(projectID):
                     proj.activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
                     proj.activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
                     query.commit()
-                    return proj.json()
+                    return redirect_back("projects/{}/".format(projectID))
                 else:
                     return out_of_date_error()
             else:
@@ -4443,7 +4454,9 @@ def delete_project(projectID):
 def get_project_patient(participantID=None):
     try:
         if participantID is None:
-            return jsonify(ProjectPatients = [i.dict() for i in query.get_project_patients()])
+            projectPatients = query.get_project_patients()
+            form = {}
+            return render_template("project_patient_table.html",form=form,projectPatients = projectPatients)
         else:
             projectPatient = query.get_project_patient(participantID)
             if projectPatient is not None:

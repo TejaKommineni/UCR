@@ -1,0 +1,57 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Facilities</h1>
+        </div>
+      </div>
+      <form class="formOverride" id="mainform" action='search/', method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_facilityName">Facility Name</label>
+                  <input type="text" class="form-control" name="facilityName" id="text_facilityName">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_contactFirstName">Contact First Name</label>
+                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_contactLastName">Contact Last Name</label>
+                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName">
+                </div>
+                <div class="col-md-1">
+                  <label for="text_facilityStatus">Status</label>
+                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus">
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Facility Name</th>
+                <th>Contact First Name</th>
+                <th>Contact Last Name</th>
+                <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for facility in facilities %}
+            <tr>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityName"]}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactFirstName"]}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactLastName"]}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityStatus"]}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}
