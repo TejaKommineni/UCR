@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, abort
 import app.query as query
 import app.models as models
 import app.forms as forms
+from app.helpers import value_or_none
 from datetime import datetime
 from app.database import db
 from sqlalchemy_utils import dependent_objects
@@ -1790,8 +1791,29 @@ def delete_facility_phone(facilityPhoneID):
 def get_facility(facilityID=None):
     try:
         if facilityID is None:
-            facilities = query.get_facilities()
+            facilityName = None
+            contactFirstName = None
+            contactLastName = None
+            facilityStatus = None
             form = {}
+            form["queryParams"]  = {}
+            if "facilityName" in request.args:
+                facilityName = value_or_none(request.args["facilityName"])
+                form["queryParams"]["facilityName"] = request.args["facilityName"]
+            if "contactFirstName" in request.args:
+                contactFirstName = value_or_none(request.args["contactFirstName"])
+                form["queryParams"]["contactFirstName"] = request.args["contactFirstName"]
+            if "contactLastName" in request.args:
+                contactLastName = value_or_none(request.args["contactLastName"])
+                form["queryParams"]["contactLastName"] = request.args["contactLastName"]
+            if "facilityStatus" in request.args:
+                facilityStatus = value_or_none(request.args["facilityStatus"])
+                form["queryParams"]["facilityStatus"] = request.args["facilityStatus"]
+            facilities = query.query_facilities(facilityName = facilityName,
+                                                 contactFirstName = contactFirstName,
+                                                 contactLastName = contactLastName,
+                                                 facilityStatus = facilityStatus)
+
             return render_template("facility_table.html",form=form,facilities=facilities)
         else:
             facility = query.get_facility(facilityID)
@@ -2883,7 +2905,37 @@ def get_patient(patAutoID=None):
     try:
         if patAutoID is None:
             form = {}
-            patients = query.get_patients()
+            firstName = None
+            lastName = None
+            patID = None
+            recordID = None
+            ucrDistID = None
+            UPDBID = None
+            form["queryParams"] = {}
+            if "firstName" in request.args:
+                firstName = value_or_none(request.args["firstName"])
+                form["queryParams"]["firstName"] = request.args["firstName"]
+            if "lastName" in request.args:
+                lastName = value_or_none(request.args["lastName"])
+                form["queryParams"]["lastName"] = request.args["lastName"]
+            if "patID" in request.args:
+                patID = value_or_none(request.args["patID"])
+                form["queryParams"]["patID"] = request.args["patID"]
+            if "recordID" in request.args:
+                recordID = value_or_none(request.args["recordID"])
+                form["queryParams"]["recordID"] = request.args["recordID"]
+            if "ucrDistID" in request.args:
+                ucrDistID = value_or_none(request.args["ucrDistID"])
+                form["queryParams"]["ucrDistID"] = request.args["ucrDistID"]
+            if "UPDBID" in request.args:
+                UPDBID = value_or_none(request.args["UPDBID"])
+                form["queryParams"]["UPDBID"] = request.args["UPDBID"]
+            patients = query.query_patients(firstName=firstName,
+                                                lastName=lastName,
+                                                patID=patID,
+                                                recordID=recordID,
+                                                ucrDistID = ucrDistID,
+                                                UPDBID = UPDBID)
             form["patients"] = patients
             return render_template("patient_table.html", form=form)
         else:
@@ -3633,8 +3685,29 @@ def delete_phone_type(phoneTypeID):
 def get_physician(physicianID=None):
     try:
         if physicianID is None:
-            physicians = query.get_physicians()
             form = {}
+            firstName = None
+            lastName = None
+            specialty = None
+            physicianStatus = None
+            form["queryParams"] = {}
+            if "firstName" in request.args:
+                firstName = value_or_none(request.args["firstName"])
+                form["queryParams"]["firstName"] = request.args["firstName"]
+            if "lastName" in request.args:
+                lastName = value_or_none(request.args["lastName"])
+                form["queryParams"]["lastName"] = request.args["lastName"]
+            if "specialty" in request.args:
+                specialty = value_or_none(request.args["specialty"])
+                form["queryParams"]["specialty"] = request.args["specialty"]
+            if "physicianStatus" in request.args:
+                physicianStatus = value_or_none(request.args["physicianStatus"])
+                form["queryParams"]["physicianStatus"] = request.args["physicianStatus"]
+
+            physicians = query.query_physicians(firstName=firstName,
+                                            lastName=lastName,
+                                            specialty=specialty,
+                                            physicianStatus=physicianStatus)
             return render_template("physician_table.html",form=form,physicians=physicians)
         else:
             physician = query.get_physician(physicianID)
@@ -4323,8 +4396,24 @@ def delete_pre_application(preApplicationID):
 def get_project(projectID=None):
     try:
         if projectID is None:
-            projects = query.get_projects()
-            form={}
+            form = {}
+            projectID = None
+            shortTitle = None
+            projectTypeID = None
+            form["queryParams"] = {}
+            if "projectID" in request.args:
+                projectID = value_or_none(request.args["projectID"])
+                form["queryParams"]["projectID"] = request.args["projectID"]
+            if "shortTitle" in request.args:
+                shortTitle = value_or_none(request.args["shortTitle"])
+                form["queryParams"]["shortTitle"] = request.args["shortTitle"]
+            if "projectTypeID" in request.args:
+                projectTypeID = value_or_none(request.args["projectTypeID"])
+                form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+
+            projects = query.query_projects(projectID=projectID,
+                                                shortTitle=shortTitle,
+                                                projectTypeID=projectTypeID)
             form["projectTypes"] = query.get_project_types()
             return render_template("project_table.html",form=form,projects=projects)
         else:
@@ -4454,8 +4543,34 @@ def delete_project(projectID):
 def get_project_patient(participantID=None):
     try:
         if participantID is None:
-            projectPatients = query.get_project_patients()
             form = {}
+            firstName = None
+            lastName = None
+            finalCode = None
+            batch = None
+            siteGrp = None
+            form["queryParams"] = {}
+            if "firstName" in request.args:
+                firstName = value_or_none(request.args["firstName"])
+                form["queryParams"]["firstName"] = request.args["firstName"]
+            if "lastName" in request.args:
+                lastName = value_or_none(request.args["lastName"])
+                form["queryParams"]["lastName"] = request.args["lastName"]
+            if "finalCode" in request.args:
+                finalCode = value_or_none(request.args["finalCode"])
+                form["queryParams"]["finalCode"] = request.args["finalCode"]
+            if "batch" in request.args:
+                batch = value_or_none(request.args["batch"])
+                form["queryParams"]["batch"] = request.args["batch"]
+            if "siteGrp" in request.args:
+                siteGrp = value_or_none(request.args["siteGrp"])
+                form["queryParams"]["siteGrp"] = request.args["siteGrp"]
+
+            projectPatients = query.query_project_patients(firstName=firstName,
+                                            lastName=lastName,
+                                            finalCode=finalCode,
+                                            batch=batch,
+                                            siteGrp = siteGrp)
             return render_template("project_patient_table.html",form=form,projectPatients = projectPatients)
         else:
             projectPatient = query.get_project_patient(participantID)
@@ -5244,8 +5359,50 @@ def delete_review_committee_list(reviewCommitteeID):
 def get_staff(staffID=None):
     try:
         if staffID is None:
-            staffs= query.get_staffs()
-            return render_template("staff_table.html",staffs=staffs)
+            form = {}
+            firstName = None
+            lastName = None
+            staffID = None
+            phoneNumber = None
+            email = None
+            institution = None
+            department = None
+            ucrRole = None
+            form["queryParams"] = {}
+            if "firstName" in request.args:
+                firstName = value_or_none(request.args["firstName"])
+                form["queryParams"]["firstName"] = request.args["firstName"]
+            if "lastName" in request.args:
+                lastName = value_or_none(request.args["lastName"])
+                form["queryParams"]["lastName"] = request.args["lastName"]
+            if "staffID" in request.args:
+                staffID = value_or_none(request.args["staffID"])
+                form["queryParams"]["staffID"] = request.args["staffID"]
+            if "phoneNumber" in request.args:
+                phoneNumber = value_or_none(request.args["phoneNumber"])
+                form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
+            if "email" in request.args:
+                email = value_or_none(request.args["email"])
+                form["queryParams"]["email"] = request.args["email"]
+            if "institution" in request.args:
+                institution = value_or_none(request.args["institution"])
+                form["queryParams"]["institution"] = request.args["institution"]
+            if "department" in request.args:
+                department = value_or_none(request.args["department"])
+                form["queryParams"]["department"] = request.args["department"]
+            if "ucrRole" in request.args:
+                ucrRole = value_or_none(request.args["ucrRole"])
+                form["queryParams"]["ucrRole"] = request.args["ucrRole"]
+
+            staffs = query.query_staffs(firstName=firstName,
+                                       lastName=lastName,
+                                       staffID=staffID,
+                                       phoneNumber=phoneNumber,
+                                       email=email,
+                                       institution = institution,
+                                       department = department,
+                                       ucrRole = ucrRole)
+            return render_template("staff_table.html",form=form,staffs=staffs)
         else:
             staff = query.get_staff(staffID)
             if staff is not None:

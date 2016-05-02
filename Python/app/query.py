@@ -2,6 +2,7 @@ import json
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.database import db
+from sqlalchemy import or_, and_
 from app.models import *
 
 def create_all():
@@ -90,6 +91,18 @@ def get_ctc_facility(id):
     
 def get_facilities():
     return db.session.query(Facility).all()
+
+def query_facilities(facilityName=None,contactFirstName=None,contactLastName=None,facilityStatus=None):
+    filters = []
+    if facilityName:
+        filters.append(Facility.facilityName.like('%{}%'.format(facilityName)))
+    if contactFirstName:
+        filters.append(Facility.contactFirstName.like('%{}%'.format(contactFirstName)))
+    if contactLastName:
+        filters.append(Facility.contactLastName.like('%{}%'.format(contactLastName)))
+    if facilityStatus:
+        filters.append(Facility.facilityStatus == facilityStatus)
+    return db.session.query(Facility).filter(or_(*filters)).all()
     
 def get_facility(id):
     return db.session.query(Facility).filter_by(facilityID= id).first()
@@ -174,6 +187,22 @@ def get_log_subject(id):
     
 def get_patients():
     return db.session.query(Patient).all()
+
+def query_patients(firstName = None, lastName = None, patID = None, UPDBID = None, ucrDistID = None, recordID = None):
+    filters = []
+    if firstName:
+        filters.append(Patient.firstName.like('%{}%'.format(firstName)))
+    if lastName:
+        filters.append(Patient.lastName.like('%{}%'.format(lastName)))
+    if patID:
+        filters.append(Patient.patID.like('%{}%'.format(patID)))
+    if UPDBID:
+        filters.append(Patient.UPDBID == UPDBID)
+    if ucrDistID:
+        filters.append(Patient.ucrDistID == ucrDistID)
+    if recordID:
+        filters.append(Patient.recordID == recordID)
+    return db.session.query(Patient).filter(or_(*filters)).all()
     
 def get_patient(id):
     return db.session.query(Patient).filter_by(patientID = id).first()
@@ -222,6 +251,18 @@ def get_phone_type(id):
 
 def get_physicians():
     return db.session.query(Physician).all()
+
+def query_physicians(firstName = None, lastName = None, specialty = None, physicianStatus = None):
+    filters = []
+    if firstName:
+        filters.append(Physician.firstName.like('%{}%'.format(firstName)))
+    if lastName:
+        filters.append(Physician.lastName.like('%{}%'.format(lastName)))
+    if specialty:
+        filters.append(Physician.specialty.like('%{}%'.format(specialty)))
+    if physicianStatus:
+        filters.append(Physician.physicianStatus == physicianStatus)
+    return db.session.query(Physician).filter(or_(*filters)).all()
     
 def get_physician(id):
     return db.session.query(Physician).filter_by(physicianID = id).first()
@@ -268,15 +309,59 @@ def get_project(id):
 def get_projects():
     return db.session.query(Project).all()
 
+def query_projects(projectID = None, shortTitle = None, projectTypeID = None ):
+    filters = []
+    if projectID:
+        filters.append(Project.projectID == projectID)
+    if shortTitle:
+        filters.append(Project.shortTitle.like('%{}%'.format(shortTitle)))
+    if projectTypeID:
+        filters.append(Project.projectTypeID == projectTypeID)
+    return db.session.query(Project).filter(or_(*filters)).all()
+
 def get_project_patients():
     return db.session.query(ProjectPatient).all()
-    
+
+def query_project_patients(firstName = None, lastName = None, finalCode = None, batch = None, siteGrp = None ):
+    filters = []
+    if firstName:
+        filters.append(Patient.firstName.like('%{}%'.format(firstName)))
+    if lastName:
+        filters.append(Patient.lastName.like('%{}%'.format(lastName)))
+    if finalCode:
+        filters.append(ProjectPatient.finalCode == finalCode)
+    if batch:
+        filters.append(ProjectPatient.batch == batch)
+    if siteGrp:
+        filters.append(ProjectPatient.siteGrp == siteGrp)
+    return db.session.query(ProjectPatient).join(CTC).join(Patient).filter(or_(*filters)).all()
+
 def get_project_patient(id):
     return db.session.query(ProjectPatient).filter_by(participantID = id).first()
 
 def get_project_staffs():
     return db.session.query(ProjectStaff).all()
-    
+
+def query_staffs(firstName = None, lastName = None, staffID = None, phoneNumber = None, email = None, institution = None, department = None, ucrRole = None):
+    filters = []
+    if firstName:
+        filters.append(Staff.firstName.like('%{}%'.format(firstName)))
+    if lastName:
+        filters.append(Staff.lastName.like('%{}%'.format(lastName)))
+    if staffID:
+        filters.append(Staff.staffID == staffID)
+    if phoneNumber:
+        filters.append(Staff.phoneNumber == phoneNumber)
+    if email:
+        filters.append(Staff.email == email)
+    if institution:
+        filters.append(Staff.institution == institution)
+    if department:
+        filters.append(Staff.department == department)
+    if ucrRole:
+        filters.append(Staff.ucrRole == ucrRole)
+    return db.session.query(Staff).filter(or_(*filters)).all()
+
 def get_project_staff(id):
     return db.session.query(ProjectStaff).filter_by(projectStaffID = id).first()
     

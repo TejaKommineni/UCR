@@ -5,25 +5,25 @@
           <h1>Facilities</h1>
         </div>
       </div>
-      <form class="formOverride" id="mainform" action='search/', method='get'>
+      <form class="formOverride" id="mainform" action='', method='get'>
           <fieldset>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_facilityName">Facility Name</label>
-                  <input type="text" class="form-control" name="facilityName" id="text_facilityName">
+                  <input type="text" class="form-control" name="facilityName" id="text_facilityName" value="{{form.queryParams.facilityName}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_contactFirstName">Contact First Name</label>
-                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName">
+                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{form.queryParams.contactFirstName}}">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_contactLastName">Contact Last Name</label>
-                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName">
+                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{form.queryParams.contactLastName}}">
                 </div>
                 <div class="col-md-1">
                   <label for="text_facilityStatus">Status</label>
-                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus">
+                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus" value="{{form.queryParams.facilityStatus}}">
                 </div>
                 <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>

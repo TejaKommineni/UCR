@@ -5,24 +5,28 @@
           <h1>Projects</h1>
         </div>
       </div>
-      <form class="formOverride" id="mainform" action='search/', method='get'>
+      <form class="formOverride" id="mainform" action='', method='get'>
           <fieldset>
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_projectID">Project ID</label>
-                  <input type="text" class="form-control" name="projectID" id="text_projectID">
+                  <input type="text" class="form-control" name="projectID" id="text_projectID" value="{{form.queryParams.projectID}}">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_shortTitle">Short Title</label>
-                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle">
+                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form.queryParams.shortTitle}}">
                 </div>
                 <div class="col-md-1">
                   <label for="select_projectTypeID">Project Type</label>
-                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID" value="">
+                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID">
                     <option value=""></option>
                   {% for projectType in form["projectTypes"] %}
+                    {% if projectType.projectTypeID|string() == form.queryParams.projectTypeID %}
+                    <option value="{{projectType.projectTypeID}}" selected="selected">{{projectType.projectType}}</option>
+                    {% else %}
                     <option value="{{projectType.projectTypeID}}">{{projectType.projectType}}</option>
+                    {% endif %}
                   {% endfor %}
                   </select>
                 </div>
@@ -45,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for project in form["projects"] %}
+            {% for project in projects %}
             <tr>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"]}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectTypeID"]}}</a></td>
