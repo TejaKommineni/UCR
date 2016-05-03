@@ -7,7 +7,7 @@
 {% endif %}
       <fieldset>
             <div class="form-group">
-            {% if projectStaff is not none %}
+               {% if project is none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
@@ -16,7 +16,7 @@
                         {% if project.projectID == projectStaff.projectID %}
                             <option selected="selected" value="{{project.projectID}}">{{project.shortTitle}}</option>
                         {% else %}
-                            <option value="{{project.projectID}}" disabled="disabled">{{project.shortTitle}}</option>
+                            <option value="{{project.projectID}}">{{project.shortTitle}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -24,6 +24,7 @@
               </div>
               {% endif %}
               <div class="row">
+              {% if staff is none %}
                <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
                   <select type="text" class="form-control" name="staffID" id="select_staffID">
@@ -36,6 +37,7 @@
                       {% endfor %}
                   </select>
                 </div>
+                {% endif %}
                 <div class = "col-md-2">
                   <label for="select_staffRoleID">Staff Role</label>
                   <select type="text" class="form-control" name="staffRoleID" id="select_staffRoleID">
@@ -106,8 +108,10 @@
                 {% if projectStaff is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStaffID" value="{{projectStaff.projectStaffID}}"/>
-                {% else %}
-                    <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
+                {% elif staff%}
+                    <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
+                {% elif project %}
+                    <input type="hidden" name="projectID" value="{{project.projectID}}"/>
                 {% endif %}
             </div>
           </div>

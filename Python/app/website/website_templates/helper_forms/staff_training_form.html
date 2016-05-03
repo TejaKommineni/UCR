@@ -8,6 +8,20 @@
       <fieldset>
             <div class="form-group">
               <div class="row">
+               {% if staffTraining is not none %}
+                <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                      {% for staff in form["staff"] %}
+                        {% if staff.staffID == staffTraining.staffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}" disabled="disabled">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                {% endif %}
                 <div class = "col-md-2">
                   <label for="select_humanSubjectTrainingID">Human Subject Training</label>
                   <select type="text" class="form-control" name="humanSubjectTrainingID" id="select_humanSubjectTrainingID">
@@ -16,18 +30,6 @@
                             <option selected="selected" value="{{hst.humanSubjectTrainingID}}">{{hst.trainingType}}</option>
                         {% else %}
                             <option value="{{hst.humanSubjectTrainingID}}">{{hst.trainingType}}</option>
-                        {% endif %}
-                      {% endfor %}
-                  </select>
-                </div>
-                <div class = "col-md-2">
-                  <label for="select_staffID">Staff</label>
-                  <select type="text" class="form-control" name="staffID" id="select_staffID">
-                      {% for staff in form["staff"] %}
-                        {% if staff.staffID == staffTraining.staffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -66,6 +68,8 @@
                 {% if staffTraining is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="staffTrainingID" value="{{staffTraining.staffTrainingID}}"/>
+                {% else %}
+                    <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
                 {% endif %}
             </div>
           </div>

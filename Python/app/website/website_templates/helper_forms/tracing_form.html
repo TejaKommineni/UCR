@@ -7,6 +7,7 @@
 {% endif %}
       <fieldset>
             <div class="form-group">
+            {% if tracing is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectPatientID">Project Patient</label>
@@ -15,12 +16,13 @@
                         {% if pp.participantID == tracing.projectPatientID %}
                             <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
                         {% else %}
-                            <option value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_tracingSourceID">Tracing Source</label>
@@ -83,7 +85,8 @@
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="tracingID" value="{{tracing.tracingID}}"/>
                 {% else %}
-                    <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                    <input type="hidden" name="tracingID" value="0"/>
+                    <input type="hidden" name="projectPatientID" value="{{projectPatient.participantID}}"/>
                 {% endif %}
             </div>
           </div>

@@ -214,6 +214,7 @@
                             <th> Contact First Name </th>
                             <th> Contact Last Name </th>
                             <th> Facility Status </th>
+                            <th> Physician-Facility Status </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -223,6 +224,7 @@
                         <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactFirstName"]}}</a></td>
                         <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactLastName"]}}</a></td>
                         <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityStatus"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.physFacilityStatus}}</a></td>
                     </tr>    
                 {% endfor %}
                     </tbody>
