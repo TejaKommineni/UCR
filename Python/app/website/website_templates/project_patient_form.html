@@ -31,7 +31,7 @@
         </fieldset>
       </form>
       
-        {% if preApplication is not none %}
+        {% if projectPatient is not none %}
         <!-- action url is for update -->
         <form class="formOverride" id="projectPatientForm" action='/website/projectpatients/{{projectPatient.participantID}}/', method='post'>
     {% else %}
@@ -40,6 +40,7 @@
     {% endif %}
           <fieldset>
             <div class="form-group">
+            {% if projectPatient is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
@@ -48,12 +49,13 @@
                         {% if proj.projectID == projectPatient.projectID %}
                             <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>

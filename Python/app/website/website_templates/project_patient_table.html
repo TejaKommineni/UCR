@@ -30,6 +30,19 @@
                   <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value = "{{form.queryParams.siteGrp}}">
                 </div>
                 <div class="col-md-2">
+                  <label for="select_projectID">Project</label>
+                  <select type="text" class="form-control" name="projectID" id="select_projectID">
+                    <option value=""></option>
+                  {% for project in form["projects"] %}
+                    {% if project.projectID == form.queryParams.projectID %}
+                    <option value="{{project.projectID}}" selected="selected">{{project.shortTitle}}</option>
+                    {% else %}
+                    <option value="{{project.projectID}}">{{project.shortTitle}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
                 </div>

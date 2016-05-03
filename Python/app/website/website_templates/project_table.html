@@ -52,7 +52,7 @@
             {% for project in projects %}
             <tr>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"]}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectTypeID"]}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectType"].projectType}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["shortTitle"]}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["dateAdded"]}}</a></td>
             </tr>

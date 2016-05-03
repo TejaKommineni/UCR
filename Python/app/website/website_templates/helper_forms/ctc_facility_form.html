@@ -8,6 +8,7 @@
       <fieldset>
             <div class="form-group">
             <div class="row">
+            {% if ctcFacility is not none %}
                 <div class="col-md-2">  
                   <label for="select_ctcID">CTC</label>        
                   <select type="text" class="form-control" name="ctcID" id="select_ctcID">
@@ -20,6 +21,7 @@
                       {% endfor %}
                   </select>
                 </div>
+            {% endif %}
                 <div class="col-md-2">  
                   <label for="select_facilityID">Facility</label>        
                   <select type="text" class="form-control" name="facilityID" id="select_facilityID">
@@ -58,6 +60,7 @@
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="CTCFacilityID" value="{{ctcFacility.CTCFacilityID}}"/>
                     {% else %}
+                        <input type="hidden" name="ctcID" value ="{{ctc.ctcID}}"/>
                         <input type="hidden" name="CTCFacilityID" value="0"/>
                     {% endif %}
                 </div>

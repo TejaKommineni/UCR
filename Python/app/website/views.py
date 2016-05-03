@@ -2911,6 +2911,7 @@ def get_patient(patAutoID=None):
             recordID = None
             ucrDistID = None
             UPDBID = None
+            phoneNumber = None
             form["queryParams"] = {}
             if "firstName" in request.args:
                 firstName = value_or_none(request.args["firstName"])
@@ -2930,12 +2931,16 @@ def get_patient(patAutoID=None):
             if "UPDBID" in request.args:
                 UPDBID = value_or_none(request.args["UPDBID"])
                 form["queryParams"]["UPDBID"] = request.args["UPDBID"]
+            if "phoneNumber" in request.args:
+                phoneNumber = value_or_none(request.args["phoneNumber"])
+                form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
             patients = query.query_patients(firstName=firstName,
                                                 lastName=lastName,
                                                 patID=patID,
                                                 recordID=recordID,
                                                 ucrDistID = ucrDistID,
-                                                UPDBID = UPDBID)
+                                                UPDBID = UPDBID,
+                                                phoneNumber = phoneNumber)
             form["patients"] = patients
             return render_template("patient_table.html", form=form)
         else:
@@ -4549,6 +4554,7 @@ def get_project_patient(participantID=None):
             finalCode = None
             batch = None
             siteGrp = None
+            projectID = None
             form["queryParams"] = {}
             if "firstName" in request.args:
                 firstName = value_or_none(request.args["firstName"])
@@ -4565,12 +4571,17 @@ def get_project_patient(participantID=None):
             if "siteGrp" in request.args:
                 siteGrp = value_or_none(request.args["siteGrp"])
                 form["queryParams"]["siteGrp"] = request.args["siteGrp"]
+            if "projectID" in request.args:
+                projectID = value_or_none(request.args["projectID"])
+                form["queryParams"]["projectID"] = request.args["projectID"]
 
             projectPatients = query.query_project_patients(firstName=firstName,
                                             lastName=lastName,
                                             finalCode=finalCode,
                                             batch=batch,
-                                            siteGrp = siteGrp)
+                                            siteGrp = siteGrp,
+                                            projectID = projectID)
+            form["projects"] = query.get_projects()
             return render_template("project_patient_table.html",form=form,projectPatients = projectPatients)
         else:
             projectPatient = query.get_project_patient(participantID)
@@ -4581,6 +4592,7 @@ def get_project_patient(participantID=None):
                 form["booleans"] = query.get_booleans()
                 form["states"] = query.get_states()
                 form["staff"] = query.get_staffs()
+                form["ctcs"] = query.get_ctcs()
                 form["contactTypes"] = query.get_contact_types()
                 form["projectPatients"] = query.get_project_patients()
                 form["informants"] = query.get_informants()

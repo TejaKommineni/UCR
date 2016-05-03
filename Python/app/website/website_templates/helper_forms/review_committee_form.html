@@ -7,6 +7,7 @@
 {% endif %}
       <fieldset>
             <div class="form-group">
+            {% if reviewCommittee is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
@@ -15,12 +16,13 @@
                         {% if proj.projectID == reviewCommittee["projectID"] %}
                             <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_reviewCommitteeStatusID">Review Committee Status</label>

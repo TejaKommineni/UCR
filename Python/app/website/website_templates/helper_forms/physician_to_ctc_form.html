@@ -21,6 +21,7 @@
                   </select>
                 </div>
               </div>
+              {% if physicianToCTC is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_ctcID">CTC</label>
@@ -35,6 +36,7 @@
                   </select>
                 </div>
               </div>
+              {% endif %}
             </div>
             
             <div class="form-group">
@@ -60,6 +62,7 @@
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="physicianToCTCID" value="{{physicianToCTC.physicianToCTCID}}"/>
                 {% else %}
+                    <input type="hidden" name="ctcID" value = "{{ctc.ctcID}}"/>
                     <input type="hidden" name="physicianToCTCID" value="0"/>
                 {% endif %}
             </div>

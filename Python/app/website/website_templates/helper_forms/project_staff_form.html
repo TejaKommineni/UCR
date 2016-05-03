@@ -7,6 +7,7 @@
 {% endif %}
       <fieldset>
             <div class="form-group">
+            {% if projectStaff is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
@@ -15,12 +16,13 @@
                         {% if project.projectID == projectStaff.projectID %}
                             <option selected="selected" value="{{project.projectID}}">{{project.shortTitle}}</option>
                         {% else %}
-                            <option value="{{project.projectID}}">{{project.shortTitle}}</option>
+                            <option value="{{project.projectID}}" disabled="disabled">{{project.shortTitle}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <div class="row">
                <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
@@ -104,6 +106,8 @@
                 {% if projectStaff is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStaffID" value="{{projectStaff.projectStaffID}}"/>
+                {% else %}
+                    <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
                 {% endif %}
             </div>
           </div>

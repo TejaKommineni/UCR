@@ -188,7 +188,7 @@ def get_log_subject(id):
 def get_patients():
     return db.session.query(Patient).all()
 
-def query_patients(firstName = None, lastName = None, patID = None, UPDBID = None, ucrDistID = None, recordID = None):
+def query_patients(firstName = None, lastName = None, patID = None, UPDBID = None, ucrDistID = None, recordID = None, phoneNumber = None):
     filters = []
     if firstName:
         filters.append(Patient.firstName.like('%{}%'.format(firstName)))
@@ -202,7 +202,9 @@ def query_patients(firstName = None, lastName = None, patID = None, UPDBID = Non
         filters.append(Patient.ucrDistID == ucrDistID)
     if recordID:
         filters.append(Patient.recordID == recordID)
-    return db.session.query(Patient).filter(or_(*filters)).all()
+    if phoneNumber:
+        filters.append(PatientPhone.phoneNumber == phoneNumber)
+    return db.session.query(Patient).outerjoin(PatientPhone).filter(or_(*filters)).all()
     
 def get_patient(id):
     return db.session.query(Patient).filter_by(patientID = id).first()
@@ -322,7 +324,9 @@ def query_projects(projectID = None, shortTitle = None, projectTypeID = None ):
 def get_project_patients():
     return db.session.query(ProjectPatient).all()
 
-def query_project_patients(firstName = None, lastName = None, finalCode = None, batch = None, siteGrp = None ):
+def query_project_patients(firstName = None, lastName = None,
+                           finalCode = None, batch = None,
+                           siteGrp = None, projectID = None ):
     filters = []
     if firstName:
         filters.append(Patient.firstName.like('%{}%'.format(firstName)))
@@ -334,7 +338,9 @@ def query_project_patients(firstName = None, lastName = None, finalCode = None, 
         filters.append(ProjectPatient.batch == batch)
     if siteGrp:
         filters.append(ProjectPatient.siteGrp == siteGrp)
-    return db.session.query(ProjectPatient).join(CTC).join(Patient).filter(or_(*filters)).all()
+    if projectID:
+        filters.append(Project.projectID == projectID)
+    return db.session.query(ProjectPatient).outerjoin(Project).outerjoin(CTC).outerjoin(Patient).filter(or_(*filters)).all()
 
 def get_project_patient(id):
     return db.session.query(ProjectPatient).filter_by(participantID = id).first()

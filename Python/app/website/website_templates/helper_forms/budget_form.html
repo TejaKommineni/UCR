@@ -7,6 +7,7 @@
 {% endif %}
       <fieldset>
             <div class="form-group">
+            {% if budget is not none %}
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
@@ -15,12 +16,13 @@
                         {% if proj.projectID == budget["projectID"] %}
                             <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_numPeriods">Number of Periods</label>
@@ -70,6 +72,7 @@
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectID" value="{{budget["projectID"]}}"/>
                 {% else %}
+                    <input type="hidden" name="budgetID" value="0"/>
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
                 {% endif %}
             </div>
