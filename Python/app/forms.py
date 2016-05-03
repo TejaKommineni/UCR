@@ -27,6 +27,10 @@ class BaseForm(Form):
     versionID = IntegerField('versionID',
         []+COMMON_INTEGER_VALIDATORS)
 
+class AbstractStatusForm(BaseForm):
+    abstractStatus = StringField('abstractStatus',
+        []+COMMON_STRING_VALIDATORS)
+
 class ArcReviewForm(BaseForm):
     projectID = IntegerField('projectID',
         []+COMMON_INTEGER_VALIDATORS)
@@ -347,6 +351,10 @@ class FacilityPhoneForm(BaseForm):
             self.contactInfoStatusID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
+
+class FinalCodeForm(BaseForm):
+    finalCode = StringField('finalCode',
+        []+COMMON_STRING_VALIDATORS)
 
 class FundingForm(BaseForm):
     grantStatusID = IntegerField('grantStatusID',
@@ -761,27 +769,37 @@ class PhoneTypeForm(BaseForm):
         []+COMMON_STRING_VALIDATORS)
 
 class PhysicianForm(BaseForm):
-    firstName = StringField('fname',
+    firstName = StringField('firstName',
         []+COMMON_STRING_VALIDATORS)
-    lastName = StringField('lname',
+    lastName = StringField('lastName',
         []+COMMON_STRING_VALIDATORS)
-    middleName = StringField('middle_name',
+    middleName = StringField('middleName',
         []+COMMON_STRING_VALIDATORS)
     credentials = StringField('credentials',
         []+COMMON_STRING_VALIDATORS)
     specialty = StringField('specialty',
         []+COMMON_STRING_VALIDATORS)
-    aliasFirstName = StringField('alias_fname',
+    aliasFirstName = StringField('aliasFirstName',
         []+COMMON_STRING_VALIDATORS)
-    aliasLastName = StringField('alias_lname',
+    aliasLastName = StringField('aliasLastName',
         []+COMMON_STRING_VALIDATORS)
-    aliasMiddleName = StringField('alias_middle_name',
+    aliasMiddleName = StringField('aliasMiddleName',
         []+COMMON_STRING_VALIDATORS)
-    physicianStatus = IntegerField('physician_status',
+    physicianStatusID = IntegerField('physicianStatusID',
         []+COMMON_INTEGER_VALIDATORS)
-    physicianStatusDate = DateField('physician_status_date',
+    physicianStatusDate = DateField('physicianStatusDate',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        physicianStatus = query.get_physician_status(self.physicianStatusID.data)
+        if physicianStatus is None:
+            self.physicianStatusID.errors.append("ID not found")
+            hasErrors = True
+
+        return not hasErrors
 
 class PhysicianFacilityForm(BaseForm):
     facilityID = IntegerField('facilityID',
@@ -917,6 +935,10 @@ class PhysicianPhoneForm(BaseForm):
             self.contactInfoStatusID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
+
+class PhysicianStatusForm(BaseForm):
+    physicianStatus = StringField('physicianID',
+        []+COMMON_STRING_VALIDATORS)
 
 class PhysicianToCTCForm(BaseForm):
     physicianID = IntegerField('physicianID',
@@ -1078,7 +1100,7 @@ class ProjectPatientForm(BaseForm):
         []+COMMON_INTEGER_VALIDATORS)
     siteGrp = IntegerField('siteGrp',
         []+COMMON_INTEGER_VALIDATORS)
-    finalCode = IntegerField('finalCode',
+    finalCodeID = IntegerField('finalCodeID',
         []+COMMON_INTEGER_VALIDATORS)
     finalCodeDate = DateField('finalCodeDate',
         []+COMMON_DATE_VALIDATORS,
@@ -1098,7 +1120,7 @@ class ProjectPatientForm(BaseForm):
         []+COMMON_INTEGER_VALIDATORS)
     dateCoordSignedStaffID = IntegerField('dateCoordSignedStaffID',
         []+COMMON_INTEGER_VALIDATORS)
-    abstractStatus = IntegerField('abstractStatus',
+    abstractStatusID = IntegerField('abstractStatusID',
         []+COMMON_INTEGER_VALIDATORS)
     abstractStatusDate = DateField('abstractStatusDate',
         []+COMMON_DATE_VALIDATORS,
@@ -1140,6 +1162,11 @@ class ProjectPatientForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
+        finalCode = query.get_staff(self.finalCodeID.data)
+        if finalCode is None:
+            self.finalCodeID.errors.append("ID not found")
+            hasErrors = True
+
         finalCodeStaff = query.get_staff(self.finalCodeStaffID.data)
         if finalCodeStaff is None:
             self.finalCodeStaffID.errors.append("ID not found")
@@ -1153,6 +1180,11 @@ class ProjectPatientForm(BaseForm):
         dateCoordSignedStaff = query.get_staff(self.dateCoordSignedStaffID.data)
         if dateCoordSignedStaff is None:
             self.dateCoordSignedStaffID.errors.append("ID not found")
+            hasErrors = True
+
+        abstractStatus = query.get_staff(self.abstractStatusID.data)
+        if abstractStatus is None:
+            self.abstractStatusID.errors.append("ID not found")
             hasErrors = True
 
         abstractStatusStaff = query.get_staff(self.abstractStatusStaffID.data)
@@ -1378,8 +1410,18 @@ class StaffForm(BaseForm):
     humanSubjectTrainingExp = DateField('humanSubjectTrainingExp',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    ucrRole = IntegerField('ucrRole',
+    ucrRoleID = IntegerField('ucrRoleID',
         []+COMMON_INTEGER_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        ucrRole = query.get_ucr_role(self.ucrRoleID.data)
+        if ucrRole is None:
+            self.ucrRoleID.errors.append("ID not found")
+            hasErrors=True
+
+        return not hasErrors
 
 class StaffRoleLUTForm(BaseForm):
     staffRole = StringField('staffRole',
@@ -1479,3 +1521,7 @@ class UCRReportForm(BaseForm):
             self.projectID.errors.append("ID not found")
             hasErrors =  True
         return not hasErrors
+
+class UCRRoleForm(BaseForm):
+    ucrRole = StringField('ucrRole',
+        []+COMMON_STRING_VALIDATORS)

@@ -41,6 +41,12 @@ def add(obj):
 def flush():
     db.session.flush()
 
+def get_abstract_statuses():
+    return db.session.query(AbstractStatus).all()
+
+def get_abstract_status(id):
+    return db.session.query(AbstractStatus).filter_by(abstractStatusID = id).first()
+
 def get_arc_reviews():
     return db.session.query(ArcReview).all()
     
@@ -118,6 +124,12 @@ def get_facility_addresses():
     
 def get_facility_address(id):
     return db.session.query(FacilityAddress).filter_by(facilityAddressID = id).first()
+
+def get_final_codes():
+    return db.session.query(FinalCode).all()
+
+def get_final_code(id):
+    return db.session.query(FinalCode).filter_by(finalCodeID=id).first()
     
 def get_fundings():
     return db.session.query(Funding).all()
@@ -254,7 +266,7 @@ def get_phone_type(id):
 def get_physicians():
     return db.session.query(Physician).all()
 
-def query_physicians(firstName = None, lastName = None, specialty = None, physicianStatus = None):
+def query_physicians(firstName = None, lastName = None, specialty = None, physicianStatusID = None):
     filters = []
     if firstName:
         filters.append(Physician.firstName.like('%{}%'.format(firstName)))
@@ -262,8 +274,8 @@ def query_physicians(firstName = None, lastName = None, specialty = None, physic
         filters.append(Physician.lastName.like('%{}%'.format(lastName)))
     if specialty:
         filters.append(Physician.specialty.like('%{}%'.format(specialty)))
-    if physicianStatus:
-        filters.append(Physician.physicianStatus == physicianStatus)
+    if physicianStatusID:
+        filters.append(Physician.physicianStatusID == physicianStatusID)
     return db.session.query(Physician).filter(or_(*filters)).all()
     
 def get_physician(id):
@@ -292,6 +304,12 @@ def get_physician_phones():
     
 def get_physician_phone(id):
     return db.session.query(PhysicianPhone).filter_by(physicianPhoneID = id).first()
+
+def get_physician_statuses():
+    return db.session.query(PhysicianStatus).all()
+
+def get_physician_status(id):
+    return db.session.query(PhysicianStatus).filter_by(physicianStatusID=id).first()
     
 def get_physician_to_ctcs():
     return db.session.query(PhysicianToCTC).all()
@@ -348,7 +366,7 @@ def get_project_patient(id):
 def get_project_staffs():
     return db.session.query(ProjectStaff).all()
 
-def query_staffs(firstName = None, lastName = None, staffID = None, phoneNumber = None, email = None, institution = None, department = None, ucrRole = None):
+def query_staffs(firstName = None, lastName = None, staffID = None, phoneNumber = None, email = None, institution = None, department = None, ucrRoleID = None):
     filters = []
     if firstName:
         filters.append(Staff.firstName.like('%{}%'.format(firstName)))
@@ -364,8 +382,8 @@ def query_staffs(firstName = None, lastName = None, staffID = None, phoneNumber 
         filters.append(Staff.institution == institution)
     if department:
         filters.append(Staff.department == department)
-    if ucrRole:
-        filters.append(Staff.ucrRole == ucrRole)
+    if ucrRoleID:
+        filters.append(Staff.ucrRoleID == ucrRoleID)
     return db.session.query(Staff).filter(or_(*filters)).all()
 
 def get_project_staff(id):
@@ -442,6 +460,12 @@ def get_ucr_reports():
     
 def get_ucr_report(id):
     return db.session.query(UCRReport).filter_by(ucrReportID = id).first()
+
+def get_ucr_roles():
+    return db.session.query(UCRRole).all()
+
+def get_ucr_role(id):
+    return db.session.query(UCRRole).filter_by(ucrRoleID=id).first()
     
 def commit():
     return db.session.commit()

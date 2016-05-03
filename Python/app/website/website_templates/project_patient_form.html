@@ -87,10 +87,18 @@
                   <label for="date_importDate">Import Date</label>        
                   <input type="date" class="form-control" name="importDate" id="date_importDate" value="{{projectPatient.importDate}}">
                </div>
-               <div class="col-md-2">  
-                  <label for="text_finalCode">Final Code</label>        
-                  <input type="text" class="form-control" name="finalCode" id="text_finalCode" value="{{projectPatient.finalCode}}">
-               </div>
+               <div class = "col-md-2">
+                  <label for="select_finalCodeID">Final Code</label>
+                  <select type="text" class="form-control" name="finalCodeID" id="select_finalCodeID">
+                      {% for finalCode in form.finalCodes %}
+                        {% if finalCode.finalCodeID == projectPatient.finalCodeID %}
+                            <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                        {% else %}
+                            <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
                <div class="col-md-2">  
                   <label for="date_finalCodeDate">Final Date</label>        
                   <input type="date" class="form-control" name="finalCodeDate" id="date_finalCodeDate" value="{{projectPatient.finalCodeDate}}">
@@ -144,8 +152,16 @@
               </div>
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="text_abstractStatus">Abstract Status</label>
-                  <input type="text" class="form-control" name="abstractStatus" id="text_abstractStatus" value="{{projectPatient.abstractStatus}}">
+                  <label for="select_abstractStatusID">Abstract Status</label>
+                  <select type="text" class="form-control" name="abstractStatusID" id="select_abstractStatusID">
+                      {% for abstractStatus in form.abstractStatuses %}
+                        {% if abstractStatus.abstractStatusID == projectPatient.abstractStatusID %}
+                            <option selected="selected" value="{{abstractStatus.abstractStatusID}}">{{abstractStatus.abstractStatus}}</option>
+                        {% else %}
+                            <option value="{{abstractStatus.abstractStatusID}}">{{abstractStatus.abstractStatus}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="date_abstractStatusDate">Abstract Status Date</label>

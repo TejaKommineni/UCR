@@ -3,7 +3,7 @@ DEBUG = True
 
 # Define the database - we are working with
 # SQLite for this example
-SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB_PyCharm\ucr_db\mock_db.db"
+SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB_PyCharm\ucr_db\test_tb.db"
 DATABASE_CONNECT_OPTIONS = {}
 
 # Application threads. A common general assumption is

@@ -104,6 +104,14 @@ class CustomModel(db.Model):
 # Models
 ##############################################################################
 
+class AbstractStatus(CustomModel):
+    __tablename__ = "AbstractStatusLUT"
+
+    abstractStatusID = db.Column('abstractStatusID',db.Integer,primary_key=True)
+    abstractStatus = db.Column('abstract_status',db.String)
+
+    projectPatients = db.relationship("ProjectPatient", back_populates ="abstractStatus")
+
 class ArcReview(CustomModel):
     __tablename__ = 'ArcReview'
 
@@ -516,6 +524,14 @@ class FacilityPhone(CustomModel):
         self.phoneStatus,
         self.phoneSource,
         self.phoneStatusDate)
+
+class FinalCode(CustomModel):
+    __tablename__ = "FinalCode"
+
+    finalCodeID = db.Column('finalCodeID', db.Integer, primary_key=True)
+    finalCode = db.Column('final_code', db.String)
+
+    projectPatients = db.relationship("ProjectPatient",back_populates="finalCode")
 
 class Funding(CustomModel):
     __tablename__ = "Funding"
@@ -1111,7 +1127,7 @@ class Physician(CustomModel):
     aliasFirstName = db.Column('alias_first_name',db.String)
     aliasLastName = db.Column('alias_last_name',db.String)
     aliasMiddleName = db.Column('alias_middle_name',db.String)
-    physicianStatus = db.Column('physician_status',db.Integer)
+    physicianStatusID = db.Column('physician_status',db.Integer,db.ForeignKey("PhysicianStatusLUT.physicianStatusID"))
     physicianStatusDate = db.Column('physician_status_date',db.Date)
 
     # Relationships
@@ -1127,6 +1143,8 @@ class Physician(CustomModel):
     physicianToCTC = db.relationship("PhysicianToCTC", back_populates="physician")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact",back_populates="physician")
+
+    physicianStatus = db.relationship("PhysicianStatus",back_populates="physicians")
 
 
     def __repr__(self):
@@ -1298,6 +1316,14 @@ class PhysicianPhone(CustomModel):
         self.phoneSource,
         self.phoneStatus,
         self.phoneStatusDate)
+
+class PhysicianStatus(CustomModel):
+    __tablename__ = "PhysicianStatusLUT"
+
+    physicianStatusID = db.Column('physicianStatusID',db.Integer,primary_key=True)
+    physicianStatus = db.Column('physicianStatus',db.String)
+
+    physicians = db.relationship("Physician",back_populates="physicianStatus")
 
 class PhysicianToCTC(CustomModel):
     __tablename__ = "PhysicianToCTC"
@@ -1506,7 +1532,7 @@ class ProjectPatient(CustomModel):
     currentAge = db.Column('current_age',db.Integer)
     batch = db.Column('batch',db.Integer)
     siteGrp = db.Column('sitegrp',db.Integer)
-    finalCode = db.Column('final_code',db.Integer)
+    finalCodeID = db.Column('final_code',db.Integer, db.ForeignKey('FinalCode.finalCodeID'))
     finalCodeDate = db.Column('final_code_date',db.Date)
     finalCodeStaffID = db.Column('final_code_staff',db.Integer, db.ForeignKey('Staff.staffID')) # FK?
     enrollmentDate= db.Column('enrollment_date',db.Date)
@@ -1514,7 +1540,7 @@ class ProjectPatient(CustomModel):
     dateCoordSigned = db.Column('date_coord_signed',db.Date)
     dateCoordSignedStaffID = db.Column('date_coord_signed_staff',db.Integer, db.ForeignKey('Staff.staffID'))
     importDate = db.Column('import_date',db.Date)
-    abstractStatus = db.Column('abstract_status',db.Integer)
+    abstractStatusID = db.Column('abstract_status',db.Integer, db.ForeignKey('AbstractStatusLUT.abstractStatusID'))
     abstractStatusDate = db.Column('abstract_status_date',db.Date)
     abstractStatusStaffID = db.Column('abstract_status_staff',db.Integer, db.ForeignKey('Staff.staffID')) # FK?
     sentToAbstractorDate = db.Column('sent_to_abstractor',db.Date)
@@ -1546,6 +1572,8 @@ class ProjectPatient(CustomModel):
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact",back_populates="projectPatient")
 
+    abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
+    finalCode = db.relationship("FinalCode",back_populates="projectPatients")
     finalCodeStaff = db.relationship("Staff",foreign_keys=[finalCodeStaffID])
     enrollmentStaff = db.relationship("Staff",foreign_keys=[enrollmentStaffID])
     dateCoordSignedStaff = db.relationship("Staff",foreign_keys=[dateCoordSignedStaffID])
@@ -1845,7 +1873,7 @@ class Staff(CustomModel):
     city = db.Column('city',db.String)
     state = db.Column('state',db.String)
     humanSubjectTrainingExp = db.Column('human_sub_training_exp',db.Date)
-    ucrRole = db.Column('UCR_role',db.Integer)
+    ucrRoleID = db.Column('UCR_role',db.Integer,db.ForeignKey("UCRRole.ucrRoleID"))
 
     # Relationships
     # 1 - M, one staff with many statuses
@@ -1861,6 +1889,8 @@ class Staff(CustomModel):
     # 1 - M, one study/projectPatient can have many staff
     #projectPatient = db.relationship("ProjectPatient",back_populates="staff")
     tracings = db.relationship("Tracing",back_populates="staff")
+
+    ucrRole = db.relationship("UCRRole",back_populates="staff")
 
     def __repr__(self):
         return "<Staff(\
@@ -2022,4 +2052,11 @@ class UCRReport(CustomModel):
         self.report_submitted,
         self.report_due,
         self.report_doc)
-    
+
+class UCRRole(CustomModel):
+    __tablename__ = "UCRRole"
+
+    ucrRoleID = db.Column("ucrRoleID",db.Integer, primary_key=True)
+    ucrRole = db.Column("ucrRole", db.String)
+
+    staff = db.relationship("Staff", back_populates="ucrRole")

@@ -827,6 +827,89 @@ def root():
         "staff"
     ]})
 
+@website.route('/abstractstatuses/', methods = ['GET'])
+@website.route('/abstractstatuses/<int:abstractStatusID>/', methods = ['GET'])
+def get_abstract_status(abstractStatusID = None):
+    try:
+        if abstractStatusID is None:
+            form={
+                "abstractStatuses" : query.get_abstract_statuses(),
+                "add": True
+            }
+            return render_template("abstract_statuses.html",form=form)
+        else:
+            abstractStatus = query.get_abstract_status(abstractStatusID)
+            if abstractStatus is not None:
+                form={
+                    "abstractStatuses" : [abstractStatus],
+                    "add" : False
+                }
+                return render_template('abstract_statuses.html',form=form)
+            else:
+                return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/abstractstatuses/<int:abstractStatusID>/',methods = ['PUT'])
+def update_abstract_status(abstractStatusID):
+    try:
+        abstractStatus = query.get_abstract_status(abstractStatusID)
+        if abstractStatus is not None:
+            form = forms.AbstractStatusForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == abstractStatus.versionID:
+                    abstractStatus.abstractStatus = request.form['abstractStatus']
+                    query.commit()
+                    return redirect_back('abstractstatuses/{}/'.format(abstractStatusID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/abstractstatuses/',methods=['POST'])
+@website.route('/abstractstatuses/<int:abstractStatusID>/',methods=['POST'])
+def create_abstract_status(abstractStatusID = None):
+    try:
+        if abstractStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_abstract_status(abstractStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_abstract_status(abstractStatusID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.AbstractStatusForm(request.form)
+            if form.validate():
+                abstractStatus = models.AbstractStatus(
+                    abstractStatus = request.form['abstractStatus'],
+                )
+                query.add(abstractStatus)
+                return redirect_back('abstractstatuses/{}/'.format(abstractStatus.abstractStatusID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/abstractstatuses/<int:abstractStatusID>/', methods = ['DELETE'])
+def delete_abstract_status(abstractStatusID):
+    try:
+        abstractStatus = query.get_abstract_status(abstractStatusID)
+        if abstractStatus is not None:
+            deps = get_dependencies(abstractStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(abstractStatus)
+                return item_deleted("AbstractStatusID {} deleted".format(abstractStatusID))
+        else:
+            return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
 ##############################################################################
 # ArcReviews
 ##############################################################################    
@@ -2000,6 +2083,89 @@ def delete_facility_address(facilityAddressID):
     except Exception as e:
         return internal_error(e)
 
+
+@website.route('/finalcodes/', methods = ['GET'])
+@website.route('/finalcodes/<int:finalCodeID>/', methods = ['GET'])
+def get_final_code(finalCodeID = None):
+    try:
+        if finalCodeID is None:
+            form = {
+                "finalCodes" : query.get_final_codes(),
+                "add" : True
+            }
+            return render_template("final_codes.html",form=form)
+        else:
+            finalCode = query.get_final_code(finalCodeID)
+            if finalCode is not None:
+                form = {
+                    "finalCodes" : [finalCode],
+                    "add" : False
+                }
+                return render_template("final_codes.html",form=form)
+            else:
+                return item_not_found("FinalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/finalcodes/<int:finalCodeID>/', methods=['PUT'])
+def update_final_code(finalCodeID):
+    try:
+        finalCode = query.get_final_code(finalCodeID)
+        if finalCode is not None:
+            form = forms.FinalCodeForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == finalCode.versionID:
+                    finalCode.finalCode = request.form['finalCode']
+                    query.commit()
+                    return redirect_back('finalcodes/{}/'.format(finalCodeID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("FinalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/finalcodes/', methods=['POST'])
+@website.route('/finalcodes/<int:finalCodeID>/', methods=['POST'])
+def create_final_code(finalCodeID=None):
+    try:
+        if finalCodeID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_final_code(finalCodeID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_final_code(finalCodeID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.FinalCodeForm(request.form)
+            if form.validate():
+                finalCode = models.FinalCode(
+                    finalCode=request.form['finalCode']
+                )
+                query.add(finalCode)
+                return redirect_back('finalcodes/{}/'.format(finalCode.finalCodeID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/finalcodes/<int:finalCodeID>/', methods=['DELETE'])
+def delete_final_code(finalCodeID):
+    try:
+        finalCode = query.get_final_code(finalCodeID)
+        if finalCode is not None:
+            deps = get_dependencies(finalCode)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(finalCode)
+                return item_deleted("FinalCodeID {} deleted".format(finalCodeID))
+        else:
+            return item_not_found("finalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
 ##############################################################################
 # Funding Source LUT
 ##############################################################################
@@ -3694,7 +3860,7 @@ def get_physician(physicianID=None):
             firstName = None
             lastName = None
             specialty = None
-            physicianStatus = None
+            physicianStatusID = None
             form["queryParams"] = {}
             if "firstName" in request.args:
                 firstName = value_or_none(request.args["firstName"])
@@ -3705,14 +3871,15 @@ def get_physician(physicianID=None):
             if "specialty" in request.args:
                 specialty = value_or_none(request.args["specialty"])
                 form["queryParams"]["specialty"] = request.args["specialty"]
-            if "physicianStatus" in request.args:
-                physicianStatus = value_or_none(request.args["physicianStatus"])
-                form["queryParams"]["physicianStatus"] = request.args["physicianStatus"]
+            if "physicianStatusID" in request.args:
+                physicianStatusID = value_or_none(request.args["physicianStatusID"])
+                form["queryParams"]["physicianStatusID"] = request.args["physicianStatusID"]
 
             physicians = query.query_physicians(firstName=firstName,
                                             lastName=lastName,
                                             specialty=specialty,
-                                            physicianStatus=physicianStatus)
+                                            physicianStatusID=physicianStatusID)
+            form["physicianStatuses"] = query.get_physician_statuses()
             return render_template("physician_table.html",form=form,physicians=physicians)
         else:
             physician = query.get_physician(physicianID)
@@ -3724,6 +3891,7 @@ def get_physician(physicianID=None):
                 form["phoneTypes"] = query.get_phone_types()
                 form["physicians"] = query.get_physicians()
                 form["facilities"] = query.get_facilities()
+                form["physicianStatuses"] = query.get_physician_statuses()
                 return render_template("physician_form.html",form=form,physician=physician)
             else:
                 return item_not_found("PhysicianID {} not found".format(physicianID))
@@ -3746,7 +3914,7 @@ def update_physician(physicianID):
                     physician.aliasFirstName = request.form['aliasFirstName']
                     physician.aliasLastName = request.form['aliasLastName']
                     physician.aliasMiddleName = request.form['aliasMiddleName']
-                    physician.physicianStatus = request.form['physicianStatus']
+                    physician.physicianStatusID = request.form['physicianStatusID']
                     physician.physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d")
                     query.commit()
                     return redirect_back("physicians/{}/".format(physicianID))
@@ -3782,7 +3950,7 @@ def create_physician(physicianID = None):
                     aliasFirstName = request.form['aliasFirstName'],
                     aliasLastName = request.form['aliasLastName'],
                     aliasMiddleName = request.form['aliasMiddleName'],
-                    physicianStatus = request.form['physicianStatus'],
+                    physicianStatusID = request.form['physicianStatusID'],
                     physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
                 )
                 query.add(physician)
@@ -4174,6 +4342,89 @@ def delete_physician_phone(physicianPhoneID):
                 return item_deleted("PhysicianPhoneID {} deleted".format(physicianPhoneID))
         else:
             return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/physicianstatuses/', methods=['GET'])
+@website.route('/physicianstatuses/<int:physicianStatusID>/', methods=['GET'])
+def get_physician_status(physicianStatusID=None):
+    try:
+        if physicianStatusID is None:
+            form = {
+                "physicianStatuses": query.get_physician_statuses(),
+                "add": True
+            }
+            return render_template("physician_statuses.html", form=form)
+        else:
+            physicianStatus = query.get_physician_status(physicianStatusID)
+            if physicianStatus is not None:
+                form = {
+                    "physicianStatuses": [physicianStatus],
+                    "add": False
+                }
+                return render_template("physician_statuses.html", form=form)
+            else:
+                return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/physicianstatuses/<int:physicianStatusID>/', methods=['PUT'])
+def update_physician_status(physicianStatusID):
+    try:
+        physicianStatus = query.get_physician_status(physicianStatusID)
+        if physicianStatus is not None:
+            form = forms.PhysicianStatusForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == physicianStatus.versionID:
+                    physicianStatus.physicianStatus = request.form['physicianStatus']
+                    query.commit()
+                    return redirect_back('physicianstatuses/{}/'.format(physicianStatusID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/physicianstatuses/', methods=['POST'])
+@website.route('/physicianstatuses/<int:physicianStatusID>/', methods=['POST'])
+def create_physician_status(physicianStatusID=None):
+    try:
+        if physicianStatusID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_physician_status(physicianStatusID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_physician_status(physicianStatusID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.PhysicianStatusForm(request.form)
+            if form.validate():
+                physicianStatus = models.PhysicianStatus(
+                    physicianStatus=request.form['physicianStatus'],
+                )
+                query.add(physicianStatus)
+                return redirect_back('physicianStatuses/{}/'.format(physicianStatus.physicianStatusID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/physicianstatuses/<int:physicianStatusID>/', methods=['DELETE'])
+def delete_physician_status(physicianStatusID):
+    try:
+        physicianStatus = query.get_physician_status(physicianStatusID)
+        if physicianStatus is not None:
+            deps = get_dependencies(physicianStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianStatus)
+                return item_deleted("PhysicianStatusID {} deleted".format(physicianStatusID))
+        else:
+            return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
     except Exception as e:
         return internal_error(e)
 
@@ -4603,6 +4854,8 @@ def get_project_patient(participantID=None):
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["patientProjectStatusTypes"] = query.get_patient_project_status_types()
                 form["tracingSources"] = query.get_tracing_sources()
+                form["finalCodes"] = query.get_final_codes()
+                form["abstractStatuses"] = query.get_abstract_statuses()
                 return render_template("project_patient_form.html",form=form,projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
@@ -4623,7 +4876,7 @@ def update_project_patient(participantID):
                     projectPatient.currentAge = request.form['currentAge']
                     projectPatient.batch = request.form['batch']
                     projectPatient.siteGrp = request.form['siteGrp']
-                    projectPatient.finalCode = request.form['finalCode']
+                    projectPatient.finalCodeID = request.form['finalCodeID']
                     projectPatient.finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d")
                     projectPatient.enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d")
                     projectPatient.dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d")
@@ -4631,7 +4884,7 @@ def update_project_patient(participantID):
                     projectPatient.finalCodeStaffID = request.form['finalCodeStaffID']
                     projectPatient.enrollmentStaffID = request.form['enrollmentStaffID']
                     projectPatient.dateCoordSignedStaffID = request.form['dateCoordSignedStaffID']
-                    projectPatient.abstractStatus = request.form['abstractStatus']
+                    projectPatient.abstractStatusID = request.form['abstractStatusID']
                     projectPatient.abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d")
                     projectPatient.abstractStatusStaffID = request.form['abstractStatusStaffID']
                     projectPatient.sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d")
@@ -4679,7 +4932,7 @@ def create_project_patient(participantID=None):
                     currentAge = request.form['currentAge'],
                     batch = request.form['batch'],
                     siteGrp = request.form['siteGrp'],
-                    finalCode = request.form['finalCode'],
+                    finalCodeID = request.form['finalCodeID'],
                     finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d"),
                     enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
                     dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
@@ -4687,7 +4940,7 @@ def create_project_patient(participantID=None):
                     finalCodeStaffID = request.form['finalCodeStaffID'],
                     enrollmentStaffID = request.form['enrollmentStaffID'],
                     dateCoordSignedStaffID = request.form['dateCoordSignedStaffID'],
-                    abstractStatus = request.form['abstractStatus'],
+                    abstractStatusID = request.form['abstractStatus'],
                     abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
                     abstractStatusStaffID = request.form['abstractStatusStaffID'],
                     sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
@@ -5379,7 +5632,7 @@ def get_staff(staffID=None):
             email = None
             institution = None
             department = None
-            ucrRole = None
+            ucrRoleID = None
             form["queryParams"] = {}
             if "firstName" in request.args:
                 firstName = value_or_none(request.args["firstName"])
@@ -5402,9 +5655,9 @@ def get_staff(staffID=None):
             if "department" in request.args:
                 department = value_or_none(request.args["department"])
                 form["queryParams"]["department"] = request.args["department"]
-            if "ucrRole" in request.args:
-                ucrRole = value_or_none(request.args["ucrRole"])
-                form["queryParams"]["ucrRole"] = request.args["ucrRole"]
+            if "ucrRoleID" in request.args:
+                ucrRoleID = value_or_none(request.args["ucrRoleID"])
+                form["queryParams"]["ucrRoleID"] = request.args["ucrRoleID"]
 
             staffs = query.query_staffs(firstName=firstName,
                                        lastName=lastName,
@@ -5413,7 +5666,8 @@ def get_staff(staffID=None):
                                        email=email,
                                        institution = institution,
                                        department = department,
-                                       ucrRole = ucrRole)
+                                       ucrRoleID = ucrRoleID)
+            form["ucrRoles"] = query.get_ucr_roles()
             return render_template("staff_table.html",form=form,staffs=staffs)
         else:
             staff = query.get_staff(staffID)
@@ -5426,6 +5680,7 @@ def get_staff(staffID=None):
                 form["inactives"] = query.get_inactive_enums()
                 form["projects"] = query.get_projects()
                 form["staffRoles"] = query.get_staff_roles()
+                form["ucrRoles"] = query.get_ucr_roles()
                 return render_template("staff_form.html",form=form, staff=staff)
             else:
                 return item_not_found("StaffID {} not found".format(staffID))
@@ -5454,7 +5709,7 @@ def update_staff(staffID):
                     staff.city = request.form['city']
                     staff.state = request.form['state']
                     staff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
-                    staff.ucrRole = request.form['ucrRole']
+                    staff.ucrRoleID = request.form['ucrRoleID']
                     query.commit()
                     return redirect_back("staff/{}/".format(staffID))
                 else:
@@ -5495,7 +5750,7 @@ def create_staff(staffID = None):
                     city = request.form['city'],
                     state = request.form['state'],
                     humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
-                    ucrRole = request.form['ucrRole']
+                    ucrRoleID = request.form['ucrRoleID']
                 )
                 query.add(staff)
                 return redirect_back("staff/{}/".format(staff.staffID))
@@ -5957,12 +6212,103 @@ def delete_ucr_report(ucrReportID):
     except Exception as e:
         return internal_error(e)
 
+@website.route('/ucrroles/', methods=['GET'])
+@website.route('/ucrroles/<int:ucrRoleID>/', methods=['GET'])
+def get_ucr_role(ucrRoleID=None):
+    try:
+        if ucrRoleID is None:
+            form = {
+                "ucrRoles": query.get_ucr_roles(),
+                "add": True
+            }
+            return render_template("ucr_roles.html", form=form)
+        else:
+            ucrRole = query.get_ucr_role(ucrRoleID)
+            if ucrRole is not None:
+                form = {
+                    "ucrRoles": [ucrRole],
+                    "add": False
+                }
+                return render_template("ucr_roles.html", form=form)
+            else:
+                return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrroles/<int:ucrRoleID>/', methods=['PUT'])
+def update_ucr_role(ucrRoleID):
+    try:
+        ucrRole = query.get_ucr_role(ucrRoleID)
+        if ucrRole is not None:
+            form = forms.UCRRoleForm(request.form)
+            if form.validate():
+                if int(request.form['versionID']) == ucrRole.versionID:
+                    ucrRole.ucrRole = request.form['ucrRole']
+                    query.commit()
+                    return redirect_back('ucrroles/{}/'.format(ucrRoleID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrroles/', methods=['POST'])
+@website.route('/ucrroles/<int:ucrRoleID>/', methods=['POST'])
+def create_ucr_role(ucrRoleID=None):
+    try:
+        if ucrRoleID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_ucr_role(ucrRoleID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_ucr_role(ucrRoleID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.UCRRoleForm(request.form)
+            if form.validate():
+                ucrRole = models.UCRRole(
+                    ucrRole=request.form['ucrRole'],
+                )
+                query.add(ucrRole)
+                return redirect_back('ucrroles/{}/'.format(ucrRole.ucrRoleID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrroles/<int:ucrRoleID>/', methods=['DELETE'])
+def delete_ucr_role(ucrRoleID):
+    try:
+        ucrRole = query.get_project_type(ucrRoleID)
+        if ucrRole is not None:
+            deps = get_dependencies(ucrRole)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ucrRole)
+                return item_deleted("UCRRoleID {} deleted".format(ucrRoleID))
+        else:
+            return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
+    except Exception as e:
+        return internal_error(e)
+
 ##############################################################################
 # Lookup Table
 ##############################################################################
 @website.route('/lookuptables/', methods=['GET'])
 def get_lookup_tables():
     form = {"tables": []}
+
+    abstractStatuses = query.get_abstract_statuses()
+    form["tables"].append({
+        "name" : "Abstract Statuses",
+        "count" : len(abstractStatuses),
+        "values" : [abst.abstractStatus for abst in abstractStatuses],
+        "endpoint" : "abstractstatuses"
+    })
 
     contactInfoSources = query.get_contact_info_sources()
     form["tables"].append({
@@ -5986,6 +6332,14 @@ def get_lookup_tables():
         "count" : len(contactTypes),
         "values" : [ct.contactDefinition for ct in contactTypes],
         "endpoint" : "contacttypes"
+    })
+
+    finalCodes = query.get_final_codes()
+    form["tables"].append({
+        "name" : "Final Codes",
+        "count" : len(finalCodes),
+        "values" : [fc.finalCode for fc in finalCodes],
+        "endpoint" : "finalcodes"
     })
 
     fundingSources = query.get_funding_sources()
@@ -6050,6 +6404,14 @@ def get_lookup_tables():
         "count" : len(phoneTypes),
         "values" : [pt.phoneType for pt in phoneTypes],
         "endpoint" : "phonetypes"
+    })
+
+    physicianStatuses = query.get_physician_statuses()
+    form["tables"].append({
+        "name" : "Physician Statuses",
+        "count" : len(physicianStatuses),
+        "values" : [ps.physicianStatus for ps in physicianStatuses],
+        "endpoint" : "physicianstatuses"
     })
 
     projectStatuses = query.get_project_status_luts()

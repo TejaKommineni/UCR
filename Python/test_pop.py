@@ -25,6 +25,29 @@ class PopulatedDB(TestCase):
 
     def populate_db2(self):
 
+        physicianStatus1 = models.PhysicianStatus(
+            physicianStatus = "status 1"
+        )
+        physicianStatus2 = models.PhysicianStatus(
+            physicianStatus = "status 2"
+        )
+
+        ucrRole1 = models.UCRRole(
+            ucrRole = "Coordinator"
+        )
+
+        ucrRole2 = models.UCRRole(
+            ucrRole = "Director"
+        )
+
+        abstractStatus1 = models.AbstractStatus(
+            abstractStatus = "status 1"
+        )
+
+        abstractStatus2 = models.AbstractStatus(
+            abstractStatus = "status 2"
+        )
+
         phoneType1 = models.PhoneTypeLUT(
             phoneType = "cell"
         )
@@ -121,7 +144,7 @@ class PopulatedDB(TestCase):
 
         ucr = models.UCRReport(
             projectID = 1,
-            reportType= 1,
+            reportType= "Annual Report",
             reportSubmitted= datetime(2016,2,2),
             reportDue= datetime(2016,2,2),
             reportDoc= "doc"
@@ -189,7 +212,7 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
+            ucrRoleID = 1
         )
         staff2 = models.Staff(
             firstName = "fname",
@@ -206,7 +229,7 @@ class PopulatedDB(TestCase):
             city = "city",
             state = "state",
             humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
+            ucrRoleID = 1
         )
 
         projStatusType1 = models.ProjectStatusLUT(
@@ -283,7 +306,6 @@ class PopulatedDB(TestCase):
             staffRoleID = 1,
             projectID = 1,
             staffID = 1,
-            role = 1,
             datePledge = datetime(2016,2,2),
             dateRevoked = datetime(2016,2,2),
             contact = "yes",
@@ -463,6 +485,14 @@ class PopulatedDB(TestCase):
             dnc = "dnc",
             dncReason = "dnc_reason"
         )
+
+        finalCode1 = models.FinalCode(
+            finalCode = "Dead"
+        )
+
+        finalCode2 = models.FinalCode(
+            finalCode = "Alive"
+        )
         projectPatient = models.ProjectPatient(
             projectID = 1,
             staffID = 1,
@@ -470,7 +500,7 @@ class PopulatedDB(TestCase):
             currentAge = 1,
             batch = 1,
             siteGrp = 1,
-            finalCode = 1,
+            finalCodeID = 1,
             finalCodeDate = datetime(2016,2,2),
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
@@ -478,7 +508,7 @@ class PopulatedDB(TestCase):
             finalCodeStaffID = 1,
             enrollmentStaffID = 1,
             dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
+            abstractStatusID = 1,
             abstractStatusDate = datetime(2016,2,2),
             abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
@@ -503,7 +533,7 @@ class PopulatedDB(TestCase):
             currentAge = 1,
             batch = 1,
             siteGrp = 1,
-            finalCode = 1,
+            finalCodeID = 1,
             finalCodeDate = datetime(2016,2,2),
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
@@ -511,7 +541,7 @@ class PopulatedDB(TestCase):
             finalCodeStaffID = 1,
             enrollmentStaffID = 1,
             dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
+            abstractStatusID = 1,
             abstractStatusDate = datetime(2016,2,2),
             abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
@@ -538,7 +568,7 @@ class PopulatedDB(TestCase):
             tracingSourceID = 1,
             projectPatientID = 1,
             date = datetime(2016,2,2),
-            staff = 1,
+            staffID = 1,
             notes = "notes"
         )
         physician = models.Physician(
@@ -550,7 +580,7 @@ class PopulatedDB(TestCase):
             aliasFirstName = "alias_fname",
             aliasLastName = "alias_lname",
             aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
+            physicianStatusID =1,
             physicianStatusDate = datetime(2016,2,2),
         )
 
@@ -563,7 +593,7 @@ class PopulatedDB(TestCase):
             aliasFirstName = "alias_fname",
             aliasLastName = "alias_lname",
             aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
+            physicianStatusID = 2,
             physicianStatusDate = datetime(2016,2,2),
         )
         physicianAddress = models.PhysicianAddress(
@@ -681,6 +711,12 @@ class PopulatedDB(TestCase):
             incentiveDate = datetime(2016,2,2)
         )
 
+        db.session.add(physicianStatus1)
+        db.session.add(physicianStatus2)
+        db.session.add(ucrRole1)
+        db.session.add(ucrRole2)
+        db.session.add(abstractStatus1)
+        db.session.add(abstractStatus2)
         db.session.add(incentive)
         db.session.add(phoneType1)
         db.session.add(phoneType2)
@@ -735,6 +771,8 @@ class PopulatedDB(TestCase):
         db.session.add(informantPhone)
         db.session.add(ctc1)
         db.session.add(ctc2)
+        db.session.add(finalCode1)
+        db.session.add(finalCode2)
         db.session.add(projectPatient)
         db.session.add(projectPatient2)
         db.session.add(tracingSource1)

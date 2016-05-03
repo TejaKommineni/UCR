@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for ucrRole in form["ucrRoles"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/ucr_roles.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set ucrRole = none %}
+    {% include 'helper_forms/ucr_roles.html' %}
+{% endif %}
+{% endblock %}

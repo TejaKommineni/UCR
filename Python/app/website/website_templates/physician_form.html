@@ -53,8 +53,17 @@
               </div>
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="text_physicianStatus">Status</label>
-                  <input type="text" class="form-control" name="physicianStatus" id="text_physicianStatus" value="{{physician["physicianStatus"]}}" >
+                  <label for="select_physicianStatusID">Status</label>
+                  <select type="text" class="form-control" name="physicianStatusID" id="select_physicianStatusID">
+                        <option></option>
+                      {% for physicianStatus in form.physicianStatuses %}
+                        {% if physicianStatus.physicianStatusID== physician.physicianStatusID %}
+                            <option selected="selected" value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% else %}
+                            <option value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="date_physicianStatusDate">Status Date</label>

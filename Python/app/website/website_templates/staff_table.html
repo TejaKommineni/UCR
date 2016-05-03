@@ -9,13 +9,13 @@
           <fieldset>
             <div class="form-group">
               <div class="row">
-                <div class = "col-md-2">
+                <div class = "col-md-1">
                   <label for="text_firstName">First Name</label>
                   <input type="text" class="form-control" name="firstName" id="text_firstName" value = "{{form.queryParams.firstName}}">
                 </div>
-                <div class="col-md-2"> 
+                <div class="col-md-1"> 
                   <label for="text_lastName">Last Name</label>
-                  <input type="text" class="form-control" name="lastName" id="text_lastName" value = "{{form.queryParams.lastName}}">
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value = "{{form.queryParams.lastName}}">
                 </div>
                 <div class="col-md-1">
                   <label for="text_staffID">Staff ID</label>
@@ -37,9 +37,18 @@
                   <label for="text_department">Department</label>
                   <input type="text" class="form-control" name="department" id="text_department" value = "{{form.queryParams.department}}">
                 </div>
-                <div class = "col-md-1">
-                  <label for="text_ucrRole">UCR Role</label>
-                  <input type="text" class="form-control" name="ucrRole" id="text_ucrRole" value = "{{form.queryParams.ucrRole}}">
+                <div class = "col-md-2">
+                  <label for="select_ucrRoleID">UCR Role</label>
+                  <select type="text" class="form-control" name="ucrRoleID" id="select_ucrRoleID">
+                        <option></option>
+                      {% for ucrRole in form.ucrRoles %}
+                        {% if ucrRole.ucrRoleID|string() == form.queryParams.ucrRoleID %}
+                            <option selected="selected" value="{{ucrRole.ucrRoleID}}">{{ucrRole.ucrRole}}</option>
+                        {% else %}
+                            <option value="{{ucrRole.ucrRoleID}}">{{ucrRole.ucrRole}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
                 <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>
@@ -73,7 +82,7 @@
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["email"]}}</a></td>
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]}}</a></td>
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"].ucrRole}}</a></td>
             </tr>
             {% endfor %}
           </tbody>
