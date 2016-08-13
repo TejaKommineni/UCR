@@ -9,70 +9,6 @@ from app.helpers import DateTimeEncoder
 from sqlalchemy.orm import class_mapper
 from sqlalchemy.ext.declarative import declared_attr
 
-STATES = db.Enum("AL",
-        "AK",
-        "AZ",
-        "AR",
-        "CA",
-        "CO",
-        "CT",
-        "DE",
-        "DC",
-        "FL",
-        "GA",
-        "HI",
-        "ID",
-        "IL",
-        "IN",
-        "IA",
-        "KS",
-        "KY",
-        "LA",
-        "ME",
-        "MT",
-        "NE",
-        "NV",
-        "NH",
-        "NJ",
-        "NM",
-        "NY",
-        "NC",
-        "ND",
-        "OH",
-        "OK",
-        "OR",
-        "MD",
-        "MA",
-        "MI",
-        "MN",
-        "MS",
-        "MO",
-        "PA",
-        "RI",
-        "SC",
-        "SD",
-        "TN",
-        "TX",
-        "UT",
-        "VT",
-        "VA",
-        "WA",
-        "WV",
-        "WI",
-        "WY"
-            )
-RACES = db.Enum("white", "black")
-ETHNICITIES = db.Enum("hispanic", "non-hispanic")
-PHONE_SOURCES = db.Enum("s1", "s2")
-SEXES = db.Enum("male", "female")
-VITAL_STATUSES = db.Enum("v1","v2")
-CONTACTS = db.Enum("yes","no")
-INACTIVES = db.Enum("yes", "no")
-ADDRESS_STATUS_SOURCE = db.Enum("s1", "s2")
-UCR_REPORT_TYPES = db.Enum("Annual Report","Final Report")
-BOOLEANS = db.Enum("True","False")
-
-
 """
     A base class that all models derive from
 """
@@ -103,6 +39,79 @@ class CustomModel(db.Model):
 ##############################################################################
 # Models
 ##############################################################################
+
+
+class Race(CustomModel):
+    __tablename__ = "RaceLUT"
+    raceID = db.Column('raceID', db.Integer, primary_key=True)
+    race = db.Column('race', db.String)
+
+
+class Ethnicity(CustomModel):
+    __tablename__ = "EthnicityLUT"
+    ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True)
+    ethnicity = db.Column('ethnicity', db.String)
+
+
+# class PhoneSource(CustomModel):
+#     __tablename__ = "PhoneSourceLUT"
+#     phoneSourceID = db.Column('phoneSourceID', db.Integer, primary_key=True)
+#     phoneSource = db.Column('phoneSource', db.String)
+
+
+class Sex(CustomModel):
+    __tablename__ = "SexLUT"
+    sexID = db.Column('sexID', db.Integer, primary_key=True)
+    sex = db.Column('sex', db.String)
+
+
+class VitalStatus(CustomModel):
+    __tablename__ = "VitalStatusLUT"
+    vitalStatusID = db.Column('vitalStatusID', db.Integer, primary_key=True)
+    vitalStatus = db.Column('vitalStatus', db.String)
+
+
+class Contacts(CustomModel):
+    __tablename__ = "ContactsLUT"
+    contactID = db.Column('contactID', db.Integer, primary_key=True)
+    contact = db.Column('contact', db.String)
+
+
+class Inactive(CustomModel):
+    __tablename__ = "InactiveLUT"
+    inactiveID = db.Column('inactiveID', db.Integer, primary_key=True)
+    inactive = db.Column('inactive', db.String)
+
+
+# class AddressStatusSource(CustomModel):
+#     __tablename__ = "AddressStatusSourceLUT"
+#     addressStatusSourceID = db.Column('addressStatusSourceID', db.Integer, primary_key=True)
+#     addressStatusSource = db.Column('addressStatusSource', db.String)
+
+
+class UCRReportType(CustomModel):
+    __tablename__ = "UCRReportTypeLUT"
+    ucrReportTypeID = db.Column('ucrReportTypeID', db.Integer, primary_key=True)
+    ucrReportType = db.Column('ucrReportType', db.String)
+
+
+# class Boolean(CustomModel):
+#     __tablename__ = "BooleanLUT"
+#     booleanID = db.Column('booleanID', db.Integer, primary_key=True)
+#     boolean = db.Column('boolean', db.String)
+
+
+# class State(CustomModel):
+#     __tablename__ = "StateLUT"
+#     stateID = db.Column('stateID', db.Integer, primary_key=True)
+#     state = db.Column('state', db.String)
+
+
+class PhysicianFacilityStatus(CustomModel):
+    __tablename__ = "PhysicianFacilityStatusLUT"
+    physicianFacilityStatusID = db.Column('physicianFacilityStatusID', db.Integer, primary_key=True)
+    physicianFacilityStatus = db.Column('physicianFacilityStatus', db.String)
+
 
 class AbstractStatus(CustomModel):
     __tablename__ = "AbstractStatusLUT"
@@ -320,7 +329,7 @@ class CTC(CustomModel):
     dxStreet2 = db.Column('dx_street2',db.String)
     dxCity = db.Column('dx_city',db.String)
     dxState = db.Column('dx_state',db.String)
-    dxZip = db.Column('dx_zip',db.Integer)
+    dxZip = db.Column('dx_zip',db.String)
     dxCounty = db.Column('dx_county',db.String)
     dnc = db.Column('dnc',db.String)
     dncReason = db.Column('dnc_reason',db.String)
@@ -447,7 +456,7 @@ class FacilityAddress(CustomModel):
     street2 = db.Column('street2',db.String)
     city = db.Column('city',db.String)
     state = db.Column('state',db.String)
-    zip = db.Column('zip',db.Integer)
+    zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('facility_address_status_date',db.Date)
 
     # Relationships
@@ -870,10 +879,10 @@ class Patient(CustomModel):
     aliasMiddleName = db.Column('alias_middle_name',db.String)
     dob = db.Column('dob',db.Date)
     SSN = db.Column('SSN',db.Integer)
-    sex = db.Column('sex',SEXES)
-    race = db.Column('race',RACES)
-    ethnicity = db.Column('ethnicity',ETHNICITIES)
-    vitalStatus = db.Column('viral_status',VITAL_STATUSES)
+    sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
+    raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))
+    ethnicityID = db.Column('ethnicityID', db.Integer, db.ForeignKey("EthnicityLUT.ethnicityID"))
+    vitalStatusID = db.Column('vital_statusID', db.Integer, db.ForeignKey("VitalStatusLUT.vitalStatusID"))
 
     # Relationships
     # M - 1, many patients can be at the same address
@@ -886,6 +895,10 @@ class Patient(CustomModel):
     patientPhones = db.relationship('PatientPhone',back_populates="patients")
     # M - 1, many informants may have multiple patients
     informants = db.relationship('Informant',back_populates="patients")
+    sex = db.relationship('Sex')
+    race = db.relationship('Race')
+    ethnicity = db.relationship('Ethnicity')
+    vitalStatus = db.relationship('VitalStatus')
 
     def __repr__(self):
         return "<Patient(\
@@ -937,7 +950,7 @@ class PatientAddress(CustomModel):
     street2 = db.Column('street2',db.String)
     city = db.Column('city',db.String)
     state = db.Column('state',db.String)
-    zip = db.Column('zip',db.Integer)
+    zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('address_status_date',db.Date)
 
     # Relationships
@@ -1185,7 +1198,7 @@ class PhysicianAddress(CustomModel):
     street2 = db.Column('physician_street2',db.String)
     city = db.Column('physician_city',db.String)
     state = db.Column('physician_state',db.String)
-    zip = db.Column('physician_zip',db.Integer)
+    zip = db.Column('physician_zip',db.String)
     addressStatusDate = db.Column('physician_address_status_date',db.Date)
 
     # Relationship
@@ -1256,9 +1269,10 @@ class PhysicianFacility(CustomModel):
     physFacilityID = db.Column('physicianFacilityID',db.Integer, primary_key=True)
     facilityID = db.Column('facilityID',db.Integer, db.ForeignKey('Facility.facilityID'))
     physicianID = db.Column('physicianID',db.Integer, db.ForeignKey('Physician.physicianID'))
-    physFacilityStatus = db.Column('physician_facility_status',db.Integer)
+    physFacilityStatusID = db.Column('physician_facility_status',db.Integer, db.ForeignKey('PhysicianFacilityStatusLUT.physicianFacilityStatusID'))
     physFacilityStatusDate = db.Column('physician_facility_date',db.Date)
 
+    physFacilityStatus = db.relationship("PhysicianFacilityStatus")
     # Relationships
     # M - 1 many physicians at the same physician facility
     physician = db.relationship("Physician",back_populates="physicianFacilities")
@@ -1659,9 +1673,11 @@ class ProjectStaff(CustomModel):
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
     datePledge = db.Column('date_pledge',db.Date)
     dateRevoked = db.Column('date_revoked',db.Date)
-    contact = db.Column('contact',CONTACTS)
-    inactive = db.Column('inactive',INACTIVES)
+    contactID = db.Column('contact', db.Integer, db.ForeignKey('ContactsLUT.contactID'))
+    inactiveID = db.Column('inactive', db.Integer, db.ForeignKey('InactiveLUT.inactiveID'))
 
+    contact = db.relationship("Contacts")
+    inactive = db.relationship("Inactive")
     # Relationships
     # M - 1, Many projectStaff with the same role
     staffRole = db.relationship("StaffRoleLUT", back_populates="projectStaff")
@@ -1980,7 +1996,7 @@ class Tracing(CustomModel):
 
     tracingID = db.Column('tracingID',db.Integer, primary_key=True)
     tracingSourceID = db.Column('tracingSourceLUTID',db.Integer, db.ForeignKey('TracingSourceLUT.tracingSourceLUTID'))
-    projectPatientID = db.Column('participantID',db.Integer, db.ForeignKey('ProjectPatient.participantID'))
+    projectPatientID = db.Column('projectPatientID',db.Integer, db.ForeignKey('ProjectPatient.participantID'))
     date = db.Column('date',db.Date)
     staffID = db.Column('staff',db.Integer, db.ForeignKey('Staff.staffID'))
     notes = db.Column('notes',db.String)
@@ -2029,13 +2045,14 @@ class UCRReport(CustomModel):
 
     ucrReportID = db.Column('ucrReport',db.Integer, primary_key=True)
     projectID = db.Column('projectID',db.Integer, db.ForeignKey('Project.projectID'))
-    reportType = db.Column('report_type',UCR_REPORT_TYPES)
+    reportTypeID = db.Column('report_type', db.Integer, db.ForeignKey('UCRReportTypeLUT.ucrReportTypeID'))
     reportSubmitted = db.Column('report_submitted',db.Date)
     reportDue = db.Column('report_due',db.Date)
     reportDoc = db.Column('report_doc',db.String)
     
     # Relationships
     # 1 - M, one project, many reports
+    reportType = db.relationship("UCRReportType")
     project = db.relationship("Project", back_populates="ucrReports")
     
     def __repr__(self):

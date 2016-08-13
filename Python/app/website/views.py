@@ -19,6 +19,74 @@ website = Blueprint('website',__name__, template_folder='website_templates')
 # A test endpoint that adds some junk to test with
 ##############################################################################
 def populate_db2():
+        db.create_all()
+
+        race1 = models.Race(
+            race = "white"
+        )
+        race2 = models.Race(
+            race = "black"
+        )
+        sex1 = models.Sex(
+            sex = "female"
+        )
+        sex2 = models.Sex(
+            sex = "male"
+        )
+        ethnicity1 = models.Ethnicity(
+            ethnicity="hispanic"
+        )
+        ethnicity2 = models.Ethnicity(
+            ethnicity="caucasian"
+        )
+        vitalStatus1 = models.VitalStatus(
+            vitalStatus = "v1"
+        )
+        vitalStatus2 = models.VitalStatus(
+            vitalStatus = "v2"
+        )
+        contacts1 = models.Contacts(
+            contact = "yes"
+        )
+        contacts2 = models.Contacts(
+            contact = "no"
+        )
+        inactive1 = models.Inactive(
+            inactive = "Yes"
+        )
+        inactive2 = models.Inactive(
+            inactive = "No"
+        )
+        ucrReportType1 = models.UCRReportType(
+            ucrReportType = "Report 1"
+        )
+        ucrReportType2 = models.UCRReportType(
+            ucrReportType = "Report 2"
+        )
+        finalCode1 = models.FinalCode(
+            finalCode = "code 1"
+        )
+        finalCode2 = models.FinalCode(
+            finalCode = "code 2"
+        )
+        abstractStatus1 = models.AbstractStatus(
+            abstractStatus = "status 1"
+        )
+        abstractStatus2 = models.AbstractStatus(
+            abstractStatus = "status 2"
+        )
+        physicianStatus1 = models.PhysicianStatus(
+            physicianStatus = "status 1"
+        )
+        physicianStatus2 = models.PhysicianStatus(
+            physicianStatus="status 2"
+        )
+        physicianFacilityStatus1 = models.PhysicianFacilityStatus(
+            physicianFacilityStatus = "open"
+        )
+        physicianFacilityStatus2 = models.PhysicianFacilityStatus(
+            physicianFacilityStatus="closed"
+        )
 
         phoneType1 = models.PhoneTypeLUT(
             phoneType = "cell"
@@ -116,7 +184,7 @@ def populate_db2():
 
         ucr = models.UCRReport(
             projectID = 1,
-            reportType= 1,
+            reportTypeID= 1,
             reportSubmitted= datetime(2016,2,2),
             reportDue= datetime(2016,2,2),
             reportDoc= "doc"
@@ -169,6 +237,10 @@ def populate_db2():
             secondaryChartfield = "scf"
         )
 
+        ucrRole = models.UCRRole(
+            ucrRole = "Coordinator"
+        )
+
         staff = models.Staff(
             firstName = "fname",
             lastName = "lname",
@@ -182,9 +254,9 @@ def populate_db2():
             credentials = "credentials",
             street = "street",
             city = "city",
-            state = "state",
+            state = "Utah",
             humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
+            ucrRoleID = 1
         )
         staff2 = models.Staff(
             firstName = "fname",
@@ -199,9 +271,9 @@ def populate_db2():
             credentials = "credentials",
             street = "street",
             city = "city",
-            state = "state",
+            state = "Colorado",
             humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
+            ucrRoleID = 1
         )
 
         projStatusType1 = models.ProjectStatusLUT(
@@ -278,11 +350,10 @@ def populate_db2():
             staffRoleID = 1,
             projectID = 1,
             staffID = 1,
-            role = 1,
             datePledge = datetime(2016,2,2),
             dateRevoked = datetime(2016,2,2),
-            contact = "yes",
-            inactive = "no"
+            contactID = 1,
+            inactiveID = 1
         )
         staffRole1 = models.StaffRoleLUT(
             staffRole = "role",
@@ -318,10 +389,10 @@ def populate_db2():
             aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
-            sex = "male",
-            race = "white",
-            ethnicity = "hispanic",
-            vitalStatus = "v1"
+            sexID = 2,
+            raceID = 1,
+            ethnicityID = 1,
+            vitalStatusID = 1
         )
         patient2 = models.Patient(
             patID = "1",
@@ -337,10 +408,10 @@ def populate_db2():
             aliasMiddleName = "alias_middle",
             dob = datetime(2016,2,2),
             SSN = "999999999",
-            sex = "male",
-            race = "white",
-            ethnicity = "hispanic",
-            vitalStatus = "v1"
+            sexID = 1,
+            raceID = 2,
+            ethnicityID = 1,
+            vitalStatusID = 2
         )
 
         contactInfoStatus1 = models.ContactInfoStatusLUT(
@@ -366,7 +437,7 @@ def populate_db2():
             street2 = "street2",
             city = "city",
             state = "state",
-            zip = "zip",
+            zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
 
@@ -411,7 +482,7 @@ def populate_db2():
             street2 = "street2",
             city = "city",
             state = "state",
-            zip = "zip",
+            zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
         informantPhone = models.InformantPhone(
@@ -465,7 +536,7 @@ def populate_db2():
             currentAge = 1,
             batch = 1,
             siteGrp = 1,
-            finalCode = 1,
+            finalCodeID = 1,
             finalCodeDate = datetime(2016,2,2),
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
@@ -473,7 +544,7 @@ def populate_db2():
             finalCodeStaffID = 1,
             enrollmentStaffID = 1,
             dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
+            abstractStatusID = 1,
             abstractStatusDate = datetime(2016,2,2),
             abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
@@ -498,7 +569,7 @@ def populate_db2():
             currentAge = 1,
             batch = 1,
             siteGrp = 1,
-            finalCode = 1,
+            finalCodeID = 1,
             finalCodeDate = datetime(2016,2,2),
             enrollmentDate = datetime(2016,2,2),
             dateCoordSigned = datetime(2016,2,2),
@@ -506,7 +577,7 @@ def populate_db2():
             finalCodeStaffID = 1,
             enrollmentStaffID = 1,
             dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
+            abstractStatusID = 1,
             abstractStatusDate = datetime(2016,2,2),
             abstractStatusStaffID = 1,
             sentToAbstractorDate = datetime(2016,2,2),
@@ -533,7 +604,7 @@ def populate_db2():
             tracingSourceID = 1,
             projectPatientID = 1,
             date = datetime(2016,2,2),
-            staff = 1,
+            staffID = 1,
             notes = "notes"
         )
         physician = models.Physician(
@@ -545,21 +616,21 @@ def populate_db2():
             aliasFirstName = "alias_fname",
             aliasLastName = "alias_lname",
             aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
+            physicianStatusID = 1,
             physicianStatusDate = datetime(2016,2,2),
         )
 
         physician2 = models.Physician(
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            credentials = "credentials",
-            specialty = "specialty",
-            aliasFirstName = "alias_fname",
-            aliasLastName = "alias_lname",
-            aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
-            physicianStatusDate = datetime(2016,2,2),
+            firstName="fname",
+            lastName="lname",
+            middleName="middle_name",
+            credentials="credentials",
+            specialty="specialty",
+            aliasFirstName="alias_fname",
+            aliasLastName="alias_lname",
+            aliasMiddleName="alias_middle_name",
+            physicianStatusID=1,
+            physicianStatusDate=datetime(2016, 2, 2),
         )
         physicianAddress = models.PhysicianAddress(
             contactInfoSourceID = 1,
@@ -569,7 +640,7 @@ def populate_db2():
             street2 = "street2",
             city = "city",
             state = "state",
-            zip = "zip",
+            zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
 
@@ -619,7 +690,7 @@ def populate_db2():
             street2 = "street2",
             city = "city",
             state = "state",
-            zip = "zip",
+            zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
 
@@ -645,7 +716,7 @@ def populate_db2():
         physicianFacility = models.PhysicianFacility(
             facilityID = 1,
             physicianID = 1,
-            physFacilityStatus = "s1",
+            physFacilityStatusID = 1,
             physFacilityStatusDate = datetime(2016,2,2)
         )
         contactType1 = models.ContactTypeLUT(
@@ -676,83 +747,152 @@ def populate_db2():
             incentiveDate = datetime(2016,2,2)
         )
 
-        db.session.add(incentive)
+        db.session.add(physicianFacilityStatus1)
+        db.session.add(physicianFacilityStatus2)
+        db.session.add(race1)
+        db.session.add(race2)
+        db.session.add(ethnicity1)
+        db.session.add(ethnicity2)
+        db.session.add(sex1)
+        db.session.add(sex2)
+        db.session.add(contacts1)
+        db.session.add(contacts2)
+        db.session.add(inactive1)
+        db.session.add(inactive2)
+        db.session.add(vitalStatus1)
+        db.session.add(vitalStatus2)
+        db.session.add(ucrReportType1)
+        db.session.add(ucrReportType2)
+        db.session.add(finalCode1)
+        db.session.add(finalCode2)
+        db.session.add(abstractStatus2)
+        db.session.add(abstractStatus1)
+        db.session.add(physicianStatus2)
+        db.session.add(physicianStatus1)
+        db.session.commit()
         db.session.add(phoneType1)
         db.session.add(phoneType2)
+        db.session.commit()
         db.session.add(contactInfoSource1)
         db.session.add(contactInfoSource2)
+        db.session.commit()
         db.session.add(contactInfoStatus1)
         db.session.add(contactInfoStatus2)
+        db.session.commit()
         db.session.add(humanSubjectTraining1)
         db.session.add(humanSubjectTraining2)
+        db.session.commit()
         db.session.add(staffRole1)
         db.session.add(staffRole2)
+        db.session.commit()
+        db.session.add(ucrRole)
+        db.session.commit()
         db.session.add(logSubject1)
         db.session.add(logSubject2)
+        db.session.commit()
         db.session.add(phaseStatus1)
         db.session.add(phaseStatus2)
+        db.session.commit()
         db.session.add(projStatusType1)
         db.session.add(projStatusType2)
-        db.session.add(projStatus)
+        db.session.commit()
         db.session.add(staff)
         db.session.add(staff2)
+        db.session.commit()
         db.session.add(grantStatus1)
         db.session.add(grantStatus2)
+        db.session.commit()
         db.session.add(fundingSource1)
         db.session.add(fundingSource2)
-        db.session.add(funding)
+        db.session.commit()
         db.session.add(irb_holder1)
         db.session.add(irb_holder2)
+        db.session.commit()
         db.session.add(project_type1)
         db.session.add(project_type2)
+        db.session.commit()
         db.session.add(project1)
         db.session.add(project2)
+        db.session.add(funding)
+        db.session.commit()
+        db.session.commit()
         db.session.add(budget1)
+        db.session.commit()
         db.session.add(rcsl)
         db.session.add(rcs2)
+        db.session.commit()
         db.session.add(rcl1)
         db.session.add(rcl2)
+        db.session.commit()
         db.session.add(rc)
+        db.session.commit()
         db.session.add(ucr)
+        db.session.commit()
         db.session.add(arcReview)
+        db.session.commit()
         db.session.add(preApp)
+        db.session.commit()
         db.session.add(log)
+        db.session.commit()
         db.session.add(projectStaff)
+        db.session.commit()
         db.session.add(staffTraining)
+        db.session.commit()
         db.session.add(patient)
         db.session.add(patient2)
+        db.session.commit()
         db.session.add(patientAddress)
         db.session.add(patientEmail)
         db.session.add(patientPhone)
+        db.session.commit()
         db.session.add(informant1)
         db.session.add(informant2)
+        db.session.commit()
         db.session.add(informantAddress)
         db.session.add(informantPhone)
+        db.session.commit()
         db.session.add(ctc1)
         db.session.add(ctc2)
+        db.session.commit()
         db.session.add(projectPatient)
         db.session.add(projectPatient2)
+        db.session.commit()
+        db.session.add(projStatus)
+        db.session.commit()
         db.session.add(tracingSource1)
         db.session.add(tracingSource2)
+        db.session.commit()
         db.session.add(tracing)
+        db.session.commit()
         db.session.add(physician)
         db.session.add(physician2)
+        db.session.commit()
         db.session.add(physicianAddress)
         db.session.add(physicianEmail)
         db.session.add(physicianPhone)
         db.session.add(physicianToCTC)
+        db.session.commit()
         db.session.add(facility1)
         db.session.add(facility2)
+        db.session.commit()
         db.session.add(facilityAddress)
         db.session.add(facilityPhone)
+        db.session.commit()
         db.session.add(patientProjectStatusType1)
         db.session.add(patientProjectStatusType2)
+        db.session.commit()
         db.session.add(patientProjectStatus)
+        db.session.commit()
         db.session.add(physicianFacility)
         db.session.add(contactType1)
+        db.session.commit()
         db.session.add(contactType2)
+        db.session.commit()
         db.session.add(contact)
+        db.session.commit()
         db.session.add(ctcFacility)
+        db.session.commit()
+        db.session.add(incentive)
         db.session.commit()
 
 @website.route('/createData')

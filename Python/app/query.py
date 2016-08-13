@@ -9,31 +9,31 @@ def create_all():
     db.create_all()
 
 def get_races():
-    return RACES
+    return db.session.query(Race).all()
 
 def get_ethnicities():
-    return ETHNICITIES
+    return db.session.query(Ethnicity).all()
 
 def get_sexes():
-    return SEXES
+    return db.session.query(Sex).all()
 
 def get_vital_statues():
-    return VITAL_STATUSES
+    return db.session.query(VitalStatus).all()
 
 def get_states():
-    return STATES
+    return db.session.query(State).all()
 
 def get_report_types():
-    return UCR_REPORT_TYPES
+    return db.session.query(UCRReportType).all()
 
 def get_booleans():
-    return BOOLEANS
+    return db.session.query(Boolean).all()
 
 def get_inactive_enums():
-    return INACTIVES
+    return db.session.query(Inactive).all()
 
 def get_contact_enums():
-    return CONTACTS
+    return db.session.query(Contacts).all()
 
 def add(obj):
     db.session.add(obj)
