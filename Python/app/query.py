@@ -8,33 +8,6 @@ from app.models import *
 def create_all():
     db.create_all()
 
-def get_races():
-    return db.session.query(Race).all()
-
-def get_ethnicities():
-    return db.session.query(Ethnicity).all()
-
-def get_sexes():
-    return db.session.query(Sex).all()
-
-def get_vital_statues():
-    return db.session.query(VitalStatus).all()
-
-def get_states():
-    return db.session.query(State).all()
-
-def get_report_types():
-    return db.session.query(UCRReportType).all()
-
-def get_booleans():
-    return db.session.query(Boolean).all()
-
-def get_inactive_enums():
-    return db.session.query(Inactive).all()
-
-def get_contact_enums():
-    return db.session.query(Contacts).all()
-
 def add(obj):
     db.session.add(obj)
 
@@ -53,6 +26,12 @@ def get_arc_reviews():
 def get_arc_review(id):
     return db.session.query(ArcReview).filter_by(arcReviewID = id).first()
 
+def get_booleans():
+    return db.session.query(Boolean).all()
+
+def get_boolean(id):
+    return db.session.query(Boolean).filter_by(booleanID =id).first()
+
 def get_budgets():
     return db.session.query(Budget).all()
     
@@ -64,6 +43,12 @@ def get_contacts():
     
 def get_contact(id):
     return db.session.query(Contact).filter_by(contactID = id).first()
+
+def get_contact_enum(id):
+    return db.session.query(Contacts).filter_by(contactID = id).first()
+
+def get_contact_enums():
+    return db.session.query(Contacts).all()
     
 def get_contact_types():
     return db.session.query(ContactTypeLUT).all()
@@ -88,6 +73,12 @@ def get_ctcs():
 
 def get_ctc(id):
     return db.session.query(CTC).filter_by(ctcID = id).first()
+
+def get_ethnicity(id):
+    return db.session.query(Ethnicity).filter_by(ethnicityID = id).first()
+
+def get_ethnicities():
+    return db.session.query(Ethnicity).all()
 
 def get_ctc_facilities():
     return db.session.query(CTCFacility).all()
@@ -154,6 +145,12 @@ def get_human_subject_trainings():
     
 def get_human_subject_training(id):
     return db.session.query(HumanSubjectTrainingLUT).filter_by(humanSubjectTrainingID = id).first()
+
+def get_inactive_enum(id):
+    return db.session.query(Inactive).filter_by(inactiveID = id).first()
+
+def get_inactive_enums():
+    return db.session.query(Inactive).all()
 
 def get_incentives():
     return db.session.query(Incentive).all()
@@ -298,6 +295,12 @@ def get_physician_facilities():
     
 def get_physician_facility(id):
     return db.session.query(PhysicianFacility).filter_by(physFacilityID = id).first()
+
+def get_physician_facility_status(id):
+    return db.session.query(PhysicianFacilityStatus).filter_by(physicianFacilityStatusID = id).first()
+
+def get_physician_facility_statuses():
+    return db.session.query(PhysicianFacilityStatus).all()
     
 def get_physician_phones():
     return db.session.query(PhysicianPhone).all()
@@ -406,6 +409,12 @@ def get_project_types():
     
 def get_project_type(id):
     return db.session.query(ProjectType).filter_by(projectTypeID=id).first()
+
+def get_race(id):
+    return db.session.query(Race).filter_by(raceID = id).first()
+
+def get_races():
+    return db.session.query(Race).all()
     
 def get_review_committee_status(id):
     return db.session.query(ReviewCommitteeStatusLUT).filter_by(reviewCommitteeStatusID=id).first()
@@ -425,6 +434,12 @@ def get_review_committee_lut(id):
 def get_review_committee_luts():
     return db.session.query(ReviewCommitteeLUT).all()
 
+def get_sex(id):
+    return db.session.query(Sex).filter_by(sexID = id).first()
+
+def get_sexes():
+    return db.session.query(Sex).all()
+
 def get_staffs():
     return db.session.query(Staff).all()
     
@@ -442,6 +457,12 @@ def get_staff_trainings():
     
 def get_staff_training(id):
     return db.session.query(StaffTraining).filter_by(staffTrainingID = id).first()
+
+def get_state(id):
+    return db.session.query(State).filter_by(stateID=id).first()
+
+def get_states():
+    return db.session.query(State).all()
     
 def get_tracings():
     return db.session.query(Tracing).all()
@@ -461,11 +482,23 @@ def get_ucr_reports():
 def get_ucr_report(id):
     return db.session.query(UCRReport).filter_by(ucrReportID = id).first()
 
+def get_report_type(id):
+    return db.session.query(UCRReportType).filter_by(ucrReportTypeID = id).first()
+
+def get_report_types():
+    return db.session.query(UCRReportType).all()
+
 def get_ucr_roles():
     return db.session.query(UCRRole).all()
 
 def get_ucr_role(id):
     return db.session.query(UCRRole).filter_by(ucrRoleID=id).first()
+
+def get_vital_status(id):
+    return db.session.query(VitalStatus).filter_by(vitalStatusID = id).first()
+
+def get_vital_statues():
+    return db.session.query(VitalStatus).all()
     
 def commit():
     return db.session.commit()

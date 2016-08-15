@@ -90,64 +90,79 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_irb0">IRB 0</label>
-                  <select type="text" class="form-control" name="irb0" id="select_irb0" value="{{preApplication.irb0}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.irb0|string() %}
-                            <option selected="selected">{{v}}</option>
+                  <select type="text" class="form-control" name="irb0" id="select_irb0">
+                        {% if preApplication.irb0 %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.irb0 %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irb1">IRB 1</label>
-                  <select type="text" class="form-control" name="irb1" id="select_irb1" value="{{preApplication.irb1}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.irb1|string() %}
-                            <option selected="selected">{{v}}</option>
+                  <select type="text" class="form-control" name="irb1" id="select_irb1">
+                      {% if preApplication.irb1 %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.irb1 %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irb2">IRB 2</label>
-                  <select type="text" class="form-control" name="irb2" id="select_irb2" value="{{preApplication.irb2}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.irb2|string() %}
-                            <option selected="selected">{{v}}</option>
+                  <select type="text" class="form-control" name="irb2" id="select_irb2">
+                      {% if preApplication.irb2 %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.irb2 %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_irb3">IRB 3</label>
-                  <select type="text" class="form-control" name="irb3" id="select_irb3" value="{{preApplication.irb3}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.irb3|string() %}
-                            <option selected="selected">{{v}}</option>
+                  <select type="text" class="form-control" name="irb3" id="select_irb3">
+                      {% if preApplication.irb3 %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.irb3 %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irb4">IRB 4</label>
-                  <select type="text" class="form-control" name="irb4" id="select_irb4" value="{{preApplication.irb4}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.irb4|string() %}
-                            <option selected="selected">{{v}}</option>
+                  <select type="text" class="form-control" name="irb4" id="select_irb4">
+                      {% if preApplication.irb4 %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.irb4 %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
@@ -159,25 +174,31 @@
                 <div class = "col-md-2">
                   <label for="select_updb">UPDB</label>
                   <select type="text" class="form-control" name="updb" id="select_updb" value="{{preApplication.updb}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.updb|string() %}
-                            <option selected="selected">{{v}}</option>
+                      {% if preApplication.updb %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.updb %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
                     <label for="select_ptContact">PT Contact</label>
                     <select type="text" class="form-control" name="ptContact" id="select_ptContact" value="{{preApplication.ptContact}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.ptContact|string() %}
-                            <option selected="selected">{{v}}</option>
+                      {% if preApplication.ptContact %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.ptContact %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
@@ -193,13 +214,16 @@
                 <div class = "col-md-2">
                   <label for="select_link">Link</label>
                   <select type="text" class="form-control" name="link" id="select_link" value="{{preApplication.link}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == preApplication.link|string() %}
-                            <option selected="selected">{{v}}</option>
+                      {% if preApplication.link %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not preApplication.link %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">

@@ -284,8 +284,8 @@ class FacilityAddressForm(BaseForm):
         []+COMMON_STRING_VALIDATORS)
     city = StringField('city',
         []+COMMON_STRING_VALIDATORS)
-    state = StringField('state',
-        []+COMMON_STRING_VALIDATORS)
+    stateID = IntegerField('stateID',
+        []+COMMON_INTEGER_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -298,6 +298,11 @@ class FacilityAddressForm(BaseForm):
         contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
         if contactSource is None:
             self.contactInfoSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        state = query.get_contact_info_source(self.stateID.data)
+        if state is None:
+            self.stateID.errors.append("ID not found")
             hasErrors = True
 
         facility = query.get_facility(self.facilityID.data)
@@ -478,8 +483,8 @@ class InformantAddressForm(BaseForm):
         []+COMMON_STRING_VALIDATORS)
     city = StringField('city',
         []+COMMON_STRING_VALIDATORS)
-    state = StringField('state',
-        []+COMMON_STRING_VALIDATORS)
+    stateID = IntegerField('stateID',
+        []+COMMON_INTEGER_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -492,6 +497,11 @@ class InformantAddressForm(BaseForm):
         contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
         if contactSource is None:
             self.contactInfoSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        state = query.get_contact_info_source(self.stateID.data)
+        if state is None:
+            self.stateID.errors.append("ID not found")
             hasErrors = True
 
         informant = query.get_informant(self.informantID.data)
@@ -615,14 +625,38 @@ class PatientForm(BaseForm):
         format = DATE_FORMAT)
     SSN = IntegerField('SSN',
         []+COMMON_INTEGER_VALIDATORS)
-    sex = StringField('sex',
-        []+COMMON_STRING_VALIDATORS)
-    race = StringField('race',
-        []+COMMON_STRING_VALIDATORS)
-    ethnicity = StringField('ethnicity',
-        []+COMMON_STRING_VALIDATORS)
-    vitalStatus = StringField('vitalStatus',
-        []+COMMON_STRING_VALIDATORS)
+    sexID = StringField('sexID',
+        []+COMMON_INTEGER_VALIDATORS)
+    raceID = StringField('raceID',
+        []+COMMON_INTEGER_VALIDATORS)
+    ethnicityID = StringField('ethnicityID',
+        []+COMMON_INTEGER_VALIDATORS)
+    vitalStatusID = StringField('vitalStatusID',
+        []+COMMON_INTEGER_VALIDATORS)
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        sex = query.get_sex(self.sexID.data)
+        if sex is None:
+            self.sexID.errors.append("ID not found")
+            hasErrors = True
+
+        race = query.get_race(self.raceID.data)
+        if race is None:
+            self.raceID.errors.append("ID not found")
+            hasErrors = True
+
+        ethnicity = query.get_ethnicity(self.ethnicityID.data)
+        if ethnicity is None:
+            self.ethnicityID.errors.append("ID not found")
+            hasErrors = True
+
+        vitalStatus = query.get_vital_status(self.vitalStatusID.data)
+        if vitalStatus is None:
+            self.vitalStatusID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
 
 class PatientAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
@@ -637,8 +671,8 @@ class PatientAddressForm(BaseForm):
         []+COMMON_STRING_VALIDATORS)
     city = StringField('city',
         []+COMMON_STRING_VALIDATORS)
-    state = StringField('state',
-        []+COMMON_STRING_VALIDATORS)
+    stateID = IntegerField('stateID',
+        []+COMMON_INTEGER_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -651,6 +685,11 @@ class PatientAddressForm(BaseForm):
         contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
         if contactSource is None:
             self.contactInfoSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        state = query.get_contact_info_source(self.stateID.data)
+        if state is None:
+            self.stateID.errors.append("ID not found")
             hasErrors = True
 
         patient = query.get_patient(self.patientID.data)
@@ -806,7 +845,7 @@ class PhysicianFacilityForm(BaseForm):
         []+COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
         []+COMMON_INTEGER_VALIDATORS)
-    physFacilityStatus = IntegerField('physFacilityStatus',
+    physFacilityStatusID = IntegerField('physFacilityStatus',
         []+COMMON_INTEGER_VALIDATORS)
     physFacilityStatusDate = DateField('physFacilityStatusDate',
         []+COMMON_DATE_VALIDATORS,
@@ -818,6 +857,11 @@ class PhysicianFacilityForm(BaseForm):
         facility = query.get_facility(self.facilityID.data)
         if facility is None:
             self.facilityID.errors.append("ID not found")
+            hasErrors = True
+
+        status = query.get_physician_facility_status(self.physFacilityStatusID.data)
+        if status is None:
+            self.physFacilityStatusID.errors.append("ID not found")
             hasErrors = True
 
         physician = query.get_physician(self.physicianID.data)
@@ -839,8 +883,8 @@ class PhysicianAddressForm(BaseForm):
         []+COMMON_STRING_VALIDATORS)
     city = StringField('city',
         []+COMMON_STRING_VALIDATORS)
-    state = StringField('state',
-        []+COMMON_STRING_VALIDATORS)
+    stateID = IntegerField('stateID',
+        []+COMMON_INTEGER_VALIDATORS)
     zip = StringField('zip',
         []+COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -853,6 +897,11 @@ class PhysicianAddressForm(BaseForm):
         contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
         if contactSource is None:
             self.contactInfoSourceID.errors.append("ID not found")
+            hasErrors = True
+
+        state = query.get_contact_info_source(self.stateID.data)
+        if state is None:
+            self.stateID.errors.append("ID not found")
             hasErrors = True
 
         physician = query.get_physician(self.physicianID.data)
@@ -1247,10 +1296,10 @@ class ProjectStaffForm(BaseForm):
     dateRevoked = DateField('dateRevoked',
         []+COMMON_DATE_VALIDATORS,
         format = DATE_FORMAT)
-    contact = StringField('contact',
-        []+COMMON_STRING_VALIDATORS)
-    inactive = StringField('inactive',
-        []+COMMON_STRING_VALIDATORS)
+    contactID = StringField('contactID',
+        []+COMMON_INTEGER_VALIDATORS)
+    inactiveID = StringField('inactiveID',
+        []+COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1264,6 +1313,16 @@ class ProjectStaffForm(BaseForm):
         staff = query.get_staff(self.staffID.data)
         if staff is None:
             self.staffID.errors.append("ID not found")
+            hasErrors = True
+
+        contact = query.get_contact_enum(self.contactID.data)
+        if contact is None:
+            self.contactID.errors.append("ID not found")
+            hasErrors = True
+
+        inactive = query.get_inactive_enum(self.inactiveID.data)
+        if inactive is None:
+            self.inactiveID.errors.append("ID not found")
             hasErrors = True
 
         staffRole = query.get_staff_role(self.staffRoleID.data)

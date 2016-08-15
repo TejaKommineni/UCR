@@ -92,12 +92,12 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_dxState">Dx State</label>        
-                  <select type="text" class="form-control" name="dxState" id="select_dxState" value="{{ctc["dxState"]}}" readonly="readonly" disabled="disabled">
-                      {% for state in form["states"].enums %}
-                        {% if state == ctc["state"] %}
-                            <option selected="selected">{{state}}</option>
+                  <select type="text" class="form-control" name="dxState" id="select_dxState" readonly="readonly" disabled="disabled">
+                      {% for state in form["states"] %}
+                        {% if state.stateID == ctc["dxStateID"]%}
+                            <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>
                         {% else %}
-                            <option>{{state}}</option>
+                            <option value="{{state.stateID}}">{{state}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

@@ -73,33 +73,49 @@
                 </div>
                <div class="col-md-2">  
                   <label for="select_sex">Sex</label>        
-                  <select type="text" class="form-control" name="race" id="select_sex" value="{{form["patient"]["sex"]}}" readonly="readonly" disabled="disabled">
-                  {% for sex in form["sexes"].enums %}
-                    <option>{{sex}}</option>
+                  <select type="text" class="form-control" name="sexID" id="select_sex" readonly="readonly" disabled="disabled">
+                  {% for sex in form["sexes"] %}
+                    {% if sex.sexID == form["patient"].sex.sexID %}
+                       <option value="{{sex.sexID}}" selected="selected">{{sex.sex}}</option>
+                    {% else %}
+                       <option value="{{sex.sexID}}">{{sex.sex}}</option>
+                     {% endif %}
                   {% endfor %}
                   </select>
                </div>
                <div class="col-md-2">  
                   <label for="select_race">Race</label>        
-                  <select type="text" class="form-control" name="race" id="select_race" value="{{form["patient"]["race"]}}" readonly="readonly" disabled="disabled">
-                  {% for race in form["races"].enums %}
-                    <option>{{race}}</option>
+                  <select type="text" class="form-control" name="raceID" id="select_race" readonly="readonly" disabled="disabled">
+                  {% for race in form["races"] %}
+                    {% if race.raceID == form["patient"].race.raceID %}
+                       <option value="{{race.raceID}}" selected="selected">{{race.race}}</option>
+                    {% else %}
+                       <option value="{{race.raceID}}">{{race.race}}</option>
+                     {% endif %}
                   {% endfor %}
                   </select>
                </div>
                <div class="col-md-2">  
                   <label for="select_ethnicity">Ethnicity</label>        
-                  <select type="text" class="form-control" name="ethnicity" id="select_ethnicity" value="{{form["patient"]["ethnicity"]}}" readonly="readonly" disabled="disabled">
-                  {% for ethnicity in form["ethnicities"].enums %}
-                    <option>{{ethnicity}}</option>
+                  <select type="text" class="form-control" name="ethnicityID" id="select_ethnicity" readonly="readonly" disabled="disabled">
+                  {% for ethnicity in form["ethnicities"] %}
+                    {% if ethnicity.ethnicityID == form["patient"].ethnicity.ethnicityID %}
+                       <option value="{{ethnicity.ethnicityID}}" selected="selected">{{ethnicity.ethnicity}}</option>
+                    {% else %}
+                       <option value="{{ethnicity.ethnicityID}}">{{ethnicity.ethnicity}}</option>
+                     {% endif %}
                   {% endfor %}
                   </select>
                </div>
                <div class="col-md-2">  
                   <label for="select_vitalStatus">Vital Status</label>        
-                  <select type="text" class="form-control" name="vitalStatus" id="select_vitalStatus" value="{{form["patient"]["vitalStatus"]}}" readonly="readonly" disabled="disabled">
-                  {% for vitalStatus in form["vitalStatuses"].enums %}
-                    <option>{{vitalStatus}}</option>
+                  <select type="text" class="form-control" name="vitalStatusID" id="select_vitalStatus" readonly="readonly" disabled="disabled">
+                  {% for vitalStatus in form["vitalStatuses"] %}
+                    {% if vitalStatus.vitalStatusID == form["patient"].vitalStatus.vitalStatusID %}
+                       <option value="{{vitalStatus.vitalStatusID}}" selected="selected">{{vitalStatus.vitalStatus}}</option>
+                    {% else %}
+                       <option value="{{vitalStatus.vitalStatusID}}">{{vitalStatus.ethnicity}}</option>
+                     {% endif %}
                   {% endfor %}
                   </select>
                </div>
@@ -129,7 +145,7 @@
         <li><a href="#patientCTCsTab" role="tab" data-toggle="tab">CTCs</a></li>
         <li><a href="#patientInformantsTab" role="tab" data-toggle="tab">Informants</a></li>
     </ul>
-    <div class="tab-content">        
+    <div class="tab-content">
         <div class="tab-pane active" id="patientAddressTab">
             <ul class ="nav nav-tabs" role="tablist">
                 {% for patientAddress in form["patientAddresses"] %}
@@ -282,5 +298,5 @@
             </div>
         </div>
     </div>
-    
+
 {% endblock %}

@@ -26,12 +26,12 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_state">State</label>        
-                  <select type="text" class="form-control" name="state" id="select_state" value="{{facilityAddress["state"]}}">
-                      {% for state in form["states"].enums %}
-                        {% if state == facilityAddress["state"] %}
-                            <option selected="selected">{{state}}</option>
+                  <select type="text" class="form-control" name="stateID" id="select_state">
+                      {% for state in form["states"] %}
+                        {% if state.stateID == facilityAddress["stateID"] %}
+                            <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>
                         {% else %}
-                            <option>{{state}}</option>
+                            <option value="{{state.stateID}}">{{state.state}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

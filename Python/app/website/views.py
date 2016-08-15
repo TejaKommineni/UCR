@@ -21,6 +21,18 @@ website = Blueprint('website',__name__, template_folder='website_templates')
 def populate_db2():
         db.create_all()
 
+        state1 = models.State(
+            state = "Utah"
+        )
+        state2 = models.State(
+            state = "California"
+        )
+        boolean1 = models.Boolean(
+            boolean = "yes"
+        )
+        boolean2 = models.Boolean(
+            boolean = "no"
+        )
         race1 = models.Race(
             race = "white"
         )
@@ -254,7 +266,7 @@ def populate_db2():
             credentials = "credentials",
             street = "street",
             city = "city",
-            state = "Utah",
+            stateID = 1,
             humanSubjectTrainingExp = datetime(2016,2,2),
             ucrRoleID = 1
         )
@@ -271,7 +283,7 @@ def populate_db2():
             credentials = "credentials",
             street = "street",
             city = "city",
-            state = "Colorado",
+            stateID = 2,
             humanSubjectTrainingExp = datetime(2016,2,2),
             ucrRoleID = 1
         )
@@ -436,7 +448,7 @@ def populate_db2():
             street = "street",
             street2 = "street2",
             city = "city",
-            state = "state",
+            stateID = 1,
             zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
@@ -481,7 +493,7 @@ def populate_db2():
             street = "street",
             street2 = "street2",
             city = "city",
-            state = "state",
+            stateID = 2,
             zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
@@ -505,7 +517,7 @@ def populate_db2():
             dxStreet1 = "street1",
             dxStreet2 = "street2",
             dxCity = "city",
-            dxState = "state",
+            dxStateID = 1,
             dxZip = 99999,
             dxCounty = "county",
             dnc = "dnc",
@@ -523,7 +535,7 @@ def populate_db2():
             dxStreet1 = "street1",
             dxStreet2 = "street2",
             dxCity = "city",
-            dxState = "state",
+            dxStateID = 2,
             dxZip = 99999,
             dxCounty = "county",
             dnc = "dnc",
@@ -639,7 +651,7 @@ def populate_db2():
             street = "street",
             street2 = "street2",
             city = "city",
-            state = "state",
+            stateID = 1,
             zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
@@ -689,7 +701,7 @@ def populate_db2():
             street = "street",
             street2 = "street2",
             city = "city",
-            state = "state",
+            stateID = 1,
             zip = "12345",
             addressStatusDate = datetime(2016,2,2),
         )
@@ -746,7 +758,10 @@ def populate_db2():
             incentiveDescription = "desc",
             incentiveDate = datetime(2016,2,2)
         )
-
+        db.session.add(state1)
+        db.session.add(state2)
+        db.session.add(boolean1)
+        db.session.add(boolean2)
         db.session.add(physicianFacilityStatus1)
         db.session.add(physicianFacilityStatus2)
         db.session.add(race1)
@@ -769,129 +784,84 @@ def populate_db2():
         db.session.add(abstractStatus1)
         db.session.add(physicianStatus2)
         db.session.add(physicianStatus1)
-        db.session.commit()
         db.session.add(phoneType1)
         db.session.add(phoneType2)
-        db.session.commit()
         db.session.add(contactInfoSource1)
         db.session.add(contactInfoSource2)
-        db.session.commit()
         db.session.add(contactInfoStatus1)
         db.session.add(contactInfoStatus2)
-        db.session.commit()
         db.session.add(humanSubjectTraining1)
         db.session.add(humanSubjectTraining2)
-        db.session.commit()
         db.session.add(staffRole1)
         db.session.add(staffRole2)
-        db.session.commit()
         db.session.add(ucrRole)
-        db.session.commit()
         db.session.add(logSubject1)
         db.session.add(logSubject2)
-        db.session.commit()
         db.session.add(phaseStatus1)
         db.session.add(phaseStatus2)
-        db.session.commit()
         db.session.add(projStatusType1)
         db.session.add(projStatusType2)
-        db.session.commit()
         db.session.add(staff)
         db.session.add(staff2)
-        db.session.commit()
         db.session.add(grantStatus1)
         db.session.add(grantStatus2)
-        db.session.commit()
         db.session.add(fundingSource1)
         db.session.add(fundingSource2)
-        db.session.commit()
         db.session.add(irb_holder1)
         db.session.add(irb_holder2)
-        db.session.commit()
         db.session.add(project_type1)
         db.session.add(project_type2)
-        db.session.commit()
         db.session.add(project1)
         db.session.add(project2)
         db.session.add(funding)
-        db.session.commit()
-        db.session.commit()
         db.session.add(budget1)
-        db.session.commit()
         db.session.add(rcsl)
         db.session.add(rcs2)
-        db.session.commit()
         db.session.add(rcl1)
         db.session.add(rcl2)
-        db.session.commit()
         db.session.add(rc)
-        db.session.commit()
         db.session.add(ucr)
-        db.session.commit()
         db.session.add(arcReview)
-        db.session.commit()
         db.session.add(preApp)
-        db.session.commit()
         db.session.add(log)
-        db.session.commit()
         db.session.add(projectStaff)
         db.session.commit()
         db.session.add(staffTraining)
-        db.session.commit()
         db.session.add(patient)
         db.session.add(patient2)
-        db.session.commit()
         db.session.add(patientAddress)
         db.session.add(patientEmail)
         db.session.add(patientPhone)
-        db.session.commit()
         db.session.add(informant1)
         db.session.add(informant2)
-        db.session.commit()
         db.session.add(informantAddress)
         db.session.add(informantPhone)
-        db.session.commit()
         db.session.add(ctc1)
         db.session.add(ctc2)
-        db.session.commit()
         db.session.add(projectPatient)
         db.session.add(projectPatient2)
-        db.session.commit()
         db.session.add(projStatus)
-        db.session.commit()
         db.session.add(tracingSource1)
         db.session.add(tracingSource2)
-        db.session.commit()
         db.session.add(tracing)
-        db.session.commit()
         db.session.add(physician)
         db.session.add(physician2)
-        db.session.commit()
         db.session.add(physicianAddress)
         db.session.add(physicianEmail)
         db.session.add(physicianPhone)
         db.session.add(physicianToCTC)
-        db.session.commit()
         db.session.add(facility1)
         db.session.add(facility2)
-        db.session.commit()
         db.session.add(facilityAddress)
         db.session.add(facilityPhone)
-        db.session.commit()
         db.session.add(patientProjectStatusType1)
         db.session.add(patientProjectStatusType2)
-        db.session.commit()
         db.session.add(patientProjectStatus)
-        db.session.commit()
         db.session.add(physicianFacility)
         db.session.add(contactType1)
-        db.session.commit()
         db.session.add(contactType2)
-        db.session.commit()
         db.session.add(contact)
-        db.session.commit()
         db.session.add(ctcFacility)
-        db.session.commit()
         db.session.add(incentive)
         db.session.commit()
 
@@ -1655,7 +1625,7 @@ def update_ctc(ctcID):
                     ctc.dxStreet1 = request.form['dxStreet1']
                     ctc.dxStreet2 = request.form['dxStreet2']
                     ctc.dxCity = request.form['dxCity']
-                    ctc.dxState = request.form['dxState']
+                    ctc.dxStateID = request.form['dxStateID']
                     ctc.dxZip = request.form['dxZip']
                     ctc.dxCounty = request.form['dxCounty']
                     ctc.dnc = request.form['dnc']
@@ -1697,7 +1667,7 @@ def create_ctc(ctcID=None):
                     dxStreet1 = request.form['dxStreet1'],
                     dxStreet2 = request.form['dxStreet2'],
                     dxCity = request.form['dxCity'],
-                    dxState = request.form['dxState'],
+                    dxStateID = request.form['dxStateID'],
                     dxZip = request.form['dxZip'],
                     dxCounty = request.form['dxCounty'],
                     dnc = request.form['dnc'],
@@ -2161,7 +2131,7 @@ def update_facility_address(facilityAddressID):
                     facilityAddress.street = request.form['street']
                     facilityAddress.street2 = request.form['street2']
                     facilityAddress.city = request.form['city']
-                    facilityAddress.state = request.form['state']
+                    facilityAddress.stateID = request.form['stateID']
                     facilityAddress.zip = request.form['zip']
                     facilityAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
@@ -2196,7 +2166,7 @@ def create_facility_address(facilityAddressID = None):
                     street = request.form['street'],
                     street2 = request.form['street2'],
                     city = request.form['city'],
-                    state = request.form['state'],
+                    stateID = request.form['stateID'],
                     zip = request.form['zip'],
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
@@ -2780,7 +2750,7 @@ def update_informant_address(informantAddressID):
                     informantAddress.street = request.form['street']
                     informantAddress.street2 = request.form['street2']
                     informantAddress.city = request.form['city']
-                    informantAddress.state = request.form['state']
+                    informantAddress.stateID = request.form['stateID']
                     informantAddress.zip = request.form['zip']
                     informantAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
@@ -2815,7 +2785,7 @@ def create_informant_address(informantAddressID = None):
                     street = request.form['street'],
                     street2 = request.form['street2'],
                     city = request.form['city'],
-                    state = request.form['state'],
+                    stateID = request.form['stateID'],
                     zip = request.form['zip'],
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
@@ -3294,10 +3264,10 @@ def update_patient(patientID):
                     patient.aliasMiddleName = request.form['aliasMiddleName']
                     patient.dob = datetime.strptime(request.form['dob'],"%Y-%m-%d")
                     patient.SSN = request.form['SSN']
-                    patient.sex = request.form['sex']
-                    patient.race = request.form['race']
-                    patient.ethnicity = request.form['ethnicity']
-                    patient.vitalStatus = request.form['vitalStatus']
+                    patient.sexID = request.form['sexID']
+                    patient.raceID = request.form['raceID']
+                    patient.ethnicityID = request.form['ethnicityID']
+                    patient.vitalStatusID = request.form['vitalStatusID']
                     query.commit()
                     return patient.json()
                 else:
@@ -3337,9 +3307,10 @@ def create_patient(patientID=None):
                    aliasMiddleName = request.form['aliasMiddleName'],
                    dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
                    SSN = request.form['SSN'],
-                   sex = request.form['sex'],
-                   ethnicity = request.form['ethnicity'],
-                   vitalStatus = request.form['vitalStatus']
+                   raceID = request.form['raceID'],
+                   sexID = request.form['sexID'],
+                   ethnicityID = request.form['ethnicityID'],
+                   vitalStatusID = request.form['vitalStatusID']
                     )
                 query.add(patient)
                 return jsonify({'patientID':patient.patientID})
@@ -3400,7 +3371,7 @@ def update_patient_address(patAddressID):
                     patientAddress.street = request.form['street']
                     patientAddress.street2 = request.form['street2']
                     patientAddress.city = request.form['city']
-                    patientAddress.state = request.form['state']
+                    patientAddress.stateID = request.form['stateID']
                     patientAddress.zip = request.form['zip']
                     patientAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
@@ -3435,7 +3406,7 @@ def create_patient_address(patAddressID = None):
                     street = request.form['street'],
                     street2 = request.form['street2'],
                     city = request.form['city'],
-                    state = request.form['state'],
+                    stateID = request.form['stateID'],
                     zip = request.form['zip'],
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
@@ -4153,7 +4124,7 @@ def update_physician_address(physicianAddressID):
                     physicianAddress.street = request.form['street']
                     physicianAddress.street2 = request.form['street2']
                     physicianAddress.city = request.form['city']
-                    physicianAddress.state = request.form['state']
+                    physicianAddress.stateID = request.form['stateID']
                     physicianAddress.zip = request.form['zip']
                     physicianAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
                     query.commit()
@@ -4188,7 +4159,7 @@ def create_physician_address(physicianAddressID=None):
                     street = request.form['street'],
                     street2 = request.form['street2'],
                     city = request.form['city'],
-                    state = request.form['state'],
+                    stateID = request.form['stateID'],
                     zip = request.form['zip'],
                     addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
                     )
@@ -4665,7 +4636,6 @@ def get_pre_application(preApplicationID=None):
             if preApplication is not None:
                 form= {}
                 form["projects"] = query.get_projects()
-                form["booleans"] = query.get_booleans()
                 return render_template("pre_application_form.html",form=form,preApplication=preApplication)
             else:
                 return item_not_found("PreApplicationID {} not found".format(preApplicationID))
@@ -4831,7 +4801,6 @@ def get_project(projectID=None):
                 form["reviewCommitteeStatuses"] = query.get_review_committee_statuses()
                 form["reviewCommitteeLUTs"] = query.get_review_committee_luts()
                 form["reportTypes"] = query.get_report_types()
-                form["booleans"] = query.get_booleans()
                 form["inactives"] = query.get_inactive_enums()
                 form["contacts"] = query.get_contact_enums()
                 form["staffRoles"] = query.get_staff_roles()
@@ -4980,7 +4949,6 @@ def get_project_patient(participantID=None):
                 form = {}
                 form["projects"] = query.get_projects()
                 form["staff"] = query.get_staffs()
-                form["booleans"] = query.get_booleans()
                 form["states"] = query.get_states()
                 form["staff"] = query.get_staffs()
                 form["ctcs"] = query.get_ctcs()
@@ -5847,7 +5815,7 @@ def update_staff(staffID):
                     staff.credentials = request.form['credentials']
                     staff.street = request.form['street']
                     staff.city = request.form['city']
-                    staff.state = request.form['state']
+                    staff.stateID = request.form['stateID']
                     staff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
                     staff.ucrRoleID = request.form['ucrRoleID']
                     query.commit()
@@ -5888,7 +5856,7 @@ def create_staff(staffID = None):
                     credentials = request.form['credentials'],
                     street = request.form['street'],
                     city = request.form['city'],
-                    state = request.form['state'],
+                    stateID = request.form['stateID'],
                     humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
                     ucrRoleID = request.form['ucrRoleID']
                 )

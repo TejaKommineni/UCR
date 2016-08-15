@@ -36,83 +36,6 @@ class CustomModel(db.Model):
     def json(self):
         return jsonify(self.dict())
 
-##############################################################################
-# Models
-##############################################################################
-
-
-class Race(CustomModel):
-    __tablename__ = "RaceLUT"
-    raceID = db.Column('raceID', db.Integer, primary_key=True)
-    race = db.Column('race', db.String)
-
-
-class Ethnicity(CustomModel):
-    __tablename__ = "EthnicityLUT"
-    ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True)
-    ethnicity = db.Column('ethnicity', db.String)
-
-
-# class PhoneSource(CustomModel):
-#     __tablename__ = "PhoneSourceLUT"
-#     phoneSourceID = db.Column('phoneSourceID', db.Integer, primary_key=True)
-#     phoneSource = db.Column('phoneSource', db.String)
-
-
-class Sex(CustomModel):
-    __tablename__ = "SexLUT"
-    sexID = db.Column('sexID', db.Integer, primary_key=True)
-    sex = db.Column('sex', db.String)
-
-
-class VitalStatus(CustomModel):
-    __tablename__ = "VitalStatusLUT"
-    vitalStatusID = db.Column('vitalStatusID', db.Integer, primary_key=True)
-    vitalStatus = db.Column('vitalStatus', db.String)
-
-
-class Contacts(CustomModel):
-    __tablename__ = "ContactsLUT"
-    contactID = db.Column('contactID', db.Integer, primary_key=True)
-    contact = db.Column('contact', db.String)
-
-
-class Inactive(CustomModel):
-    __tablename__ = "InactiveLUT"
-    inactiveID = db.Column('inactiveID', db.Integer, primary_key=True)
-    inactive = db.Column('inactive', db.String)
-
-
-# class AddressStatusSource(CustomModel):
-#     __tablename__ = "AddressStatusSourceLUT"
-#     addressStatusSourceID = db.Column('addressStatusSourceID', db.Integer, primary_key=True)
-#     addressStatusSource = db.Column('addressStatusSource', db.String)
-
-
-class UCRReportType(CustomModel):
-    __tablename__ = "UCRReportTypeLUT"
-    ucrReportTypeID = db.Column('ucrReportTypeID', db.Integer, primary_key=True)
-    ucrReportType = db.Column('ucrReportType', db.String)
-
-
-# class Boolean(CustomModel):
-#     __tablename__ = "BooleanLUT"
-#     booleanID = db.Column('booleanID', db.Integer, primary_key=True)
-#     boolean = db.Column('boolean', db.String)
-
-
-# class State(CustomModel):
-#     __tablename__ = "StateLUT"
-#     stateID = db.Column('stateID', db.Integer, primary_key=True)
-#     state = db.Column('state', db.String)
-
-
-class PhysicianFacilityStatus(CustomModel):
-    __tablename__ = "PhysicianFacilityStatusLUT"
-    physicianFacilityStatusID = db.Column('physicianFacilityStatusID', db.Integer, primary_key=True)
-    physicianFacilityStatus = db.Column('physicianFacilityStatus', db.String)
-
-
 class AbstractStatus(CustomModel):
     __tablename__ = "AbstractStatusLUT"
 
@@ -270,6 +193,11 @@ class Contact(CustomModel):
         self.initials,
         self.notes)
 
+class Contacts(CustomModel):
+    __tablename__ = "ContactsLUT"
+    contactID = db.Column('contactID', db.Integer, primary_key=True)
+    contact = db.Column('contact', db.String)
+
 class ContactInfoSourceLUT(CustomModel):
     __tablename__ = "ContactInfoSourceLUT"
 
@@ -328,7 +256,7 @@ class CTC(CustomModel):
     dxStreet1 = db.Column('dx_street1',db.String)
     dxStreet2 = db.Column('dx_street2',db.String)
     dxCity = db.Column('dx_city',db.String)
-    dxState = db.Column('dx_state',db.String)
+    dxStateID = db.Column('dx_stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     dxZip = db.Column('dx_zip',db.String)
     dxCounty = db.Column('dx_county',db.String)
     dnc = db.Column('dnc',db.String)
@@ -342,6 +270,7 @@ class CTC(CustomModel):
     # M - 1
     ctcFacilities = db.relationship("CTCFacility",back_populates="ctc")
     #
+    dxState = db.relationship("State")
     physicianToCTC = db.relationship("PhysicianToCTC",back_populates="ctc")
 
     def __repr__(self):
@@ -403,6 +332,11 @@ class CTCFacility(CustomModel):
         self.ctcID,
         self.facilityID)
 
+class Ethnicity(CustomModel):
+    __tablename__ = "EthnicityLUT"
+    ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True)
+    ethnicity = db.Column('ethnicity', db.String)
+
 class Facility(CustomModel):
     __tablename__ = "Facility"
 
@@ -455,12 +389,13 @@ class FacilityAddress(CustomModel):
     street = db.Column('street',db.String)
     street2 = db.Column('street2',db.String)
     city = db.Column('city',db.String)
-    state = db.Column('state',db.String)
+    stateID = db.Column('stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('facility_address_status_date',db.Date)
 
     # Relationships
     # M - 1, many facilities can be at the same address
+    state = db.relationship("State")
     facilities = db.relationship("Facility",back_populates="facilityAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
@@ -666,6 +601,11 @@ class IRBHolderLUT(CustomModel):
             self.holder,
             self.holderDefinition)
 
+class Inactive(CustomModel):
+    __tablename__ = "InactiveLUT"
+    inactiveID = db.Column('inactiveID', db.Integer, primary_key=True)
+    inactive = db.Column('inactive', db.String)
+
 class Incentive(CustomModel):
     __tablename__ = "Incentive"
 
@@ -734,12 +674,13 @@ class InformantAddress(CustomModel):
     street = db.Column('street',db.String)
     street2 = db.Column('street2',db.String)
     city = db.Column('city',db.String)
-    state = db.Column('state',db.String)
+    stateID = db.Column('stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('address_status_date',db.Date)
 
     # Relationships
     # 1 - M, one informant may have multiple addresses
+    state = db.relationship("State")
     informant = db.relationship("Informant", back_populates = "informantAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
@@ -949,11 +890,12 @@ class PatientAddress(CustomModel):
     street = db.Column('street',db.String)
     street2 = db.Column('street2',db.String)
     city = db.Column('city',db.String)
-    state = db.Column('state',db.String)
+    stateID = db.Column('stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip',db.String)
     addressStatusDate = db.Column('address_status_date',db.Date)
 
     # Relationships
+    state = db.relationship("State")
     patients = db.relationship("Patient",back_populates="patientAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
@@ -1197,12 +1139,13 @@ class PhysicianAddress(CustomModel):
     street = db.Column('physician_street',db.String)
     street2 = db.Column('physician_street2',db.String)
     city = db.Column('physician_city',db.String)
-    state = db.Column('physician_state',db.String)
+    stateID = db.Column('physician_stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('physician_zip',db.String)
     addressStatusDate = db.Column('physician_address_status_date',db.Date)
 
     # Relationship
     # M - 1, many physicians can be at the same address
+    state = db.relationship("State")
     physicians = db.relationship("Physician",back_populates="physicianAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
@@ -1291,6 +1234,11 @@ class PhysicianFacility(CustomModel):
         self.physicianID,
         self.physFacilityStatus,
         self.physFacilityStatusDate)
+
+class PhysicianFacilityStatus(CustomModel):
+    __tablename__ = "PhysicianFacilityStatusLUT"
+    physicianFacilityStatusID = db.Column('physicianFacilityStatusID', db.Integer, primary_key=True)
+    physicianFacilityStatus = db.Column('physicianFacilityStatus', db.String)
 
 class PhysicianPhone(CustomModel):
     __tablename__ = "PhysicianPhone"
@@ -1673,8 +1621,8 @@ class ProjectStaff(CustomModel):
     staffID = db.Column('staffID',db.Integer, db.ForeignKey('Staff.staffID'))
     datePledge = db.Column('date_pledge',db.Date)
     dateRevoked = db.Column('date_revoked',db.Date)
-    contactID = db.Column('contact', db.Integer, db.ForeignKey('ContactsLUT.contactID'))
-    inactiveID = db.Column('inactive', db.Integer, db.ForeignKey('InactiveLUT.inactiveID'))
+    contactID = db.Column('contactID', db.Integer, db.ForeignKey('ContactsLUT.contactID'))
+    inactiveID = db.Column('inactiveID', db.Integer, db.ForeignKey('InactiveLUT.inactiveID'))
 
     contact = db.relationship("Contacts")
     inactive = db.relationship("Inactive")
@@ -1787,6 +1735,11 @@ class ProjectType(CustomModel):
         self.projectType,
         self.projectTypeDefinition)
 
+class Race(CustomModel):
+    __tablename__ = "RaceLUT"
+    raceID = db.Column('raceID', db.Integer, primary_key=True)
+    race = db.Column('race', db.String)
+
 class ReviewCommitteeStatusLUT(CustomModel):
     __tablename__ = 'ReviewCommitteeStatusLUT'
 
@@ -1871,6 +1824,11 @@ class ReviewCommitteeLUT(CustomModel):
         self.reviewComittee,
         self.rcDescription)
 
+class Sex(CustomModel):
+    __tablename__ = "SexLUT"
+    sexID = db.Column('sexID', db.Integer, primary_key=True)
+    sex = db.Column('sex', db.String)
+
 class Staff(CustomModel):
     __tablename__ = 'Staff'
 
@@ -1887,7 +1845,7 @@ class Staff(CustomModel):
     credentials = db.Column('credentials',db.String)
     street = db.Column('street',db.String)
     city = db.Column('city',db.String)
-    state = db.Column('state',db.String)
+    stateID = db.Column('stateID',db.Integer, db.ForeignKey("StateLUT.stateID"))
     humanSubjectTrainingExp = db.Column('human_sub_training_exp',db.Date)
     ucrRoleID = db.Column('UCR_role',db.Integer,db.ForeignKey("UCRRole.ucrRoleID"))
 
@@ -1905,7 +1863,7 @@ class Staff(CustomModel):
     # 1 - M, one study/projectPatient can have many staff
     #projectPatient = db.relationship("ProjectPatient",back_populates="staff")
     tracings = db.relationship("Tracing",back_populates="staff")
-
+    state = db.relationship("State")
     ucrRole = db.relationship("UCRRole",back_populates="staff")
 
     def __repr__(self):
@@ -1991,6 +1949,11 @@ class StaffTraining(CustomModel):
         self.dateTaken,
         self.dateExpires)
 
+class State(CustomModel):
+    __tablename__ = "StateLUT"
+    stateID = db.Column('stateID', db.Integer, primary_key=True)
+    state = db.Column('state', db.String)
+
 class Tracing(CustomModel):
     __tablename__ = "Tracing"
 
@@ -2070,6 +2033,11 @@ class UCRReport(CustomModel):
         self.report_due,
         self.report_doc)
 
+class UCRReportType(CustomModel):
+    __tablename__ = "UCRReportTypeLUT"
+    ucrReportTypeID = db.Column('ucrReportTypeID', db.Integer, primary_key=True)
+    ucrReportType = db.Column('ucrReportType', db.String)
+
 class UCRRole(CustomModel):
     __tablename__ = "UCRRole"
 
@@ -2077,3 +2045,9 @@ class UCRRole(CustomModel):
     ucrRole = db.Column("ucrRole", db.String)
 
     staff = db.relationship("Staff", back_populates="ucrRole")
+
+class VitalStatus(CustomModel):
+    __tablename__ = "VitalStatusLUT"
+    vitalStatusID = db.Column('vitalStatusID', db.Integer, primary_key=True)
+    vitalStatus = db.Column('vitalStatus', db.String)
+
