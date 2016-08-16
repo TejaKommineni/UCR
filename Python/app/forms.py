@@ -1198,9 +1198,10 @@ class ProjectPatientForm(BaseForm):
     siteGrp = IntegerField('siteGrp',
                            [] + COMMON_INTEGER_VALIDATORS)
     finalCodeID = IntegerField('finalCodeID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.optional()],
+                               filters = [lambda x: x or None])
     finalCodeDate = DateField('finalCodeDate',
-                              [] + COMMON_DATE_VALIDATORS,
+                              [validators.optional()],
                               format=DATE_FORMAT)
     enrollmentDate = DateField('enrollmentDate',
                                [] + COMMON_DATE_VALIDATORS,
@@ -1259,10 +1260,11 @@ class ProjectPatientForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        finalCode = query.get_staff(self.finalCodeID.data)
-        if finalCode is None:
-            self.finalCodeID.errors.append("ID not found")
-            hasErrors = True
+        if self.finalCodeID.data:
+            finalCode = query.get_staff(self.finalCodeID.data)
+            if finalCode is None:
+                self.finalCodeID.errors.append("ID not found")
+                hasErrors = True
 
         finalCodeStaff = query.get_staff(self.finalCodeStaffID.data)
         if finalCodeStaff is None:

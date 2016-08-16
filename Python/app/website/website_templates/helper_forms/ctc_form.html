@@ -18,12 +18,22 @@
                         <label>Patient</label><br>
                         <a class="btn btn-primary" role="button" href="/website/patients/{{ctc.patient.patientID}}/">Patient</a>
                     </div>
+                </div>
+                  <div class="row">
+                    <div class="col-md-5">
+                      <label for="text_lastName">Project Title</label>
+                      <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{ctc.projectPatient.project.projectTitle}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-1">
+                        <label>Project</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/projects/{{ctc.projectPatient.project.projectID}}/">Project</a>
+                    </div>
                      <div class="col-md-2">
                         <label>Project Patient</label><br>
                         <a class="btn btn-primary" role="button" href="/website/projectpatients/{{ctc.projectPatient.participantID}}/">Project Patient</a>
                     </div>
+                  </div>
                 </div>
-            </div>
         </fieldset>
       </form>
 
@@ -70,7 +80,7 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_dxStreet">Dx Street</label>
-                  <input type="text" class="form-control" name="dxStreet" id="text_dx_street" value="{{ctc["dxStreet"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxStreet1" id="text_dx_street" value="{{ctc["dxStreet1"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_dxZip">Dx Zip Code</label>

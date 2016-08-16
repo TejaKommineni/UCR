@@ -90,6 +90,7 @@
                <div class = "col-md-2">
                   <label for="select_finalCodeID">Final Code</label>
                   <select type="text" class="form-control" name="finalCodeID" id="select_finalCodeID">
+                      <option></option>
                       {% for finalCode in form.finalCodes %}
                         {% if finalCode.finalCodeID == projectPatient.finalCodeID %}
                             <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
@@ -334,15 +335,15 @@
             </fieldset>
     </form>
     <ul class = "nav nav-tabs" role="tablist">
-        <li><a href="#contactsTab"  role="tab" data-toggle="tab">Contacts</a></li>
-        <li class="active"><a href="#ctcTab" role="tab" data-toggle="tab">CTC</a></li>
+        <li class="active"><a href="#contactsTab"  role="tab" data-toggle="tab">Contacts</a></li>
+        <li><a href="#ctcTab" role="tab" data-toggle="tab">CTC</a></li>
         <li><a href="#incentivesTab" role="tab" data-toggle="tab">Incentives</a></li>
         <li><a href="#patientContactInfoTab" role="tab" data-toggle="tab">Patient Contact Info</a></li>
         <li><a href="#statusesTab" role="tab" data-toggle="tab">Statuses</a></li>
         <li><a href="#tracingsTab" role="tab" data-toggle="tab">Tracings</a></li>
     </ul>
     <div class="tab-content">        
-        <div class="tab-pane" id="contactsTab">
+        <div class="tab-pane active" id="contactsTab">
             <ul class ="nav nav-tabs" role="tablist">
                 {% for contact in projectPatient.contacts %}
                     {% if loop.index == 1 %}
@@ -372,7 +373,7 @@
             </div>
         </div>
         
-        <div class="tab-pane active" id="ctcTab">
+        <div class="tab-pane" id="ctcTab">
             {% set ctc = projectPatient.ctc %}
             {% include 'helper_forms/ctc_form.html' %}
         </div>
@@ -406,14 +407,14 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="tab-pane" id="patientContactInfoTab">
             <ul class = "nav nav-tabs" role="tablist">
             <li><a href="#patientAddressTab"  role="tab" data-toggle="tab">Address</a></li>
             <li><a href="#patientEmailTab" role="tab" data-toggle="tab">Email</a></li>
             <li><a href="#patientPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
             </ul>
-            <div class="tab-content">        
+            <div class="tab-content">
                 <div class="tab-pane active" id="patientAddressTab">
                     <ul class ="nav nav-tabs" role="tablist">
                         {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
@@ -488,7 +489,7 @@
                 </div>
             </div>
     </div>
-    <div class="tab-pane" id="statusesTab">
+        <div class="tab-pane" id="statusesTab">
         <ul class ="nav nav-tabs" role="tablist">
             {% for patientProjectStatus in projectPatient.patientProjectStatuses %}
                 {% if loop.index == 1 %}
@@ -517,8 +518,8 @@
             </div>
         </div>
     </div>
-        
-    <div class="tab-pane" id="tracingsTab">
+
+        <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
             {% for tracing in projectPatient.tracings %}
                 {% if loop.index == 1 %}
@@ -546,6 +547,7 @@
             {% include 'helper_forms/tracing_form.html' %}
             </div>
         </div>
+    </div>
     </div>
     
 {% endblock %}
