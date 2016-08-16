@@ -54,24 +54,24 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_contact">Contact</label>
-                  <select type="text" class="form-control" name="contact" id="select_contact">
-                      {% for contact in form.contacts.enums %}
-                        {% if projectStaff.contact == contact %}
-                            <option selected="selected" >{{contact}}</option>
+                  <select type="text" class="form-control" name="contactID" id="select_contact">
+                      {% for contact in form.contacts %}
+                        {% if projectStaff.contactID == contact.contactID %}
+                            <option value="{{contact.contactID}}" selected="selected" >{{contact.contact}}</option>
                         {% else %}
-                            <option>{{contact}}</option>
+                            <option value="{{contact.contactID}}">{{contact.contact}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_inactive">Inactive</label>
-                  <select type="text" class="form-control" name="inactive" id="select_inactive">
-                      {% for inactive in form.inactives.enums %}
-                        {% if projectStaff.inactive == inactive %}
-                            <option selected="selected">{{inactive}}</option>
+                  <select type="text" class="form-control" name="inactiveID" id="select_inactive">
+                      {% for inactive in form.inactives %}
+                        {% if projectStaff.inactiveID == inactive.inactiveID %}
+                            <option value="{{inactive.inactiveID}}" selected="selected">{{inactive.inactive}}</option>
                         {% else %}
-                            <option>{{inactive}}</option>
+                            <option value="{{inactive.inactiveID}}">{{inactive.inactive}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

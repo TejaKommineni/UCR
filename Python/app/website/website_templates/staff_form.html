@@ -67,9 +67,9 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_state">State</label>        
-                  <select type="text" class="form-control" name="state" id="select_state" value="{{staff.state}}">
+                  <select type="text" class="form-control" name="stateID" id="select_state">
                       {% for state in form["states"] %}
-                        {% if state.state == staff.state.state %}
+                        {% if state.stateID == staff.stateID %}
                             <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>
                         {% else %}
                             <option value="{{state.stateID}}">{{state.state}}</option>
@@ -85,7 +85,15 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_ucrRole">UCR Role</label>
-                  <input type="text" class="form-control" name="ucrRole" id="text_ucrRole" value="{{staff.ucrRole}}">
+                  <select type="text" class="form-control" name="ucrRoleID" id="select_ucr_role">
+                      {% for ucrRole in form["ucrRoles"] %}
+                        {% if ucrRole.ucrRoleID == staff.ucrRoleID %}
+                            <option value="{{ucrRole.ucrRoleID}}" selected="selected">{{ucrRole.ucrRole}}</option>
+                        {% else %}
+                            <option value="{{ucrRole.ucrRoleID}}">{{ucrRole.ucrRole}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
               </div>
             
