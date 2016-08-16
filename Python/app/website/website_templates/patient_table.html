@@ -60,12 +60,12 @@
           <tbody>
             {% for patient in form["patients"] %}
             <tr>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["lastName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["firstName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["patID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["recordID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["ucrDistID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["patientID"]}}">{{patient["UPDBID"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["lastName"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["firstName"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["patID"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["recordID"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["ucrDistID"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["UPDBID"]}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

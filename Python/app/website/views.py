@@ -28,12 +28,6 @@ def populate_db2():
     state2 = models.State(
         state="California"
     )
-    boolean1 = models.Boolean(
-        boolean="yes"
-    )
-    boolean2 = models.Boolean(
-        boolean="no"
-    )
     race1 = models.Race(
         race="white"
     )
@@ -444,7 +438,7 @@ def populate_db2():
 
     patientAddress = models.PatientAddress(
         contactInfoSourceID=1,
-        patientID=1,
+        participantID=1,
         contactInfoStatusID=1,
         street="street",
         street2="street2",
@@ -456,21 +450,21 @@ def populate_db2():
 
     patientEmail = models.PatientEmail(
         contactInfoSourceID=1,
-        patientID=1,
+        participantID=1,
         contactInfoStatusID=1,
         email="email",
         emailStatusDate=datetime(2016, 2, 2)
     )
     patientPhone = models.PatientPhone(
         contactInfoSourceID=1,
-        patientID=1,
+        participantID=1,
         contactInfoStatusID=1,
         phoneTypeID=1,
         phoneNumber="phone",
         phoneStatusDate=datetime(2016, 2, 2)
     )
     informant1 = models.Informant(
-        patientID=1,
+        participantID=1,
         firstName="fname",
         lastName="lname",
         middleName="middle_name",
@@ -479,7 +473,7 @@ def populate_db2():
         notes="notes"
     )
     informant2 = models.Informant(
-        patientID=1,
+        participantID=1,
         firstName="fname",
         lastName="lname",
         middleName="middle_name",
@@ -507,7 +501,7 @@ def populate_db2():
         phoneStatusDate=datetime(2016, 2, 2)
     )
     ctc1 = models.CTC(
-        patientID=1,
+        participantID=1,
         dxDate=datetime(2016, 2, 2),
         site=1,
         histology="histology",
@@ -525,7 +519,7 @@ def populate_db2():
         dncReason="dnc_reason"
     )
     ctc2 = models.CTC(
-        patientID=1,
+        participantID=1,
         dxDate=datetime(2016, 2, 2),
         site=1,
         histology="histology",
@@ -615,7 +609,7 @@ def populate_db2():
     )
     tracing = models.Tracing(
         tracingSourceID=1,
-        projectPatientID=1,
+        participantID=1,
         date=datetime(2016, 2, 2),
         staffID=1,
         notes="notes"
@@ -755,14 +749,12 @@ def populate_db2():
         facilityID=1
     )
     incentive = models.Incentive(
-        projectPatientID=1,
+        participantID=1,
         incentiveDescription="desc",
-        incentiveDate=datetime(2016, 2, 2)
+        barcode= "12345"
     )
     db.session.add(state1)
     db.session.add(state2)
-    db.session.add(boolean1)
-    db.session.add(boolean2)
     db.session.add(physicianFacilityStatus1)
     db.session.add(physicianFacilityStatus2)
     db.session.add(race1)
@@ -1659,7 +1651,7 @@ def update_ctc(ctcID):
             form = forms.CTCForm(request.form)
             if form.validate():
                 if int(form.versionID.data) == ctc.versionID:
-                    ctc.patientID = form.patientID.data
+                    ctc.participantID = form.participantID.data
                     ctc.dxDate = form.dxDate.data
                     ctc.site = form.site.data
                     ctc.histology = form.histology.data
@@ -1702,7 +1694,7 @@ def create_ctc(ctcID=None):
             form = forms.CTCForm(request.form)
             if form.validate():
                 ctc = models.CTC(
-                    patientID=form.patientID.data,
+                    participantID=form.participantID.data,
                     dxDate=form.dxDate.data,
                     site=form.site.data,
                     histology=form.histology.data,
@@ -2649,7 +2641,7 @@ def update_incentive(incentiveID):
                 if int(form.versionID.data) == incentive.versionID:
                     incentive.projectPatientID = request.form["projectPatientID"]
                     incentive.incentiveDescription = form.incentiveDescription.data
-                    incentive.incentiveDate = form.incentiveDate.data
+                    incentive.barcode = form.barcode.data
                     query.commit()
                     return redirect_back("incentives/{}/".format(incentiveID))
                 else:
@@ -2679,7 +2671,7 @@ def create_incentive(incentiveID=None):
                 incentive = models.Incentive(
                     projectPatientID=form.projectPatientID.data,
                     incentiveDescription=form.incentiveDescription.data,
-                    incentiveDate=form.incentiveDate.data
+                    barcode=form.barcode.data
                 )
                 query.add(incentive)
                 return redirect_back("incentives/{}/".format(incentive.incentiveID))
@@ -2738,7 +2730,7 @@ def update_informant(informantID):
             form = forms.InformantForm(request.form)
             if form.validate():
                 if int(form.versionID.data) == informant.versionID:
-                    informant.patientID = form.patientID.data
+                    informant.participantID = form.participantID.data
                     informant.firstName = form.firstName.data
                     informant.lastName = form.lastName.data
                     informant.middleName = form.middleName.data
@@ -2772,7 +2764,7 @@ def create_informant(informantID=None):
             form = forms.InformantForm(request.form)
             if form.validate():
                 informant = models.Informant(
-                    patientID=form.patientID.data,
+                    participantID=form.participantID.data,
                     firstName=form.firstName.data,
                     lastName=form.lastName.data,
                     middleName=form.middleName.data,
@@ -3483,7 +3475,7 @@ def update_patient_address(patAddressID):
             if form.validate():
                 if int(form.versionID.data) == patientAddress.versionID:
                     patientAddress.contactInfoSourceID = form.contactInfoSourceID.data
-                    patientAddress.patientID = form.patientID.data
+                    patientAddress.participantID = form.participantID.data
                     patientAddress.contactInfoStatusID = form.contactInfoStatusID.data
                     patientAddress.street = form.street.data
                     patientAddress.street2 = form.street2.data
@@ -3519,7 +3511,7 @@ def create_patient_address(patAddressID=None):
             if form.validate():
                 patientaddress = models.PatientAddress(
                     contactInfoSourceID=form.contactInfoSourceID.data,
-                    patientID=form.patientID.data,
+                    participantID=form.participantID.data,
                     contactInfoStatusID=form.contactInfoStatusID.data,
                     street=form.street.data,
                     street2=form.street2.data,
@@ -3585,7 +3577,7 @@ def update_patient_email(emailID):
             if form.validate():
                 if int(form.versionID.data) == patientEmail.versionID:
                     patientEmail.contactInfoSourceID = form.contactInfoSourceID.data
-                    patientEmail.patientID = form.patientID.data
+                    patientEmail.participantID = form.participantID.data
                     patientEmail.contactInfoStatusID = form.contactInfoStatusID.data
                     patientEmail.email = form.email.data
                     patientEmail.emailStatusDate = form.emailStatusDate.data
@@ -3617,7 +3609,7 @@ def create_patient_email(emailID=None):
             if form.validate():
                 patientEmail = models.PatientEmail(
                     contactInfoSourceID=form.contactInfoSourceID.data,
-                    patientID=form.patientID.data,
+                    participantID=form.participantID.data,
                     contactInfoStatusID=form.contactInfoStatusID.data,
                     email=form.email.data,
                     emailStatusDate=form.emailStatusDate.data
@@ -3680,7 +3672,7 @@ def update_patient_phone(patPhoneID):
             if form.validate():
                 if int(form.versionID.data) == patientPhone.versionID:
                     patientPhone.contactInfoSourceID = form.contactInfoSourceID.data
-                    patientPhone.patientID = form.patientID.data
+                    patientPhone.participantID = form.participantID.data
                     patientPhone.contactInfoStatusID = form.contactInfoStatusID.data
                     patientPhone.phoneTypeID = form.phoneTypeID.data
                     patientPhone.phoneNumber = form.phoneNumber.data
@@ -3713,7 +3705,7 @@ def create_patient_phone(patPhoneID=None):
             if form.validate():
                 patientPhone = models.PatientPhone(
                     contactInfoSourceID=form.contactInfoSourceID.data,
-                    patientID=form.patientID.data,
+                    participantID=form.participantID.data,
                     contactInfoStatusID=form.contactInfoStatusID.data,
                     phoneTypeID=form.phoneTypeID.data,
                     phoneNumber=form.phoneNumber.data,
@@ -6314,7 +6306,7 @@ def update_tracing(tracingID):
             if form.validate():
                 if int(form.versionID.data) == tracing.versionID:
                     tracing.tracingSourceID = form.tracingSourceID.data
-                    tracing.projectPatientID = form.projectPatientID.data
+                    tracing.participantID = form.participantID.data
                     tracing.date = form.date.data
                     tracing.staffID = form.staffID.data
                     tracing.notes = form.notes.data
@@ -6346,7 +6338,7 @@ def create_tracing(tracingID=None):
             if form.validate():
                 tracing = models.Tracing(
                     tracingSourceID=form.tracingSourceID.data,
-                    projectPatientID=form.projectPatientID.data,
+                    participantID=form.participantID.data,
                     date=form.date.data,
                     staffID=form.staffID.data,
                     notes=form.notes.data
@@ -6497,7 +6489,7 @@ def update_ucr_report(ucrReportID):
             if form.validate():
                 if int(form.versionID.data) == ucr.versionID:
                     ucr.projectID = form.projectID.data
-                    ucr.reportType = form.reportType.data
+                    ucr.reportTypeID = form.reportType.data
                     ucr.reportSubmitted = form.reportSubmitted.data
                     ucr.reportDue = form.reportDue.data
                     ucr.reportDoc = form.reportDoc.data
@@ -6529,7 +6521,7 @@ def create_ucr_report(ucrReportID=None):
             if form.validate():
                 ucr = models.UCRReport(
                     projectID=form.projectID.data,
-                    reportType=form.reportType.data,
+                    reportTypeID=form.reportType.data,
                     reportSubmitted=form.reportSubmitted.data,
                     reportDue=form.reportDue.data,
                     reportDoc=form.reportDoc.data

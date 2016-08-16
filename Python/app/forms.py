@@ -216,7 +216,7 @@ class CTCFacilityForm(BaseForm):
 
 
 class CTCForm(BaseForm):
-    patientID = IntegerField('patientID',
+    participantID = IntegerField('participantID',
                              [] + COMMON_INTEGER_VALIDATORS)
     dxDate = DateField('dxDate',
                        [] + COMMON_DATE_VALIDATORS,
@@ -257,12 +257,12 @@ class CTCForm(BaseForm):
             hasErrors = True
 
         # Check to make sure the project FK exists
-        patient = query.get_patient(self.patientID.data)
+        patient = query.get_patient(self.participantID.data)
         if patient is None:
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        state = query.get_state(self.stateID.data)
+        state = query.get_state(self.dxStateID.data)
         if state is None:
             self.stateID.errors.append("ID not found")
             hasErrors = True
@@ -453,13 +453,12 @@ class IRBHolderLUTForm(BaseForm):
 
 
 class IncentiveForm(BaseForm):
-    projectPatientID = IntegerField('projectPatientID',
+    participantID = IntegerField('participantID',
                                     [] + COMMON_INTEGER_VALIDATORS)
     incentiveDescription = StringField('incentiveDescription',
                                        [] + COMMON_STRING_VALIDATORS)
-    incentiveDate = DateField('incentiveDate',
-                              [] + COMMON_DATE_VALIDATORS,
-                              format=DATE_FORMAT)
+    barcode = StringField('barcode',
+                              [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -473,7 +472,7 @@ class IncentiveForm(BaseForm):
 
 
 class InformantForm(BaseForm):
-    patientID = IntegerField('patientID',
+    participantID = IntegerField('participantID',
                              [] + COMMON_INTEGER_VALIDATORS)
     firstName = StringField('firstName',
                             [] + COMMON_STRING_VALIDATORS)
@@ -490,7 +489,7 @@ class InformantForm(BaseForm):
 
     def validate(self):
         hasErrors = not Form.validate(self)
-        patient = query.get_patient(self.patientID.data)
+        patient = query.get_patient(self.participantID.data)
         if patient is None:
             self.patientID.errors.append("ID not found")
             hasErrors = True
@@ -629,7 +628,7 @@ class LogSubjectLUTForm(BaseForm):
 
 
 class PatientForm(BaseForm):
-    patID = StringField('patID',
+    participantID = StringField('participantID',
                         [] + COMMON_STRING_VALIDATORS)
     recordID = IntegerField('recordID',
                             [] + COMMON_INTEGER_VALIDATORS)
@@ -693,7 +692,7 @@ class PatientForm(BaseForm):
 class PatientAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
-    patientID = IntegerField('patientID',
+    participantID = IntegerField('participantID',
                              [] + COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
@@ -739,7 +738,7 @@ class PatientAddressForm(BaseForm):
 class PatientEmailForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
-    patientID = IntegerField('patientID',
+    participantID = IntegerField('participantID',
                              [] + COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
@@ -771,7 +770,7 @@ class PatientEmailForm(BaseForm):
 class PatientPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
-    patientID = IntegerField('patientID',
+    participantID = IntegerField('participantID',
                              [] + COMMON_INTEGER_VALIDATORS)
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
@@ -1584,7 +1583,7 @@ class StaffTrainingForm(BaseForm):
 class TracingForm(BaseForm):
     tracingSourceID = IntegerField('tracingSourceID',
                                    [] + COMMON_INTEGER_VALIDATORS)
-    projectPatientID = IntegerField('projectPatientID',
+    participantID = IntegerField('participantID',
                                     [] + COMMON_INTEGER_VALIDATORS)
     date = DateField('date',
                      [] + COMMON_DATE_VALIDATORS,
@@ -1624,8 +1623,8 @@ class TracingSourceLUTForm(BaseForm):
 class UCRReportForm(BaseForm):
     projectID = IntegerField('projectID',
                              [] + COMMON_INTEGER_VALIDATORS)
-    reportType = StringField('reportType',
-                             [] + COMMON_STRING_VALIDATORS)
+    reportTypeID = IntegerField('reportTypeID',
+                             [] + COMMON_INTEGER_VALIDATORS)
     reportSubmitted = DateField('reportSubmitted',
                                 [] + COMMON_DATE_VALIDATORS,
                                 format=DATE_FORMAT)
@@ -1645,6 +1644,11 @@ class UCRReportForm(BaseForm):
         project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
+            hasErrors = True
+
+        ucrReportType = query.get_report_type(self.reportTypeID.data)
+        if ucrReportType is None:
+            self.reportTypeID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 

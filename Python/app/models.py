@@ -51,7 +51,7 @@ class ArcReview(CustomModel):
     __tablename__ = 'ArcReview'
 
     arcReviewID = db.Column('arcReviewID', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     reviewType = db.Column('review_type', db.Integer)
     dateSentToReviewer = db.Column('date_sent_to_reviewer', db.Date)
     reviewer1 = db.Column('reviewer1', db.Integer)
@@ -114,7 +114,7 @@ class Budget(CustomModel):
     __tablename__ = "Budget"
 
     budgetID = db.Column('budgetID', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     numPeriods = db.Column('num_periods', db.Integer)
     periodStart = db.Column('period_start', db.Date)
     periodEnd = db.Column('period_end', db.Date)
@@ -147,14 +147,14 @@ class Contact(CustomModel):
     __tablename__ = 'Contact'
 
     contactID = db.Column('contactID', db.Integer, primary_key=True)
-    contactTypeLUTID = db.Column('contactTypeLUTID', db.Integer, db.ForeignKey("ContactTypeLUT.contactTypeLUTID"))
-    projectPatientID = db.Column('particpantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"))
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey("Staff.staffID"))
+    contactTypeLUTID = db.Column('contactTypeLUTID', db.Integer, db.ForeignKey("ContactTypeLUT.contactTypeLUTID"), nullable=False)
+    projectPatientID = db.Column('particpantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey("Staff.staffID"), nullable=False)
     informantID = db.Column('informantID', db.Integer, db.ForeignKey("Informant.informantID"))
     facilityID = db.Column('facilityID', db.Integer, db.ForeignKey("Facility.facilityID"))
-    physicianID = db.Column('physician', db.Integer, db.ForeignKey("Physician.physicianID"))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
     description = db.Column('description', db.String)
-    contactDate = db.Column('contact_date', db.Date)
+    contactDate = db.Column('contact_date', db.Date, nullable=False)
     initials = db.Column('initials', db.String)
     notes = db.Column('notes', db.String)
 
@@ -255,7 +255,7 @@ class CTC(CustomModel):
     __tablename__ = 'CTC'
 
     ctcID = db.Column('ctcID', db.Integer, primary_key=True)
-    patientID = db.Column('patAutoID', db.Integer, db.ForeignKey('Patient.patAutoID'))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey('Patient.participantID'), nullable=False)
     dxDate = db.Column('dx_date', db.Date)
     site = db.Column('site', db.Integer)
     histology = db.Column('histology', db.String)
@@ -325,8 +325,8 @@ class CTCFacility(CustomModel):
     __tablename__ = 'CTCFacility'
 
     CTCFacilityID = db.Column('CTCFacilityID', db.Integer, primary_key=True)
-    ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
-    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'))
+    ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'), nullable=False)
+    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'), nullable=False)
 
     # Relationships
     # 1 - M, one facilty may have many CTCFacilities
@@ -399,7 +399,7 @@ class FacilityAddress(CustomModel):
     facilityAddressID = db.Column('facilityAddressID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey("Facility.facilityID"))
+    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey("Facility.facilityID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatusLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     street = db.Column('street', db.String)
@@ -452,7 +452,7 @@ class FacilityPhone(CustomModel):
                                     db.ForeignKey('ContactInfoSourceLUT.contactInfoSourceID'))
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey('ContactInfoStatusLUT.contactInfoStatusID'))
-    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'))
+    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'), nullable=False)
     phoneTypeID = db.Column('phoneTypeLUTID', db.Integer, db.ForeignKey('PhoneTypeLUT.phoneTypeLUTID'))
     phoneNumber = db.Column('facility_phone', db.String)
     clinicName = db.Column('clinic_name', db.String)
@@ -503,7 +503,7 @@ class Funding(CustomModel):
 
     fundingID = db.Column('fundingID', db.Integer, primary_key=True)
     grantStatusID = db.Column('grantStatusLUTID', db.Integer, db.ForeignKey('GrantStatusLUT.grantStatusID'))
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     fundingSourceID = db.Column('fundingSourceID', db.Integer, db.ForeignKey('FundingSourceLUT.fundingSourceID'))
     primaryFundingSource = db.Column('primary_funding_source', db.String)
     secondaryFundingSource = db.Column('secondary_funding_source', db.String)
@@ -637,10 +637,12 @@ class Incentive(CustomModel):
     __tablename__ = "Incentive"
 
     incentiveID = db.Column('incentiveID', db.Integer, primary_key=True)
-    projectPatientID = db.Column('participantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"))
+    contactID = db.Column('contactID', db.Integer, db.ForeignKey("Contact.contactID"))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     incentiveDescription = db.Column('incentive_desc', db.String)
-    incentiveDate = db.Column('incentive_date', db.Date)
+    barcode = db.Column('barcode', db.String)
 
+    contact = db.relationship("Contact")
     projectPatient = db.relationship("ProjectPatient", back_populates="incentives")
 
     def __repr__(self):
@@ -655,7 +657,7 @@ class Informant(CustomModel):
     __tablename__ = "Informant"
 
     informantID = db.Column('informantID', db.Integer, primary_key=True)
-    patientID = db.Column('patAutoID', db.Integer, db.ForeignKey("Patient.patAutoID"))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey("Patient.participantID"), nullable=False)
     firstName = db.Column('first_name', db.String)
     lastName = db.Column('last_name', db.String)
     middleName = db.Column('middle_name', db.String)
@@ -700,7 +702,7 @@ class InformantAddress(CustomModel):
                                     db.ForeignKey('ContactInfoSourceLUT.contactInfoSourceID'))
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey('ContactInfoStatusLUT.contactInfoStatusID'))
-    informantID = db.Column('informantID', db.Integer, db.ForeignKey('Informant.informantID'))
+    informantID = db.Column('informantID', db.Integer, db.ForeignKey('Informant.informantID'), nullable=False)
     street = db.Column('street', db.String)
     street2 = db.Column('street2', db.String)
     city = db.Column('city', db.String)
@@ -749,7 +751,7 @@ class InformantPhone(CustomModel):
     informantPhoneID = db.Column('informantPhoneID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    informantID = db.Column('informantId', db.Integer, db.ForeignKey("Informant.informantID"))
+    informantID = db.Column('informantId', db.Integer, db.ForeignKey("Informant.informantID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     phoneTypeID = db.Column('phoneTypeLUTID', db.Integer, db.ForeignKey("PhoneTypeLUT.phoneTypeLUTID"))
@@ -787,8 +789,8 @@ class Log(CustomModel):
 
     logID = db.Column('logID', db.Integer, primary_key=True)
     logSubjectID = db.Column('logSubjectLUTID', db.Integer, db.ForeignKey('LogSubjectLUT.logSubjectLUTID'))
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     phaseStatusID = db.Column('logPhaseID', db.Integer, db.ForeignKey('PhaseStatus.logPhaseID'))
     note = db.Column('note', db.String)
     date = db.Column('date', db.Date)
@@ -842,7 +844,7 @@ class LogSubjectLUT(CustomModel):
 class Patient(CustomModel):
     __tablename__ = 'Patient'
 
-    patientID = db.Column('patAutoID', db.Integer, primary_key=True)
+    participantID = db.Column('participantID', db.Integer, primary_key=True)
     patID = db.Column('patID', db.String)
     recordID = db.Column('recordID', db.Integer)
     ucrDistID = db.Column('ucrDistID', db.Integer)
@@ -923,7 +925,7 @@ class PatientAddress(CustomModel):
     patAddressID = db.Column('patAddressID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    patientID = db.Column('patientId', db.Integer, db.ForeignKey("Patient.patAutoID"))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey("Patient.participantID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     street = db.Column('street', db.String)
@@ -973,7 +975,7 @@ class PatientEmail(CustomModel):
     emailID = db.Column('emailID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    patientID = db.Column('patientID', db.Integer, db.ForeignKey("Patient.patAutoID"))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey("Patient.participantID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     email = db.Column('email', db.String)
@@ -1011,7 +1013,7 @@ class PatientPhone(CustomModel):
     patPhoneID = db.Column('patPhoneID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    patientID = db.Column('patientID', db.Integer, db.ForeignKey("Patient.patAutoID"))
+    participantID = db.Column('patientID', db.Integer, db.ForeignKey("Patient.participantID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     phoneTypeID = db.Column('phoneTypeLUTID', db.Integer, db.ForeignKey('PhoneTypeLUT.phoneTypeLUTID'))
@@ -1050,7 +1052,7 @@ class PatientProjectStatus(CustomModel):
     patientProjectStatusID = db.Column('patientProjectStatusID', db.Integer, primary_key=True)
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer,
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
-    projectPatientID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'))
+    projectPatientID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
@@ -1186,7 +1188,7 @@ class PhysicianAddress(CustomModel):
     physicianAddressID = db.Column('physicianAddressID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoSourceID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     street = db.Column('physician_street', db.String)
@@ -1237,7 +1239,7 @@ class PhysicianEmail(CustomModel):
     physicianEmailID = db.Column('physicianEmailID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoSourceID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     email = db.Column('email', db.String)
@@ -1268,7 +1270,7 @@ class PhysicianFacility(CustomModel):
 
     physFacilityID = db.Column('physicianFacilityID', db.Integer, primary_key=True)
     facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'))
-    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey('Physician.physicianID'))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey('Physician.physicianID'), nullable=False)
     physFacilityStatusID = db.Column('physician_facility_status', db.Integer,
                                      db.ForeignKey('PhysicianFacilityStatusLUT.physicianFacilityStatusID'))
     physFacilityStatusDate = db.Column('physician_facility_date', db.Date)
@@ -1306,7 +1308,7 @@ class PhysicianPhone(CustomModel):
     physicianPhoneID = db.Column('physicianPhoneID', db.Integer, primary_key=True)
     contactInfoSourceID = db.Column('contactInfoSourceID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
-    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"), nullable=False)
     contactInfoStatusID = db.Column('contactInfoStatus', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     phoneTypeID = db.Column('phoneTypeID', db.Integer, db.ForeignKey("PhoneTypeLUT.phoneTypeLUTID"))
@@ -1355,8 +1357,8 @@ class PhysicianToCTC(CustomModel):
     __tablename__ = "PhysicianToCTC"
 
     physicianCTCID = db.Column('physicianCTCID', db.Integer, primary_key=True)
-    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey('Physician.physicianID'))
-    ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
+    physicianID = db.Column('physicianID', db.Integer, db.ForeignKey('Physician.physicianID'), nullable=False)
+    ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'), nullable=False)
 
     # Relationships
     # M - 1
@@ -1378,7 +1380,7 @@ class PreApplication(CustomModel):
     __tablename__ = 'PreApplication'
 
     preApplicationID = db.Column('preApplication', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     piFirstName = db.Column('pi_first_name', db.String)
     piLastName = db.Column('pi_last_name', db.String)
     piPhone = db.Column('pi_phone', db.String)
@@ -1555,20 +1557,20 @@ class ProjectPatient(CustomModel):
     __tablename__ = 'ProjectPatient'
 
     participantID = db.Column('participantID', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
     currentAge = db.Column('current_age', db.Integer)
     batch = db.Column('batch', db.Integer)
     siteGrp = db.Column('sitegrp', db.Integer)
-    finalCodeID = db.Column('final_code', db.Integer, db.ForeignKey('FinalCode.finalCodeID'))
+    finalCodeID = db.Column('final_code', db.Integer, db.ForeignKey('FinalCode.finalCodeID'), nullable=False)
     finalCodeDate = db.Column('final_code_date', db.Date)
     finalCodeStaffID = db.Column('final_code_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK?
     enrollmentDate = db.Column('enrollment_date', db.Date)
     enrollmentStaffID = db.Column('enrollment_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK?
     dateCoordSigned = db.Column('date_coord_signed', db.Date)
     dateCoordSignedStaffID = db.Column('date_coord_signed_staff', db.Integer, db.ForeignKey('Staff.staffID'))
-    importDate = db.Column('import_date', db.Date)
+    importDate = db.Column('import_date', db.Date, nullable=False)
     abstractStatusID = db.Column('abstract_status', db.Integer, db.ForeignKey('AbstractStatusLUT.abstractStatusID'))
     abstractStatusDate = db.Column('abstract_status_date', db.Date)
     abstractStatusStaffID = db.Column('abstract_status_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK?
@@ -1686,8 +1688,8 @@ class ProjectStaff(CustomModel):
 
     projectStaffID = db.Column('projectStaffID', db.Integer, primary_key=True)
     staffRoleID = db.Column('staffRoleLUTID', db.Integer, db.ForeignKey('StaffRoleLUT.staffRoleLUTID'))
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     datePledge = db.Column('date_pledge', db.Date)
     dateRevoked = db.Column('date_revoked', db.Date)
     contactID = db.Column('contactID', db.Integer, db.ForeignKey('ContactsLUT.contactID'))
@@ -1737,8 +1739,8 @@ class ProjectStatus(CustomModel):
     projectStatusID = db.Column('projectStatusID', db.Integer, primary_key=True)
     projectStatusTypeID = db.Column('projectStatusTypeID', db.Integer,
                                     db.ForeignKey('ProjectStatusLUT.projectStatusTypeID'))
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     statusDate = db.Column('statusDate', db.Date)
     statusNotes = db.Column('statusNotes', db.String)
 
@@ -1840,7 +1842,7 @@ class ReviewCommittee(CustomModel):
     __tablename__ = 'ReviewCommittee'
 
     reviewCommitteeID = db.Column('reviewCommitteeID', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     reviewCommitteeStatusID = db.Column('reviewCommitteeStatusLUTID', db.Integer,
                                         db.ForeignKey('ReviewCommitteeStatusLUT.reviewCommitteeStatusLUTID'))
     reviewCommitteeLUTID = db.Column('reviewCommitteeLUT', db.Integer,
@@ -2011,7 +2013,7 @@ class StaffTraining(CustomModel):
     __tablename__ = 'StaffTraining'
 
     staffTrainingID = db.Column('staffTrainingID', db.Integer, primary_key=True)
-    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'))
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     humanSubjectTrainingID = db.Column('humanSubjectTrainingID', db.Integer,
                                        db.ForeignKey('HumanSubjectTrainingLUT.humanSubjectTrainingID'))
     dateTaken = db.Column('date_taken', db.Date)
@@ -2048,9 +2050,9 @@ class Tracing(CustomModel):
 
     tracingID = db.Column('tracingID', db.Integer, primary_key=True)
     tracingSourceID = db.Column('tracingSourceLUTID', db.Integer, db.ForeignKey('TracingSourceLUT.tracingSourceLUTID'))
-    projectPatientID = db.Column('projectPatientID', db.Integer, db.ForeignKey('ProjectPatient.participantID'))
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
     date = db.Column('date', db.Date)
-    staffID = db.Column('staff', db.Integer, db.ForeignKey('Staff.staffID'))
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     notes = db.Column('notes', db.String)
 
     # Relationships
@@ -2097,9 +2099,9 @@ class TracingSourceLUT(CustomModel):
 class UCRReport(CustomModel):
     __tablename__ = 'UcrReport'
 
-    ucrReportID = db.Column('ucrReport', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
-    reportTypeID = db.Column('report_type', db.Integer, db.ForeignKey('UCRReportTypeLUT.ucrReportTypeID'))
+    ucrReportID = db.Column('ucrReportID', db.Integer, primary_key=True)
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    reportTypeID = db.Column('report_typeID', db.Integer, db.ForeignKey('UCRReportTypeLUT.ucrReportTypeID'))
     reportSubmitted = db.Column('report_submitted', db.Date)
     reportDue = db.Column('report_due', db.Date)
     reportDoc = db.Column('report_doc', db.String)

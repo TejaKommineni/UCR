@@ -280,7 +280,7 @@ def query_patients(firstName=None, lastName=None, patID=None, UPDBID=None, ucrDi
 
 
 def get_patient(id):
-    return db.session.query(Patient).filter_by(patientID=id).first()
+    return db.session.query(Patient).filter_by(participantID=id).first()
 
 
 def get_patient_addresses():
