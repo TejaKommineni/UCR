@@ -345,27 +345,40 @@
     <div class="tab-content">        
         <div class="tab-pane active" id="contactsTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for contact in projectPatient.contacts %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#contact{{loop.index}}Tab" role="tab" data-toggle="tab">{{contact.contactDate}}</a></li>
-                    {% else %}
-                    <li><a href="#contact{{loop.index}}Tab" role="tab" data-toggle="tab">{{contact.contactDate}}</a></li>
-                    {% endif %}
-                {% endfor %}
+                <li><a href="#contactTable" role="tab" data-toggle="tab">Contacts</a></li>
                 <li><a href="#newContactTab" role="tab" data-toggle="tab">New Contact</a></li>
             </ul>
             <div class="tab-content">
-                {% for contact in projectPatient.contacts %}
-                {% if loop.index == 1 %}
-                    <div class="tab-pane active" id="contact{{loop.index}}Tab">
-                    {% include 'helper_forms/contact_form.html' %}
-                    </div>
-                    {% else %}
-                    <div class="tab-pane" id="contact{{loop.index}}Tab">
-                    {% include 'helper_forms/contact_form.html' %}
-                    </div>
-                {% endif %}
-                {% endfor %}
+                <div class="tab-pane active">
+                    <form class="formOverride" id="contactTable">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Contact Date</th>
+                                        <th>Contact Type</th>
+                                        <th>Staff</th>
+                                        <th>Informant</th>
+                                        <th>Facility</th>
+                                        <th>Physician</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for contact in projectPatient.contacts %}
+                                    <tr>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactDefinition}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newContactTab">
                 {% set contact = none %}
                 {% include 'helper_forms/contact_form.html' %}

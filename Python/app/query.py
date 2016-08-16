@@ -51,7 +51,7 @@ def get_budget(id):
 
 
 def get_contacts():
-    return db.session.query(Contact).all()
+    return db.session.query(Contact).all().order_by(Contact.contactDate.desc())
 
 
 def get_contact(id):

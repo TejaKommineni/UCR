@@ -1600,7 +1600,7 @@ class ProjectPatient(CustomModel):
     # 1 - M, on PP with many staff
     staff = db.relationship("Staff", foreign_keys=[staffID])  # , back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
-    contacts = db.relationship("Contact", back_populates="projectPatient")
+    contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate)")
 
     abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
     finalCode = db.relationship("FinalCode", back_populates="projectPatients")
