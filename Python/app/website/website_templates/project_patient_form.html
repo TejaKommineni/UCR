@@ -240,13 +240,16 @@
                 <div class = "col-md-2">
                   <label for="select_medRecordReleaseSigned">Medical Record Release Signed</label>
                   <select type="text" class="form-control" name="medRecordReleaseSigned" id="select_medRecordReleaseSigned" value="{{projectPatient.medRecordReleaseSigned}}">
-                      {% for v in form.booleans.enums %}
-                        {% if v|string() == projectPatient.medRecordReleaseSigned|string() %}
-                            <option selected="selected">{{v}}</option>
+                      {% if projectPatient.medRecordReleaseSigned %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option>{{v}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
+                        {% if not projectPatient.medRecordReleaseSigned %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
                     </select>
                 </div>
                 <div class = "col-md-2">
