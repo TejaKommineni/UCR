@@ -60,6 +60,7 @@
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
                   <select type="text" class="form-control" name="staffID" id="select_staffID">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.staffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -90,7 +91,6 @@
                <div class = "col-md-2">
                   <label for="select_finalCodeID">Final Code</label>
                   <select type="text" class="form-control" name="finalCodeID" id="select_finalCodeID">
-                      <option></option>
                       {% for finalCode in form.finalCodes %}
                         {% if finalCode.finalCodeID == projectPatient.finalCodeID %}
                             <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
@@ -107,6 +107,7 @@
                <div class = "col-md-2">
                   <label for="select_finalCodeStaff">Final Code Staff</label>
                   <select type="text" class="form-control" name="finalCodeStaffID" id="select_finalCodeStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.finalCodeStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -125,6 +126,7 @@
                 <div class = "col-md-2">
                   <label for="select_enrollmentStaff">Enrollement Staff</label>
                   <select type="text" class="form-control" name="enrollmentStaffID" id="select_enrollmentStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.enrollmentStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -141,6 +143,7 @@
                 <div class = "col-md-2">
                   <label for="select_dateCoordSignedStaff">Date Coordinator Signed Staff</label>
                   <select type="text" class="form-control" name="dateCoordSignedStaffID" id="select_dateCoordSignedStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.dateCoordSignedStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -155,6 +158,7 @@
                 <div class = "col-md-2">
                   <label for="select_abstractStatusID">Abstract Status</label>
                   <select type="text" class="form-control" name="abstractStatusID" id="select_abstractStatusID">
+                      <option></option>
                       {% for abstractStatus in form.abstractStatuses %}
                         {% if abstractStatus.abstractStatusID == projectPatient.abstractStatusID %}
                             <option selected="selected" value="{{abstractStatus.abstractStatusID}}">{{abstractStatus.abstractStatus}}</option>
@@ -171,6 +175,7 @@
                 <div class = "col-md-2">
                   <label for="select_abstractStatusStaff">Abstract Status Staff</label>
                   <select type="text" class="form-control" name="abstractStatusStaffID" id="select_abstractStatusStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.abstractStatusStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -189,6 +194,7 @@
                 <div class = "col-md-2">
                   <label for="select_sentToAbstractorStaff">Sent to Abstractor Staff</label>
                   <select type="text" class="form-control" name="sentToAbstractorStaffID" id="select_sentToAbstractorStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.sentToAbstractorStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -205,6 +211,7 @@
                 <div class = "col-md-2">
                   <label for="select_abstractorStaff">Abstractor Staff</label>
                   <select type="text" class="form-control" name="abstractorStaffID" id="select_abstractorStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.abstractorStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -223,6 +230,7 @@
                 <div class = "col-md-2">
                   <label for="select_researcherStaff">Researcher Staff</label>
                   <select type="text" class="form-control" name="researcherStaffID" id="select_researcherStaff">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.researcherStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -264,6 +272,7 @@
                 <div class = "col-md-2">
                   <label for="select_medRecordReleaseStaffID">Medical Record Release Staff</label>
                   <select type="text" class="form-control" name="medRecordReleaseStaffID" id="select_medRecordReleaseStaffID">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.medRecordReleaseStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -282,6 +291,7 @@
                 <div class = "col-md-2">
                   <label for="select_surveyToResearcherStaffID">Survey To Researcher Staff</label>
                   <select type="text" class="form-control" name="surveyToResearcherStaffID" id="select_surveyToResearcherStaffID">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.surveyToResearcherStaffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>

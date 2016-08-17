@@ -2,23 +2,23 @@ from wtforms import Form, BooleanField, StringField, IntegerField, DateField, Fl
 import query
 
 COMMON_STRING_VALIDATORS = [
-    validators.InputRequired(),
+    validators.optional(),
     validators.Length(min=1)]
 
 COMMON_INTEGER_VALIDATORS = [
-    validators.input_required(),
+    validators.optional(),
     validators.number_range(min=0)]
 
 COMMON_DATE_VALIDATORS = [
-    validators.input_required()
+    validators.optional()
 ]
 
 COMMON_FLOAT_VALIDATORS = [
-    validators.input_required()
+    validators.optional()
 ]
 
 COMMON_BOOL_VALIDATORS = [
-    validators.input_required()
+    validators.optional()
 ]
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -28,6 +28,8 @@ class BaseForm(Form):
     versionID = IntegerField('versionID',
                              [] + COMMON_INTEGER_VALIDATORS)
 
+    def validate(self):
+        return Form.validate(self)
 
 class AbstractStatusForm(BaseForm):
     abstractStatus = StringField('abstractStatus',
@@ -36,7 +38,7 @@ class AbstractStatusForm(BaseForm):
 
 class ArcReviewForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     reviewType = IntegerField('reviewType',
                               [] + COMMON_INTEGER_VALIDATORS)
     dateSentToReviewer = DateField('dateSentToReviewer',
@@ -70,10 +72,7 @@ class ArcReviewForm(BaseForm):
                                  [] + COMMON_BOOL_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
@@ -85,7 +84,7 @@ class ArcReviewForm(BaseForm):
 
 class BudgetForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     numPeriods = IntegerField('numPeriods',
                               [] + COMMON_INTEGER_VALIDATORS)
     periodStart = DateField('periodStart',
@@ -100,10 +99,7 @@ class BudgetForm(BaseForm):
                                 [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
@@ -115,11 +111,11 @@ class BudgetForm(BaseForm):
 
 class ContactForm(BaseForm):
     contactTypeLUTID = IntegerField('contactTypeLUTID',
-                                    [] + COMMON_INTEGER_VALIDATORS)
+                                    [validators.InputRequired()])
     projectPatientID = IntegerField('projectPatientID',
-                                    [] + COMMON_INTEGER_VALIDATORS)
+                                    [validators.InputRequired()])
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     informantID = IntegerField('informantID',
                                [] + COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
@@ -129,7 +125,7 @@ class ContactForm(BaseForm):
     description = StringField('description',
                               [] + COMMON_STRING_VALIDATORS)
     contactDate = DateField('contactDate',
-                            [] + COMMON_DATE_VALIDATORS,
+                            [validators.InputRequired()],
                             format=DATE_FORMAT)
     initials = StringField('initials',
                            [] + COMMON_STRING_VALIDATORS)
@@ -137,10 +133,7 @@ class ContactForm(BaseForm):
                         [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         projectPatient = query.get_project_patient(self.projectPatientID.data)
@@ -158,20 +151,23 @@ class ContactForm(BaseForm):
             self.staffID.errors.append("ID not found")
             hasErrors = True
 
-        informant = query.get_informant(self.informantID.data)
-        if informant is None:
-            self.informantID.errors.append("ID not found")
-            hasErrors = True
+        if self.informantID.data:
+            informant = query.get_informant(self.informantID.data)
+            if informant is None:
+                self.informantID.errors.append("ID not found")
+                hasErrors = True
 
-        facility = query.get_project_patient(self.facilityID.data)
-        if facility is None:
-            self.facilityID.errors.append("ID not found")
-            hasErrors = True
+        if self.facilityID.data:
+            facility = query.get_project_patient(self.facilityID.data)
+            if facility is None:
+                self.facilityID.errors.append("ID not found")
+                hasErrors = True
 
-        physician = query.get_physician(self.physicianID.data)
-        if physician is None:
-            self.physicianID.errors.append("ID not found")
-            hasErrors = True
+        if self.physicianID.data:
+            physician = query.get_physician(self.physicianID.data)
+            if physician is None:
+                self.physicianID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -192,9 +188,9 @@ class ContactTypeLUTForm(BaseForm):
 
 class CTCFacilityForm(BaseForm):
     ctcID = IntegerField('ctcID',
-                         [] + COMMON_INTEGER_VALIDATORS)
+                         [validators.InputRequired()])
     facilityID = IntegerField('facilityID',
-                              [] + COMMON_INTEGER_VALIDATORS)
+                              [validators.InputRequired()])
 
     def validate(self):
         f = Form.validate(self)
@@ -217,7 +213,7 @@ class CTCFacilityForm(BaseForm):
 
 class CTCForm(BaseForm):
     participantID = IntegerField('participantID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     dxDate = DateField('dxDate',
                        [] + COMMON_DATE_VALIDATORS,
                        format=DATE_FORMAT)
@@ -251,21 +247,19 @@ class CTCForm(BaseForm):
                             [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         patient = query.get_patient(self.participantID.data)
         if patient is None:
-            self.projectID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
-        state = query.get_state(self.dxStateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
+        if self.dxStateID.data:
+            state = query.get_state(self.dxStateID.data)
+            if state is None:
+                self.dxStateID.errors.append("ID not found")
+                hasErrors = True
 
         return not hasErrors
 
@@ -292,7 +286,7 @@ class FacilityAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
-                              [] + COMMON_INTEGER_VALIDATORS)
+                              [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
@@ -312,25 +306,28 @@ class FacilityAddressForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
-        state = query.get_contact_info_source(self.stateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
-
         facility = query.get_facility(self.facilityID.data)
         if facility is None:
             self.facilityID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.stateID.data:
+            state = query.get_state(self.stateID.data)
+            if state is None:
+                self.stateID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -338,7 +335,7 @@ class FacilityPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     facilityID = IntegerField('facilityID',
-                              [] + COMMON_INTEGER_VALIDATORS)
+                              [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     phoneNumber = StringField('phoneNumber',
@@ -354,25 +351,28 @@ class FacilityPhoneForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        phoneType = query.get_phone_type(self.phoneTypeID.data)
-        if phoneType is None:
-            self.phoneTypeID.errors.append("ID not found")
-            hasErrors = True
-
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
         facility = query.get_facility(self.facilityID.data)
         if facility is None:
             self.facilityID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.phoneTypeID.data:
+            phoneType = query.get_phone_type(self.phoneTypeID.data)
+            if phoneType is None:
+                self.phoneTypeID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -385,7 +385,7 @@ class FundingForm(BaseForm):
     grantStatusID = IntegerField('grantStatusID',
                                  [] + COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     fundingSourceID = IntegerField('fundingSourceID',
                                    [] + COMMON_INTEGER_VALIDATORS)
     primaryFundingSource = StringField('primaryFundingSource',
@@ -407,10 +407,7 @@ class FundingForm(BaseForm):
                                       [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
@@ -418,15 +415,17 @@ class FundingForm(BaseForm):
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        grantStatus = query.get_grant_status(self.grantStatusID.data)
-        if grantStatus is None:
-            self.grantStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.grantStatusID.data:
+            grantStatus = query.get_grant_status(self.grantStatusID.data)
+            if grantStatus is None:
+                self.grantStatusID.errors.append("ID not found")
+                hasErrors = True
 
-        fundingSource = query.get_funding_source(self.fundingSourceID.data)
-        if fundingSource is None:
-            self.fundingSourceID.errors.append("ID not found")
-            hasErrors = True
+        if self.fundingSourceID.data:
+            fundingSource = query.get_funding_source(self.fundingSourceID.data)
+            if fundingSource is None:
+                self.fundingSourceID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -454,7 +453,7 @@ class IRBHolderLUTForm(BaseForm):
 
 class IncentiveForm(BaseForm):
     participantID = IntegerField('participantID',
-                                    [] + COMMON_INTEGER_VALIDATORS)
+                                    [validators.InputRequired()])
     incentiveDescription = StringField('incentiveDescription',
                                        [] + COMMON_STRING_VALIDATORS)
     barcode = StringField('barcode',
@@ -463,9 +462,9 @@ class IncentiveForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_project_patient(self.projectPatientID.data)
-        if contactSource is None:
-            self.projectPatientID.errors.append("ID not found")
+        participant = query.get_project_patient(self.participantID.data)
+        if participant is None:
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
         return not hasErrors
@@ -473,7 +472,7 @@ class IncentiveForm(BaseForm):
 
 class InformantForm(BaseForm):
     participantID = IntegerField('participantID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     firstName = StringField('firstName',
                             [] + COMMON_STRING_VALIDATORS)
     lastName = StringField('lastName',
@@ -491,7 +490,7 @@ class InformantForm(BaseForm):
         hasErrors = not Form.validate(self)
         patient = query.get_patient(self.participantID.data)
         if patient is None:
-            self.patientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
@@ -500,7 +499,7 @@ class InformantAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     informantID = IntegerField('informantID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
@@ -520,25 +519,28 @@ class InformantAddressForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
-        state = query.get_contact_info_source(self.stateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
-
         informant = query.get_informant(self.informantID.data)
         if informant is None:
             self.informantID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.stateID.data:
+            state = query.get_contact_info_source(self.stateID.data)
+            if state is None:
+                self.stateID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -586,9 +588,9 @@ class LogForm(BaseForm):
     logSubjectID = IntegerField('logSubjectID',
                                 [] + COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     phaseStatusID = IntegerField('phaseStatusID',
                                  [] + COMMON_INTEGER_VALIDATORS)
     note = StringField('note',
@@ -605,20 +607,22 @@ class LogForm(BaseForm):
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        logSubject = query.get_log_subject(self.logSubjectID.data)
-        if logSubject is None:
-            self.logSubjectID.errors.append("ID not found")
-            hasErrors = True
-
         staff = query.get_staff(self.staffID.data)
         if staff is None:
             self.staffID.errors.append("ID not found")
             hasErrors = True
 
-        phaseStatus = query.get_phase_status(self.phaseStatusID.data)
-        if phaseStatus is None:
-            self.phaseStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.logSubjectID.data:
+            logSubject = query.get_log_subject(self.logSubjectID.data)
+            if logSubject is None:
+                self.logSubjectID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.phaseStatusID.data:
+            phaseStatus = query.get_phase_status(self.phaseStatusID.data)
+            if phaseStatus is None:
+                self.phaseStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -628,7 +632,7 @@ class LogSubjectLUTForm(BaseForm):
 
 
 class PatientForm(BaseForm):
-    participantID = StringField('participantID',
+    patID = StringField('patID',
                         [] + COMMON_STRING_VALIDATORS)
     recordID = IntegerField('recordID',
                             [] + COMMON_INTEGER_VALIDATORS)
@@ -667,25 +671,29 @@ class PatientForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        sex = query.get_sex(self.sexID.data)
-        if sex is None:
-            self.sexID.errors.append("ID not found")
-            hasErrors = True
+        if self.sexID.data:
+            sex = query.get_sex(self.sexID.data)
+            if sex is None:
+                self.sexID.errors.append("ID not found")
+                hasErrors = True
 
-        race = query.get_race(self.raceID.data)
-        if race is None:
-            self.raceID.errors.append("ID not found")
-            hasErrors = True
+        if self.raceID.data:
+            race = query.get_race(self.raceID.data)
+            if race is None:
+                self.raceID.errors.append("ID not found")
+                hasErrors = True
 
-        ethnicity = query.get_ethnicity(self.ethnicityID.data)
-        if ethnicity is None:
-            self.ethnicityID.errors.append("ID not found")
-            hasErrors = True
+        if self.ethnicityID.data:
+            ethnicity = query.get_ethnicity(self.ethnicityID.data)
+            if ethnicity is None:
+                self.ethnicityID.errors.append("ID not found")
+                hasErrors = True
 
-        vitalStatus = query.get_vital_status(self.vitalStatusID.data)
-        if vitalStatus is None:
-            self.vitalStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.vitalStatusID.data:
+            vitalStatus = query.get_vital_status(self.vitalStatusID.data)
+            if vitalStatus is None:
+                self.vitalStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -693,7 +701,7 @@ class PatientAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
@@ -713,25 +721,28 @@ class PatientAddressForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
-        state = query.get_contact_info_source(self.stateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
-
-        patient = query.get_patient(self.patientID.data)
+        patient = query.get_patient(self.participantID.data)
         if patient is None:
-            self.patientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.stateID.data:
+            state = query.get_state(self.stateID.data)
+            if state is None:
+                self.stateID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -739,7 +750,7 @@ class PatientEmailForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     email = StringField('email',
@@ -750,20 +761,22 @@ class PatientEmailForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
-        patient = query.get_patient(self.patientID.data)
+        patient = query.get_patient(self.participantID.data)
         if patient is None:
-            self.patientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -771,7 +784,7 @@ class PatientPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     phoneTypeID = IntegerField('phoneTypeID',
@@ -785,46 +798,50 @@ class PatientPhoneForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        phoneType = query.get_phone_type(self.phoneTypeID.data)
-        if phoneType is None:
-            self.phoneTypeID.errors.append("ID not found")
-            hasErrors = True
-
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
-
-        patient = query.get_patient(self.patientID.data)
+        patient = query.get_patient(self.participantID.data)
         if patient is None:
-            self.patientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.phoneTypeID.data:
+            phoneType = query.get_phone_type(self.phoneTypeID.data)
+            if phoneType is None:
+                self.phoneTypeID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
 class PatientProjectStatusForm(BaseForm):
     patientProjectStatusTypeID = IntegerField('patientProjectStatusTypeID',
                                               [] + COMMON_INTEGER_VALIDATORS)
-    projectPatientID = IntegerField('projectID',
-                                    [] + COMMON_INTEGER_VALIDATORS)
+    participantID = IntegerField('participantID',
+                                    [validators.InputRequired()])
 
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        patientProjectStatusLUT = query.get_patient_project_status_type(self.patientProjectStatusTypeID.data)
-        if patientProjectStatusLUT is None:
-            self.patientProjectStatusTypeID.errors.append("ID not found")
+        projectPatient = query.get_project_patient(self.participantID.data)
+        if projectPatient is None:
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
-        projectPatient = query.get_project_patient(self.projectPatientID.data)
-        if projectPatient is None:
-            self.projectPatientID.errors.append("ID not found")
-            hasErrors = True
+        if self.patientProjectStatusTypeID.data:
+            patientProjectStatusLUT = query.get_patient_project_status_type(self.patientProjectStatusTypeID.data)
+            if patientProjectStatusLUT is None:
+                self.patientProjectStatusTypeID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -871,19 +888,19 @@ class PhysicianForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        physicianStatus = query.get_physician_status(self.physicianStatusID.data)
-        if physicianStatus is None:
-            self.physicianStatusID.errors.append("ID not found")
-            hasErrors = True
-
+        if self.physicianStatusID.data:
+            physicianStatus = query.get_physician_status(self.physicianStatusID.data)
+            if physicianStatus is None:
+                self.physicianStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
 class PhysicianFacilityForm(BaseForm):
     facilityID = IntegerField('facilityID',
-                              [] + COMMON_INTEGER_VALIDATORS)
+                              [validators.InputRequired()])
     physicianID = IntegerField('physicianID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     physFacilityStatusID = IntegerField('physFacilityStatus',
                                         [] + COMMON_INTEGER_VALIDATORS)
     physFacilityStatusDate = DateField('physFacilityStatusDate',
@@ -893,20 +910,22 @@ class PhysicianFacilityForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
+        physician = query.get_physician(self.physicianID.data)
+        if physician is None:
+            self.physicianID.errors.append("ID not found")
+            hasErrors = True
+
         facility = query.get_facility(self.facilityID.data)
         if facility is None:
             self.facilityID.errors.append("ID not found")
             hasErrors = True
 
-        status = query.get_physician_facility_status(self.physFacilityStatusID.data)
-        if status is None:
-            self.physFacilityStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.physFacilityStatusID.data:
+            status = query.get_physician_facility_status(self.physFacilityStatusID.data)
+            if status is None:
+                self.physFacilityStatusID.errors.append("ID not found")
+                hasErrors = True
 
-        physician = query.get_physician(self.physicianID.data)
-        if physician is None:
-            self.physicianID.errors.append("ID not found")
-            hasErrors = True
         return not hasErrors
 
 
@@ -914,7 +933,7 @@ class PhysicianAddressForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     street = StringField('street',
@@ -934,25 +953,28 @@ class PhysicianAddressForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
 
-        state = query.get_contact_info_source(self.stateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
+        if self.stateID.data:
+            state = query.get_state(self.stateID.data)
+            if state is None:
+                self.stateID.errors.append("ID not found")
+                hasErrors = True
 
         physician = query.get_physician(self.physicianID.data)
         if physician is None:
             self.physicianID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -960,7 +982,7 @@ class PhysicianEmailForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     email = StringField('email',
@@ -971,20 +993,22 @@ class PhysicianEmailForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
 
         physician = query.get_patient(self.physicianID.data)
         if physician is None:
             self.physicianID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -992,7 +1016,7 @@ class PhysicianPhoneForm(BaseForm):
     contactInfoSourceID = IntegerField('contactInfoSourceID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     physicianID = IntegerField('physicianID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     contactInfoStatusID = IntegerField('contactInfoStatusID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     phoneNumber = StringField('phoneNumber',
@@ -1006,25 +1030,28 @@ class PhysicianPhoneForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        phoneType = query.get_phone_type(self.phoneTypeID.data)
-        if phoneType is None:
-            self.phoneTypeID.errors.append("ID not found")
-            hasErrors = True
+        if self.phoneTypeID.data:
+            phoneType = query.get_phone_type(self.phoneTypeID.data)
+            if phoneType is None:
+                self.phoneTypeID.errors.append("ID not found")
+                hasErrors = True
 
-        contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
-        if contactSource is None:
-            self.contactInfoSourceID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoSourceID.data:
+            contactSource = query.get_contact_info_source(self.contactInfoSourceID.data)
+            if contactSource is None:
+                self.contactInfoSourceID.errors.append("ID not found")
+                hasErrors = True
 
         physician = query.get_physician(self.physicianID.data)
         if physician is None:
             self.physicianID.errors.append("ID not found")
             hasErrors = True
 
-        contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
-        if contactStatus is None:
-            self.contactInfoStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactInfoStatusID.data:
+            contactStatus = query.get_contact_info_status(self.contactInfoStatusID.data)
+            if contactStatus is None:
+                self.contactInfoStatusID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -1035,9 +1062,9 @@ class PhysicianStatusForm(BaseForm):
 
 class PhysicianToCTCForm(BaseForm):
     physicianID = IntegerField('physicianID',
-                               [] + COMMON_INTEGER_VALIDATORS)
+                               [validators.InputRequired()])
     ctcID = IntegerField('ctcID',
-                         [] + COMMON_INTEGER_VALIDATORS)
+                         [validators.InputRequired()])
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1048,7 +1075,7 @@ class PhysicianToCTCForm(BaseForm):
             hasErrors = True
 
         ctc = query.get_ctc(self.ctcID.data)
-        if physician is None:
+        if ctc is None:
             self.ctcID.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
@@ -1056,7 +1083,7 @@ class PhysicianToCTCForm(BaseForm):
 
 class PreApplicationForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     piFirstName = StringField('piFirstName',
                               [] + COMMON_STRING_VALIDATORS)
     piLastName = StringField('piLastName',
@@ -1113,10 +1140,7 @@ class PreApplicationForm(BaseForm):
                               [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
         project = query.get_project(self.projectID.data)
@@ -1164,32 +1188,31 @@ class ProjectForm(BaseForm):
                                 format=DATE_FORMAT)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
-        projType = query.get_project_type(self.projectTypeID.data)
-        if projType is None:
-            self.projectTypeID.errors.append("ID not found")
-            hasErrors = True
+        if self.projectTypeID.data:
+            projType = query.get_project_type(self.projectTypeID.data)
+            if projType is None:
+                self.projectTypeID.errors.append("ID not found")
+                hasErrors = True
 
         # check the irbHolderLUT FK
-        irbHolder = query.get_irb_holder(self.irbHolderID.data)
-        if irbHolder is None:
-            self.irbHolderID.errors.append("ID not found")
-            hasErrors = True
+        if self.irbHolderID.data:
+            irbHolder = query.get_irb_holder(self.irbHolderID.data)
+            if irbHolder is None:
+                self.irbHolderID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
 class ProjectPatientForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     staffID = IntegerField('staffID',
                            [] + COMMON_INTEGER_VALIDATORS)
     ctcID = IntegerField('ctcID',
-                         [] + COMMON_INTEGER_VALIDATORS)
+                         [validators.InputRequired()])
     currentAge = IntegerField('currentAge',
                               [] + COMMON_INTEGER_VALIDATORS)
     batch = IntegerField('batch',
@@ -1197,10 +1220,9 @@ class ProjectPatientForm(BaseForm):
     siteGrp = IntegerField('siteGrp',
                            [] + COMMON_INTEGER_VALIDATORS)
     finalCodeID = IntegerField('finalCodeID',
-                               [validators.optional()],
-                               filters = [lambda x: x or None])
+                               [validators.InputRequired()])
     finalCodeDate = DateField('finalCodeDate',
-                              [validators.optional()],
+                              [] + COMMON_DATE_VALIDATORS,
                               format=DATE_FORMAT)
     enrollmentDate = DateField('enrollmentDate',
                                [] + COMMON_DATE_VALIDATORS,
@@ -1209,7 +1231,7 @@ class ProjectPatientForm(BaseForm):
                                 [] + COMMON_DATE_VALIDATORS,
                                 format=DATE_FORMAT)
     importDate = DateField('importDate',
-                           [] + COMMON_DATE_VALIDATORS,
+                           [validators.InputRequired()],
                            format=DATE_FORMAT)
     finalCodeStaffID = IntegerField('finalCodeStaffID',
                                     [] + COMMON_INTEGER_VALIDATORS)
@@ -1259,71 +1281,81 @@ class ProjectPatientForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        if self.finalCodeID.data:
-            finalCode = query.get_staff(self.finalCodeID.data)
-            if finalCode is None:
-                self.finalCodeID.errors.append("ID not found")
+        finalCode = query.get_staff(self.finalCodeID.data)
+        if finalCode is None:
+            self.finalCodeID.errors.append("ID not found")
+            hasErrors = True
+
+        if self.finalCodeStaffID.data:
+            finalCodeStaff = query.get_staff(self.finalCodeStaffID.data)
+            if finalCodeStaff is None:
+                self.finalCodeStaffID.errors.append("ID not found")
                 hasErrors = True
 
-        finalCodeStaff = query.get_staff(self.finalCodeStaffID.data)
-        if finalCodeStaff is None:
-            self.finalCodeStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.enrollmentStaffID.data:
+            enrollmentStaff = query.get_staff(self.enrollmentStaffID.data)
+            if enrollmentStaff is None:
+                self.enrollmentStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        enrollmentStaff = query.get_staff(self.enrollmentStaffID.data)
-        if enrollmentStaff is None:
-            self.enrollmentStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.dateCoordSignedStaffID.data:
+            dateCoordSignedStaff = query.get_staff(self.dateCoordSignedStaffID.data)
+            if dateCoordSignedStaff is None:
+                self.dateCoordSignedStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        dateCoordSignedStaff = query.get_staff(self.dateCoordSignedStaffID.data)
-        if dateCoordSignedStaff is None:
-            self.dateCoordSignedStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.abstractStatusID.data:
+            abstractStatus = query.get_staff(self.abstractStatusID.data)
+            if abstractStatus is None:
+                self.abstractStatusID.errors.append("ID not found")
+                hasErrors = True
 
-        abstractStatus = query.get_staff(self.abstractStatusID.data)
-        if abstractStatus is None:
-            self.abstractStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.abstractStatusStaffID.data:
+            abstractStatusStaff = query.get_staff(self.abstractStatusStaffID.data)
+            if abstractStatusStaff is None:
+                self.abstractStatusStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        abstractStatusStaff = query.get_staff(self.abstractStatusStaffID.data)
-        if abstractStatusStaff is None:
-            self.abstractStatusStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.sentToAbstractorStaffID.data:
+            sentToAbstractorStaff = query.get_staff(self.sentToAbstractorStaffID.data)
+            if sentToAbstractorStaff is None:
+                self.sentToAbstractorStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        sentToAbstractorStaff = query.get_staff(self.sentToAbstractorStaffID.data)
-        if sentToAbstractorStaff is None:
-            self.sentToAbstractorStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.abstractorStaffID.data:
+            abstractorStaff = query.get_staff(self.abstractorStaffID.data)
+            if abstractorStaff is None:
+                self.abstractorStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        abstractorStaff = query.get_staff(self.abstractorStaffID.data)
-        if abstractorStaff is None:
-            self.abstractorStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.researcherStaffID.data:
+            researcherStaff = query.get_staff(self.researcherStaffID.data)
+            if researcherStaff is None:
+                self.researcherStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        researcherStaff = query.get_staff(self.researcherStaffID.data)
-        if researcherStaff is None:
-            self.researcherStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.medRecordReleaseStaffID.data:
+            medRecordReleaseStaff = query.get_staff(self.medRecordReleaseStaffID.data)
+            if medRecordReleaseStaff is None:
+                self.medRecordReleaseStaffID.errors.append("ID not found")
+                hasErrors = True
 
-        medRecordReleaseStaff = query.get_staff(self.medRecordReleaseStaffID.data)
-        if medRecordReleaseStaff is None:
-            self.medRecordReleaseStaffID.errors.append("ID not found")
-            hasErrors = True
-
-        surveyToResearcherStaff = query.get_staff(self.surveyToResearcherStaffID.data)
-        if surveyToResearcherStaff is None:
-            self.surveyToResearcherStaffID.errors.append("ID not found")
-            hasErrors = True
+        if self.surveyToResearcherStaffID.data:
+            surveyToResearcherStaff = query.get_staff(self.surveyToResearcherStaffID.data)
+            if surveyToResearcherStaff is None:
+                self.surveyToResearcherStaffID.errors.append("ID not found")
+                hasErrors = True
 
         project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        staff = query.get_staff(self.staffID.data)
-        if staff is None:
-            self.staffID.errors.append("ID not found")
-            hasErrors = True
+        if self.staffID.data:
+            staff = query.get_staff(self.staffID.data)
+            if staff is None:
+                self.staffID.errors.append("ID not found")
+                hasErrors = True
 
         ctc = query.get_ctc(self.ctcID.data)
         if ctc is None:
@@ -1337,9 +1369,9 @@ class ProjectStaffForm(BaseForm):
     staffRoleID = IntegerField('staffRoleID',
                                [] + COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     datePledge = DateField('datePledge',
                            [] + COMMON_DATE_VALIDATORS,
                            format=DATE_FORMAT)
@@ -1365,20 +1397,23 @@ class ProjectStaffForm(BaseForm):
             self.staffID.errors.append("ID not found")
             hasErrors = True
 
-        contact = query.get_contact_enum(self.contactID.data)
-        if contact is None:
-            self.contactID.errors.append("ID not found")
-            hasErrors = True
+        if self.contactID.data:
+            contact = query.get_contact_enum(self.contactID.data)
+            if contact is None:
+                self.contactID.errors.append("ID not found")
+                hasErrors = True
 
-        inactive = query.get_inactive_enum(self.inactiveID.data)
-        if inactive is None:
-            self.inactiveID.errors.append("ID not found")
-            hasErrors = True
+        if self.inactiveID.data:
+            inactive = query.get_inactive_enum(self.inactiveID.data)
+            if inactive is None:
+                self.inactiveID.errors.append("ID not found")
+                hasErrors = True
 
-        staffRole = query.get_staff_role(self.staffRoleID.data)
-        if staffRole is None:
-            self.staffRoleID.errors.append("ID not found")
-            hasErrors = True
+        if self.staffRoleID.data:
+            staffRole = query.get_staff_role(self.staffRoleID.data)
+            if staffRole is None:
+                self.staffRoleID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -1386,9 +1421,9 @@ class ProjectStatusForm(BaseForm):
     projectStatusTypeID = IntegerField('projectStatusTypeID',
                                        [] + COMMON_INTEGER_VALIDATORS)
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     statusDate = DateField('statusDate',
                            [] + COMMON_DATE_VALIDATORS,
                            format=DATE_FORMAT)
@@ -1396,10 +1431,7 @@ class ProjectStatusForm(BaseForm):
                               [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False  # are hasErrors detected?
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
         project = query.get_project_type(self.projectID.data)
@@ -1407,10 +1439,11 @@ class ProjectStatusForm(BaseForm):
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        projectStatus = query.get_project_status_lut(self.projectStatusTypeID.data)
-        if projectStatus is None:
-            self.projectStatusTypeID.errors.append("ID not found")
-            hasErrors = True
+        if self.projectStatusTypeID.data:
+            projectStatus = query.get_project_status_lut(self.projectStatusTypeID.data)
+            if projectStatus is None:
+                self.projectStatusTypeID.errors.append("ID not found")
+                hasErrors = True
 
         staff = query.get_staff(self.staffID.data)
         if staff is None:
@@ -1442,7 +1475,7 @@ class ReviewCommitteeStatusLUTForm(BaseForm):
 
 class ReviewCommitteeForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     reviewCommitteeStatusID = IntegerField('reviewCommitteeStatusID',
                                            [] + COMMON_INTEGER_VALIDATORS)
     reviewCommitteeLUTID = IntegerField('reviewCommitteeLUTID',
@@ -1475,16 +1508,18 @@ class ReviewCommitteeForm(BaseForm):
             hasErrors = True
 
         # check the rcStatus FK
-        rcStatus = query.get_review_committee_status(self.reviewCommitteeStatusID.data)
-        if rcStatus is None:
-            self.reviewCommitteeStatusID.errors.append("ID not found")
-            hasErrors = True
+        if self.reviewCommitteeStatusID.data:
+            rcStatus = query.get_review_committee_status(self.reviewCommitteeStatusID.data)
+            if rcStatus is None:
+                self.reviewCommitteeStatusID.errors.append("ID not found")
+                hasErrors = True
 
         # check the reviewCommitteeList FK
-        rc = query.get_review_committee_lut(self.reviewCommitteeLUTID.data)
-        if rc is None:
-            self.reviewCommitteeLUTID.errors.append("ID not found")
-            hasErrors = True
+        if self.reviewCommitteeLUTID.data:
+            rc = query.get_review_committee_lut(self.reviewCommitteeLUTID.data)
+            if rc is None:
+                self.reviewCommitteeLUTID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -1531,15 +1566,17 @@ class StaffForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        ucrRole = query.get_ucr_role(self.ucrRoleID.data)
-        if ucrRole is None:
-            self.ucrRoleID.errors.append("ID not found")
-            hasErrors = True
+        if self.ucrRoleID.data:
+            ucrRole = query.get_ucr_role(self.ucrRoleID.data)
+            if ucrRole is None:
+                self.ucrRoleID.errors.append("ID not found")
+                hasErrors = True
 
-        state = query.get_state(self.stateID.data)
-        if state is None:
-            self.stateID.errors.append("ID not found")
-            hasErrors = True
+        if self.stateID.data:
+            state = query.get_state(self.stateID.data)
+            if state is None:
+                self.stateID.errors.append("ID not found")
+                hasErrors = True
 
         return not hasErrors
 
@@ -1553,7 +1590,7 @@ class StaffRoleLUTForm(BaseForm):
 
 class StaffTrainingForm(BaseForm):
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     humanSubjectTrainingID = IntegerField('humanSubjectTrainingID',
                                           [] + COMMON_INTEGER_VALIDATORS)
     dateTaken = DateField('dateTaken',
@@ -1573,10 +1610,11 @@ class StaffTrainingForm(BaseForm):
             hasErrors = True
 
         # check the rcStatus FK
-        hst = query.get_human_subject_training(self.humanSubjectTrainingID.data)
-        if hst is None:
-            self.humanSubjectTrainingID.errors.append("ID not found")
-            hasErrors = True
+        if self.humanSubjectTrainingID.data:
+            hst = query.get_human_subject_training(self.humanSubjectTrainingID.data)
+            if hst is None:
+                self.humanSubjectTrainingID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -1584,12 +1622,12 @@ class TracingForm(BaseForm):
     tracingSourceID = IntegerField('tracingSourceID',
                                    [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
-                                    [] + COMMON_INTEGER_VALIDATORS)
+                                    [validators.InputRequired()])
     date = DateField('date',
                      [] + COMMON_DATE_VALIDATORS,
                      format=DATE_FORMAT)
     staffID = IntegerField('staffID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+                           [validators.InputRequired()])
     notes = StringField('notes',
                         [] + COMMON_STRING_VALIDATORS)
 
@@ -1597,16 +1635,17 @@ class TracingForm(BaseForm):
         hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
-        projectPatient = query.get_project_patient(self.projectPatientID.data)
+        projectPatient = query.get_project_patient(self.participantID.data)
         if projectPatient is None:
-            self.projectPatientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
         # check the irbHolderLUT FK
-        tracingSource = query.get_tracing_source(self.tracingSourceID.data)
-        if tracingSource is None:
-            self.tracingSourceID.errors.append("ID not found")
-            hasErrors = True
+        if self.tracingSourceID.data:
+            tracingSource = query.get_tracing_source(self.tracingSourceID.data)
+            if tracingSource is None:
+                self.tracingSourceID.errors.append("ID not found")
+                hasErrors = True
 
         staff = query.get_staff(self.staffID.data)
         if staff is None:
@@ -1622,7 +1661,7 @@ class TracingSourceLUTForm(BaseForm):
 
 class UCRReportForm(BaseForm):
     projectID = IntegerField('projectID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+                             [validators.InputRequired()])
     reportTypeID = IntegerField('reportTypeID',
                              [] + COMMON_INTEGER_VALIDATORS)
     reportSubmitted = DateField('reportSubmitted',
@@ -1635,10 +1674,7 @@ class UCRReportForm(BaseForm):
                             [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
-        f = Form.validate(self)
-        hasErrors = False
-        if not f:
-            hasErrors = True
+        hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
         project = query.get_project(self.projectID.data)
@@ -1646,10 +1682,11 @@ class UCRReportForm(BaseForm):
             self.projectID.errors.append("ID not found")
             hasErrors = True
 
-        ucrReportType = query.get_report_type(self.reportTypeID.data)
-        if ucrReportType is None:
-            self.reportTypeID.errors.append("ID not found")
-            hasErrors = True
+        if self.reportTypeID.data:
+            ucrReportType = query.get_report_type(self.reportTypeID.data)
+            if ucrReportType is None:
+                self.reportTypeID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 

@@ -5004,7 +5004,7 @@ def update_project(projectID):
                     proj.finalRecruitmentReport = form.finalRecruitmentReport.data
                     proj.ongoingContact = form.ongoingContact.data
                     proj.activityStartDate = form.activityStartDate.data
-                    proj.activityEndDate = form.activityStartDate.data
+                    proj.activityEndDate = form.activityEndDate.data
                     query.commit()
                     return redirect_back("projects/{}/".format(projectID))
                 else:
@@ -5047,7 +5047,7 @@ def create_project(projectID=None):
                     finalRecruitmentReport=form.finalRecruitmentReport.data,
                     ongoingContact="true" == form.ongoingContact.data.lower(),
                     activityStartDate=form.activityStartDate.data,
-                    activityEndDate=form.activityStartDate.data
+                    activityEndDate=form.activityEndDate.data
                 )
                 query.add(proj)
                 return redirect_back("projects/{}/".format(proj.projectID))

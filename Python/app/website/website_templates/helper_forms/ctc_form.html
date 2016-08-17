@@ -103,6 +103,7 @@
                 <div class="col-md-2">  
                   <label for="select_dxState">Dx State</label>        
                   <select type="text" class="form-control" name="dxState" id="select_dxState" readonly="readonly" disabled="disabled">
+                      <option></option>
                       {% for state in form["states"] %}
                         {% if state.stateID == ctc["dxStateID"]%}
                             <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>

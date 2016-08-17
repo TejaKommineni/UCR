@@ -27,6 +27,7 @@
                 <div class = "col-md-4">
                   <label for="select_tracingSourceID">Tracing Source</label>
                   <select type="text" class="form-control" name="tracingSourceID" id="select_tracingSourceID">
+                      <option></option>
                       {% for ts in form.tracingSources %}
                         {% if ts.tracingSourceID == tracing.tracingSourceID %}
                             <option selected="selected" value="{{ts.tracingSourceID}}">{{ts.description}}</option>

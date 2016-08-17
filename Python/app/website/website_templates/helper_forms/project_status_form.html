@@ -27,6 +27,7 @@
               <div class = "col-md-2">
                   <label for="select_projectStatusType">Project Status Type</label>
                   <select type="text" class="form-control" name="projectStatusTypeID" id="select_projectStatusType">
+                      <option></option>
                       {% for projectStatusType in form["projectStatusTypes"] %}
                         {% if projectStatusType.projectStatusSubjectID == projectStatus["projectStatusTypeID"] %}
                             <option selected="selected" value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>

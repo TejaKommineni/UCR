@@ -27,6 +27,7 @@
                 <div class="col-md-2">  
                   <label for="select_state">State</label>        
                   <select type="text" class="form-control" name="stateID" id="select_state">
+                      <option></option>
                       {% for state in form["states"] %}
                         {% if state.stateID == patientAddress["stateID"] %}
                             <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>

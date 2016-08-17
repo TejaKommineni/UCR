@@ -27,6 +27,7 @@
                 <div class="col-md-2">  
                   <label for="select_state">State</label>        
                   <select type="text" class="form-control" name="stateID" id="select_state">
+                      <option></option>
                       {% for state in form["states"] %}
                         {% if state.stateID == facilityAddress["stateID"] %}
                             <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>
@@ -45,6 +46,7 @@
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
                   <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                      <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == facilityAddress["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -57,6 +59,7 @@
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
                   <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                      <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == facilityAddress["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>

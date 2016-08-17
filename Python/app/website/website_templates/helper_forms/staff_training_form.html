@@ -25,6 +25,7 @@
                 <div class = "col-md-2">
                   <label for="select_humanSubjectTrainingID">Human Subject Training</label>
                   <select type="text" class="form-control" name="humanSubjectTrainingID" id="select_humanSubjectTrainingID">
+                        <option></option>
                       {% for hst in form.humanSubjectTrainings %}
                         {% if hst.humanSubjectTrainingID == staffTraining.humanSubjectTrainingID %}
                             <option selected="selected" value="{{hst.humanSubjectTrainingID}}">{{hst.trainingType}}</option>

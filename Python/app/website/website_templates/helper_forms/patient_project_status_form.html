@@ -27,6 +27,7 @@
                 <div class = "col-md-8">
                   <label for="select_patientProjectStatusTypeID">Project Patient Status Type</label>
                   <select type="text" class="form-control" name="patientProjectStatusTypeID" id="select_patientProjectStatusTypeID">
+                      <option></option>
                       {% for ppst in form.patientProjectStatusTypes %}
                         {% if ppst.patientProjectStatusTypeID == patientProjectStatus.patientProjectStatusTypeID %}
                             <option selected="selected" value="{{ppst.patientProjectStatusTypeID}}">{{ppst.statusDescription}}</option>

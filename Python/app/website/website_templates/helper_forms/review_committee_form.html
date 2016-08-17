@@ -27,6 +27,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewCommitteeStatusID">Review Committee Status</label>
                   <select type="text" class="form-control" name="reviewCommitteeStatusID" id="select_reviewCommitteeStatusID">
+                        <option></option>
                       {% for reviewCommitteeStatus in form["reviewCommitteeStatuses"] %}
                         {% if reviewCommitteeStatus.reviewCommitteeStatusID == reviewCommittee["reviewCommitteeStatusID"] %}
                             <option selected="selected" value="{{reviewCommitteeStatus.reviewCommitteeStatusID}}">{{reviewCommitteeStatus.reviewCommitteeStatus}}</option>
@@ -39,6 +40,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewCommitteeLUTID">Review Committee</label>
                   <select type="text" class="form-control" name="reviewCommitteeLUTID" id="select_reviewCommitteeLUTID">
+                      <option></option>
                       {% for reviewCommitteeLUT in form["reviewCommitteeLUTs"] %}
                         {% if reviewCommitteeLUT.reviewCommitteeLUTID == reviewCommittee["reviewCommitteeLUTID"] %}
                             <option selected="selected" value="{{reviewCommitteeLUT.reviewCommitteeID}}">{{reviewCommitteeLUT.reviewCommittee}}</option>

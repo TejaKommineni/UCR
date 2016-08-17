@@ -27,6 +27,7 @@
                 <div class="col-md-2">  
                   <label for="select_reportType">Report Type</label>
                   <select type="text" class="form-control" name="reportType" id="select_reportType" value="{{ucrReport.reportType}}">
+                      <option></option>
                       {% for rt in form.reportTypes %}
                         {% if rt.ucrReportTypeID == ucrReport.reportTypeID %}
                             <option value="{{rt.ucrReportTypeID}}" selected="selected">{{rt.ucrReportType}}</option>

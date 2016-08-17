@@ -41,6 +41,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewer1">Reviewer 1</label>
                   <select type="text" class="form-control" name="reviewer1" id="select_reviewer1">
+                      <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer1"] %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -53,6 +54,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewer1Rec">Reviewer 1 Rec</label>
                   <select type="text" class="form-control" name="reviewer1Rec" id="select_reviewer1Rec">
+                      <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer1Rec"] %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -75,6 +77,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewer2">Reviewer 2</label>
                   <select type="text" class="form-control" name="reviewer2" id="select_reviewer2">
+                      <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer2"] %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -87,6 +90,7 @@
                 <div class = "col-md-2">
                   <label for="select_reviewer2Rec">Reviewer 2 Rec</label>
                   <select type="text" class="form-control" name="reviewer2Rec" id="select_reviewer2Rec">
+                      <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer2Rec"] %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>

@@ -27,6 +27,7 @@
                 <div class = "col-md-2">
                   <label for="select_contactTypeLUTID">Contact Type</label>
                   <select type="text" class="form-control" name="contactTypeLUTID" id="select_contactTypeLUTID">
+                      <option></option>
                       {% for contactType in form.contactTypes %}
                         {% if contactType.contactTypeID == contact.contactTypeLUTID %}
                             <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactDefinition}}</option>
@@ -53,6 +54,7 @@
                 <div class = "col-md-2">
                   <label for="select_informantID">Informant</label>
                   <select type="text" class="form-control" name="informantID" id="select_informantID">
+                      <option></option>
                       {% if contact is not none %}
                           {% for informant in contact.projectPatient.ctc.patient.informants %}
                             {% if informant.informantID == contact.informantID %}
@@ -75,6 +77,7 @@
                 <div class = "col-md-2">
                   <label for="select_facilityID">Facility</label>
                   <select type="text" class="form-control" name="facilityID" id="select_facilityID">
+                      <option></option>
                       {% for facility in form.facilities %}
                         {% if facility.facilityID == contact.facilityID %}
                             <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName}}</option>
@@ -87,6 +90,7 @@
                 <div class = "col-md-2">
                   <label for="select_physicianID">Physician</label>
                   <select type="text" class="form-control" name="physicianID" id="select_physicianID">
+                      <option></option>
                       {% for physician in form.physicians %}
                         {% if physician.physicianID == contact.physicianID %}
                             <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>

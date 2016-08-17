@@ -1269,7 +1269,7 @@ class PhysicianFacility(CustomModel):
     __tablename__ = 'PhysicianFacility'
 
     physFacilityID = db.Column('physicianFacilityID', db.Integer, primary_key=True)
-    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'))
+    facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'), nullable=False)
     physicianID = db.Column('physicianID', db.Integer, db.ForeignKey('Physician.physicianID'), nullable=False)
     physFacilityStatusID = db.Column('physician_facility_status', db.Integer,
                                      db.ForeignKey('PhysicianFacilityStatusLUT.physicianFacilityStatusID'))

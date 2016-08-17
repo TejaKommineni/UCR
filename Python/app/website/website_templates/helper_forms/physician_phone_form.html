@@ -14,6 +14,7 @@
               <div class="col-md-2">  
                   <label for="select_phoneTypeID">Phone Type</label>        
                   <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
+                      <option></option>
                       {% for phoneType in form["phoneTypes"] %}
                         {% if phoneType["phoneTypeID"] == physicianPhone["phoneTypeID"] %}
                             <option value="{{phoneType["phoneTypeID"]}}" selected="selected">{{phoneType["phoneType"]}}</option>
@@ -28,6 +29,7 @@
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
                   <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                      <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == physicianPhone["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -40,6 +42,7 @@
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
                   <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                      <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == physicianPhone["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>

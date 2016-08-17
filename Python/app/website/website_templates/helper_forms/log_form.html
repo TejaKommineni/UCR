@@ -27,6 +27,7 @@
               <div class = "col-md-2">
                   <label for="select_logSubjectID">Log Subject</label>
                   <select type="text" class="form-control" name="logSubjectID" id="select_logSubjectID">
+                      <option></option>
                       {% for logSubject in form["logSubjects"] %}
                         {% if log.logSubjectID == logSubject["logSubjectID"] %}
                             <option selected="selected" value="{{logSubject.logSubjectID}}">{{logSubject.logSubject}}</option>
@@ -39,6 +40,7 @@
                 <div class = "col-md-2">
                   <label for="select_phaseStatusID">Phase Status</label>
                   <select type="text" class="form-control" name="phaseStatusID" id="select_phaseStatusID">
+                      <option></option>
                       {% for phaseStatus in form["phaseStatuses"] %}
                         {% if log.logPhaseID == phaseStatus["logPhaseID"] %}
                             <option selected="selected" value="{{phaseStatus.logPhaseID}}">{{phaseStatus.phaseStatus}}</option>

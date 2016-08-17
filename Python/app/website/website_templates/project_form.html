@@ -19,6 +19,7 @@
                 <div class = "col-md-2">
                   <label for="select_projectTypeID">Project Type</label>
                   <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID" value="{{form["project"]["projectTypeID"]}}">
+                    <option></option>
                   {% for projectType in form["projectTypes"] %}
                   {% if projectType.projectTypeID == form["project"]["projectTypeID"] %}
                     <option value="{{projectType.projectTypeID}}" selected=selected>{{projectType.projectType}}</option>
@@ -60,9 +61,14 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irbHolderID">IRB Holder</label>
-                  <select type="text" class="form-control" name="irbHolderID" id="select_irbHolderID" value="{{form["project"]["irbHolderID"]}}">
+                  <select type="text" class="form-control" name="irbHolderID" id="select_irbHolderID">
+                    <option></option>
                   {% for irbHolder in form["irbHolders"] %}
-                    <option value="{{irbHolder["irbHolderID"]}}">{{irbHolder["holder"]}}</option>
+                    {% if irbHolder.irbHolderID == form["project"]["irbHolderID"] %}
+                    <option value="{{irbHolder.irbHolderID}}" selected=selected>{{irbHolder.holder}}</option>
+                    {% else %}
+                    <option value="{{irbHolder.irbHolderID}}">{{irbHolder.holder}}</option>
+                    {% endif %}
                   {% endfor %}
                   </select>
                 </div>
