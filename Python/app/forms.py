@@ -1557,9 +1557,6 @@ class StaffForm(BaseForm):
                        [] + COMMON_STRING_VALIDATORS)
     stateID = IntegerField('stateID',
                            [] + COMMON_INTEGER_VALIDATORS)
-    humanSubjectTrainingExp = DateField('humanSubjectTrainingExp',
-                                        [] + COMMON_DATE_VALIDATORS,
-                                        format=DATE_FORMAT)
     ucrRoleID = IntegerField('ucrRoleID',
                              [] + COMMON_INTEGER_VALIDATORS)
 

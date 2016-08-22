@@ -6023,7 +6023,6 @@ def update_staff(staffID):
                     staff.street = form.street.data
                     staff.city = form.city.data
                     staff.stateID = form.stateID.data
-                    staff.humanSubjectTrainingExp = form.humanSubjectTrainingExp.data
                     staff.ucrRoleID = form.ucrRoleID.data
                     query.commit()
                     return redirect_back("staff/{}/".format(staffID))
@@ -6065,7 +6064,6 @@ def create_staff(staffID=None):
                     street=form.street.data,
                     city=form.city.data,
                     stateID=form.stateID.data,
-                    humanSubjectTrainingExp=form.humanSubjectTrainingExp.data,
                     ucrRoleID=form.ucrRoleID.data
                 )
                 query.add(staff)
