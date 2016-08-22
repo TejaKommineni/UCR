@@ -2639,7 +2639,7 @@ def update_incentive(incentiveID):
             form = forms.IncentiveForm(request.form)
             if form.validate():
                 if int(form.versionID.data) == incentive.versionID:
-                    incentive.projectPatientID = request.form["projectPatientID"]
+                    incentive.participantID = request.form["participantID"]
                     incentive.incentiveDescription = form.incentiveDescription.data
                     incentive.barcode = form.barcode.data
                     query.commit()
@@ -2669,7 +2669,7 @@ def create_incentive(incentiveID=None):
             form = forms.IncentiveForm(request.form)
             if form.validate():
                 incentive = models.Incentive(
-                    projectPatientID=form.projectPatientID.data,
+                    participantID=form.participantID.data,
                     incentiveDescription=form.incentiveDescription.data,
                     barcode=form.barcode.data
                 )
@@ -3768,7 +3768,7 @@ def update_patient_project_status(patientProjectStatusID):
             if form.validate():
                 if int(form.versionID.data) == patientProjectStatus.versionID:
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
-                    patientProjectStatus.projectPatientID = form.projectPatientID.data
+                    patientProjectStatus.participantID = form.participantID.data
                     query.commit()
                     return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
                 else:
@@ -3797,7 +3797,7 @@ def create_patient_project_status(patientProjectStatusID=None):
             if form.validate():
                 patientProjectStatus = models.PatientProjectStatus(
                     patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
-                    projectPatientID=form.projectPatientID.data
+                    participantID=form.participantID.data
                 )
                 query.add(patientProjectStatus)
                 return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatus.patientProjectStatusID))

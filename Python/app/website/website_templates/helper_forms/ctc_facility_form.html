@@ -11,7 +11,7 @@
             {% if ctcFacility is not none %}
                 <div class="col-md-2">  
                   <label for="select_ctcID">CTC</label>        
-                  <select type="text" class="form-control" name="ctcID" id="select_ctcID">
+                  <select type="text" required="required" class="form-control" name="ctcID" id="select_ctcID">
                       {% for ctc in form["ctcs"] %}
                         {% if ctc["ctcID"] == ctcFacility["ctcID"] %}
                             <option value="{{ctc["ctcID"]}}" selected="selected">{{ctc.patient.firstName}} {{ctc.patient.middleName}} {{ctc.patient.lastName}}</option>
@@ -24,7 +24,7 @@
             {% endif %}
                 <div class="col-md-2">  
                   <label for="select_facilityID">Facility</label>        
-                  <select type="text" class="form-control" name="facilityID" id="select_facilityID">
+                  <select type="text" required="required" class="form-control" name="facilityID" id="select_facilityID">
                       {% for facility in form["facilities"] %}
                         {% if facility["facilityID"] == ctcFacility["facilityID"] %}
                             <option value="{{facility["facilityID"]}}" selected="selected">{{facility["facilityName"]}}</option>

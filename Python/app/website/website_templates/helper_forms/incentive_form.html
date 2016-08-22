@@ -11,9 +11,9 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectPatientID">Project Patient</label>
-                  <select type="text" class="form-control" name="projectPatientID" id="select_projectPatientID">
+                  <select type="text" class="form-control" required="required" name="participantID" id="select_projectPatientID">
                       {% for pp in form.projectPatients %}
-                        {% if pp.participantID == incentive.projectPatientID %}
+                        {% if pp.participantID == incentive.participantID %}
                             <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
                         {% else %}
                             <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
@@ -62,7 +62,7 @@
                     <input type="hidden" name="incentiveID" value="{{incentive.incentiveID}}"/>
                 {% else %}
                     <input type="hidden" name="incentiveID" value="0"/>
-                    <input type="hidden" name="projectPatientID" value="{{projectPatient.participantID}}"/>
+                    <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
                 {% endif %}
             </div>
           </div>

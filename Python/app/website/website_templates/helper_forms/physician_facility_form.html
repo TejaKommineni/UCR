@@ -10,7 +10,7 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_physicianID">Physician</label>
-                  <select type="text" class="form-control" name="physicianID" id="select_physicianID">
+                  <select type="text" class="form-control" required="required" name="physicianID" id="select_physicianID">
                       {% for phys in form.physicians %}
                         {% if phys.physicianID == physicianFacility.physicianID %}
                             <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
@@ -24,7 +24,7 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_facilityID">Facility</label>
-                  <select type="text" class="form-control" name="facilityID" id="select_facilityID">
+                  <select type="text" class="form-control" required="required" name="facilityID" id="select_facilityID">
                       {% for facility in form.facilities %}
                         {% if facility.facilityID == physicianFacility.facilityID %}
                             <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName}}</option>

@@ -26,7 +26,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_contactTypeLUTID">Contact Type</label>
-                  <select type="text" class="form-control" name="contactTypeLUTID" id="select_contactTypeLUTID">
+                  <select type="text" class="form-control" required="required" name="contactTypeLUTID" id="select_contactTypeLUTID">
                       <option></option>
                       {% for contactType in form.contactTypes %}
                         {% if contactType.contactTypeID == contact.contactTypeLUTID %}
@@ -41,7 +41,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
-                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                  <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                       {% for staff in form.staff %}
                         {% if staff.staffID == contact.staffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -114,7 +114,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_contactDate">Contact Date</label>
-                  <input type="date" class="form-control" name="contactDate" id="date_contactDate" value="{{contact.contactDate}}">
+                  <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate" value="{{contact.contactDate}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_initials">Initials</label>
@@ -147,7 +147,7 @@
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
                 {% else %}
-                    <input type="hidden" name = "projectPatientID" value = "{{projectPatient.participantID}}"/>
+                    <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
                 {% endif %}
             </div>
           </div>

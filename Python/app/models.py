@@ -1052,7 +1052,7 @@ class PatientProjectStatus(CustomModel):
     patientProjectStatusID = db.Column('patientProjectStatusID', db.Integer, primary_key=True)
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer,
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
-    projectPatientID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT

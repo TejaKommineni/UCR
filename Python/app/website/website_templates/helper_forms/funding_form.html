@@ -11,7 +11,7 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
-                  <select type="text" class="form-control" name="projectID" id="select_projectID">
+                  <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == funding["projectID"] %}
                             <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>

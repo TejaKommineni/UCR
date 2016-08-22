@@ -11,7 +11,7 @@
               <div class="row">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
-                  <select type="text" class="form-control" name="projectID" id="select_projectID">
+                  <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for project in form.projects %}
                         {% if project.projectID == projectStaff.projectID %}
                             <option selected="selected" value="{{project.projectID}}">{{project.shortTitle}}</option>
@@ -27,7 +27,7 @@
               {% if staff is none %}
                <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
-                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                  <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectStaff.staffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
