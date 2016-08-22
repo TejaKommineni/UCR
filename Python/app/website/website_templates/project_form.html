@@ -90,7 +90,18 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_ongoingContact">Ongoing Contact</label>
-                  <input type="text" class="form-control" name="ongoingContact" id="text_ongoingContact" value="{{form["project"]["ongoingContact"]}}">
+                    <select type="text" class="form-control" name="ongoingContact" id="select_ongoingContact">
+                      {% if form.project.ongoingContact %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not form.project.ongoingContact %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="date_activityStartDate">Activity Start Date</label>
