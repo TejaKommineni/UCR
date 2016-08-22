@@ -18,8 +18,17 @@
                   <input type="text" class="form-control" name="lastName" id="text_lastName" value = "{{form.queryParams.lastName}}">
                 </div>
                 <div class="col-md-1">
-                  <label for="text_finalCode">Final Code</label>
-                  <input type="text" class="form-control" name="finalCode" id="text_finalCode" value = "{{form.queryParams.finalCode}}">
+                  <label for="select_finalCode">Final Code</label>
+                  <select type="text" class="form-control" name="finalCodeID" id="select_finalCode">
+                    <option value=""></option>
+                  {% for finalCode in form["finalCodes"] %}
+                    {% if finalCode.finalCodeID == form.queryParams.finalCodeID %}
+                    <option value="{{finalCode.finalCodeID}}" selected="selected">{{finalCode.finalCode}}</option>
+                    {% else %}
+                    <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-1">
                   <label for="text_batch">Batch</label>

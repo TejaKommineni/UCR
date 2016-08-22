@@ -94,7 +94,7 @@ class Contact(CustomModel):
 
     contactID = db.Column('contactID', db.Integer, primary_key=True)
     contactTypeLUTID = db.Column('contactTypeLUTID', db.Integer, db.ForeignKey("ContactTypeLUT.contactTypeLUTID"), nullable=False)
-    projectPatientID = db.Column('particpantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
+    participantID = db.Column('particpantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     staffID = db.Column('staffID', db.Integer, db.ForeignKey("Staff.staffID"), nullable=False)
     informantID = db.Column('informantID', db.Integer, db.ForeignKey("Informant.informantID"))
     facilityID = db.Column('facilityID', db.Integer, db.ForeignKey("Facility.facilityID"))
@@ -150,7 +150,6 @@ class ContactTypeLUT(CustomModel):
     contacts = db.relationship("Contact", back_populates="contactType")
 
 
-
 class CTC(CustomModel):
     __tablename__ = 'CTC'
 
@@ -184,7 +183,6 @@ class CTC(CustomModel):
     physicianToCTC = db.relationship("PhysicianToCTC", back_populates="ctc")
 
 
-
 class CTCFacility(CustomModel):
     __tablename__ = 'CTCFacility'
 
@@ -197,7 +195,6 @@ class CTCFacility(CustomModel):
     facility = db.relationship("Facility", back_populates="ctcFacilities")
     # M - 1,many ctc to one ctcfacility
     ctc = db.relationship("CTC", back_populates="ctcFacilities")
-
 
 
 class Ethnicity(CustomModel):
@@ -228,7 +225,6 @@ class Facility(CustomModel):
     ctcFacilities = db.relationship("CTCFacility", back_populates="facility")
     # M - 1
     physicianFacilities = db.relationship("PhysicianFacility", back_populates="facility")
-
 
 
 class FacilityAddress(CustomModel):
@@ -277,7 +273,6 @@ class FacilityPhone(CustomModel):
     phoneType = db.relationship("PhoneTypeLUT")
 
 
-
 class FinalCode(CustomModel):
     __tablename__ = "FinalCode"
 
@@ -312,7 +307,6 @@ class Funding(CustomModel):
     project = db.relationship("Project", back_populates="fundings")
 
 
-
 class FundingSourceLUT(CustomModel):
     __tablename__ = 'FundingSourceLUT'
 
@@ -322,7 +316,6 @@ class FundingSourceLUT(CustomModel):
     # Relationships
     # M - 1, many fundings with the same source
     fundings = db.relationship("Funding", back_populates="fundingSource")
-
 
 
 class GrantStatusLUT(CustomModel):
@@ -336,7 +329,6 @@ class GrantStatusLUT(CustomModel):
     fundings = db.relationship("Funding", back_populates="grantStatus")
 
 
-
 class HumanSubjectTrainingLUT(CustomModel):
     __tablename__ = 'HumanSubjectTrainingLUT'
 
@@ -346,7 +338,6 @@ class HumanSubjectTrainingLUT(CustomModel):
     # Relationships
     # M - 1, many staff trainings with the same HST
     staffTrainings = db.relationship('StaffTraining', back_populates="humanSubjectTraining")
-
 
 
 class IRBHolderLUT(CustomModel):
@@ -359,7 +350,6 @@ class IRBHolderLUT(CustomModel):
     # Relationships
     # M - 1, Many projects with the same IRB
     projects = db.relationship("Project", back_populates="irbHolder")
-
 
 
 class Inactive(CustomModel):
@@ -425,7 +415,6 @@ class InformantAddress(CustomModel):
     informant = db.relationship("Informant", back_populates="informantAddresses")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
-
 
 
 class InformantPhone(CustomModel):
@@ -657,7 +646,6 @@ class Physician(CustomModel):
     contacts = db.relationship("Contact", back_populates="physician")
 
     physicianStatus = db.relationship("PhysicianStatus", back_populates="physicians")
-
 
 
 class PhysicianAddress(CustomModel):

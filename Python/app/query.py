@@ -448,15 +448,15 @@ def get_project_patients():
 
 
 def query_project_patients(firstName=None, lastName=None,
-                           finalCode=None, batch=None,
+                           finalCodeID=None, batch=None,
                            siteGrp=None, projectID=None):
     filters = []
     if firstName:
         filters.append(Patient.firstName.like('%{}%'.format(firstName)))
     if lastName:
         filters.append(Patient.lastName.like('%{}%'.format(lastName)))
-    if finalCode:
-        filters.append(ProjectPatient.finalCode == finalCode)
+    if finalCodeID:
+        filters.append(ProjectPatient.finalCodeID == finalCodeID)
     if batch:
         filters.append(ProjectPatient.batch == batch)
     if siteGrp:

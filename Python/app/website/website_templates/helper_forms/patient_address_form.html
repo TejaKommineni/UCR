@@ -94,9 +94,9 @@
                     <!-- Extra hidden fields -->
                     {% if patientAddress is not none %}
                         <input type="hidden" name="_method" value="put" />
-                        <input type="hidden" name="patientID" value="{{patientAddress["patientID"]}}"/>
+                        <input type="hidden" name="participantID" value="{{patientAddress["participantID"]}}"/>
                     {% else %}
-                        <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
+                        <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
                     {% endif %}
                 </div>
               </div>

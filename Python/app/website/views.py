@@ -19,104 +19,1139 @@ website = Blueprint('website', __name__, template_folder='website_templates')
 #
 # A test endpoint that adds some junk to test with
 ##############################################################################
+def create_final_codes():
+    finalCodes = []
+    finalCodes.append(models.FinalCode(
+        finalCode="Pending"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Consent- Survey complete w/Med. Rcd. release"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Consent- Survey complete NO Med.Rcd. release"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Consent- Incomplete survey. Cannot complete (see notes for reason)"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Survey complete- no consent form with or without medical release"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- by mail"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- no reason"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- too ill"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- no interest"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- too old"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- no cancer"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No-upset"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- DO NOT CONTACT-per contact with patient on study"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No- no signed consent form"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Lost to follow-up (bad/no address or phone)-may have contacted once or initial letter not returned, but can no longer contact"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="No response after 2+ letters (no/bad phone)"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Deceased AFTER selection"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible - Current Age"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible-other"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible- DX date"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible- Patient Deceased"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible- mental capacity"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible- histology or behavior"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible- out of state resident at DX"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible-Recently contacted for another UCR study or lost to follow-up in another UCR study within past year"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible-Do not contact per DMS"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible-Not able to send letter OR letter returned and no other contact possible (for NOK or Patient)"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Ineligible - Contacted for other study within 1 year"
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCode="Holding"
+    ))
+    return finalCodes
+def create_states():
+    states = []
+    states.append(models.State(
+        state="Alabama"
+    ))
+    states.append(models.State(
+        state="Alaska"
+    ))
+    states.append(models.State(
+        state="Arizona"
+    ))
+    states.append(models.State(
+        state="Arkansas"
+    ))
+    states.append(models.State(
+        state="California"
+    ))
+    states.append(models.State(
+        state="Colorado"
+    ))
+    states.append(models.State(
+        state="Connecticut"
+    ))
+    states.append(models.State(
+        state="Delaware"
+    ))
+    states.append(models.State(
+        state="Florida"
+    ))
+    states.append(models.State(
+        state="Georgia"
+    ))
+    states.append(models.State(
+        state="Hawaii"
+    ))
+    states.append(models.State(
+        state="Idaho"
+    ))
+    states.append(models.State(
+        state="Illinois"
+    ))
+    states.append(models.State(
+        state="Indiana"
+    ))
+    states.append(models.State(
+        state="Iowa"
+    ))
+    states.append(models.State(
+        state="Kansas"
+    ))
+    states.append(models.State(
+        state="Kentucky"
+    ))
+    states.append(models.State(
+        state="Louisiana"
+    ))
+    states.append(models.State(
+        state="Maine"
+    ))
+    states.append(models.State(
+        state="Maryland"
+    ))
+    states.append(models.State(
+        state="Massachusetts"
+    ))
+    states.append(models.State(
+        state="Michigan"
+    ))
+    states.append(models.State(
+        state="Minnesota"
+    ))
+    states.append(models.State(
+        state="Mississippi"
+    ))
+    states.append(models.State(
+        state="Missouri"
+    ))
+    states.append(models.State(
+        state="Montana"
+    ))
+    states.append(models.State(
+        state="Nebraska"
+    ))
+    states.append(models.State(
+        state="Nevada"
+    ))
+    states.append(models.State(
+        state="New Hampshire"
+    ))
+    states.append(models.State(
+        state="New Jersey"
+    ))
+    states.append(models.State(
+        state="New Mexico"
+    ))
+    states.append(models.State(
+        state="New York"
+    ))
+    states.append(models.State(
+        state="North Carolina"
+    ))
+    states.append(models.State(
+        state="North Dakota"
+    ))
+    states.append(models.State(
+        state="Ohio"
+    ))
+    states.append(models.State(
+        state="Oklahoma"
+    ))
+    states.append(models.State(
+        state="Oregon"
+    ))
+    states.append(models.State(
+        state="Pennsylvania"
+    ))
+    states.append(models.State(
+        state="Rhhode Island"
+    ))
+    states.append(models.State(
+        state="South Carolina"
+    ))
+    states.append(models.State(
+        state="South Dakota"
+    ))
+    states.append(models.State(
+        state="Tennessee"
+    ))
+    states.append(models.State(
+        state="Texas"
+    ))
+    states.append(models.State(
+        state="Utah"
+    ))
+    states.append(models.State(
+        state="Vermont"
+    ))
+    states.append(models.State(
+        state="Virginia"
+    ))
+    states.append(models.State(
+        state="Washington"
+    ))
+    states.append(models.State(
+        state="West Virginia"
+    ))
+    states.append(models.State(
+        state="Wisonsin"
+    ))
+    states.append(models.State(
+        state="Wyoming"
+    ))
+    states.append(models.State(
+        state="District of Columbia"
+    ))
+    return states
+def create_abstract_statuses():
+    statuses = []
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Pending"
+    ))
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Eligible, Assigned to Abstractor"
+    ))
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Eligible, Received"
+    ))
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Complete"
+    ))
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Refused (no medical release)"
+    ))
+    statuses.append(models.AbstractStatus(
+        abstractStatus="Not Included In Abstraction"
+    ))
+    return statuses
+def create_sexes():
+    sexes=[]
+    sexes.append(models.Sex(
+        sex="Female"
+    ))
+    sexes.append(models.Sex(
+        sex="Male"
+    ))
+    sexes.append(models.Sex(
+        sex="Transsexual"
+    ))
+    sexes.append(models.Sex(
+        sex="Unknown"
+    ))
+    return sexes
+def create_races():
+    races=[]
+    races.append(models.Race(
+        race="American Indian or Alaska Native"
+    ))
+    races.append(models.Race(
+        race="Asian"
+    ))
+    races.append(models.Race(
+        race="Black"
+    ))
+    races.append(models.Race(
+        race="Native Hawaiian or Other Pacific Islander"
+    ))
+    races.append(models.Race(
+        race="White"
+    ))
+    races.append(models.Race(
+        race="Unknown"
+    ))
+    return races
+def create_ethnicities():
+    ethnicities=[]
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Hispanic or Latino"
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Not Hispanic or Latino"
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Unknown"
+    ))
+    return ethnicities
+def create_vital_statuses():
+    vitals=[]
+    vitals.append(models.VitalStatus(
+        vitalStatus="Alive"
+    ))
+    vitals.append(models.VitalStatus(
+        vitalStatus="Dead"
+    ))
+    return vitals
+def create_contacts():
+    contacts=[]
+    contacts.append(models.Contacts(
+        contact="yes"
+    ))
+    contacts.append(models.Contacts(
+        contact="no"
+    ))
+    return contacts
+def create_inactives():
+    inactives = []
+    inactives.append(models.Inactive(
+        inactive="Yes"
+    ))
+    inactives.append(models.Inactive(
+        inactive="No"
+    ))
+    return inactives
+def create_ucr_report_types():
+    reports = []
+    reports.append(models.UCRReportType(
+        ucrReportType="Report 1"
+    ))
+    reports.append(models.UCRReportType(
+        ucrReportType="Report 2"
+    ))
+    return reports
+def create_physician_statuses():
+    statuses=[]
+    statuses.append(models.PhysicianStatus(
+        physicianStatus="active"
+    ))
+    statuses.append(models.PhysicianStatus(
+        physicianStatus="inactive"
+    ))
+    return statuses
+def create_physician_facility_statuses():
+    statuses=[]
+    statuses.append(models.PhysicianFacilityStatus(
+        physicianFacilityStatus="open"
+    ))
+    statuses.append(models.PhysicianFacilityStatus(
+        physicianFacilityStatus="closed"
+    ))
+    return statuses
+def create_phone_types():
+    phoneTypes=[]
+    phoneTypes.append(models.PhoneTypeLUT(
+        phoneType="cell"
+    ))
+    phoneTypes.append(models.PhoneTypeLUT(
+        phoneType="home"
+    ))
+    phoneTypes.append(models.PhoneTypeLUT(
+        phoneType="work"
+    ))
+    return phoneTypes
+def create_irb_holders():
+    holders=[]
+    holders.append(models.IRBHolderLUT(
+        holder="U of U",
+        holderDefinition="U of U researcher is responsible for IRB"
+    ))
+    holders.append(models.IRBHolderLUT(
+        holder="External",
+        holderDefinition="External researcher is responsible for IRB"
+    ))
+    holders.append(models.IRBHolderLUT(
+        holder="UCR",
+        holderDefinition="UCR is responsible for IRB. IRB is in UCR researcher's name"
+    ))
+    holders.append(models.IRBHolderLUT(
+        holder="N/A",
+        holderDefinition="Not Applicable"
+    ))
+    holders.append(models.IRBHolderLUT(
+        holder="Unknown",
+        holderDefinition="Unknown"
+    ))
+    holders.append(models.IRBHolderLUT(
+        holder="Other",
+        holderDefinition="Other"
+    ))
+    return holders
+def create_project_types():
+    types = []
+    types.append(models.ProjectType(
+        projectType="Consent",
+        projectTypeDefinition="UCR obtains patient consent for project"
+    ))
+    types.append(models.ProjectType(
+        projectType="Permission",
+        projectTypeDefinition="UCR obtains patient permission for project"
+    ))
+    types.append(models.ProjectType(
+        projectType="Linkage",
+        projectTypeDefinition="UCR conducts data linkage. No patient contact"
+    ))
+    types.append(models.ProjectType(
+        projectType="Physician",
+        projectTypeDefinition="UCR contacts physicians only. No patient contact."
+    ))
+    types.append(models.ProjectType(
+        projectType="Other",
+        projectTypeDefinition="Need to clean up"
+    ))
+    types.append(models.ProjectType(
+        projectType="Unknown",
+        projectTypeDefinition="When still in application phase"
+    ))
+    types.append(models.ProjectType(
+        projectType="Tumor",
+        projectTypeDefinition="UCR creates a tumor level data file.  No patient contact. No linkage conducted"
+    ))
+    return types
+def create_contact_statuses():
+    contactInfoStatuses = []
+    contactInfoStatuses.append(models.ContactInfoStatusLUT(
+        contactInfoStatus="Current"
+    ))
+    contactInfoStatuses.append(models.ContactInfoStatusLUT(
+        contactInfoStatus="Unknown"
+    ))
+    contactInfoStatuses.append(models.ContactInfoStatusLUT(
+        contactInfoStatus="Bad"
+    ))
+    contactInfoStatuses.append(models.ContactInfoStatusLUT(
+        contactInfoStatus="Duplicate"
+    ))
+    return contactInfoStatuses
+def create_contact_sources():
+    contactSources=[]
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="UCR"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="UPDB"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="Patient or NOK"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="Research"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="USPS"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="Bad"
+    ))
+    contactSources.append(models.ContactInfoSourceLUT(
+        contactInfoSource="Accurint"
+    ))
+    return contactSources
+def create_grant_statuses():
+    statuses=[]
+    statuses.append(models.GrantStatusLUT(
+        grantStatus="Submitted"
+    ))
+    statuses.append(models.GrantStatusLUT(
+        grantStatus="Awarded"
+    ))
+    statuses.append(models.GrantStatusLUT(
+        grantStatus="Rejected"
+    ))
+    return statuses
+def create_funding_sources():
+    sources=[]
+    sources.append(models.FundingSourceLUT(
+        fundingSource="NCI"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="NCI-Pilot"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="U of U Department"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="SEER"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="UDOH"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="AHRQ"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="PCORI"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="CHOICE"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="Private Industry"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="NIH"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="Primary Children's Hospital Foundation"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="United BioSource Corporation"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="Novo Nordisk"
+    ))
+    sources.append(models.FundingSourceLUT(
+        fundingSource="RTI"
+    ))
+    return sources
+def create_review_committee_statuses():
+    statuses=[]
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Pending",
+        reviewCommitteeStatusDefinition="Pending"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Approved",
+        reviewCommitteeStatusDefinition="Approved"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Closed",
+        reviewCommitteeStatusDefinition="Closed"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Non Human Subject",
+        reviewCommitteeStatusDefinition="Non Human Subject"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Exempt",
+        reviewCommitteeStatusDefinition="Exempt"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Signed",
+        reviewCommitteeStatusDefinition="Signed"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Sent - Carol",
+        reviewCommitteeStatusDefinition="Sent - Carol"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Not Needed",
+        reviewCommitteeStatusDefinition="Not Needed"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Sent - Full ARC Review",
+        reviewCommitteeStatusDefinition="Sent - Full ARC Review"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Unknown",
+        reviewCommitteeStatusDefinition="Unknown"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Expired",
+        reviewCommitteeStatusDefinition="Expired"
+    ))
+    statuses.append(models.ReviewCommitteeStatusLUT(
+        reviewCommitteeStatus="Submitted",
+        reviewCommitteeStatusDefinition="Submitted"
+    ))
+    return statuses
+def create_project_statuses():
+    statuses = []
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Pending",
+        projectStatusDefinition="Project has not started"
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Active",
+        projectStatusDefinition="Project is underway"
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Hibernate",
+        projectStatusDefinition="Project has open IRB, but no current UCR activity"
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="IRB Closed",
+        projectStatusDefinition="IRB is closed. Project is closed."
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Archived",
+        projectStatusDefinition="Project is old and inactive for years. IRB is closed."
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Canceled",
+        projectStatusDefinition="Project never materialized."
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Pre-Application",
+        projectStatusDefinition="Received pre-application"
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Application",
+        projectStatusDefinition="Application under review"
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Post-Contact",
+        projectStatusDefinition="Only for contact studies: Contact complete but we are still reviewing pubs and/or linking data."
+    ))
+    statuses.append(models.ProjectStatusLUT(
+        projectStatus="Linkage",
+        projectStatusDefinition="Regularly Scheduled Linkages"
+    ))
+    return statuses
+def create_log_subjects():
+    subjects = []
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Review Committee"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Budget"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Misc."
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Data"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Pre-Application"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Application"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Recruitment"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Audit"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Start-up"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Publication"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Close-out"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Agreements"
+    ))
+    subjects.append(models.LogSubjectLUT(
+        logSubject="Reports"
+    ))
+    return subjects
+def create_review_committees():
+    rcs=[]
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="U of U IRB",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="ARC",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="IHC",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="St Marks",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Odgen",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="IASIS",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Vanderbuilt",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Emory",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UCR Admin",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="RTI",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Loma Linda University",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="NCI-CDA",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Sterling",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UCR Research Agreement",
+        reviewCommitteeDescription="Expires after 5 years"
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UCR Research Application",
+        reviewCommitteeDescription="Renewed annually"
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UCR Annual Report",
+        reviewCommitteeDescription="Annually"
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UCR Research Proposal",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="RGE",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="Westat",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UDOH Data Use Committees",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="OHSRP - NIH Office of Human Subjects Research",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UDOH IRB",
+        reviewCommitteeDescription=None
+    ))
+    rcs.append(models.ReviewCommitteeLUT(
+        reviewCommittee="UDOH Health Data Committee",
+        reviewCommitteeDescription=None
+    ))
+    return rcs
+def create_staff_roles():
+    roles = []
+    roles.append(models.StaffRoleLUT(
+        staffRole="PI-External",
+        staffRoleDescription="Principle Investigator- external, no U of U affiliation"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Co-PI",
+        staffRoleDescription="Co-PI"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Coordinator",
+        staffRoleDescription="Runs study for investigator"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Research Assistant",
+        staffRoleDescription="Assists on study"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Research Associate",
+        staffRoleDescription=None
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="UCR Staff",
+        staffRoleDescription=None
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Data Analyst",
+        staffRoleDescription=None
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="PI-U of U",
+        staffRoleDescription="Principle Investigator- U of U affiliation"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="PI-UCR",
+        staffRoleDescription="Principle Investigator- UCR Researcher"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="PPR Staff",
+        staffRoleDescription="UPDB Staff"
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Programmer",
+        staffRoleDescription=None
+    ))
+    roles.append(models.StaffRoleLUT(
+        staffRole="Adminstrative Staff",
+        staffRoleDescription="No access to confidential data manages budget etc."
+    ))
+    return roles
+def create_project_phases():
+    phases = []
+    phases.append(models.PhaseStatus(
+        phaseStatus="Received",
+        phaseDescription="Items received from investigator"
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Meeting Scheduled",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="In Review",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="ARC Approved",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Sent to ARC",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Sent to Carol",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Sent to Investigator",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Contract Signed",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="SOP Complete",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="IRB Approval",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="RGE Approval",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Annual Review Received",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Notified Carrie Database Needed",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Project Lead Assigned",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Project Lead Assigned",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Study Complete",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Meeting",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Invoice Sent",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Data Transfer",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Report to Researcher",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Approved/Agreed",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Email/Phone from CRO",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="IRB Continuing Review",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="OSP",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Study Activities",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Accounting",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="IRB Amendment",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Email",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Report In Progress",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="Report Sent",
+        phaseDescription=None
+    ))
+    phases.append(models.PhaseStatus(
+        phaseStatus="IRB Submitted",
+        phaseDescription=None
+    ))
+    return phases
+def create_human_subject_trainings():
+    hsts = []
+    hsts.append(models.HumanSubjectTrainingLUT(
+        trainingType="CITI"
+    ))
+    hsts.append(models.HumanSubjectTrainingLUT(
+        trainingType="NIH"
+    ))
+    hsts.append(models.HumanSubjectTrainingLUT(
+        trainingType="VA"
+    ))
+    hsts.append(models.HumanSubjectTrainingLUT(
+        trainingType="Unknown"
+    ))
+    hsts.append(models.HumanSubjectTrainingLUT(
+        trainingType="N/A"
+    ))
+    return hsts
+def create_tracing_sources():
+    sources = []
+    sources.append(models.TracingSourceLUT(
+        description="DMS"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Filer4"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="DEX/White pages"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Intellus"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Dr Office"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Voter DB"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Zaba"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Other (Enter in Notes)"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Obit"
+    ))
+    sources.append(models.TracingSourceLUT(
+        description="Advance Bkground Check"
+    ))
+    return sources
+def create_contact_types():
+    contact_types = []
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed 1st packet to patient (intro letter, survey, consent, med rcd. release)"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed Reminder letter"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed 2nd packet (FU letter, survey, consent, med rcd release)"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed Thank you letter and copy of consent form"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed Packet (after phone contact)"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Mailed additional items- (survey, consent form, envelope, etc)"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Undeliverable, mail returned w/forwarding addresses, mailed to new address"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Undeliverable, Mail returned, NO forwarding address"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Packet Returned - Temporarily Away"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Left voicemail"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Left message with person"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Busy"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Bad Phone number"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- Received, thinking about it"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- Received, willing"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- Received, already sent to us"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- too sick"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- no cancer"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Language Barrier"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Deceased"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Pt unable to come to phone, could not leave message"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Incompetent"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Patient left message for Coordinator"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- Refused (no reason given)"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Ineligible"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- did not receive, mailed another letter"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Spoke with- Other"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Survey returned without consent form"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Survey returned incomplete"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Consent returned without survey"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Received consent, survey received previously"
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Enter in error"
+    ))
+    return contact_types
+def create_ucr_roles():
+    roles = []
+    roles.append(models.UCRRole(
+        ucrRole="role 1"
+    ))
+    return roles
+
+
 def populate_db2():
     db.create_all()
-
-    state1 = models.State(
-        state="Utah"
-    )
-    state2 = models.State(
-        state="California"
-    )
-    race1 = models.Race(
-        race="white"
-    )
-    race2 = models.Race(
-        race="black"
-    )
-    sex1 = models.Sex(
-        sex="female"
-    )
-    sex2 = models.Sex(
-        sex="male"
-    )
-    ethnicity1 = models.Ethnicity(
-        ethnicity="hispanic"
-    )
-    ethnicity2 = models.Ethnicity(
-        ethnicity="caucasian"
-    )
-    vitalStatus1 = models.VitalStatus(
-        vitalStatus="v1"
-    )
-    vitalStatus2 = models.VitalStatus(
-        vitalStatus="v2"
-    )
-    contacts1 = models.Contacts(
-        contact="yes"
-    )
-    contacts2 = models.Contacts(
-        contact="no"
-    )
-    inactive1 = models.Inactive(
-        inactive="Yes"
-    )
-    inactive2 = models.Inactive(
-        inactive="No"
-    )
-    ucrReportType1 = models.UCRReportType(
-        ucrReportType="Report 1"
-    )
-    ucrReportType2 = models.UCRReportType(
-        ucrReportType="Report 2"
-    )
-    finalCode1 = models.FinalCode(
-        finalCode="code 1"
-    )
-    finalCode2 = models.FinalCode(
-        finalCode="code 2"
-    )
-    abstractStatus1 = models.AbstractStatus(
-        abstractStatus="status 1"
-    )
-    abstractStatus2 = models.AbstractStatus(
-        abstractStatus="status 2"
-    )
-    physicianStatus1 = models.PhysicianStatus(
-        physicianStatus="status 1"
-    )
-    physicianStatus2 = models.PhysicianStatus(
-        physicianStatus="status 2"
-    )
-    physicianFacilityStatus1 = models.PhysicianFacilityStatus(
-        physicianFacilityStatus="open"
-    )
-    physicianFacilityStatus2 = models.PhysicianFacilityStatus(
-        physicianFacilityStatus="closed"
-    )
-
-    phoneType1 = models.PhoneTypeLUT(
-        phoneType="cell"
-    )
-    phoneType2 = models.PhoneTypeLUT(
-        phoneType="home"
-    )
-
-    irb_holder1 = models.IRBHolderLUT(
-        holder="holder 1",
-        holderDefinition="IRB 1")
-
-    irb_holder2 = models.IRBHolderLUT(
-        holder="holder 2",
-        holderDefinition="IRB 2")
-
-    project_type1 = models.ProjectType(
-        projectType="Type 1",
-        projectTypeDefinition="Def 1")
-
-    project_type2 = models.ProjectType(
-        projectType="Type 2",
-        projectTypeDefinition="Def 2")
+    finalCodes = create_final_codes()
+    states = create_states()
+    abstractStatuses = create_abstract_statuses()
+    sexes = create_sexes()
+    races = create_races()
+    ethnicities = create_ethnicities()
+    vitals = create_vital_statuses()
+    contacts  = create_contacts()
+    inactives = create_inactives()
+    ucrReportTypes = create_ucr_report_types()
+    physicianStatuses = create_physician_statuses()
+    physFacilityStatuses = create_physician_facility_statuses()
+    phoneTypes = create_phone_types()
+    irbHolders = create_irb_holders()
+    projectTypes = create_project_types()
+    contactStatuses = create_contact_statuses()
+    contactSources = create_contact_sources()
+    grantStatuses = create_grant_statuses()
+    fundingSources = create_funding_sources()
+    reviewCommitteeStatuses = create_review_committee_statuses()
+    projectStatuses = create_project_statuses()
+    logTypes = create_log_subjects()
+    reviewCommittees = create_review_committees()
+    staffRoles = create_staff_roles()
+    projectPhases = create_project_phases()
+    hsts = create_human_subject_trainings()
+    tracingSources = create_tracing_sources()
+    contactTypes = create_contact_types()
+    ucrRoles = create_ucr_roles()
 
     project1 = models.Project(
         projectTypeID=1,
@@ -162,22 +1197,6 @@ def populate_db2():
         periodTotal=1.23,
         periodComment="comment")
 
-    rcsl = models.ReviewCommitteeStatusLUT(
-        reviewCommitteeStatus="Status 1",
-        reviewCommitteeStatusDefinition="rc status def")
-
-    rcs2 = models.ReviewCommitteeStatusLUT(
-        reviewCommitteeStatus="Status 2",
-        reviewCommitteeStatusDefinition="rc status def 2")
-
-    rcl1 = models.ReviewCommitteeLUT(
-        reviewCommittee="rc 1",
-        reviewCommitteeDescription="rc desc 1")
-
-    rcl2 = models.ReviewCommitteeLUT(
-        reviewCommittee="rc 2",
-        reviewCommitteeDescription="rc des 2c")
-
     rc = models.ReviewCommittee(
         projectID=1,
         reviewCommitteeStatusID=1,
@@ -214,22 +1233,6 @@ def populate_db2():
         engaged=True,
         nonPublicData=True)
 
-    grantStatus1 = models.GrantStatusLUT(
-        grantStatus="status"
-    )
-
-    fundingSource1 = models.FundingSourceLUT(
-        fundingSource="source"
-    )
-
-    grantStatus2 = models.GrantStatusLUT(
-        grantStatus="status2"
-    )
-
-    fundingSource2 = models.FundingSourceLUT(
-        fundingSource="source2"
-    )
-
     funding = models.Funding(
         grantStatusID=1,
         projectID=1,
@@ -242,10 +1245,6 @@ def populate_db2():
         grantPi=1,
         primaryChartfield="pcf",
         secondaryChartfield="scf"
-    )
-
-    ucrRole = models.UCRRole(
-        ucrRole="Coordinator"
     )
 
     staff = models.Staff(
@@ -262,7 +1261,6 @@ def populate_db2():
         street="street",
         city="city",
         stateID=1,
-        humanSubjectTrainingExp=datetime(2016, 2, 2),
         ucrRoleID=1
     )
     staff2 = models.Staff(
@@ -279,17 +1277,7 @@ def populate_db2():
         street="street",
         city="city",
         stateID=2,
-        humanSubjectTrainingExp=datetime(2016, 2, 2),
         ucrRoleID=1
-    )
-
-    projStatusType1 = models.ProjectStatusLUT(
-        projectStatus="Status 1",
-        projectStatusDefinition="status def"
-    )
-    projStatusType2 = models.ProjectStatusLUT(
-        projectStatus="Status 2",
-        projectStatusDefinition="status def 2"
     )
 
     projStatus = models.ProjectStatus(
@@ -329,22 +1317,6 @@ def populate_db2():
         deliveryDate=datetime(2016, 2, 2),
         description="description"
     )
-
-    phaseStatus1 = models.PhaseStatus(
-        phaseStatus="status",
-        phaseDescription="desc"
-    )
-
-    phaseStatus2 = models.PhaseStatus(
-        phaseStatus="status",
-        phaseDescription="desc"
-    )
-    logSubject1 = models.LogSubjectLUT(
-        logSubject="subject"
-    )
-    logSubject2 = models.LogSubjectLUT(
-        logSubject="subject"
-    )
     log = models.Log(
         logSubjectID=1,
         projectID=1,
@@ -362,25 +1334,11 @@ def populate_db2():
         contactID=1,
         inactiveID=1
     )
-    staffRole1 = models.StaffRoleLUT(
-        staffRole="role",
-        staffRoleDescription="desc"
-    )
-    staffRole2 = models.StaffRoleLUT(
-        staffRole="role",
-        staffRoleDescription="desc"
-    )
     staffTraining = models.StaffTraining(
         staffID=1,
         humanSubjectTrainingID=1,
         dateTaken=datetime(2016, 2, 2),
         dateExpires=datetime(2016, 2, 2)
-    )
-    humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
-        trainingType="type"
-    )
-    humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
-        trainingType="type"
     )
     patient = models.Patient(
         patID="1",
@@ -419,21 +1377,6 @@ def populate_db2():
         raceID=2,
         ethnicityID=1,
         vitalStatusID=2
-    )
-
-    contactInfoStatus1 = models.ContactInfoStatusLUT(
-        contactInfoStatus="status"
-    )
-
-    contactInfoSource1 = models.ContactInfoSourceLUT(
-        contactInfoSource="source"
-    )
-    contactInfoStatus2 = models.ContactInfoStatusLUT(
-        contactInfoStatus="status"
-    )
-
-    contactInfoSource2 = models.ContactInfoSourceLUT(
-        contactInfoSource="source"
     )
 
     patientAddress = models.PatientAddress(
@@ -601,12 +1544,6 @@ def populate_db2():
         surveyToResearcher=datetime(2016, 2, 2),
         surveyToResearcherStaffID=1)
 
-    tracingSource1 = models.TracingSourceLUT(
-        description="desc"
-    )
-    tracingSource2 = models.TracingSourceLUT(
-        description="desc"
-    )
     tracing = models.Tracing(
         tracingSourceID=1,
         participantID=1,
@@ -718,7 +1655,7 @@ def populate_db2():
     )
     patientProjectStatus = models.PatientProjectStatus(
         patientProjectStatusTypeID=1,
-        projectPatientID=1,
+        participantID=1,
     )
     physicianFacility = models.PhysicianFacility(
         facilityID=1,
@@ -726,15 +1663,9 @@ def populate_db2():
         physFacilityStatusID=1,
         physFacilityStatusDate=datetime(2016, 2, 2)
     )
-    contactType1 = models.ContactTypeLUT(
-        contactDefinition="def"
-    )
-    contactType2 = models.ContactTypeLUT(
-        contactDefinition="def"
-    )
     contact = models.Contact(
         contactTypeLUTID=1,
-        projectPatientID=1,
+        participantID=1,
         staffID=1,
         informantID=1,
         facilityID=1,
@@ -753,72 +1684,47 @@ def populate_db2():
         incentiveDescription="desc",
         barcode= "12345"
     )
-    db.session.add(state1)
-    db.session.add(state2)
-    db.session.add(physicianFacilityStatus1)
-    db.session.add(physicianFacilityStatus2)
-    db.session.add(race1)
-    db.session.add(race2)
-    db.session.add(ethnicity1)
-    db.session.add(ethnicity2)
-    db.session.add(sex1)
-    db.session.add(sex2)
-    db.session.add(contacts1)
-    db.session.add(contacts2)
-    db.session.add(inactive1)
-    db.session.add(inactive2)
-    db.session.add(vitalStatus1)
-    db.session.add(vitalStatus2)
-    db.session.add(ucrReportType1)
-    db.session.add(ucrReportType2)
-    db.session.add(finalCode1)
-    db.session.add(finalCode2)
-    db.session.add(abstractStatus2)
-    db.session.add(abstractStatus1)
-    db.session.add(physicianStatus2)
-    db.session.add(physicianStatus1)
-    db.session.add(phoneType1)
-    db.session.add(phoneType2)
-    db.session.add(contactInfoSource1)
-    db.session.add(contactInfoSource2)
-    db.session.add(contactInfoStatus1)
-    db.session.add(contactInfoStatus2)
-    db.session.add(humanSubjectTraining1)
-    db.session.add(humanSubjectTraining2)
-    db.session.add(staffRole1)
-    db.session.add(staffRole2)
-    db.session.add(ucrRole)
-    db.session.add(logSubject1)
-    db.session.add(logSubject2)
-    db.session.add(phaseStatus1)
-    db.session.add(phaseStatus2)
-    db.session.add(projStatusType1)
-    db.session.add(projStatusType2)
+    db.session.add_all(states)
+    db.session.add_all(finalCodes)
+    db.session.add_all(sexes)
+    db.session.add_all(abstractStatuses)
+    db.session.add_all(races)
+    db.session.add_all(ethnicities)
+    db.session.add_all(vitals)
+    db.session.add_all(contacts)
+    db.session.add_all(inactives)
+    db.session.add_all(ucrReportTypes)
+    db.session.add_all(physicianStatuses)
+    db.session.add_all(physFacilityStatuses)
+    db.session.add_all(phoneTypes)
+    db.session.add_all(irbHolders)
+    db.session.add_all(projectTypes)
+    db.session.add_all(contactStatuses)
+    db.session.add_all(contactSources)
+    db.session.add_all(grantStatuses)
+    db.session.add_all(fundingSources)
+    db.session.add_all(reviewCommitteeStatuses)
+    db.session.add_all(projectStatuses)
+    db.session.add_all(logTypes)
+    db.session.add_all(reviewCommittees)
+    db.session.add_all(staffRoles)
+    db.session.add_all(projectPhases)
+    db.session.add_all(hsts)
+    db.session.add_all(tracingSources)
+    db.session.add_all(contactTypes)
+    db.session.add_all(ucrRoles)
     db.session.add(staff)
     db.session.add(staff2)
-    db.session.add(grantStatus1)
-    db.session.add(grantStatus2)
-    db.session.add(fundingSource1)
-    db.session.add(fundingSource2)
-    db.session.add(irb_holder1)
-    db.session.add(irb_holder2)
-    db.session.add(project_type1)
-    db.session.add(project_type2)
     db.session.add(project1)
     db.session.add(project2)
     db.session.add(funding)
     db.session.add(budget1)
-    db.session.add(rcsl)
-    db.session.add(rcs2)
-    db.session.add(rcl1)
-    db.session.add(rcl2)
     db.session.add(rc)
     db.session.add(ucr)
     db.session.add(arcReview)
     db.session.add(preApp)
     db.session.add(log)
     db.session.add(projectStaff)
-    db.session.commit()
     db.session.add(staffTraining)
     db.session.add(patient)
     db.session.add(patient2)
@@ -834,8 +1740,6 @@ def populate_db2():
     db.session.add(projectPatient)
     db.session.add(projectPatient2)
     db.session.add(projStatus)
-    db.session.add(tracingSource1)
-    db.session.add(tracingSource2)
     db.session.add(tracing)
     db.session.add(physician)
     db.session.add(physician2)
@@ -851,8 +1755,6 @@ def populate_db2():
     db.session.add(patientProjectStatusType2)
     db.session.add(patientProjectStatus)
     db.session.add(physicianFacility)
-    db.session.add(contactType1)
-    db.session.add(contactType2)
     db.session.add(contact)
     db.session.add(ctcFacility)
     db.session.add(incentive)
@@ -1280,7 +2182,7 @@ def update_contact(contactID):
             if form.validate():
                 if int(form.versionID.data) == contact.versionID:
                     contact.contactTypeLUTID = form.contactTypeLUTID.data
-                    contact.projectPatientID = form.projectPatientID.data
+                    contact.participantID = form.participantID.data
                     contact.staffID = form.staffID.data
                     contact.informantID = form.informantID.data
                     contact.facilityID = form.facilityID.data
@@ -1317,7 +2219,7 @@ def create_contact(contactID=None):
             if form.validate():
                 contact = models.Contact(
                     contactTypeLUTID=form.contactTypeLUTID.data,
-                    projectPatientID=form.projectPatientID.data,
+                    participantID=form.participantID.data,
                     staffID=form.staffID.data,
                     informantID=form.informantID.data,
                     facilityID=form.facilityID.data,
@@ -5085,10 +5987,10 @@ def get_project_patient(participantID=None):
             form = {}
             firstName = None
             lastName = None
-            finalCode = None
             batch = None
             siteGrp = None
             projectID = None
+            finalCodeID = None
             form["queryParams"] = {}
             if "firstName" in request.args:
                 firstName = value_or_none(request.args["firstName"])
@@ -5096,9 +5998,9 @@ def get_project_patient(participantID=None):
             if "lastName" in request.args:
                 lastName = value_or_none(request.args["lastName"])
                 form["queryParams"]["lastName"] = request.args["lastName"]
-            if "finalCode" in request.args:
-                finalCode = value_or_none(request.args["finalCode"])
-                form["queryParams"]["finalCode"] = request.args["finalCode"]
+            if "finalCodeID" in request.args:
+                finalCodeID = value_or_none(request.args["finalCodeID"])
+                form["queryParams"]["finalCodeID"] = request.args["finalCodeID"]
             if "batch" in request.args:
                 batch = value_or_none(request.args["batch"])
                 form["queryParams"]["batch"] = request.args["batch"]
@@ -5111,11 +6013,12 @@ def get_project_patient(participantID=None):
 
             projectPatients = query.query_project_patients(firstName=firstName,
                                                            lastName=lastName,
-                                                           finalCode=finalCode,
+                                                           finalCodeID=finalCodeID,
                                                            batch=batch,
                                                            siteGrp=siteGrp,
                                                            projectID=projectID)
             form["projects"] = query.get_projects()
+            form["finalCodes"] = query.get_final_codes()
             return render_template("project_patient_table.html", form=form, projectPatients=projectPatients)
         else:
             projectPatient = query.get_project_patient(participantID)

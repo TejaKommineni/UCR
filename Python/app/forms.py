@@ -112,7 +112,7 @@ class BudgetForm(BaseForm):
 class ContactForm(BaseForm):
     contactTypeLUTID = IntegerField('contactTypeLUTID',
                                     [validators.InputRequired()])
-    projectPatientID = IntegerField('projectPatientID',
+    participantID = IntegerField('participantID',
                                     [validators.InputRequired()])
     staffID = IntegerField('staffID',
                            [validators.InputRequired()])
