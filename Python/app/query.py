@@ -1,9 +1,60 @@
 import json
+import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.database import db
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
+from sqlalchemy.orm import aliased
 from app.models import *
+
+
+def summary():
+    summary_dict = {"projects":[]}
+    # subq = db.session.query(ProjectPatient.projectID, ProjectPatient.finalCodeID, func.count(ProjectPatient.finalCodeID)).group_by(ProjectPatient.finalCodeID, ProjectPatient.projectID).subquery()
+    # subq_alias1 = aliased(subq)
+    # qry = db.session.query(Project.projectTitle, Project.activityStartDate, Project.projectID, subq_alias1). \
+    #     join(subq_alias1, and_(Project.projectID==subq_alias1.c.projectID))
+    # for result in qry.all():
+    #     summary_dict[result[2]] = {
+    #         "title": result[0],
+    #         "activityStarteDate": result[1],
+    #         "lettersSent": lettersSent,
+    #         "phoneCalls": phoneCalls,
+    #         "avgDaysToFinalize": avgDaysToFinalize,
+    #         "avgNumberOfContactsPerPerson": avgNumberOfContactsPerPerson
+    #     }
+    # db.session.query(func.count(Contact.contactID)).join(Contact.projectPatient).join(ProjectPatient.project).filter(Project.projectID==1)
+    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate).all()
+    for result in res:
+        summary_dict["projects"].append(
+            {
+            "projectID": result[0],
+            "projectTitle": result[1],
+            "activityStartDate": result[2],
+            "numberOfLettersSent": get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30), contact_type_ids=[1,2,3,4,5,6])[0],
+            "numberOfPhoneCalls": get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30), contact_type_ids=[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27])[0],
+            "avgNumberOfDaysToFinalize": 999,
+            "avgNumberOfContactsPerPerson": float(get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30))[0])/float(len(query_project_patients(projectID=result[0]))),
+            "numberOfConsents": 999,
+            "numberOfPermissions": 999
+            }
+        )
+    return summary_dict
+
+
+def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, contact_type_ids=None):
+    filters = []
+    if projectID:
+        filters.append(Project.projectID == projectID)
+    if startDate:
+        filters.append(Contact.contactDate >= startDate)
+    if endDate:
+        filters.append(Contact.contactDate <= endDate)
+    if contact_type_ids:
+        filters.append(Contact.contactTypeLUTID.in_(contact_type_ids))
+    res = db.session.query(func.count(Contact.contactID), func.count(ProjectPatient.participantID)).join(Contact.projectPatient).join(ProjectPatient.project). \
+        filter(and_(*filters)).first()
+    return res
 
 
 def create_all():

@@ -1513,7 +1513,7 @@ def populate_db2():
     )
 
     projectPatient2 = models.ProjectPatient(
-        projectID=1,
+        projectID=2,
         staffID=1,
         ctcID=1,
         currentAge=1,
@@ -1845,6 +1845,13 @@ def root():
             "projects",
             "staff"
         ]})
+
+@website.route('/overview/', methods=['GET'])
+def overview():
+    form={
+        "summary": query.summary()
+    }
+    return render_template("study_summary_table.html", form=form)
 
 
 @website.route('/abstractstatuses/', methods=['GET'])

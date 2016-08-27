@@ -1,0 +1,38 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Project Summary</h1>
+        </div>
+      </div>
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Title</th>
+                <th>Start Date</th>
+                <th>Letters Sent in Last 30 Days</th>
+                <th>Phone Calls in Last 30 Days</th>
+                <th>Average Days to Finalize (TODO)</th>
+                <th>Average Contacts Per Patient</th>
+                <th>Consents (TODO)</th>
+                <th>Permissions (TODO)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for project in form.summary.projects %}
+            <tr>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectID}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectTitle}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.activityStartDate}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.avgNumberOfDaysToFinalize}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.avgNumberOfContactsPerPerson}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsents}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPermissions}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}

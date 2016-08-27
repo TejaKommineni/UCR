@@ -136,7 +136,7 @@ class ContactForm(BaseForm):
         hasErrors = not Form.validate(self)
 
         # Check to make sure the project FK exists
-        projectPatient = query.get_project_patient(self.projectPatientID.data)
+        projectPatient = query.get_project_patient(self.participantID.data)
         if projectPatient is None:
             self.projectPatientID.errors.append("ID not found")
             hasErrors = True

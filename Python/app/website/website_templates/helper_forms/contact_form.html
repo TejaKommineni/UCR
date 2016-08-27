@@ -10,10 +10,10 @@
               {% if contact is not none %}
               <div class="row">
                 <div class = "col-md-4">
-                  <label for="select_projectPatientID">Project Patient</label>
-                  <select type="text" class="form-control" name="projectPatientID" id="select_projectPatientID">
+                  <label for="select_participantID">Project Patient</label>
+                  <select type="text" class="form-control" name="participantID" id="select_participantID">
                       {% for pp in form.projectPatients %}
-                        {% if pp.participantID == contact.projectPatientID %}
+                        {% if pp.participantID == contact.participantID %}
                             <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
                         {% else %}
                             <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
