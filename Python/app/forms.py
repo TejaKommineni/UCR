@@ -1277,6 +1277,8 @@ class ProjectPatientForm(BaseForm):
                                    format=DATE_FORMAT)
     surveyToResearcherStaffID = IntegerField('surveyToResearcherStaffID',
                                              [] + COMMON_INTEGER_VALIDATORS)
+    qualityControl = BooleanField('qualityControl',
+                                            []+COMMON_BOOL_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)

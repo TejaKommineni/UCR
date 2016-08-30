@@ -6093,6 +6093,7 @@ def update_project_patient(participantID):
                     projectPatient.medRecordReleaseDate = form.medRecordReleaseDate.data
                     projectPatient.surveyToResearcher = form.surveyToResearcher.data
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
+                    projectPatient.qualityControl = form.qualityControl.data
                     query.commit()
                     return redirect_back("projectpatients/{}/".format(participantID))
                 else:
@@ -6149,7 +6150,8 @@ def create_project_patient(participantID=None):
                     medRecordReleaseStaffID=form.medRecordReleaseStaffID.data,
                     medRecordReleaseDate=form.medRecordReleaseDate.data,
                     surveyToResearcher=form.surveyToResearcher.data,
-                    surveyToResearcherStaffID=form.surveyToResearcherStaffID.data
+                    surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
+                    qualityControl = form.qualityControl.data
                 )
                 query.add(projectPatient)
                 return redirect_back("projectPatients/{}/".format(projectPatient.participantID))

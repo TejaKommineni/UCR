@@ -301,6 +301,21 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class = "col-md-2">
+                  <label for="select_qualityControl">Quality Control</label>
+                  <select type="text" class="form-control" name="qualityControl" id="select_qualityControl">
+                      {% if projectPatient.qualityControl %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectPatient.qualityControl %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
             </div>
 
             <!-- hidden fields -->

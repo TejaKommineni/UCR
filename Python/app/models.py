@@ -876,6 +876,7 @@ class ProjectPatient(CustomModel):
     surveyToResearcher = db.Column('survey_to_researcher', db.Date)
     surveyToResearcherStaffID = db.Column('survey_to_researcher_staff', db.Integer,
                                           db.ForeignKey('Staff.staffID'))  # FK
+    qualityControl = db.Column('quality_control', db.Boolean)
 
     incentives = db.relationship('Incentive', back_populates='projectPatient')
     # Relationships
