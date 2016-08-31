@@ -191,6 +191,7 @@ class CTCFacilityForm(BaseForm):
                          [validators.InputRequired()])
     facilityID = IntegerField('facilityID',
                               [validators.InputRequired()])
+    coc = IntegerField('coc', []+COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         f = Form.validate(self)
@@ -217,8 +218,8 @@ class CTCForm(BaseForm):
     dxDate = DateField('dxDate',
                        [] + COMMON_DATE_VALIDATORS,
                        format=DATE_FORMAT)
-    site = IntegerField('site',
-                        [] + COMMON_INTEGER_VALIDATORS)
+    site = StringField('site',
+                        [] + COMMON_STRING_VALIDATORS)
     histology = StringField('histology',
                             [] + COMMON_STRING_VALIDATORS)
     behavior = StringField('behavior',
@@ -244,6 +245,8 @@ class CTCForm(BaseForm):
     dnc = StringField('dnc',
                       [] + COMMON_STRING_VALIDATORS)
     dncReason = StringField('dncReason',
+                            [] + COMMON_STRING_VALIDATORS)
+    recordID = StringField('recordID',
                             [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
@@ -634,8 +637,6 @@ class LogSubjectLUTForm(BaseForm):
 class PatientForm(BaseForm):
     patID = StringField('patID',
                         [] + COMMON_STRING_VALIDATORS)
-    recordID = IntegerField('recordID',
-                            [] + COMMON_INTEGER_VALIDATORS)
     ucrDistID = IntegerField('ucrDistID',
                              [] + COMMON_INTEGER_VALIDATORS)
     UPDBID = IntegerField('UPDBID',

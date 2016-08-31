@@ -338,7 +338,7 @@ def get_patients():
     return db.session.query(Patient).all()
 
 
-def query_patients(firstName=None, lastName=None, patID=None, UPDBID=None, ucrDistID=None, recordID=None,
+def query_patients(firstName=None, lastName=None, patID=None, UPDBID=None, ucrDistID=None,
                    phoneNumber=None):
     filters = []
     if firstName:
@@ -351,8 +351,6 @@ def query_patients(firstName=None, lastName=None, patID=None, UPDBID=None, ucrDi
         filters.append(Patient.UPDBID == UPDBID)
     if ucrDistID:
         filters.append(Patient.ucrDistID == ucrDistID)
-    if recordID:
-        filters.append(Patient.recordID == recordID)
     if phoneNumber:
         filters.append(PatientPhone.phoneNumber == phoneNumber)
     return db.session.query(Patient).outerjoin(PatientPhone).filter(or_(*filters)).all()

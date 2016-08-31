@@ -156,7 +156,7 @@ class CTC(CustomModel):
     ctcID = db.Column('ctcID', db.Integer, primary_key=True)
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('Patient.participantID'), nullable=False)
     dxDate = db.Column('dx_date', db.Date)
-    site = db.Column('site', db.Integer)
+    site = db.Column('site', db.String)
     histology = db.Column('histology', db.String)
     behavior = db.Column('behavior', db.String)
     ctcSequence = db.Column('ctc_sequence', db.String)
@@ -170,6 +170,7 @@ class CTC(CustomModel):
     dxCounty = db.Column('dx_county', db.String)
     dnc = db.Column('dnc', db.String)
     dncReason = db.Column('dnc_reason', db.String)
+    recordID = db.Column('recordID', db.String)
 
     # Relationship
     # 1 - 1, one ctc per projectPatient
@@ -189,6 +190,7 @@ class CTCFacility(CustomModel):
     CTCFacilityID = db.Column('CTCFacilityID', db.Integer, primary_key=True)
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'), nullable=False)
     facilityID = db.Column('facilityID', db.Integer, db.ForeignKey('Facility.facilityID'), nullable=False)
+    coc = db.Column('coc', db.Integer)
 
     # Relationships
     # 1 - M, one facilty may have many CTCFacilities
@@ -475,7 +477,6 @@ class Patient(CustomModel):
 
     participantID = db.Column('participantID', db.Integer, primary_key=True)
     patID = db.Column('patID', db.String)
-    recordID = db.Column('recordID', db.Integer)
     ucrDistID = db.Column('ucrDistID', db.Integer)
     UPDBID = db.Column('UPDBID', db.Integer)
     firstName = db.Column('first_name', db.String)

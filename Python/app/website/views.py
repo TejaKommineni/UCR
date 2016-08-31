@@ -1342,7 +1342,6 @@ def populate_db2():
     )
     patient = models.Patient(
         patID="1",
-        recordID=1,
         ucrDistID=1,
         UPDBID=1,
         firstName="fname",
@@ -1361,12 +1360,11 @@ def populate_db2():
     )
     patient2 = models.Patient(
         patID="1",
-        recordID=1,
         ucrDistID=1,
         UPDBID=1,
-        firstName="fname",
-        lastName="lname",
-        middleName="mname",
+        firstName="fname2",
+        lastName="lname2",
+        middleName="mname2",
         maidenName="maiden_name",
         aliasFirstName="alias_fname",
         aliasLastName="alias_lname",
@@ -1446,7 +1444,7 @@ def populate_db2():
     ctc1 = models.CTC(
         participantID=1,
         dxDate=datetime(2016, 2, 2),
-        site=1,
+        site="Site 2",
         histology="histology",
         behavior="behavior",
         ctcSequence="sequence",
@@ -1459,12 +1457,13 @@ def populate_db2():
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
-        dncReason="dnc_reason"
+        dncReason="dnc_reason",
+        recordID="abc321"
     )
     ctc2 = models.CTC(
         participantID=1,
         dxDate=datetime(2016, 2, 2),
-        site=1,
+        site="Site 1",
         histology="histology",
         behavior="behavior",
         ctcSequence="sequence",
@@ -1477,7 +1476,8 @@ def populate_db2():
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
-        dncReason="dnc_reason"
+        dncReason="dnc_reason",
+        recordID = "abc123"
     )
     projectPatient = models.ProjectPatient(
         projectID=1,
@@ -1509,13 +1509,14 @@ def populate_db2():
         medRecordReleaseStaffID=1,
         medRecordReleaseDate=datetime(2016, 2, 2),
         surveyToResearcher=datetime(2016, 2, 2),
-        surveyToResearcherStaffID=1
+        surveyToResearcherStaffID=1,
+        qualityControl = True,
     )
 
     projectPatient2 = models.ProjectPatient(
         projectID=2,
         staffID=1,
-        ctcID=1,
+        ctcID=2,
         currentAge=1,
         batch=1,
         siteGrp=1,
@@ -1542,7 +1543,9 @@ def populate_db2():
         medRecordReleaseStaffID=1,
         medRecordReleaseDate=datetime(2016, 2, 2),
         surveyToResearcher=datetime(2016, 2, 2),
-        surveyToResearcherStaffID=1)
+        surveyToResearcherStaffID=1,
+        qualityControl=False
+    )
 
     tracing = models.Tracing(
         tracingSourceID=1,
@@ -1677,7 +1680,8 @@ def populate_db2():
     )
     ctcFacility = models.CTCFacility(
         ctcID=1,
-        facilityID=1
+        facilityID=1,
+        coc=123
     )
     incentive = models.Incentive(
         participantID=1,
@@ -2576,6 +2580,7 @@ def update_ctc(ctcID):
                     ctc.dxCounty = form.dxCounty.data
                     ctc.dnc = form.dnc.data
                     ctc.dncReason = form.dncReason.data
+                    ctc.recordID = form.recordID.data
                     query.commit()
                     return redirect_back('ctcs/{}/'.format(ctcID))
                 else:
@@ -2618,7 +2623,8 @@ def create_ctc(ctcID=None):
                     dxZip=form.dxZip.data,
                     dxCounty=form.dxCounty.data,
                     dnc=form.dnc.data,
-                    dncReason=form.dncReason.data
+                    dncReason=form.dncReason.data,
+                    recordID = form.recordID.data
                 )
                 query.add(ctc)
                 return redirect_back('ctcs/{}/'.format(ctc.ctcID))
@@ -2677,6 +2683,7 @@ def update_ctc_facility(CTCFacilityID):
                 if int(form.versionID.data) == ctcFacility.versionID:
                     ctcFacility.ctcID = form.ctcID.data
                     ctcFacility.facilityID = form.facilityID.data
+                    ctcFacility.coc = form.coc.data
                     query.commit()
                     return redirect_back("ctcfacilities/{}/".format(CTCFacilityID))
                 else:
@@ -2705,7 +2712,8 @@ def create_ctc_facility(CTCFacilityID=None):
             if form.validate():
                 ctcFacility = models.CTCFacility(
                     ctcID=form.ctcID.data,
-                    facilityID=form.facilityID.data
+                    facilityID=form.facilityID.data,
+                    coc=form.coc.data
                 )
                 query.add(ctcFacility)
                 return redirect_back("ctcfacilities/{}/".format(ctcFacility.CTCFacilityID))
@@ -4211,9 +4219,6 @@ def get_patient(patAutoID=None):
             if "patID" in request.args:
                 patID = value_or_none(request.args["patID"])
                 form["queryParams"]["patID"] = request.args["patID"]
-            if "recordID" in request.args:
-                recordID = value_or_none(request.args["recordID"])
-                form["queryParams"]["recordID"] = request.args["recordID"]
             if "ucrDistID" in request.args:
                 ucrDistID = value_or_none(request.args["ucrDistID"])
                 form["queryParams"]["ucrDistID"] = request.args["ucrDistID"]
@@ -4226,7 +4231,6 @@ def get_patient(patAutoID=None):
             patients = query.query_patients(firstName=firstName,
                                             lastName=lastName,
                                             patID=patID,
-                                            recordID=recordID,
                                             ucrDistID=ucrDistID,
                                             UPDBID=UPDBID,
                                             phoneNumber=phoneNumber)
@@ -4266,7 +4270,6 @@ def update_patient(patientID):
             if form.validate():
                 if int(form.versionID.data) == patient.versionID:
                     patient.patID = form.patID.data
-                    patient.recordID = form.recordID.data
                     patient.ucrDistID = form.ucrDistID.data
                     patient.UPDBID = form.UPDBID.data
                     patient.firstName = form.firstName.data
@@ -4310,7 +4313,6 @@ def create_patient(patientID=None):
             if form.validate():
                 patient = models.Patient(
                     patID=form.patID.data,
-                    recordID=form.recordID.data,
                     ucrDistID=form.ucrDistID.data,
                     UPDBID=form.UPDBID.data,
                     firstName=form.firstName.data,
