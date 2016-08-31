@@ -1283,7 +1283,7 @@ class ProjectPatientForm(BaseForm):
     def validate(self):
         hasErrors = not Form.validate(self)
 
-        finalCode = query.get_staff(self.finalCodeID.data)
+        finalCode = query.get_final_code(self.finalCodeID.data)
         if finalCode is None:
             self.finalCodeID.errors.append("ID not found")
             hasErrors = True

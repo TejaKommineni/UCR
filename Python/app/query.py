@@ -9,6 +9,10 @@ from app.models import *
 
 
 def summary():
+    """
+    Generates a dictionary that summarizes each project over the last 30 days
+    :return:
+    """
     summary_dict = {"projects":[]}
     # subq = db.session.query(ProjectPatient.projectID, ProjectPatient.finalCodeID, func.count(ProjectPatient.finalCodeID)).group_by(ProjectPatient.finalCodeID, ProjectPatient.projectID).subquery()
     # subq_alias1 = aliased(subq)
@@ -24,21 +28,34 @@ def summary():
     #         "avgNumberOfContactsPerPerson": avgNumberOfContactsPerPerson
     #     }
     # db.session.query(func.count(Contact.contactID)).join(Contact.projectPatient).join(ProjectPatient.project).filter(Project.projectID==1)
-    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate).all()
+    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).all()
     for result in res:
-        summary_dict["projects"].append(
-            {
+        summary_info = {
             "projectID": result[0],
             "projectTitle": result[1],
             "activityStartDate": result[2],
-            "numberOfLettersSent": get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30), contact_type_ids=[1,2,3,4,5,6])[0],
-            "numberOfPhoneCalls": get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30), contact_type_ids=[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27])[0],
-            "avgNumberOfDaysToFinalize": 999,
-            "avgNumberOfContactsPerPerson": float(get_number_of_contact_types(projectID=result[0], startDate=datetime.datetime.today()-datetime.timedelta(days=30))[0])/float(len(query_project_patients(projectID=result[0]))),
-            "numberOfConsents": 999,
-            "numberOfPermissions": 999
-            }
-        )
+            "numberOfLettersSent": get_number_of_contact_types(projectID=result[0],
+                                                               startDate=datetime.datetime.today() - datetime.timedelta(
+                                                                   days=30), contact_type_ids=[1, 2, 3, 4, 5, 6])[0],
+            "numberOfPhoneCalls": get_number_of_contact_types(projectID=result[0],
+                                                              startDate=datetime.datetime.today() - datetime.timedelta(
+                                                                  days=30),
+                                                              contact_type_ids=[10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                                                                                20, 21, 22, 23, 24, 25, 26, 27])[0],
+            "avgNumberOfContactsPerPerson": float(get_number_of_contact_types(projectID=result[0],
+                                                                              startDate=datetime.datetime.today() - datetime.timedelta(
+                                                                                  days=30))[0]) / float(
+                len(query_project_patients(projectID=result[0]))),
+            "numberOfConsents": 0,
+            "numberOfPermissions": 0
+        }
+        if result[3] == 1: # check for consents
+            summary_info["numberOfConsents"] = get_number_of_final_code_types(projectID=result[0],
+                                                              final_code_type_ids=[2,3])[0]
+        if result[3] == 2: #set permissions
+            summary_info["numberOfPermissions"] = get_number_of_final_code_types(projectID=result[0],
+                                                                                 final_code_type_ids=[2, 3])[0]
+        summary_dict["projects"].append(summary_info)
     return summary_dict
 
 
@@ -53,6 +70,17 @@ def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, co
     if contact_type_ids:
         filters.append(Contact.contactTypeLUTID.in_(contact_type_ids))
     res = db.session.query(func.count(Contact.contactID), func.count(ProjectPatient.participantID)).join(Contact.projectPatient).join(ProjectPatient.project). \
+        filter(and_(*filters)).first()
+    return res
+
+
+def get_number_of_final_code_types(projectID=None, final_code_type_ids=None):
+    filters = []
+    if projectID:
+        filters.append(Project.projectID == projectID)
+    if final_code_type_ids:
+        filters.append(FinalCode.finalCodeID.in_(final_code_type_ids))
+    res = db.session.query(func.count(FinalCode.finalCodeID)).join(FinalCode.projectPatients).join(ProjectPatient.project). \
         filter(and_(*filters)).first()
     return res
 
