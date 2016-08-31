@@ -462,6 +462,7 @@
                             <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
                             {% endif %}
                         {% endfor %}
+                        <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
                     </ul>
                     <div class="tab-content">
                         {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
@@ -475,6 +476,10 @@
                             </div>
                         {% endif %}
                         {% endfor %}
+                        <div class="tab-pane" id="newAddressTab">
+                        {% set patientAddress = none %}
+                        {% include 'helper_forms/patient_address_form.html' %}
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="patientEmailTab">
@@ -486,6 +491,7 @@
                             <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
                             {% endif %}
                         {% endfor %}
+                        <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
                     </ul>
                     <div class="tab-content">
                         {% for patientEmail in projectPatient.ctc.patient.patientEmails  %}
@@ -499,6 +505,10 @@
                             </div>
                         {% endif %}
                         {% endfor %}
+                        <div class="tab-pane" id="newEmailTab">
+                        {% set patientEmail = none %}
+                        {% include 'helper_forms/patient_email_form.html' %}
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="patientPhoneTab">
@@ -510,6 +520,7 @@
                             <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
                             {% endif %}
                         {% endfor %}
+                        <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
                     </ul>
                     <div class="tab-content">
                         {% for patientPhone in projectPatient.ctc.patient.patientPhones %}
@@ -523,6 +534,10 @@
                             </div>
                         {% endif %}
                         {% endfor %}
+                        <div class="tab-pane" id="newPhoneTab">
+                        {% set patientPhone = none %}
+                        {% include 'helper_forms/patient_phone_form.html' %}
+                        </div>
                     </div>
                 </div>
             </div>

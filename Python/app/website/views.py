@@ -4524,7 +4524,7 @@ def create_patient_email(emailID=None):
                     emailStatusDate=form.emailStatusDate.data
                 )
                 query.add(patientEmail)
-                return redirect_back('patientemails/{}/'.format(patientEmail.patientID))
+                return redirect_back('patientemails/{}/'.format(patientEmail.participantID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
@@ -4621,7 +4621,7 @@ def create_patient_phone(patPhoneID=None):
                     phoneStatusDate=form.phoneStatusDate.data
                 )
                 query.add(patientPhone)
-                return redirect_back('patientphones/{}/'.format(patientPhone.patientID))
+                return redirect_back('patientphones/{}/'.format(patientPhone.participantID))
             else:
                 return missing_params(form.errors)
     except Exception as e:

@@ -1,6 +1,6 @@
 {% if patientPhone is not none %}
     <!-- action url is for update -->
-    <form class="formOverride" id="phoneForm" action='/website/patientphones/{{patientPhone["participantID"]}}/', method='post'>
+    <form class="formOverride" id="phoneForm" action='/website/patientphones/{{patientPhone["patPhoneID"]}}/', method='post'>
 {% else %}
     <form class="formOverride" id="phoneForm" action='/website/patientphones/', method='post'>
 {% endif %}
@@ -83,8 +83,10 @@
                     {% if patientPhone is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="participantID" value="{{patientPhone["participantID"]}}"/>
-                    {% else %}
+                    {% elif form.patient %}
                         <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
+                    {% else %}
+                        <input type="hidden" name="participantID" value="{{projectPatient["participantID"]}}"/>
                     {% endif %}
                 </div>
               </div>
