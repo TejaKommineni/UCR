@@ -370,12 +370,12 @@
     <div class="tab-content">        
         <div class="tab-pane active" id="contactsTab">
             <ul class ="nav nav-tabs" role="tablist">
-                <li><a href="#contactTable" role="tab" data-toggle="tab">Contacts</a></li>
+                <li><a class="active" href="#contactTable" role="tab" data-toggle="tab">Contacts</a></li>
                 <li><a href="#newContactTab" role="tab" data-toggle="tab">New Contact</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active">
-                    <form class="formOverride" id="contactTable">
+                <div class="tab-pane active" id="contactTable">
+                    <form class="formOverride">
                         <fieldset>
                             <table class="table table-striped no-spacing">
                                   <thead>
@@ -570,7 +570,7 @@
             {% include 'helper_forms/patient_project_status_form.html' %}
             </div>
         </div>
-    </div>
+         </div>
 
         <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
