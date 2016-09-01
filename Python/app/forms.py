@@ -215,9 +215,12 @@ class CTCFacilityForm(BaseForm):
 class CTCForm(BaseForm):
     participantID = IntegerField('participantID',
                              [validators.InputRequired()])
-    dxDate = DateField('dxDate',
-                       [] + COMMON_DATE_VALIDATORS,
-                       format=DATE_FORMAT)
+    dxDateDay = DateField('dxDateDay',
+                       [validators.number_range(max=31)] + COMMON_INTEGER_VALIDATORS)
+    dxDateMonth = DateField('dxDateMonth',
+                       [validators.number_range(max=12)] + COMMON_INTEGER_VALIDATORS)
+    dxDateYear = DateField('dxDateYear',
+                       [] + COMMON_INTEGER_VALIDATORS)
     site = StringField('site',
                         [] + COMMON_STRING_VALIDATORS)
     histology = StringField('histology',
@@ -461,6 +464,8 @@ class IncentiveForm(BaseForm):
                                        [] + COMMON_STRING_VALIDATORS)
     barcode = StringField('barcode',
                               [] + COMMON_STRING_VALIDATORS)
+    dateGiven = DateField('dateGiven',[]+COMMON_DATE_VALIDATORS,
+                          format=DATE_FORMAT)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -470,6 +475,12 @@ class IncentiveForm(BaseForm):
             self.participantID.errors.append("ID not found")
             hasErrors = True
 
+        # make sure barcode is in the table
+        if self.barcode.data:
+            bc = query.get_gift_card_by_barcode(self.barcode.data)
+            if bc is None:
+                self.barcode.errors.append("Barcode not found in gift card table.")
+                hasErrors = True
         return not hasErrors
 
 
@@ -655,9 +666,12 @@ class PatientForm(BaseForm):
                                 [] + COMMON_STRING_VALIDATORS)
     aliasMiddleName = StringField('aliasMiddleName',
                                   [] + COMMON_STRING_VALIDATORS)
-    dob = DateField('dob',
-                    [] + COMMON_DATE_VALIDATORS,
-                    format=DATE_FORMAT)
+    dobDay = IntegerField('dobDay',
+                    [validators.number_range(max=31)] + COMMON_INTEGER_VALIDATORS)
+    dobMonth = IntegerField('dobDay',
+                    [validators.number_range(max=12)] + COMMON_INTEGER_VALIDATORS)
+    dobYear = IntegerField('dobYear',
+                    [] + COMMON_INTEGER_VALIDATORS)
     SSN = IntegerField('SSN',
                        [] + COMMON_INTEGER_VALIDATORS)
     sexID = StringField('sexID',

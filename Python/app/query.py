@@ -254,6 +254,17 @@ def get_funding_source(id):
     return db.session.query(FundingSourceLUT).filter_by(fundingSourceID=id).first()
 
 
+def get_gift_cards():
+    return db.session.query(GiftCard).all()
+
+
+def get_gift_card(id):
+    return db.session.query(GiftCard).filter_by(giftCardID=id).first()
+
+def get_gift_card_by_barcode(barcode):
+    return db.session.query(GiftCard).filter_by(barcode=barcode).first()
+
+
 def get_grant_statuses():
     return db.session.query(GrantStatusLUT).all()
 
@@ -284,6 +295,10 @@ def get_incentives():
 
 def get_incentive(id):
     return db.session.query(Incentive).filter_by(incentiveID=id).first()
+
+
+def get_incentive_by_barcode(barcode):
+    return db.session.query(Incentive).filter_by(barcode=barcode).first()
 
 
 def get_informants():

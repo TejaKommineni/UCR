@@ -1119,7 +1119,24 @@ def create_ucr_roles():
         ucrRole="role 1"
     ))
     return roles
-
+def create_gift_cards():
+    gcs = []
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456789",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456788",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456787",
+        amount=25
+    ))
+    return gcs
 
 def populate_db2():
     db.create_all()
@@ -1152,6 +1169,7 @@ def populate_db2():
     tracingSources = create_tracing_sources()
     contactTypes = create_contact_types()
     ucrRoles = create_ucr_roles()
+    giftCards = create_gift_cards()
 
     project1 = models.Project(
         projectTypeID=1,
@@ -1351,7 +1369,9 @@ def populate_db2():
         aliasFirstName="alias_fname",
         aliasLastName="alias_lname",
         aliasMiddleName="alias_middle",
-        dob=datetime(2016, 2, 2),
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
         SSN="999999999",
         sexID=2,
         raceID=1,
@@ -1369,7 +1389,9 @@ def populate_db2():
         aliasFirstName="alias_fname",
         aliasLastName="alias_lname",
         aliasMiddleName="alias_middle",
-        dob=datetime(2016, 2, 2),
+        dobDay=26,
+        dobMonth=4,
+        dobYear=1970,
         SSN="999999999",
         sexID=1,
         raceID=2,
@@ -1443,7 +1465,9 @@ def populate_db2():
     )
     ctc1 = models.CTC(
         participantID=1,
-        dxDate=datetime(2016, 2, 2),
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1988,
         site="Site 2",
         histology="histology",
         behavior="behavior",
@@ -1462,7 +1486,9 @@ def populate_db2():
     )
     ctc2 = models.CTC(
         participantID=1,
-        dxDate=datetime(2016, 2, 2),
+        dxDateDay=3,
+        dxDateMonth=10,
+        dxDateYear=1958,
         site="Site 1",
         histology="histology",
         behavior="behavior",
@@ -1686,7 +1712,8 @@ def populate_db2():
     incentive = models.Incentive(
         participantID=1,
         incentiveDescription="desc",
-        barcode= "12345"
+        barcode= "123456789",
+        dateGiven=datetime(2016,4,3)
     )
     db.session.add_all(states)
     db.session.add_all(finalCodes)
@@ -1717,6 +1744,7 @@ def populate_db2():
     db.session.add_all(tracingSources)
     db.session.add_all(contactTypes)
     db.session.add_all(ucrRoles)
+    db.session.add_all(giftCards)
     db.session.add(staff)
     db.session.add(staff2)
     db.session.add(project1)
@@ -3555,10 +3583,18 @@ def update_incentive(incentiveID):
         if incentive is not None:
             form = forms.IncentiveForm(request.form)
             if form.validate():
+                # Check to see if the barcode field is being updateed,
+                # if it is, then make sure the barcode isn't used anywhere else
+                if incentive.barcode != form.barcode.data:
+                    incentive2 = query.get_incentive_by_barcode(form.barcode.data)
+                    if incentive2:
+                        form.barcode.errors.append("Barcode was already used for a different incentive.")
+                        return missing_params(form.errors)
                 if int(form.versionID.data) == incentive.versionID:
                     incentive.participantID = request.form["participantID"]
                     incentive.incentiveDescription = form.incentiveDescription.data
                     incentive.barcode = form.barcode.data
+                    incentive.dateGiven = form.dateGiven.data
                     query.commit()
                     return redirect_back("incentives/{}/".format(incentiveID))
                 else:
@@ -3585,10 +3621,16 @@ def create_incentive(incentiveID=None):
         else:
             form = forms.IncentiveForm(request.form)
             if form.validate():
+                # make sure the barcode isn't used for another incentive (DB won't allow it but we want a useful message)
+                incentive2 = query.get_incentive_by_barcode(form.barcode.data)
+                if incentive2:
+                    form.barcode.errors.append("Barcode was already used for a different incentive.")
+                    return missing_params(form.errors)
                 incentive = models.Incentive(
                     participantID=form.participantID.data,
                     incentiveDescription=form.incentiveDescription.data,
-                    barcode=form.barcode.data
+                    barcode=form.barcode.data,
+                    dateGiven = form.dateGiven.data
                 )
                 query.add(incentive)
                 return redirect_back("incentives/{}/".format(incentive.incentiveID))
@@ -4279,7 +4321,9 @@ def update_patient(patientID):
                     patient.aliasFirstName = form.aliasFirstName.data
                     patient.aliasLastName = form.aliasLastName.data
                     patient.aliasMiddleName = form.aliasMiddleName.data
-                    patient.dob = form.dob.data
+                    patient.dobDay = form.dobDay.data
+                    patient.dobMonth = form.dobMonth.data
+                    patient.dobYear = form.dobYear.data
                     patient.SSN = form.SSN.data
                     patient.sexID = form.sexID.data
                     patient.raceID = form.raceID.data
@@ -4322,7 +4366,9 @@ def create_patient(patientID=None):
                     aliasFirstName=form.aliasFirstName.data,
                     aliasLastName=form.aliasLastName.data,
                     aliasMiddleName=form.aliasMiddleName.data,
-                    dob=form.dob.data,
+                    dobDay=form.dobDay.data,
+                    dobMonth=form.dobMonth.data,
+                    dobYear=form.dobYear.data,
                     SSN=form.SSN.data,
                     raceID=form.raceID.data,
                     sexID=form.sexID.data,

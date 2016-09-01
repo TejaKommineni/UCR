@@ -63,10 +63,20 @@
           
             <div class="form-group">
               <div class="row">
-                <div class="col-md-2">
-                  <label for="date_dob">Date of Birth</label>
-                  <input type="date" class="form-control" name="dob" id="date_dob" value="{{form["patient"]["dob"]}}" readonly="readonly" disabled="disabled">
+                <div class="col-md-1">
+                  <label for="date_dobDay">DOB Day</label>
+                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobDay"]}}" readonly="readonly" disabled="disabled">
                 </div>
+                <div class="col-md-1">
+                  <label for="date_dobMonth">DOB Month</label>
+                  <input type="text" class="form-control" name="dobMonth" id="date_dobMonth" value="{{form["patient"]["dobMonth"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-1">
+                  <label for="date_dobYear">DOB Year</label>
+                  <input type="text" class="form-control" name="dobYear" id="date_dobYear" value="{{form["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
                <div class="col-md-2">  
                   <label for="select_sex">Sex</label>        
                   <select type="text" class="form-control" name="sexID" id="select_sex" readonly="readonly" disabled="disabled">

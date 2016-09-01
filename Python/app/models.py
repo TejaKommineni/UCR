@@ -155,7 +155,9 @@ class CTC(CustomModel):
 
     ctcID = db.Column('ctcID', db.Integer, primary_key=True)
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('Patient.participantID'), nullable=False)
-    dxDate = db.Column('dx_date', db.Date)
+    dxDateDay = db.Column('dx_date_day', db.Integer)
+    dxDateMonth = db.Column('dx_date_month', db.Integer)
+    dxDateYear = db.Column('dx_date_year', db.Integer)
     site = db.Column('site', db.String)
     histology = db.Column('histology', db.String)
     behavior = db.Column('behavior', db.String)
@@ -320,6 +322,15 @@ class FundingSourceLUT(CustomModel):
     fundings = db.relationship("Funding", back_populates="fundingSource")
 
 
+class GiftCard(CustomModel):
+    __tablename__ = "GiftCardLUT"
+
+    giftCardID = db.Column('gift_cardID', db.Integer, primary_key=True)
+    description = db.Column('description', db.String)
+    barcode = db.Column('barcode', db.String(50), unique=True, nullable=False)
+    amount = db.Column('amount', db.Float)
+
+
 class GrantStatusLUT(CustomModel):
     __tablename__ = 'GrantStatusLUT'
 
@@ -367,10 +378,12 @@ class Incentive(CustomModel):
     contactID = db.Column('contactID', db.Integer, db.ForeignKey("Contact.contactID"))
     participantID = db.Column('participantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     incentiveDescription = db.Column('incentive_desc', db.String)
-    barcode = db.Column('barcode', db.String)
+    barcode = db.Column('barcode', db.String(50), db.ForeignKey("GiftCardLUT.barcode"), unique=True, nullable=False)
+    dateGiven = db.Column('date_given', db.DateTime)
 
     contact = db.relationship("Contact")
     projectPatient = db.relationship("ProjectPatient", back_populates="incentives")
+    giftCard = db.relationship("GiftCard")
 
 
 class Informant(CustomModel):
@@ -486,7 +499,9 @@ class Patient(CustomModel):
     aliasFirstName = db.Column('alias_first_name', db.String)
     aliasLastName = db.Column('alias_last_name', db.String)
     aliasMiddleName = db.Column('alias_middle_name', db.String)
-    dob = db.Column('dob', db.Date)
+    dobDay = db.Column('dob_day', db.Integer)
+    dobMonth = db.Column('dob_month', db.Integer)
+    dobYear = db.Column('dob_year', db.Integer)
     SSN = db.Column('SSN', db.Integer)
     sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
     raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))

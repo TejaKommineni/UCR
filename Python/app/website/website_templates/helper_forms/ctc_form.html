@@ -49,9 +49,19 @@
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="date_dxDate">Dx Date</label>
-                  <input type="date" class="form-control" name="dxDate" id="date_dxDate" value="{{ctc["dxDate"]}}" readonly="readonly" disabled="disabled">
+                  <label for="date_dxDateDay">Dx Date Day</label>
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateDay"]}}" readonly="readonly" disabled="disabled">
                 </div>
+                <div class = "col-md-2">
+                  <label for="date_dxDateMonth">Dx Date Month</label>
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateMonth" value="{{ctc["dxDateMonth"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_dxDateYear">Dx Date Year</label>
+                  <input type="text" class="form-control" name="dxDateYear" id="date_dxDateYear" value="{{ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
                 <div class = "col-md-2">
                   <label for="text_site">Site</label>
                   <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"]}}" readonly="readonly" disabled="disabled">
