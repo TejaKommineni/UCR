@@ -249,7 +249,7 @@
                                 <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["lastName"]}}</a></td>
                                 <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["firstName"]}}</a></td>
                                 <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["specialty"]}}</a></td>
-                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"].physicianStatus}}</a></td>
                             </tr>
                         {% endfor %}
                           </tbody>

@@ -37,8 +37,6 @@
                       {% endfor %}
                   </select>
                 </div>
-              </div>
-              <div class="row">
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
@@ -51,7 +49,9 @@
                       {% endfor %}
                   </select>
                 </div>
-                <div class = "col-md-2">
+              </div>
+              <div class="row">
+                  <div class = "col-md-2">
                   <label for="select_informantID">Informant</label>
                   <select type="text" class="form-control" name="informantID" id="select_informantID">
                       <option></option>
@@ -74,6 +74,21 @@
                        {% endif %}
                   </select>
                 </div>
+                  <div class = "col-md-2">
+                  <label for="select_informantID">Informant Phone</label>
+                  <select type="text" class="form-control" name="informantPhoneID" id="select_informantPhoneID">
+                      <option></option>
+                          {% for informantPhone in form.informantPhones %}
+                            {% if informantPhone.informantPhoneID == contact.informantPhoneID %}
+                                <option selected="selected" value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                            {% else %}
+                                <option value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                            {% endif %}
+                          {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
                 <div class = "col-md-2">
                   <label for="select_facilityID">Facility</label>
                   <select type="text" class="form-control" name="facilityID" id="select_facilityID">
@@ -87,6 +102,21 @@
                       {% endfor %}
                   </select>
                 </div>
+              <div class = "col-md-2">
+                  <label for="select_facilityID">Facility Phone</label>
+                  <select type="text" class="form-control" name="facilityPhoneID" id="select_facilityPhoneID">
+                      <option></option>
+                      {% for facilityPhone in form.facilityPhones %}
+                        {% if facilityPhone.facilityPhoneID == contact.facilityPhoneID %}
+                            <option selected="selected" value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.facilityPhoneID}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                </div>
+                <div class="row">
                 <div class = "col-md-2">
                   <label for="select_physicianID">Physician</label>
                   <select type="text" class="form-control" name="physicianID" id="select_physicianID">
@@ -100,13 +130,44 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class = "col-md-2">
+                  <label for="select_physicianID">Physician Phone</label>
+                  <select type="text" class="form-control" name="physicianPhoneID" id="select_physicianPhoneID">
+                      <option></option>
+                      {% for physicianPhone in form.physicianPhones %}
+                        {% if physicianPhone.physicianPhoneID == contact.physicianPhoneID %}
+                            <option selected="selected" value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                </div>
+              <div class="row">
+              <div class = "col-md-2"></div>
+                <div class = "col-md-2">
+                  <label for="select_patientPhoneID">Patient Phone</label>
+                  <select type="text" class="form-control" name="patientPhoneID" id="select_patientPhoneID">
+                      <option></option>
+                      {% for patientPhone in form.patientPhones %}
+                        {% if patientPhone.patPhoneID == contact.patientPhoneID %}
+                            <option selected="selected" value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
               </div>
               <div class="row">
-                <div class = "col-md-8">
+                <div class = "col-md-4">
                   <label for="text_description">Description</label>
                   <input type="text" class="form-control" name="description" id="text_description" value="{{contact.description}}">
                 </div>
-                <div class = "col-md-8">
+              </div>
+            <div class="row">
+                <div class = "col-md-4">
                   <label for="text_notes">Notes</label>
                   <input type="text" class="form-control" name="notes" id="text_notes" value="{{contact.notes}}">
                 </div>
@@ -122,8 +183,8 @@
                 </div>
               </div>
             </div>
-            
-      
+
+
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
@@ -135,12 +196,12 @@
                   <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{contact.modifiedDate}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">
-                  <label for="text_versionID">Version</label>  
+                  <label for="text_versionID">Version</label>
                   {% if contact is not none %}
                     <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{contact.versionID}}" readonly="readonly">
                   {% else %}
                     <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
-                  {% endif %}  
+                  {% endif %}
                 </div>
                 <!-- Extra hidden fields -->
                 {% if contact is not none %}
@@ -166,3 +227,4 @@
                 </div>
             </fieldset>
     </form>
+

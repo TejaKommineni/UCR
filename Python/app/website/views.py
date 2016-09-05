@@ -1697,8 +1697,39 @@ def populate_db2():
         participantID=1,
         staffID=1,
         informantID=1,
+        informantPhoneID=1,
+        description="desc",
+        contactDate=datetime(2016, 2, 2),
+        initials="atp",
+        notes="notes"
+    )
+    contact2 = models.Contact(
+        contactTypeLUTID=1,
+        participantID=1,
+        staffID=1,
         facilityID=1,
+        facilityPhoneID=1,
+        description="desc",
+        contactDate=datetime(2016, 2, 2),
+        initials="atp",
+        notes="notes"
+    )
+    contact3 = models.Contact(
+        contactTypeLUTID=1,
+        participantID=1,
+        staffID=1,
         physicianID=1,
+        physicianPhoneID=1,
+        description="desc",
+        contactDate=datetime(2016, 2, 2),
+        initials="atp",
+        notes="notes"
+    )
+    contact4 = models.Contact(
+        contactTypeLUTID=1,
+        participantID=1,
+        staffID=1,
+        patientPhoneID=1,
         description="desc",
         contactDate=datetime(2016, 2, 2),
         initials="atp",
@@ -1788,6 +1819,9 @@ def populate_db2():
     db.session.add(patientProjectStatus)
     db.session.add(physicianFacility)
     db.session.add(contact)
+    db.session.add(contact2)
+    db.session.add(contact3)
+    db.session.add(contact4)
     db.session.add(ctcFacility)
     db.session.add(incentive)
     db.session.commit()
@@ -2202,9 +2236,19 @@ def get_contact(contactID=None):
                 form["contactTypes"] = query.get_contact_types()
                 form["projectPatients"] = query.get_project_patients()
                 form["staff"] = query.get_staffs()
-                form["informants"] = query.get_informants()
-                form["facilities"] = query.get_facilities()
-                form["physicians"] = query.get_physicians()
+                form["informants"] = contact.projectPatient.ctc.patient.informants
+                form["informantPhones"] = []
+                for informant in form["informants"]:
+                    form["informantPhones"].extend(informant.informantPhones)
+                form["facilities"] = [x.facility for x in contact.projectPatient.ctc.ctcFacilities]
+                form["facilityPhones"] = []
+                for facility in form["facilities"]:
+                    form["facilityPhones"].extend(facility.facilityPhones)
+                form["physicians"] = [x.physician for x in contact.projectPatient.ctc.physicianToCTC]
+                form["physicianPhones"] = []
+                for physician in form["physicians"]:
+                    form["physicianPhones"].extend(physician.physicianPhones)
+                form["patientPhones"] = contact.projectPatient.ctc.patient.patientPhones
                 return render_template("contact_form.html", form=form, contact=contact)
             else:
                 return item_not_found("ContactID {} not found".format(contactID))
@@ -2224,8 +2268,12 @@ def update_contact(contactID):
                     contact.participantID = form.participantID.data
                     contact.staffID = form.staffID.data
                     contact.informantID = form.informantID.data
+                    contact.informantPhoneID = form.informantPhoneID.data
                     contact.facilityID = form.facilityID.data
+                    contact.facilityPhoneID = form.facilityPhoneID.data
                     contact.physicianID = form.physicianID.data
+                    contact.physicianPhoneID = form.physicianPhoneID.data
+                    contact.patientPhoneID = form.patientPhoneID.data
                     contact.description = form.description.data
                     contact.contactDate = form.contactDate.data
                     contact.initials = form.initials.data
@@ -2261,8 +2309,12 @@ def create_contact(contactID=None):
                     participantID=form.participantID.data,
                     staffID=form.staffID.data,
                     informantID=form.informantID.data,
+                    informantPhoneID=form.informantPhoneID.data,
                     facilityID=form.facilityID.data,
+                    facilityPhoneID=form.facilityPhoneID.data,
                     physicianID=form.physicianID.data,
+                    physicianPhoneID=form.physicianPhoneID.data,
+                    patientPhoneID=form.patientPhoneID.data,
                     description=form.description.data,
                     contactDate=form.contactDate.data,
                     initials=form.initials.data,
@@ -6086,9 +6138,19 @@ def get_project_patient(participantID=None):
                 form["ctcs"] = query.get_ctcs()
                 form["contactTypes"] = query.get_contact_types()
                 form["projectPatients"] = query.get_project_patients()
-                form["informants"] = query.get_informants()
-                form["facilities"] = query.get_facilities()
-                form["physicians"] = query.get_physicians()
+                form["informants"] = projectPatient.ctc.patient.informants
+                form["informantPhones"] = []
+                for informant in form["informants"]:
+                    form["informantPhones"].extend(informant.informantPhones)
+                form["facilities"] = [x.facility for x in projectPatient.ctc.ctcFacilities]
+                form["facilityPhones"] = []
+                for facility in form["facilities"]:
+                    form["facilityPhones"].extend(facility.facilityPhones)
+                form["physicians"] = [x.physician for x in projectPatient.ctc.physicianToCTC]
+                form["physicianPhones"] = []
+                for physician in form["physicians"]:
+                    form["physicianPhones"].extend(physician.physicianPhones)
+                form["patientPhones"] = projectPatient.ctc.patient.patientPhones
                 form["phoneTypes"] = query.get_phone_types()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["contactInfoSources"] = query.get_contact_info_sources()

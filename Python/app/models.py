@@ -97,8 +97,12 @@ class Contact(CustomModel):
     participantID = db.Column('particpantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     staffID = db.Column('staffID', db.Integer, db.ForeignKey("Staff.staffID"), nullable=False)
     informantID = db.Column('informantID', db.Integer, db.ForeignKey("Informant.informantID"))
+    informantPhoneID = db.Column('informantPhoneID', db.Integer, db.ForeignKey("InformantPhone.informantPhoneID"))
     facilityID = db.Column('facilityID', db.Integer, db.ForeignKey("Facility.facilityID"))
+    facilityPhoneID = db.Column('faciltyPhoneID', db.Integer, db.ForeignKey('FacilityPhone.facilityPhoneID'))
     physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
+    physicianPhoneID = db.Column('physicianPhoneID', db.Integer, db.ForeignKey("PhysicianPhone.physicianPhoneID"))
+    patientPhoneID = db.Column('patientPhoneID', db.Integer, db.ForeignKey("PatientPhone.patPhoneID"))
     description = db.Column('description', db.String)
     contactDate = db.Column('contact_date', db.Date, nullable=False)
     initials = db.Column('initials', db.String)
@@ -117,6 +121,11 @@ class Contact(CustomModel):
     facility = db.relationship("Facility", back_populates="contacts")
     # M - 1, many contacts may have the same facility
     physician = db.relationship("Physician", back_populates="contacts")
+
+    facilityPhone = db.relationship('FacilityPhone')
+    informantPhone = db.relationship('InformantPhone')
+    physicianPhone = db.relationship('PhysicianPhone')
+    patientPhone = db.relationship('PatientPhone')
 
 
 class Contacts(CustomModel):
@@ -450,6 +459,7 @@ class InformantPhone(CustomModel):
     informant = db.relationship("Informant", back_populates="informantPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
+    phoneType = db.relationship("PhoneTypeLUT")
 
 
 class Log(CustomModel):
@@ -585,6 +595,7 @@ class PatientPhone(CustomModel):
     patients = db.relationship("Patient", back_populates="patientPhones")
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
+    phoneType=db.relationship("PhoneTypeLUT")
 
 
 class PatientProjectStatus(CustomModel):

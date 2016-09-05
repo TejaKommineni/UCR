@@ -118,10 +118,25 @@ class ContactForm(BaseForm):
                            [validators.InputRequired()])
     informantID = IntegerField('informantID',
                                [] + COMMON_INTEGER_VALIDATORS)
+
+    informantPhoneID = IntegerField('informantPhoneID',
+                               [] + COMMON_INTEGER_VALIDATORS)
+
     facilityID = IntegerField('facilityID',
                               [] + COMMON_INTEGER_VALIDATORS)
+
+    facilityPhoneID = IntegerField('facilityPhoneID',
+                              [] + COMMON_INTEGER_VALIDATORS)
+
     physicianID = IntegerField('physicianID',
                                [] + COMMON_INTEGER_VALIDATORS)
+
+    physicianPhoneID = IntegerField('physicianPhoneID',
+                               [] + COMMON_INTEGER_VALIDATORS)
+
+    patientPhoneID = IntegerField('patientPhoneID',
+                                    [] + COMMON_INTEGER_VALIDATORS)
+
     description = StringField('description',
                               [] + COMMON_STRING_VALIDATORS)
     contactDate = DateField('contactDate',
@@ -138,7 +153,7 @@ class ContactForm(BaseForm):
         # Check to make sure the project FK exists
         projectPatient = query.get_project_patient(self.participantID.data)
         if projectPatient is None:
-            self.projectPatientID.errors.append("ID not found")
+            self.participantID.errors.append("ID not found")
             hasErrors = True
 
         contactType = query.get_contact_type(self.contactTypeLUTID.data)
@@ -157,16 +172,67 @@ class ContactForm(BaseForm):
                 self.informantID.errors.append("ID not found")
                 hasErrors = True
 
+        if self.informantPhoneID.data:
+            if self.informantID.data is None:
+                self.informantID.errors.append("InformantID required if specifying InformantPhoneID")
+                hasErrors = True
+            else:
+                informantPhone = query.get_informant_phone(self.informantPhoneID.data)
+                if informantPhone is None:
+                    self.informantPhoneID.errors.append("ID not found")
+                    hasErrors = True
+                else:
+                    informant = query.get_informant(self.informantID.data)
+                    if self.informantPhoneID.data not in [x.informantPhoneID for x in informant.informantPhones]:
+                        self.informantPhoneID.errors.append("InformantPhoneID is not linked to specified Informant")
+                        hasErrors = True
+
         if self.facilityID.data:
             facility = query.get_project_patient(self.facilityID.data)
             if facility is None:
                 self.facilityID.errors.append("ID not found")
                 hasErrors = True
 
+        if self.facilityPhoneID.data:
+            if self.facilityID.data is None:
+                self.facilityID.errors.append("FacilityID required if specifying FacilityPhoneID")
+                hasErrors = True
+            else:
+                faciltyPhone = query.get_facility_phone(self.facilityPhoneID.data)
+                if faciltyPhone is None:
+                    self.facilityPhoneID.errors.append("ID not found")
+                    hasErrors = True
+                else:
+                    facility = query.get_facility(self.facilityID.data)
+                    if self.facilityPhoneID.data not in [x.facilityPhoneID for x in facility.facilityPhones]:
+                        self.facilityID.errors.append("FacilityPhoneID is not linked to specified Facility")
+                        hasErrors = True
+
         if self.physicianID.data:
             physician = query.get_physician(self.physicianID.data)
             if physician is None:
                 self.physicianID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.physicianPhoneID.data:
+            if self.physicianID.data is None:
+                self.physicianID.errors.append("PhysicianID required if specifying PhysicianPhoneID")
+                hasErrors = True
+            else:
+                physicianPhone = query.get_physician_phone(self.physicianPhoneID.data)
+                if physicianPhone is None:
+                    self.physicianPhoneID.errors.append("ID not found")
+                    hasErrors = True
+                else:
+                    physician = query.get_physician(self.physicianID.data)
+                    if self.physicianPhoneID.data not in [x.physicianPhoneID for x in physician.physicianPhones]:
+                        self.physicianPhoneID.errors.append("PhysicianPhoneID is not linked to specified Physician")
+                        hasErrors = True
+
+        if self.patientPhoneID.data:
+            patientPhone = query.get_patient_phone(self.patientPhoneID.data)
+            if patientPhone is None:
+                self.patientPhoneID.errors.append("ID not found")
                 hasErrors = True
         return not hasErrors
 

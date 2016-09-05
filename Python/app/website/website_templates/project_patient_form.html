@@ -72,15 +72,15 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="text_currentAge">Current Age</label>        
-                  <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}">
+                  <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}" readonly="readonly" disabled="disabled">
                </div>
                 <div class = "col-md-2">
                   <label for="text_batch">Batch</label>
-                  <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch}}">
+                  <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch}}" readonly="readonly" disabled="disabled">
                 </div>
                <div class="col-md-2">  
                   <label for="text_siteGrp">Site Group</label>        
-                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value="{{projectPatient.siteGrp}}">
+                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value="{{projectPatient.siteGrp}}" readonly="readonly" disabled="disabled">
                </div>
               </div>
               <div class = "row">
@@ -371,7 +371,10 @@
         <div class="tab-pane active" id="contactsTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li><a class="active" href="#contactTable" role="tab" data-toggle="tab">Contacts</a></li>
-                <li><a href="#newContactTab" role="tab" data-toggle="tab">New Contact</a></li>
+                <li><a href="#newPatientContactTab" role="tab" data-toggle="tab">New Patient Contact</a></li>
+                <li><a href="#newInformantContactTab" role="tab" data-toggle="tab">New Informant Contact</a></li>
+                <li><a href="#newFacilityContactTab" role="tab" data-toggle="tab">New Facility Contact</a></li>
+                <li><a href="#newPhysicianContactTab" role="tab" data-toggle="tab">New Physician Contact</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="contactTable">
@@ -383,6 +386,7 @@
                                         <th>Contact Date</th>
                                         <th>Contact Type</th>
                                         <th>Staff</th>
+                                        <th>Patient Phone</th>
                                         <th>Informant</th>
                                         <th>Facility</th>
                                         <th>Physician</th>
@@ -394,9 +398,10 @@
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate}}</a></td>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactDefinition}}</a></td>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.patientPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}} {{contact.informantPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName}} {{contact.facilityPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName}} {{contact.physicianPhone.phoneNumber}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -404,9 +409,21 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="tab-pane" id="newContactTab">
+                <div class="tab-pane" id="newPatientContactTab">
                 {% set contact = none %}
-                {% include 'helper_forms/contact_form.html' %}
+                {% include 'helper_forms/contact_form_patient.html' %}
+                </div>
+                <div class="tab-pane" id="newInformantContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_informant.html' %}
+                </div>
+                <div class="tab-pane" id="newFacilityContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_facility.html' %}
+                </div>
+                <div class="tab-pane" id="newPhysicianContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_physician.html' %}
                 </div>
             </div>
         </div>
