@@ -435,27 +435,37 @@
         
         <div class="tab-pane" id="incentivesTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for incentive in projectPatient.incentives %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#incentive{{loop.index}}Tab" role="tab" data-toggle="tab">Incentive {{loop.index}}</a></li>
-                    {% else %}
-                    <li><a href="#incentive{{loop.index}}Tab" role="tab" data-toggle="tab">Incentive {{loop.index}}</a></li>
-                    {% endif %}
-                {% endfor %}
+                <li><a href="#incentiveTableTab" role="tab" data-toggle="tab">Incentives</a></li>
                 <li><a href="#newIncentiveTab" role="tab" data-toggle="tab">New Incentive</a></li>
             </ul>
             <div class="tab-content">
-                {% for incentive in projectPatient.incentives %}
-                {% if loop.index == 1 %}
-                    <div class="tab-pane active" id="incentive{{loop.index}}Tab">
-                    {% include 'helper_forms/incentive_form.html' %}
-                    </div>
-                    {% else %}
-                    <div class="tab-pane" id="incentive{{loop.index}}Tab">
-                    {% include 'helper_forms/incentive_form.html' %}
-                    </div>
-                {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="incentiveTableTab">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Barcode</th>
+                                        <th>Gift Card Description</th>
+                                        <th>Amount</th>
+                                        <th>Date Given</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for incentive in projectPatient.incentives %}
+                                    <tr>
+                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription}}</a></td>
+                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.barcode}}</a></td>
+                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.giftCard.description}}</a></td>
+                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount}}</a></td>
+                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.dateGiven}}</a></td></tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newIncentiveTab">
                 {% set incentive = none %}
                 {% include 'helper_forms/incentive_form.html' %}

@@ -533,7 +533,8 @@ class IncentiveForm(BaseForm):
     incentiveDescription = StringField('incentiveDescription',
                                        [] + COMMON_STRING_VALIDATORS)
     barcode = StringField('barcode',
-                              [] + COMMON_STRING_VALIDATORS)
+                              [validators.InputRequired()] + COMMON_STRING_VALIDATORS,
+                          )
     dateGiven = DateField('dateGiven',[]+COMMON_DATE_VALIDATORS,
                           format=DATE_FORMAT)
 
