@@ -35,9 +35,9 @@
                                           <option></option>
                                           {% for contactType in form.contactTypes %}
                                             {% if contactType.contactTypeID == contact.contactTypeLUTID %}
-                                                <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactDefinition}}</option>
+                                                <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
                                             {% else %}
-                                                <option value="{{contactType.contactTypeID}}">{{contactType.contactDefinition}}</option>
+                                                <option value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
                                             {% endif %}
                                           {% endfor %}
                                       </select>

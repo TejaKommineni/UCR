@@ -23,9 +23,9 @@
                     <option value=""></option>
                   {% for finalCode in form["finalCodes"] %}
                     {% if finalCode.finalCodeID == form.queryParams.finalCodeID %}
-                    <option value="{{finalCode.finalCodeID}}" selected="selected">{{finalCode.finalCode}}</option>
+                    <option value="{{finalCode.finalCodeID}}" selected="selected">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
                     {% else %}
-                    <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                    <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
                     {% endif %}
                   {% endfor %}
                   </select>
@@ -75,7 +75,7 @@
             <tr>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}} - {{projectPatient["finalCode"].finalCodeDefinition}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"]}}</a></td>
             </tr>

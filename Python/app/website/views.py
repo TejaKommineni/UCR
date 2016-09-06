@@ -22,91 +22,133 @@ website = Blueprint('website', __name__, template_folder='website_templates')
 def create_final_codes():
     finalCodes = []
     finalCodes.append(models.FinalCode(
-        finalCode="Pending"
+        finalCodeDefinition="Pending",
+        finalCode=0
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Consent- Survey complete w/Med. Rcd. release"
+        finalCodeDefinition="Consent- Survey complete w/Med. Rcd. release",
+        finalCode=100
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Consent- Survey complete NO Med.Rcd. release"
+        finalCodeDefinition="Consent- Survey complete NO Med.Rcd. release",
+        finalCode=101
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Consent- Incomplete survey. Cannot complete (see notes for reason)"
+        finalCodeDefinition="Consent- Incomplete survey. Cannot complete (see notes for reason)",
+        finalCode=111
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Survey complete- no consent form with or without medical release"
+        finalCodeDefinition="Survey complete- no consent form with or without medical release",
+        finalCode=112
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- by mail"
+        finalCodeDefinition="No- by mail",
+        finalCode=200
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- no reason"
+        finalCodeDefinition="No- no reason",
+        finalCode=201
+
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- too ill"
+        finalCodeDefinition="No- too ill",
+        finalCode=202
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- no interest"
+        finalCodeDefinition="No- no interest",
+        finalCode=203
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- too old"
+        finalCodeDefinition="No- too old",
+        finalCode=204
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- no cancer"
+        finalCodeDefinition="No- no cancer",
+        finalCode=205
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No-upset"
+        finalCodeDefinition="No-upset",
+        finalCode=207
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- DO NOT CONTACT-per contact with patient on study"
+        finalCodeDefinition="No- DO NOT CONTACT-per contact with patient on study",
+        finalCode=208
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No- no signed consent form"
+        finalCodeDefinition="No- no signed consent form",
+        finalCode=209
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Lost to follow-up (bad/no address or phone)-may have contacted once or initial letter not returned, but can no longer contact"
+        finalCodeDefinition="No response after max effort",
+        finalCode=300
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="No response after 2+ letters (no/bad phone)"
+        finalCodeDefinition="Lost to follow-up (bad/no address or phone)-may have contacted once or initial letter not returned, but can no longer contact",
+        finalCode=301
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Deceased AFTER selection"
+        finalCodeDefinition="Language Barrier",
+        finalCode=302
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible - Current Age"
+        finalCodeDefinition="No response after 2+ letters (no/bad phone)",
+        finalCode=303
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible-other"
+        finalCodeDefinition="Deceased AFTER selection",
+        finalCode=309
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible- DX date"
+        finalCodeDefinition="Ineligible - Current Age",
+        finalCode=400
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible- Patient Deceased"
+        finalCodeDefinition="Ineligible-other",
+        finalCode=401
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible- mental capacity"
+        finalCodeDefinition="Ineligible- DX date",
+        finalCode=402
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible- histology or behavior"
+        finalCodeDefinition="Ineligible- Patient Deceased",
+        finalCode=403
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible- out of state resident at DX"
+        finalCodeDefinition="Ineligible- mental capacity",
+        finalCode=404
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible-Recently contacted for another UCR study or lost to follow-up in another UCR study within past year"
+        finalCodeDefinition="Ineligible- histology or behavior",
+        finalCode=406
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible-Do not contact per DMS"
+        finalCodeDefinition="Ineligible- out of state resident at DX",
+        finalCode=407
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible-Not able to send letter OR letter returned and no other contact possible (for NOK or Patient)"
+        finalCodeDefinition="Ineligible-Recently contacted for another UCR study or lost to follow-up in another UCR study within past year",
+        finalCode=408
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Ineligible - Contacted for other study within 1 year"
+        finalCodeDefinition="Ineligible-out of country",
+        finalCode=409
     ))
     finalCodes.append(models.FinalCode(
-        finalCode="Holding"
+        finalCodeDefinition="Ineligible-Do not contact per DMS",
+        finalCode=410
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCodeDefinition="Ineligible-Not able to send letter OR letter returned and no other contact possible (for NOK or Patient)",
+        finalCode=411
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCodeDefinition="Ineligible - Contacted for other study within 1 year",
+        finalCode=412
+    ))
+    finalCodes.append(models.FinalCode(
+        finalCodeDefinition="Holding",
+        finalCode=999
     ))
     return finalCodes
 def create_states():
@@ -1017,100 +1059,136 @@ def create_tracing_sources():
 def create_contact_types():
     contact_types = []
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed 1st packet to patient (intro letter, survey, consent, med rcd. release)"
+        contactDefinition="Mailed 1st packet to patient (intro letter, survey, consent, med rcd. release)",
+        contactCode=100
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed Reminder letter"
+        contactDefinition="Mailed Reminder letter",
+        contactCode=101
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed 2nd packet (FU letter, survey, consent, med rcd release)"
+        contactDefinition="Mailed 2nd packet (FU letter, survey, consent, med rcd release)",
+        contactCode=102
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed Thank you letter and copy of consent form"
+        contactDefinition="Mailed Thank you letter and copy of consent form",
+        contactCode=103
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed Packet (after phone contact)"
+        contactDefinition="Mailed Packet (after phone contact)",
+        contactCode=109
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Mailed additional items- (survey, consent form, envelope, etc)"
+        contactDefinition="Mailed additional items- (survey, consent form, envelope, etc)",
+        contactCode=110
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Undeliverable, mail returned w/forwarding addresses, mailed to new address"
+        contactDefinition="Undeliverable, mail returned w/forwarding addresses, mailed to new address",
+        contactCode=150
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Undeliverable, Mail returned, NO forwarding address"
+        contactDefinition="Undeliverable, Mail returned, NO forwarding address",
+        contactCode=151
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Packet Returned - Temporarily Away"
+        contactDefinition="Packet Returned - Temporarily Away",
+        contactCode=152
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Left voicemail"
+        contactDefinition="Left voicemail",
+        contactCode=200
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Left message with person"
+        contactDefinition="Left message with person",
+        contactCode=201
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Busy"
+        contactDefinition="No answer",
+        contactCode=202
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Bad Phone number"
+        contactDefinition="Busy",
+        contactCode=203
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- Received, thinking about it"
+        contactDefinition="Bad Phone number",
+        contactCode=204
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- Received, willing"
+        contactDefinition="Spoke with- Received, thinking about it",
+        contactCode=205
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- Received, already sent to us"
+        contactDefinition="Spoke with- Received, willing",
+        contactCode=206
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- too sick"
+        contactDefinition="Spoke with- Received, already sent to us",
+        contactCode=207
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- no cancer"
+        contactDefinition="Spoke with- too sick",
+        contactCode=208
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Language Barrier"
+        contactDefinition="Spoke with- no cancer",
+        contactCode=209
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Deceased"
+        contactDefinition="Language Barrier",
+        contactCode=210
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Pt unable to come to phone, could not leave message"
+        contactDefinition="Deceased",
+        contactCode=211
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Incompetent"
+        contactDefinition="Pt unable to come to phone, could not leave message",
+        contactCode=212
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Patient left message for Coordinator"
+        contactDefinition="Incompetent",
+        contactCode=213
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- Refused (no reason given)"
+        contactDefinition="Patient left message for Coordinator",
+        contactCode=214
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Ineligible"
+        contactDefinition="Spoke with- Refused (no reason given)",
+        contactCode=215
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- did not receive, mailed another letter"
+        contactDefinition="Ineligible",
+        contactCode=216
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Spoke with- Other"
+        contactDefinition="Spoke with- did not receive, mailed another letter",
+        contactCode=217
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Survey returned without consent form"
+        contactDefinition="Spoke with- Other",
+        contactCode=218
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Survey returned incomplete"
+        contactDefinition="Survey returned without consent form",
+        contactCode=300
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Consent returned without survey"
+        contactDefinition="Survey returned incomplete",
+        contactCode=301
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Received consent, survey received previously"
+        contactDefinition="Consent returned without survey",
+        contactCode=302
     ))
     contact_types.append(models.ContactTypeLUT(
-        contactDefinition="Enter in error"
+        contactDefinition="Received consent, survey received previously",
+        contactCode=304
+    ))
+    contact_types.append(models.ContactTypeLUT(
+        contactDefinition="Enter in error",
+        contactCode=999
     ))
     return contact_types
 def create_ucr_roles():
@@ -2379,8 +2457,14 @@ def update_contact_type(contactTypeID):
         if contactType is not None:
             form = forms.ContactTypeLUTForm(request.form)
             if form.validate():
+                if contactType.contactCode != form.contactCode.data:
+                    contactType2 = query.get_contact_type_by_code(form.contactCode.data)
+                    if contactType2:
+                        form.contactCode.errors.append("Contact Code already exists in database.")
+                    return missing_params(form.errors)
                 if int(form.versionID.data) == contactType.versionID:
                     contactType.contactDefinition = form.contactDefinition.data
+                    contactType.contactCode = form.contactCode.data
                     query.commit()
                     return redirect_back('contacttypes/{}/'.format(contactTypeID))
                 else:
@@ -2407,8 +2491,13 @@ def create_contact_type(contactTypeID=None):
         else:
             form = forms.ContactTypeLUTForm(request.form)
             if form.validate():
+                contactType2 = query.get_contact_type_by_code(form.contactCode.data)
+                if contactType2:
+                    form.contactCode.errors.append("Contact code already exists in the database.")
+                    return missing_params(form.errors)
                 contactType = models.ContactTypeLUT(
                     contactDefinition=form.contactDefinition.data,
+                    contactCode=form.contactCode.data
                 )
                 query.add(contactType)
                 return redirect_back('contacttypes/{}/'.format(contactType.contactTypeID))
@@ -3281,8 +3370,14 @@ def update_final_code(finalCodeID):
         if finalCode is not None:
             form = forms.FinalCodeForm(request.form)
             if form.validate():
+                if finalCode.finalCode != form.finalCode.data:
+                    finalCode2 = query.get_final_code_by_code(form.finalCode.data)
+                    if finalCode2:
+                        form.finalCode.errors.append("Final Code already exists in database.")
+                    return missing_params(form.errors)
                 if int(form.versionID.data) == finalCode.versionID:
                     finalCode.finalCode = form.finalCode.data
+                    finalCode.finalCodeDefinition = form.finalCodeDefinition.data
                     query.commit()
                     return redirect_back('finalcodes/{}/'.format(finalCodeID))
                 else:
@@ -3309,8 +3404,13 @@ def create_final_code(finalCodeID=None):
         else:
             form = forms.FinalCodeForm(request.form)
             if form.validate():
+                finalCode2 = query.get_final_code_by_code(form.finalCode.data)
+                if finalCode2:
+                    form.finalCode.errors.append("Final code already exists in the database.")
+                    return missing_params(form.errors)
                 finalCode = models.FinalCode(
-                    finalCode=form.finalCode.data
+                    finalCode=form.finalCode.data,
+                    finalCodeDefinition=form.finalCodeDefinition.data
                 )
                 query.add(finalCode)
                 return redirect_back('finalcodes/{}/'.format(finalCode.finalCodeID))

@@ -250,6 +250,8 @@ class ContactInfoStatusForm(BaseForm):
 class ContactTypeLUTForm(BaseForm):
     contactDefinition = StringField('contactDefinition',
                                     [] + COMMON_STRING_VALIDATORS)
+    contactCode = IntegerField('contactCode',
+                               [] + COMMON_INTEGER_VALIDATORS)
 
 
 class CTCFacilityForm(BaseForm):
@@ -449,8 +451,10 @@ class FacilityPhoneForm(BaseForm):
 
 
 class FinalCodeForm(BaseForm):
-    finalCode = StringField('finalCode',
-                            [] + COMMON_STRING_VALIDATORS)
+    finalCode = IntegerField('finalCode',
+                            [] + COMMON_INTEGER_VALIDATORS)
+    finalCodeDefinition = StringField('finalCodeDefintion',
+                                      [] + COMMON_STRING_VALIDATORS)
 
 
 class FundingForm(BaseForm):

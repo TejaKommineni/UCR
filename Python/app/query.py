@@ -153,6 +153,10 @@ def get_contact_type(id):
     return db.session.query(ContactTypeLUT).filter_by(contactTypeID=id).first()
 
 
+def get_contact_type_by_code(code):
+    return db.session.query(ContactTypeLUT).filter_by(contactCode=code).first()
+
+
 def get_contact_info_sources():
     return db.session.query(ContactInfoSourceLUT).all()
 
@@ -236,6 +240,10 @@ def get_final_codes():
 
 def get_final_code(id):
     return db.session.query(FinalCode).filter_by(finalCodeID=id).first()
+
+
+def get_final_code_by_code(code):
+    return db.session.query(FinalCode).filter_by(finalCode=code).first()
 
 
 def get_fundings():

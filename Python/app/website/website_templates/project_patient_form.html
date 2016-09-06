@@ -93,9 +93,9 @@
                   <select type="text" class="form-control" required="required" name="finalCodeID" id="select_finalCodeID">
                       {% for finalCode in form.finalCodes %}
                         {% if finalCode.finalCodeID == projectPatient.finalCodeID %}
-                            <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                            <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
                         {% else %}
-                            <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}}</option>
+                            <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -396,7 +396,7 @@
                                     {% for contact in projectPatient.contacts %}
                                     <tr>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactDefinition}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactCode}} - {{contact.contactType.contactDefinition}}</a></td>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName}}</a></td>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.patientPhone.phoneNumber}}</a></td>
                                         <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}} {{contact.informantPhone.phoneNumber}}</a></td>

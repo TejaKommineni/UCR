@@ -152,6 +152,7 @@ class ContactTypeLUT(CustomModel):
     __tablename__ = "ContactTypeLUT"
 
     contactTypeID = db.Column('contactTypeLUTID', db.Integer, primary_key=True)
+    contactCode = db.Column('contact_code', db.Integer, unique=True)
     contactDefinition = db.Column('contact_definition', db.String)
 
     # Relationships
@@ -290,7 +291,9 @@ class FinalCode(CustomModel):
     __tablename__ = "FinalCode"
 
     finalCodeID = db.Column('finalCodeID', db.Integer, primary_key=True)
-    finalCode = db.Column('final_code', db.String)
+    finalCodeDefinition = db.Column('final_code_definition', db.String)
+    finalCode = db.Column('final_code', db.Integer, unique=True)
+
 
     projectPatients = db.relationship("ProjectPatient", back_populates="finalCode")
 
