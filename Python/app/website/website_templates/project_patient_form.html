@@ -571,27 +571,28 @@
     </div>
         <div class="tab-pane" id="statusesTab">
         <ul class ="nav nav-tabs" role="tablist">
-            {% for patientProjectStatus in projectPatient.patientProjectStatuses %}
-                {% if loop.index == 1 %}
-                <li class="active"><a href="#patientProjectStatus{{loop.index}}Tab" role="tab" data-toggle="tab">Patient Project Status {{loop.index}}</a></li>
-                {% else %}
-                <li><a href="#patientProjectStatus{{loop.index}}Tab" role="tab" data-toggle="tab">Patient Project Status {{loop.index}}</a></li>
-                {% endif %}
-            {% endfor %}
+            <li class="active"><a href="#patientProjectStatusTableTab" role="tab" data-toggle="tab">Patient Project Statuses</a></li>
             <li><a href="#newPatientProjectStatus" role="tab" data-toggle="tab">New Patient Project Status</a></li>
         </ul>
         <div class="tab-content">
-            {% for patientProjectStatus in projectPatient.patientProjectStatuses %}
-                {% if loop.index == 1 %}
-                    <div class="tab-pane active" id="patientProjectStatus{{loop.index}}Tab">
-                    {% include 'helper_forms/patient_project_status_form.html' %}
-                    </div>
-                {% else %}
-                    <div class="tab-pane" id="patientProjectStatus{{loop.index}}Tab">
-                    {% include 'helper_forms/patient_project_status_form.html' %}
-                    </div>
-                {% endif %}
-            {% endfor %}
+            <div class="tab-pane active" id="patientProjectStatusTableTab">
+                <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Status Type</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
+                                    <tr><td><a href="/website/patientprojectstatuses/{{projectPatientStatus["projectPatientStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td></tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+            </div>
             <div class="tab-pane" id="newPatientProjectStatus">
             {% set patientProjectStatus = none %}
             {% include 'helper_forms/patient_project_status_form.html' %}
@@ -601,27 +602,36 @@
 
         <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
-            {% for tracing in projectPatient.tracings %}
-                {% if loop.index == 1 %}
-                <li class="active"><a href="#tracing{{loop.index}}Tab" role="tab" data-toggle="tab">Tracing {{loop.index}}</a></li>
-                {% else %}
-                <li><a href="#tracing{{loop.index}}Tab" role="tab" data-toggle="tab">Tracing {{loop.index}}</a></li>
-                {% endif %}
-            {% endfor %}
+            <li class="active"><a href="#tracingTable}Tab" role="tab" data-toggle="tab">Tracings</a></li>
             <li><a href="#newtracing" role="tab" data-toggle="tab">New Tracing</a></li>
         </ul>
         <div class="tab-content">
-            {% for tracing in projectPatient.tracings %}
-                {% if loop.index == 1 %}
-                    <div class="tab-pane active" id="tracing{{loop.index}}Tab">
-                    {% include 'helper_forms/tracing_form.html' %}
-                    </div>
-                {% else %}
-                    <div class="tab-pane" id="tracing{{loop.index}}Tab">
-                    {% include 'helper_forms/tracing_form.html' %}
-                    </div>
-                {% endif %}
-            {% endfor %}
+            <div class="tab-pane active" id="tracingTable">
+                <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Tracing Source</th>
+                                        <th>Staff</th>
+                                        <th>Notes</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for tracing in projectPatient.tracings %}
+                                    <tr>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.tracingSource.description}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.staff.firstName}} {{tracing.staff.lastName}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.notes}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.date}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+            </div>
             <div class="tab-pane" id="newtracing">
             {% set tracing = none %}
             {% include 'helper_forms/tracing_form.html' %}
