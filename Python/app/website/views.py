@@ -1,3 +1,4 @@
+import flask
 from flask import jsonify, request, url_for, redirect, abort, g, session, current_app
 from flask import Blueprint, render_template, abort
 import app.query as query
@@ -10,9 +11,25 @@ from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
 from urllib.parse import urlparse, urljoin
+from flask.ext.cas import login_required
+from functools import wraps
 
 website = Blueprint('website', __name__, template_folder='website_templates')
 
+def authorization_required(roles):
+    def real_decorator(function):
+        def wrapper(*args, **kwargs):
+            if 'CAS_USERNAME' not in flask.session:
+                return unauthorized()
+            else:
+                user = query.get_user_by_username(flask.session['CAS_USERNAME'])
+                if user is None:
+                    return unauthorized()
+                if user.role.role in roles:
+                    return function(*args, **kwargs)
+            return unauthorized()
+        return wrapper
+    return real_decorator
 
 ##############################################################################
 # create_data
@@ -1964,6 +1981,9 @@ def internal_error(e):
 def item_deleted(message):
     return render_template("error.html", message=message)
 
+def unauthorized():
+    return render_template("error.html", message="You are not authorized to view this."), 403
+
 
 def get_dependencies(record):
     deps = list(dependent_objects(record).limit(5))
@@ -1982,6 +2002,8 @@ def dependency_detected(dependencies, message="Dependency Detected"):
 # Root Node
 ##############################################################################
 @website.route('/')
+@login_required
+@authorization_required(roles=[2])
 def root():
     form = {}
     return render_template("homepage.html", form=form)
