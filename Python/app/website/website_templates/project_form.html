@@ -158,27 +158,44 @@
     <div class="tab-content">        
         <div class="tab-pane active" id="arcReviewTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for arcReview in form.project.arcReviews %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#arcReview{{arcReview.arcReviewID}}Tab" role="tab" data-toggle="tab">Arc Review {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#arcReview{{arcReview.arcReviewID}}Tab" role="tab" data-toggle="tab">Arc Review {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
                 <li><a href="#newArcReview" role="tab" data-toggle="tab">New Arc Review</a></li>
             </ul>
             <div class="tab-content">
-                {% for arcReview in form.project.arcReviews %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="arcReview{{arcReview.arcReviewID}}Tab">
-                        {% include 'helper_forms/arc_review_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="arcReview{{arcReview.arcReviewID}}Tab">
-                        {% include 'helper_forms/arc_review_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="arcReviewTableTab">
+                     <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Review Type</th>
+                                        <th>Date Sent to Reviewer</th>
+                                        <th>Date Reviewer 1 Signed</th>
+                                        <th>Date Reviewer 2 Signed</th>
+                                        <th>Contact</th>
+                                        <th>Linkage</th>
+                                        <th>Enaged</th>
+                                        <th>Non-Public Data</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for arcReview in form.project.arcReviews %}
+                                    <tr>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewType}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.contact}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.linkage}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.engaged}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.nonPublicData}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newArcReview">
                 {% set arcReview = none %}
                 {% include 'helper_forms/arc_review_form.html' %}
@@ -188,27 +205,38 @@
     
         <div class="tab-pane" id="budgetTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for budget in form.project.budgets %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#budget{{budget.budgetID}}Tab" role="tab" data-toggle="tab">Budget {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#budget{{budget.budgetID}}Tab" role="tab" data-toggle="tab">Budget {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#budgetTableTab" role="tab" data-toggle="tab">Budgets</a></li>
                 <li><a href="#newBudget" role="tab" data-toggle="tab">New Budget</a></li>
             </ul>
             <div class="tab-content">
-                {% for budget in form.project.budgets %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="budget{{budget.budgetID}}Tab">
-                        {% include 'helper_forms/budget_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="budget{{budget.budgetID}}Tab">
-                        {% include 'helper_forms/budget_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="budgetTableTab">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Number of Periods</th>
+                                        <th>Period Start</th>
+                                        <th>Period End</th>
+                                        <th>Period Total</th>
+                                        <th>Period Comment</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for budget in form.project.budgets %}
+                                    <tr>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newBudget">
                 {% set budget = none %}
                 {% include 'helper_forms/budget_form.html' %}
@@ -218,27 +246,42 @@
     
         <div class = "tab-pane" id="fundingTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for funding in form.project.fundings %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#funding{{funding.fundingID}}Tab" role="tab" data-toggle="tab">Funding {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#funding{{funding.fundingID}}Tab" role="tab" data-toggle="tab">Funding {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#fundingTableTab" role="tab" data-toggle="tab">Fundings</a></li>
                 <li><a href="#newFunding" role="tab" data-toggle="tab">New Funding</a></li>
             </ul>
             <div class="tab-content">
-                {% for funding in form.project.fundings %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="funding{{funding.fundingID}}Tab">
-                        {% include 'helper_forms/funding_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="funding{{funding.fundingID}}Tab">
-                        {% include 'helper_forms/funding_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="fundingTableTab">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Grant Status</th>
+                                        <th>Funding Source</th>
+                                        <th>Primary Funding Source</th>
+                                        <th>Secondary Funding Source</th>
+                                        <th>Funding Number</th>
+                                        <th>Grant Title</th>
+                                        <th>Date Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for funding in form.project.fundings %}
+                                    <tr>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.primaryFundingSource}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.secondaryFundingSource}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newFunding">
                 {% set funding = none %}
                 {% include 'helper_forms/funding_form.html' %}
@@ -248,27 +291,38 @@
         
         <div class = "tab-pane" id="logTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for log in form.project.logs %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#log{{log.logID}}Tab" role="tab" data-toggle="tab">Log {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#log{{log.logID}}Tab" role="tab" data-toggle="tab">Log {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#logTableTab" role="tab" data-toggle="tab">Logs</a></li>
                 <li><a href="#newLog" role="tab" data-toggle="tab">New Log</a></li>
             </ul>
             <div class="tab-content">
-                {% for log in form.project.logs %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="log{{log.logID}}Tab">
-                        {% include 'helper_forms/log_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="log{{log.logID}}Tab">
-                        {% include 'helper_forms/log_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="logTableTab">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Log Subject</th>
+                                        <th>Phase Status</th>
+                                        <th>Staff</th>
+                                        <th>Note</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for log in form.project.logs %}
+                                    <tr>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.logSubject.logSubject}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.phaseStatus.phaseStatus}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.staff.firstName}}  {{log.staff.lastName}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.note}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.date}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newLog">
                 {% set log = none %}
                 {% include 'helper_forms/log_form.html' %}
@@ -361,6 +415,7 @@
                 <div class="tab-pane" id="newProjectStaffTab">
                 {% set projectStaff = none %}
                 {% set staff = none %}
+                {% set project = form.project %}
                 {% include 'helper_forms/project_staff_form.html' %}
                 </div>
             </div>
@@ -369,27 +424,36 @@
         
         <div class = "tab-pane" id="projectStatusesTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for projectStatus in form.project.projectStatuses %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#projectStatus{{projectStatus.projectStatusID}}Tab" role="tab" data-toggle="tab">Project Status {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#projectStatus{{projectStatus.projectStatusID}}Tab" role="tab" data-toggle="tab">Project Status {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#projectStatusTableTab" role="tab" data-toggle="tab">Project Statuses</a></li>
                 <li><a href="#newProjectStatus" role="tab" data-toggle="tab">New Status</a></li>
             </ul>
             <div class="tab-content">
-                {% for projectStatus in form.project.projectStatuses %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="projectStatus{{projectStatus.projectStatusID}}Tab">
-                        {% include 'helper_forms/project_status_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="projectStatus{{projectStatus.projectStatusID}}Tab">
-                        {% include 'helper_forms/project_status_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="projectStatusTableTab">
+                    <form class="formOverride" id="projectStatuses">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Status Type</th>
+                                        <th>Staff</th>
+                                        <th>Note</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for projectStatus in form.project.projectStatuses %}
+                                    <tr>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.projectStatus.projectStatus}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.staff.firstName}} {{projectStatus.staff.lastName}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusNotes}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusDate}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newProjectStatus">
                 {% set projectStatus = none %}
                 {% include 'helper_forms/project_status_form.html' %}
@@ -399,27 +463,44 @@
         
         <div class = "tab-pane" id="reviewCommitteeTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for reviewCommittee in form.project.reviewCommittees %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#reviewCommittee{{reviewCommittee.reviewCommitteeID}}Tab" role="tab" data-toggle="tab">RC {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#reviewCommittee{{reviewCommittee.reviewCommitteeID}}Tab" role="tab" data-toggle="tab">RC {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#reviewCommitteeTableTab" role="tab" data-toggle="tab">Review Committees </a></li>
                 <li><a href="#newReviewCommittee" role="tab" data-toggle="tab">New RC</a></li>
             </ul>
             <div class="tab-content">
-                {% for reviewCommittee in form.project.reviewCommittees %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="reviewCommittee{{reviewCommittee.reviewCommitteeID}}Tab">
-                        {% include 'helper_forms/review_committee_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="reviewCommittee{{reviewCommittee.reviewCommitteeID}}Tab">
-                        {% include 'helper_forms/review_committee_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="reviewCommitteeTableTab">
+                    <form class="formOverride">
+                         <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Review Committee</th>
+                                            <th>RC Status</th>
+                                            <th>RC Number</th>
+                                            <th>Date Initial Review</th>
+                                            <th>Date Expires</th>
+                                            <th>Note</th>
+                                            <th>Protocol</th>
+                                            <th>Approval</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for rc in form.project.reviewCommittees %}
+                                        <tr>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeLUT.reviewCommittee}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeStatusLUT.reviewCommitteeStatus}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeNumber}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateInitialReview}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateExpires}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcNote}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcProtocol}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcApproval}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newReviewCommittee">
                 {% set reviewCommittee = none %}
                 {% include 'helper_forms/review_committee_form.html' %}
@@ -428,27 +509,36 @@
         </div>
         <div class = "tab-pane" id="ucrReportTab">
             <ul class ="nav nav-tabs" role="tablist">
-                {% for ucrReport in form.project.ucrReports %}
-                    {% if loop.index == 1 %}
-                    <li class="active"><a href="#ucrReport{{ucrReport.ucrReportID}}Tab" role="tab" data-toggle="tab">UCR Report {{loop.index}} </a></li>
-                    {% else %}
-                    <li><a href="#ucrReport{{ucrReport.ucrReportID}}Tab" role="tab" data-toggle="tab">UCR Report {{loop.index}} </a></li>
-                    {% endif %}
-                {% endfor %}
+                <li class="active"><a href="#ucrReportTableTab" role="tab" data-toggle="tab">UCR Reports</a></li>
                 <li><a href="#newUCRReport" role="tab" data-toggle="tab">New UCR Report</a></li>
             </ul>
             <div class="tab-content">
-                {% for ucrReport in form.project.ucrReports %}
-                    {% if loop.index == 1 %}
-                        <div class="tab-pane active" id="ucrReport{{ucrReport.ucrReportID}}Tab">
-                        {% include 'helper_forms/ucr_report_form.html' %}
-                        </div>
-                    {% else %}
-                        <div class="tab-pane" id="ucrReport{{ucrReport.ucrReportID}}Tab">
-                        {% include 'helper_forms/ucr_report_form.html' %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="tab-pane active" id="ucrReportTableTab">
+                    <form class="formOverride">
+                         <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Report Type</th>
+                                            <th>Report Submitted</th>
+                                            <th>Report Due</th>
+                                            <th>Report Document</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for report in form.project.ucrReports %}
+                                        <tr>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                    </form>
+                </div>
                 <div class="tab-pane" id="newUCRReport">
                 {% set ucrReport = none %}
                 {% include 'helper_forms/ucr_report_form.html' %}

@@ -1983,12 +1983,8 @@ def dependency_detected(dependencies, message="Dependency Detected"):
 ##############################################################################
 @website.route('/')
 def root():
-    return jsonify({
-        "version": 0.01,
-        "endpoints": [
-            "projects",
-            "staff"
-        ]})
+    form = {}
+    return render_template("homepage.html", form=form)
 
 @website.route('/overview/', methods=['GET'])
 def overview():
@@ -7641,7 +7637,7 @@ def create_ucr_report(ucrReportID=None):
             if form.validate():
                 ucr = models.UCRReport(
                     projectID=form.projectID.data,
-                    reportTypeID=form.reportType.data,
+                    reportTypeID=form.reportTypeID.data,
                     reportSubmitted=form.reportSubmitted.data,
                     reportDue=form.reportDue.data,
                     reportDoc=form.reportDoc.data

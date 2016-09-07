@@ -42,7 +42,7 @@
                   <select type="text" class="form-control" name="phaseStatusID" id="select_phaseStatusID">
                       <option></option>
                       {% for phaseStatus in form["phaseStatuses"] %}
-                        {% if log.logPhaseID == phaseStatus["logPhaseID"] %}
+                        {% if log.phaseStatusID == phaseStatus["logPhaseID"] %}
                             <option selected="selected" value="{{phaseStatus.logPhaseID}}">{{phaseStatus.phaseStatus}}</option>
                         {% else %}
                             <option value="{{phaseStatus.logPhaseID}}">{{phaseStatus.phaseStatus}}</option>

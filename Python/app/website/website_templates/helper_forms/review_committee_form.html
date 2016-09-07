@@ -42,7 +42,7 @@
                   <select type="text" class="form-control" name="reviewCommitteeLUTID" id="select_reviewCommitteeLUTID">
                       <option></option>
                       {% for reviewCommitteeLUT in form["reviewCommitteeLUTs"] %}
-                        {% if reviewCommitteeLUT.reviewCommitteeLUTID == reviewCommittee["reviewCommitteeLUTID"] %}
+                        {% if reviewCommitteeLUT.reviewCommitteeID == reviewCommittee["reviewCommitteeLUTID"] %}
                             <option selected="selected" value="{{reviewCommitteeLUT.reviewCommitteeID}}">{{reviewCommitteeLUT.reviewCommittee}}</option>
                         {% else %}
                             <option value="{{reviewCommitteeLUT.reviewCommitteeID}}">{{reviewCommitteeLUT.reviewCommittee}}</option>

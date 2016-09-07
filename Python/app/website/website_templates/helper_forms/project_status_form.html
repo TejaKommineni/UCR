@@ -29,7 +29,7 @@
                   <select type="text" class="form-control" name="projectStatusTypeID" id="select_projectStatusType">
                       <option></option>
                       {% for projectStatusType in form["projectStatusTypes"] %}
-                        {% if projectStatusType.projectStatusSubjectID == projectStatus["projectStatusTypeID"] %}
+                        {% if projectStatusType.projectStatusTypeID == projectStatus["projectStatusTypeID"] %}
                             <option selected="selected" value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
                         {% else %}
                             <option value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
