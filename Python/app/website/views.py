@@ -1233,8 +1233,45 @@ def create_gift_cards():
     ))
     return gcs
 
+
+def create_roles():
+    roles = []
+    roles.append(models.Role(
+        role="Contact Staff"
+    ))
+    roles.append(models.Role(
+        role="Developer"
+    ))
+    roles.append(models.Role(
+        role = "Director"
+    ))
+    roles.append(models.Role(
+        role="Informatics Staff"
+    ))
+    roles.append(models.Role(
+        role="Research Manager"
+    ))
+    return roles
+
+
+def create_users():
+    users = []
+    users.append(models.User(
+        uID="u0973461",
+        roleID=2 # developer
+    ))
+    users.append(models.User(
+        uID="u0050151",
+        roleID=1 # Contact Staff
+    ))
+    return users
+
+
 def populate_db2():
     db.create_all()
+
+    roles = create_roles()
+    users = create_users()
     finalCodes = create_final_codes()
     states = create_states()
     abstractStatuses = create_abstract_statuses()
@@ -1361,10 +1398,11 @@ def populate_db2():
     )
 
     staff = models.Staff(
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
-        email="email",
+        userID=1,
+        firstName="Aaron",
+        lastName="Thomas",
+        middleName="Pulver",
+        email="aaron.pulver@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
         institution="institution",
@@ -1377,9 +1415,10 @@ def populate_db2():
         ucrRoleID=1
     )
     staff2 = models.Staff(
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
+        userID=2,
+        firstName="Phoebe",
+        lastName="",
+        middleName="McNeally",
         email="email",
         phoneNumber="phone",
         phoneComment="phoneComment",
@@ -1841,6 +1880,8 @@ def populate_db2():
         barcode= "123456789",
         dateGiven=datetime(2016,4,3)
     )
+    db.session.add_all(roles)
+    db.session.add_all(users)
     db.session.add_all(states)
     db.session.add_all(finalCodes)
     db.session.add_all(sexes)

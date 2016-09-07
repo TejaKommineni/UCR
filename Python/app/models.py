@@ -1060,6 +1060,13 @@ class ReviewCommitteeLUT(CustomModel):
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="reviewCommitteeLUT")
 
 
+class Role(CustomModel):
+    __tablename__ = "Role"
+
+    roleID = db.Column("roleID", db.Integer, primary_key=True)
+    role = db.Column("role", db.String(50), unique=True, nullable=False)
+
+
 class Sex(CustomModel):
     __tablename__ = "SexLUT"
     sexID = db.Column('sexID', db.Integer, primary_key=True)
@@ -1084,6 +1091,7 @@ class Staff(CustomModel):
     city = db.Column('city', db.String)
     stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
     ucrRoleID = db.Column('UCR_role', db.Integer, db.ForeignKey("UCRRole.ucrRoleID"))
+    userID = db.Column("user_id", db.Integer, db.ForeignKey("User.userID"), nullable=False)
 
     # Relationships
     # 1 - M, one staff with many statuses
@@ -1101,6 +1109,7 @@ class Staff(CustomModel):
     tracings = db.relationship("Tracing", back_populates="staff")
     state = db.relationship("State")
     ucrRole = db.relationship("UCRRole", back_populates="staff")
+    user = db.relationship("User")
 
 
 class StaffRoleLUT(CustomModel):
@@ -1196,6 +1205,16 @@ class UCRRole(CustomModel):
     ucrRole = db.Column("ucrRole", db.String)
 
     staff = db.relationship("Staff", back_populates="ucrRole")
+
+
+class User(CustomModel):
+    __tablename__ = "User"
+
+    userID = db.Column("userID", db.Integer, primary_key=True)
+    uID = db.Column("uID", db.String(10), unique=True, nullable=False)
+    roleID = db.Column("roleID", db.Integer, db.ForeignKey('Role.roleID'), nullable=False)
+
+    role = db.relationship("Role")
 
 
 class VitalStatus(CustomModel):
