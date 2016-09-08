@@ -657,6 +657,14 @@ def get_review_committee_luts():
     return db.session.query(ReviewCommitteeLUT).all()
 
 
+def get_roles():
+    return db.session.query(Role).all()
+
+
+def get_role(id):
+    return db.session.query(Role).filter_by(roleID=id).first()
+
+
 def get_sex(id):
     return db.session.query(Sex).filter_by(sexID=id).first()
 
@@ -735,6 +743,18 @@ def get_ucr_roles():
 
 def get_ucr_role(id):
     return db.session.query(UCRRole).filter_by(ucrRoleID=id).first()
+
+
+def get_user(id):
+    return db.session.query(User).filter_by(userID=id).first()
+
+
+def get_users():
+    return db.session.query(User).all()
+
+
+def get_user_by_username(username):
+    return db.session.query(User).filter_by(uID=username).first()
 
 
 def get_vital_status(id):

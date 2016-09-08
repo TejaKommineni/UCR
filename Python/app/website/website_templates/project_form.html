@@ -132,6 +132,8 @@
             <input type="hidden" name="_method" value="put" />
           </div>
         </fieldset>
+        {# Only allow edit button for developers... #}
+        {% if user.role.role in ['Developer', 'Research Manager', 'Informantics Staff'] %}
         </fieldset>
             <fieldset>
                 <div class = "form-group">
@@ -142,21 +144,27 @@
                   </div>
                 </div>
             </fieldset>
+        {% endif %}
     </form>
     <ul class = "nav nav-tabs" role="tablist">
-        <li class="active"><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
+        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        <li><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
         <li><a href="#budgetTab" role="tab" data-toggle="tab">Budgets</a></li>
         <li><a href="#fundingTab" role="tab" data-toggle="tab">Fundings</a></li>
         <li><a href="#logTab" role="tab" data-toggle="tab">Logs</a></li>
         <li><a href="#preApplicationTab" role="tab" data-toggle="tab">Pre Application</a></li>
-        <li><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
+        {% endif %}
+        <li class="active"><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
+        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <li><a href="#projectStaffTab" role="tab" data-toggle="tab">Project Staff</a></li>
         <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
         <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
         <li><a href="#ucrReportTab" role="tab" data-toggle="tab">UCR Reports</a></li>
+        {% endif %}
     </ul>
-    <div class="tab-content">        
-        <div class="tab-pane active" id="arcReviewTab">
+    <div class="tab-content">
+        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        <div class="tab-pane" id="arcReviewTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
                 <li><a href="#newArcReview" role="tab" data-toggle="tab">New Arc Review</a></li>
@@ -334,8 +342,8 @@
             {% set preApplication = form.project.preApplication %}
             {% include 'helper_forms/pre_application_form.html' %}
         </div>
-        
-        <div class = "tab-pane" id="projectPatientTab">
+        {% endif %}
+        <div class = "tab-pane active" id="projectPatientTab">
             <form class="formOverride" id="projectPatients">
                 <fieldset>
                     <table class="table table-striped no-spacing">
@@ -367,7 +375,7 @@
                 </fieldset>
             </form>
         </div>
-        
+        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <div class = "tab-pane" id="projectStaffTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>
@@ -545,6 +553,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 
 {% endblock %}

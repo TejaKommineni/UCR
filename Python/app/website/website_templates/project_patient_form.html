@@ -455,11 +455,11 @@
                                   <tbody>
                                     {% for incentive in projectPatient.incentives %}
                                     <tr>
-                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription}}</a></td>
-                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.barcode}}</a></td>
-                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.giftCard.description}}</a></td>
-                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount}}</a></td>
-                                        <td><a href="/website/incentivew/{{incentive["incentiveID"]}}">{{incentive.dateGiven}}</a></td></tr>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.barcode}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.giftCard.description}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.dateGiven}}</a></td></tr>
                                     {% endfor %}
                                   </tbody>
                             </table>
@@ -586,7 +586,7 @@
                                   </thead>
                                   <tbody>
                                     {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
-                                    <tr><td><a href="/website/patientprojectstatuses/{{projectPatientStatus["projectPatientStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td></tr>
+                                    <tr><td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td></tr>
                                     {% endfor %}
                                   </tbody>
                             </table>

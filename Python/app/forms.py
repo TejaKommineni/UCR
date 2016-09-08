@@ -1,5 +1,5 @@
 from wtforms import Form, BooleanField, StringField, IntegerField, DateField, FloatField, BooleanField, validators
-import query
+from . import query
 
 COMMON_STRING_VALIDATORS = [
     validators.optional(),
@@ -184,7 +184,7 @@ class ContactForm(BaseForm):
                 else:
                     informant = query.get_informant(self.informantID.data)
                     if self.informantPhoneID.data not in [x.informantPhoneID for x in informant.informantPhones]:
-                        self.informantPhoneID.errors.append("InformantPhoneID is not linked to specified Informant")
+                        self.informantPhoneID.errors.append("InformantPhoneID is not linked to specified Informant (make sure the phone number and informant match)")
                         hasErrors = True
 
         if self.facilityID.data:
@@ -205,7 +205,7 @@ class ContactForm(BaseForm):
                 else:
                     facility = query.get_facility(self.facilityID.data)
                     if self.facilityPhoneID.data not in [x.facilityPhoneID for x in facility.facilityPhones]:
-                        self.facilityID.errors.append("FacilityPhoneID is not linked to specified Facility")
+                        self.facilityID.errors.append("FacilityPhoneID is not linked to specified Facility (make sure the phone number and the informant match)")
                         hasErrors = True
 
         if self.physicianID.data:
@@ -226,7 +226,7 @@ class ContactForm(BaseForm):
                 else:
                     physician = query.get_physician(self.physicianID.data)
                     if self.physicianPhoneID.data not in [x.physicianPhoneID for x in physician.physicianPhones]:
-                        self.physicianPhoneID.errors.append("PhysicianPhoneID is not linked to specified Physician")
+                        self.physicianPhoneID.errors.append("PhysicianPhoneID is not linked to specified Physician (make sure the phone number and the physician match)")
                         hasErrors = True
 
         if self.patientPhoneID.data:
