@@ -15,7 +15,9 @@ def create_app(config):
     app.register_blueprint(api, url_prefix = '/api')
     app.register_blueprint(website, url_prefix = '/website')
     app.json_encoder = DateTimeEncoder
-    CAS(app)
+    # Only CASify the app if DEV MODE is disabled
+    if not('DEV_MODE' in app.config and app.config['DEV_MODE']):
+        CAS(app)
 
     # redirect root to website blueprint
     @app.route('/')

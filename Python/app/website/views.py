@@ -18,7 +18,27 @@ website = Blueprint('website', __name__, template_folder='website_templates')
 
 @website.context_processor
 def add_user_to_jinja():
-    user = query.get_user_by_username(flask.session['CAS_USERNAME'])
+    """
+    This adds the user to the context that is availabe in the Jinja templates
+    If DEV_MODE is set, a fake user is created
+    If DEV_ROLE is also set, the role will be read from the config.py
+    :return:
+    """
+    if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
+        user = models.User(
+            uID="uDEV9999",
+            roleID=1
+        )
+        if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
+            user.role = models.Role(
+                role= current_app.config['DEV_ROLE']
+            )
+        else:
+            user.role = models.Role(
+                role="Developer"
+            )
+    else:
+        user = query.get_user_by_username(flask.session['CAS_USERNAME'])
     return dict(user=user)
 
 
@@ -26,17 +46,33 @@ def authorization_required(roles):
     """
     A decorator function to make sure the user is logged in via CAS and has proper roles for the
     endpoint they are trying to use
+
+    If DEV_MODE is set, CAS authentication is ignored and a fake user is created
     :param roles:
     :return:
     """
     def real_decorator(function):
         @wraps(function)
         def wrapper(*args, **kwargs):
-            if 'CAS_USERNAME' not in flask.session:
+            if 'CAS_USERNAME' not in flask.session and not ('DEV_MODE' in current_app.config and current_app.config['DEV_MODE']):
                 flask.session['CAS_AFTER_LOGIN_SESSION_URL'] = flask.request.path
                 return cas_login()
             else:
-                user = query.get_user_by_username(flask.session['CAS_USERNAME'])
+                if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
+                    user = models.User(
+                        uID="uDEV9999",
+                        roleID=1
+                    )
+                    if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
+                        user.role = models.Role(
+                            role=current_app.config['DEV_ROLE']
+                        )
+                    else:
+                        user.role = models.Role(
+                            role="Developer"
+                        )
+                else:
+                    user = query.get_user_by_username(flask.session['CAS_USERNAME'])
                 if user is None:
                     return unauthorized("User is not authorized to use this application.")
                 if user.role.role in roles:
@@ -48,9 +84,8 @@ def authorization_required(roles):
     return real_decorator
 
 ##############################################################################
-# create_data
+# create_* functions all return a list of objects to be added to the database
 #
-# A test endpoint that adds some junk to test with
 ##############################################################################
 def create_final_codes():
     finalCodes = []
@@ -1248,8 +1283,6 @@ def create_gift_cards():
         amount=25
     ))
     return gcs
-
-
 def create_roles():
     roles = []
     roles.append(models.Role(
@@ -1268,8 +1301,6 @@ def create_roles():
         role="Research Manager"
     ))
     return roles
-
-
 def create_users():
     users = []
     users.append(models.User(
@@ -1284,6 +1315,10 @@ def create_users():
 
 
 def populate_db2():
+    """
+    This creates the database/tables and populates it with junk data for testing
+    :return:
+    """
     db.create_all()
 
     roles = create_roles()
@@ -1986,6 +2021,11 @@ def create_data():
 
 
 def is_safe_url(target):
+    """
+    Checks to make sure the target url is safe for redireciton
+    :param target:
+    :return:
+    """
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
@@ -1993,6 +2033,10 @@ def is_safe_url(target):
 
 
 def get_redirect_target():
+    """
+    Gets the url to redirect to
+    :return:
+    """
     for target in request.values.get('next'), request.referrer:
         if not target:
             continue
@@ -2001,6 +2045,12 @@ def get_redirect_target():
 
 
 def redirect_back(endpoint, **values):
+    """
+    Redirect back to endpoint
+    :param endpoint:
+    :param values:
+    :return:
+    """
     target = get_redirect_target()
     if not target or not is_safe_url(target):
         target = url_for(endpoint, **values)
@@ -2011,39 +2061,81 @@ def redirect_back(endpoint, **values):
 # Error Handlers
 ##############################################################################
 def item_not_found(e):
+    """
+    The handler when an item or url is not found
+    :param e: The error message
+    :return: templated html
+    """
     message = "Error: {}".format(e)
     return render_template("error.html", message=message), 404
 
 
 def invalid_method():
+    """
+    The handler when an invalid method is called
+    :param e: The error message
+    :return: templated html
+    """
     message = "Invalid Method Detected"
     return render_template("error.html", message=message), 400
 
 
 def missing_params(e):
+    """
+    The handler when a POST/PUT request is missing a parameter
+    :param e: The error message
+    :return: templated html
+    """
     message = "Error: {}".format(e)
     return render_template("error.html", message=message)
 
 
 def out_of_date_error():
+    """
+    The handler when an item PUT item was changed before submitted
+    :param e: The error message
+    :return: templated html
+    """
     message = "Conflict detected. Object has been changed. Please refresh data and update."
     return message, 409
 
 
 def internal_error(e):
+    """
+    The handler when an internal error happens
+    :param e: The error message
+    :return: templated html
+    """
     message = "Error: {}".format(e)
     return render_template("error.html", message=message), 500
 
 
 def item_deleted(message):
+    """
+    The handler when an item was deleted/ no longer exists
+    :param e: The error message
+    :return: templated html
+    """
     return render_template("error.html", message=message)
 
 
 def unauthorized(message=""):
+    """
+    The handler when the user is not authorized to use
+    application or part of the application
+    :param e: The error message
+    :return: templated html
+    """
     return render_template("error.html", message="You are not authorized to perform this action. {}".format(message)), 403
 
 
 def get_dependencies(record):
+    """
+    Gets in dependencies of an object
+    Used to check before deleting
+    :param record:
+    :return:
+    """
     deps = list(dependent_objects(record).limit(5))
     dependencies = []
     if deps:
@@ -2053,6 +2145,11 @@ def get_dependencies(record):
 
 
 def dependency_detected(dependencies, message="Dependency Detected"):
+    """
+    The handler when trying to delete an item that has dependencies
+    :param e: The error message
+    :return: templated html
+    """
     return "{} - {}".format(message, dependencies), 400
 
 

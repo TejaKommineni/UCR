@@ -3,8 +3,7 @@ DEBUG = True
 
 # Define the database - we are working with
 # SQLite for this example
-#SQLALCHEMY_DATABASE_URI = r"sqlite:///E:\aaron_temp\SourceCode\UCR_DB_PyCharm\ucr_db\test_tb.db"
-SQLALCHEMY_DATABASE_URI = r"mssql+pyodbc://cornice.digit.utah.edu/ucr?driver=ODBC+Driver+11+for+SQL+Server"
+SQLALCHEMY_DATABASE_URI = r"mssql+pyodbc://ucr_db_admin:ucr_db_admin@cornice.digit.utah.edu/ucr?driver=ODBC+Driver+11+for+SQL+Server"
 DATABASE_CONNECT_OPTIONS = {}
 
 # Application threads. A common general assumption is
@@ -21,7 +20,12 @@ CSRF_ENABLED     = True
 CSRF_SESSION_KEY = "secret2"
 
 # Secret key for signing cookies
-SECRET_KEY = "secret2"
+SECRET_KEY = "secret"
+
+# Set this to not use CAS signle sign on server
+#DEV_MODE = True
+# Set this to specifiy a specific role to use in DEV_MODE
+#DEV_ROLE = "Contact Staff"
 
 CAS_SERVER = "https://test.go.utah.edu"
 CAS_AFTER_LOGIN = "website.root"
