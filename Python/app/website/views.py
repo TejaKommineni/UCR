@@ -1663,7 +1663,7 @@ def populate_db2():
         dxStreet2="street2",
         dxCity="city",
         dxStateID=1,
-        dxZip=99999,
+        dxZip="99999",
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
@@ -2354,10 +2354,10 @@ def create_arc_review(arcReviewID=None):
                     reviewer2SigDate=form.reviewer2SigDate.data,
                     reviewer2Comments=form.reviewer2Comments.data,
                     research=form.research.data,
-                    contact="true" == form.contact.data.lower(),
-                    linkage="true" == form.linkage.data.lower(),
-                    engaged="true" == form.engaged.data.lower(),
-                    nonPublicData="true" == form.nonPublicData.data.lower()
+                    contact=form.contact.data,
+                    linkage=form.linkage.data,
+                    engaged=form.engaged.data,
+                    nonPublicData=form.nonPublicData.data
                 )
                 query.add(arcReview)
                 return redirect_back('arcreviews/{}/'.format(arcReview.arcReviewID))
@@ -2938,7 +2938,9 @@ def update_ctc(ctcID):
             if form.validate():
                 if int(form.versionID.data) == ctc.versionID:
                     ctc.participantID = form.participantID.data
-                    ctc.dxDate = form.dxDate.data
+                    ctc.dxDateDay = form.dxDateDay.data
+                    ctc.dxDateMonth = form.dxDateMonth.data
+                    ctc.dxDateYear = form.dxDateYear.data
                     ctc.site = form.site.data
                     ctc.histology = form.histology.data
                     ctc.behavior = form.behavior.data
@@ -2983,7 +2985,9 @@ def create_ctc(ctcID=None):
             if form.validate():
                 ctc = models.CTC(
                     participantID=form.participantID.data,
-                    dxDate=form.dxDate.data,
+                    dxDateDay=form.dxDateDay.data,
+                    dxDateMonth=form.dxDateMonth.data,
+                    dxDateYear=form.dxDateYear.data,
                     site=form.site.data,
                     histology=form.histology.data,
                     behavior=form.behavior.data,
@@ -2998,7 +3002,7 @@ def create_ctc(ctcID=None):
                     dxCounty=form.dxCounty.data,
                     dnc=form.dnc.data,
                     dncReason=form.dncReason.data,
-                    recordID = form.recordID.data
+                    recordID=form.recordID.data
                 )
                 query.add(ctc)
                 return redirect_back('ctcs/{}/'.format(ctc.ctcID))
@@ -3602,7 +3606,7 @@ def update_final_code(finalCodeID):
                     finalCode2 = query.get_final_code_by_code(form.finalCode.data)
                     if finalCode2:
                         form.finalCode.errors.append("Final Code already exists in database.")
-                    return missing_params(form.errors)
+                        return missing_params(form.errors)
                 if int(form.versionID.data) == finalCode.versionID:
                     finalCode.finalCode = form.finalCode.data
                     finalCode.finalCodeDefinition = form.finalCodeDefinition.data
@@ -3797,10 +3801,10 @@ def update_grant_status(grantStatusID):
         if grantStatus is not None:
             form = forms.GrantStatusLUTForm(request.form)
             if form.validate():
-                if int(form.versionID.data) == grantStatus.versionID:
+                if int(request.form['versionID']) == grantStatus.versionID:
                     grantStatus.grantStatus = form.grantStatus.data
                     query.commit()
-                    return redirect_back('grantstatuses/{}/'.format(grantStatusID))
+                    return grantStatus.json()
                 else:
                     return out_of_date_error()
             else:
@@ -3979,20 +3983,18 @@ def update_incentive(incentiveID):
         if incentive is not None:
             form = forms.IncentiveForm(request.form)
             if form.validate():
-                # Check to see if the barcode field is being updateed,
-                # if it is, then make sure the barcode isn't used anywhere else
                 if incentive.barcode != form.barcode.data:
                     incentive2 = query.get_incentive_by_barcode(form.barcode.data)
                     if incentive2:
                         form.barcode.errors.append("Barcode was already used for a different incentive.")
                         return missing_params(form.errors)
-                if int(form.versionID.data) == incentive.versionID:
-                    incentive.participantID = request.form["participantID"]
+                if int(request.form['versionID']) == incentive.versionID:
+                    incentive.participantID = form.participantID.data
                     incentive.incentiveDescription = form.incentiveDescription.data
                     incentive.barcode = form.barcode.data
                     incentive.dateGiven = form.dateGiven.data
                     query.commit()
-                    return redirect_back("incentives/{}/".format(incentiveID))
+                    return incentive.json()
                 else:
                     return out_of_date_error()
             else:
@@ -4027,7 +4029,7 @@ def create_incentive(incentiveID=None):
                     participantID=form.participantID.data,
                     incentiveDescription=form.incentiveDescription.data,
                     barcode=form.barcode.data,
-                    dateGiven = form.dateGiven.data
+                    dateGiven=form.dateGiven.data
                 )
                 query.add(incentive)
                 return redirect_back("incentives/{}/".format(incentive.incentiveID))
@@ -4753,7 +4755,7 @@ def update_patient(patientID):
                     patient.ethnicityID = form.ethnicityID.data
                     patient.vitalStatusID = form.vitalStatusID.data
                     query.commit()
-                    return patient.json()
+                    return redirect_back("/patients/{}".format(patientID))
                 else:
                     return out_of_date_error()
             else:
@@ -4799,7 +4801,7 @@ def create_patient(patientID=None):
                     vitalStatusID=form.vitalStatusID.data
                 )
                 query.add(patient)
-                return jsonify({'patientID': patient.patientID})
+                return redirect_back("/patients/{}".format(patientID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
@@ -5880,7 +5882,7 @@ def update_physician_facility(physFacilityID):
                 if int(form.versionID.data) == physicianFacility.versionID:
                     physicianFacility.facilityID = form.facilityID.data
                     physicianFacility.physicianID = form.physicianID.data
-                    physicianFacility.physFacilityStatus = form.physFacilityStatus.data
+                    physicianFacility.physFacilityStatusID = form.physFacilityStatusID.data
                     physicianFacility.physFacilityStatusDate = form.physFacilityStatusDate.data
                     query.commit()
                     return redirect_back("physicianfacilities/{}/".format(physFacilityID))
@@ -5912,7 +5914,7 @@ def create_physician_facility(physFacilityID=None):
                 physicianFacility = models.PhysicianFacility(
                     facilityID=form.facilityID.data,
                     physicianID=form.physicianID.data,
-                    physFacilityStatus=form.physFacilityStatus.data,
+                    physFacilityStatusID=form.physFacilityStatusID.data,
                     physFacilityStatusDate=form.physFacilityStatusDate.data,
                 )
                 query.add(physicianFacility)
@@ -6325,16 +6327,16 @@ def create_pre_application(preApplicationID=None):
                     udoh=form.udoh.data,
                     projectTitle=form.projectTitle.data,
                     purpose=form.purpose.data,
-                    irb0="true" == form.irb0.data.lower(),
-                    irb1="true" == form.irb1.data.lower(),
-                    irb2="true" == form.irb2.data.lower(),
-                    irb3="true" == form.irb3.data.lower(),
-                    irb4="true" == form.irb4.data.lower(),
+                    irb0=form.irb0.data,
+                    irb1=form.irb1.data,
+                    irb2=form.irb2.data,
+                    irb3=form.irb3.data,
+                    irb4=form.irb4.data,
                     otherIrb=form.otherIrb.data,
-                    updb="true" == form.updb.data.lower(),
-                    ptContact="true" == form.ptContact.data.lower(),
+                    updb=form.updb.data,
+                    ptContact=form.ptContact.data,
                     startDate=form.startDate.data,
-                    link="true" == form.link.data.lower(),
+                    link=form.link.data,
                     deliveryDate=form.deliveryDate.data,
                     description=form.description.data
                 )
@@ -6488,7 +6490,7 @@ def create_project(projectID=None):
                     previousShortTitle=form.previousShortTitle.data,
                     dateAdded=form.dateAdded.data,
                     finalRecruitmentReport=form.finalRecruitmentReport.data,
-                    ongoingContact="true" == form.ongoingContact.data.lower(),
+                    ongoingContact=form.ongoingContact.data,
                     activityStartDate=form.activityStartDate.data,
                     activityEndDate=form.activityEndDate.data
                 )
@@ -6683,7 +6685,7 @@ def create_project_patient(participantID=None):
                     finalCodeStaffID=form.finalCodeStaffID.data,
                     enrollmentStaffID=form.enrollmentStaffID.data,
                     dateCoordSignedStaffID=form.dateCoordSignedStaffID.data,
-                    abstractStatusID=form.abstractStatus.data,
+                    abstractStatusID=form.abstractStatusID.data,
                     abstractStatusDate=form.abstractStatusDate.data,
                     abstractStatusStaffID=form.abstractStatusStaffID.data,
                     sentToAbstractorDate=form.sentToAbstractorDate.data,
@@ -6693,13 +6695,13 @@ def create_project_patient(participantID=None):
                     researcherDate=form.researcherDate.data,
                     researcherStaffID=form.researcherStaffID.data,
                     consentLink=form.consentLink.data,
-                    medRecordReleaseSigned="true" == form.medRecordReleaseSigned.data.lower(),
+                    medRecordReleaseSigned=form.medRecordReleaseSigned.data,
                     medRecordReleaseLink=form.medRecordReleaseLink.data,
                     medRecordReleaseStaffID=form.medRecordReleaseStaffID.data,
                     medRecordReleaseDate=form.medRecordReleaseDate.data,
                     surveyToResearcher=form.surveyToResearcher.data,
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
-                    qualityControl = form.qualityControl.data
+                    qualityControl=form.qualityControl.data
                 )
                 query.add(projectPatient)
                 return redirect_back("projectPatients/{}/".format(projectPatient.participantID))
@@ -7515,6 +7517,7 @@ def update_staff(staffID):
                     staff.city = form.city.data
                     staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data
+                    staff.userID = form.userID.data
                     query.commit()
                     return redirect_back("staff/{}/".format(staffID))
                 else:
@@ -7556,7 +7559,8 @@ def create_staff(staffID=None):
                     street=form.street.data,
                     city=form.city.data,
                     stateID=form.stateID.data,
-                    ucrRoleID=form.ucrRoleID.data
+                    ucrRoleID=form.ucrRoleID.data,
+                    userID=form.userID.data
                 )
                 query.add(staff)
                 return redirect_back("staff/{}/".format(staff.staffID))
@@ -7998,7 +8002,7 @@ def update_ucr_report(ucrReportID):
             if form.validate():
                 if int(form.versionID.data) == ucr.versionID:
                     ucr.projectID = form.projectID.data
-                    ucr.reportTypeID = form.reportType.data
+                    ucr.reportTypeID = form.reportTypeID.data
                     ucr.reportSubmitted = form.reportSubmitted.data
                     ucr.reportDue = form.reportDue.data
                     ucr.reportDoc = form.reportDoc.data

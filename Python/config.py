@@ -3,7 +3,7 @@ DEBUG = True
 
 # Define the database - we are working with
 # SQLite for this example
-SQLALCHEMY_DATABASE_URI = r"mssql+pyodbc://ucr_db_admin:ucr_db_admin@cornice.digit.utah.edu/ucr?driver=ODBC+Driver+11+for+SQL+Server"
+SQLALCHEMY_DATABASE_URI = r"mssql+pyodbc://ucr_db_admin:ucr_db_admin@cornice.digit.utah.edu/ucr?driver=ODBC+Driver+13+for+SQL+Server"
 DATABASE_CONNECT_OPTIONS = {}
 
 # Application threads. A common general assumption is
@@ -23,7 +23,7 @@ CSRF_SESSION_KEY = "secret2"
 SECRET_KEY = "secret"
 
 # Set this to not use CAS signle sign on server
-#DEV_MODE = True
+DEV_MODE = True
 # Set this to specifiy a specific role to use in DEV_MODE
 #DEV_ROLE = "Contact Staff"
 

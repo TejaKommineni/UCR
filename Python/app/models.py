@@ -391,7 +391,7 @@ class Incentive(CustomModel):
     participantID = db.Column('participantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     incentiveDescription = db.Column('incentive_desc', db.String)
     barcode = db.Column('barcode', db.String(50), db.ForeignKey("GiftCardLUT.barcode"), unique=True, nullable=False)
-    dateGiven = db.Column('date_given', db.DateTime)
+    dateGiven = db.Column('date_given', db.Date)
 
     contact = db.relationship("Contact")
     projectPatient = db.relationship("ProjectPatient", back_populates="incentives")
@@ -515,7 +515,7 @@ class Patient(CustomModel):
     dobDay = db.Column('dob_day', db.Integer)
     dobMonth = db.Column('dob_month', db.Integer)
     dobYear = db.Column('dob_year', db.Integer)
-    SSN = db.Column('SSN', db.Integer)
+    SSN = db.Column('SSN', db.String)
     sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
     raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))
     ethnicityID = db.Column('ethnicityID', db.Integer, db.ForeignKey("EthnicityLUT.ethnicityID"))
