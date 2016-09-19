@@ -25,7 +25,7 @@ SECRET_KEY = "secret"
 # Set this to not use CAS signle sign on server
 DEV_MODE = True
 # Set this to specifiy a specific role to use in DEV_MODE
-#DEV_ROLE = "Contact Staff"
+DEV_ROLE = "Contact Staff"
 
 CAS_SERVER = "https://test.go.utah.edu"
 CAS_AFTER_LOGIN = "website.root"

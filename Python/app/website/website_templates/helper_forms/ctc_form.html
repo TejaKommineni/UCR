@@ -2,6 +2,11 @@
         <fieldset>
             <div class="form-group">
                 <div class="row">
+                    <div class="col-md-6">
+                      <h1>CTC</h1>
+                    </div>
+                  </div>
+                <div class="row">
                     <div class="col-md-2">  
                       <label for="text_firstName">First Name</label>        
                       <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
@@ -194,7 +199,9 @@
         <div class="tab-pane active" id="facilitiesTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
+                {% if user.role.role in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                 <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="facilityTableTab">
@@ -221,16 +228,20 @@
                     </tbody>
                   </table>
                 </div>
+                {% if user.role.role in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                 <div class="tab-pane" id="newFacilityTab">
                 {% set ctcFacility = none %}
                 {% include 'helper_forms/ctc_facility_form.html' %}
                 </div>
+                {% endif %}
             </div>
         </div>
            <div class="tab-pane" id="physiciansTab">
                 <ul class ="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#physicianTableTab" role="tab" data-toggle="tab">Table </a></li>
+                    {% if user.role.role in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                     <li><a href="#newPhysicianTab" role="tab" data-toggle="tab">New Physician</a></li>
+                    {% endif %}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="physicianTableTab">
@@ -255,10 +266,12 @@
                           </tbody>
                         </table>
                     </div>
+                    {% if user.role.role in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                     <div class="tab-pane" id="newPhysicianTab">
                     {% set physicianToCTC = none %}
                     {% include 'helper_forms/physician_to_ctc_form.html' %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
          </div>

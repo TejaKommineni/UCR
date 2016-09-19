@@ -250,7 +250,9 @@
                           <thead>
                             <tr>
                                 <th>CTC ID</th>
-                                <th>DX Date</th>
+                                <th>DX Date Day</th>
+                                <th>DX Date Month</th>
+                                <th>DX Date Year</th>
                                 <th>Site</th>
                                 <th>Stage</th>
                             </tr>
@@ -259,7 +261,9 @@
                             {% for ctc in form["ctcs"] %}
                             <tr>
                                 <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["ctcID"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDate"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateDay"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateMonth"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateYear"]}}</a></td>
                                 <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["site"]}}</a></td>
                                 <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["stage"]}}</a></td>
                             </tr>

@@ -153,16 +153,19 @@
                             <th>Project ID</th>
                             <th>Project Type</th>
                             <th>Short Title</th>
-                            <th>Date Added</th>
+                            <th>Inactive</th>
+                            <th>Date Pledged</th>
                         </tr>
                       </thead>
                       <tbody>
                         {% for ps in staff.projectStaff %}
                         <tr>
                             <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectTypeID}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectType.projectType}}</a></td>
                             <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.dateAdded}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.inactive.inactive}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.datePledge}}</a></td>
+                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.dateRevoked}}</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>

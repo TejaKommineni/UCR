@@ -25,18 +25,15 @@ def add_user_to_jinja():
     :return:
     """
     if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
-        user = models.User(
-            uID="uDEV9999",
-            roleID=1
-        )
-        if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
-            user.role = models.Role(
-                role= current_app.config['DEV_ROLE']
-            )
-        else:
-            user.role = models.Role(
-                role="Developer"
-            )
+        user = query.get_user(2)
+        # if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
+        #     user.role = models.Role(
+        #         role= current_app.config['DEV_ROLE']
+        #     )
+        # else:
+        #     user.role = models.Role(
+        #         role="Developer"
+        #     )
     else:
         user = query.get_user_by_username(flask.session['CAS_USERNAME'])
     return dict(user=user)
@@ -59,18 +56,15 @@ def authorization_required(roles):
                 return cas_login()
             else:
                 if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
-                    user = models.User(
-                        uID="uDEV9999",
-                        roleID=1
-                    )
-                    if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
-                        user.role = models.Role(
-                            role=current_app.config['DEV_ROLE']
-                        )
-                    else:
-                        user.role = models.Role(
-                            role="Developer"
-                        )
+                    user = query.get_user(2)
+                    # if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
+                    #     user.role = models.Role(
+                    #         role=current_app.config['DEV_ROLE']
+                    #     )
+                    # else:
+                    #     user.role = models.Role(
+                    #         role="Developer"
+                    #     )
                 else:
                     user = query.get_user_by_username(flask.session['CAS_USERNAME'])
                 if user is None:
@@ -3994,7 +3988,7 @@ def update_incentive(incentiveID):
                     incentive.barcode = form.barcode.data
                     incentive.dateGiven = form.dateGiven.data
                     query.commit()
-                    return incentive.json()
+                    return redirect_back('incentives/{}/'.format(incentive.incentiveID))
                 else:
                     return out_of_date_error()
             else:
@@ -7517,7 +7511,8 @@ def update_staff(staffID):
                     staff.city = form.city.data
                     staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data
-                    staff.userID = form.userID.data
+                    # Don't allow updates to userID
+                    #staff.userID = form.userID.data
                     query.commit()
                     return redirect_back("staff/{}/".format(staffID))
                 else:
@@ -7802,7 +7797,7 @@ def get_tracing(tracingID=None):
 
 
 @website.route('/tracings/<int:tracingID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
 def update_tracing(tracingID):
     try:
         tracing = query.get_tracing(tracingID)
@@ -7829,7 +7824,7 @@ def update_tracing(tracingID):
 
 @website.route('/tracings/', methods=['POST'])
 @website.route('/tracings/<int:tracingID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
 def create_tracing(tracingID=None):
     try:
         if tracingID:

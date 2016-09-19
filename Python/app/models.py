@@ -1109,7 +1109,7 @@ class Staff(CustomModel):
     tracings = db.relationship("Tracing", back_populates="staff")
     state = db.relationship("State")
     ucrRole = db.relationship("UCRRole", back_populates="staff")
-    user = db.relationship("User")
+    user = db.relationship("User", back_populates="staff")
 
 
 class StaffRoleLUT(CustomModel):
@@ -1215,6 +1215,7 @@ class User(CustomModel):
     roleID = db.Column("roleID", db.Integer, db.ForeignKey('Role.roleID'), nullable=False)
 
     role = db.relationship("Role")
+    staff = db.relationship("Staff", uselist=False)
 
 
 class VitalStatus(CustomModel):

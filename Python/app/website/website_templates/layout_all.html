@@ -26,7 +26,7 @@
                   {% if user.role.role in ['Director', 'Developer'] %}
                  <li><a href = "/website/overview/">Overview</a></li>
                   {% endif %}
-                  {% if user.role.role in ['Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.role.role in ['Developer','Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/facilities/">Facilities</a></li>
                   {% endif %}
                   {% if user.role.role in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
@@ -57,3 +57,16 @@
         </div>
     </body>
 </html>
+
+<script>
+    // Javascript to enable link to tab
+    var url = document.location.toString();
+    if (url.match('#')) {
+        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+
+    // Change hash for page-reload
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    })
+</script>

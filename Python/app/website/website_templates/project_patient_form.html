@@ -41,7 +41,7 @@
           <fieldset>
             <div class="form-group">
             {% if projectPatient is not none %}
-              <div class="row">
+              <div class="row row-dark">
                 <div class = "col-md-4">
                   <label for="select_projectID">Project</label>
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
@@ -83,7 +83,7 @@
                   <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value="{{projectPatient.siteGrp}}" readonly="readonly" disabled="disabled">
                </div>
               </div>
-              <div class = "row">
+              <div class = "row row-dark">
                 <div class="col-md-2">  
                   <label for="date_importDate">Import Date</label>        
                   <input type="date" class="form-control" required="required" name="importDate" id="date_importDate" value="{{projectPatient.importDate}}">
@@ -154,7 +154,7 @@
                   </select>
                 </div>
               </div>
-              <div class="row">
+              <div class="row row-dark">
                 <div class = "col-md-2">
                   <label for="select_abstractStatusID">Abstract Status</label>
                   <select type="text" class="form-control" name="abstractStatusID" id="select_abstractStatusID">
@@ -222,7 +222,7 @@
                   </select>
                 </div>
               </div>
-              <div class="row">
+              <div class="row row-dark">
                 <div class = "col-md-2">
                   <label for="date_researcherDate">Researcher Date</label>
                   <input type="date" class="form-control" name="researcherDate" id="date_researcherDate" value="{{projectPatient.researcherDate}}">
@@ -283,7 +283,7 @@
                   </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row row-dark">
                 <div class = "col-md-2">
                   <label for="date_surveyToResearcher">Survey To Researcher</label>
                   <input type="date" class="form-control" name="surveyToResearcher" id="date_surveyToResearcher" value="{{projectPatient.surveyToResearcher}}">
@@ -602,11 +602,11 @@
 
         <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#tracingTable}Tab" role="tab" data-toggle="tab">Tracings</a></li>
+            <li class="active"><a href="#tracingTableTab" role="tab" data-toggle="tab">Tracings</a></li>
             <li><a href="#newtracing" role="tab" data-toggle="tab">New Tracing</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="tracingTable">
+            <div class="tab-pane active" id="tracingTableTab">
                 <form class="formOverride">
                         <fieldset>
                             <table class="table table-striped no-spacing">

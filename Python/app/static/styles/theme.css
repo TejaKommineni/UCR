@@ -8,3 +8,20 @@
         border-style: solid;
     }
 }
+
+.row-dark {
+    /*background-color:#d3d3d3;*/
+}
+
+.row-dark input {
+    /*background-color:#CDE7F0;*/
+}
+.row-dark select {
+    /*background-color:#CDE7F0;*/
+}
+
+
+.row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

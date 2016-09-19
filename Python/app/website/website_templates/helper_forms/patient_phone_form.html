@@ -28,7 +28,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == patientPhone["contactInfoSourceID"] %}
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == patientPhone["contactInfoStatusID"] %}
@@ -54,7 +54,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_phoneStatusDate">Phone Status Date</label>
-                  <input type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{patientPhone["phoneStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{patientPhone["phoneStatusDate"]}}">
                 </div>
             </div>
           </fieldset>

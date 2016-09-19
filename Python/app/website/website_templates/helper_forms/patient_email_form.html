@@ -15,7 +15,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == patientEmail["contactInfoSourceID"] %}
@@ -41,7 +41,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_emailStatusDate">Email Status Date</label>
-                  <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{patientEmail["emailStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{patientEmail["emailStatusDate"]}}">
                 </div>
             </div>
                 <div class="form-group">
