@@ -538,6 +538,8 @@ class IncentiveForm(BaseForm):
     dateGiven = DateField('dateGiven',[]+COMMON_DATE_VALIDATORS,
                           format=DATE_FORMAT)
 
+    contactID = IntegerField('contactID', [validators.InputRequired()])
+
     def validate(self):
         hasErrors = not Form.validate(self)
 
@@ -545,6 +547,11 @@ class IncentiveForm(BaseForm):
         if participant is None:
             self.participantID.errors.append("ID not found")
             hasErrors = True
+
+        contact = query.get_contact(self.contactID.data)
+        if contact is None:
+            self.contactID.errors.append("ID not found")
+            hasErrors=True
 
         # make sure barcode is in the table
         if self.barcode.data:

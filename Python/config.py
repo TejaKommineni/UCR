@@ -38,7 +38,7 @@ CSRF_SESSION_KEY = "secret2"
 SECRET_KEY = "secret"
 
 # Set this to not use CAS single sign on server
-DEV_MODE = True
+DEV_MODE = False
 
 CAS_SERVER = "https://test.go.utah.edu"
 CAS_AFTER_LOGIN = "website.root"

@@ -2051,6 +2051,7 @@ def update_incentive(incentiveID):
                     incentive.incentiveDescription = form.incentiveDescription.data
                     incentive.barcode = form.barcode.data
                     incentive.dateGiven = form.dateGiven.data
+                    incentive.contactID = form.contactID.data
                     query.commit()
                     return redirect_back('incentives/{}/'.format(incentive.incentiveID))
                 else:
@@ -2087,7 +2088,8 @@ def create_incentive(incentiveID=None):
                     participantID=form.participantID.data,
                     incentiveDescription=form.incentiveDescription.data,
                     barcode=form.barcode.data,
-                    dateGiven=form.dateGiven.data
+                    dateGiven=form.dateGiven.data,
+                    contactID=form.contactID.data
                 )
                 query.add(incentive)
                 return redirect_back("incentives/{}/".format(incentive.incentiveID))

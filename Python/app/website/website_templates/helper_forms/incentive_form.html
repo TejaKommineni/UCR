@@ -22,7 +22,24 @@
                   </select>
                 </div>
               </div>
-              {% endif %}
+            {% endif %}
+              <div class="row">
+                <div class = "col-md-8">
+                  <label for="select_projectPatientID">Contact</label>
+                  <select required="required" type="text" class="form-control" name="contactID" id="select_contactID">
+                      {% if incentive is not none %}
+                        {% set projectPatient = incentive.projectPatient %}
+                      {% endif %}
+                      {% for contact in projectPatient.contacts %}
+                        {% if contact.contactID == incentive.contactID %}
+                            <option selected="selected" value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName}},{{contact.staff.lastName}}) - ({{contact.contactType.contactCode}} {{contact.contactType.contactDefinition}})</option>
+                        {% else %}
+                            <option value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName}},{{contact.staff.lastName}}) - ({{contact.contactType.contactCode}} {{contact.contactType.contactDefinition}})</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_description">Description</label>

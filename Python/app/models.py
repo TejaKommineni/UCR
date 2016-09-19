@@ -126,6 +126,7 @@ class Contact(CustomModel):
     informantPhone = db.relationship('InformantPhone')
     physicianPhone = db.relationship('PhysicianPhone')
     patientPhone = db.relationship('PatientPhone')
+    incentive = db.relationship('Incentive')
 
 
 class Contacts(CustomModel):
@@ -393,7 +394,7 @@ class Incentive(CustomModel):
     barcode = db.Column('barcode', db.String(50), db.ForeignKey("GiftCardLUT.barcode"), unique=True, nullable=False)
     dateGiven = db.Column('date_given', db.Date)
 
-    contact = db.relationship("Contact")
+    contact = db.relationship("Contact", back_populates="incentive", uselist=False)
     projectPatient = db.relationship("ProjectPatient", back_populates="incentives")
     giftCard = db.relationship("GiftCard")
 
