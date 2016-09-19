@@ -9,10 +9,16 @@ from flask import redirect, session
 from datetime import timedelta
 
 def create_app(config):
+    """
+    This creates the application from the configuration file passed in
+    :param config: (string) the configuration file
+    :return: a flask app object
+    """
     app = Flask(__name__)
     app.config.from_pyfile(config)
     db.init_app(app)
-    app.register_blueprint(api, url_prefix = '/api')
+    if "JSON_API" in app.config and app.config["JSON_API"]:
+        app.register_blueprint(api, url_prefix = '/api')
     app.register_blueprint(website, url_prefix = '/website')
     app.json_encoder = DateTimeEncoder
     # Only CASify the app if DEV MODE is disabled

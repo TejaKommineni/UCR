@@ -1,4 +1,9 @@
-TESTING = True
+"""
+This is the 'production' ready configuration.
+Depending on the machine it's running on you may need to update the connection string
+
+JSON_API must be set to true
+"""
 
 # Statement for enabling the development environment
 DEBUG = True
@@ -9,6 +14,9 @@ SSL_KEY = r"E:\SourceCode\ucr_db\UCR.key"
 
 # Port to run on
 PORT = 8443
+
+# Enable JSON API
+JSON_API = True
 
 # Define the database - we are working with
 # SQLite for this example
