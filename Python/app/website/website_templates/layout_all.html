@@ -12,6 +12,7 @@
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
         <!-- Latest compiled and minified JavaScript -->
         <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/theme.js') }}"></script>
     </head>
     <body>
         <nav class = "navbar navbar-default navbar-dark navbar-inverse" role = "navigation">
@@ -61,16 +62,3 @@
         </div>
     </body>
 </html>
-
-<script>
-    // Javascript to enable link to tab
-    var url = document.location.toString();
-    if (url.match('#')) {
-        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-    }
-
-    // Change hash for page-reload
-    $('.nav-tabs a').on('shown.bs.tab', function (e) {
-        window.location.hash = e.target.hash;
-    })
-</script>
