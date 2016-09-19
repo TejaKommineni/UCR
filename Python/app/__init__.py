@@ -10,7 +10,7 @@ from datetime import timedelta
 
 def create_app(config):
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_pyfile(config)
     db.init_app(app)
     app.register_blueprint(api, url_prefix = '/api')
     app.register_blueprint(website, url_prefix = '/website')
@@ -26,4 +26,4 @@ def create_app(config):
 
     return app
     
-app = create_app('config')
+app = create_app(r'../config.py')

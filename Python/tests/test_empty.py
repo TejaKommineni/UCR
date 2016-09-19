@@ -19,7 +19,7 @@ import app.models as models
 class BlankDB(TestCase):
     def create_app(self):
         # pass in test configuration
-        return app.create_app('test_config')
+        return app.create_app(r'../tests/test_config.py')
 
     def setUp(self):
         db.drop_all()

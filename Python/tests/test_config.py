@@ -3,6 +3,13 @@ TESTING = True
 # Statement for enabling the development environment
 DEBUG = True
 
+# SSL
+SSL_CRT = r"E:\SourceCode\ucr_db\UCR.crt"
+SSL_KEY = r"E:\SourceCode\ucr_db\UCR.key"
+
+# Port to run on
+PORT = 8443
+
 # Define the database - we are working with
 # SQLite for this example
 SQLALCHEMY_DATABASE_URI = r"mssql+pyodbc://ucr_db_admin:ucr_db_admin@cornice.digit.utah.edu/ucr_test?driver=ODBC+Driver+13+for+SQL+Server"

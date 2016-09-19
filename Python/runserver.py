@@ -1,4 +1,7 @@
 from app import app
 if __name__ == "__main__":
-    #context=(r"E:\UCR\UCR.crt", r"E:\UCR\UCR.key")
-    app.run(host="0.0.0.0", debug=True)
+    if "SSL_CRT" in app.config and "SSL_KEY" in app.config:
+        context=(app.config['SSL_CRT'], app.config['SSL_KEY'])
+        app.run(ssl_context=context, port=app.config['PORT'], debug=app.config['DEBUG'])
+    else:
+        app.run(port=app.config['PORT'], debug=app.config['DEBUG'])
