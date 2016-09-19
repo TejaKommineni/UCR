@@ -4797,7 +4797,8 @@ def update_staff(staffID):
                     staff.city = form.city.data
                     staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data
-                    staff.userID = form.userID.data
+                    # don't allow user id to be changed
+                    #staff.userID = form.userID.data
                     query.commit()
                     return staff.json()
                 else:

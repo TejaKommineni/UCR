@@ -4625,7 +4625,8 @@ class TestStaff(PopulatedDB):
             "ucrRoleID" : 2,
             "versionID" : 1
             })
-        self.assertEqual(response.json["userID"], 2)
+        # Don't update userID
+        self.assertEqual(response.json["userID"], 1)
         self.assertEqual(response.json["staffID"], 1)
         self.assertEqual(response.json["firstName"], "fname2")
         self.assertEqual(response.json["lastName"], "lname2")
