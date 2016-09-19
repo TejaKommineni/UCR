@@ -25,15 +25,7 @@ def add_user_to_jinja():
     :return:
     """
     if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
-        user = query.get_user(2)
-        # if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
-        #     user.role = models.Role(
-        #         role= current_app.config['DEV_ROLE']
-        #     )
-        # else:
-        #     user.role = models.Role(
-        #         role="Developer"
-        #     )
+        user = query.get_user(1)
     else:
         user = query.get_user_by_username(flask.session['CAS_USERNAME'])
     return dict(user=user)
@@ -56,15 +48,7 @@ def authorization_required(roles):
                 return cas_login()
             else:
                 if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
-                    user = query.get_user(2)
-                    # if 'DEV_ROLE' in current_app.config and current_app.config['DEV_ROLE']:
-                    #     user.role = models.Role(
-                    #         role=current_app.config['DEV_ROLE']
-                    #     )
-                    # else:
-                    #     user.role = models.Role(
-                    #         role="Developer"
-                    #     )
+                    user = query.get_user(1)
                 else:
                     user = query.get_user_by_username(flask.session['CAS_USERNAME'])
                 if user is None:

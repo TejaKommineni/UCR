@@ -42,13 +42,16 @@ def summary():
                                                                   days=30),
                                                               contact_type_ids=[10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                                                                                 20, 21, 22, 23, 24, 25, 26, 27])[0],
-            "avgNumberOfContactsPerPerson": float(get_number_of_contact_types(projectID=result[0],
-                                                                              startDate=datetime.datetime.today() - datetime.timedelta(
-                                                                                  days=30))[0]) / float(
-                len(query_project_patients(projectID=result[0]))),
             "numberOfConsents": 0,
             "numberOfPermissions": 0
         }
+        try:
+            summary_info["avgNumberOfContactsPerPerson"]= float(get_number_of_contact_types(projectID=result[0],
+                                                                              startDate=datetime.datetime.today() - datetime.timedelta(
+                                                                                  days=30))[0]) / float(
+                len(query_project_patients(projectID=result[0])))
+        except ZeroDivisionError:
+            summary_info["avgNumberOfContactsPerPerson"] = "inf"
         if result[3] == 1: # check for consents
             summary_info["numberOfConsents"] = get_number_of_final_code_types(projectID=result[0],
                                                               final_code_type_ids=[2,3])[0]
