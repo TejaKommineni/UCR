@@ -97,10 +97,17 @@
                     {% if patientAddress is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="participantID" value="{{patientAddress["participantID"]}}"/>
+                        {% if "patientaddresses" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="patients/{{patientAddress.participantID}}/#patientAddressTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#patientAddressTab"/>
+                        {% endif %}
                     {% elif form.patient %}
                         <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="patients/{{form["patient"]["participantID"]}}/#patientAddressTab"/>
               `     {% else %}
                         <input type="hidden" name="participantID" value="{{projectPatient["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient["participantID"]}}/#patientAddressTab"/>
                     {% endif %}
                 </div>
               </div>
@@ -119,3 +126,11 @@
                 </div>
             </fieldset>
     </form>
+
+<script>
+    $(document).ready( function() {
+        if (!$("#date_addressStatusDate").val()){
+            document.getElementById('date_addressStatusDate').valueAsDate = new Date();
+        }
+    });
+</script>

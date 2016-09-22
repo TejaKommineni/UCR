@@ -209,9 +209,14 @@
                 {% if contact is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{contact.participantID}}/#contactTable"/>
                 {% else %}
                     <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#contactTable"/>
                 {% endif %}
+
             </div>
           </div>
         </fieldset>
@@ -229,4 +234,3 @@
                 </div>
             </fieldset>
     </form>
-

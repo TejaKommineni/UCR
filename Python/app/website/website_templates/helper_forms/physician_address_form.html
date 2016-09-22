@@ -97,8 +97,10 @@
                     {% if physicianAddress is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="physicianID" value="{{physicianAddress.physicianID}}"/>
+                        <input type="hidden" name="_redirectlink" value="physicians/{{physicianAddress["physicianID"]}}/#physicianAddressTab">
                     {% else %}
                         <input type="hidden" name="physicianID" value="{{physician.physicianID}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianAddressTab">
                     {% endif %}
                 </div>
               </div>

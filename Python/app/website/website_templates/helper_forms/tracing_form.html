@@ -87,10 +87,15 @@
                 {% if tracing is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="tracingID" value="{{tracing.tracingID}}"/>
+                    <!-- redirect to patient tracing tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{tracing.participantID}}/#tracingTableTab"/>
                 {% else %}
                     <input type="hidden" name="tracingID" value="0"/>
                     <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                    <!-- redirect to patient tracing tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#tracingTableTab"/>
                 {% endif %}
+
             </div>
           </div>
         </fieldset>

@@ -86,8 +86,10 @@
                     {% if facilityPhone is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="facilityID" value="{{facilityPhone["facilityID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="facilities/{{facilityPhone["facilityID"]}}/#facilityPhoneTab">
                     {% else %}
                         <input type="hidden" name="facilityID" value="{{facility["facilityID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#facilityPhoneTab">
                     {% endif %}
                 </div>
               </div>

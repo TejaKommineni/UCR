@@ -55,7 +55,6 @@
                 <div class = "col-md-2">
                   <label for="date_phoneStatusDate">Phone Status Date</label>
                   <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
-                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
                 </div>
             </div>
           </fieldset>
@@ -84,8 +83,10 @@
                     {% if physicianPhone is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="physicianID" value="{{physicianPhone["physicianID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="physicians/{{physicianPhone["physicianID"]}}/#physicianPhoneTab">
                     {% else %}
                         <input type="hidden" name="physicianID" value="{{physician["physicianID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianPhoneTab">
                     {% endif %}
                 </div>
               </div>

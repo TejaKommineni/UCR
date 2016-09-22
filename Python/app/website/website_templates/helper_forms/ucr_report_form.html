@@ -74,8 +74,10 @@
                 {% if ucrReport is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="ucrReportID" value="{{ucrReport.ucrReportID}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{ucrReport["projectID"]}}/#ucrReportTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#ucrReportTableTab">
                 {% endif %}
             </div>
           </div>

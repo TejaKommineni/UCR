@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify, request, url_for, redirect, abort, g, session, current_app
+from flask import jsonify, request, url_for, redirect, abort, g, session, current_app, flash
 from flask import Blueprint, render_template, abort
 import app.query as query
 import app.models as models
@@ -79,6 +79,11 @@ def get_redirect_target():
     Gets the url to redirect to
     :return:
     """
+    if "_redirectlink" in request.values:
+        link = "/website/{}".format(request.values["_redirectlink"].lstrip("/").replace("website","").lstrip("/"))
+        if is_safe_url(link):
+            return link
+
     for target in request.values.get('next'), request.referrer:
         if not target:
             continue
@@ -250,6 +255,7 @@ def update_abstract_status(abstractStatusID):
                 if int(form.versionID.data) == abstractStatus.versionID:
                     abstractStatus.abstractStatus = form.abstractStatus.data
                     query.commit()
+                    flash("Updated Abstract Status")
                     return redirect_back('abstractstatuses/{}/'.format(abstractStatusID))
                 else:
                     return out_of_date_error()
@@ -280,6 +286,7 @@ def create_abstract_status(abstractStatusID=None):
                     abstractStatus=form.abstractStatus.data,
                 )
                 query.add(abstractStatus)
+                flash("Created Abstract Status")
                 return redirect_back('abstractstatuses/{}/'.format(abstractStatus.abstractStatusID))
             else:
                 return missing_params(form.errors)
@@ -357,6 +364,7 @@ def update_arc_review(arcReviewID):
                     query.add(arcReview)
                     query.flush()
                     query.commit()
+                    flash("Updated Arc Review")
                     return redirect_back('arcreviews/{}/'.format(arcReviewID))
                 else:
                     return out_of_date_error()
@@ -402,6 +410,7 @@ def create_arc_review(arcReviewID=None):
                     nonPublicData=form.nonPublicData.data
                 )
                 query.add(arcReview)
+                flash("Created Arc Review")
                 return redirect_back('arcreviews/{}/'.format(arcReview.arcReviewID))
             else:
                 return missing_params(form.errors)
@@ -465,6 +474,7 @@ def update_budget(budgetID):
                     budget.periodTotal = form.periodTotal.data
                     budget.periodComment = form.periodComment.data
                     query.commit()
+                    flash("Updated Budget")
                     return redirect_back('budgets/{}/'.format(budgetID))
                 else:
                     return out_of_date_error()
@@ -500,6 +510,7 @@ def create_budget(budgetID=None):
                     periodComment=form.periodComment.data
                 )
                 query.add(budget)
+                flash("Created Budget")
                 return redirect_back('budgets/{}/'.format(budget.budgetID))
             else:
                 return missing_params(form.errors)
@@ -587,6 +598,7 @@ def update_contact(contactID):
                     contact.initials = form.initials.data
                     contact.notes = form.notes.data
                     query.commit()
+                    flash("Updated Contact")
                     return redirect_back("contacts/{}/".format(contactID))
                 else:
                     return out_of_date_error()
@@ -630,6 +642,7 @@ def create_contact(contactID=None):
                     notes=form.notes.data,
                 )
                 query.add(contact)
+                flash("Created Contact")
                 return redirect_back("contacts/{}/".format(contact.contactID))
             else:
                 return missing_params(form.errors)
@@ -700,6 +713,7 @@ def update_contact_type(contactTypeID):
                     contactType.contactDefinition = form.contactDefinition.data
                     contactType.contactCode = form.contactCode.data
                     query.commit()
+                    flash("Updated Contact Type")
                     return redirect_back('contacttypes/{}/'.format(contactTypeID))
                 else:
                     return out_of_date_error()
@@ -735,6 +749,7 @@ def create_contact_type(contactTypeID=None):
                     contactCode=form.contactCode.data
                 )
                 query.add(contactType)
+                flash("Created Contact Type")
                 return redirect_back('contacttypes/{}/'.format(contactType.contactTypeID))
             else:
                 return missing_params(form.errors)
@@ -799,6 +814,7 @@ def update_contact_info_source(contactInfoSourceID):
                 if int(form.versionID.data) == contactInfoSource.versionID:
                     contactInfoSource.contactInfoSource = form.contactInfoSource.data
                     query.commit()
+                    flash("Updated Contact Info Source")
                     return redirect_back('contactinfosources/{}/'.format(contactInfoSourceID))
                 else:
                     return out_of_date_error()
@@ -829,6 +845,7 @@ def create_contact_info_source(contactInfoSourceID=None):
                     contactInfoSource=form.contactInfoSource.data,
                 )
                 query.add(contactInfoSource)
+                flash("Created Contact Info Source")
                 return redirect_back('contactinfosources/{}/'.format(contactInfoSource.contactInfoSourceID))
             else:
                 return missing_params(form.errors)
@@ -890,6 +907,7 @@ def update_contact_info_status(contactInfoStatusID):
                 if int(form.versionID.data) == contactInfoStatus.versionID:
                     contactInfoStatus.contactInfoStatus = form.contactInfoStatus.data
                     query.commit()
+                    flash("Updated Contact Info Status")
                     return redirect_back('contactinfostatuses/{}/'.format(contactInfoStatusID))
                 else:
                     return out_of_date_error()
@@ -920,6 +938,7 @@ def create_contact_info_status(contactInfoStatusID=None):
                     contactInfoStatus=form.contactInfoStatus.data,
                 )
                 query.add(contactInfoStatus)
+                flash("Created Contact Info Status")
                 return redirect_back('contactinfostatuses/{}/'.format(contactInfoStatus.contactInfoStatusID))
             else:
                 missing_params(form.errors)
@@ -999,6 +1018,7 @@ def update_ctc(ctcID):
                     ctc.dncReason = form.dncReason.data
                     ctc.recordID = form.recordID.data
                     query.commit()
+                    flash("Updated CTC")
                     return redirect_back('ctcs/{}/'.format(ctcID))
                 else:
                     return out_of_date_error()
@@ -1047,6 +1067,7 @@ def create_ctc(ctcID=None):
                     recordID=form.recordID.data
                 )
                 query.add(ctc)
+                flash("Created CTC")
                 return redirect_back('ctcs/{}/'.format(ctc.ctcID))
             else:
                 return missing_params(form.errors)
@@ -1108,6 +1129,7 @@ def update_ctc_facility(CTCFacilityID):
                     ctcFacility.facilityID = form.facilityID.data
                     ctcFacility.coc = form.coc.data
                     query.commit()
+                    flash("Updated CTC to Facility Link")
                     return redirect_back("ctcfacilities/{}/".format(CTCFacilityID))
                 else:
                     return out_of_date_error()
@@ -1140,6 +1162,7 @@ def create_ctc_facility(CTCFacilityID=None):
                     coc=form.coc.data
                 )
                 query.add(ctcFacility)
+                flash("Created CTC to Facility Link")
                 return redirect_back("ctcfacilities/{}/".format(ctcFacility.CTCFacilityID))
             else:
                 return missing_params(form.errors)
@@ -1211,6 +1234,7 @@ def update_funding(fundingID):
                     funding.primaryChartfield = form.primaryChartfield.data
                     funding.secondaryChartfield = form.secondaryChartfield.data
                     query.commit()
+                    flash("Updated Funding")
                     return redirect_back('fundings/{}/'.format(fundingID))
                 else:
                     return out_of_date_error()
@@ -1251,6 +1275,7 @@ def create_funding(fundingID=None):
                     secondaryChartfield=form.secondaryChartfield.data
                 )
                 query.add(funding)
+                flash("Created Funding")
                 return redirect_back('fundings/{}/'.format(funding.fundingID))
             else:
                 return missing_params(form.errors)
@@ -1317,6 +1342,7 @@ def update_facility_phone(facilityPhoneID):
                     facilityPhone.phoneNumber = form.phoneNumber.data
                     facilityPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
+                    flash("Updated Facility Phone")
                     return redirect_back("facilityphones/{}/".format(facilityPhoneID))
                 else:
                     return out_of_date_error()
@@ -1353,6 +1379,7 @@ def create_facility_phone(facilityPhoneID=None):
                     phoneStatusDate=form.phoneStatusDate.data
                 )
                 query.add(facilityPhone)
+                flash("Created Facility Phone")
                 return redirect_back("facilityphones/{}/".format(facilityPhone.facilityPhoneID))
             else:
                 return missing_params(form.errors)
@@ -1444,6 +1471,7 @@ def update_facility(facilityID):
                     facility.contact2FirstName = form.contact2FirstName.data
                     facility.contact2LastName = form.contact2LastName.data
                     query.commit()
+                    flash("Updated Facility")
                     return redirect_back("facilties/{}/".format(facilityID))
                 else:
                     return out_of_date_error()
@@ -1480,6 +1508,7 @@ def create_facility(facilityID=None):
                     contact2LastName=form.contact2LastName.data
                 )
                 ret = query.add(facility)
+                flash("Created Facility")
                 return redirect("facilities/{}/".format(facility.facilityID))
             else:
                 return missing_params(form.errors)
@@ -1548,6 +1577,7 @@ def update_facility_address(facilityAddressID):
                     facilityAddress.zip = form.zip.data
                     facilityAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
+                    flash("Updated Facility Address")
                 else:
                     return out_of_date_error()
             else:
@@ -1586,6 +1616,7 @@ def create_facility_address(facilityAddressID=None):
                     addressStatusDate=form.addressStatusDate.data,
                 )
                 query.add(facilityAddress)
+                flash("Created Facility Address")
                 return redirect_back("facilityaddresses/{}/".format(facilityAddressID))
             else:
                 return missing_params(form.errors)
@@ -1653,6 +1684,7 @@ def update_final_code(finalCodeID):
                     finalCode.finalCode = form.finalCode.data
                     finalCode.finalCodeDefinition = form.finalCodeDefinition.data
                     query.commit()
+                    flash("Updated Final Code")
                     return redirect_back('finalcodes/{}/'.format(finalCodeID))
                 else:
                     return out_of_date_error()
@@ -1688,6 +1720,7 @@ def create_final_code(finalCodeID=None):
                     finalCodeDefinition=form.finalCodeDefinition.data
                 )
                 query.add(finalCode)
+                flash("Created Final Code")
                 return redirect_back('finalcodes/{}/'.format(finalCode.finalCodeID))
             else:
                 return missing_params(form.errors)
@@ -1752,6 +1785,7 @@ def update_funding_source(fundingSourceID):
                 if int(form.versionID.data) == fundingSource.versionID:
                     fundingSource.fundingSource = form.fundingSource.data
                     query.commit()
+                    flash("Updated Funding Source")
                     return redirect_back('fundingsources/{}/'.format(fundingSourceID))
                 else:
                     return out_of_date_error()
@@ -1782,6 +1816,7 @@ def create_funding_source(fundingSourceID=None):
                     fundingSource=form.fundingSource.data
                 )
                 query.add(fundingSource)
+                flash("Created Funding Source")
                 return redirect_back('fundingsources/{}/'.format(fundingSource.fundingSourceID))
             else:
                 return missing_params(form.errors)
@@ -1845,8 +1880,8 @@ def update_grant_status(grantStatusID):
             if form.validate():
                 if int(request.form['versionID']) == grantStatus.versionID:
                     grantStatus.grantStatus = form.grantStatus.data
-                    query.commit()
-                    return grantStatus.json()
+                    flash("Updated Funding Source")
+                    return redirect_back('grantstatuses/{}/'.format(grantStatusID))
                 else:
                     return out_of_date_error()
             else:
@@ -1876,6 +1911,7 @@ def create_grant_status(grantStatusID=None):
                     grantStatus=form.grantStatus.data
                 )
                 query.add(grantStatus)
+                flash("Created Grant Status")
                 return redirect_back('grantstatuses/{}/'.format(grantStatus.grantStatusID))
             else:
                 return missing_params(form.errors)
@@ -1940,6 +1976,7 @@ def update_human_subject_training(humanSubjectTrainingID):
                 if int(form.versionID.data) == humanSubjectTraining.versionID:
                     humanSubjectTraining.trainingType = form.trainingType.data
                     query.commit()
+                    flash("Updated Human Subject Training")
                     return redirect_back('humansubjecttrainings/{}/'.format(humanSubjectTrainingID))
                 else:
                     return out_of_date_error()
@@ -1970,6 +2007,7 @@ def create_human_subject_training(humanSubjectTrainingID=None):
                     trainingType=form.trainingType.data
                 )
                 query.add(humanSubjectTraining)
+                flash("Created Human Subject Training")
                 return redirect_back('humansubjecttrainings/{}/'.format(humanSubjectTraining.humanSubjectTrainingID))
             else:
                 return missing_params(form.errors)
@@ -2037,6 +2075,7 @@ def update_incentive(incentiveID):
                     incentive.dateGiven = form.dateGiven.data
                     incentive.contactID = form.contactID.data
                     query.commit()
+                    flash("Updated Incentive")
                     return redirect_back('incentives/{}/'.format(incentive.incentiveID))
                 else:
                     return out_of_date_error()
@@ -2076,6 +2115,7 @@ def create_incentive(incentiveID=None):
                     contactID=form.contactID.data
                 )
                 query.add(incentive)
+                flash("Created Incentive")
                 return redirect_back("incentives/{}/".format(incentive.incentiveID))
             else:
                 return missing_params(form.errors)
@@ -2143,6 +2183,7 @@ def update_informant(informantID):
                     informant.informantRelationship = form.informantRelationship.data
                     informant.notes = form.notes.data
                     query.commit()
+                    flash("Updated Informant")
                     return redirect_back('informants/{}/'.format(informantID))
                 else:
                     return out_of_date_error()
@@ -2179,6 +2220,7 @@ def create_informant(informantID=None):
                     notes=form.notes.data
                 )
                 query.add(informant)
+                flash("Created Informant")
                 return redirect_back('informants/{}/'.format(informant.informantID))
             else:
                 return missing_params(form.errors)
@@ -2248,6 +2290,7 @@ def update_informant_address(informantAddressID):
                     informantAddress.zip = form.zip.data
                     informantAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
+                    flash("Updated Informant Address")
                     return redirect_back('informantaddresses/{}/'.format(informantAddressID))
                 else:
                     return out_of_date_error()
@@ -2286,6 +2329,7 @@ def create_informant_address(informantAddressID=None):
                     addressStatusDate=form.addressStatusDate.data,
                 )
                 query.add(informantAddress)
+                flash("Created Informant Address")
                 return redirect_back('informantaddresses/{}/'.format(informantAddress.informantAddressID))
             else:
                 return missing_params(form.errors)
@@ -2352,6 +2396,7 @@ def update_informant_phone(informantPhoneID):
                     informantPhone.phoneNumber = form.phoneNumber.data
                     informantPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
+                    flash("Updated Informant Phone")
                     return redirect_back('informantphones/{}/'.format(informantPhoneID))
                 else:
                     return out_of_date_error()
@@ -2387,6 +2432,7 @@ def create_informant_phone(informantPhoneID=None):
                     phoneStatusDate=form.phoneStatusDate.data
                 )
                 query.add(informantPhone)
+                flash("Created Informant Phone")
                 return redirect_back('informantphones/{}/'.format(informantPhone.informantPhoneID))
             else:
                 return missing_params(form.errors)
@@ -2452,6 +2498,7 @@ def update_irb_holder(irbHolderID):
                     irb.holder = form.holder.data
                     irb.holderDefinition = form.holderDefinition.data
                     query.commit()
+                    flash("Updated IRB Holder")
                     return redirect_back('irbholders/{}/'.format(irbHolderID))
                 else:
                     return out_of_date_error()
@@ -2483,6 +2530,7 @@ def create_irb_holder(irbHolderID=None):
                     holderDefinition=form.holderDefinition.data
                 )
                 query.add(irb)
+                flash("Created IRB Holder")
                 return redirect_back('irbholders/{}/'.format(irb.irbHolderID))
             else:
                 return missing_params(form.errors)
@@ -2549,6 +2597,7 @@ def update_log(logID):
                     log.note = form.note.data
                     log.date = form.date.data
                     query.commit()
+                    flash("Updated Log")
                     return redirect_back('logs/{}/'.format(logID))
                 else:
                     return out_of_date_error()
@@ -2584,6 +2633,7 @@ def create_log(logID=None):
                     date=form.date.data
                 )
                 query.add(log)
+                flash("Created Log")
                 return redirect_back('logs/{}/'.format(log.logID))
             else:
                 return missing_params(form.errors)
@@ -2648,6 +2698,7 @@ def update_log_subject(logSubjectID):
                 if int(form.versionID.data) == logSubject.versionID:
                     logSubject.logSubject = form.logSubject.data
                     query.commit()
+                    flash("Updated Log Subject")
                     return redirect_back('logsubjects/{}/'.format(logSubjectID))
                 else:
                     return out_of_date_error()
@@ -2678,6 +2729,7 @@ def create_log_subject(logSubjectID=None):
                     logSubject=form.logSubject.data
                 )
                 query.add(logSubject)
+                flash("Added Log Subject")
                 return redirect_back('logsubjects/{}/'.format(logSubject.logSubjectID))
             else:
                 return missing_params(form.errors)
@@ -2799,6 +2851,7 @@ def update_patient(patientID):
                     patient.ethnicityID = form.ethnicityID.data
                     patient.vitalStatusID = form.vitalStatusID.data
                     query.commit()
+                    flash("Updated Patient")
                     return redirect_back("/patients/{}".format(patientID))
                 else:
                     return out_of_date_error()
@@ -2845,6 +2898,7 @@ def create_patient(patientID=None):
                     vitalStatusID=form.vitalStatusID.data
                 )
                 query.add(patient)
+                flash("Created Patient")
                 return redirect_back("/patients/{}".format(patientID))
             else:
                 return missing_params(form.errors)
@@ -2912,6 +2966,7 @@ def update_patient_address(patAddressID):
                     patientAddress.zip = form.zip.data
                     patientAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
+                    flash("Updated Patient Address")
                     return redirect_back('patientaddresses/{}/'.format(patAddressID))
                 else:
                     return out_of_date_error()
@@ -2950,6 +3005,7 @@ def create_patient_address(patAddressID=None):
                     addressStatusDate=form.addressStatusDate.data,
                 )
                 query.add(patientaddress)
+                flash("Created Patient Address")
                 return redirect_back('patientaddresses/{}/'.format(patientaddress.patAddressID))
             else:
                 return missing_params(form.errors)
@@ -3014,6 +3070,7 @@ def update_patient_email(emailID):
                     patientEmail.email = form.email.data
                     patientEmail.emailStatusDate = form.emailStatusDate.data
                     query.commit()
+                    flash("Updated Patient Email")
                     return redirect_back('patientemails/{}/'.format(emailID))
                 else:
                     return out_of_date_error()
@@ -3048,6 +3105,7 @@ def create_patient_email(emailID=None):
                     emailStatusDate=form.emailStatusDate.data
                 )
                 query.add(patientEmail)
+                flash("Created Patient Email")
                 return redirect_back('patientemails/{}/'.format(patientEmail.participantID))
             else:
                 return missing_params(form.errors)
@@ -3114,6 +3172,7 @@ def update_patient_phone(patPhoneID):
                     patientPhone.phoneNumber = form.phoneNumber.data
                     patientPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
+                    flash("Updated Patient Phone")
                     return redirect_back('patientphones/{}/'.format(patPhoneID))
                 else:
                     return out_of_date_error()
@@ -3149,6 +3208,7 @@ def create_patient_phone(patPhoneID=None):
                     phoneStatusDate=form.phoneStatusDate.data
                 )
                 query.add(patientPhone)
+                flash("Created Patient Phone")
                 return redirect_back('patientphones/{}/'.format(patientPhone.participantID))
             else:
                 return missing_params(form.errors)
@@ -3210,6 +3270,7 @@ def update_patient_project_status(patientProjectStatusID):
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
                     query.commit()
+                    flash("Updated Patient Project Status")
                     return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
                 else:
                     return out_of_date_error()
@@ -3241,6 +3302,7 @@ def create_patient_project_status(patientProjectStatusID=None):
                     participantID=form.participantID.data
                 )
                 query.add(patientProjectStatus)
+                flash("Created Patient Project Status")
                 return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatus.patientProjectStatusID))
             else:
                 return missing_params(form.errors)
@@ -3305,6 +3367,7 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
                 if int(form.versionID.data) == patientProjectStatusType.versionID:
                     patientProjectStatusType.statusDescription = form.statusDescription.data
                     query.commit()
+                    flash("Updated Patient Project Status Type")
                     return redirect_back('patientprojectstatustypes/{}/'.format(patientProjectStatusTypeID))
                 else:
                     return out_of_date_error()
@@ -3335,6 +3398,7 @@ def create_patient_project_status_type(patientProjectStatusTypeID=None):
                     statusDescription=form.statusDescription.data
                 )
                 query.add(patientProjectStatusType)
+                flash("Created Patient Project Status Type")
                 return redirect_back(
                     'patientprojectstatustypes/{}/'.format(patientProjectStatusType.patientProjectStatusTypeID))
             else:
@@ -3401,6 +3465,7 @@ def update_phase_status(logPhaseID):
                     phaseStatus.phaseStatus = form.phaseStatus.data
                     phaseStatus.phaseDescription = form.phaseDescription.data
                     query.commit()
+                    flash("Updated Phase Status")
                     return redirect_back('phasestatuses/{}/'.format(logPhaseID))
                 else:
                     return out_of_date_error()
@@ -3432,6 +3497,7 @@ def create_phase_status(logPhaseID=None):
                     phaseDescription=form.phaseDescription.data
                 )
                 query.add(phaseStatus)
+                flash("Created Phase Status")
                 return redirect_back('patientprojectstatustypes/{}/'.format(phaseStatus.logPhaseID))
             else:
                 return missing_params(form.errors)
@@ -3496,6 +3562,7 @@ def update_phone_type(phoneTypeID):
                 if int(form.versionID.data) == phoneType.versionID:
                     phoneType.phoneType = form.phoneType.data
                     query.commit()
+                    flash("Updated Phone Type")
                     return redirect_back('phonetypes/{}/'.format(phoneTypeID))
                 else:
                     return out_of_date_error()
@@ -3526,6 +3593,7 @@ def create_phone_type(phoneTypeID=None):
                     phoneType=form.phoneType.data
                 )
                 query.add(phoneType)
+                flash("Created Phone Type")
                 return redirect_back('phonetypes/{}/'.format(phoneType.phoneTypeID))
             else:
                 return missing_params(form.errors)
@@ -3623,6 +3691,7 @@ def update_physician(physicianID):
                     physician.physicianStatusID = form.physicianStatusID.data
                     physician.physicianStatusDate = form.physicianStatusDate.data
                     query.commit()
+                    flash("Updated Physician")
                     return redirect_back("physicians/{}/".format(physicianID))
                 else:
                     return out_of_date_error()
@@ -3662,6 +3731,7 @@ def create_physician(physicianID=None):
                     physicianStatusDate=form.physicianStatusDate.data,
                 )
                 query.add(physician)
+                flash("Created Physician")
                 return redirect_back("physicians/{}/".format(physician.physicianID))
             else:
                 return missing_params(form.errors)
@@ -3731,6 +3801,7 @@ def update_physician_address(physicianAddressID):
                     physicianAddress.zip = form.zip.data
                     physicianAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
+                    flash("Updated Physician Address")
                     return redirect_back("physicianaddresses/{}/".format(physicianAddressID))
                 else:
                     return out_of_date_error()
@@ -3769,6 +3840,7 @@ def create_physician_address(physicianAddressID=None):
                     addressStatusDate=form.addressStatusDate.data,
                 )
                 query.add(physicianAddress)
+                flash("Created Physician Address")
                 return redirect_back("physicianaddresses/{}/".format(physicianAddress.physicianAddressID))
             else:
                 return missing_params(form.errors)
@@ -3833,6 +3905,7 @@ def update_physician_email(physicianEmailID):
                     physicianEmail.email = form.email.data
                     physicianEmail.emailStatusDate = form.emailStatusDate.data
                     query.commit()
+                    flash("Updated Physician Email")
                     return redirect_back("physicianemails/{}/".format(physicianEmailID))
                 else:
                     return out_of_date_error()
@@ -3867,6 +3940,7 @@ def create_physician_email(physicianEmailID=None):
                     emailStatusDate=form.emailStatusDate.data
                 )
                 query.add(physicianEmail)
+                flash("Created Physician Email")
                 return redirect_back("physicianemails/{}/".format(physicianEmail.physicianID))
             else:
                 return missing_params(form.errors)
@@ -3929,6 +4003,7 @@ def update_physician_facility(physFacilityID):
                     physicianFacility.physFacilityStatusID = form.physFacilityStatusID.data
                     physicianFacility.physFacilityStatusDate = form.physFacilityStatusDate.data
                     query.commit()
+                    flash("Updated Physician Facility Link")
                     return redirect_back("physicianfacilities/{}/".format(physFacilityID))
                 else:
                     return out_of_date_error()
@@ -3962,6 +4037,7 @@ def create_physician_facility(physFacilityID=None):
                     physFacilityStatusDate=form.physFacilityStatusDate.data,
                 )
                 query.add(physicianFacility)
+                flash("Created Physician Facility Link")
                 return redirect_back("physicianfacilities/{}/".format(physicianFacility.physFacilityID))
             else:
                 return missing_params(form.errors)
@@ -4028,6 +4104,7 @@ def update_physician_phone(physicianPhoneID):
                     physicianPhone.phoneTypeID = form.phoneTypeID.data
                     physicianPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
+                    flash("Updated Physician Phone")
                     return redirect_back("physicianphones/{}/".format(physicianPhoneID))
                 else:
                     return out_of_date_error()
@@ -4063,6 +4140,7 @@ def create_physician_phone(physicianPhoneID=None):
                     phoneStatusDate=form.phoneStatusDate.data
                 )
                 query.add(physicianPhone)
+                flash("Created Physician Phone")
                 return redirect_back("physicianphones/{}/".format(physicianPhone.physicianPhoneID))
             else:
                 return missing_params(form.errors)
@@ -4124,6 +4202,7 @@ def update_physician_status(physicianStatusID):
                 if int(form.versionID.data) == physicianStatus.versionID:
                     physicianStatus.physicianStatus = form.physicianStatus.data
                     query.commit()
+                    flash("Updated Physician Status")
                     return redirect_back('physicianstatuses/{}/'.format(physicianStatusID))
                 else:
                     return out_of_date_error()
@@ -4154,6 +4233,7 @@ def create_physician_status(physicianStatusID=None):
                     physicianStatus=form.physicianStatus.data,
                 )
                 query.add(physicianStatus)
+                flash("Created Physician Status")
                 return redirect_back('physicianStatuses/{}/'.format(physicianStatus.physicianStatusID))
             else:
                 return missing_params(form.errors)
@@ -4214,6 +4294,7 @@ def update_physician_to_ctc(physicianCTCID):
                     physicianToCTC.physicianID = form.physicianID.data
                     physicianToCTC.ctcID = form.ctcID.data
                     query.commit()
+                    flash("Updated Physician to CTC Link")
                     return redirect_back("physiciantoctcs/{}/".format(physicianCTCID))
                 else:
                     return out_of_date_error()
@@ -4245,6 +4326,7 @@ def create_physician_to_ctc(physicianCTCID=None):
                     ctcID=form.ctcID.data
                 )
                 query.add(physicianToCTC)
+                flash("Created Physician to CTC Link")
                 return redirect_back("physiciantoctcs/{}/".format(physicianToCTC.physicianCTCID))
             else:
                 return missing_params(form.errors)
@@ -4329,6 +4411,7 @@ def update_pre_application(preApplicationID):
                     preApplication.deliveryDate = form.deliveryDate.data
                     preApplication.description = form.description.data
                     query.commit()
+                    flash("Updated Pre-Application")
                     return redirect_back("preapplications/{}/".format(preApplicationID))
                 else:
                     return out_of_date_error()
@@ -4385,6 +4468,7 @@ def create_pre_application(preApplicationID=None):
                     description=form.description.data
                 )
                 query.add(preApplication)
+                flash("Created Pre-Application")
                 return redirect_back("preapplications/{}/".format(preApplication.preApplicationID))
             else:
                 return missing_params(form.errors)
@@ -4494,6 +4578,7 @@ def update_project(projectID):
                     proj.activityStartDate = form.activityStartDate.data
                     proj.activityEndDate = form.activityEndDate.data
                     query.commit()
+                    flash("Updated Project", 'message')
                     return redirect_back("projects/{}/".format(projectID))
                 else:
                     return out_of_date_error()
@@ -4539,6 +4624,7 @@ def create_project(projectID=None):
                     activityEndDate=form.activityEndDate.data
                 )
                 query.add(proj)
+                flash("Created Project")
                 return redirect_back("projects/{}/".format(proj.projectID))
             else:
                 return missing_params(form.errors)
@@ -4688,6 +4774,7 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
                     query.commit()
+                    flash("Updated Project Patient")
                     return redirect_back("projectpatients/{}/".format(participantID))
                 else:
                     return out_of_date_error()
@@ -4748,6 +4835,7 @@ def create_project_patient(participantID=None):
                     qualityControl=form.qualityControl.data
                 )
                 query.add(projectPatient)
+                flash("Created Project Patient")
                 return redirect_back("projectPatients/{}/".format(projectPatient.participantID))
             else:
                 return missing_params(form.errors)
@@ -4816,6 +4904,7 @@ def update_project_staff(projectStaffID):
                     projectStaff.contactID = form.contactID.data
                     projectStaff.inactiveID = form.inactiveID.data
                     query.commit()
+                    flash("Updated Project-Staff Link")
                     return redirect_back("projectstaff/{}/".format(projectStaffID))
                 else:
                     return out_of_date_error()
@@ -4852,6 +4941,7 @@ def create_project_staff(projectStaffID=None):
                     inactiveID=form.inactiveID.data,
                 )
                 query.add(projectStaff)
+                flash("Created Project-Staff Link")
                 return redirect_back("projectstaff/{}/".format(projectStaff.projectStaffID))
             else:
                 return missing_params(form.errors)
@@ -4916,6 +5006,7 @@ def update_project_status(projectStatusID):
                     projectStatus.statusDate = form.statusDate.data
                     projectStatus.statusNotes = form.statusNotes.data
                     query.commit()
+                    flash("Updated Project Status")
                     return redirect_back('projectstatuses/{}/'.format(projectStatus.projectStatusID))
                 else:
                     return out_of_date_error()
@@ -4950,6 +5041,7 @@ def create_project_status(projectStatusID=None):
                     statusNotes=form.statusNotes.data
                 )
                 query.add(projectStatus)
+                flash("Created Project Status")
                 return redirect_back('projectstatuses/{}/'.format(projectStatusID))
             else:
                 return missing_params(form.errors)
@@ -5015,6 +5107,7 @@ def update_project_status_lut(projectStatusTypeID):
                     projectStatusType.projectStatus = form.projectStatus.data
                     projectStatusType.projectStatusDefinition = form.projectStatusDefinition.data
                     query.commit()
+                    flash("Updated Project Status Type")
                     return redirect_back('projectstatustypes/{}/'.format(projectStatusTypeID))
                 else:
                     return out_of_date_error()
@@ -5046,6 +5139,7 @@ def create_project_status_lut(projectStatusTypeID=None):
                     projectStatusDefinition=form.projectStatusDefinition.data
                 )
                 query.add(projectStatusType)
+                flash("Created Project Status Type")
                 return redirect_back('patientprojectstatustypes/{}/'.format(projectStatusType.projectStatusTypeID))
             else:
                 return missing_params(form.errors)
@@ -5111,6 +5205,7 @@ def update_project_type(projectTypeID):
                     projectType.projectType = form.projectType.data
                     projectType.projectTypeDefinition = form.projectTypeDefinition.data
                     query.commit()
+                    flash("Updated Project Type")
                     return redirect_back('projecttypes/{}/'.format(projectTypeID))
                 else:
                     return out_of_date_error()
@@ -5142,6 +5237,7 @@ def create_project_type(projectTypeID=None):
                     projectTypeDefinition=form.projectTypeDefinition.data
                 )
                 query.add(projectType)
+                flash("Created Project Type")
                 return redirect_back('projecttypes/{}/'.format(projectType.projectTypeID))
             else:
                 return missing_params(form.errors)
@@ -5207,6 +5303,7 @@ def update_rc_status_list(reviewCommitteeStatusID):
                     rcStatus.reviewCommitteeStatus = form.reviewCommitteeStatus.data
                     rcStatus.reviewCommitteeStatusDefinition = form.reviewCommitteeStatusDefinition.data
                     query.commit()
+                    flash("Updated Review Committee Status")
                     return redirect_back('reviewcommitteestatuses/{}/'.format(reviewCommitteeStatusID))
                 else:
                     return out_of_date_error()
@@ -5238,6 +5335,7 @@ def create_rc_status_list(reviewCommitteeStatusID=None):
                     reviewCommitteeStatusDefinition=form.reviewCommitteeStatusDefinition.data
                 )
                 query.add(rcStatus)
+                flash("Created Review Committee Status")
                 return redirect_back('reviewcommitteestatuses/{}/'.format(rcStatus.reviewCommitteeStatusID))
             else:
                 return missing_params(form.errors)
@@ -5306,6 +5404,7 @@ def update_review_committee(reviewCommitteeID):
                     rc.rcProtocol = form.rcProtocol.data
                     rc.rcApproval = form.rcApproval.data
                     query.commit()
+                    flash("Updated Review Committee")
                     return redirect_back("reviewcommittees/{}/".format(reviewCommitteeID))
                 else:
                     return out_of_date_error()
@@ -5344,6 +5443,7 @@ def create_review_committee(reviewCommitteeID=None):
                     rcApproval=form.rcApproval.data
                 )
                 query.add(rc)
+                flash("Created Review Committee")
                 return redirect_back("reviewcommittees/{}/".format(rc.reviewCommitteeID))
             else:
                 return missing_params(form.errors)
@@ -5409,6 +5509,7 @@ def update_review_committee_list(reviewCommitteeID):
                     rcList.reviewCommittee = form.reviewCommittee.data
                     rcList.reviewCommitteeDescription = form.reviewCommitteeDescription.data
                     query.commit()
+                    flash("Updated Review Committee")
                     return redirect_back('reviewcommitteelist/{}/'.format(reviewCommitteeID))
                 else:
                     return out_of_date_error()
@@ -5440,6 +5541,7 @@ def create_review_committee_list(reviewCommitteeID=None):
                     reviewCommitteeDescription=form.reviewCommitteeDescription.data
                 )
                 query.add(reviewCommitteeList)
+                flash("Created Review Committee")
                 return redirect_back('reviewcommitteelist/{}/'.format(reviewCommitteeID))
             else:
                 return missing_params(form.errors)
@@ -5564,6 +5666,7 @@ def update_staff(staffID):
                     # Don't allow updates to userID
                     #staff.userID = form.userID.data
                     query.commit()
+                    flash("Updated Staff")
                     return redirect_back("staff/{}/".format(staffID))
                 else:
                     return out_of_date_error()
@@ -5608,6 +5711,7 @@ def create_staff(staffID=None):
                     userID=form.userID.data
                 )
                 query.add(staff)
+                flash("Created Staff")
                 return redirect_back("staff/{}/".format(staff.staffID))
             else:
                 return missing_params(form.errors)
@@ -5673,6 +5777,7 @@ def update_staff_role(staffRoleID):
                     staffRole.staffRole = form.staffRole.data
                     staffRole.staffRoleDescription = form.staffRoleDescription.data
                     query.commit()
+                    flash("Updated Staff Role")
                     return redirect_back('staffroles/{}/'.format(staffRoleID))
                 else:
                     return out_of_date_error()
@@ -5704,6 +5809,7 @@ def create_staff_role(staffRoleID=None):
                     staffRoleDescription=form.staffRoleDescription.data,
                 )
                 query.add(staffRole)
+                flash("Created Staff Role")
                 return redirect_back('staffroles/{}/'.format(staffRoleID))
             else:
                 return missing_params(form.errors)
@@ -5766,6 +5872,7 @@ def update_staff_training(staffTrainingID):
                     stafftraining.dateTaken = form.dateTaken.data
                     stafftraining.dateExpires = form.dateExpires.data
                     query.commit()
+                    flash("Updated Staff Training")
                     return redirect_back("stafftrainings/{}/".format(staffTrainingID))
                 else:
                     return out_of_date_error()
@@ -5797,6 +5904,7 @@ def create_staff_training(staffTrainingID=None):
                     dateExpires=form.dateExpires.data
                 )
                 query.add(stafftraining)
+                flash("Created Staff Training")
                 return redirect_back("stafftrainings/{}/".format(stafftraining.staffTrainingID))
             else:
                 return missing_params(form.errors)
@@ -5861,6 +5969,7 @@ def update_tracing(tracingID):
                     tracing.staffID = form.staffID.data
                     tracing.notes = form.notes.data
                     query.commit()
+                    flash("Updated Tracing")
                     return redirect_back("tracings/{}/".format(tracingID))
                 else:
                     return out_of_date_error()
@@ -5895,6 +6004,7 @@ def create_tracing(tracingID=None):
                     notes=form.notes.data
                 )
                 query.add(tracing)
+                flash("Created Tracing")
                 return redirect_back("tracings/{}/".format(tracing.tracingID))
             else:
                 return missing_params(form.errors)
@@ -5959,6 +6069,7 @@ def update_tracing_source(tracingSourceID):
                 if int(form.versionID.data) == tracingSource.versionID:
                     tracingSource.description = form.description.data
                     query.commit()
+                    flash("Updated Tracing Source")
                     return redirect_back('tracingsources/{}/'.format(tracingSourceID))
                 else:
                     return out_of_date_error()
@@ -5989,6 +6100,7 @@ def create_tracing_source(tracingSourceID=None):
                     description=form.description.data
                 )
                 ret = query.add(tracingSource)
+                flash("Created Tracing Source")
                 return redirect_back('tracingsources/{}/'.format(tracingSourceID))
             else:
                 return missing_params(form.errors)
@@ -6052,6 +6164,7 @@ def update_ucr_report(ucrReportID):
                     ucr.reportDue = form.reportDue.data
                     ucr.reportDoc = form.reportDoc.data
                     query.commit()
+                    flash("Updated UCR Report")
                     return redirect_back("ucrreports/{}/".format(ucrReportID))
                 else:
                     return out_of_date_error()
@@ -6086,7 +6199,7 @@ def create_ucr_report(ucrReportID=None):
                     reportDoc=form.reportDoc.data
                 )
                 query.add(ucr)
-                query.commit()
+                flash("Created UCR Report")
                 return redirect_back("ucrreports/{}/".format(ucr.ucrReportID))
             else:
                 return missing_params(form.errors)
@@ -6146,6 +6259,7 @@ def update_ucr_role(ucrRoleID):
                 if int(form.versionID.data) == ucrRole.versionID:
                     ucrRole.ucrRole = form.ucrRole.data
                     query.commit()
+                    flash("Updated UCR Role")
                     return redirect_back('ucrroles/{}/'.format(ucrRoleID))
                 else:
                     return out_of_date_error()
@@ -6176,6 +6290,7 @@ def create_ucr_role(ucrRoleID=None):
                     ucrRole=form.ucrRole.data,
                 )
                 query.add(ucrRole)
+                flash("Created UCR Role")
                 return redirect_back('ucrroles/{}/'.format(ucrRole.ucrRoleID))
             else:
                 return missing_params(form.errors)

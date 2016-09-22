@@ -86,8 +86,10 @@
                 {% if projectStatus is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStatusID" value="{{projectStatus["projectStatusID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{projectStatus["projectID"]}}/#projectStatusTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStatusTableTab">
                 {% endif %}
             </div>
           </div>

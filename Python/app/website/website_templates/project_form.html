@@ -189,14 +189,14 @@
                                   <tbody>
                                     {% for arcReview in form.project.arcReviews %}
                                     <tr>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewType}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.contact}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.linkage}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.engaged}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.nonPublicData}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewType or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -233,10 +233,10 @@
                                   <tbody>
                                     {% for budget in form.project.budgets %}
                                     <tr>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods or ''}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal or ''}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment}}</a></td>
                                     </tr>
                                     {% endfor %}

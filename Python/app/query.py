@@ -301,7 +301,7 @@ def get_inactive_enums():
 
 
 def get_incentives():
-    return db.session.query(Incentive).all()
+    return db.session.query(Incentive).order_by(Incentive.dateGiven.desc()).all()
 
 
 def get_incentive(id):

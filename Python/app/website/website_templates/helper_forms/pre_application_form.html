@@ -255,8 +255,10 @@
                 {% if preApplication is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="preApplicationID" value="{{preApplication.preApplicationID}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{preApplication["projectID"]}}/#preApplicationTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#preApplicationTab">
                 {% endif %}
             </div>
           </div>

@@ -81,10 +81,15 @@
                 {% if incentive is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="incentiveID" value="{{incentive.incentiveID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{incentive.participantID}}/#incentiveTableTab"/>
                 {% else %}
                     <input type="hidden" name="incentiveID" value="0"/>
                     <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#incentiveTableTab"/>
                 {% endif %}
+
             </div>
           </div>
         </fieldset>
@@ -102,3 +107,11 @@
                 </div>
             </fieldset>
     </form>
+
+<script>
+$(document).ready( function() {
+    if (!$("#date_dateGiven").val()){
+        document.getElementById('date_dateGiven').valueAsDate = new Date();
+    }
+});
+</script>

@@ -103,8 +103,10 @@
                 {% if reviewCommittee is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="reviewCommitteeID" value="{{reviewCommittee["reviewCommitteeID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{reviewCommittee["projectID"]}}/#reviewCommitteeTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#reviewCommitteeTableTab">
                 {% endif %}
             </div>
           </div>

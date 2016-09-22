@@ -219,7 +219,7 @@
                 {% for ctcFacility in ctc.ctcFacilities %}
                     <tr>
                         <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityName"]}}</a></td>
-                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.coc}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.coc or ''}}</a></td>
                         <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactFirstName"]}}</a></td>
                         <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactLastName"]}}</a></td>
                         <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityStatus"]}}</a></td>

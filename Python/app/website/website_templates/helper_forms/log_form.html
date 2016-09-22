@@ -99,8 +99,10 @@
                 {% if log is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="logID" value="{{log["logID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{log["projectID"]}}/#logTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#logTableTab">
                 {% endif %}
             </div>
           </div>

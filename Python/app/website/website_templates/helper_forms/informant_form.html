@@ -60,6 +60,7 @@
                 {% else %}
                     <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
                 {% endif %}
+                <input type="hidden" name="_redirectlink" value="{{request.path}}#informantTableTab"/>
             </div>
           </div>
         </fieldset>

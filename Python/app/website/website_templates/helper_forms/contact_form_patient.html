@@ -90,7 +90,7 @@
                                   <div class="row">
                                     <div class = "col-md-4">
                                       <label for="date_contactDate">Contact Date</label>
-                                      <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate" value="{{contact.contactDate}}">
+                                      <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate2" value="{{contact.contactDate}}">
                                     </div>
                                     <div class = "col-md-4">
                                       <label for="text_initials">Initials</label>
@@ -122,8 +122,12 @@
                                     {% if contact is not none %}
                                         <input type="hidden" name="_method" value="put" />
                                         <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
+                                        <!-- redirect to contactTable in projectPatient -->
+                                        <input type="hidden" name="_redirectlink" value="projectpatients/{{contact.participantID}}/#contactTable"/>
                                     {% else %}
                                         <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
+                                        <!-- redirect to contactTable in projectPatient -->
+                                        <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#contactTable"/>
                                     {% endif %}
                                 </div>
                               </div>
@@ -215,3 +219,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready( function() {
+        if (!$("#date_contactDate2").val()){
+            document.getElementById('date_contactDate2').valueAsDate = new Date();
+        }
+    });
+</script>

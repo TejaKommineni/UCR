@@ -62,9 +62,13 @@
                 {% if patientProjectStatus is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="patientProjectStatusID" value="{{patientProjectStatus.patientProjectStatusID}}"/>
+                    <!-- redirect to patient project status tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{patientProjectStatus.participantID}}/#patientProjectStatusTableTab"/>
                 {% else %}
                     <input type="hidden" name="patientProjectStatusID" value="0"/>
                     <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                    <!-- redirect to patient project status tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#patientProjectStatusTableTab"/>
                 {% endif %}
             </div>
           </div>

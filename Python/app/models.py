@@ -909,7 +909,7 @@ class ProjectPatient(CustomModel):
                                           db.ForeignKey('Staff.staffID'))  # FK
     qualityControl = db.Column('quality_control', db.Boolean)
 
-    incentives = db.relationship('Incentive', back_populates='projectPatient')
+    incentives = db.relationship('Incentive', back_populates='projectPatient', order_by="desc(Incentive.dateGiven)")
     # Relationships
     # 1 - M, one PP with many PPStatuses
     patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient")

@@ -320,11 +320,13 @@
 
             <!-- hidden fields -->
             <input type="hidden" class="form-control" name="ctcID" id="text_ctcID" value="{{projectPatient.ctcID}}">
-            {% if preApplication is not none %}
+            {% if projectPatient is not none %}
                 <input type="hidden" name="_method" value="put" />
+                <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/"/>
                 <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
             {% else %}
                 <input type="hidden" name="participantID" value="{{form.patient.participantID}}"/>
+                <input type="hidden" name="_redirectlink" value="projectpatients/"/>
             {% endif %}
             
             <div class="form-group">

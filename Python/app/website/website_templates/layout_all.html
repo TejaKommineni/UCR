@@ -56,6 +56,17 @@
               </ul>
            </div>
         </nav>
+        <div id="message-box" class="jumbotron flyover flyover-centered alert-custom">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-custom">
+                      {{ message }}
+                    </div>
+                {% endfor %}
+              {% endif %}
+          {% endwith %}
+        </div>
         <div id="content">
             {% block content %}
             {% endblock %}

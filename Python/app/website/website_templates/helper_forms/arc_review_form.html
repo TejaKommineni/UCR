@@ -26,7 +26,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_reviewType">Review Type</label>
-                  <input type="text" class="form-control" name="reviewType" id="text_reviewType" value="{{arcReview["reviewType"]}}">
+                  <input type="text" class="form-control" name="reviewType" id="text_reviewType" value="{{arcReview["reviewType"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateSentToReviewer">Date Sent to Reviewer</label>
@@ -195,9 +195,11 @@
                     {% if arcReview is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="arcReviewID" value="{{arcReview["arcReviewID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="projects/{{arcReview.projectID}}/#arcReviewTableTab">
                     {% else %}
                         <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
                         <input type="hidden" name="arcReviewID" value="{{form["project"]["projectID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#arcReviewTableTab">
                     {% endif %}
                 </div>
               </div>

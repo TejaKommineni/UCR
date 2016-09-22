@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="date_dateRevoked">Date Revoked</label>
-                  <input required="required" type="date" class="form-control" name="dateRevoked" id="date_dateRevoked" value="{{projectStaff.dateRevoked}}">
+                  <input type="date" class="form-control" name="dateRevoked" id="date_dateRevoked" value="{{projectStaff.dateRevoked}}">
                 </div>
               </div>
             
@@ -112,10 +112,17 @@
                 {% if projectStaff is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStaffID" value="{{projectStaff.projectStaffID}}"/>
+                    {% if "projectstaff" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="staff/{{projectStaff.staffID}}/#projectStaffTableTab"/>
+                    {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStaffTableTab"/>
+                    {% endif %}
                 {% elif staff%}
                     <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectsTableTab"/>
                 {% elif project %}
                     <input type="hidden" name="projectID" value="{{project.projectID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStaffTableTab"/>
                 {% endif %}
             </div>
           </div>

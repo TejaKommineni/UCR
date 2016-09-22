@@ -118,8 +118,10 @@
                 {% if funding is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="fundingID" value="{{funding["fundingID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{funding["projectID"]}}/#fundingTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#fundingTableTab">
                 {% endif %}
             </div>
           </div>

@@ -69,8 +69,10 @@
                 {% if staffTraining is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="staffTrainingID" value="{{staffTraining.staffTrainingID}}"/>
+                    <input type="hidden" name="_redirectlink" value="staff/{{staffTraining["staffID"]}}/#trainingTableTab">
                 {% else %}
                     <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#trainingTableTab">
                 {% endif %}
             </div>
           </div>
