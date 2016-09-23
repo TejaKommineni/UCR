@@ -392,10 +392,10 @@ def create_vital_statuses():
 def create_contacts():
     contacts = []
     contacts.append(models.Contacts(
-        contact="yes"
+        contact="Yes"
     ))
     contacts.append(models.Contacts(
-        contact="no"
+        contact="No"
     ))
     return contacts
 
@@ -414,10 +414,10 @@ def create_inactives():
 def create_ucr_report_types():
     reports = []
     reports.append(models.UCRReportType(
-        ucrReportType="Report 1"
+        ucrReportType="Final Report"
     ))
     reports.append(models.UCRReportType(
-        ucrReportType="Report 2"
+        ucrReportType="Annual Report"
     ))
     return reports
 
@@ -425,10 +425,10 @@ def create_ucr_report_types():
 def create_physician_statuses():
     statuses = []
     statuses.append(models.PhysicianStatus(
-        physicianStatus="active"
+        physicianStatus="Active"
     ))
     statuses.append(models.PhysicianStatus(
-        physicianStatus="inactive"
+        physicianStatus="Inactive"
     ))
     return statuses
 
@@ -436,10 +436,10 @@ def create_physician_statuses():
 def create_physician_facility_statuses():
     statuses = []
     statuses.append(models.PhysicianFacilityStatus(
-        physicianFacilityStatus="open"
+        physicianFacilityStatus="Open"
     ))
     statuses.append(models.PhysicianFacilityStatus(
-        physicianFacilityStatus="closed"
+        physicianFacilityStatus="Closed"
     ))
     return statuses
 
@@ -447,13 +447,13 @@ def create_physician_facility_statuses():
 def create_phone_types():
     phoneTypes = []
     phoneTypes.append(models.PhoneTypeLUT(
-        phoneType="cell"
+        phoneType="Cell"
     ))
     phoneTypes.append(models.PhoneTypeLUT(
-        phoneType="home"
+        phoneType="Home"
     ))
     phoneTypes.append(models.PhoneTypeLUT(
-        phoneType="work"
+        phoneType="Work"
     ))
     return phoneTypes
 
@@ -1240,10 +1240,16 @@ def create_contact_types():
 def create_ucr_roles():
     roles = []
     roles.append(models.UCRRole(
-        ucrRole="role 1"
+        ucrRole="Contact Staff"
     ))
     roles.append(models.UCRRole(
-        ucrRole="role 2"
+        ucrRole="Coordinator"
+    ))
+    roles.append(models.UCRRole(
+        ucrRole="Informatics Staff"
+    ))
+    roles.append(models.UCRRole(
+        ucrRole="Other"
     ))
     return roles
 
@@ -1263,6 +1269,41 @@ def create_gift_cards():
     gcs.append(models.GiftCard(
         description="Smiths Gift Card",
         barcode="123456787",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456786",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456785",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456784",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456783",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456782",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456781",
+        amount=25
+    ))
+    gcs.append(models.GiftCard(
+        description="Smiths Gift Card",
+        barcode="123456780",
         amount=25
     ))
     return gcs
@@ -1296,9 +1337,2386 @@ def create_users():
     ))
     users.append(models.User(
         uID="u0050151",
+        roleID=2  # Contact Staff
+    ))
+    users.append(models.User(
+        uID="u0372607",
+        roleID=4  # Contact Staff
+    ))
+    users.append(models.User(
+        uID="u0710561",
+        roleID=5  # Contact Staff
+    ))
+    users.append(models.User(
+        uID="u0100768",
+        roleID=5 # Contact Staff
+    ))
+    users.append(models.User(
+        uID="u0030586",
+        roleID=1  # Contact Staff
+    ))
+    users.append(models.User(
+        uID="u0666687",
         roleID=1  # Contact Staff
     ))
     return users
+
+
+def create_staff():
+    staff = []
+    staff.append(models.Staff(
+        userID=1,
+        firstName="Aaron",
+        lastName="Pulver",
+        middleName="Thomas",
+        email="aaron.pulver@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=1,
+        ucrRoleID=4
+    ))
+    staff.append(models.Staff(
+        userID=2,
+        firstName="Phoebe",
+        lastName="McNeally",
+        middleName="",
+        email="phoebe.mcneally.geog.utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=4
+    ))
+    staff.append(models.Staff(
+        userID=3,
+        firstName="Carrie",
+        lastName="Bateman",
+        middleName="",
+        email="u0372607@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=3
+    ))
+    staff.append(models.Staff(
+        userID=4,
+        firstName="Valerie",
+        lastName="Otto",
+        middleName="Yoder",
+        email="u0710561@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=2
+    ))
+    staff.append(models.Staff(
+        userID=5,
+        firstName="Kate",
+        lastName="Hak",
+        middleName="",
+        email="u0372607@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=2
+    ))
+    staff.append(models.Staff(
+        userID=6,
+        firstName="Sandie",
+        lastName="Edwards",
+        middleName="",
+        email="u0030586@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=1
+    ))
+    staff.append(models.Staff(
+        userID=7,
+        firstName="Lori",
+        lastName="Burke",
+        middleName="",
+        email="u0666687@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        stateID=2,
+        ucrRoleID=1
+    ))
+    return staff
+
+
+def create_projects():
+    projects = []
+    projects.append(
+        models.Project(
+            projectTypeID=1,
+            irbHolderID=1,
+            projectTitle="Test Project 1",
+            shortTitle="Test Project 1",
+            projectSummary="Summary of Project 1",
+            sop="sop",
+            ucrProposal="UCR Proposal 1",
+            budgetDoc="N:/Fakelocation/fakebudget.pdf",
+            ucrFee="No",
+            ucrNoFee="Yes",
+            previousShortTitle="Test Project One",
+            dateAdded=datetime(2016, 2, 2),
+            finalRecruitmentReport="N:/Fakelocation/fakereport.pdf",
+            ongoingContact=True,
+            activityStartDate=datetime(2016, 2, 2),
+            activityEndDate=datetime(2016, 2, 2))
+    )
+    projects.append(
+        models.Project(
+            projectTypeID=2,
+            irbHolderID=2,
+            projectTitle="Test Project 2",
+            shortTitle="Test Project 2",
+            projectSummary="Summary of Project 2",
+            sop="sop",
+            ucrProposal="UCR Proposal 2",
+            budgetDoc="N:/Fakelocation/fakebudget2.pdf",
+            ucrFee="No",
+            ucrNoFee="Yes",
+            previousShortTitle="Test Project Two",
+            dateAdded=datetime(2016, 2, 2),
+            finalRecruitmentReport="N:/Fakelocation/fakereport2.pdf",
+            ongoingContact=True,
+            activityStartDate=datetime(2016, 2, 2),
+            activityEndDate=datetime(2016, 2, 2))
+    )
+    projects.append(
+        models.Project(
+            projectTypeID=3,
+            irbHolderID=3,
+            projectTitle="Test Project 3",
+            shortTitle="Test Project 3",
+            projectSummary="Summary of Project 3",
+            sop="sop",
+            ucrProposal="UCR Proposal 3",
+            budgetDoc="N:/Fakelocation/fakebudget3.pdf",
+            ucrFee="Yes",
+            ucrNoFee="No",
+            previousShortTitle="Test Project Three",
+            dateAdded=datetime(2016, 4, 5),
+            finalRecruitmentReport="N:/Fakelocation/fakereport3.pdf",
+            ongoingContact=True,
+            activityStartDate=datetime(2016, 4, 5),
+            activityEndDate=datetime(2016, 6, 7))
+    )
+    projects.append(
+        models.Project(
+            projectTypeID=1,
+            irbHolderID=4,
+            projectTitle="Test Project 4",
+            shortTitle="Test Project 4",
+            projectSummary="Summary of Project 4",
+            sop="sop",
+            ucrProposal="UCR Proposal 4",
+            budgetDoc="N:/Fakelocation/fakebudget4.pdf",
+            ucrFee="No",
+            ucrNoFee="Yes",
+            previousShortTitle="Test Project Four",
+            dateAdded=datetime(2016, 8, 8),
+            finalRecruitmentReport="N:/Fakelocation/fakereport4.pdf",
+            ongoingContact=True,
+            activityStartDate=datetime(2016, 9, 9),
+            activityEndDate=datetime(2016, 9, 10))
+    )
+    projects.append(
+        models.Project(
+            projectTypeID=2,
+            irbHolderID=3,
+            projectTitle="Test Project 5",
+            shortTitle="Test Project 5",
+            projectSummary="Summary of Project 5",
+            sop="sop",
+            ucrProposal="UCR Proposal 2",
+            budgetDoc="N:/Fakelocation/fakebudget5.pdf",
+            ucrFee="No",
+            ucrNoFee="Yes",
+            previousShortTitle="Test Project Five",
+            dateAdded=datetime(2016, 2, 2),
+            finalRecruitmentReport="N:/Fakelocation/fakereport5.pdf",
+            ongoingContact=True,
+            activityStartDate=datetime(2016, 2, 2),
+            activityEndDate=datetime(2016, 2, 2))
+    )
+    return projects
+
+
+def create_budgets():
+    budgets = []
+    budgets.append(
+        models.Budget(
+            projectID=1,
+            numPeriods=1,
+            periodStart=datetime(2016, 2, 2),
+            periodEnd=datetime(2016, 9, 9),
+            periodTotal=1000,
+            periodComment="Initial Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=1,
+            numPeriods=1,
+            periodStart=datetime(2016, 9, 10),
+            periodEnd=datetime(2016, 12, 31),
+            periodTotal=1000,
+            periodComment="Second Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=2,
+            numPeriods=1,
+            periodStart=datetime(2016, 2, 2),
+            periodEnd=datetime(2016, 9, 9),
+            periodTotal=1000,
+            periodComment="Initial Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=2,
+            numPeriods=1,
+            periodStart=datetime(2016, 9, 10),
+            periodEnd=datetime(2016, 12, 31),
+            periodTotal=1000,
+            periodComment="Second Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=3,
+            numPeriods=1,
+            periodStart=datetime(2016, 2, 2),
+            periodEnd=datetime(2016, 9, 9),
+            periodTotal=1000,
+            periodComment="Initial Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=3,
+            numPeriods=1,
+            periodStart=datetime(2016, 9, 10),
+            periodEnd=datetime(2016, 12, 31),
+            periodTotal=1000,
+            periodComment="Second Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=4,
+            numPeriods=1,
+            periodStart=datetime(2016, 2, 2),
+            periodEnd=datetime(2016, 9, 9),
+            periodTotal=1000,
+            periodComment="Initial Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=4,
+            numPeriods=1,
+            periodStart=datetime(2016, 9, 10),
+            periodEnd=datetime(2016, 12, 31),
+            periodTotal=1000,
+            periodComment="Second Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=5,
+            numPeriods=1,
+            periodStart=datetime(2016, 2, 2),
+            periodEnd=datetime(2016, 9, 9),
+            periodTotal=1000,
+            periodComment="Initial Budget"))
+    budgets.append(
+        models.Budget(
+            projectID=5,
+            numPeriods=1,
+            periodStart=datetime(2016, 9, 10),
+            periodEnd=datetime(2016, 12, 31),
+            periodTotal=1000,
+            periodComment="Second Budget"))
+    return budgets
+
+
+def create_project_review_committees():
+    rcs = []
+    rcs.append(models.ReviewCommittee(
+        projectID=1,
+        reviewCommitteeStatusID=1,
+        reviewCommitteeLUTID=1,
+        reviewCommitteeNumber="1",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="No"))
+    rcs.append(models.ReviewCommittee(
+        projectID=1,
+        reviewCommitteeStatusID=2,
+        reviewCommitteeLUTID=2,
+        reviewCommitteeNumber="2",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="Approved"))
+    rcs.append(models.ReviewCommittee(
+        projectID=2,
+        reviewCommitteeStatusID=2,
+        reviewCommitteeLUTID=2,
+        reviewCommitteeNumber="3",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="Approved"))
+    rcs.append(models.ReviewCommittee(
+        projectID=2,
+        reviewCommitteeStatusID=3,
+        reviewCommitteeLUTID=3,
+        reviewCommitteeNumber="4",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="Approved"))
+    rcs.append(models.ReviewCommittee(
+        projectID=3,
+        reviewCommitteeStatusID=1,
+        reviewCommitteeLUTID=1,
+        reviewCommitteeNumber="5",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="No"))
+    rcs.append(models.ReviewCommittee(
+        projectID=4,
+        reviewCommitteeStatusID=2,
+        reviewCommitteeLUTID=2,
+        reviewCommitteeNumber="6",
+        dateInitialReview=datetime(2016, 2, 2),
+        dateExpires=datetime(2016, 10, 10),
+        rcNote="Notes",
+        rcProtocol="Protocol 1",
+        rcApproval="Approved"))
+    return rcs
+
+
+def create_ucr_reports():
+    ucr_reports = []
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=1,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc1.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=2,
+        reportTypeID=1,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc2.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=3,
+        reportTypeID=1,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc3.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=4,
+        reportTypeID=1,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc4.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=5,
+        reportTypeID=1,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc5.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=2,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc6.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=2,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc7.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=2,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc8.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=2,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc9.pdf"
+    ))
+    ucr_reports.append(models.UCRReport(
+        projectID=1,
+        reportTypeID=2,
+        reportSubmitted=datetime(2016, 2, 2),
+        reportDue=datetime(2016, 2, 2),
+        reportDoc="N:/FakeLocation/FakeDoc10.pdf"
+    ))
+    return ucr_reports
+
+
+def create_arc_reviews():
+    arcs = []
+    arcs.append(
+        models.ArcReview(
+            projectID=1,
+            reviewType=1,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=1,
+            reviewType=2,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=2,
+            reviewType=1,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=2,
+            reviewType=2,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=3,
+            reviewType=1,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=3,
+            reviewType=2,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=4,
+            reviewType=1,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=4,
+            reviewType=2,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=5,
+            reviewType=1,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    arcs.append(
+        models.ArcReview(
+            projectID=5,
+            reviewType=2,
+            dateSentToReviewer=datetime(2016, 2, 2),
+            reviewer1=1,
+            reviewer1Rec=1,
+            reviewer1SigDate=datetime(2016, 2, 2),
+            reviewer1Comments="test comment",
+            reviewer2=2,
+            reviewer2Rec=2,
+            reviewer2SigDate=datetime(2016, 2, 2),
+            reviewer2Comments="test comment",
+            research=1,
+            linkage=False,
+            contact=True,
+            engaged=True,
+            nonPublicData=True)
+    )
+    return arcs
+
+
+def create_fundings():
+    fundings = []
+    fundings.append(
+        models.Funding(
+            grantStatusID=1,
+            projectID=1,
+            fundingSourceID=1,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=2,
+            projectID=1,
+            fundingSourceID=2,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=1,
+            projectID=2,
+            fundingSourceID=1,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=2,
+            projectID=2,
+            fundingSourceID=2,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=1,
+            projectID=3,
+            fundingSourceID=1,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=2,
+            projectID=3,
+            fundingSourceID=2,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=1,
+            projectID=4,
+            fundingSourceID=1,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=2,
+            projectID=4,
+            fundingSourceID=2,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=1,
+            projectID=5,
+            fundingSourceID=1,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    fundings.append(
+        models.Funding(
+            grantStatusID=2,
+            projectID=5,
+            fundingSourceID=2,
+            primaryFundingSource="pfs",
+            secondaryFundingSource="sfs",
+            fundingNumber="number",
+            grantTitle="title",
+            dateStatus=datetime(2016, 2, 2),
+            grantPi=1,
+            primaryChartfield="pcf",
+            secondaryChartfield="scf"
+        )
+    )
+    return fundings
+
+
+def create_project_statuses2():
+    statuses = []
+    statuses.append(
+        models.ProjectStatus(
+            projectStatusTypeID=1,
+            projectID=1,
+            staffID=1,
+            statusDate=datetime(2016, 2, 2),
+            statusNotes="notes"
+        )
+    )
+    statuses.append(
+        models.ProjectStatus(
+            projectStatusTypeID=4,
+            projectID=2,
+            staffID=1,
+            statusDate=datetime(2016, 2, 2),
+            statusNotes="notes"
+        )
+    )
+    statuses.append(
+        models.ProjectStatus(
+            projectStatusTypeID=1,
+            projectID=3,
+            staffID=1,
+            statusDate=datetime(2016, 2, 2),
+            statusNotes="notes"
+        )
+    )
+    statuses.append(
+        models.ProjectStatus(
+            projectStatusTypeID=3,
+            projectID=4,
+            staffID=1,
+            statusDate=datetime(2016, 2, 2),
+            statusNotes="notes"
+        )
+    )
+    statuses.append(
+        models.ProjectStatus(
+            projectStatusTypeID=2,
+            projectID=5,
+            staffID=1,
+            statusDate=datetime(2016, 2, 2),
+            statusNotes="notes"
+        )
+    )
+    return statuses
+
+
+def create_pre_applications():
+    preapps = []
+    preapps.append(
+        models.PreApplication(
+            projectID=1,
+            piFirstName="pi_fname",
+            piLastName="pi_lname",
+            piEmail="pi_email",
+            piPhone="pi_phone",
+            contactFirstName="contact_fname",
+            contactLastName="contact_lname",
+            contactPhone="contact_phone",
+            contactEmail="contact_email",
+            institution="institution",
+            institution2="institution2",
+            uid="uid",
+            udoh=1,
+            projectTitle="Project 1",
+            purpose="purpose",
+            irb0=True,
+            irb1=True,
+            irb2=True,
+            irb3=True,
+            irb4=True,
+            otherIrb="other_irb",
+            updb=True,
+            ptContact=True,
+            startDate=datetime(2016, 2, 2),
+            link=True,
+            deliveryDate=datetime(2016, 2, 2),
+            description="description"
+        )
+    )
+    preapps.append(
+        models.PreApplication(
+            projectID=2,
+            piFirstName="pi_fname",
+            piLastName="pi_lname",
+            piEmail="pi_email",
+            piPhone="pi_phone",
+            contactFirstName="contact_fname",
+            contactLastName="contact_lname",
+            contactPhone="contact_phone",
+            contactEmail="contact_email",
+            institution="institution",
+            institution2="institution2",
+            uid="uid",
+            udoh=1,
+            projectTitle="Project 2",
+            purpose="purpose",
+            irb0=True,
+            irb1=True,
+            irb2=True,
+            irb3=True,
+            irb4=True,
+            otherIrb="other_irb",
+            updb=True,
+            ptContact=True,
+            startDate=datetime(2016, 2, 2),
+            link=True,
+            deliveryDate=datetime(2016, 2, 2),
+            description="description"
+        )
+    )
+    preapps.append(
+        models.PreApplication(
+            projectID=3,
+            piFirstName="pi_fname",
+            piLastName="pi_lname",
+            piEmail="pi_email",
+            piPhone="pi_phone",
+            contactFirstName="contact_fname",
+            contactLastName="contact_lname",
+            contactPhone="contact_phone",
+            contactEmail="contact_email",
+            institution="institution",
+            institution2="institution2",
+            uid="uid",
+            udoh=1,
+            projectTitle="Project 3",
+            purpose="purpose",
+            irb0=True,
+            irb1=True,
+            irb2=True,
+            irb3=True,
+            irb4=True,
+            otherIrb="other_irb",
+            updb=True,
+            ptContact=True,
+            startDate=datetime(2016, 2, 2),
+            link=True,
+            deliveryDate=datetime(2016, 2, 2),
+            description="description"
+        )
+    )
+    preapps.append(
+        models.PreApplication(
+            projectID=4,
+            piFirstName="pi_fname",
+            piLastName="pi_lname",
+            piEmail="pi_email",
+            piPhone="pi_phone",
+            contactFirstName="contact_fname",
+            contactLastName="contact_lname",
+            contactPhone="contact_phone",
+            contactEmail="contact_email",
+            institution="institution",
+            institution2="institution2",
+            uid="uid",
+            udoh=1,
+            projectTitle="Project 4",
+            purpose="purpose",
+            irb0=True,
+            irb1=True,
+            irb2=True,
+            irb3=True,
+            irb4=True,
+            otherIrb="other_irb",
+            updb=True,
+            ptContact=True,
+            startDate=datetime(2016, 2, 2),
+            link=True,
+            deliveryDate=datetime(2016, 2, 2),
+            description="description"
+        )
+    )
+    preapps.append(
+        models.PreApplication(
+            projectID=5,
+            piFirstName="pi_fname",
+            piLastName="pi_lname",
+            piEmail="pi_email",
+            piPhone="pi_phone",
+            contactFirstName="contact_fname",
+            contactLastName="contact_lname",
+            contactPhone="contact_phone",
+            contactEmail="contact_email",
+            institution="institution",
+            institution2="institution2",
+            uid="uid",
+            udoh=1,
+            projectTitle="Project 5",
+            purpose="purpose",
+            irb0=True,
+            irb1=True,
+            irb2=True,
+            irb3=True,
+            irb4=True,
+            otherIrb="other_irb",
+            updb=True,
+            ptContact=True,
+            startDate=datetime(2016, 2, 2),
+            link=True,
+            deliveryDate=datetime(2016, 2, 2),
+            description="description"
+        )
+    )
+    return preapps
+
+
+def create_logs():
+    logs = []
+    logs.append(
+        models.Log(
+            logSubjectID=1,
+            projectID=1,
+            staffID=1,
+            phaseStatusID=1,
+            note="Test Note 1",
+            date=datetime(2016, 2, 2)
+        )
+    )
+    logs.append(
+        models.Log(
+            logSubjectID=1,
+            projectID=2,
+            staffID=1,
+            phaseStatusID=1,
+            note="Test Note 1",
+            date=datetime(2016, 2, 2)
+        )
+    )
+    logs.append(
+        models.Log(
+            logSubjectID=1,
+            projectID=3,
+            staffID=1,
+            phaseStatusID=1,
+            note="Test Note 1",
+            date=datetime(2016, 2, 2)
+        )
+    )
+    logs.append(
+        models.Log(
+            logSubjectID=1,
+            projectID=4,
+            staffID=1,
+            phaseStatusID=1,
+            note="Test Note 1",
+            date=datetime(2016, 2, 2)
+        )
+    )
+    logs.append(
+        models.Log(
+            logSubjectID=1,
+            projectID=5,
+            staffID=1,
+            phaseStatusID=1,
+            note="Test Note 1",
+            date=datetime(2016, 2, 2)
+        )
+    )
+    return logs
+
+
+def create_project_staff():
+    project_staff = []
+    project_staff.append(models.ProjectStaff(
+        staffRoleID=1,
+        projectID=1,
+        staffID=1,
+        datePledge=datetime(2016, 2, 2),
+        dateRevoked=datetime(2016, 2, 2),
+        contactID=1,
+        inactiveID=1
+    ))
+    project_staff.append(models.ProjectStaff(
+        staffRoleID=1,
+        projectID=1,
+        staffID=2,
+        datePledge=datetime(2016, 2, 2),
+        dateRevoked=datetime(2016, 2, 2),
+        contactID=1,
+        inactiveID=1
+    ))
+    return project_staff
+
+
+def create_staff_trainings():
+    trainings = []
+    trainings.append(
+        models.StaffTraining(
+            staffID=1,
+            humanSubjectTrainingID=1,
+            dateTaken=datetime(2016, 2, 2),
+            dateExpires=datetime(2016, 2, 2)
+        )
+    )
+    trainings.append(
+        models.StaffTraining(
+            staffID=1,
+            humanSubjectTrainingID=2,
+            dateTaken=datetime(2016, 2, 2),
+            dateExpires=datetime(2016, 2, 2)
+        )
+    )
+    trainings.append(
+        models.StaffTraining(
+            staffID=2,
+            humanSubjectTrainingID=1,
+            dateTaken=datetime(2016, 2, 2),
+            dateExpires=datetime(2016, 2, 2)
+        )
+    )
+    trainings.append(
+        models.StaffTraining(
+            staffID=2,
+            humanSubjectTrainingID=2,
+            dateTaken=datetime(2016, 2, 2),
+            dateExpires=datetime(2016, 2, 2)
+        )
+    )
+    return trainings
+
+
+def create_patients():
+    patients = []
+    patients.append(models.Patient(
+        patID="1",
+        ucrDistID=1,
+        UPDBID=1,
+        firstName="John",
+        lastName="Doe",
+        middleName="Joe",
+        maidenName="",
+        aliasFirstName="Johnny",
+        aliasLastName="Doey",
+        aliasMiddleName="Joey",
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
+        SSN="999999999",
+        sexID=2,
+        raceID=1,
+        ethnicityID=1,
+        vitalStatusID=1
+    ))
+    patients.append(models.Patient(
+        patID="2",
+        ucrDistID=1,
+        UPDBID=1,
+        firstName="John2",
+        lastName="Doe2",
+        middleName="Joe2",
+        maidenName="",
+        aliasFirstName="Johnny",
+        aliasLastName="Doey",
+        aliasMiddleName="Joey",
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
+        SSN="999999999",
+        sexID=2,
+        raceID=1,
+        ethnicityID=1,
+        vitalStatusID=1
+    ))
+    patients.append(models.Patient(
+        patID="3",
+        ucrDistID=1,
+        UPDBID=1,
+        firstName="John3",
+        lastName="Doe3",
+        middleName="Joe3",
+        maidenName="",
+        aliasFirstName="Johnny",
+        aliasLastName="Doey",
+        aliasMiddleName="Joey",
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
+        SSN="999999999",
+        sexID=2,
+        raceID=1,
+        ethnicityID=2,
+        vitalStatusID=1
+    ))
+    patients.append(models.Patient(
+        patID="4",
+        ucrDistID=1,
+        UPDBID=1,
+        firstName="Jane",
+        lastName="Doe",
+        middleName="Jill",
+        maidenName="",
+        aliasFirstName="J",
+        aliasLastName="Doey",
+        aliasMiddleName="Jill",
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
+        SSN="999999999",
+        sexID=1,
+        raceID=3,
+        ethnicityID=2,
+        vitalStatusID=1
+    ))
+    patients.append(models.Patient(
+        patID="4",
+        ucrDistID=1,
+        UPDBID=1,
+        firstName="Jane2",
+        lastName="Doe2",
+        middleName="Jill2",
+        maidenName="",
+        aliasFirstName="J",
+        aliasLastName="Doey",
+        aliasMiddleName="Jill",
+        dobDay=15,
+        dobMonth=2,
+        dobYear=1990,
+        SSN="999999999",
+        sexID=1,
+        raceID=2,
+        ethnicityID=2,
+        vitalStatusID=2
+    ))
+    return patients
+
+
+def create_patient_addresses():
+    addresses = []
+    addresses.append(
+        models.PatientAddress(
+        contactInfoSourceID=1,
+        participantID=1,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(
+        models.PatientAddress(
+        contactInfoSourceID=1,
+        participantID=2,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(
+        models.PatientAddress(
+        contactInfoSourceID=1,
+        participantID=3,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(
+        models.PatientAddress(
+        contactInfoSourceID=1,
+        participantID=4,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(
+        models.PatientAddress(
+        contactInfoSourceID=1,
+        participantID=5,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    return addresses
+
+
+def create_patient_emails():
+    emails = []
+    emails.append(
+        models.PatientEmail(
+            contactInfoSourceID=1,
+            participantID=1,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PatientEmail(
+            contactInfoSourceID=1,
+            participantID=2,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PatientEmail(
+            contactInfoSourceID=1,
+            participantID=3,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PatientEmail(
+            contactInfoSourceID=1,
+            participantID=4,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PatientEmail(
+            contactInfoSourceID=1,
+            participantID=5,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    return emails
+
+
+def create_patient_phones():
+    phones = []
+    phones.append(
+        models.PatientPhone(
+            contactInfoSourceID=1,
+            participantID=1,
+            contactInfoStatusID=1,
+            phoneTypeID=1,
+            phoneNumber="phone",
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PatientPhone(
+            contactInfoSourceID=1,
+            participantID=2,
+            contactInfoStatusID=1,
+            phoneTypeID=1,
+            phoneNumber="phone",
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PatientPhone(
+            contactInfoSourceID=1,
+            participantID=3,
+            contactInfoStatusID=1,
+            phoneTypeID=1,
+            phoneNumber="phone",
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PatientPhone(
+            contactInfoSourceID=1,
+            participantID=4,
+            contactInfoStatusID=1,
+            phoneTypeID=1,
+            phoneNumber="phone",
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PatientPhone(
+            contactInfoSourceID=1,
+            participantID=5,
+            contactInfoStatusID=1,
+            phoneTypeID=1,
+            phoneNumber="phone",
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    return phones
+
+
+def create_informants():
+    informants = []
+    informants.append(models.Informant(
+        participantID=1,
+        firstName="Joe",
+        lastName="Smith",
+        middleName="",
+        informantPrimary="informant_primary",
+        informantRelationship="Husband",
+        notes="notes"
+    ))
+    informants.append(models.Informant(
+        participantID=2,
+        firstName="Joe2",
+        lastName="Smith2",
+        middleName="",
+        informantPrimary="informant_primary",
+        informantRelationship="Husband",
+        notes="notes"
+    ))
+    informants.append(models.Informant(
+        participantID=3,
+        firstName="Joe3",
+        lastName="Smith3",
+        middleName="",
+        informantPrimary="informant_primary",
+        informantRelationship="Husband",
+        notes="notes"
+    ))
+    informants.append(models.Informant(
+        participantID=4,
+        firstName="Joe4",
+        lastName="Smith4",
+        middleName="",
+        informantPrimary="informant_primary",
+        informantRelationship="Husband",
+        notes="notes"
+    ))
+    informants.append(models.Informant(
+        participantID=5,
+        firstName="Joe5",
+        lastName="Smith5",
+        middleName="",
+        informantPrimary="informant_primary",
+        informantRelationship="Husband",
+        notes="notes"
+    ))
+    return informants
+
+
+def create_informant_addresses():
+    informant_addresses = []
+    informant_addresses.append(models.InformantAddress(
+        contactInfoSourceID=1,
+        informantID=1,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=2,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    informant_addresses.append(models.InformantAddress(
+        contactInfoSourceID=1,
+        informantID=2,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=2,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    informant_addresses.append(models.InformantAddress(
+        contactInfoSourceID=1,
+        informantID=3,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=2,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    informant_addresses.append(models.InformantAddress(
+        contactInfoSourceID=1,
+        informantID=4,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=2,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    informant_addresses.append(models.InformantAddress(
+        contactInfoSourceID=1,
+        informantID=5,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=2,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    return informant_addresses
+
+
+def create_informant_phones():
+    informant_phones = []
+    informant_phones.append(models.InformantPhone(
+        contactInfoSourceID=1,
+        informantID=1,
+        contactInfoStatusID=1,
+        phoneTypeID=1,
+        phoneNumber="123-456-999 ext 1",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    informant_phones.append(models.InformantPhone(
+        contactInfoSourceID=1,
+        informantID=2,
+        contactInfoStatusID=1,
+        phoneTypeID=1,
+        phoneNumber="123-456-999 ext 2",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    informant_phones.append(models.InformantPhone(
+        contactInfoSourceID=1,
+        informantID=3,
+        contactInfoStatusID=1,
+        phoneTypeID=1,
+        phoneNumber="123-456-999 ext 3",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    informant_phones.append(models.InformantPhone(
+        contactInfoSourceID=1,
+        informantID=4,
+        contactInfoStatusID=1,
+        phoneTypeID=1,
+        phoneNumber="123-456-999 ext 4",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    informant_phones.append(models.InformantPhone(
+        contactInfoSourceID=1,
+        informantID=5,
+        contactInfoStatusID=1,
+        phoneTypeID=1,
+        phoneNumber="123-456-999 ext 5",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    return informant_phones
+
+
+def create_ctcs():
+    ctcs = []
+    ctcs.append(models.CTC(
+        participantID=1,
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1998,
+        site="Site 2",
+        histology="histology",
+        behavior="behavior",
+        ctcSequence="sequence",
+        stage="stage",
+        dxAge=1,
+        dxStreet1="street1",
+        dxStreet2="street2",
+        dxCity="city",
+        dxStateID=1,
+        dxZip=99999,
+        dxCounty="county",
+        dnc="dnc",
+        dncReason="dnc_reason",
+        recordID="1"
+    ))
+    ctcs.append(models.CTC(
+        participantID=2,
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1998,
+        site="Site 2",
+        histology="histology",
+        behavior="behavior",
+        ctcSequence="sequence",
+        stage="stage",
+        dxAge=1,
+        dxStreet1="street1",
+        dxStreet2="street2",
+        dxCity="city",
+        dxStateID=1,
+        dxZip=99999,
+        dxCounty="county",
+        dnc="dnc",
+        dncReason="dnc_reason",
+        recordID="2"
+    ))
+    ctcs.append(models.CTC(
+        participantID=3,
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1998,
+        site="Site 2",
+        histology="histology",
+        behavior="behavior",
+        ctcSequence="sequence",
+        stage="stage",
+        dxAge=1,
+        dxStreet1="street1",
+        dxStreet2="street2",
+        dxCity="city",
+        dxStateID=1,
+        dxZip=99999,
+        dxCounty="county",
+        dnc="dnc",
+        dncReason="dnc_reason",
+        recordID="3"
+    ))
+    ctcs.append(models.CTC(
+        participantID=4,
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1998,
+        site="Site 2",
+        histology="histology",
+        behavior="behavior",
+        ctcSequence="sequence",
+        stage="stage",
+        dxAge=1,
+        dxStreet1="street1",
+        dxStreet2="street2",
+        dxCity="city",
+        dxStateID=1,
+        dxZip=99999,
+        dxCounty="county",
+        dnc="dnc",
+        dncReason="dnc_reason",
+        recordID="4"
+    ))
+    ctcs.append(models.CTC(
+        participantID=5,
+        dxDateDay=2,
+        dxDateMonth=7,
+        dxDateYear=1998,
+        site="Site 2",
+        histology="histology",
+        behavior="behavior",
+        ctcSequence="sequence",
+        stage="stage",
+        dxAge=1,
+        dxStreet1="street1",
+        dxStreet2="street2",
+        dxCity="city",
+        dxStateID=1,
+        dxZip=99999,
+        dxCounty="county",
+        dnc="dnc",
+        dncReason="dnc_reason",
+        recordID="5"
+    ))
+    return ctcs
+
+
+def create_project_patients():
+    pps = []
+    pps.append(
+        models.ProjectPatient(
+            projectID=1,
+            staffID=1,
+            ctcID=1,
+            currentAge=1,
+            batch=1,
+            siteGrp=1,
+            finalCodeID=1,
+            finalCodeDate=datetime(2016, 2, 2),
+            enrollmentDate=datetime(2016, 2, 2),
+            dateCoordSigned=datetime(2016, 2, 2),
+            importDate=datetime(2016, 2, 2),
+            finalCodeStaffID=1,
+            enrollmentStaffID=1,
+            dateCoordSignedStaffID=1,
+            abstractStatusID=1,
+            abstractStatusDate=datetime(2016, 2, 2),
+            abstractStatusStaffID=1,
+            sentToAbstractorDate=datetime(2016, 2, 2),
+            sentToAbstractorStaffID=1,
+            abstractedDate=datetime(2016, 2, 2),
+            abstractorStaffID=1,
+            researcherDate=datetime(2016, 2, 2),
+            researcherStaffID=1,
+            consentLink="link",
+            medRecordReleaseSigned=True,
+            medRecordReleaseLink="link",
+            medRecordReleaseStaffID=1,
+            medRecordReleaseDate=datetime(2016, 2, 2),
+            surveyToResearcher=datetime(2016, 2, 2),
+            surveyToResearcherStaffID=1,
+            qualityControl=True,
+        )
+    )
+    pps.append(
+        models.ProjectPatient(
+            projectID=2,
+            staffID=1,
+            ctcID=2,
+            currentAge=1,
+            batch=1,
+            siteGrp=1,
+            finalCodeID=1,
+            finalCodeDate=datetime(2016, 2, 2),
+            enrollmentDate=datetime(2016, 2, 2),
+            dateCoordSigned=datetime(2016, 2, 2),
+            importDate=datetime(2016, 2, 2),
+            finalCodeStaffID=1,
+            enrollmentStaffID=1,
+            dateCoordSignedStaffID=1,
+            abstractStatusID=1,
+            abstractStatusDate=datetime(2016, 2, 2),
+            abstractStatusStaffID=1,
+            sentToAbstractorDate=datetime(2016, 2, 2),
+            sentToAbstractorStaffID=1,
+            abstractedDate=datetime(2016, 2, 2),
+            abstractorStaffID=1,
+            researcherDate=datetime(2016, 2, 2),
+            researcherStaffID=1,
+            consentLink="link",
+            medRecordReleaseSigned=True,
+            medRecordReleaseLink="link",
+            medRecordReleaseStaffID=1,
+            medRecordReleaseDate=datetime(2016, 2, 2),
+            surveyToResearcher=datetime(2016, 2, 2),
+            surveyToResearcherStaffID=1,
+            qualityControl=True,
+        )
+    )
+    pps.append(
+        models.ProjectPatient(
+            projectID=3,
+            staffID=1,
+            ctcID=3,
+            currentAge=1,
+            batch=1,
+            siteGrp=1,
+            finalCodeID=1,
+            finalCodeDate=datetime(2016, 2, 2),
+            enrollmentDate=datetime(2016, 2, 2),
+            dateCoordSigned=datetime(2016, 2, 2),
+            importDate=datetime(2016, 2, 2),
+            finalCodeStaffID=1,
+            enrollmentStaffID=1,
+            dateCoordSignedStaffID=1,
+            abstractStatusID=1,
+            abstractStatusDate=datetime(2016, 2, 2),
+            abstractStatusStaffID=1,
+            sentToAbstractorDate=datetime(2016, 2, 2),
+            sentToAbstractorStaffID=1,
+            abstractedDate=datetime(2016, 2, 2),
+            abstractorStaffID=1,
+            researcherDate=datetime(2016, 2, 2),
+            researcherStaffID=1,
+            consentLink="link",
+            medRecordReleaseSigned=True,
+            medRecordReleaseLink="link",
+            medRecordReleaseStaffID=1,
+            medRecordReleaseDate=datetime(2016, 2, 2),
+            surveyToResearcher=datetime(2016, 2, 2),
+            surveyToResearcherStaffID=1,
+            qualityControl=True,
+        )
+    )
+    pps.append(
+        models.ProjectPatient(
+            projectID=4,
+            staffID=1,
+            ctcID=4,
+            currentAge=1,
+            batch=1,
+            siteGrp=1,
+            finalCodeID=1,
+            finalCodeDate=datetime(2016, 2, 2),
+            enrollmentDate=datetime(2016, 2, 2),
+            dateCoordSigned=datetime(2016, 2, 2),
+            importDate=datetime(2016, 2, 2),
+            finalCodeStaffID=1,
+            enrollmentStaffID=1,
+            dateCoordSignedStaffID=1,
+            abstractStatusID=1,
+            abstractStatusDate=datetime(2016, 2, 2),
+            abstractStatusStaffID=1,
+            sentToAbstractorDate=datetime(2016, 2, 2),
+            sentToAbstractorStaffID=1,
+            abstractedDate=datetime(2016, 2, 2),
+            abstractorStaffID=1,
+            researcherDate=datetime(2016, 2, 2),
+            researcherStaffID=1,
+            consentLink="link",
+            medRecordReleaseSigned=True,
+            medRecordReleaseLink="link",
+            medRecordReleaseStaffID=1,
+            medRecordReleaseDate=datetime(2016, 2, 2),
+            surveyToResearcher=datetime(2016, 2, 2),
+            surveyToResearcherStaffID=1,
+            qualityControl=True,
+        )
+    )
+    pps.append(
+        models.ProjectPatient(
+            projectID=5,
+            staffID=1,
+            ctcID=5,
+            currentAge=1,
+            batch=1,
+            siteGrp=1,
+            finalCodeID=1,
+            finalCodeDate=datetime(2016, 2, 2),
+            enrollmentDate=datetime(2016, 2, 2),
+            dateCoordSigned=datetime(2016, 2, 2),
+            importDate=datetime(2016, 2, 2),
+            finalCodeStaffID=1,
+            enrollmentStaffID=1,
+            dateCoordSignedStaffID=1,
+            abstractStatusID=1,
+            abstractStatusDate=datetime(2016, 2, 2),
+            abstractStatusStaffID=1,
+            sentToAbstractorDate=datetime(2016, 2, 2),
+            sentToAbstractorStaffID=1,
+            abstractedDate=datetime(2016, 2, 2),
+            abstractorStaffID=1,
+            researcherDate=datetime(2016, 2, 2),
+            researcherStaffID=1,
+            consentLink="link",
+            medRecordReleaseSigned=True,
+            medRecordReleaseLink="link",
+            medRecordReleaseStaffID=1,
+            medRecordReleaseDate=datetime(2016, 2, 2),
+            surveyToResearcher=datetime(2016, 2, 2),
+            surveyToResearcherStaffID=1,
+            qualityControl=True,
+        )
+    )
+    return pps
+
+
+def create_tracings():
+    tracings = []
+    tracings.append(models.Tracing(
+        tracingSourceID=1,
+        participantID=1,
+        date=datetime(2016, 2, 2),
+        staffID=1,
+        notes="notes"
+    ))
+    tracings.append(models.Tracing(
+        tracingSourceID=1,
+        participantID=2,
+        date=datetime(2016, 2, 2),
+        staffID=1,
+        notes="notes"
+    ))
+    tracings.append(models.Tracing(
+        tracingSourceID=1,
+        participantID=3,
+        date=datetime(2016, 2, 2),
+        staffID=1,
+        notes="notes"
+    ))
+    tracings.append(models.Tracing(
+        tracingSourceID=1,
+        participantID=4,
+        date=datetime(2016, 2, 2),
+        staffID=1,
+        notes="notes"
+    ))
+    tracings.append(models.Tracing(
+        tracingSourceID=1,
+        participantID=5,
+        date=datetime(2016, 2, 2),
+        staffID=1,
+        notes="notes"
+    ))
+    return tracings
+
+
+def create_physicians():
+    physicians = []
+    physicians.append(
+        models.Physician(
+            firstName="Bill",
+            lastName="Walden",
+            middleName="",
+            credentials="MD",
+            specialty="specialty",
+            aliasFirstName="alias_fname",
+            aliasLastName="alias_lname",
+            aliasMiddleName="alias_middle_name",
+            physicianStatusID=1,
+            physicianStatusDate=datetime(2016, 2, 2),
+        )
+    )
+    physicians.append(
+        models.Physician(
+            firstName="Bob",
+            lastName="Smith",
+            middleName="",
+            credentials="MD",
+            specialty="specialty",
+            aliasFirstName="alias_fname",
+            aliasLastName="alias_lname",
+            aliasMiddleName="alias_middle_name",
+            physicianStatusID=1,
+            physicianStatusDate=datetime(2016, 2, 2),
+        )
+    )
+    physicians.append(
+        models.Physician(
+            firstName="Jill",
+            lastName="Walden",
+            middleName="",
+            credentials="MD",
+            specialty="specialty",
+            aliasFirstName="alias_fname",
+            aliasLastName="alias_lname",
+            aliasMiddleName="alias_middle_name",
+            physicianStatusID=1,
+            physicianStatusDate=datetime(2016, 2, 2),
+        )
+    )
+    return physicians
+
+
+def create_physician_addresses():
+    addresses = []
+    addresses.append(models.PhysicianAddress(
+        contactInfoSourceID=2,
+        physicianID=1,
+        contactInfoStatusID=2,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(models.PhysicianAddress(
+        contactInfoSourceID=2,
+        physicianID=2,
+        contactInfoStatusID=2,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(models.PhysicianAddress(
+        contactInfoSourceID=2,
+        physicianID=3,
+        contactInfoStatusID=2,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    return addresses
+
+
+def create_physician_emails():
+    emails = []
+    emails.append(
+        models.PhysicianEmail(
+            contactInfoSourceID=1,
+            physicianID=1,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PhysicianEmail(
+            contactInfoSourceID=1,
+            physicianID=2,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    emails.append(
+        models.PhysicianEmail(
+            contactInfoSourceID=1,
+            physicianID=3,
+            contactInfoStatusID=1,
+            email="email@gmail.com",
+            emailStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    return emails
+
+
+def create_physician_phones():
+    phones = []
+    phones.append(
+        models.PhysicianPhone(
+            contactInfoSourceID=1,
+            physicianID=1,
+            contactInfoStatusID=1,
+            phoneNumber="999-999-999",
+            phoneTypeID=1,
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PhysicianPhone(
+            contactInfoSourceID=1,
+            physicianID=2,
+            contactInfoStatusID=1,
+            phoneNumber="999-999-999",
+            phoneTypeID=1,
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    phones.append(
+        models.PhysicianPhone(
+            contactInfoSourceID=1,
+            physicianID=2,
+            contactInfoStatusID=1,
+            phoneNumber="999-999-999",
+            phoneTypeID=1,
+            phoneStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    return phones
+
+
+def create_physician_to_ctcs():
+    ptcs = []
+    ptcs.append(
+        models.PhysicianToCTC(
+            physicianID=1,
+            ctcID=1
+        )
+    )
+    ptcs.append(
+        models.PhysicianToCTC(
+            physicianID=2,
+            ctcID=2
+        )
+    )
+    ptcs.append(
+        models.PhysicianToCTC(
+            physicianID=3,
+            ctcID=3
+        )
+    )
+    ptcs.append(
+        models.PhysicianToCTC(
+            physicianID=1,
+            ctcID=4
+        )
+    )
+    ptcs.append(
+        models.PhysicianToCTC(
+            physicianID=1,
+            ctcID=5
+        )
+    )
+    return ptcs
+
+
+def create_facilities():
+    facilities = []
+    facilities.append(models.Facility(
+        facilityName="Facility 1",
+        contactFirstName="fname",
+        contactLastName="lname",
+        facilityStatus=1,
+        facilityStatusDate=datetime(2016, 2, 2),
+        contact2FirstName="fname",
+        contact2LastName="lname"
+    ))
+    facilities.append(models.Facility(
+        facilityName="Facility 2",
+        contactFirstName="fname",
+        contactLastName="lname",
+        facilityStatus=1,
+        facilityStatusDate=datetime(2016, 2, 2),
+        contact2FirstName="fname",
+        contact2LastName="lname"
+    ))
+    return facilities
+
+
+def create_faciliy_addresses():
+    addresses = []
+    addresses.append(models.FacilityAddress(
+        contactInfoSourceID=1,
+        facilityID=1,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    addresses.append(models.FacilityAddress(
+        contactInfoSourceID=1,
+        facilityID=2,
+        contactInfoStatusID=1,
+        street="street",
+        street2="street2",
+        city="city",
+        stateID=1,
+        zip="12345",
+        addressStatusDate=datetime(2016, 2, 2),
+    ))
+    return addresses
+
+
+def create_facility_phones():
+    phones = []
+    phones.append(models.FacilityPhone(
+        contactInfoSourceID=1,
+        facilityID=1,
+        contactInfoStatusID=1,
+        clinicName="clinic",
+        phoneTypeID=1,
+        phoneNumber="phone",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    phones.append(models.FacilityPhone(
+        contactInfoSourceID=1,
+        facilityID=2,
+        contactInfoStatusID=1,
+        clinicName="clinic",
+        phoneTypeID=1,
+        phoneNumber="phone",
+        phoneStatusDate=datetime(2016, 2, 2)
+    ))
+    return phones
+
+
+def create_patient_project_status_types():
+    status_types = []
+    status_types.append(models.PatientProjectStatusLUT(
+        statusDescription="Status 1"
+    ))
+    status_types.append(models.PatientProjectStatusLUT(
+        statusDescription="Status 2"
+    ))
+    status_types.append(models.PatientProjectStatusLUT(
+        statusDescription="Status 3"
+    ))
+    return status_types
+
+
+def create_patient_project_statuses():
+    statuses = []
+    statuses.append(
+        models.PatientProjectStatus(
+            patientProjectStatusTypeID=1,
+            participantID=1,
+        )
+    )
+    statuses.append(
+        models.PatientProjectStatus(
+            patientProjectStatusTypeID=1,
+            participantID=2,
+        )
+    )
+    statuses.append(
+        models.PatientProjectStatus(
+            patientProjectStatusTypeID=1,
+            participantID=3,
+        )
+    )
+    statuses.append(
+        models.PatientProjectStatus(
+            patientProjectStatusTypeID=1,
+            participantID=4,
+        )
+    )
+    statuses.append(
+        models.PatientProjectStatus(
+            patientProjectStatusTypeID=1,
+            participantID=5,
+        )
+    )
+    return statuses
+
+
+def create_physician_facilities():
+    pfs = []
+    pfs.append(
+        models.PhysicianFacility(
+            facilityID=1,
+            physicianID=1,
+            physFacilityStatusID=1,
+            physFacilityStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    pfs.append(
+        models.PhysicianFacility(
+            facilityID=2,
+            physicianID=2,
+            physFacilityStatusID=1,
+            physFacilityStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    pfs.append(
+        models.PhysicianFacility(
+            facilityID=2,
+            physicianID=3,
+            physFacilityStatusID=1,
+            physFacilityStatusDate=datetime(2016, 2, 2)
+        )
+    )
+    return pfs
+
+
+def create_ctc_to_facilities():
+    cfs = []
+    cfs.append(
+        models.CTCFacility(
+            ctcID=1,
+            facilityID=1,
+            coc=123
+        )
+    )
+    cfs.append(
+        models.CTCFacility(
+            ctcID=2,
+            facilityID=2,
+            coc=123
+        )
+    )
+    cfs.append(
+        models.CTCFacility(
+            ctcID=3,
+            facilityID=2,
+            coc=123
+        )
+    )
+    cfs.append(
+        models.CTCFacility(
+            ctcID=4,
+            facilityID=1,
+            coc=123
+        )
+    )
+    cfs.append(
+        models.CTCFacility(
+            ctcID=5,
+            facilityID=2,
+            coc=123
+        )
+    )
+    return cfs
+
+
+def create_pp_contacts():
+    contacts = []
+    for i in range(1,6):
+        contacts.append(
+            models.Contact(
+                contactTypeLUTID=1,
+                participantID=i,
+                staffID=1,
+                informantID=1,
+                informantPhoneID=1,
+                description="desc",
+                contactDate=datetime(2016, 2, 2),
+                initials="atp",
+                notes="notes"
+        ))
+        contacts.append(models.Contact(
+            contactTypeLUTID=2,
+            participantID=i,
+            staffID=1,
+            facilityID=1,
+            facilityPhoneID=1,
+            description="desc",
+            contactDate=datetime(2016, 2, 2),
+            initials="atp",
+            notes="notes"
+        ))
+        contacts.append(models.Contact(
+            contactTypeLUTID=3,
+            participantID=i,
+            staffID=1,
+            physicianID=1,
+            physicianPhoneID=1,
+            description="desc",
+            contactDate=datetime(2016, 2, 2),
+            initials="atp",
+            notes="notes"
+        ))
+        contacts.append(models.Contact(
+            contactTypeLUTID=4,
+            participantID=i,
+            staffID=1,
+            patientPhoneID=1,
+            description="desc",
+            contactDate=datetime(2016, 2, 2),
+            initials="atp",
+            notes="notes"
+        ))
+    return contacts
+
+
+def create_incentives():
+    incentives = []
+    incentives.append(
+        models.Incentive(
+            participantID=1,
+            incentiveDescription="desc",
+            barcode="123456789",
+            dateGiven=datetime(2016, 4, 3)
+        )
+    )
+    incentives.append(
+        models.Incentive(
+            participantID=2,
+            incentiveDescription="desc",
+            barcode="123456788",
+            dateGiven=datetime(2016, 4, 3)
+        )
+    )
+    incentives.append(
+        models.Incentive(
+            participantID=3,
+            incentiveDescription="desc",
+            barcode="123456787",
+            dateGiven=datetime(2016, 4, 3)
+        )
+    )
+    incentives.append(
+        models.Incentive(
+            participantID=4,
+            incentiveDescription="desc",
+            barcode="123456786",
+            dateGiven=datetime(2016, 4, 3)
+        )
+    )
+    incentives.append(
+        models.Incentive(
+            participantID=5,
+            incentiveDescription="desc",
+            barcode="123456785",
+            dateGiven=datetime(2016, 4, 3)
+        )
+    )
+    return incentives
 
 
 def populate_db():
@@ -1342,616 +3760,43 @@ def populate_db():
     ucrRoles = create_ucr_roles()
     giftCards = create_gift_cards()
 
-    project1 = models.Project(
-        projectTypeID=1,
-        irbHolderID=1,
-        projectTitle="Test Project",
-        shortTitle="Test Project",
-        projectSummary="Summary",
-        sop="sop",
-        ucrProposal="ucr_proposal",
-        budgetDoc="budget_doc",
-        ucrFee="no",
-        ucrNoFee="yes",
-        previousShortTitle="t short",
-        dateAdded=datetime(2016, 2, 2),
-        finalRecruitmentReport="report",
-        ongoingContact=True,
-        activityStartDate=datetime(2016, 2, 2),
-        activityEndDate=datetime(2016, 2, 2))
+    projects = create_projects()
+    budgets = create_budgets()
+    projectReviewCommittees = create_project_review_committees()
+    ucr_reports = create_ucr_reports()
+    arc_reviews = create_arc_reviews()
+    fundings = create_fundings()
+    staff = create_staff()
+    proj_statuses = create_project_statuses2()
+    pre_applications = create_pre_applications()
+    logs = create_logs()
+    project_staff = create_project_staff()
+    staff_trainings = create_staff_trainings()
+    patients = create_patients()
+    patient_addresses = create_patient_addresses()
+    patient_emails = create_patient_emails()
+    patient_phones = create_patient_phones()
+    informants = create_informants()
+    informant_addresses = create_informant_addresses()
+    informant_phones = create_informant_phones()
+    ctcs = create_ctcs()
+    project_patients = create_project_patients()
+    tracings = create_tracings()
+    physicians = create_physicians()
+    physician_addresses = create_physician_addresses()
+    physician_emails = create_physician_emails()
+    physician_phones = create_physician_phones()
+    physician_to_ctcs = create_physician_to_ctcs()
+    facilities = create_facilities()
+    facility_addresses = create_faciliy_addresses()
+    facility_phones = create_facility_phones()
+    patient_project_status_types = create_patient_project_status_types()
+    patient_project_statuses = create_patient_project_statuses()
+    physician_facilities = create_physician_facilities()
+    ctc_to_facilities = create_ctc_to_facilities()
+    pp_contacts = create_pp_contacts()
+    incentives = create_incentives()
 
-    project2 = models.Project(
-        projectTypeID=1,
-        irbHolderID=1,
-        projectTitle="Test Project",
-        shortTitle="Test Project",
-        projectSummary="Summary",
-        sop="sop",
-        ucrProposal="ucr_proposal",
-        budgetDoc="budget_doc",
-        ucrFee="no",
-        ucrNoFee="yes",
-        previousShortTitle="t short",
-        dateAdded=datetime(2016, 2, 2),
-        finalRecruitmentReport="report",
-        ongoingContact=True,
-        activityStartDate=datetime(2016, 2, 2),
-        activityEndDate=datetime(2016, 2, 2))
-
-    budget1 = models.Budget(
-        projectID=1,
-        numPeriods=1,
-        periodStart=datetime(2016, 2, 2),
-        periodEnd=datetime(2016, 2, 2),
-        periodTotal=1.23,
-        periodComment="comment")
-
-    rc = models.ReviewCommittee(
-        projectID=1,
-        reviewCommitteeStatusID=1,
-        reviewCommitteeLUTID=1,
-        reviewCommitteeNumber="1",
-        dateInitialReview=datetime(2016, 2, 2),
-        dateExpires=datetime(2016, 2, 2),
-        rcNote="rc_note",
-        rcProtocol="rc_proto",
-        rcApproval="rc_approval")
-
-    ucr = models.UCRReport(
-        projectID=1,
-        reportTypeID=1,
-        reportSubmitted=datetime(2016, 2, 2),
-        reportDue=datetime(2016, 2, 2),
-        reportDoc="doc"
-    )
-    arcReview = models.ArcReview(
-        projectID=1,
-        reviewType=1,
-        dateSentToReviewer=datetime(2016, 2, 2),
-        reviewer1=1,
-        reviewer1Rec=1,
-        reviewer1SigDate=datetime(2016, 2, 2),
-        reviewer1Comments="test comment",
-        reviewer2=2,
-        reviewer2Rec=2,
-        reviewer2SigDate=datetime(2016, 2, 2),
-        reviewer2Comments="test comment",
-        research=1,
-        linkage=False,
-        contact=True,
-        engaged=True,
-        nonPublicData=True)
-
-    funding = models.Funding(
-        grantStatusID=1,
-        projectID=1,
-        fundingSourceID=1,
-        primaryFundingSource="pfs",
-        secondaryFundingSource="sfs",
-        fundingNumber="number",
-        grantTitle="title",
-        dateStatus=datetime(2016, 2, 2),
-        grantPi=1,
-        primaryChartfield="pcf",
-        secondaryChartfield="scf"
-    )
-
-    staff = models.Staff(
-        userID=1,
-        firstName="Aaron",
-        lastName="Thomas",
-        middleName="Pulver",
-        email="aaron.pulver@utah.edu",
-        phoneNumber="phone",
-        phoneComment="phoneComment",
-        institution="institution",
-        department="department",
-        position="position",
-        credentials="credentials",
-        street="street",
-        city="city",
-        stateID=1,
-        ucrRoleID=1
-    )
-    staff2 = models.Staff(
-        userID=2,
-        firstName="Phoebe",
-        lastName="",
-        middleName="McNeally",
-        email="email",
-        phoneNumber="phone",
-        phoneComment="phoneComment",
-        institution="institution",
-        department="department",
-        position="position",
-        credentials="credentials",
-        street="street",
-        city="city",
-        stateID=2,
-        ucrRoleID=1
-    )
-
-    projStatus = models.ProjectStatus(
-        projectStatusTypeID=1,
-        projectID=1,
-        staffID=1,
-        statusDate=datetime(2016, 2, 2),
-        statusNotes="notes"
-    )
-
-    preApp = models.PreApplication(
-        projectID=1,
-        piFirstName="pi_fname",
-        piLastName="pi_lname",
-        piEmail="pi_email",
-        piPhone="pi_phone",
-        contactFirstName="contact_fname",
-        contactLastName="contact_lname",
-        contactPhone="contact_phone",
-        contactEmail="contact_email",
-        institution="institution",
-        institution2="institution2",
-        uid="uid",
-        udoh=1,
-        projectTitle="project_title",
-        purpose="purpose",
-        irb0=True,
-        irb1=True,
-        irb2=True,
-        irb3=True,
-        irb4=True,
-        otherIrb="other_irb",
-        updb=True,
-        ptContact=True,
-        startDate=datetime(2016, 2, 2),
-        link=True,
-        deliveryDate=datetime(2016, 2, 2),
-        description="description"
-    )
-    log = models.Log(
-        logSubjectID=1,
-        projectID=1,
-        staffID=1,
-        phaseStatusID=1,
-        note="note",
-        date=datetime(2016, 2, 2)
-    )
-    projectStaff = models.ProjectStaff(
-        staffRoleID=1,
-        projectID=1,
-        staffID=1,
-        datePledge=datetime(2016, 2, 2),
-        dateRevoked=datetime(2016, 2, 2),
-        contactID=1,
-        inactiveID=1
-    )
-    staffTraining = models.StaffTraining(
-        staffID=1,
-        humanSubjectTrainingID=1,
-        dateTaken=datetime(2016, 2, 2),
-        dateExpires=datetime(2016, 2, 2)
-    )
-    patient = models.Patient(
-        patID="1",
-        ucrDistID=1,
-        UPDBID=1,
-        firstName="fname",
-        lastName="lname",
-        middleName="mname",
-        maidenName="maiden_name",
-        aliasFirstName="alias_fname",
-        aliasLastName="alias_lname",
-        aliasMiddleName="alias_middle",
-        dobDay=15,
-        dobMonth=2,
-        dobYear=1990,
-        SSN="999999999",
-        sexID=2,
-        raceID=1,
-        ethnicityID=1,
-        vitalStatusID=1
-    )
-    patient2 = models.Patient(
-        patID="1",
-        ucrDistID=1,
-        UPDBID=1,
-        firstName="fname2",
-        lastName="lname2",
-        middleName="mname2",
-        maidenName="maiden_name",
-        aliasFirstName="alias_fname",
-        aliasLastName="alias_lname",
-        aliasMiddleName="alias_middle",
-        dobDay=26,
-        dobMonth=4,
-        dobYear=1970,
-        SSN="999999999",
-        sexID=1,
-        raceID=2,
-        ethnicityID=1,
-        vitalStatusID=2
-    )
-
-    patientAddress = models.PatientAddress(
-        contactInfoSourceID=1,
-        participantID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID=1,
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
-    )
-
-    patientEmail = models.PatientEmail(
-        contactInfoSourceID=1,
-        participantID=1,
-        contactInfoStatusID=1,
-        email="email",
-        emailStatusDate=datetime(2016, 2, 2)
-    )
-    patientPhone = models.PatientPhone(
-        contactInfoSourceID=1,
-        participantID=1,
-        contactInfoStatusID=1,
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    patientPhone2 = models.PatientPhone(
-        contactInfoSourceID=1,
-        participantID=1,
-        contactInfoStatusID=1,
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    informant1 = models.Informant(
-        participantID=1,
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
-        informantPrimary="informant_primary",
-        informantRelationship="informant_relationship",
-        notes="notes"
-    )
-    informant2 = models.Informant(
-        participantID=1,
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
-        informantPrimary="informant_primary",
-        informantRelationship="informant_relationship",
-        notes="notes"
-    )
-    informantAddress = models.InformantAddress(
-        contactInfoSourceID=1,
-        informantID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID=2,
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
-    )
-    informantPhone = models.InformantPhone(
-        contactInfoSourceID=1,
-        informantID=1,
-        contactInfoStatusID=1,
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    informantPhone2 = models.InformantPhone(
-        contactInfoSourceID=1,
-        informantID=1,
-        contactInfoStatusID=1,
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    ctc1 = models.CTC(
-        participantID=1,
-        dxDateDay=2,
-        dxDateMonth=7,
-        dxDateYear=1988,
-        site="Site 2",
-        histology="histology",
-        behavior="behavior",
-        ctcSequence="sequence",
-        stage="stage",
-        dxAge=1,
-        dxStreet1="street1",
-        dxStreet2="street2",
-        dxCity="city",
-        dxStateID=1,
-        dxZip=99999,
-        dxCounty="county",
-        dnc="dnc",
-        dncReason="dnc_reason",
-        recordID="abc321"
-    )
-    ctc2 = models.CTC(
-        participantID=1,
-        dxDateDay=3,
-        dxDateMonth=10,
-        dxDateYear=1958,
-        site="Site 1",
-        histology="histology",
-        behavior="behavior",
-        ctcSequence="sequence",
-        stage="stage",
-        dxAge=1,
-        dxStreet1="street1",
-        dxStreet2="street2",
-        dxCity="city",
-        dxStateID=2,
-        dxZip=99999,
-        dxCounty="county",
-        dnc="dnc",
-        dncReason="dnc_reason",
-        recordID="abc123"
-    )
-    projectPatient = models.ProjectPatient(
-        projectID=1,
-        staffID=1,
-        ctcID=1,
-        currentAge=1,
-        batch=1,
-        siteGrp=1,
-        finalCodeID=1,
-        finalCodeDate=datetime(2016, 2, 2),
-        enrollmentDate=datetime(2016, 2, 2),
-        dateCoordSigned=datetime(2016, 2, 2),
-        importDate=datetime(2016, 2, 2),
-        finalCodeStaffID=1,
-        enrollmentStaffID=1,
-        dateCoordSignedStaffID=1,
-        abstractStatusID=1,
-        abstractStatusDate=datetime(2016, 2, 2),
-        abstractStatusStaffID=1,
-        sentToAbstractorDate=datetime(2016, 2, 2),
-        sentToAbstractorStaffID=1,
-        abstractedDate=datetime(2016, 2, 2),
-        abstractorStaffID=1,
-        researcherDate=datetime(2016, 2, 2),
-        researcherStaffID=1,
-        consentLink="link",
-        medRecordReleaseSigned=True,
-        medRecordReleaseLink="link",
-        medRecordReleaseStaffID=1,
-        medRecordReleaseDate=datetime(2016, 2, 2),
-        surveyToResearcher=datetime(2016, 2, 2),
-        surveyToResearcherStaffID=1,
-        qualityControl=True,
-    )
-
-    projectPatient2 = models.ProjectPatient(
-        projectID=1,
-        staffID=1,
-        ctcID=1,
-        currentAge=1,
-        batch=1,
-        siteGrp=1,
-        finalCodeID=1,
-        finalCodeDate=datetime(2016, 2, 2),
-        enrollmentDate=datetime(2016, 2, 2),
-        dateCoordSigned=datetime(2016, 2, 2),
-        importDate=datetime(2016, 2, 2),
-        finalCodeStaffID=1,
-        enrollmentStaffID=1,
-        dateCoordSignedStaffID=1,
-        abstractStatusID=1,
-        abstractStatusDate=datetime(2016, 2, 2),
-        abstractStatusStaffID=1,
-        sentToAbstractorDate=datetime(2016, 2, 2),
-        sentToAbstractorStaffID=1,
-        abstractedDate=datetime(2016, 2, 2),
-        abstractorStaffID=1,
-        researcherDate=datetime(2016, 2, 2),
-        researcherStaffID=1,
-        consentLink="link",
-        medRecordReleaseSigned=True,
-        medRecordReleaseLink="link",
-        medRecordReleaseStaffID=1,
-        medRecordReleaseDate=datetime(2016, 2, 2),
-        surveyToResearcher=datetime(2016, 2, 2),
-        surveyToResearcherStaffID=1,
-        qualityControl=False
-    )
-
-    tracing = models.Tracing(
-        tracingSourceID=1,
-        participantID=1,
-        date=datetime(2016, 2, 2),
-        staffID=1,
-        notes="notes"
-    )
-    physician = models.Physician(
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
-        credentials="credentials",
-        specialty="specialty",
-        aliasFirstName="alias_fname",
-        aliasLastName="alias_lname",
-        aliasMiddleName="alias_middle_name",
-        physicianStatusID=1,
-        physicianStatusDate=datetime(2016, 2, 2),
-    )
-
-    physician2 = models.Physician(
-        firstName="fname",
-        lastName="lname",
-        middleName="middle_name",
-        credentials="credentials",
-        specialty="specialty",
-        aliasFirstName="alias_fname",
-        aliasLastName="alias_lname",
-        aliasMiddleName="alias_middle_name",
-        physicianStatusID=1,
-        physicianStatusDate=datetime(2016, 2, 2),
-    )
-    physicianAddress = models.PhysicianAddress(
-        contactInfoSourceID=1,
-        physicianID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID=1,
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
-    )
-
-    physicianEmail = models.PhysicianEmail(
-        contactInfoSourceID=1,
-        physicianID=1,
-        contactInfoStatusID=1,
-        email="email",
-        emailStatusDate=datetime(2016, 2, 2)
-    )
-
-    physicianPhone = models.PhysicianPhone(
-        contactInfoSourceID=1,
-        physicianID=1,
-        contactInfoStatusID=1,
-        phoneNumber="phone",
-        phoneTypeID=1,
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    physicianPhone2 = models.PhysicianPhone(
-        contactInfoSourceID=1,
-        physicianID=1,
-        contactInfoStatusID=1,
-        phoneNumber="phone",
-        phoneTypeID=1,
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    physicianToCTC = models.PhysicianToCTC(
-        physicianID=1,
-        ctcID=1
-    )
-    facility1 = models.Facility(
-        facilityName="name",
-        contactFirstName="fname",
-        contactLastName="lname",
-        facilityStatus=1,
-        facilityStatusDate=datetime(2016, 2, 2),
-        contact2FirstName="fname",
-        contact2LastName="lname"
-    )
-    facility2 = models.Facility(
-        facilityName="name",
-        contactFirstName="fname",
-        contactLastName="lname",
-        facilityStatus=1,
-        facilityStatusDate=datetime(2016, 2, 2),
-        contact2FirstName="fname",
-        contact2LastName="lname"
-    )
-    facilityAddress = models.FacilityAddress(
-        contactInfoSourceID=1,
-        facilityID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID=1,
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
-    )
-
-    facilityPhone = models.FacilityPhone(
-        contactInfoSourceID=1,
-        facilityID=1,
-        contactInfoStatusID=1,
-        clinicName="clinic",
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    facilityPhone2 = models.FacilityPhone(
-        contactInfoSourceID=1,
-        facilityID=1,
-        contactInfoStatusID=1,
-        clinicName="clinic",
-        phoneTypeID=1,
-        phoneNumber="phone2",
-        phoneStatusDate=datetime(2016, 2, 2)
-    )
-    patientProjectStatusType1 = models.PatientProjectStatusLUT(
-        statusDescription="desc"
-    )
-    patientProjectStatusType2 = models.PatientProjectStatusLUT(
-        statusDescription="desc"
-    )
-    patientProjectStatus = models.PatientProjectStatus(
-        patientProjectStatusTypeID=1,
-        participantID=1,
-    )
-    physicianFacility = models.PhysicianFacility(
-        facilityID=1,
-        physicianID=1,
-        physFacilityStatusID=1,
-        physFacilityStatusDate=datetime(2016, 2, 2)
-    )
-    contact = models.Contact(
-        contactTypeLUTID=1,
-        participantID=1,
-        staffID=1,
-        informantID=1,
-        informantPhoneID=1,
-        description="desc",
-        contactDate=datetime(2016, 2, 2),
-        initials="atp",
-        notes="notes"
-    )
-    contact2 = models.Contact(
-        contactTypeLUTID=1,
-        participantID=1,
-        staffID=1,
-        facilityID=1,
-        facilityPhoneID=1,
-        description="desc",
-        contactDate=datetime(2016, 2, 2),
-        initials="atp",
-        notes="notes"
-    )
-    contact3 = models.Contact(
-        contactTypeLUTID=1,
-        participantID=1,
-        staffID=1,
-        physicianID=1,
-        physicianPhoneID=1,
-        description="desc",
-        contactDate=datetime(2016, 2, 2),
-        initials="atp",
-        notes="notes"
-    )
-    contact4 = models.Contact(
-        contactTypeLUTID=1,
-        participantID=1,
-        staffID=1,
-        patientPhoneID=1,
-        description="desc",
-        contactDate=datetime(2016, 2, 2),
-        initials="atp",
-        notes="notes"
-    )
-    ctcFacility = models.CTCFacility(
-        ctcID=1,
-        facilityID=1,
-        coc=123
-    )
-    incentive = models.Incentive(
-        participantID=1,
-        incentiveDescription="desc",
-        barcode="123456789",
-        dateGiven=datetime(2016, 4, 3)
-    )
     db.session.add_all(roles)
     db.session.add_all(users)
     db.session.add_all(states)
@@ -1984,58 +3829,43 @@ def populate_db():
     db.session.add_all(contactTypes)
     db.session.add_all(ucrRoles)
     db.session.add_all(giftCards)
-    db.session.add(staff)
-    db.session.add(staff2)
-    db.session.add(project1)
-    db.session.add(project2)
-    db.session.add(funding)
-    db.session.add(budget1)
-    db.session.add(rc)
-    db.session.add(ucr)
-    db.session.add(arcReview)
-    db.session.add(preApp)
-    db.session.add(log)
-    db.session.add(projectStaff)
-    db.session.add(staffTraining)
-    db.session.add(patient)
-    db.session.add(patient2)
-    db.session.add(patientAddress)
-    db.session.add(patientEmail)
-    db.session.add(patientPhone)
-    db.session.add(patientPhone2)
-    db.session.add(informant1)
-    db.session.add(informant2)
-    db.session.add(informantAddress)
-    db.session.add(informantPhone)
-    db.session.add(informantPhone2)
-    db.session.add(ctc1)
-    db.session.add(ctc2)
-    db.session.add(projectPatient)
-    db.session.add(projectPatient2)
-    db.session.add(projStatus)
-    db.session.add(tracing)
-    db.session.add(physician)
-    db.session.add(physician2)
-    db.session.add(physicianAddress)
-    db.session.add(physicianEmail)
-    db.session.add(physicianPhone)
-    db.session.add(physicianPhone2)
-    db.session.add(physicianToCTC)
-    db.session.add(facility1)
-    db.session.add(facility2)
-    db.session.add(facilityAddress)
-    db.session.add(facilityPhone)
-    db.session.add(facilityPhone2)
-    db.session.add(patientProjectStatusType1)
-    db.session.add(patientProjectStatusType2)
-    db.session.add(patientProjectStatus)
-    db.session.add(physicianFacility)
-    db.session.add(contact)
-    db.session.add(contact2)
-    db.session.add(contact3)
-    db.session.add(contact4)
-    db.session.add(ctcFacility)
-    db.session.add(incentive)
+
+    db.session.add_all(projects)
+    db.session.add_all(budgets)
+    db.session.add_all(projectReviewCommittees)
+    db.session.add_all(ucr_reports)
+    db.session.add_all(arc_reviews)
+    db.session.add_all(fundings)
+    db.session.add_all(staff)
+    db.session.add_all(proj_statuses)
+    db.session.add_all(pre_applications)
+    db.session.add_all(logs)
+    db.session.add_all(project_staff)
+    db.session.add_all(staff_trainings)
+    db.session.add_all(patients)
+    db.session.add_all(patient_addresses)
+    db.session.add_all(patient_emails)
+    db.session.add_all(patient_phones)
+    db.session.add_all(informants)
+    db.session.add_all(informant_addresses)
+    db.session.add_all(informant_phones)
+    db.session.add_all(ctcs)
+    db.session.add_all(project_patients)
+    db.session.add_all(tracings)
+    db.session.add_all(physicians)
+    db.session.add_all(physician_addresses)
+    db.session.add_all(physician_emails)
+    db.session.add_all(physician_phones)
+    db.session.add_all(physician_to_ctcs)
+    db.session.add_all(facilities)
+    db.session.add_all(facility_addresses)
+    db.session.add_all(facility_phones)
+    db.session.add_all(patient_project_status_types)
+    db.session.add_all(patient_project_statuses)
+    db.session.add_all(physician_facilities)
+    db.session.add_all(ctc_to_facilities)
+    db.session.add_all(pp_contacts)
+    db.session.add_all(incentives)
     db.session.commit()
 
 
