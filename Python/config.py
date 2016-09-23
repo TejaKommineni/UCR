@@ -40,7 +40,7 @@ SECRET_KEY = "secret"
 # Set this to not use CAS single sign on server
 DEV_MODE = False
 
-CAS_SERVER = "https://test.go.utah.edu"
+CAS_SERVER = "https://go.utah.edu"
 CAS_AFTER_LOGIN = "website.root"
 CAS_LOGIN_ROUTE = "/cas/login"
 SESSION_TYPE = "filesystem"
