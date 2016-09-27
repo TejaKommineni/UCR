@@ -1,6 +1,11 @@
 $(document).ready(function() {
-    hashHandler();
-    alertHandler();
+    $(window).bind("pageshow", function(event) {
+        // only show message if page not persisted (eg. not navigated to via back/forward button
+        if (!event.originalEvent.persisted) {
+            hashHandler();
+            alertHandler();
+        }
+    });
 });
 
 hashHandler = function() {

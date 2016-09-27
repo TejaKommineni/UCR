@@ -3269,6 +3269,7 @@ def update_patient_project_status(patientProjectStatusID):
                 if int(form.versionID.data) == patientProjectStatus.versionID:
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
+                    patientProjectStatus.statusDate = form.statusDate.data
                     query.commit()
                     flash("Updated Patient Project Status")
                     return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
@@ -3299,7 +3300,8 @@ def create_patient_project_status(patientProjectStatusID=None):
             if form.validate():
                 patientProjectStatus = models.PatientProjectStatus(
                     patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
-                    participantID=form.participantID.data
+                    participantID=form.participantID.data,
+                    statusDate = form.statusDate.data
                 )
                 query.add(patientProjectStatus)
                 flash("Created Patient Project Status")

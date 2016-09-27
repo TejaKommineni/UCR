@@ -3186,11 +3186,13 @@ class TestPatientProjectStatus(BlankDB):
         response = self.client.post("/api/patientprojectstatuses/", data = {
             "patientProjectStatusTypeID" : 1,
             "participantID" : 1,
+            "statusDate": "2016-02-02",
             "versionID" : 1,
         })
         self.assertEqual(response.json["patientProjectStatusID"],1)
         self.assertEqual(response.json["patientProjectStatusTypeID"],1)
         self.assertEqual(response.json["participantID"],1)
+        self.assertEqual(response.json["statusDate"],"2016-02-02")
         self.assertEqual(response.json["versionID"],1)
 
 class TestPatientProjectStatusLUT(BlankDB):

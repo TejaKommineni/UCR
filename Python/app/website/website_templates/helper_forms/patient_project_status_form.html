@@ -24,7 +24,7 @@
               </div>
               {% endif %}
               <div class="row">
-                <div class = "col-md-8">
+                <div class = "col-md-2">
                   <label for="select_patientProjectStatusTypeID">Project Patient Status Type</label>
                   <select required="required" type="text" class="form-control" name="patientProjectStatusTypeID" id="select_patientProjectStatusTypeID">
                       <option></option>
@@ -37,7 +37,10 @@
                       {% endfor %}
                   </select>
                 </div>
-              </div>
+             <div class = "col-md-2">
+              <label for="date_date">Date</label>
+              <input required="required" type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{patientProjectStatus["statusDate"]}}">
+             </div>
             </div>
             
             <div class="form-group">

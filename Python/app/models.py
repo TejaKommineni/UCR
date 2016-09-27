@@ -609,6 +609,7 @@ class PatientProjectStatus(CustomModel):
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer,
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
+    statusDate = db.Column('patientProjectStatusDate', db.Date)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
@@ -912,7 +913,7 @@ class ProjectPatient(CustomModel):
     incentives = db.relationship('Incentive', back_populates='projectPatient', order_by="desc(Incentive.dateGiven)")
     # Relationships
     # 1 - M, one PP with many PPStatuses
-    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient")
+    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient", order_by="desc(PatientProjectStatus.statusDate)")
     # 1 - M, one PP with many tracings
     tracings = db.relationship('Tracing', back_populates="projectPatient")
     # M -1 many projectPatient can have the same project

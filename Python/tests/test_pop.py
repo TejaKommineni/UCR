@@ -1872,6 +1872,7 @@ class PopulatedDB(TestCase):
         patientProjectStatus = models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=1,
+            statusDate=datetime(2016,2,2)
         )
         physicianFacility = models.PhysicianFacility(
             facilityID=1,
@@ -3508,12 +3509,14 @@ class TestPatientProjectStatus(PopulatedDB):
         self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusID"], 1)
         self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusTypeID"], 1)
         self.assertEqual(response.json["PatientProjectStatuses"][0]["participantID"], 1)
+        self.assertEqual(response.json["PatientProjectStatuses"][0]["statusDate"], "2016-02-02")
         self.assertEqual(response.json["PatientProjectStatuses"][0]["versionID"], 1)
 
     def test_get_patient_project_status(self):
         response = self.client.get("/api/patientprojectstatuses/1/")
         self.assertEqual(response.json["patientProjectStatusID"], 1)
         self.assertEqual(response.json["patientProjectStatusTypeID"], 1)
+        self.assertEqual(response.json["statusDate"], "2016-02-02")
         self.assertEqual(response.json["participantID"], 1)
         self.assertEqual(response.json["versionID"], 1)
 
@@ -3521,11 +3524,13 @@ class TestPatientProjectStatus(PopulatedDB):
         response = self.client.put("/api/patientprojectstatuses/1/", data = {
             "patientProjectStatusTypeID" : 2,
             "participantID" : 2,
+            "statusDate": "2016-02-03",
             "versionID" : 1
         })
         self.assertEqual(response.json["patientProjectStatusID"], 1)
         self.assertEqual(response.json["patientProjectStatusTypeID"], 2)
         self.assertEqual(response.json["participantID"], 2)
+        self.assertEqual(response.json["statusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_patient_project_status(self):

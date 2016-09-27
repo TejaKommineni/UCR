@@ -921,6 +921,7 @@ class PatientProjectStatusForm(BaseForm):
                                               [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
                                     [validators.InputRequired()])
+    statusDate = DateField('statusDate',[] + COMMON_DATE_VALIDATORS, format=DATE_FORMAT)
 
     def validate(self):
         hasErrors = not Form.validate(self)

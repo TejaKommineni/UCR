@@ -2338,6 +2338,7 @@ def update_patient_project_status(patientProjectStatusID):
                 if int(request.form['versionID']) == patientProjectStatus.versionID:
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
+                    patientProjectStatus.statusDate = form.statusDate.data
                     query.commit()
                     return patientProjectStatus.json()
                 else:
@@ -2356,7 +2357,8 @@ def create_patient_project_status():
         if form.validate():
             patientProjectStatus = models.PatientProjectStatus(
                 patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
-                participantID=form.participantID.data
+                participantID=form.participantID.data,
+                statusDate = form.statusDate.data
             )
             query.add(patientProjectStatus)
             return patientProjectStatus.json()

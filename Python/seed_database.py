@@ -3526,30 +3526,35 @@ def create_patient_project_statuses():
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=1,
+            statusDate = datetime(2016,8,9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=2,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=3,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=4,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=5,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     return statuses
