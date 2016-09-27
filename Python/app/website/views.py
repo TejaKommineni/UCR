@@ -2169,6 +2169,7 @@ def get_informant(informantID=None):
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["phoneTypes"] = query.get_phone_types()
+                form["informantRelationships"] = query.get_informant_relationships()
                 return render_template("informant_form.html", form=form, informant=informant)
             else:
                 return item_not_found("InformantID {} not found".format(informantID))
@@ -2190,7 +2191,7 @@ def update_informant(informantID):
                     informant.lastName = form.lastName.data
                     informant.middleName = form.middleName.data
                     informant.informantPrimary = form.informantPrimary.data
-                    informant.informantRelationship = form.informantRelationship.data
+                    informant.informantRelationshipID = form.informantRelationshipID.data
                     informant.notes = form.notes.data
                     query.commit()
                     flash("Updated Informant")
@@ -2226,7 +2227,7 @@ def create_informant(informantID=None):
                     lastName=form.lastName.data,
                     middleName=form.middleName.data,
                     informantPrimary=form.informantPrimary.data,
-                    informantRelationship=form.informantRelationship.data,
+                    informantRelationshipID=form.informantRelationshipID.data,
                     notes=form.notes.data
                 )
                 query.add(informant)

@@ -349,6 +349,14 @@ def get_informant_phone(id):
     return db.session.query(InformantPhone).filter_by(informantPhoneID=id).first()
 
 
+def get_informant_relationship(id):
+    return db.session.query(InformantRelationship).filter_by(informantRelationshipID=id).first()
+
+
+def get_informant_relationships():
+    return db.session.query(InformantRelationship).all()
+
+
 def get_irb_holders():
     return db.session.query(IRBHolderLUT).all()
 

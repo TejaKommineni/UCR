@@ -29,6 +29,52 @@ class BlankDB(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def create_informant_relationships(self):
+        relationships = []
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Mother"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Father"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Son"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Daughter"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Grandson"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Granddaughter"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Uncle"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Aunt"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Cousin"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Wife"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Husband"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Friend"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Other Family Member"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Other"
+        ))
+        return relationships
+
     def create_final_codes(self):
         finalCodes = []
         finalCodes.append(models.FinalCode(
@@ -2443,6 +2489,9 @@ class TestInformant(BlankDB):
         self.populate_db()
 
     def populate_db(self):
+
+
+
         patient = models.Patient(
             patID="1",
             ucrDistID=1,
@@ -2463,6 +2512,7 @@ class TestInformant(BlankDB):
             ethnicityID=1,
             vitalStatusID=2
         )
+        db.session.add_all(self.create_informant_relationships())
         db.session.add_all(self.create_states())
         db.session.add_all(self.create_contact_sources())
         db.session.add_all(self.create_contact_statuses())
@@ -2487,8 +2537,8 @@ class TestInformant(BlankDB):
             "firstName" : "fname",
             "lastName" : "lname",
             "middleName" : "middle_name",
-            "informantPrimary" : "informant_primary",
-            "informantRelationship" : "informant_relationship",
+            "informantPrimary" : "true",
+            "informantRelationshipID" : 1,
             "notes" : "notes",
             "versionID" : 1,
         })
@@ -2496,8 +2546,8 @@ class TestInformant(BlankDB):
         self.assertEqual(response.json["participantID"],1)
         self.assertEqual(response.json["firstName"],"fname")
         self.assertEqual(response.json["middleName"],"middle_name")
-        self.assertEqual(response.json["informantPrimary"],"informant_primary")
-        self.assertEqual(response.json["informantRelationship"],"informant_relationship")
+        self.assertEqual(response.json["informantPrimary"],True)
+        self.assertEqual(response.json["informantRelationshipID"],1)
         self.assertEqual(response.json["notes"],"notes")
         self.assertEqual(response.json["versionID"],1)
 

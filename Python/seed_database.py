@@ -9,6 +9,53 @@ from datetime import datetime
 import app.models as models
 
 
+def create_informant_relationships():
+    relationships = []
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Mother"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Father"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Son"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Daughter"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Grandson"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Granddaughter"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Uncle"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Aunt"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Cousin"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Wife"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Husband"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Friend"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Other Family Member"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Other"
+    ))
+    return relationships
+
+
 def create_final_codes():
     finalCodes = []
     finalCodes.append(models.FinalCode(
@@ -2768,8 +2815,8 @@ def create_informants():
         firstName="Joe",
         lastName="Smith",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=1,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2777,8 +2824,8 @@ def create_informants():
         firstName="Joe2",
         lastName="Smith2",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=2,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2786,8 +2833,8 @@ def create_informants():
         firstName="Joe3",
         lastName="Smith3",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=3,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2795,8 +2842,8 @@ def create_informants():
         firstName="Joe4",
         lastName="Smith4",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=4,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2804,8 +2851,8 @@ def create_informants():
         firstName="Joe5",
         lastName="Smith5",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=5,
         notes="notes"
     ))
     return informants
@@ -3732,6 +3779,7 @@ def populate_db():
     db.drop_all()
     db.create_all()
 
+    informantRelationships = create_informant_relationships()
     roles = create_roles()
     users = create_users()
     finalCodes = create_final_codes()
@@ -3802,6 +3850,7 @@ def populate_db():
     pp_contacts = create_pp_contacts()
     incentives = create_incentives()
 
+    db.session.add_all(informantRelationships)
     db.session.add_all(roles)
     db.session.add_all(users)
     db.session.add_all(states)

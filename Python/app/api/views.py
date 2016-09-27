@@ -1533,7 +1533,7 @@ def update_informant(informantID):
                     informant.lastName = form.lastName.data
                     informant.middleName = form.middleName.data
                     informant.informantPrimary = form.informantPrimary.data
-                    informant.informantRelationship = form.informantRelationship.data
+                    informant.informantRelationshipID = form.informantRelationshipID.data
                     informant.notes = form.notes.data
                     query.commit()
                     return informant.json()
@@ -1557,7 +1557,7 @@ def create_informant():
                 lastName=form.lastName.data,
                 middleName=form.middleName.data,
                 informantPrimary=form.informantPrimary.data,
-                informantRelationship=form.informantRelationship.data,
+                informantRelationshipID=form.informantRelationshipID.data,
                 notes=form.notes.data
                 )
             query.add(informant)

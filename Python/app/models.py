@@ -407,8 +407,8 @@ class Informant(CustomModel):
     firstName = db.Column('first_name', db.String)
     lastName = db.Column('last_name', db.String)
     middleName = db.Column('middle_name', db.String)
-    informantPrimary = db.Column('informant_primary', db.String)
-    informantRelationship = db.Column('informant_relationship', db.String)
+    informantPrimary = db.Column('informant_primary', db.Boolean)
+    informantRelationshipID = db.Column('informant_relationshipID', db.Integer, db.ForeignKey("InformantRelationship.informantRelationshipID"))
     notes = db.Column('notes', db.String)
 
     # Relationships
@@ -464,6 +464,13 @@ class InformantPhone(CustomModel):
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     phoneType = db.relationship("PhoneTypeLUT")
+
+
+class InformantRelationship(CustomModel):
+    __tablename__ = 'InformantRelationship'
+
+    informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True)
+    informantRelationship = db.Column('informant_relationship', db.String)
 
 
 class Log(CustomModel):
