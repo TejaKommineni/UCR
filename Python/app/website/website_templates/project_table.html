@@ -34,6 +34,19 @@
                   {% endfor %}
                   </select>
                 </div>
+                  <div class="col-md-1">
+                  <label for="select_projectTypeID">Current Status</label>
+                  <select type="text" class="form-control" name="mostRecentProjectStatusTypeID" id="select_mostRecentProjectStatus">
+                    <option value=""></option>
+                  {% for projectStatusType in form["projectStatusLUTs"] %}
+                    {% if projectStatusType.projectStatusTypeID|string() == form.queryParams.mostRecentProjectStatusTypeID %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}" selected="selected">{{projectStatusType.projectStatus}}</option>
+                    {% else %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
                 <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>

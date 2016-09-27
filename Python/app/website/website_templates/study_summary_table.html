@@ -5,6 +5,35 @@
           <h1>Project Summary</h1>
         </div>
       </div>
+        <form class="formOverride" id="mainform" action='' method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="text_shortTitle">Project Title</label>
+                  <input type="text" class="form-control" name="projectTitle" id="text_shortTitle" value="{{form.queryParams.projectTitle}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="select_projectTypeID">Current Status</label>
+                  <select type="text" class="form-control" name="mostRecentProjectStatusTypeID" id="select_mostRecentProjectStatus">
+                    <option value=""></option>
+                  {% for projectStatusType in form["projectStatusLUTs"] %}
+                    {% if projectStatusType.projectStatusTypeID|string() == form.queryParams.mostRecentProjectStatusTypeID %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}" selected="selected">{{projectStatusType.projectStatus}}</option>
+                    {% else %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
         <table class="table table-striped no-spacing">
           <thead>
             <tr>
@@ -14,8 +43,7 @@
                 <th>Letters Sent in Last 30 Days</th>
                 <th>Phone Calls in Last 30 Days</th>
                 <th>Average Contacts Per Patient</th>
-                <th>Consents</th>
-                <th>Permissions</th>
+                <th>Consents & Permissions</th>
             </tr>
           </thead>
           <tbody>
@@ -27,8 +55,7 @@
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.avgNumberOfContactsPerPerson}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsents}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPermissions}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsentsOrPermissions}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

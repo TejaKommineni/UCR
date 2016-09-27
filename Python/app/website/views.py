@@ -213,9 +213,19 @@ def root():
 @website.route('/overview/', methods=['GET'])
 @authorization_required(roles=['Director', 'Developer'])
 def overview():
-    form={
-        "summary": query.summary()
-    }
+    form = {}
+    form["queryParams"] = {}
+    mostRecentProjectStatusTypeID=None
+    projectTitle=None
+    if "mostRecentProjectStatusTypeID" in request.args:
+        mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+        form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
+    if "projectTitle" in request.args:
+        projectTitle = value_or_none(request.args["projectTitle"])
+        form["queryParams"]["projectTitle"] = request.args["projectTitle"]
+    form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
+    form["projectStatusLUTs"] = query.get_project_status_luts()
+
     return render_template("study_summary_table.html", form=form)
 
 
@@ -4510,6 +4520,7 @@ def get_project(projectID=None):
             shortTitle = None
             projectTypeID = None
             piLastName = None
+            mostRecentProjectStatusTypeID = None
             form["queryParams"] = {}
             if "projectID" in request.args:
                 projectID = value_or_none(request.args["projectID"])
@@ -4523,12 +4534,17 @@ def get_project(projectID=None):
             if "projectTypeID" in request.args:
                 projectTypeID = value_or_none(request.args["projectTypeID"])
                 form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+            if "mostRecentProjectStatusTypeID" in request.args:
+                mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+                form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
 
             projects = query.query_projects(projectID=projectID,
                                             shortTitle=shortTitle,
                                             projectTypeID=projectTypeID,
-                                            piLastName=piLastName)
+                                            piLastName=piLastName,
+                                            mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
             form["projectTypes"] = query.get_project_types()
+            form["projectStatusLUTs"] = query.get_project_status_luts()
             return render_template("project_table.html", form=form, projects=projects)
         else:
             proj = query.get_project(projectID)
