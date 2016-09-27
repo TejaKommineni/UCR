@@ -571,10 +571,10 @@ class InformantForm(BaseForm):
                            [] + COMMON_STRING_VALIDATORS)
     middleName = StringField('middleName',
                              [] + COMMON_STRING_VALIDATORS)
-    informantPrimary = StringField('informantPrimary',
-                                   [] + COMMON_STRING_VALIDATORS)
-    informantRelationship = StringField('informantRelationship',
-                                        [] + COMMON_STRING_VALIDATORS)
+    informantPrimary = BooleanField('informantPrimary',
+                                   [] + COMMON_BOOL_VALIDATORS)
+    informantRelationshipID = IntegerField('informantRelationshipID',
+                                        [] + COMMON_INTEGER_VALIDATORS)
     notes = StringField('notes',
                         [] + COMMON_STRING_VALIDATORS)
 
@@ -584,6 +584,12 @@ class InformantForm(BaseForm):
         if patient is None:
             self.participantID.errors.append("ID not found")
             hasErrors = True
+
+        if self.informantRelationshipID.data:
+            relationship = query.get_informant_relationship(self.informantRelationshipID.data)
+            if relationship is None:
+                self.informantRelationshipID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -921,6 +927,7 @@ class PatientProjectStatusForm(BaseForm):
                                               [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
                                     [validators.InputRequired()])
+    statusDate = DateField('statusDate',[] + COMMON_DATE_VALIDATORS, format=DATE_FORMAT)
 
     def validate(self):
         hasErrors = not Form.validate(self)

@@ -53,7 +53,7 @@ def authorization_required(roles):
                     user = query.get_user_by_username(flask.session['CAS_USERNAME'])
                 if user is None:
                     return unauthorized("User is not authorized to use this application.")
-                if user.role.role in roles:
+                if user.ucrRole.ucrRole in roles:
                     return function(*args, **kwargs)
                 else:
                     return unauthorized("User is not authorized to use this part of the applicaiton. Acceptable roles are: {}".format(", ".join(roles)))
@@ -213,9 +213,19 @@ def root():
 @website.route('/overview/', methods=['GET'])
 @authorization_required(roles=['Director', 'Developer'])
 def overview():
-    form={
-        "summary": query.summary()
-    }
+    form = {}
+    form["queryParams"] = {}
+    mostRecentProjectStatusTypeID=None
+    projectTitle=None
+    if "mostRecentProjectStatusTypeID" in request.args:
+        mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+        form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
+    if "projectTitle" in request.args:
+        projectTitle = value_or_none(request.args["projectTitle"])
+        form["queryParams"]["projectTitle"] = request.args["projectTitle"]
+    form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
+    form["projectStatusLUTs"] = query.get_project_status_luts()
+
     return render_template("study_summary_table.html", form=form)
 
 
@@ -2159,6 +2169,7 @@ def get_informant(informantID=None):
                 form["contactInfoSources"] = query.get_contact_info_sources()
                 form["contactInfoStatuses"] = query.get_contact_info_statuses()
                 form["phoneTypes"] = query.get_phone_types()
+                form["informantRelationships"] = query.get_informant_relationships()
                 return render_template("informant_form.html", form=form, informant=informant)
             else:
                 return item_not_found("InformantID {} not found".format(informantID))
@@ -2180,7 +2191,7 @@ def update_informant(informantID):
                     informant.lastName = form.lastName.data
                     informant.middleName = form.middleName.data
                     informant.informantPrimary = form.informantPrimary.data
-                    informant.informantRelationship = form.informantRelationship.data
+                    informant.informantRelationshipID = form.informantRelationshipID.data
                     informant.notes = form.notes.data
                     query.commit()
                     flash("Updated Informant")
@@ -2216,7 +2227,7 @@ def create_informant(informantID=None):
                     lastName=form.lastName.data,
                     middleName=form.middleName.data,
                     informantPrimary=form.informantPrimary.data,
-                    informantRelationship=form.informantRelationship.data,
+                    informantRelationshipID=form.informantRelationshipID.data,
                     notes=form.notes.data
                 )
                 query.add(informant)
@@ -3269,6 +3280,7 @@ def update_patient_project_status(patientProjectStatusID):
                 if int(form.versionID.data) == patientProjectStatus.versionID:
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
+                    patientProjectStatus.statusDate = form.statusDate.data
                     query.commit()
                     flash("Updated Patient Project Status")
                     return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
@@ -3299,7 +3311,8 @@ def create_patient_project_status(patientProjectStatusID=None):
             if form.validate():
                 patientProjectStatus = models.PatientProjectStatus(
                     patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
-                    participantID=form.participantID.data
+                    participantID=form.participantID.data,
+                    statusDate = form.statusDate.data
                 )
                 query.add(patientProjectStatus)
                 flash("Created Patient Project Status")
@@ -4507,6 +4520,8 @@ def get_project(projectID=None):
             projectID = None
             shortTitle = None
             projectTypeID = None
+            piLastName = None
+            mostRecentProjectStatusTypeID = None
             form["queryParams"] = {}
             if "projectID" in request.args:
                 projectID = value_or_none(request.args["projectID"])
@@ -4514,14 +4529,23 @@ def get_project(projectID=None):
             if "shortTitle" in request.args:
                 shortTitle = value_or_none(request.args["shortTitle"])
                 form["queryParams"]["shortTitle"] = request.args["shortTitle"]
+            if "piLastName" in request.args:
+                piLastName = value_or_none(request.args["piLastName"])
+                form["queryParams"]["piLastName"] = request.args["piLastName"]
             if "projectTypeID" in request.args:
                 projectTypeID = value_or_none(request.args["projectTypeID"])
                 form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+            if "mostRecentProjectStatusTypeID" in request.args:
+                mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+                form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
 
             projects = query.query_projects(projectID=projectID,
                                             shortTitle=shortTitle,
-                                            projectTypeID=projectTypeID)
+                                            projectTypeID=projectTypeID,
+                                            piLastName=piLastName,
+                                            mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
             form["projectTypes"] = query.get_project_types()
+            form["projectStatusLUTs"] = query.get_project_status_luts()
             return render_template("project_table.html", form=form, projects=projects)
         else:
             proj = query.get_project(projectID)

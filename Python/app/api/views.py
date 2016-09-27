@@ -1533,7 +1533,7 @@ def update_informant(informantID):
                     informant.lastName = form.lastName.data
                     informant.middleName = form.middleName.data
                     informant.informantPrimary = form.informantPrimary.data
-                    informant.informantRelationship = form.informantRelationship.data
+                    informant.informantRelationshipID = form.informantRelationshipID.data
                     informant.notes = form.notes.data
                     query.commit()
                     return informant.json()
@@ -1557,7 +1557,7 @@ def create_informant():
                 lastName=form.lastName.data,
                 middleName=form.middleName.data,
                 informantPrimary=form.informantPrimary.data,
-                informantRelationship=form.informantRelationship.data,
+                informantRelationshipID=form.informantRelationshipID.data,
                 notes=form.notes.data
                 )
             query.add(informant)
@@ -2338,6 +2338,7 @@ def update_patient_project_status(patientProjectStatusID):
                 if int(request.form['versionID']) == patientProjectStatus.versionID:
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
+                    patientProjectStatus.statusDate = form.statusDate.data
                     query.commit()
                     return patientProjectStatus.json()
                 else:
@@ -2356,7 +2357,8 @@ def create_patient_project_status():
         if form.validate():
             patientProjectStatus = models.PatientProjectStatus(
                 patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
-                participantID=form.participantID.data
+                participantID=form.participantID.data,
+                statusDate = form.statusDate.data
             )
             query.add(patientProjectStatus)
             return patientProjectStatus.json()

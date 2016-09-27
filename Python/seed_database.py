@@ -9,6 +9,53 @@ from datetime import datetime
 import app.models as models
 
 
+def create_informant_relationships():
+    relationships = []
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Mother"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Father"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Son"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Daughter"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Grandson"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Granddaughter"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Uncle"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Aunt"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Cousin"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Wife"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Husband"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Friend"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Other Family Member"
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Other"
+    ))
+    return relationships
+
+
 def create_final_codes():
     finalCodes = []
     finalCodes.append(models.FinalCode(
@@ -1243,13 +1290,16 @@ def create_ucr_roles():
         ucrRole="Contact Staff"
     ))
     roles.append(models.UCRRole(
-        ucrRole="Coordinator"
+        ucrRole="Developer"
+    ))
+    roles.append(models.UCRRole(
+        ucrRole="Director"
     ))
     roles.append(models.UCRRole(
         ucrRole="Informatics Staff"
     ))
     roles.append(models.UCRRole(
-        ucrRole="Other"
+        ucrRole="Research Manager"
     ))
     return roles
 
@@ -1307,26 +1357,6 @@ def create_gift_cards():
         amount=25
     ))
     return gcs
-
-
-def create_roles():
-    roles = []
-    roles.append(models.Role(
-        role="Contact Staff"
-    ))
-    roles.append(models.Role(
-        role="Developer"
-    ))
-    roles.append(models.Role(
-        role="Director"
-    ))
-    roles.append(models.Role(
-        role="Informatics Staff"
-    ))
-    roles.append(models.Role(
-        role="Research Manager"
-    ))
-    return roles
 
 
 def create_users():
@@ -2768,8 +2798,8 @@ def create_informants():
         firstName="Joe",
         lastName="Smith",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=1,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2777,8 +2807,8 @@ def create_informants():
         firstName="Joe2",
         lastName="Smith2",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=2,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2786,8 +2816,8 @@ def create_informants():
         firstName="Joe3",
         lastName="Smith3",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=3,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2795,8 +2825,8 @@ def create_informants():
         firstName="Joe4",
         lastName="Smith4",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=4,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2804,8 +2834,8 @@ def create_informants():
         firstName="Joe5",
         lastName="Smith5",
         middleName="",
-        informantPrimary="informant_primary",
-        informantRelationship="Husband",
+        informantPrimary=True,
+        informantRelationshipID=5,
         notes="notes"
     ))
     return informants
@@ -3526,30 +3556,35 @@ def create_patient_project_statuses():
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=1,
+            statusDate = datetime(2016,8,9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=2,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=3,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=4,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=5,
+            statusDate=datetime(2016, 8, 9)
         )
     )
     return statuses
@@ -3727,7 +3762,8 @@ def populate_db():
     db.drop_all()
     db.create_all()
 
-    roles = create_roles()
+    ucrRoles = create_ucr_roles()
+    informantRelationships = create_informant_relationships()
     users = create_users()
     finalCodes = create_final_codes()
     states = create_states()
@@ -3757,7 +3793,6 @@ def populate_db():
     hsts = create_human_subject_trainings()
     tracingSources = create_tracing_sources()
     contactTypes = create_contact_types()
-    ucrRoles = create_ucr_roles()
     giftCards = create_gift_cards()
 
     projects = create_projects()
@@ -3797,7 +3832,8 @@ def populate_db():
     pp_contacts = create_pp_contacts()
     incentives = create_incentives()
 
-    db.session.add_all(roles)
+    db.session.add_all(ucrRoles)
+    db.session.add_all(informantRelationships)
     db.session.add_all(users)
     db.session.add_all(states)
     db.session.add_all(finalCodes)
@@ -3827,7 +3863,6 @@ def populate_db():
     db.session.add_all(hsts)
     db.session.add_all(tracingSources)
     db.session.add_all(contactTypes)
-    db.session.add_all(ucrRoles)
     db.session.add_all(giftCards)
 
     db.session.add_all(projects)

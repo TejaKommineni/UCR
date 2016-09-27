@@ -407,8 +407,8 @@ class Informant(CustomModel):
     firstName = db.Column('first_name', db.String)
     lastName = db.Column('last_name', db.String)
     middleName = db.Column('middle_name', db.String)
-    informantPrimary = db.Column('informant_primary', db.String)
-    informantRelationship = db.Column('informant_relationship', db.String)
+    informantPrimary = db.Column('informant_primary', db.Boolean)
+    informantRelationshipID = db.Column('informant_relationshipID', db.Integer, db.ForeignKey("InformantRelationship.informantRelationshipID"))
     notes = db.Column('notes', db.String)
 
     # Relationships
@@ -464,6 +464,13 @@ class InformantPhone(CustomModel):
     contactInfoStatus = db.relationship("ContactInfoStatusLUT")
     contactInfoSource = db.relationship("ContactInfoSourceLUT")
     phoneType = db.relationship("PhoneTypeLUT")
+
+
+class InformantRelationship(CustomModel):
+    __tablename__ = 'InformantRelationship'
+
+    informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True)
+    informantRelationship = db.Column('informant_relationship', db.String)
 
 
 class Log(CustomModel):
@@ -609,6 +616,7 @@ class PatientProjectStatus(CustomModel):
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer,
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
+    statusDate = db.Column('patientProjectStatusDate', db.Date)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
@@ -912,7 +920,7 @@ class ProjectPatient(CustomModel):
     incentives = db.relationship('Incentive', back_populates='projectPatient', order_by="desc(Incentive.dateGiven)")
     # Relationships
     # 1 - M, one PP with many PPStatuses
-    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient")
+    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient", order_by="desc(PatientProjectStatus.statusDate)")
     # 1 - M, one PP with many tracings
     tracings = db.relationship('Tracing', back_populates="projectPatient")
     # M -1 many projectPatient can have the same project
@@ -1061,13 +1069,6 @@ class ReviewCommitteeLUT(CustomModel):
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="reviewCommitteeLUT")
 
 
-class Role(CustomModel):
-    __tablename__ = "Role"
-
-    roleID = db.Column("roleID", db.Integer, primary_key=True)
-    role = db.Column("role", db.String(50), unique=True, nullable=False)
-
-
 class Sex(CustomModel):
     __tablename__ = "SexLUT"
     sexID = db.Column('sexID', db.Integer, primary_key=True)
@@ -1213,9 +1214,9 @@ class User(CustomModel):
 
     userID = db.Column("userID", db.Integer, primary_key=True)
     uID = db.Column("uID", db.String(10), unique=True, nullable=False)
-    roleID = db.Column("roleID", db.Integer, db.ForeignKey('Role.roleID'), nullable=False)
+    roleID = db.Column("roleID", db.Integer, db.ForeignKey('UCRRole.ucrRoleID'), nullable=False)
 
-    role = db.relationship("Role")
+    ucrRole = db.relationship("UCRRole")
     staff = db.relationship("Staff", uselist=False)
 
 

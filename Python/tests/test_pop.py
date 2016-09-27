@@ -23,6 +23,52 @@ class PopulatedDB(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def create_informant_relationships(self):
+        relationships = []
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Mother"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Father"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Son"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Daughter"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Grandson"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Granddaughter"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Uncle"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Aunt"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Cousin"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Wife"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Husband"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Friend"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Other Family Member"
+        ))
+        relationships.append(models.InformantRelationship(
+            informantRelationship="Other"
+        ))
+        return relationships
+
     def create_final_codes(self):
         finalCodes = []
         finalCodes.append(models.FinalCode(
@@ -1252,25 +1298,6 @@ class PopulatedDB(TestCase):
         ))
         return gcs
 
-    def create_roles(self):
-        roles = []
-        roles.append(models.Role(
-            role="Contact Staff"
-        ))
-        roles.append(models.Role(
-            role="Developer"
-        ))
-        roles.append(models.Role(
-            role="Director"
-        ))
-        roles.append(models.Role(
-            role="Informatics Staff"
-        ))
-        roles.append(models.Role(
-            role="Research Manager"
-        ))
-        return roles
-
     def create_users(self):
         users = []
         users.append(models.User(
@@ -1290,7 +1317,7 @@ class PopulatedDB(TestCase):
         """
         db.create_all()
 
-        roles = self.create_roles()
+        informantRelationships = self.create_informant_relationships()
         users = self.create_users()
         finalCodes = self.create_final_codes()
         states = self.create_states()
@@ -1593,8 +1620,8 @@ class PopulatedDB(TestCase):
             firstName="fname",
             lastName="lname",
             middleName="middle_name",
-            informantPrimary="informant_primary",
-            informantRelationship="informant_relationship",
+            informantPrimary=True,
+            informantRelationshipID=1,
             notes="notes"
         )
         informant2 = models.Informant(
@@ -1602,8 +1629,8 @@ class PopulatedDB(TestCase):
             firstName="fname",
             lastName="lname",
             middleName="middle_name",
-            informantPrimary="informant_primary",
-            informantRelationship="informant_relationship",
+            informantPrimary=True,
+            informantRelationshipID=1,
             notes="notes"
         )
         informantAddress = models.InformantAddress(
@@ -1872,6 +1899,7 @@ class PopulatedDB(TestCase):
         patientProjectStatus = models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=1,
+            statusDate=datetime(2016,2,2)
         )
         physicianFacility = models.PhysicianFacility(
             facilityID=1,
@@ -1933,7 +1961,8 @@ class PopulatedDB(TestCase):
             barcode="123456789",
             dateGiven=datetime(2016, 4, 3)
         )
-        db.session.add_all(roles)
+        db.session.add_all(ucrRoles)
+        db.session.add_all(informantRelationships)
         db.session.add_all(users)
         db.session.add_all(states)
         db.session.add_all(finalCodes)
@@ -1963,7 +1992,6 @@ class PopulatedDB(TestCase):
         db.session.add_all(hsts)
         db.session.add_all(tracingSources)
         db.session.add_all(contactTypes)
-        db.session.add_all(ucrRoles)
         db.session.add_all(giftCards)
         db.session.add(staff)
         db.session.add(staff2)
@@ -2992,8 +3020,8 @@ class TestInformant(PopulatedDB):
         self.assertEqual(response.json["Informants"][0]["firstName"], "fname")
         self.assertEqual(response.json["Informants"][0]["lastName"], "lname")
         self.assertEqual(response.json["Informants"][0]["middleName"], "middle_name")
-        self.assertEqual(response.json["Informants"][0]["informantPrimary"], "informant_primary")
-        self.assertEqual(response.json["Informants"][0]["informantRelationship"], "informant_relationship")
+        self.assertEqual(response.json["Informants"][0]["informantPrimary"], True)
+        self.assertEqual(response.json["Informants"][0]["informantRelationshipID"], 1)
         self.assertEqual(response.json["Informants"][0]["notes"], "notes")
         self.assertEqual(response.json["Informants"][0]["versionID"], 1)
 
@@ -3004,8 +3032,8 @@ class TestInformant(PopulatedDB):
         self.assertEqual(response.json["firstName"], "fname")
         self.assertEqual(response.json["lastName"], "lname")
         self.assertEqual(response.json["middleName"], "middle_name")
-        self.assertEqual(response.json["informantPrimary"], "informant_primary")
-        self.assertEqual(response.json["informantRelationship"], "informant_relationship")
+        self.assertEqual(response.json["informantPrimary"], True)
+        self.assertEqual(response.json["informantRelationshipID"], 1),
         self.assertEqual(response.json["notes"], "notes")
         self.assertEqual(response.json["versionID"], 1)
 
@@ -3015,8 +3043,8 @@ class TestInformant(PopulatedDB):
             "firstName" : "fname Updated",
             "lastName" : "lname Updated",
             "middleName" : "middle_name Updated",
-            "informantPrimary" : "informant_primary Updated",
-            "informantRelationship" : "informant_relationship Updated",
+            "informantPrimary" : "false",
+            "informantRelationshipID" : 2,
             "notes" : "notes Updated",
             "versionID" : 1
         })
@@ -3025,8 +3053,8 @@ class TestInformant(PopulatedDB):
         self.assertEqual(response.json["firstName"], "fname Updated")
         self.assertEqual(response.json["lastName"], "lname Updated")
         self.assertEqual(response.json["middleName"], "middle_name Updated")
-        self.assertEqual(response.json["informantPrimary"], "informant_primary Updated")
-        self.assertEqual(response.json["informantRelationship"], "informant_relationship Updated")
+        self.assertEqual(response.json["informantPrimary"], False)
+        self.assertEqual(response.json["informantRelationshipID"], 2)
         self.assertEqual(response.json["notes"], "notes Updated")
         self.assertEqual(response.json["versionID"], 2)
 
@@ -3508,12 +3536,14 @@ class TestPatientProjectStatus(PopulatedDB):
         self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusID"], 1)
         self.assertEqual(response.json["PatientProjectStatuses"][0]["patientProjectStatusTypeID"], 1)
         self.assertEqual(response.json["PatientProjectStatuses"][0]["participantID"], 1)
+        self.assertEqual(response.json["PatientProjectStatuses"][0]["statusDate"], "2016-02-02")
         self.assertEqual(response.json["PatientProjectStatuses"][0]["versionID"], 1)
 
     def test_get_patient_project_status(self):
         response = self.client.get("/api/patientprojectstatuses/1/")
         self.assertEqual(response.json["patientProjectStatusID"], 1)
         self.assertEqual(response.json["patientProjectStatusTypeID"], 1)
+        self.assertEqual(response.json["statusDate"], "2016-02-02")
         self.assertEqual(response.json["participantID"], 1)
         self.assertEqual(response.json["versionID"], 1)
 
@@ -3521,11 +3551,13 @@ class TestPatientProjectStatus(PopulatedDB):
         response = self.client.put("/api/patientprojectstatuses/1/", data = {
             "patientProjectStatusTypeID" : 2,
             "participantID" : 2,
+            "statusDate": "2016-02-03",
             "versionID" : 1
         })
         self.assertEqual(response.json["patientProjectStatusID"], 1)
         self.assertEqual(response.json["patientProjectStatusTypeID"], 2)
         self.assertEqual(response.json["participantID"], 2)
+        self.assertEqual(response.json["statusDate"], "2016-02-03")
         self.assertEqual(response.json["versionID"], 2)
 
     def test_delete_patient_project_status(self):

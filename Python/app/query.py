@@ -8,7 +8,7 @@ from sqlalchemy.orm import aliased
 from app.models import *
 
 
-def summary():
+def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
     """
     Generates a dictionary that summarizes each project over the last 30 days
     :return:
@@ -28,7 +28,16 @@ def summary():
     #         "avgNumberOfContactsPerPerson": avgNumberOfContactsPerPerson
     #     }
     # db.session.query(func.count(Contact.contactID)).join(Contact.projectPatient).join(ProjectPatient.project).filter(Project.projectID==1)
-    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).all()
+    # res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).all()
+
+    # some complex query to filter by the most recent projectStatusTypeID
+    filters = []
+    if projectTitle:
+        filters.append(Project.projectTitle.like('%{}%'.format(projectTitle)))
+    if mostRecentProjectStatusTypeID:
+        filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
+    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).outerjoin(ProjectStatus.project).filter(ProjectStatus.statusDate == db.session.query(
+        func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.projectTitle).all()
     for result in res:
         summary_info = {
             "projectID": result[0],
@@ -42,8 +51,8 @@ def summary():
                                                                   days=30),
                                                               contact_type_ids=[10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                                                                                 20, 21, 22, 23, 24, 25, 26, 27])[0],
-            "numberOfConsents": 0,
-            "numberOfPermissions": 0
+            "numberOfConsentsOrPermissions": get_number_of_final_code_types(projectID=result[0],
+                                                              min_final_code=100, max_final_code=199)[0],
         }
         try:
             summary_info["avgNumberOfContactsPerPerson"]= float(get_number_of_contact_types(projectID=result[0],
@@ -52,17 +61,11 @@ def summary():
                 len(query_project_patients(projectID=result[0])))
         except ZeroDivisionError:
             summary_info["avgNumberOfContactsPerPerson"] = "inf"
-        if result[3] == 1: # check for consents
-            summary_info["numberOfConsents"] = get_number_of_final_code_types(projectID=result[0],
-                                                              final_code_type_ids=[2,3])[0]
-        if result[3] == 2: #set permissions
-            summary_info["numberOfPermissions"] = get_number_of_final_code_types(projectID=result[0],
-                                                                                 final_code_type_ids=[2, 3])[0]
         summary_dict["projects"].append(summary_info)
     return summary_dict
 
 
-def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, contact_type_ids=None):
+def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, contact_type_ids=None, contact_codes=None, min_contact_code=None, max_contact_code=None):
     filters = []
     if projectID:
         filters.append(Project.projectID == projectID)
@@ -72,17 +75,27 @@ def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, co
         filters.append(Contact.contactDate <= endDate)
     if contact_type_ids:
         filters.append(Contact.contactTypeLUTID.in_(contact_type_ids))
+    if contact_codes:
+        filters.append(Contact.contactCode.in_(contact_codes))
+    if  min_contact_code:
+        filters.append(Contact.contactCode >= min_contact_code)
+    if max_contact_code:
+        filters.append(Contact.contactCode <= max_contact_code)
     res = db.session.query(func.count(Contact.contactID), func.count(ProjectPatient.participantID)).join(Contact.projectPatient).join(ProjectPatient.project). \
         filter(and_(*filters)).first()
     return res
 
 
-def get_number_of_final_code_types(projectID=None, final_code_type_ids=None):
+def get_number_of_final_code_types(projectID=None, final_code_type_ids=None, min_final_code=None, max_final_code=None):
     filters = []
     if projectID:
         filters.append(Project.projectID == projectID)
     if final_code_type_ids:
         filters.append(FinalCode.finalCodeID.in_(final_code_type_ids))
+    if min_final_code:
+        filters.append(FinalCode.finalCode >= min_final_code)
+    if max_final_code:
+        filters.append(FinalCode.finalCode <= max_final_code)
     res = db.session.query(func.count(FinalCode.finalCodeID)).join(FinalCode.projectPatients).join(ProjectPatient.project). \
         filter(and_(*filters)).first()
     return res
@@ -336,6 +349,14 @@ def get_informant_phone(id):
     return db.session.query(InformantPhone).filter_by(informantPhoneID=id).first()
 
 
+def get_informant_relationship(id):
+    return db.session.query(InformantRelationship).filter_by(informantRelationshipID=id).first()
+
+
+def get_informant_relationships():
+    return db.session.query(InformantRelationship).all()
+
+
 def get_irb_holders():
     return db.session.query(IRBHolderLUT).all()
 
@@ -535,7 +556,7 @@ def get_projects():
     return db.session.query(Project).all()
 
 
-def query_projects(projectID=None, shortTitle=None, projectTypeID=None):
+def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastName=None, mostRecentProjectStatusTypeID=None):
     filters = []
     if projectID:
         filters.append(Project.projectID == projectID)
@@ -543,7 +564,14 @@ def query_projects(projectID=None, shortTitle=None, projectTypeID=None):
         filters.append(Project.shortTitle.like('%{}%'.format(shortTitle)))
     if projectTypeID:
         filters.append(Project.projectTypeID == projectTypeID)
-    return db.session.query(Project).filter(or_(*filters)).all()
+    if piLastName:
+        filters.append(PreApplication.piLastName.like('%{}%'.format(piLastName)))
+    if mostRecentProjectStatusTypeID:
+        filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
+
+    res = db.session.query(Project).outerjoin(ProjectStatus.project).filter(ProjectStatus.statusDate == db.session.query(
+        func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.projectTitle).all()
+    return res
 
 
 def get_project_patients():
