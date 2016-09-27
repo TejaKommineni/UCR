@@ -535,7 +535,7 @@ def get_projects():
     return db.session.query(Project).all()
 
 
-def query_projects(projectID=None, shortTitle=None, projectTypeID=None):
+def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastName=None):
     filters = []
     if projectID:
         filters.append(Project.projectID == projectID)
@@ -543,6 +543,8 @@ def query_projects(projectID=None, shortTitle=None, projectTypeID=None):
         filters.append(Project.shortTitle.like('%{}%'.format(shortTitle)))
     if projectTypeID:
         filters.append(Project.projectTypeID == projectTypeID)
+    if piLastName:
+        filters.append(PreApplication.piLastName.like('%{}%'.format(piLastName)))
     return db.session.query(Project).filter(or_(*filters)).all()
 
 

@@ -5,7 +5,7 @@
           <h1>Projects</h1>
         </div>
       </div>
-      <form class="formOverride" id="mainform" action='', method='get'>
+      <form class="formOverride" id="mainform" action='' method='get'>
           <fieldset>
             <div class="form-group">
               <div class="row">
@@ -16,6 +16,10 @@
                 <div class="col-md-2"> 
                   <label for="text_shortTitle">Short Title</label>
                   <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form.queryParams.shortTitle}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_shortTitle">PI Last Name</label>
+                  <input type="text" class="form-control" name="piLastName" id="text_piLastName" value="{{form.queryParams.piLastName}}">
                 </div>
                 <div class="col-md-1">
                   <label for="select_projectTypeID">Project Type</label>

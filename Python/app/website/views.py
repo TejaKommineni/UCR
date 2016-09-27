@@ -4509,6 +4509,7 @@ def get_project(projectID=None):
             projectID = None
             shortTitle = None
             projectTypeID = None
+            piLastName = None
             form["queryParams"] = {}
             if "projectID" in request.args:
                 projectID = value_or_none(request.args["projectID"])
@@ -4516,13 +4517,17 @@ def get_project(projectID=None):
             if "shortTitle" in request.args:
                 shortTitle = value_or_none(request.args["shortTitle"])
                 form["queryParams"]["shortTitle"] = request.args["shortTitle"]
+            if "piLastName" in request.args:
+                piLastName = value_or_none(request.args["piLastName"])
+                form["queryParams"]["piLastName"] = request.args["piLastName"]
             if "projectTypeID" in request.args:
                 projectTypeID = value_or_none(request.args["projectTypeID"])
                 form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
 
             projects = query.query_projects(projectID=projectID,
                                             shortTitle=shortTitle,
-                                            projectTypeID=projectTypeID)
+                                            projectTypeID=projectTypeID,
+                                            piLastName=piLastName)
             form["projectTypes"] = query.get_project_types()
             return render_template("project_table.html", form=form, projects=projects)
         else:
