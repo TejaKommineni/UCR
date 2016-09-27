@@ -1290,13 +1290,16 @@ def create_ucr_roles():
         ucrRole="Contact Staff"
     ))
     roles.append(models.UCRRole(
-        ucrRole="Coordinator"
+        ucrRole="Developer"
+    ))
+    roles.append(models.UCRRole(
+        ucrRole="Director"
     ))
     roles.append(models.UCRRole(
         ucrRole="Informatics Staff"
     ))
     roles.append(models.UCRRole(
-        ucrRole="Other"
+        ucrRole="Research Manager"
     ))
     return roles
 
@@ -1354,26 +1357,6 @@ def create_gift_cards():
         amount=25
     ))
     return gcs
-
-
-def create_roles():
-    roles = []
-    roles.append(models.Role(
-        role="Contact Staff"
-    ))
-    roles.append(models.Role(
-        role="Developer"
-    ))
-    roles.append(models.Role(
-        role="Director"
-    ))
-    roles.append(models.Role(
-        role="Informatics Staff"
-    ))
-    roles.append(models.Role(
-        role="Research Manager"
-    ))
-    return roles
 
 
 def create_users():
@@ -3779,8 +3762,8 @@ def populate_db():
     db.drop_all()
     db.create_all()
 
+    ucrRoles = create_ucr_roles()
     informantRelationships = create_informant_relationships()
-    roles = create_roles()
     users = create_users()
     finalCodes = create_final_codes()
     states = create_states()
@@ -3810,7 +3793,6 @@ def populate_db():
     hsts = create_human_subject_trainings()
     tracingSources = create_tracing_sources()
     contactTypes = create_contact_types()
-    ucrRoles = create_ucr_roles()
     giftCards = create_gift_cards()
 
     projects = create_projects()
@@ -3850,8 +3832,8 @@ def populate_db():
     pp_contacts = create_pp_contacts()
     incentives = create_incentives()
 
+    db.session.add_all(ucrRoles)
     db.session.add_all(informantRelationships)
-    db.session.add_all(roles)
     db.session.add_all(users)
     db.session.add_all(states)
     db.session.add_all(finalCodes)
@@ -3881,7 +3863,6 @@ def populate_db():
     db.session.add_all(hsts)
     db.session.add_all(tracingSources)
     db.session.add_all(contactTypes)
-    db.session.add_all(ucrRoles)
     db.session.add_all(giftCards)
 
     db.session.add_all(projects)

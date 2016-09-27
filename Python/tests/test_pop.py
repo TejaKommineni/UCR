@@ -1298,25 +1298,6 @@ class PopulatedDB(TestCase):
         ))
         return gcs
 
-    def create_roles(self):
-        roles = []
-        roles.append(models.Role(
-            role="Contact Staff"
-        ))
-        roles.append(models.Role(
-            role="Developer"
-        ))
-        roles.append(models.Role(
-            role="Director"
-        ))
-        roles.append(models.Role(
-            role="Informatics Staff"
-        ))
-        roles.append(models.Role(
-            role="Research Manager"
-        ))
-        return roles
-
     def create_users(self):
         users = []
         users.append(models.User(
@@ -1337,7 +1318,6 @@ class PopulatedDB(TestCase):
         db.create_all()
 
         informantRelationships = self.create_informant_relationships()
-        roles = self.create_roles()
         users = self.create_users()
         finalCodes = self.create_final_codes()
         states = self.create_states()
@@ -1981,8 +1961,8 @@ class PopulatedDB(TestCase):
             barcode="123456789",
             dateGiven=datetime(2016, 4, 3)
         )
+        db.session.add_all(ucrRoles)
         db.session.add_all(informantRelationships)
-        db.session.add_all(roles)
         db.session.add_all(users)
         db.session.add_all(states)
         db.session.add_all(finalCodes)
@@ -2012,7 +1992,6 @@ class PopulatedDB(TestCase):
         db.session.add_all(hsts)
         db.session.add_all(tracingSources)
         db.session.add_all(contactTypes)
-        db.session.add_all(ucrRoles)
         db.session.add_all(giftCards)
         db.session.add(staff)
         db.session.add(staff2)

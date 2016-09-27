@@ -1278,7 +1278,19 @@ class BlankDB(TestCase):
     def create_ucr_roles(self):
         roles = []
         roles.append(models.UCRRole(
-            ucrRole="role 1"
+            ucrRole="Contact Staff"
+        ))
+        roles.append(models.UCRRole(
+            ucrRole="Developer"
+        ))
+        roles.append(models.UCRRole(
+            ucrRole="Director"
+        ))
+        roles.append(models.UCRRole(
+            ucrRole="Informatics Staff"
+        ))
+        roles.append(models.UCRRole(
+            ucrRole="Research Manager"
         ))
         return roles
 
@@ -1300,25 +1312,6 @@ class BlankDB(TestCase):
             amount=25
         ))
         return gcs
-
-    def create_roles(self):
-        roles = []
-        roles.append(models.Role(
-            role="Contact Staff"
-        ))
-        roles.append(models.Role(
-            role="Developer"
-        ))
-        roles.append(models.Role(
-            role="Director"
-        ))
-        roles.append(models.Role(
-            role="Informatics Staff"
-        ))
-        roles.append(models.Role(
-            role="Research Manager"
-        ))
-        return roles
 
     def create_users(self):
         users = []
@@ -1562,8 +1555,8 @@ class TestContact(BlankDB):
             firstName="fname",
             lastName="lname",
             middleName="middle_name",
-            informantPrimary="informant_primary",
-            informantRelationship="informant_relationship",
+            informantPrimary=True,
+            informantRelationshipID=1,
             notes="notes"
         )
 
@@ -1697,6 +1690,7 @@ class TestContact(BlankDB):
             surveyToResearcherStaffID=1,
             qualityControl=True,
         )
+        db.session.add_all(self.create_informant_relationships())
         db.session.add_all(self.create_contact_types())
         db.session.add_all(self.create_sexes())
         db.session.add_all(self.create_races())
@@ -1706,7 +1700,7 @@ class TestContact(BlankDB):
         db.session.add_all(self.create_physician_statuses())
         db.session.add_all(self.create_final_codes())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_irb_holders())
         db.session.add_all(self.create_project_types())
@@ -2433,7 +2427,7 @@ class TestIncentive(BlankDB):
         db.session.add_all(self.create_physician_statuses())
         db.session.add_all(self.create_final_codes())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_irb_holders())
         db.session.add_all(self.create_project_types())
@@ -2772,7 +2766,7 @@ class TestLog(BlankDB):
         db.session.add_all(self.create_project_types())
         db.session.add_all(self.create_log_subjects())
         db.session.add_all(self.create_ucr_roles())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_states())
         db.session.add(p)
@@ -3208,7 +3202,7 @@ class TestPatientProjectStatus(BlankDB):
         db.session.add_all(self.create_physician_statuses())
         db.session.add_all(self.create_final_codes())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_irb_holders())
         db.session.add_all(self.create_project_types())
@@ -3912,7 +3906,7 @@ class TestProjectPatient(BlankDB):
         db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_final_codes())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_irb_holders())
         db.session.add_all(self.create_project_types())
@@ -4043,7 +4037,7 @@ class TestProjectStaff(BlankDB):
         db.session.add_all(self.create_project_types())
         db.session.add_all(self.create_staff_roles())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_inactives())
         db.session.add_all(self.create_contacts())
@@ -4132,7 +4126,7 @@ class TestProjectStatus(BlankDB):
         db.session.add_all(self.create_project_types())
         db.session.add_all(self.create_staff_roles())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_ucr_roles())
         db.session.add(staff)
@@ -4320,7 +4314,7 @@ class TestStaff(BlankDB):
 
     def populate_db(self):
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_ucr_roles())
         db.session.commit()
@@ -4416,7 +4410,7 @@ class TestStaffTraining(BlankDB):
             userID = 1
         )
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_human_subject_trainings())
@@ -4572,7 +4566,7 @@ class TestTracing(BlankDB):
         db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_final_codes())
         db.session.add_all(self.create_states())
-        db.session.add_all(self.create_roles())
+        db.session.add_all(self.create_ucr_roles())
         db.session.add_all(self.create_users())
         db.session.add_all(self.create_irb_holders())
         db.session.add_all(self.create_project_types())

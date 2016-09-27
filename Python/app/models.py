@@ -1069,13 +1069,6 @@ class ReviewCommitteeLUT(CustomModel):
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="reviewCommitteeLUT")
 
 
-class Role(CustomModel):
-    __tablename__ = "Role"
-
-    roleID = db.Column("roleID", db.Integer, primary_key=True)
-    role = db.Column("role", db.String(50), unique=True, nullable=False)
-
-
 class Sex(CustomModel):
     __tablename__ = "SexLUT"
     sexID = db.Column('sexID', db.Integer, primary_key=True)
@@ -1221,9 +1214,9 @@ class User(CustomModel):
 
     userID = db.Column("userID", db.Integer, primary_key=True)
     uID = db.Column("uID", db.String(10), unique=True, nullable=False)
-    roleID = db.Column("roleID", db.Integer, db.ForeignKey('Role.roleID'), nullable=False)
+    roleID = db.Column("roleID", db.Integer, db.ForeignKey('UCRRole.ucrRoleID'), nullable=False)
 
-    role = db.relationship("Role")
+    ucrRole = db.relationship("UCRRole")
     staff = db.relationship("Staff", uselist=False)
 
 
