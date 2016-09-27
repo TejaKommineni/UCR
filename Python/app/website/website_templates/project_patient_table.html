@@ -63,6 +63,7 @@
         <table class="table table-striped no-spacing">
           <thead>
             <tr>
+                <th>Project Link</th>
                 <th>Last Name</th>
                 <th>First Name</th>
                 <th>Final Code</th>
@@ -73,6 +74,7 @@
           <tbody>
             {% for projectPatient in projectPatients %}
             <tr>
+                <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.projectTitle}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}} - {{projectPatient["finalCode"].finalCodeDefinition}}</a></td>
