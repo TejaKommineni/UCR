@@ -28,28 +28,28 @@
            </div>
            <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
               <ul class = "nav navbar-nav">
-                  {% if user.ucrRole.ucrRole in ['Director', 'Developer'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Director', 'Developer'] %}
                  <li><a href = "/website/overview/">Overview</a></li>
                   {% endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer','Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer','Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/facilities/">Facilities</a></li>
                   {% endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/physicians/">Physicians</a></li>
                   {% endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/projects/">Projects</a></li>
                   {%endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/projectpatients/">Project Patients</a></li>
                   {% endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                  <li><a href = "/website/staff/">Staff</a></li>
                   {% endif %}
-                  {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                  <li><a href = "/website/lookuptables/">LUTS</a></li>
                   {% endif %}
-                 <li class="logout"><a href = "/logout/">Logout: ({{user.uID}} - {{user.ucrRole.ucrRole}})</a></li>
+                 <li class="logout"><a href = "/logout/">Logout: ({{user.uID}} - {{user.staff.ucrRole.ucrRole}})</a></li>
               </ul>
            </div>
         </nav>

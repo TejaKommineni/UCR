@@ -24,7 +24,7 @@
                 {% endif %}
                 <div class = "col-md-2">
                   <label for="select_humanSubjectTrainingID">Human Subject Training</label>
-                  <select type="text" class="form-control" name="humanSubjectTrainingID" id="select_humanSubjectTrainingID">
+                  <select required="required" type="text" class="form-control" name="humanSubjectTrainingID" id="select_humanSubjectTrainingID">
                         <option></option>
                       {% for hst in form.humanSubjectTrainings %}
                         {% if hst.humanSubjectTrainingID == staffTraining.humanSubjectTrainingID %}
@@ -39,11 +39,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_dateTaken">Date Taken</label>
-                  <input type="date" class="form-control" name="dateTaken" id="date_dateTaken" value="{{staffTraining.dateTaken}}">
+                  <input required="required" type="date" class="form-control" name="dateTaken" id="date_dateTaken" value="{{staffTraining.dateTaken}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateExpires">Date Expires</label>
-                  <input type="date" class="form-control" name="dateExpires" id="date_dateExpires" value="{{staffTraining.dateExpires}}">
+                  <input required="required" type="date" class="form-control" name="dateExpires" id="date_dateExpires" value="{{staffTraining.dateExpires}}">
                 </div>
               </div>
             

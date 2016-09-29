@@ -199,7 +199,7 @@
         <div class="tab-pane active" id="facilitiesTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
-                {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                 <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
                 {% endif %}
             </ul>
@@ -228,7 +228,7 @@
                     </tbody>
                   </table>
                 </div>
-                {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                 <div class="tab-pane" id="newFacilityTab">
                 {% set ctcFacility = none %}
                 {% include 'helper_forms/ctc_facility_form.html' %}
@@ -239,7 +239,7 @@
            <div class="tab-pane" id="physiciansTab">
                 <ul class ="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#physicianTableTab" role="tab" data-toggle="tab">Table </a></li>
-                    {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                    {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                     <li><a href="#newPhysicianTab" role="tab" data-toggle="tab">New Physician</a></li>
                     {% endif %}
                 </ul>
@@ -266,7 +266,7 @@
                           </tbody>
                         </table>
                     </div>
-                    {% if user.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                    {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                     <div class="tab-pane" id="newPhysicianTab">
                     {% set physicianToCTC = none %}
                     {% include 'helper_forms/physician_to_ctc_form.html' %}

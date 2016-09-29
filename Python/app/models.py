@@ -1214,9 +1214,7 @@ class User(CustomModel):
 
     userID = db.Column("userID", db.Integer, primary_key=True)
     uID = db.Column("uID", db.String(10), unique=True, nullable=False)
-    roleID = db.Column("roleID", db.Integer, db.ForeignKey('UCRRole.ucrRoleID'), nullable=False)
 
-    ucrRole = db.relationship("UCRRole")
     staff = db.relationship("Staff", uselist=False)
 
 

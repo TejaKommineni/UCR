@@ -133,7 +133,7 @@
           </div>
         </fieldset>
         {# Only allow edit button for developers... #}
-        {% if user.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
         </fieldset>
             <fieldset>
                 <div class = "form-group">
@@ -147,7 +147,7 @@
         {% endif %}
     </form>
     <ul class = "nav nav-tabs" role="tablist">
-        {% if user.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <li><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
         <li><a href="#budgetTab" role="tab" data-toggle="tab">Budgets</a></li>
         <li><a href="#fundingTab" role="tab" data-toggle="tab">Fundings</a></li>
@@ -155,7 +155,7 @@
         <li><a href="#preApplicationTab" role="tab" data-toggle="tab">Pre Application</a></li>
         {% endif %}
         <li class="active"><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
-        {% if user.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <li><a href="#projectStaffTab" role="tab" data-toggle="tab">Project Staff</a></li>
         <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
         <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
@@ -163,7 +163,7 @@
         {% endif %}
     </ul>
     <div class="tab-content">
-        {% if user.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <div class="tab-pane" id="arcReviewTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
@@ -375,7 +375,7 @@
                 </fieldset>
             </form>
         </div>
-        {% if user.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <div class = "tab-pane" id="projectStaffTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>

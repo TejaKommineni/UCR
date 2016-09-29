@@ -1363,31 +1363,24 @@ def create_users():
     users = []
     users.append(models.User(
         uID="u0973461",
-        roleID=2  # developer
     ))
     users.append(models.User(
         uID="u0050151",
-        roleID=2  # Contact Staff
     ))
     users.append(models.User(
         uID="u0372607",
-        roleID=4  # Contact Staff
     ))
     users.append(models.User(
         uID="u0710561",
-        roleID=5  # Contact Staff
     ))
     users.append(models.User(
         uID="u0100768",
-        roleID=5 # Contact Staff
     ))
     users.append(models.User(
         uID="u0030586",
-        roleID=1  # Contact Staff
     ))
     users.append(models.User(
         uID="u0666687",
-        roleID=1  # Contact Staff
     ))
     return users
 
@@ -1409,7 +1402,7 @@ def create_staff():
         street="street",
         city="city",
         stateID=1,
-        ucrRoleID=4
+        ucrRoleID=2
     ))
     staff.append(models.Staff(
         userID=2,
@@ -1426,7 +1419,7 @@ def create_staff():
         street="street",
         city="city",
         stateID=2,
-        ucrRoleID=4
+        ucrRoleID=2
     ))
     staff.append(models.Staff(
         userID=3,
@@ -1443,7 +1436,7 @@ def create_staff():
         street="street",
         city="city",
         stateID=2,
-        ucrRoleID=3
+        ucrRoleID=4
     ))
     staff.append(models.Staff(
         userID=4,
@@ -1460,7 +1453,7 @@ def create_staff():
         street="street",
         city="city",
         stateID=2,
-        ucrRoleID=2
+        ucrRoleID=5
     ))
     staff.append(models.Staff(
         userID=5,
@@ -1477,7 +1470,7 @@ def create_staff():
         street="street",
         city="city",
         stateID=2,
-        ucrRoleID=2
+        ucrRoleID=5
     ))
     staff.append(models.Staff(
         userID=6,
@@ -3832,15 +3825,20 @@ def populate_db():
     pp_contacts = create_pp_contacts()
     incentives = create_incentives()
 
+    # Basic things to get started
     db.session.add_all(ucrRoles)
-    db.session.add_all(informantRelationships)
     db.session.add_all(users)
+    db.session.add_all(sexes)
+    db.session.add_all(races)
+    db.session.add_all(states)
+    db.session.add_all(ethnicities)
+    db.session.add_all(staff)
+
+    # Mostly LUTS
+    db.session.add_all(informantRelationships)
     db.session.add_all(states)
     db.session.add_all(finalCodes)
-    db.session.add_all(sexes)
     db.session.add_all(abstractStatuses)
-    db.session.add_all(races)
-    db.session.add_all(ethnicities)
     db.session.add_all(vitals)
     db.session.add_all(contacts)
     db.session.add_all(inactives)
@@ -3858,20 +3856,19 @@ def populate_db():
     db.session.add_all(projectStatuses)
     db.session.add_all(logTypes)
     db.session.add_all(reviewCommittees)
-    db.session.add_all(staffRoles)
     db.session.add_all(projectPhases)
     db.session.add_all(hsts)
     db.session.add_all(tracingSources)
     db.session.add_all(contactTypes)
     db.session.add_all(giftCards)
 
+    # Main Tables
     db.session.add_all(projects)
     db.session.add_all(budgets)
     db.session.add_all(projectReviewCommittees)
     db.session.add_all(ucr_reports)
     db.session.add_all(arc_reviews)
     db.session.add_all(fundings)
-    db.session.add_all(staff)
     db.session.add_all(proj_statuses)
     db.session.add_all(pre_applications)
     db.session.add_all(logs)
