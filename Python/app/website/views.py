@@ -211,7 +211,7 @@ def root():
 
 
 @website.route('/overview/', methods=['GET'])
-@authorization_required(roles=['Director', 'Developer'])
+@authorization_required(roles=['Director', 'Developer', 'Research Manager', 'Informatics Staff'])
 def overview():
     form = {}
     form["queryParams"] = {}
@@ -327,7 +327,7 @@ def delete_abstract_status(abstractStatusID):
 ##############################################################################
 # @website.route('/arcreviews/', methods = ['GET'])
 @website.route('/arcreviews/<int:arcReviewID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_arc_review(arcReviewID=None):
     try:
         if arcReviewID is None:
@@ -346,7 +346,7 @@ def get_arc_review(arcReviewID=None):
 
 
 @website.route('/arcreviews/<int:arcReviewID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_arc_review(arcReviewID):
     try:
         arcReview = query.get_arc_review(arcReviewID)
@@ -388,7 +388,7 @@ def update_arc_review(arcReviewID):
 
 @website.route('/arcreviews/', methods=['POST'])
 @website.route('/arcreviews/<int:arcReviewID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_arc_review(arcReviewID=None):
     try:
         if arcReviewID:
@@ -429,7 +429,7 @@ def create_arc_review(arcReviewID=None):
 
 
 @website.route('/arcreviews/<int:arcReviewID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_arc_review(arcReviewID):
     try:
         arcReview = query.get_arc_review(arcReviewID)
@@ -451,7 +451,7 @@ def delete_arc_review(arcReviewID):
 #############################################################################
 # @website.route('/budgets/', methods = ['GET'])
 @website.route('/budgets/<int:budgetID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_budget(budgetID=None):
     try:
         if budgetID is None:
@@ -469,7 +469,7 @@ def get_budget(budgetID=None):
 
 
 @website.route('/budgets/<int:budgetID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_budget(budgetID):
     try:
         budget = query.get_budget(budgetID)
@@ -498,7 +498,7 @@ def update_budget(budgetID):
 
 @website.route('/budgets/', methods=['POST'])
 @website.route('/budgets/<int:budgetID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_budget(budgetID=None):
     try:
         if budgetID:
@@ -529,7 +529,7 @@ def create_budget(budgetID=None):
 
 
 @website.route('/budgets/<int:budgetID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_budget(budgetID):
     try:
         budget = query.get_budget(budgetID)
@@ -1203,7 +1203,7 @@ def delete_ctc_facility(CTCFacilityID):
 ##############################################################################
 # @website.route('/fundings/', methods = ['GET'])
 @website.route('/fundings/<int:fundingID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_funding(fundingID=None):
     try:
         if fundingID is None:
@@ -1224,7 +1224,7 @@ def get_funding(fundingID=None):
 
 
 @website.route('/fundings/<int:fundingID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_funding(fundingID):
     try:
         funding = query.get_funding(fundingID)
@@ -1258,7 +1258,7 @@ def update_funding(fundingID):
 
 @website.route('/fundings/', methods=['POST'])
 @website.route('/fundings/<int:fundingID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_funding(fundingID=None):
     try:
         if fundingID:
@@ -1294,7 +1294,7 @@ def create_funding(fundingID=None):
 
 
 @website.route('/fundings/<int:fundingID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_funding(fundingID):
     try:
         funding = query.get_funding(fundingID)
@@ -2572,7 +2572,7 @@ def delete_irb_holder(irbHolderID):
 ##############################################################################
 # @website.route('/logs/',methods=['GET'])
 @website.route('/logs/<int:logID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_log(logID=None):
     try:
         if logID is None:
@@ -2593,7 +2593,7 @@ def get_log(logID=None):
 
 
 @website.route('/logs/<int:logID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_log(logID):
     try:
         log = query.get_log(logID)
@@ -2622,7 +2622,7 @@ def update_log(logID):
 
 @website.route('/logs/', methods=['POST'])
 @website.route('/logs/<int:logID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_log(logID=None):
     try:
         if logID:
@@ -2653,7 +2653,7 @@ def create_log(logID=None):
 
 
 @website.route('/logs/<int:logID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_log(logID):
     try:
         log = query.get_log(logID)
@@ -3443,7 +3443,7 @@ def delete_patient_project_status_type(patientProjectStatusTypeID):
 ##############################################################################
 @website.route('/phasestatuses/', methods=['GET'])
 @website.route('/phasestatuses/<int:logPhaseID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_phase_status(logPhaseID=None):
     try:
         if logPhaseID is None:
@@ -3467,7 +3467,7 @@ def get_phase_status(logPhaseID=None):
 
 
 @website.route('/phasestatuses/<int:logPhaseID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_phase_status(logPhaseID):
     try:
         phaseStatus = query.get_phase_status(logPhaseID)
@@ -3492,7 +3492,7 @@ def update_phase_status(logPhaseID):
 
 @website.route('/phasestatuses/', methods=['POST'])
 @website.route('/phasestatuses/<int:logPhaseID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_phase_status(logPhaseID=None):
     try:
         if logPhaseID:
@@ -3519,7 +3519,7 @@ def create_phase_status(logPhaseID=None):
 
 
 @website.route('/phasestatuses/<int:logPhaseID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_phase_status(logPhaseID):
     try:
         phaseStatus = query.get_phase_status(logPhaseID)
@@ -4370,7 +4370,7 @@ def delete_physician_to_ctc(physicianCTCID):
 ##############################################################################
 # @website.route('/preapplications/', methods = ['GET'])
 @website.route('/preapplications/<int:preApplicationID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_pre_application(preApplicationID=None):
     try:
         if preApplicationID is None:
@@ -4388,7 +4388,7 @@ def get_pre_application(preApplicationID=None):
 
 
 @website.route('/preapplications/<int:preApplicationID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_pre_application(preApplicationID):
     try:
         preApplication = query.get_pre_application(preApplicationID)
@@ -4438,7 +4438,7 @@ def update_pre_application(preApplicationID):
 
 @website.route('/preapplications/', methods=['POST'])
 @website.route('/preapplications/<int:preApplicationID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_pre_application(preApplicationID=None):
     try:
         if preApplicationID:
@@ -4490,7 +4490,7 @@ def create_pre_application(preApplicationID=None):
 
 
 @website.route('/preapplications/<int:preApplicationID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_pre_application(preApplicationID):
     try:
         preApplication = query.get_pre_application(preApplicationID)
@@ -4512,7 +4512,7 @@ def delete_pre_application(preApplicationID):
 ##############################################################################
 @website.route('/projects/', methods=['GET'])
 @website.route('/projects/<int:projectID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
 def get_project(projectID=None):
     try:
         if projectID is None:
@@ -4577,7 +4577,7 @@ def get_project(projectID=None):
 
 
 @website.route('/projects/<int:projectID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_project(projectID):
     try:
         proj = query.get_project(projectID)
@@ -4616,7 +4616,7 @@ def update_project(projectID):
 
 @website.route('/projects/', methods=['POST'])
 @website.route('/projects/<int:projectID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_project(projectID=None):
     try:
         if projectID:
@@ -4657,7 +4657,7 @@ def create_project(projectID=None):
 
 
 @website.route('/projects/<int:projectID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_project(projectID):
     try:
         proj = query.get_project(projectID)
@@ -4890,7 +4890,7 @@ def delete_project_patient(participantID):
 ##############################################################################
 # @website.route('/projectstaff/', methods = ['GET'])
 @website.route('/projectstaff/<int:projectStaffID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_project_staff(projectStaffID=None):
     try:
         if projectStaffID is None:
@@ -4912,7 +4912,7 @@ def get_project_staff(projectStaffID=None):
 
 
 @website.route('/projectstaff/<int:projectStaffID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_project_staff(projectStaffID):
     try:
         projectStaff = query.get_project_staff(projectStaffID)
@@ -4942,7 +4942,7 @@ def update_project_staff(projectStaffID):
 
 @website.route('/projectstaff/', methods=['POST'])
 @website.route('/projectstaff/<int:projectStaffID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_project_staff(projectStaffID=None):
     try:
         if projectStaffID:
@@ -4974,7 +4974,7 @@ def create_project_staff(projectStaffID=None):
 
 
 @website.route('/projectstaff/<int:projectStaffID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_project_staff(projectStaffID):
     try:
         projectStaff = query.get_project_staff(projectStaffID)
@@ -4996,7 +4996,7 @@ def delete_project_staff(projectStaffID):
 ##############################################################################
 # @website.route('/projectstatuses/', methods = ['GET'])
 @website.route('/projectstatuses/<int:projectStatusID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_project_status(projectStatusID=None):
     try:
         if projectStatusID is None:
@@ -5016,7 +5016,7 @@ def get_project_status(projectStatusID=None):
 
 
 @website.route('/projectstatuses/<int:projectStatusID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_project_status(projectStatusID):
     try:
         projectStatus = query.get_project_status(projectStatusID)
@@ -5044,7 +5044,7 @@ def update_project_status(projectStatusID):
 
 @website.route('/projectstatuses/', methods=['POST'])
 @website.route('/projectstatuses/<int:projectStatusID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_project_status(projectStatusID=None):
     try:
         if projectStatusID:
@@ -5074,7 +5074,7 @@ def create_project_status(projectStatusID=None):
 
 
 @website.route('/projectstatuses/<int:projectStatusID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_project_status(projectStatusID):
     try:
         projectStatus = query.get_project_status(projectStatusID)
@@ -5390,7 +5390,7 @@ def delete_rc_status_list(reviewCommitteeStatusID):
 ##############################################################################
 # @website.route('/reviewcommittees/', methods = ['GET'])
 @website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_review_committee(reviewCommitteeID=None):
     try:
         if reviewCommitteeID is None:
@@ -5410,7 +5410,7 @@ def get_review_committee(reviewCommitteeID=None):
 
 
 @website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_review_committee(reviewCommitteeID):
     try:
         rc = query.get_review_committee(reviewCommitteeID)
@@ -5442,7 +5442,7 @@ def update_review_committee(reviewCommitteeID):
 
 @website.route('/reviewcommittees/', methods=['POST'])
 @website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_review_committee(reviewCommitteeID=None):
     try:
         if reviewCommitteeID:
@@ -5476,7 +5476,7 @@ def create_review_committee(reviewCommitteeID=None):
 
 
 @website.route('/reviewcommittees/<int:reviewCommitteeID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_review_committee(reviewCommitteeID):
     try:
         rc = query.get_review_committee(reviewCommitteeID)
@@ -5498,7 +5498,7 @@ def delete_review_committee(reviewCommitteeID):
 ##############################################################################
 @website.route('/reviewcommitteelist/', methods=['GET'])
 @website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_review_committee_list(reviewCommitteeID=None):
     try:
         if reviewCommitteeID is None:
@@ -5522,7 +5522,7 @@ def get_review_committee_list(reviewCommitteeID=None):
 
 
 @website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_review_committee_list(reviewCommitteeID):
     try:
         rcList = query.get_review_committee_lut(reviewCommitteeID)
@@ -5547,7 +5547,7 @@ def update_review_committee_list(reviewCommitteeID):
 
 @website.route('/reviewcommitteelist/', methods=['POST'])
 @website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_review_committee_list(reviewCommitteeID=None):
     try:
         if reviewCommitteeID:
@@ -5574,7 +5574,7 @@ def create_review_committee_list(reviewCommitteeID=None):
 
 
 @website.route('/reviewcommitteelist/<int:reviewCommitteeID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_review_committee_list(reviewCommitteeID):
     try:
         reviewCommittee = query.get_review_committee_lut(reviewCommitteeID)
@@ -5596,7 +5596,7 @@ def delete_review_committee_list(reviewCommitteeID):
 ##############################################################################
 @website.route('/staff/', methods=['GET'])
 @website.route('/staff/<int:staffID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_staff(staffID=None):
     try:
         if staffID is None:
@@ -5665,7 +5665,7 @@ def get_staff(staffID=None):
 
 
 @website.route('/staff/<int:staffID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_staff(staffID):
     try:
         staff = query.get_staff(staffID)
@@ -5704,7 +5704,7 @@ def update_staff(staffID):
 
 @website.route('/staff/', methods=['POST'])
 @website.route('/staff/<int:staffID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_staff(staffID=None):
     try:
         if staffID:
@@ -5744,7 +5744,7 @@ def create_staff(staffID=None):
 
 
 @website.route('/staff/<int:staffID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_staff(staffID):
     try:
         staff = query.get_staff(staffID)
@@ -5864,7 +5864,7 @@ def delete_staff_role(staffRoleID):
 ##############################################################################
 # @website.route('/stafftrainings/', methods = ['GET'])
 @website.route('/stafftrainings/<int:staffTrainingID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_staff_training(staffTrainingID=None):
     try:
         if staffTrainingID is None:
@@ -5883,7 +5883,7 @@ def get_staff_training(staffTrainingID=None):
 
 
 @website.route('/stafftrainings/<int:staffTrainingID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_staff_training(staffTrainingID):
     try:
         stafftraining = query.get_staff_training(staffTrainingID)
@@ -5910,7 +5910,7 @@ def update_staff_training(staffTrainingID):
 
 @website.route('/stafftrainings/', methods=['POST'])
 @website.route('/stafftrainings/<int:staffTrainingID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_staff_training(staffTrainingID=None):
     try:
         if staffTrainingID:
@@ -5937,7 +5937,7 @@ def create_staff_training(staffTrainingID=None):
 
 
 @website.route('/stafftrainings/<int:staffTrainingID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_staff_training(staffTrainingID):
     try:
         stafftraining = query.get_staff_training(staffTrainingID)
@@ -6155,7 +6155,7 @@ def delete_tracing_source(tracingSourceID):
 ##############################################################################
 # @website.route('/ucrreports/', methods = ['GET'])
 @website.route('/ucrreports/<int:ucrReportID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_ucr_report(ucrReportID=None):
     try:
         if ucrReportID is None:
@@ -6174,7 +6174,7 @@ def get_ucr_report(ucrReportID=None):
 
 
 @website.route('/ucrreports/<int:ucrReportID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_ucr_report(ucrReportID):
     try:
         ucr = query.get_ucr_report(ucrReportID)
@@ -6202,7 +6202,7 @@ def update_ucr_report(ucrReportID):
 
 @website.route('/ucrreports/', methods=['POST'])
 @website.route('/ucrreports/<int:ucrReportID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_ucr_report(ucrReportID=None):
     try:
         if ucrReportID:
@@ -6232,7 +6232,7 @@ def create_ucr_report(ucrReportID=None):
 
 
 @website.route('/ucrreports/<int:ucrReportID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_ucr_report(ucrReportID):
     try:
         ucr = query.get_ucr_report(ucrReportID)
@@ -6249,7 +6249,7 @@ def delete_ucr_report(ucrReportID):
 
 @website.route('/ucrroles/', methods=['GET'])
 @website.route('/ucrroles/<int:ucrRoleID>/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def get_ucr_role(ucrRoleID=None):
     try:
         if ucrRoleID is None:
@@ -6273,7 +6273,7 @@ def get_ucr_role(ucrRoleID=None):
 
 
 @website.route('/ucrroles/<int:ucrRoleID>/', methods=['PUT'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def update_ucr_role(ucrRoleID):
     try:
         ucrRole = query.get_ucr_role(ucrRoleID)
@@ -6297,7 +6297,7 @@ def update_ucr_role(ucrRoleID):
 
 @website.route('/ucrroles/', methods=['POST'])
 @website.route('/ucrroles/<int:ucrRoleID>/', methods=['POST'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def create_ucr_role(ucrRoleID=None):
     try:
         if ucrRoleID:
@@ -6323,7 +6323,7 @@ def create_ucr_role(ucrRoleID=None):
 
 
 @website.route('/ucrroles/<int:ucrRoleID>/', methods=['DELETE'])
-@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
 def delete_ucr_role(ucrRoleID):
     try:
         ucrRole = query.get_project_type(ucrRoleID)
