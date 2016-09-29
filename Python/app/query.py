@@ -45,12 +45,11 @@ def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
             "activityStartDate": result[2],
             "numberOfLettersSent": get_number_of_contact_types(projectID=result[0],
                                                                startDate=datetime.datetime.today() - datetime.timedelta(
-                                                                   days=30), contact_type_ids=[1, 2, 3, 4, 5, 6])[0],
+                                                                   days=30), max_contact_code=199, min_contact_code=100)[0],
             "numberOfPhoneCalls": get_number_of_contact_types(projectID=result[0],
                                                               startDate=datetime.datetime.today() - datetime.timedelta(
                                                                   days=30),
-                                                              contact_type_ids=[10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                                                                                20, 21, 22, 23, 24, 25, 26, 27])[0],
+                                                              max_contact_code=299, min_contact_code=200)[0],
             "numberOfConsentsOrPermissions": get_number_of_final_code_types(projectID=result[0],
                                                               min_final_code=100, max_final_code=199)[0],
         }
@@ -76,12 +75,12 @@ def get_number_of_contact_types(projectID=None, startDate=None, endDate=None, co
     if contact_type_ids:
         filters.append(Contact.contactTypeLUTID.in_(contact_type_ids))
     if contact_codes:
-        filters.append(Contact.contactCode.in_(contact_codes))
+        filters.append(ContactTypeLUT.contactCode.in_(contact_codes))
     if  min_contact_code:
-        filters.append(Contact.contactCode >= min_contact_code)
+        filters.append(ContactTypeLUT.contactCode >= min_contact_code)
     if max_contact_code:
-        filters.append(Contact.contactCode <= max_contact_code)
-    res = db.session.query(func.count(Contact.contactID), func.count(ProjectPatient.participantID)).join(Contact.projectPatient).join(ProjectPatient.project). \
+        filters.append(ContactTypeLUT.contactCode <= max_contact_code)
+    res = db.session.query(func.count(Contact.contactID), func.count(ProjectPatient.participantID)).join(Contact.projectPatient).join(ProjectPatient.project).join(Contact.contactType). \
         filter(and_(*filters)).first()
     return res
 

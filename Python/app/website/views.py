@@ -53,10 +53,10 @@ def authorization_required(roles):
                     user = query.get_user_by_username(flask.session['CAS_USERNAME'])
                 if user is None:
                     return unauthorized("User is not authorized to use this application.")
-                if user.ucrRole.ucrRole in roles:
+                if user.staff.ucrRole.ucrRole in roles:
                     return function(*args, **kwargs)
                 else:
-                    return unauthorized("User is not authorized to use this part of the applicaiton. Acceptable roles are: {}".format(", ".join(roles)))
+                    return unauthorized("User is not authorized to use this part of the application. Acceptable roles are: {}".format(", ".join(roles)))
             return unauthorized()
         return wrapper
     return real_decorator

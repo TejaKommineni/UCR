@@ -1317,11 +1317,9 @@ class BlankDB(TestCase):
         users = []
         users.append(models.User(
             uID="u0973461",
-            roleID=2  # developer
         ))
         users.append(models.User(
             uID="u0050151",
-            roleID=1  # Contact Staff
         ))
         return users
 
