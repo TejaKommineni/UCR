@@ -31,7 +31,7 @@
                   {% if user.staff.ucrRole.ucrRole in ['Director', 'Developer'] %}
                  <li><a href = "/website/overview/">Overview</a></li>
                   {% endif %}
-                  {% if user.staff.ucrRole.ucrRole in ['Developer','Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
                  <li><a href = "/website/facilities/">Facilities</a></li>
                   {% endif %}
                   {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
