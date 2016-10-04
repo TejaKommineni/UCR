@@ -3828,13 +3828,14 @@ def populate_db():
     # Basic things to get started
     db.session.add_all(ucrRoles)
     db.session.add_all(users)
-    db.session.add_all(sexes)
-    db.session.add_all(races)
     db.session.add_all(states)
-    db.session.add_all(ethnicities)
     db.session.add_all(staff)
 
-    # Mostly LUTS
+    # # Mostly LUTS
+    db.session.add_all(staffRoles)
+    db.session.add_all(sexes)
+    db.session.add_all(ethnicities)
+    db.session.add_all(races)
     db.session.add_all(informantRelationships)
     db.session.add_all(states)
     db.session.add_all(finalCodes)
