@@ -1,0 +1,114 @@
+{% if patientPhone is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="phoneForm" action='/website/patientphones/{{patientPhone["patPhoneID"]}}/', method='post'>
+{% else %}
+    <form class="formOverride" id="phoneForm" action='/website/patientphones/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_phoneNumber">Phone Number</label>
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{patientPhone["phoneNumber"]}}">
+                </div>
+              <div class="col-md-2">  
+                  <label for="select_phoneTypeID">Phone Type</label>        
+                  <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
+                      <option></option>
+                      {% for phoneType in form["phoneTypes"] %}
+                        {% if phoneType["phoneTypeID"] == patientPhone["phoneTypeID"] %}
+                            <option value="{{phoneType["phoneTypeID"]}}" selected="selected">{{phoneType["phoneType"]}}</option>
+                        {% else %}
+                            <option value="{{phoneType["phoneTypeID"]}}">{{phoneType["phoneType"]}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">  
+                  <label for="select_contactInfoSource">Contact Info Source</label>        
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                      <option></option>
+                      {% for contactInfoSource in form["contactInfoSources"] %}
+                        {% if contactInfoSource["contactInfoSourceID"] == patientPhone["contactInfoSourceID"] %}
+                            <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
+                        {% else %}
+                            <option value="{{contactInfoSource["contactInfoSourceID"]}}">{{contactInfoSource["contactInfoSource"]}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">  
+                  <label for="select_contactInfoStatus">Contact Info Status</label>        
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                      <option></option>
+                      {% for contactInfoStatus in form["contactInfoStatuses"] %}
+                        {% if contactInfoStatus["contactInfoStatusID"] == patientPhone["contactInfoStatusID"] %}
+                            <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>
+                        {% else %}
+                            <option value="{{contactInfoStatus["contactInfoStatusID"]}}">{{contactInfoStatus["contactInfoStatus"]}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_phoneStatusDate">Phone Status Date</label>
+                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{patientPhone["phoneStatusDate"]}}">
+                </div>
+            </div>
+          </fieldset>
+          
+          <fieldset>
+                
+                <div class="form-group">
+                  <div class="row">
+                    <div class = "col-md-2">
+                      <label for="text_createdDate">Created</label>
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{patientPhone["createdDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class = "col-md-2">
+                      <label for="text_modifiedDate">Last Modified</label>
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{patientPhone["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="text_versionID">Version</label>
+                      {% if patientPhone is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{patientPhone["versionID"]}}" readonly="readonly">
+                      {% else %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                      {% endif %}
+                    </div>
+                    <!-- Extra hidden fields -->
+                    {% if patientPhone is not none %}
+                        <input type="hidden" name="_method" value="put" />
+                        <input type="hidden" name="participantID" value="{{patientPhone["participantID"]}}"/>
+                        {% if "patientPhone" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="patients/{{patientAddress.participantID}}/#patientPhoneTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#patientPhoneTab"/>
+                        {% endif %}
+                    {% elif form.patient %}
+                        <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="patients/{{form["patient"]["participantID"]}}/#patientPhoneTab"/>
+                    {% else %}
+                        <input type="hidden" name="participantID" value="{{projectPatient["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient["participantID"]}}/#patientPhoneTab"/>
+                    {% endif %}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                    {% if patientPhone is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                    {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Phone</button>
+                    {% endif %}
+                    </div>
+                  </div>
+                </div>
+        </fieldset>
+    </form>

@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for finalCode in form["finalCodes"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/final_codes.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set finalCode = none %}
+    {% include 'helper_forms/final_codes.html' %}
+{% endif %}
+{% endblock %}

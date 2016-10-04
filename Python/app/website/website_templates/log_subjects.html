@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for logSubject in form["logSubjects"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/log_subject_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set logSubject = none %}
+    {% include 'helper_forms/log_subject_form.html' %}
+{% endif %}
+{% endblock %}

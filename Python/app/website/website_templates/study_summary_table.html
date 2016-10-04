@@ -1,0 +1,63 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Project Summary</h1>
+        </div>
+      </div>
+        <form class="formOverride" id="mainform" action='' method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="text_shortTitle">Project Title</label>
+                  <input type="text" class="form-control" name="projectTitle" id="text_shortTitle" value="{{form.queryParams.projectTitle}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="select_projectTypeID">Current Status</label>
+                  <select type="text" class="form-control" name="mostRecentProjectStatusTypeID" id="select_mostRecentProjectStatus">
+                    <option value=""></option>
+                  {% for projectStatusType in form["projectStatusLUTs"] %}
+                    {% if projectStatusType.projectStatusTypeID|string() == form.queryParams.mostRecentProjectStatusTypeID %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}" selected="selected">{{projectStatusType.projectStatus}}</option>
+                    {% else %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Title</th>
+                <th>Start Date</th>
+                <th>Letters Sent in Last 30 Days</th>
+                <th>Phone Calls in Last 30 Days</th>
+                <th>Average Contacts Per Patient</th>
+                <th>Consents & Permissions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for project in form.summary.projects %}
+            <tr>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectID}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectTitle}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.activityStartDate}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.avgNumberOfContactsPerPerson}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsentsOrPermissions}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}

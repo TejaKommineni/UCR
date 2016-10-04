@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for contactInfoSource in form["contactInfoSources"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/contact_info_source_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set contactInfoSource = none %}
+    {% include 'helper_forms/contact_info_source_form.html' %}
+{% endif %}
+{% endblock %}

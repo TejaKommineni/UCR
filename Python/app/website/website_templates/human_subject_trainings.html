@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for humanSubjectTraining in form["humanSubjectTrainings"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/human_subject_training_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set humanSubjectTraining = none %}
+    {% include 'helper_forms/human_subject_training_form.html' %}
+{% endif %}
+{% endblock %}

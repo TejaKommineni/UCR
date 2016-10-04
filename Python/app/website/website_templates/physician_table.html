@@ -1,0 +1,66 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Physicians</h1>
+        </div>
+      </div>
+      <form class="formOverride" id="mainform" action='', method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{form.queryParams.firstName}}">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{form.queryParams.lastName}}">
+                </div>
+                <div class="col-md-1">
+                  <label for="text_specialty">Specialty</label>
+                  <input type="text" class="form-control" name="specialty" id="text_specialty" value="{{form.queryParams.specialty}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_physicianStatusID">Physician Status</label>
+                  <select type="text" class="form-control" name="physicianStatusID" id="select_physicianStatusID">
+                        <option></option>
+                      {% for physicianStatus in form.physicianStatuses %}
+                        {% if physicianStatus.physicianStatusID|string() == form.queryParams.physicianStatusID %}
+                            <option selected="selected" value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% else %}
+                            <option value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Specialty</th>
+                <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for physician in physicians %}
+            <tr>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["firstName"]}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["lastName"]}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["specialty"]}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["physicianStatus"].physicianStatus}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}

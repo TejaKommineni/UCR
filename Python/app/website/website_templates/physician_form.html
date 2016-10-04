@@ -1,0 +1,250 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Physician Information</h1>
+        </div>
+      </div>
+
+    {% if physician is not none %}
+        <!-- action url is for update -->
+        <form class="formOverride" id="physicianForm" action='/website/physicians/{{physician["physicianID"]}}/', method='post'>
+    {% else %}
+        <!-- action url is for post/create -->
+        <form class="formOverride" id="physicianForm" action='/website/physicians/', method='post'>
+    {% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{physician["firstName"]}}" >
+                </div>
+                <div class="col-md-2">
+                  <label for="text_middleName">Middle Name</label>
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{physician["middleName"]}}" >
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{physician["lastName"]}}" >
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_credentials">Credentials</label>
+                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{physician["credentials"]}}" >
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_aliasFirstName">Alias First Name</label>
+                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{physician["aliasFirstName"]}}" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_aliasMiddleName">Alias Middle Name</label>
+                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{physician["aliasMiddleName"]}}" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_aliasLastName">Alias Last Name</label>
+                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{physician["aliasLastName"]}}" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_specialty">Specialty</label>
+                  <input type="text" class="form-control" name="specialty" id="text_specialty" value="{{physician["specialty"]}}" >
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_physicianStatusID">Status</label>
+                  <select type="text" class="form-control" name="physicianStatusID" id="select_physicianStatusID">
+                        <option></option>
+                      {% for physicianStatus in form.physicianStatuses %}
+                        {% if physicianStatus.physicianStatusID== physician.physicianStatusID %}
+                            <option selected="selected" value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% else %}
+                            <option value="{{physicianStatus.physicianStatusID}}">{{physicianStatus.physicianStatus}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_physicianStatusDate">Status Date</label>
+                  <input type="date" class="form-control" name="physicianStatusDate" id="date_physicianStatusDate" value="{{physician["physicianStatusDate"]}}" >
+                </div>
+              </div>
+            </div>
+            
+      
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{physician.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{physician.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if physician is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{physician.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if physician is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="physicianID" value="{{physician.physicianID}}"/>
+                {% else %}
+                    <input type="hidden" name="physicianID" value="0"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+            <div class = "form-group">
+              <div class="row">
+                <div class="col-md-2">
+                  {% if physician is not none %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Add Physician</button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li><a href="#physicianAddressTab"  role="tab" data-toggle="tab">Address</a></li>
+        <li><a href="#physicianEmailTab" role="tab" data-toggle="tab">Email</a></li>
+        <li><a href="#physicianPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+        <li><a href="#physicianFacilityTab" role="tab" data-toggle="tab">Facility</a></li>
+    </ul>
+    <div class="tab-content">        
+        <div class="tab-pane active" id="physicianAddressTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for physicianAddress in physician.physicianAddresses %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#physicianAddress{{physicianAddress.physicianAddressID}}Tab" role="tab" data-toggle="tab">{{physicianAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#physicianAddress{{physicianAddress.physicianAddressID}}Tab" role="tab" data-toggle="tab">{{physicianAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for physicianAddress in physician.physicianAddresses %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="physicianAddress{{physicianAddress.physicianAddressID}}Tab">
+                    {% include 'helper_forms/physician_address_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="physicianAddress{{physicianAddress.physicianAddressID}}Tab">
+                    {% include 'helper_forms/physician_address_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newAddressTab">
+                {% set physicianAddress = none %}
+                {% include 'helper_forms/physician_address_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="physicianEmailTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for physicianEmail in physician.physicianEmails %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#physicianEmail{{physicianEmail.physicianEmailID}}Tab" role="tab" data-toggle="tab">{{physicianEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#physicianEmail{{physicianEmail.physicianEmailID}}Tab" role="tab" data-toggle="tab">{{physicianEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for physicianEmail in physician.physicianEmails %}
+                    {% if loop.index == 1 %}
+                        <div class="tab-pane active" id="physicianEmail{{physicianEmail.physicianEmailID}}Tab">
+                        {% include 'helper_forms/physician_email_form.html' %}
+                        </div>
+                    {% else %}
+                        <div class="tab-pane" id="physicianEmail{{physicianEmail.physicianEmailID}}Tab">
+                        {% include 'helper_forms/physician_email_form.html' %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newEmailTab">
+                {% set physicianEmail = none %}
+                {% include 'helper_forms/physician_email_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="physicianPhoneTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for physicianPhone in physician.physicianPhones %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#physicianPhone{{physicianPhone.physicianPhoneID}}Tab" role="tab" data-toggle="tab">{{physicianPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#physicianPhone{{physicianPhone.physicianPhoneID}}Tab" role="tab" data-toggle="tab">{{physicianPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for physicianPhone in physician.physicianPhones %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="physicianPhone{{physicianPhone.physicianPhoneID}}Tab">
+                    {% include 'helper_forms/physician_phone_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="physicianPhone{{physicianPhone.physicianPhoneID}}Tab">
+                    {% include 'helper_forms/physician_phone_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newPhoneTab">
+                {% set physicianPhone = none %}
+                {% include 'helper_forms/physician_phone_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="physicianFacilityTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
+                <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="facilityTableTab">
+                <table class="table table-striped no-spacing">
+                    <thead>
+                        <tr>
+                            <th> Facility Name </th>
+                            <th> Contact First Name </th>
+                            <th> Contact Last Name </th>
+                            <th> Facility Status </th>
+                            <th> Physician-Facility Status </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% for physicianFacility in physician.physicianFacilities %}
+                    <tr>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactFirstName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactLastName"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityStatus"]}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.physFacilityStatus.physicianFacilityStatus}}</a></td>
+                    </tr>    
+                {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="newFacilityTab">
+                {% set physicianFacility = none %}
+                {% include 'helper_forms/physician_facility_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

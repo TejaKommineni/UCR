@@ -1,0 +1,316 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Patient Information</h1>
+        </div>
+      </div>
+      
+        <form class="formOverride" id="patientForm">
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_patientID">Patient ID</label>
+                  <input type="text" class="form-control" name="patID" id="text_patientID" value="{{form["patient"]["patID"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_ucrDistID">UCRDISTID</label>  
+                  <input type="text" class="form-control" name="ucrDistID" id="text_ucrDistID" value="{{form["patient"]["ucrDistID"]}}" readonly="readonly" disabled="disabled">
+                </div>
+               <div class="col-md-2">  
+                  <label for="text_UPDBID">UPDBID</label>        
+                  <input type="text" class="form-control" name="UPDBID" id="text_UPDBID" value="{{form["patient"]["UPDBID"]}}" readonly="readonly" disabled="disabled">
+               </div>
+               <div class="col-md-2">  
+                  <label for="text_SSN">SSN</label>        
+                  <input type="text" class="form-control" name="SSN" id="text_SSN" value="{{form["patient"]["SSN"]}}" readonly="readonly" disabled="disabled">
+               </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{form["patient"]["firstName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_middleName">Middle Name</label>
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{form["patient"]["middleName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{form["patient"]["lastName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_maidenName">Maiden Name</label>
+                  <input type="text" class="form-control" name="maidenName" id="text_maidenName" value="{{form["patient"]["maidenName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_aliasFirstName">Alias First Name</label>
+                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{form["patient"]["aliasFirstName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_aliasMiddleName">Alias Middle Name</label>
+                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{form["patient"]["aliasMiddleName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_aliasLastName">Alias Last Name</label>
+                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{form["patient"]["aliasLastName"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-1">
+                  <label for="date_dobDay">DOB Day</label>
+                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobDay"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-1">
+                  <label for="date_dobMonth">DOB Month</label>
+                  <input type="text" class="form-control" name="dobMonth" id="date_dobMonth" value="{{form["patient"]["dobMonth"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-1">
+                  <label for="date_dobYear">DOB Year</label>
+                  <input type="text" class="form-control" name="dobYear" id="date_dobYear" value="{{form["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
+               <div class="col-md-2">  
+                  <label for="select_sex">Sex</label>        
+                  <select type="text" class="form-control" name="sexID" id="select_sex" readonly="readonly" disabled="disabled">
+                      <option></option>
+                  {% for sex in form["sexes"] %}
+                    {% if sex.sexID == form["patient"].sex.sexID %}
+                       <option value="{{sex.sexID}}" selected="selected">{{sex.sex}}</option>
+                    {% else %}
+                       <option value="{{sex.sexID}}">{{sex.sex}}</option>
+                     {% endif %}
+                  {% endfor %}
+                  </select>
+               </div>
+               <div class="col-md-2">  
+                  <label for="select_race">Race</label>        
+                  <select type="text" class="form-control" name="raceID" id="select_race" readonly="readonly" disabled="disabled">
+                      <option></option>
+                  {% for race in form["races"] %}
+                    {% if race.raceID == form["patient"].race.raceID %}
+                       <option value="{{race.raceID}}" selected="selected">{{race.race}}</option>
+                    {% else %}
+                       <option value="{{race.raceID}}">{{race.race}}</option>
+                     {% endif %}
+                  {% endfor %}
+                  </select>
+               </div>
+               <div class="col-md-2">  
+                  <label for="select_ethnicity">Ethnicity</label>        
+                  <select type="text" class="form-control" name="ethnicityID" id="select_ethnicity" readonly="readonly" disabled="disabled">
+                      <option></option>
+                  {% for ethnicity in form["ethnicities"] %}
+                    {% if ethnicity.ethnicityID == form["patient"].ethnicity.ethnicityID %}
+                       <option value="{{ethnicity.ethnicityID}}" selected="selected">{{ethnicity.ethnicity}}</option>
+                    {% else %}
+                       <option value="{{ethnicity.ethnicityID}}">{{ethnicity.ethnicity}}</option>
+                     {% endif %}
+                  {% endfor %}
+                  </select>
+               </div>
+               <div class="col-md-2">  
+                  <label for="select_vitalStatus">Vital Status</label>        
+                  <select type="text" class="form-control" name="vitalStatusID" id="select_vitalStatus" readonly="readonly" disabled="disabled">
+                      <option></option>
+                  {% for vitalStatus in form["vitalStatuses"] %}
+                    {% if vitalStatus.vitalStatusID == form["patient"].vitalStatus.vitalStatusID %}
+                       <option value="{{vitalStatus.vitalStatusID}}" selected="selected">{{vitalStatus.vitalStatus}}</option>
+                    {% else %}
+                       <option value="{{vitalStatus.vitalStatusID}}">{{vitalStatus.ethnicity}}</option>
+                     {% endif %}
+                  {% endfor %}
+                  </select>
+               </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{form["patient"]["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{form["patient"]["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{form["patient"]["versionID"]}}" readonly="readonly" disabled="disabled">
+                </div>
+            </div>
+          </div>
+        </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li><a href="#patientAddressTab"  role="tab" data-toggle="tab">Address</a></li>
+        <li><a href="#patientEmailTab" role="tab" data-toggle="tab">Email</a></li>
+        <li><a href="#patientPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+        <li><a href="#patientCTCsTab" role="tab" data-toggle="tab">CTCs</a></li>
+        <li><a href="#patientInformantsTab" role="tab" data-toggle="tab">Informants</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="patientAddressTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientAddress in form["patientAddresses"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientAddress in form["patientAddresses"] %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                    {% include 'helper_forms/patient_address_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                    {% include 'helper_forms/patient_address_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newAddressTab">
+                {% set patientAddress = none %}
+                {% include 'helper_forms/patient_address_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="patientEmailTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientEmail in form["patientEmails"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientEmail in form["patientEmails"] %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
+                    {% include 'helper_forms/patient_email_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
+                    {% include 'helper_forms/patient_email_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newEmailTab">
+                {% set patientEmail = none %}
+                {% include 'helper_forms/patient_email_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="patientPhoneTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                {% for patientPhone in form["patientPhones"] %}
+                    {% if loop.index == 1 %}
+                    <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% else %}
+                    <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
+            </ul>
+            <div class="tab-content">
+                {% for patientPhone in form["patientPhones"] %}
+                {% if loop.index == 1 %}
+                    <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                    {% include 'helper_forms/patient_phone_form.html' %}
+                    </div>
+                {% else %}
+                    <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                    {% include 'helper_forms/patient_phone_form.html' %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="tab-pane" id="newPhoneTab">
+                {% set patientPhone = none %}
+                {% include 'helper_forms/patient_phone_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class = "tab-pane" id="patientCTCsTab">
+            <form class="formOverride" id="patientCTC">
+                <fieldset>
+                    <table class="table table-striped no-spacing">
+                          <thead>
+                            <tr>
+                                <th>CTC ID</th>
+                                <th>DX Date Day</th>
+                                <th>DX Date Month</th>
+                                <th>DX Date Year</th>
+                                <th>Site</th>
+                                <th>Stage</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for ctc in form["ctcs"] %}
+                            <tr>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["ctcID"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateDay"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateMonth"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateYear"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["site"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["stage"]}}</a></td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+        <div class= "tab-pane" id="patientInformantsTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#informantTableTab" role="tab" data-toggle="tab">Table</a></li>
+                <li><a href="#newInformantTab" role="tab" data-toggle="tab">New Informant</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="informantTableTab">
+                    <form class="formOverride" id="patientInformants">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Primary</th>
+                                        <th>Relationship</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for informant in form["informants"] %}
+                                    <tr>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"]}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="newInformantTab">
+                    {% set informant = none %}
+                    {% include 'helper_forms/informant_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

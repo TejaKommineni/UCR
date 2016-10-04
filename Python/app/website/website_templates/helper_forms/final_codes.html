@@ -1,0 +1,54 @@
+{% if finalCode is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="finalCodeForm{{loop.index}}" action='/website/finalcodes/{{finalCode["finalCodeID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="finalCodeForm{{loop.index}}" action='/website/finalcodes/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>Final Code</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_finalCode{{loop.index}}">Final Code</label>
+                  <input type="text" class="form-control" name="finalCode" id="text_finalCode{{loop.index}}" value="{{finalCode["finalCode"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_finalCodeDefinition{{loop.index}}">Final Code Definition</label>
+                  <input type="text" class="form-control" name="finalCodeDefinition" id="text_finalCodeDefinition{{loop.index}}" value="{{finalCode["finalCodeDefinition"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{finalCode["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{finalCode["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>  
+                  {% if finalCode is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{finalCode["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if finalCode is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add Final Code</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if finalCode is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="finalCodeID" value="{{finalCode["finalCodeID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="finalCodeID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>

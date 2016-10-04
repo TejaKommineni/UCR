@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for irbHolder in form["irbHolders"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/irb_holder_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set irbHolder = none %}
+    {% include 'helper_forms/irb_holder_form.html' %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for physicianStatus in form["physicianStatuses"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/physician_statuses.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set physicianStatus = none %}
+    {% include 'helper_forms/physician_statuses.html' %}
+{% endif %}
+{% endblock %}

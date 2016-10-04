@@ -1,0 +1,279 @@
+    <form class="formOverride" id="patientInfoForm">
+        <fieldset>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                      <h1>CTC</h1>
+                    </div>
+                  </div>
+                <div class="row">
+                    <div class="col-md-2">  
+                      <label for="text_firstName">First Name</label>        
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_middleName">Middle Name</label>        
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{ctc.patient.middleName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_lastName">Last Name</label>        
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{ctc.patient.lastName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-1">
+                        <label>Patient</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/patients/{{ctc.patient.participantID}}/">Patient</a>
+                    </div>
+                </div>
+                  <div class="row">
+                    <div class="col-md-5">
+                      <label for="text_lastName">Project Title</label>
+                      <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{ctc.projectPatient.project.projectTitle}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-1">
+                        <label>Project</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/projects/{{ctc.projectPatient.project.projectID}}/">Project</a>
+                    </div>
+                     <div class="col-md-2">
+                        <label>Project Patient</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/projectpatients/{{ctc.projectPatient.participantID}}/">Project Patient</a>
+                    </div>
+                  </div>
+                </div>
+        </fieldset>
+      </form>
+
+{% if ctc is not none %}
+    <!-- action url is for update -->
+    <!--<form class="formOverride" id="addressForm" action='/website/ctcs/{{ctc["ctcID"]}}/', method='post'>-->
+    <form class="formOverride" id="ctcForm">
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="ctcForm" action='/website/ctcs/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_dxDateDay">Dx Date Day</label>
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateDay"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_dxDateMonth">Dx Date Month</label>
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateMonth" value="{{ctc["dxDateMonth"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_dxDateYear">Dx Date Year</label>
+                  <input type="text" class="form-control" name="dxDateYear" id="date_dxDateYear" value="{{ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_site">Site</label>
+                  <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_ctcSequence">CTC Sequence</label>
+                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_stage">Stage</label>
+                  <input type="text" class="form-control" name="stage" id="text_stage" value="{{ctc["stage"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class = "row">
+                <div class = "col-md-8">
+                  <label for="text_histology">Histology</label>
+                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"]}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
+                </div>
+             </div>
+             <div class="row">
+                <div class = "col-md-8">
+                  <label for="text_behavior">Behavior</label>
+                  <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{ctc["behavior"]}}</textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_dxStreet">Dx Street</label>
+                  <input type="text" class="form-control" name="dxStreet1" id="text_dx_street" value="{{ctc["dxStreet1"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_dxZip">Dx Zip Code</label>
+                  <input type="text" class="form-control" name="dxZip" id="text_dxZip" value="{{ctc["dxZip"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                 <div class = "col-md-2">
+                  <label for="text_dxCounty">Dx County</label>
+                  <input type="text" class="form-control" name="dxCounty" id="text_dxCounty" value="{{ctc["dxCounty"]}}" readonly="readonly" disabled="disabled">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_dxStreet2">Dx Street 2</label>
+                  <input type="text" class="form-control" name="dxStreet2" id="text_dxStreet2" value="{{ctc["dxStreet2"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_dxCity">Dx City</label>
+                  <input type="text" class="form-control" name="dxCity" id="text_dxCity" value="{{ctc["dxCity"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">  
+                  <label for="select_dxState">Dx State</label>        
+                  <select type="text" class="form-control" name="dxState" id="select_dxState" readonly="readonly" disabled="disabled">
+                      <option></option>
+                      {% for state in form["states"] %}
+                        {% if state.stateID == ctc["dxStateID"]%}
+                            <option value="{{state.stateID}}" selected="selected">{{state.state}}</option>
+                        {% else %}
+                            <option value="{{state.stateID}}">{{state}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                
+            </div>
+            <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_dnc">DNC</label>
+                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_dncReason">DNC Reason</label>
+                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_recordID">Record ID</label>
+                  <input type="text" class="form-control" name="recordID" id="text_recordID" value="{{ctc["recordID"]}}" readonly="readonly" disabled="disabled">
+                </div>
+            </div>
+            </div>
+          </fieldset>
+              
+          <fieldset>
+                
+                <div class="form-group">
+                  <div class="row">
+                    <div class = "col-md-2">
+                      <label for="text_createdDate">Created</label>
+                      <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{ctc["createdDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class = "col-md-2">
+                      <label for="text_modifiedDate">Last Modified</label>
+                      <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{ctc["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="text_versionID">Version</label>  
+                      {% if ctc is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{ctc["versionID"]}}" readonly="readonly">
+                      {% else %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                      {% endif %}  
+                    </div>
+                    <!-- Extra hidden fields -->
+                    {% if ctc is not none %}
+                    <input class="form-control" type="hidden" id="text_method" name="_method" value="put" />
+                    {% endif %}
+                    <input class="form-contorl" type="hidden" id="text_method" name="patientID" value="{{ctc["patientID"]}}"/>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if ctc is not none %}
+                      <!--<button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>-->
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add CTC</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li class="active"><a href="#facilitiesTab" role="tab" data-toggle="tab">Facilities</a></li>
+        <li><a href="#physiciansTab"  role="tab" data-toggle="tab">Physicians</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="facilitiesTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#facilityTableTab" role="tab" data-toggle="tab">Table </a></li>
+                {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                <li><a href="#newFacilityTab" role="tab" data-toggle="tab">New Facility</a></li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="facilityTableTab">
+                <table class="table table-striped no-spacing">
+                    <thead>
+                        <tr>
+                            <th> Facility Name </th>
+                            <th> Class of Case </th>
+                            <th> Contact First Name </th>
+                            <th> Contact Last Name </th>
+                            <th> Facility Status </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% for ctcFacility in ctc.ctcFacilities %}
+                    <tr>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.coc or ''}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactFirstName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactLastName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityStatus"]}}</a></td>
+                    </tr>    
+                {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                <div class="tab-pane" id="newFacilityTab">
+                {% set ctcFacility = none %}
+                {% include 'helper_forms/ctc_facility_form.html' %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+           <div class="tab-pane" id="physiciansTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#physicianTableTab" role="tab" data-toggle="tab">Table </a></li>
+                    {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                    <li><a href="#newPhysicianTab" role="tab" data-toggle="tab">New Physician</a></li>
+                    {% endif %}
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="physicianTableTab">
+                    <table class="table table-striped no-spacing">
+                      <thead>
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Specialty</th>
+                            <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for physicianToCTC in ctc.physicianToCTC %}
+                            <tr>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["lastName"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["firstName"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["specialty"]}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"].physicianStatus}}</a></td>
+                            </tr>
+                        {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                    {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                    <div class="tab-pane" id="newPhysicianTab">
+                    {% set physicianToCTC = none %}
+                    {% include 'helper_forms/physician_to_ctc_form.html' %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+         </div>
+    
+    

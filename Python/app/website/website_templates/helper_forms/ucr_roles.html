@@ -1,0 +1,50 @@
+{% if ucrRole is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="ucrRoleForm{{loop.index}}" action='/website/ucrroles/{{ucrRole["ucrRoleID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="ucrRoleForm{{loop.index}}" action='/website/ucrroles/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>UCR Role</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_ucrRole{{loop.index}}">UCR Role</label>
+                  <input type="text" class="form-control" name="ucrRole" id="text_ucrRole{{loop.index}}" value="{{ucrRole["ucrRole"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{ucrRole["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{ucrRole["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>  
+                  {% if ucrRole is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{ucrRole["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if ucrRole is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add UCR Role</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if ucrRole is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="ucrRoleID" value="{{ucrRole["ucrRoleID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="ucrRoleID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>

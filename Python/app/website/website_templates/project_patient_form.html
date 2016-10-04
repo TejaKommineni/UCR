@@ -1,0 +1,649 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Project Patient Information</h1>
+        </div>
+      </div>
+      
+      <form class="formOverride" id="patientInfoForm">
+        <fieldset>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">  
+                      <label for="text_firstName">First Name</label>        
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{projectPatient.ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_middleName">Middle Name</label>        
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{projectPatient.ctc.patient.middleName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">  
+                      <label for="text_lastName">Last Name</label>        
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{projectPatient.ctc.patient.lastName}}" readonly="readonly" disabled="disabled">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Link to Patient</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/patients/{{projectPatient.ctc.patient.participantID}}/">Full Patient Info</a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+      </form>
+      
+        {% if projectPatient is not none %}
+        <!-- action url is for update -->
+        <form class="formOverride" id="projectPatientForm" action='/website/projectpatients/{{projectPatient.participantID}}/', method='post'>
+    {% else %}
+        <!-- action url is for post/create -->
+        <form class="formOverride" id="projectPatientForm" action='/website/projectpatients/', method='post'>
+    {% endif %}
+          <fieldset>
+            <div class="form-group">
+            {% if projectPatient is not none %}
+              <div class="row row-dark">
+                <div class = "col-md-4">
+                  <label for="select_projectID">Project</label>
+                  <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
+                      {% for proj in form.projects %}
+                        {% if proj.projectID == projectPatient.projectID %}
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                        {% else %}
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% endif %}
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select type="text" class="form-control" name="staffID" id="select_staffID">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.staffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">  
+                  <label for="text_currentAge">Current Age</label>        
+                  <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}" readonly="readonly" disabled="disabled">
+               </div>
+                <div class = "col-md-2">
+                  <label for="text_batch">Batch</label>
+                  <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch}}" readonly="readonly" disabled="disabled">
+                </div>
+               <div class="col-md-2">  
+                  <label for="text_siteGrp">Site Group</label>        
+                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value="{{projectPatient.siteGrp}}" readonly="readonly" disabled="disabled">
+               </div>
+              </div>
+              <div class = "row row-dark">
+                <div class="col-md-2">  
+                  <label for="date_importDate">Import Date</label>        
+                  <input type="date" class="form-control" required="required" name="importDate" id="date_importDate" value="{{projectPatient.importDate}}">
+               </div>
+               <div class = "col-md-2">
+                  <label for="select_finalCodeID">Final Code</label>
+                  <select type="text" class="form-control" required="required" name="finalCodeID" id="select_finalCodeID">
+                      {% for finalCode in form.finalCodes %}
+                        {% if finalCode.finalCodeID == projectPatient.finalCodeID %}
+                            <option selected="selected" value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
+                        {% else %}
+                            <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+               <div class="col-md-2">  
+                  <label for="date_finalCodeDate">Final Date</label>        
+                  <input type="date" class="form-control" name="finalCodeDate" id="date_finalCodeDate" value="{{projectPatient.finalCodeDate}}">
+               </div>
+               <div class = "col-md-2">
+                  <label for="select_finalCodeStaff">Final Code Staff</label>
+                  <select type="text" class="form-control" name="finalCodeStaffID" id="select_finalCodeStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.finalCodeStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">  
+                  <label for="date_enrollmentDate">Enrollment Date</label>        
+                  <input type="date" class="form-control" name="enrollmentDate" id="date_enrollmentDate" value="{{projectPatient.enrollmentDate}}">
+               </div>
+                <div class = "col-md-2">
+                  <label for="select_enrollmentStaff">Enrollement Staff</label>
+                  <select type="text" class="form-control" name="enrollmentStaffID" id="select_enrollmentStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.enrollmentStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">  
+                  <label for="date_dateCoordSigned">Date Coordinator Signed</label>        
+                  <input type="date" class="form-control" name="dateCoordSigned" id="date_dateCoordSigned" value="{{projectPatient.dateCoordSigned}}">
+               </div>
+                <div class = "col-md-2">
+                  <label for="select_dateCoordSignedStaff">Date Coordinator Signed Staff</label>
+                  <select type="text" class="form-control" name="dateCoordSignedStaffID" id="select_dateCoordSignedStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.dateCoordSignedStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row row-dark">
+                <div class = "col-md-2">
+                  <label for="select_abstractStatusID">Abstract Status</label>
+                  <select type="text" class="form-control" name="abstractStatusID" id="select_abstractStatusID">
+                      <option></option>
+                      {% for abstractStatus in form.abstractStatuses %}
+                        {% if abstractStatus.abstractStatusID == projectPatient.abstractStatusID %}
+                            <option selected="selected" value="{{abstractStatus.abstractStatusID}}">{{abstractStatus.abstractStatus}}</option>
+                        {% else %}
+                            <option value="{{abstractStatus.abstractStatusID}}">{{abstractStatus.abstractStatus}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_abstractStatusDate">Abstract Status Date</label>
+                  <input type="date" class="form-control" name="abstractStatusDate" id="date_abstractStatusDate" value="{{projectPatient.abstractStatusDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_abstractStatusStaff">Abstract Status Staff</label>
+                  <select type="text" class="form-control" name="abstractStatusStaffID" id="select_abstractStatusStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.abstractStatusStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_sentToAbstractorDate">Abstract Status Date</label>
+                  <input type="date" class="form-control" name="sentToAbstractorDate" id="date_sentToAbstractorDate" value="{{projectPatient.sentToAbstractorDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_sentToAbstractorStaff">Sent to Abstractor Staff</label>
+                  <select type="text" class="form-control" name="sentToAbstractorStaffID" id="select_sentToAbstractorStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.sentToAbstractorStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="date_abstractedDate">Abstracted Date</label>
+                  <input type="date" class="form-control" name="abstractedDate" id="date_abstractedDate" value="{{projectPatient.abstractedDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_abstractorStaff">Abstractor Staff</label>
+                  <select type="text" class="form-control" name="abstractorStaffID" id="select_abstractorStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.abstractorStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row row-dark">
+                <div class = "col-md-2">
+                  <label for="date_researcherDate">Researcher Date</label>
+                  <input type="date" class="form-control" name="researcherDate" id="date_researcherDate" value="{{projectPatient.researcherDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_researcherStaff">Researcher Staff</label>
+                  <select type="text" class="form-control" name="researcherStaffID" id="select_researcherStaff">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.researcherStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-4">
+                  <label for="text_consentLink">Consent Link</label>
+                  <input type="text" class="form-control" name="consentLink" id="text_consentLink" value="{{projectPatient.consentLink}}">
+                </div>
+            </div>
+            <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_medRecordReleaseSigned">Medical Record Release Signed</label>
+                  <select type="text" class="form-control" name="medRecordReleaseSigned" id="select_medRecordReleaseSigned" value="{{projectPatient.medRecordReleaseSigned}}">
+                      {% if projectPatient.medRecordReleaseSigned %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectPatient.medRecordReleaseSigned %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_medRecordReleaseLink">Medical Record Release Link</label>
+                  <input type="text" class="form-control" name="medRecordReleaseLink" id="text_medRecordReleaseLink" value="{{projectPatient.medRecordReleaseLink}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_medRecordReleaseDate">Medical Record Release Date</label>
+                  <input type="date" class="form-control" name="medRecordReleaseDate" id="text_medRecordReleaseDate" value="{{projectPatient.medRecordReleaseDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_medRecordReleaseStaffID">Medical Record Release Staff</label>
+                  <select type="text" class="form-control" name="medRecordReleaseStaffID" id="select_medRecordReleaseStaffID">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.medRecordReleaseStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+            </div>
+            <div class="row row-dark">
+                <div class = "col-md-2">
+                  <label for="date_surveyToResearcher">Survey To Researcher</label>
+                  <input type="date" class="form-control" name="surveyToResearcher" id="date_surveyToResearcher" value="{{projectPatient.surveyToResearcher}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_surveyToResearcherStaffID">Survey To Researcher Staff</label>
+                  <select type="text" class="form-control" name="surveyToResearcherStaffID" id="select_surveyToResearcherStaffID">
+                      <option></option>
+                      {% for staff in form.staff %}
+                        {% if staff.staffID == projectPatient.surveyToResearcherStaffID %}
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% else %}
+                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_qualityControl">Quality Control</label>
+                  <select type="text" class="form-control" name="qualityControl" id="select_qualityControl">
+                      {% if projectPatient.qualityControl %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectPatient.qualityControl %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- hidden fields -->
+            <input type="hidden" class="form-control" name="ctcID" id="text_ctcID" value="{{projectPatient.ctcID}}">
+            {% if projectPatient is not none %}
+                <input type="hidden" name="_method" value="put" />
+                <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/"/>
+                <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+            {% else %}
+                <input type="hidden" name="participantID" value="{{form.patient.participantID}}"/>
+                <input type="hidden" name="_redirectlink" value="projectpatients/"/>
+            {% endif %}
+            
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{projectPatient.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{projectPatient.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{projectPatient.versionID}}" readonly="readonly">
+                </div>
+            </div>
+          </div>
+        </fieldset>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if preApplication is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Project Patient</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>
+    <ul class = "nav nav-tabs" role="tablist">
+        <li class="active"><a href="#contactsTab"  role="tab" data-toggle="tab">Contacts</a></li>
+        <li><a href="#ctcTab" role="tab" data-toggle="tab">CTC</a></li>
+        <li><a href="#incentivesTab" role="tab" data-toggle="tab">Incentives</a></li>
+        <li><a href="#patientContactInfoTab" role="tab" data-toggle="tab">Patient Contact Info</a></li>
+        <li><a href="#statusesTab" role="tab" data-toggle="tab">Statuses</a></li>
+        <li><a href="#tracingsTab" role="tab" data-toggle="tab">Tracings</a></li>
+    </ul>
+    <div class="tab-content">        
+        <div class="tab-pane active" id="contactsTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li><a class="active" href="#contactTable" role="tab" data-toggle="tab">Contacts</a></li>
+                <li><a href="#newPatientContactTab" role="tab" data-toggle="tab">New Patient Contact</a></li>
+                <li><a href="#newInformantContactTab" role="tab" data-toggle="tab">New Informant Contact</a></li>
+                <li><a href="#newFacilityContactTab" role="tab" data-toggle="tab">New Facility Contact</a></li>
+                <li><a href="#newPhysicianContactTab" role="tab" data-toggle="tab">New Physician Contact</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="contactTable">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Contact Date</th>
+                                        <th>Contact Type</th>
+                                        <th>Staff</th>
+                                        <th>Patient Phone</th>
+                                        <th>Informant</th>
+                                        <th>Facility</th>
+                                        <th>Physician</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for contact in projectPatient.contacts %}
+                                    <tr>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactCode}} - {{contact.contactType.contactDefinition}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.patientPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}} {{contact.informantPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName}} {{contact.facilityPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName}} {{contact.physicianPhone.phoneNumber}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="newPatientContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_patient.html' %}
+                </div>
+                <div class="tab-pane" id="newInformantContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_informant.html' %}
+                </div>
+                <div class="tab-pane" id="newFacilityContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_facility.html' %}
+                </div>
+                <div class="tab-pane" id="newPhysicianContactTab">
+                {% set contact = none %}
+                {% include 'helper_forms/contact_form_physician.html' %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane" id="ctcTab">
+            {% set ctc = projectPatient.ctc %}
+            {% include 'helper_forms/ctc_form.html' %}
+        </div>
+        
+        <div class="tab-pane" id="incentivesTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li><a href="#incentiveTableTab" role="tab" data-toggle="tab">Incentives</a></li>
+                <li><a href="#newIncentiveTab" role="tab" data-toggle="tab">New Incentive</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="incentiveTableTab">
+                    <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Barcode</th>
+                                        <th>Gift Card Description</th>
+                                        <th>Amount</th>
+                                        <th>Date Given</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for incentive in projectPatient.incentives %}
+                                    <tr>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.barcode}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.giftCard.description}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.dateGiven}}</a></td></tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="newIncentiveTab">
+                {% set incentive = none %}
+                {% include 'helper_forms/incentive_form.html' %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="patientContactInfoTab">
+            <ul class = "nav nav-tabs" role="tablist">
+            <li><a href="#patientAddressTab"  role="tab" data-toggle="tab">Address</a></li>
+            <li><a href="#patientEmailTab" role="tab" data-toggle="tab">Email</a></li>
+            <li><a href="#patientPhoneTab" role="tab" data-toggle="tab">Phone</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="patientAddressTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                            {% include 'helper_forms/patient_address_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientAddress{{patientAddress.patAddressID}}Tab">
+                            {% include 'helper_forms/patient_address_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="tab-pane" id="newAddressTab">
+                        {% set patientAddress = none %}
+                        {% include 'helper_forms/patient_address_form.html' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="patientEmailTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails  %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
+                            {% include 'helper_forms/patient_email_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientEmail{{patientEmail.emailID}}Tab">
+                            {% include 'helper_forms/patient_email_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="tab-pane" id="newEmailTab">
+                        {% set patientEmail = none %}
+                        {% include 'helper_forms/patient_email_form.html' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="patientPhoneTab">
+                    <ul class ="nav nav-tabs" role="tablist">
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones  %}
+                            {% if loop.index == 1 %}
+                            <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% else %}
+                            <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones %}
+                        {% if loop.index == 1 %}
+                            <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                            {% include 'helper_forms/patient_phone_form.html' %}
+                            </div>
+                        {% else %}
+                            <div class="tab-pane" id="patientPhone{{patientPhone.patPhoneID}}Tab">
+                            {% include 'helper_forms/patient_phone_form.html' %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="tab-pane" id="newPhoneTab">
+                        {% set patientPhone = none %}
+                        {% include 'helper_forms/patient_phone_form.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <div class="tab-pane" id="statusesTab">
+        <ul class ="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#patientProjectStatusTableTab" role="tab" data-toggle="tab">Patient Project Statuses</a></li>
+            <li><a href="#newPatientProjectStatus" role="tab" data-toggle="tab">New Patient Project Status</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="patientProjectStatusTableTab">
+                <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Status Type</th>
+                                        <th>Status Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
+                                    <tr>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.statusDate}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+            </div>
+            <div class="tab-pane" id="newPatientProjectStatus">
+            {% set patientProjectStatus = none %}
+            {% include 'helper_forms/patient_project_status_form.html' %}
+            </div>
+        </div>
+         </div>
+
+        <div class="tab-pane" id="tracingsTab">
+        <ul class ="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#tracingTableTab" role="tab" data-toggle="tab">Tracings</a></li>
+            <li><a href="#newtracing" role="tab" data-toggle="tab">New Tracing</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tracingTableTab">
+                <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Tracing Source</th>
+                                        <th>Staff</th>
+                                        <th>Notes</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for tracing in projectPatient.tracings %}
+                                    <tr>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.tracingSource.description}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.staff.firstName}} {{tracing.staff.lastName}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.notes}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.date}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+            </div>
+            <div class="tab-pane" id="newtracing">
+            {% set tracing = none %}
+            {% include 'helper_forms/tracing_form.html' %}
+            </div>
+        </div>
+    </div>
+    </div>
+    
+{% endblock %}

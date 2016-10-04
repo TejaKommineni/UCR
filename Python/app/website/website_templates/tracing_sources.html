@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for tracingSource in form["tracingSources"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/tracing_source_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set tracingSource = none %}
+    {% include 'helper_forms/tracing_source_form.html' %}
+{% endif %}
+{% endblock %}

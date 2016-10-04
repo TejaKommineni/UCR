@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for abstractStatus in form["abstractStatuses"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/abstract_statuses.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set abstractStatus = none %}
+    {% include 'helper_forms/abstract_statuses.html' %}
+{% endif %}
+{% endblock %}

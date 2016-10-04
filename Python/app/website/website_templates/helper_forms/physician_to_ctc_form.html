@@ -1,0 +1,90 @@
+{% if physicianToCTC is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="physicianToCTCForm" action='/website/physiciantoctcs/{{physicianToCTC["physicianCTCID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="physicianToCTCForm" action='/website/physiciantoctcs/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_physicianID">Physician</label>
+                  <select type="text" class="form-control" required="required" name="physicianID" id="select_physicianID">
+                      {% for phys in form.physicians %}
+                        {% if phys.physicianID == physicianToCTC.physicianID %}
+                            <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                        {% else %}
+                            <option value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% if physicianToCTC is not none %}
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_ctcID">CTC</label>
+                  <select type="text" class="form-control" required="required" name="ctcID" id="select_ctcID">
+                      {% for ctc in form.ctcs %}
+                        {% if ctc.ctcID == physicianToCTC.ctcID %}
+                            <option selected="selected" value="{{ctc.ctcID}}">{{ctc.patient.firstName}} {{ctc.patient.middleName}} {{ctc.patient.lastName}} {{ctc.dxDate}}</option>
+                        {% else %}
+                            <option value="{{ctc.ctcID}}">{{ctc.patient.firstName}} {{ctc.patient.middleName}} {{ctc.patient.lastName}} {{ctc.dxDate}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{physicianToCTC.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{physicianToCTC.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  
+                  {% if physicianToCTC is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{physicianToCTC.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if physicianToCTC is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="physicianToCTCID" value="{{physicianToCTC.physicianToCTCID}}"/>
+                    {% if "ctcfacilities" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="ctcs/{{physicianToCTC.ctcID}}/#physicianTableTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianTableTab"/>
+                    {% endif %}
+                {% else %}
+                    <input type="hidden" name="ctcID" value = "{{ctc.ctcID}}"/>
+                    <input type="hidden" name="physicianToCTCID" value="0"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianTableTab"/>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if physicianToCTC is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Physician To CTC</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>

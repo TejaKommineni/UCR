@@ -1,0 +1,100 @@
+
+    {% if informant is not none %}
+            <!-- action url is for update -->
+            <form class="formOverride" id="informantForm" action='/website/informants/{{informant["informantID"]}}/', method='post'>
+        {% else %}
+            <form class="formOverride" id="informantForm" action='/website/informants/', method='post'>
+        {% endif %}
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_firstName">First Name</label>
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{informant["firstName"]}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_middleName">Middle Name</label>
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{informant["middleName"]}}">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_lastName">Last Name</label>
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{informant["lastName"]}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_informantPrimary">Informant Primary</label>
+                  <select type="text" class="form-control" name="informantPrimary" id="select_contact">
+                        {% if informant.informantPrimary %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not informant.informantPrimary %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_informantRelationship">Informant Relationship</label>
+                  <select type="text" class="form-control" name="informantRelationshipID" id="select_informantRelationshipID">
+                      <option></option>
+                          {% for informantRelationship in form.informantRelationships %}
+                            {% if informantRelationship.informantRelationshipID == informant.informantRelationshipID %}
+                                <option selected="selected" value="{{informantRelationship.informantRelationshipID}}">{{informantRelationship.informantRelationship}}</option>
+                            {% else %}
+                                <option value="{{informantRelationship.informantRelationshipID}}">{{informantRelationship.informantRelationship}}</option>
+                            {% endif %}
+                          {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_notes">Notes</label>
+                  <input type="text" class="form-control" name="notes" id="text_notes" value="{{informant["notes"]}}">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{informant["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{informant["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>  {% if informant is not none %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{informant["versionID"]}}" readonly="readonly">
+                      {% else %}
+                        <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                      {% endif %}  
+                </div>
+                <!-- Extra hidden fields -->
+                {% if informant is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="participantID" value="{{informant["participantID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
+                {% endif %}
+                <input type="hidden" name="_redirectlink" value="{{request.path}}#informantTableTab"/>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+            <div class = "form-group">
+              <div class="row">
+                <div class="col-md-2">
+                {% if informant is not none %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                {% else %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Add Informant</button>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+        </fieldset>
+    </form>

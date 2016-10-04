@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap-theme.min.css') }}">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/theme.js') }}"></script>
+    </head>
+    <body>
+        <nav class = "navbar navbar-default navbar-dark navbar-inverse" role = "navigation">
+           <div class = "navbar-header">
+              <button type = "button" class = "navbar-toggle"
+                 data-toggle = "collapse" data-target = "#example-navbar-collapse">
+                 <span class = "sr-only">Toggle navigation</span>
+                 <span class = "icon-bar"></span>
+                 <span class = "icon-bar"></span>
+                 <span class = "icon-bar"></span>
+              </button>
+              <a class = "navbar-brand" href = "/website/">UCR</a>
+           </div>
+           <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
+              <ul class = "nav navbar-nav">
+                  {% if user.staff.ucrRole.ucrRole in ['Director', 'Developer', 'Research Manager', 'Informatics Staff'] %}
+                 <li><a href = "/website/overview/">Overview</a></li>
+                  {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                 <li><a href = "/website/facilities/">Facilities</a></li>
+                  {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                 <li><a href = "/website/physicians/">Physicians</a></li>
+                  {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                 <li><a href = "/website/projects/">Projects</a></li>
+                  {%endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'] %}
+                 <li><a href = "/website/projectpatients/">Project Patients</a></li>
+                  {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Informatics Staff', 'Research Manager'] %}
+                 <li><a href = "/website/staff/">Staff</a></li>
+                  {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
+                 <li><a href = "/website/lookuptables/">LUTS</a></li>
+                  {% endif %}
+                 <li class="logout"><a href = "/logout/">Logout: ({{user.uID}} - {{user.staff.ucrRole.ucrRole}})</a></li>
+              </ul>
+           </div>
+        </nav>
+        <div id="message-box" class="jumbotron flyover flyover-centered alert-custom">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-custom">
+                      {{ message }}
+                    </div>
+                {% endfor %}
+              {% endif %}
+          {% endwith %}
+        </div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

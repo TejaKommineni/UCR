@@ -9,754 +9,7 @@ from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
 
-api = Blueprint('api',__name__,template_folder='templates')
-
-##############################################################################
-# create_data
-#
-# A test endpoint that adds some junk to test with
-##############################################################################
-def populate_db2(self):
-
-        phoneType1 = models.PhoneTypeLUT(
-            phoneType = "cell"
-        )
-        phoneType2 = models.PhoneTypeLUT(
-            phoneType = "home"
-        )
-
-        irb_holder1 = models.IRBHolderLUT(
-            holder = "holder 1",
-            holderDefinition= "IRB 1")
-
-        irb_holder2 = models.IRBHolderLUT(
-            holder = "holder 2",
-            holderDefinition= "IRB 2")
-
-        project_type1 = models.ProjectType(
-            projectType = "Type 1",
-            projectTypeDefinition = "Def 1")
-
-        project_type2 = models.ProjectType(
-            projectType = "Type 2",
-            projectTypeDefinition = "Def 2")
-
-        project1 = models.Project(
-            projectTypeID = 1,
-            irbHolderID = 1,
-            projectTitle = "Test Project",
-            shortTitle = "Test Project",
-            projectSummary = "Summary",
-            sop="sop",
-            ucrProposal="ucr_proposal",
-            budgetDoc = "budget_doc",
-            ucrFee = "no",
-            ucrNoFee = "yes",
-            previousShortTitle = "t short",
-            dateAdded = datetime(2016,2,2),
-            finalRecruitmentReport = "report",
-            ongoingContact = True,
-            activityStartDate = datetime(2016,2,2),
-            activityEndDate = datetime(2016,2,2))
-
-        project2 = models.Project(
-            projectTypeID = 1,
-            irbHolderID = 1,
-            projectTitle = "Test Project",
-            shortTitle = "Test Project",
-            projectSummary = "Summary",
-            sop="sop",
-            ucrProposal="ucr_proposal",
-            budgetDoc = "budget_doc",
-            ucrFee = "no",
-            ucrNoFee = "yes",
-            previousShortTitle = "t short",
-            dateAdded = datetime(2016,2,2),
-            finalRecruitmentReport = "report",
-            ongoingContact = True,
-            activityStartDate = datetime(2016,2,2),
-            activityEndDate = datetime(2016,2,2))
-
-        budget1 = models.Budget(
-            projectID = 1,
-            numPeriods = 1,
-            periodStart = datetime(2016,2,2),
-            periodEnd = datetime(2016,2,2),
-            periodTotal = 1.23,
-            periodComment = "comment")
-
-        rcsl = models.ReviewCommitteeStatusLUT(
-            reviewCommitteeStatus = "Status 1",
-            reviewCommitteeStatusDefinition = "rc status def")
-
-        rcs2 = models.ReviewCommitteeStatusLUT(
-            reviewCommitteeStatus = "Status 2",
-            reviewCommitteeStatusDefinition = "rc status def 2")
-
-        rcl1 = models.ReviewCommitteeLUT(
-            reviewCommittee = "rc 1",
-            reviewCommitteeDescription = "rc desc 1")
-
-        rcl2 = models.ReviewCommitteeLUT(
-            reviewCommittee = "rc 2",
-            reviewCommitteeDescription = "rc des 2c")
-
-        rc = models.ReviewCommittee(
-            projectID=1,
-            reviewCommitteeStatusID=1,
-            reviewCommitteeLUTID=1,
-            reviewCommitteeNumber="1",
-            dateInitialReview=datetime(2016,2,2),
-            dateExpires = datetime(2016,2,2),
-            rcNote = "rc_note",
-            rcProtocol = "rc_proto",
-            rcApproval="rc_approval")
-
-        ucr = models.UCRReport(
-            projectID = 1,
-            reportType= 1,
-            reportSubmitted= datetime(2016,2,2),
-            reportDue= datetime(2016,2,2),
-            reportDoc= "doc"
-        )
-        arcReview = models.ArcReview(
-            projectID = 1,
-            reviewType = 1,
-            dateSentToReviewer = datetime(2016,2,2),
-            reviewer1 = 1,
-            reviewer1Rec = 1,
-            reviewer1SigDate = datetime(2016,2,2),
-            reviewer1Comments = "test comment",
-            reviewer2 = 2,
-            reviewer2Rec  =2 ,
-            reviewer2SigDate = datetime(2016,2,2),
-            reviewer2Comments = "test comment",
-            research = 1,
-            linkage=False,
-            contact = True,
-            engaged = True,
-            nonPublicData = True)
-
-        grantStatus1 = models.GrantStatusLUT(
-            grantStatus = "status"
-        )
-
-        fundingSource1 = models.FundingSourceLUT(
-            fundingSource = "source"
-        )
-
-        grantStatus2 = models.GrantStatusLUT(
-            grantStatus = "status2"
-        )
-
-        fundingSource2 = models.FundingSourceLUT(
-            fundingSource = "source2"
-        )
-
-        funding = models.Funding(
-            grantStatusID = 1,
-            projectID = 1,
-            fundingSourceID = 1,
-            primaryFundingSource = "pfs",
-            secondaryFundingSource = "sfs",
-            fundingNumber = "number",
-            grantTitle = "title",
-            dateStatus = datetime(2016,2,2),
-            grantPi = 1,
-            primaryChartfield = "pcf",
-            secondaryChartfield = "scf"
-        )
-
-        staff = models.Staff(
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            email = "email",
-            phoneNumber = "phone",
-            phoneComment = "phoneComment",
-            institution = "institution",
-            department = "department",
-            position = "position",
-            credentials = "credentials",
-            street = "street",
-            city = "city",
-            state = "state",
-            humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
-        )
-        staff2 = models.Staff(
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            email = "email",
-            phoneNumber = "phone",
-            phoneComment = "phoneComment",
-            institution = "institution",
-            department = "department",
-            position = "position",
-            credentials = "credentials",
-            street = "street",
-            city = "city",
-            state = "state",
-            humanSubjectTrainingExp = datetime(2016,2,2),
-            ucrRole = 1
-        )
-
-        projStatusType1 = models.ProjectStatusLUT(
-            projectStatus = "Status 1",
-            projectStatusDefinition = "status def"
-        )
-        projStatusType2 = models.ProjectStatusLUT(
-            projectStatus = "Status 2",
-            projectStatusDefinition = "status def 2"
-        )
-
-        projStatus = models.ProjectStatus(
-            projectStatusTypeID = 1,
-            projectID = 1,
-            staffID = 1,
-            statusDate = datetime(2016,2,2),
-            statusNotes = "notes"
-        )
-
-        preApp = models.PreApplication(
-            projectID = 1,
-            piFirstName = "pi_fname",
-            piLastName = "pi_lname",
-            piEmail = "pi_email",
-            piPhone = "pi_phone",
-            contactFirstName = "contact_fname",
-            contactLastName = "contact_lname",
-            contactPhone = "contact_phone",
-            contactEmail = "contact_email",
-            institution = "institution",
-            institution2 = "institution2",
-            uid = "uid",
-            udoh = 1,
-            projectTitle = "project_title",
-            purpose = "purpose",
-            irb0 = True,
-            irb1 = True,
-            irb2 = True,
-            irb3 = True,
-            irb4 = True,
-            otherIrb = "other_irb",
-            updb = True,
-            ptContact = True,
-            startDate = datetime(2016,2,2),
-            link = True,
-            deliveryDate = datetime(2016,2,2),
-            description = "description"
-        )
-
-        phaseStatus1 = models.PhaseStatus(
-            phaseStatus = "status",
-            phaseDescription = "desc"
-        )
-
-        phaseStatus2 = models.PhaseStatus(
-            phaseStatus = "status",
-            phaseDescription = "desc"
-        )
-        logSubject1 = models.LogSubjectLUT(
-            logSubject = "subject"
-        )
-        logSubject2 = models.LogSubjectLUT(
-            logSubject = "subject"
-        )
-        log = models.Log(
-            logSubjectID = 1,
-            projectID = 1,
-            staffID = 1,
-            phaseStatusID = 1,
-            note = "note",
-            date = datetime(2016,2,2)
-        )
-        projectStaff = models.ProjectStaff(
-            staffRoleID = 1,
-            projectID = 1,
-            staffID = 1,
-            role = 1,
-            datePledge = datetime(2016,2,2),
-            dateRevoked = datetime(2016,2,2),
-            contact = "yes",
-            inactive = "no"
-        )
-        staffRole1 = models.StaffRoleLUT(
-            staffRole = "role",
-            staffRoleDescription = "desc"
-        )
-        staffRole2 = models.StaffRoleLUT(
-            staffRole = "role",
-            staffRoleDescription = "desc"
-        )
-        staffTraining = models.StaffTraining(
-            staffID = 1,
-            humanSubjectTrainingID = 1,
-            dateTaken = datetime(2016,2,2),
-            dateExpires = datetime(2016,2,2)
-        )
-        humanSubjectTraining1 = models.HumanSubjectTrainingLUT(
-            trainingType = "type"
-        )
-        humanSubjectTraining2 = models.HumanSubjectTrainingLUT(
-            trainingType = "type"
-        )
-        patient = models.Patient(
-            patID = "1",
-            recordID = 1,
-            ucrDistID = 1,
-            UPDBID = 1,
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "mname",
-            maidenName = "maiden_name",
-            aliasFirstName = "alias_fname",
-            aliasLastName = "alias_lname",
-            aliasMiddleName = "alias_middle",
-            dob = datetime(2016,2,2),
-            SSN = "999999999",
-            sex = "male",
-            race = "white",
-            ethnicity = "hispanic",
-            vitalStatus = "v1"
-        )
-        patient2 = models.Patient(
-            patID = "1",
-            recordID = 1,
-            ucrDistID = 1,
-            UPDBID = 1,
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "mname",
-            maidenName = "maiden_name",
-            aliasFirstName = "alias_fname",
-            aliasLastName = "alias_lname",
-            aliasMiddleName = "alias_middle",
-            dob = datetime(2016,2,2),
-            SSN = "999999999",
-            sex = "male",
-            race = "white",
-            ethnicity = "hispanic",
-            vitalStatus = "v1"
-        )
-
-        contactInfoStatus1 = models.ContactInfoStatusLUT(
-            contactInfoStatus = "status"
-        )
-
-        contactInfoSource1 = models.ContactInfoSourceLUT(
-            contactInfoSource = "source"
-        )
-        contactInfoStatus2 = models.ContactInfoStatusLUT(
-            contactInfoStatus = "status"
-        )
-
-        contactInfoSource2 = models.ContactInfoSourceLUT(
-            contactInfoSource = "source"
-        )
-
-        patientAddress = models.PatientAddress(
-            contactInfoSourceID = 1,
-            patientID = 1,
-            contactInfoStatusID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            addressStatusDate = datetime(2016,2,2),
-        )
-
-        patientEmail = models.PatientEmail(
-            contactInfoSourceID = 1,
-            patientID = 1,
-            contactInfoStatusID = 1,
-            email = "email",
-            emailStatusDate = datetime(2016,2,2)
-        )
-        patientPhone = models.PatientPhone(
-            contactInfoSourceID = 1,
-            patientID = 1,
-            contactInfoStatusID = 1,
-            phoneTypeID = 1,
-            phoneNumber = "phone",
-            phoneStatusDate = datetime(2016,2,2)
-        )
-        informant1 = models.Informant(
-            patientID = 1,
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            informantPrimary = "informant_primary",
-            informantRelationship = "informant_relationship",
-            notes = "notes"
-        )
-        informant2 = models.Informant(
-            patientID = 1,
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            informantPrimary = "informant_primary",
-            informantRelationship = "informant_relationship",
-            notes = "notes"
-        )
-        informantAddress = models.InformantAddress(
-            contactInfoSourceID = 1,
-            informantID = 1,
-            contactInfoStatusID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            addressStatusDate = datetime(2016,2,2),
-        )
-        informantPhone = models.InformantPhone(
-            contactInfoSourceID = 1,
-            informantID = 1,
-            contactInfoStatusID = 1,
-            phoneTypeID = 1,
-            phoneNumber = "phone",
-            phoneStatusDate = datetime(2016,2,2)
-        )
-        ctc1 = models.CTC(
-            patientID = 1,
-            dxDate = datetime(2016,2,2),
-            site = 1,
-            histology = "histology",
-            behavior = "behavior",
-            ctcSequence = "sequence",
-            stage = "stage",
-            dxAge = 1,
-            dxStreet1 = "street1",
-            dxStreet2 = "street2",
-            dxCity = "city",
-            dxState = "state",
-            dxZip = 99999,
-            dxCounty = "county",
-            dnc = "dnc",
-            dncReason = "dnc_reason"
-        )
-        ctc2 = models.CTC(
-            patientID = 1,
-            dxDate = datetime(2016,2,2),
-            site = 1,
-            histology = "histology",
-            behavior = "behavior",
-            ctcSequence = "sequence",
-            stage = "stage",
-            dxAge = 1,
-            dxStreet1 = "street1",
-            dxStreet2 = "street2",
-            dxCity = "city",
-            dxState = "state",
-            dxZip = 99999,
-            dxCounty = "county",
-            dnc = "dnc",
-            dncReason = "dnc_reason"
-        )
-        projectPatient = models.ProjectPatient(
-            projectID = 1,
-            staffID = 1,
-            ctcID = 1,
-            currentAge = 1,
-            batch = 1,
-            siteGrp = 1,
-            finalCode = 1,
-            finalCodeDate = datetime(2016,2,2),
-            enrollmentDate = datetime(2016,2,2),
-            dateCoordSigned = datetime(2016,2,2),
-            importDate = datetime(2016,2,2),
-            finalCodeStaffID = 1,
-            enrollmentStaffID = 1,
-            dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
-            abstractStatusDate = datetime(2016,2,2),
-            abstractStatusStaffID = 1,
-            sentToAbstractorDate = datetime(2016,2,2),
-            sentToAbstractorStaffID = 1,
-            abstractedDate = datetime(2016,2,2),
-            abstractorStaffID = 1,
-            researcherDate = datetime(2016,2,2),
-            researcherStaffID = 1,
-            consentLink = "link",
-            medRecordReleaseSigned = True,
-            medRecordReleaseLink = "link",
-            medRecordReleaseStaffID = 1,
-            medRecordReleaseDate = datetime(2016,2,2),
-            surveyToResearcher = datetime(2016,2,2),
-            surveyToResearcherStaffID = 1
-        )
-
-        projectPatient2 = models.ProjectPatient(
-            projectID = 1,
-            staffID = 1,
-            ctcID = 1,
-            currentAge = 1,
-            batch = 1,
-            siteGrp = 1,
-            finalCode = 1,
-            finalCodeDate = datetime(2016,2,2),
-            enrollmentDate = datetime(2016,2,2),
-            dateCoordSigned = datetime(2016,2,2),
-            importDate = datetime(2016,2,2),
-            finalCodeStaffID = 1,
-            enrollmentStaffID = 1,
-            dateCoordSignedStaffID = 1,
-            abstractStatus = 1,
-            abstractStatusDate = datetime(2016,2,2),
-            abstractStatusStaffID = 1,
-            sentToAbstractorDate = datetime(2016,2,2),
-            sentToAbstractorStaffID = 1,
-            abstractedDate = datetime(2016,2,2),
-            abstractorStaffID = 1,
-            researcherDate = datetime(2016,2,2),
-            researcherStaffID = 1,
-            consentLink = "link",
-            medRecordReleaseSigned = True,
-            medRecordReleaseLink = "link",
-            medRecordReleaseStaffID = 1,
-            medRecordReleaseDate = datetime(2016,2,2),
-            surveyToResearcher = datetime(2016,2,2),
-            surveyToResearcherStaffID = 1)
-
-        tracingSource1 = models.TracingSourceLUT(
-            description = "desc"
-        )
-        tracingSource2 = models.TracingSourceLUT(
-            description = "desc"
-        )
-        tracing = models.Tracing(
-            tracingSourceID = 1,
-            projectPatientID = 1,
-            date = datetime(2016,2,2),
-            staff = 1,
-            notes = "notes"
-        )
-        physician = models.Physician(
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            credentials = "credentials",
-            specialty = "specialty",
-            aliasFirstName = "alias_fname",
-            aliasLastName = "alias_lname",
-            aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
-            physicianStatusDate = datetime(2016,2,2),
-        )
-
-        physician2 = models.Physician(
-            firstName = "fname",
-            lastName = "lname",
-            middleName = "middle_name",
-            credentials = "credentials",
-            specialty = "specialty",
-            aliasFirstName = "alias_fname",
-            aliasLastName = "alias_lname",
-            aliasMiddleName = "alias_middle_name",
-            physicianStatus = 1,
-            physicianStatusDate = datetime(2016,2,2),
-        )
-        physicianAddress = models.PhysicianAddress(
-            contactInfoSourceID = 1,
-            physicianID = 1,
-            contactInfoStatusID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            addressStatusDate = datetime(2016,2,2),
-        )
-
-        physicianEmail = models.PhysicianEmail(
-            contactInfoSourceID = 1,
-            physicianID = 1,
-            contactInfoStatusID = 1,
-            email = "email",
-            emailStatusDate = datetime(2016,2,2)
-        )
-
-        physicianPhone = models.PhysicianPhone(
-            contactInfoSourceID = 1,
-            physicianID = 1,
-            contactInfoStatusID = 1,
-            phoneNumber = "phone",
-            phoneTypeID = 1,
-            phoneStatusDate = datetime(2016,2,2)
-        )
-        physicianToCTC = models.PhysicianToCTC(
-            physicianID = 1,
-            ctcID = 1
-        )
-        facility1 = models.Facility(
-            facilityName = "name",
-            contactFirstName = "fname",
-            contactLastName = "lname",
-            facilityStatus = 1,
-            facilityStatusDate = datetime(2016,2,2),
-            contact2FirstName = "fname",
-            contact2LastName = "lname"
-        )
-        facility2 = models.Facility(
-            facilityName = "name",
-            contactFirstName = "fname",
-            contactLastName = "lname",
-            facilityStatus = 1,
-            facilityStatusDate = datetime(2016,2,2),
-            contact2FirstName = "fname",
-            contact2LastName = "lname"
-        )
-        facilityAddress = models.FacilityAddress(
-            contactInfoSourceID = 1,
-            facilityID = 1,
-            contactInfoStatusID = 1,
-            street = "street",
-            street2 = "street2",
-            city = "city",
-            state = "state",
-            zip = "zip",
-            addressStatusDate = datetime(2016,2,2),
-        )
-
-        facilityPhone = models.FacilityPhone(
-            contactInfoSourceID = 1,
-            facilityID = 1,
-            contactInfoStatusID = 1,
-            clinicName = "clinic",
-            phoneTypeID = 1,
-            phoneNumber = "phone",
-            phoneStatusDate = datetime(2016,2,2)
-        )
-        patientProjectStatusType1 = models.PatientProjectStatusLUT(
-            statusDescription = "desc"
-        )
-        patientProjectStatusType2 = models.PatientProjectStatusLUT(
-            statusDescription = "desc"
-        )
-        patientProjectStatus = models.PatientProjectStatus(
-            patientProjectStatusTypeID =1,
-            projectPatientID = 1,
-        )
-        physicianFacility = models.PhysicianFacility(
-            facilityID = 1,
-            physicianID = 1,
-            physFacilityStatus = "s1",
-            physFacilityStatusDate = datetime(2016,2,2)
-        )
-        contactType1 = models.ContactTypeLUT(
-            contactDefinition = "def"
-        )
-        contactType2 = models.ContactTypeLUT(
-            contactDefinition = "def"
-        )
-        contact = models.Contact(
-            contactTypeLUTID = 1,
-            projectPatientID = 1,
-            staffID = 1,
-            informantID = 1,
-            facilityID = 1,
-            physicianID = 1,
-            description = "desc",
-            contactDate = datetime(2016,2,2),
-            initials = "atp",
-            notes = "notes"
-        )
-        ctcFacility = models.CTCFacility(
-            ctcID = 1,
-            facilityID = 1
-        )
-        incentive = models.Incentive(
-            projectPatientID = 1,
-            incentiveDescription = "desc",
-            incentiveDate = datetime(2016,2,2)
-        )
-
-        db.session.add(incentive)
-        db.session.add(phoneType1)
-        db.session.add(phoneType2)
-        db.session.add(contactInfoSource1)
-        db.session.add(contactInfoSource2)
-        db.session.add(contactInfoStatus1)
-        db.session.add(contactInfoStatus2)
-        db.session.add(humanSubjectTraining1)
-        db.session.add(humanSubjectTraining2)
-        db.session.add(staffRole1)
-        db.session.add(staffRole2)
-        db.session.add(logSubject1)
-        db.session.add(logSubject2)
-        db.session.add(phaseStatus1)
-        db.session.add(phaseStatus2)
-        db.session.add(projStatusType1)
-        db.session.add(projStatusType2)
-        db.session.add(projStatus)
-        db.session.add(staff)
-        db.session.add(staff2)
-        db.session.add(grantStatus1)
-        db.session.add(grantStatus2)
-        db.session.add(fundingSource1)
-        db.session.add(fundingSource2)
-        db.session.add(funding)
-        db.session.add(irb_holder1)
-        db.session.add(irb_holder2)
-        db.session.add(project_type1)
-        db.session.add(project_type2)
-        db.session.add(project1)
-        db.session.add(project2)
-        db.session.add(budget1)
-        db.session.add(rcsl)
-        db.session.add(rcs2)
-        db.session.add(rcl1)
-        db.session.add(rcl2)
-        db.session.add(rc)
-        db.session.add(ucr)
-        db.session.add(arcReview)
-        db.session.add(preApp)
-        db.session.add(log)
-        db.session.add(projectStaff)
-        db.session.add(staffTraining)
-        db.session.add(patient)
-        db.session.add(patient2)
-        db.session.add(patientAddress)
-        db.session.add(patientEmail)
-        db.session.add(patientPhone)
-        db.session.add(informant1)
-        db.session.add(informant2)
-        db.session.add(informantAddress)
-        db.session.add(informantPhone)
-        db.session.add(ctc1)
-        db.session.add(ctc2)
-        db.session.add(projectPatient)
-        db.session.add(projectPatient2)
-        db.session.add(tracingSource1)
-        db.session.add(tracingSource2)
-        db.session.add(tracing)
-        db.session.add(physician)
-        db.session.add(physician2)
-        db.session.add(physicianAddress)
-        db.session.add(physicianEmail)
-        db.session.add(physicianPhone)
-        db.session.add(physicianToCTC)
-        db.session.add(facility1)
-        db.session.add(facility2)
-        db.session.add(facilityAddress)
-        db.session.add(facilityPhone)
-        db.session.add(patientProjectStatusType1)
-        db.session.add(patientProjectStatusType2)
-        db.session.add(patientProjectStatus)
-        db.session.add(physicianFacility)
-        db.session.add(contactType1)
-        db.session.add(contactType2)
-        db.session.add(contact)
-        db.session.add(ctcFacility)
-        db.session.commit()
-
-@api.route('/createData')
-def create_data():
-    populate_db2()
-    return "Added Data"
+api = Blueprint('api',__name__,template_folder='api_templates')
 
 ##############################################################################
 # Error Handlers
@@ -808,6 +61,76 @@ def root():
     ]})
 
 
+@api.route('/abstractstatuses/', methods=['GET'])
+@api.route('/abstractstatuses/<int:abstractStatusID>/', methods=['GET'])
+def get_abstract_status(abstractStatusID=None):
+    try:
+        if abstractStatusID is None:
+            return jsonify(abstractStatuses=[i.dict() for i in query.get_abstract_statuses()])
+        else:
+            abstractStatus = query.get_abstract_status(abstractStatusID)
+            if abstractStatus is not None:
+                return abstractStatus.json()
+            else:
+                return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/abstractstatuses/<int:abstractStatusID>/', methods=['PUT'])
+def update_abstract_status(abstractStatusID):
+    try:
+        abstractStatus = query.get_abstract_status(abstractStatusID)
+        if abstractStatus is not None:
+            form = forms.AbstractStatusForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == abstractStatus.versionID:
+                    abstractStatus.abstractStatus = form.abstractStatus.data
+                    query.commit()
+                    return abstractStatus.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/abstractstatuses/', methods=['POST'])
+def create_abstract_status():
+    try:
+        form = forms.AbstractStatusForm(request.form)
+        if form.validate():
+            abstractStatus = models.AbstractStatus(
+                abstractStatus=form.abstractStatus.data,
+            )
+            query.add(abstractStatus)
+            return abstractStatus.json()
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/abstractstatuses/<int:abstractStatusID>/', methods=['DELETE'])
+def delete_abstract_status(abstractStatusID):
+    try:
+        abstractStatus = query.get_abstract_status(abstractStatusID)
+        if abstractStatus is not None:
+            deps = get_dependencies(abstractStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(abstractStatus)
+                return item_deleted("AbstractStatusID {} deleted".format(abstractStatusID))
+        else:
+            return item_not_found("AbstractStatusID {} not found".format(abstractStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+
 ##############################################################################
 # ArcReviews
 ##############################################################################    
@@ -834,23 +157,23 @@ def update_arc_review(arcReviewID):
             form = forms.ArcReviewForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == arcReview.versionID:
-                    arcReview.projectID = request.form['projectID']
-                    arcReview.reviewType = request.form['reviewType']
-                    arcReview.dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d")
-                    arcReview.reviewer1 = request.form['reviewer1']
-                    arcReview.reviewer1Rec = request.form['reviewer1Rec']
-                    arcReview.reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d")
-                    arcReview.reviewer1Comments = request.form['reviewer1Comments']
-                    arcReview.reviewer2 = request.form['reviewer2']
-                    arcReview.reviewer2Rec = request.form['reviewer2Rec']
-                    arcReview.reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d")
-                    arcReview.reviewer2Comments = request.form['reviewer2Comments']
-                    arcReview.research = request.form['research']
-                    arcReview.contact = "true" == request.form['contact'].lower()
-                    arcReview.contact = "true" == request.form['contact'].lower()
-                    arcReview.linkage = "true" == request.form['linkage'].lower()
-                    arcReview.engaged = "true" == request.form['engaged'].lower()
-                    arcReview.nonPublicData = "true" == request.form['nonPublicData'].lower()
+                    arcReview.projectID = form.projectID.data
+                    arcReview.reviewType = form.reviewType.data
+                    arcReview.dateSentToReviewer = form.dateSentToReviewer.data
+                    arcReview.reviewer1 = form.reviewer1.data
+                    arcReview.reviewer1Rec = form.reviewer1Rec.data
+                    arcReview.reviewer1SigDate = form.reviewer1SigDate.data
+                    arcReview.reviewer1Comments = form.reviewer1Comments.data
+                    arcReview.reviewer2 = form.reviewer2.data
+                    arcReview.reviewer2Rec = form.reviewer2Rec.data
+                    arcReview.reviewer2SigDate = form.reviewer2SigDate.data
+                    arcReview.reviewer2Comments = form.reviewer2Comments.data
+                    arcReview.research = form.research.data
+                    arcReview.contact = form.contact.data
+                    arcReview.contact = form.contact.data
+                    arcReview.linkage = form.linkage.data
+                    arcReview.engaged = form.engaged.data
+                    arcReview.nonPublicData = form.nonPublicData.data
                     query.add(arcReview)
                     query.flush()
                     query.commit()
@@ -870,25 +193,25 @@ def create_arc_review():
         form = forms.ArcReviewForm(request.form)
         if form.validate():
             arcReview = models.ArcReview(
-                projectID = request.form['projectID'],
-                reviewType = request.form['reviewType'],
-                dateSentToReviewer = datetime.strptime(request.form['dateSentToReviewer'],"%Y-%m-%d"),
-                reviewer1 = request.form['reviewer1'],
-                reviewer1Rec = request.form['reviewer1Rec'],
-                reviewer1SigDate = datetime.strptime(request.form['reviewer1SigDate'],"%Y-%m-%d"),
-                reviewer1Comments = request.form['reviewer1Comments'],
-                reviewer2 = request.form['reviewer2'],
-                reviewer2Rec = request.form['reviewer2Rec'],
-                reviewer2SigDate = datetime.strptime(request.form['reviewer2SigDate'],"%Y-%m-%d"),
-                reviewer2Comments = request.form['reviewer2Comments'],
-                research = request.form['research'],
-                contact = "true" == request.form['contact'].lower(),
-                linkage = "true" == request.form['linkage'].lower(),
-                engaged = "true" == request.form['engaged'].lower(),
-                nonPublicData = "true" == request.form['nonPublicData'].lower()
+                projectID=form.projectID.data,
+                reviewType=form.reviewType.data,
+                dateSentToReviewer=form.dateSentToReviewer.data,
+                reviewer1=form.reviewer1.data,
+                reviewer1Rec=form.reviewer1Rec.data,
+                reviewer1SigDate=form.reviewer1SigDate.data,
+                reviewer1Comments=form.reviewer1Comments.data,
+                reviewer2=form.reviewer2.data,
+                reviewer2Rec=form.reviewer2Rec.data,
+                reviewer2SigDate=form.reviewer2SigDate.data,
+                reviewer2Comments=form.reviewer2Comments.data,
+                research=form.research.data,
+                contact = form.contact.data,
+                linkage = form.linkage.data,
+                engaged =form.engaged.data,
+                nonPublicData = form.nonPublicData.data
             )
             query.add(arcReview)
-            return jsonify({"arcReviewID" : arcReview.arcReviewID})
+            return arcReview.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -936,12 +259,12 @@ def update_budget(budgetID):
             form = forms.BudgetForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == budget.versionID:
-                    budget.projectID = request.form['projectID']
-                    budget.numPeriods = request.form['numPeriods']
-                    budget.periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d")
-                    budget.periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d")
-                    budget.periodTotal = request.form['periodTotal']
-                    budget.periodComment = request.form['periodComment']
+                    budget.projectID = form.projectID.data
+                    budget.numPeriods = form.numPeriods.data
+                    budget.periodStart = form.periodStart.data
+                    budget.periodEnd = form.periodEnd.data
+                    budget.periodTotal = form.periodTotal.data
+                    budget.periodComment = form.periodComment.data
                     query.commit()
                     return budget.json()
                 else:
@@ -959,15 +282,15 @@ def create_budget():
         form = forms.BudgetForm(request.form)
         if form.validate():
             budget = models.Budget(
-                projectID = request.form['projectID'],
-                numPeriods = request.form['numPeriods'],
-                periodStart = datetime.strptime(request.form['periodStart'],"%Y-%m-%d"),
-                periodEnd = datetime.strptime(request.form['periodEnd'],"%Y-%m-%d"),
-                periodTotal = request.form['periodTotal'],
-                periodComment = request.form['periodComment']
+                projectID=form.projectID.data,
+                numPeriods=form.numPeriods.data,
+                periodStart=form.periodStart.data,
+                periodEnd=form.periodEnd.data,
+                periodTotal=form.periodTotal.data,
+                periodComment=form.periodComment.data
             )
             query.add(budget)
-            return jsonify({"budgetID" : budget.budgetID})
+            return budget.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1015,16 +338,20 @@ def update_contact(contactID):
             form = forms.ContactForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == contact.versionID:
-                    contact.contactTypeLUTID = request.form['contactTypeLUTID']
-                    contact.projectPatientID = request.form['projectPatientID']
-                    contact.staffID = request.form['staffID']
-                    contact.informantID = request.form['informantID']
-                    contact.facilityID = request.form['facilityID']
-                    contact.physicianID = request.form['physicianID']
-                    contact.description = request.form['description']
-                    contact.contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d")
-                    contact.initials = request.form['initials']
-                    contact.notes = request.form['notes']
+                    contact.contactTypeLUTID = form.contactTypeLUTID.data
+                    contact.participantID = form.participantID.data
+                    contact.staffID = form.staffID.data
+                    contact.informantID = form.informantID.data
+                    contact.informantPhoneID = form.informantPhoneID.data
+                    contact.facilityID = form.facilityID.data
+                    contact.facilityPhoneID = form.facilityPhoneID.data
+                    contact.physicianID = form.physicianID.data
+                    contact.physicianPhoneID = form.physicianPhoneID.data
+                    contact.patientPhoneID = form.patientPhoneID.data
+                    contact.description = form.description.data
+                    contact.contactDate = form.contactDate.data
+                    contact.initials = form.initials.data
+                    contact.notes = form.notes.data
                     query.commit()
                     return contact.json()
                 else:
@@ -1042,19 +369,23 @@ def create_contact():
         form = forms.ContactForm(request.form)
         if form.validate():
             contact = models.Contact(
-                contactTypeLUTID = request.form['contactTypeLUTID'],
-                projectPatientID = request.form['projectPatientID'],
-                staffID = request.form['staffID'],
-                informantID = request.form['informantID'],
-                facilityID = request.form['facilityID'],
-                physicianID = request.form['physicianID'],
-                description = request.form['description'],
-                contactDate = datetime.strptime(request.form['contactDate'],"%Y-%m-%d"),
-                initials = request.form['initials'],
-                notes = request.form['notes'],
+                contactTypeLUTID=form.contactTypeLUTID.data,
+                participantID=form.participantID.data,
+                staffID=form.staffID.data,
+                informantID=form.informantID.data,
+                informantPhoneID=form.informantPhoneID.data,
+                facilityID=form.facilityID.data,
+                facilityPhoneID=form.facilityPhoneID.data,
+                physicianID=form.physicianID.data,
+                physicianPhoneID=form.physicianPhoneID.data,
+                patientPhoneID=form.patientPhoneID.data,
+                description=form.description.data,
+                contactDate=form.contactDate.data,
+                initials=form.initials.data,
+                notes=form.notes.data,
             )
             query.add(contact)
-            return jsonify({"contactID" : contact.contactID})
+            return contact.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1102,7 +433,8 @@ def update_contact_type(contactTypeID):
             form = forms.ContactTypeLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == contactType.versionID:
-                    contactType.contactDefinition = request.form['contactDefinition']
+                    contactType.contactDefinition = form.contactDefinition.data
+                    contactType.contactCode = form.contactCode.data
                     query.commit()
                     return contactType.json()
                 else:
@@ -1119,11 +451,16 @@ def create_contact_type():
     try:
         form = forms.ContactTypeLUTForm(request.form)
         if form.validate():
+            contactType2 = query.get_contact_type_by_code(form.contactCode.data)
+            if contactType2:
+                form.contactCode.errors.append("Contact code already exists in the database.")
+                return missing_params(form.errors)
             contactType = models.ContactTypeLUT(
-                contactDefinition = request.form['contactDefinition'],
+                contactDefinition=form.contactDefinition.data,
+                contactCode=form.contactCode.data
             )
             query.add(contactType)
-            return jsonify({"contactTypeID" : contactType.contactTypeID})
+            return contactType.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1171,7 +508,7 @@ def update_contact_info_source(contactInfoSourceID):
             form = forms.ContactInfoSourceForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == contactInfoSource.versionID:
-                    contactInfoSource.contactInfoSource = request.form['contactInfoSource']
+                    contactInfoSource.contactInfoSource = form.contactInfoSource.data
                     query.commit()
                     return contactInfoSource.json()
                 else:
@@ -1189,10 +526,10 @@ def create_contact_info_source():
         form = forms.ContactInfoSourceForm(request.form)
         if form.validate():
             contactInfoSource = models.ContactInfoSourceLUT(
-                contactInfoSource = request.form['contactInfoSource'],
+                contactInfoSource=form.contactInfoSource.data,
             )
             query.add(contactInfoSource)
-            return jsonify({"contactInfoSourceID" : contactInfoSource.contactInfoSourceID})
+            return contactInfoSource.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1237,7 +574,7 @@ def update_contact_info_status(contactInfoStatusID):
             form = forms.ContactInfoStatusForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == contactInfoStatus.versionID:
-                    contactInfoStatus.contactInfoStatus = request.form['contactInfoStatus']
+                    contactInfoStatus.contactInfoStatus = form.contactInfoStatus.data
                     query.commit()
                     return contactInfoStatus.json()
                 else:
@@ -1255,10 +592,10 @@ def create_contact_info_status():
         form = forms.ContactInfoStatusForm(request.form)
         if form.validate():
             contactInfoStatus = models.ContactInfoStatusLUT(
-                contactInfoStatus = request.form['contactInfoStatus'],
+                contactInfoStatus=form.contactInfoStatus.data,
             )
             query.add(contactInfoStatus)
-            return jsonify({"contactInfoStatusID" : contactInfoStatus.contactInfoStatusID})
+            return contactInfoStatus.json()
         else:
             missing_params(form.errors)
     except Exception as e:
@@ -1306,22 +643,25 @@ def update_ctc(ctcID):
             form = forms.CTCForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == ctc.versionID:
-                    ctc.patientID = request.form['patientID']
-                    ctc.dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d")
-                    ctc.site = request.form['site']
-                    ctc.histology = request.form['histology']
-                    ctc.behavior = request.form['behavior']
-                    ctc.ctcSequence = request.form['ctcSequence']
-                    ctc.stage = request.form['stage']
-                    ctc.dxAge = request.form['dxAge']
-                    ctc.dxStreet1 = request.form['dxStreet1']
-                    ctc.dxStreet2 = request.form['dxStreet2']
-                    ctc.dxCity = request.form['dxCity']
-                    ctc.dxState = request.form['dxState']
-                    ctc.dxZip = request.form['dxZip']
-                    ctc.dxCounty = request.form['dxCounty']
-                    ctc.dnc = request.form['dnc']
-                    ctc.dncReason = request.form['dncReason']
+                    ctc.participantID = form.participantID.data
+                    ctc.dxDateDay = form.dxDateDay.data
+                    ctc.dxDateMonth = form.dxDateMonth.data
+                    ctc.dxDateYear = form.dxDateYear.data
+                    ctc.site = form.site.data
+                    ctc.histology = form.histology.data
+                    ctc.behavior = form.behavior.data
+                    ctc.ctcSequence = form.ctcSequence.data
+                    ctc.stage = form.stage.data
+                    ctc.dxAge = form.dxAge.data
+                    ctc.dxStreet1 = form.dxStreet1.data
+                    ctc.dxStreet2 = form.dxStreet2.data
+                    ctc.dxCity = form.dxCity.data
+                    ctc.dxStateID = form.dxStateID.data
+                    ctc.dxZip = form.dxZip.data
+                    ctc.dxCounty = form.dxCounty.data
+                    ctc.dnc = form.dnc.data
+                    ctc.dncReason = form.dncReason.data
+                    ctc.recordID = form.recordID.data
                     query.commit()
                     return ctc.json()
                 else:
@@ -1339,25 +679,28 @@ def create_ctc():
         form = forms.CTCForm(request.form)
         if form.validate():
             ctc = models.CTC(
-                patientID = request.form['patientID'],
-                dxDate = datetime.strptime(request.form['dxDate'],"%Y-%m-%d"),
-                site = request.form['site'],
-                histology = request.form['histology'],
-                behavior = request.form['behavior'],
-                ctcSequence = request.form['ctcSequence'],
-                stage = request.form['stage'],
-                dxAge = request.form['dxAge'],
-                dxStreet1 = request.form['dxStreet1'],
-                dxStreet2 = request.form['dxStreet2'],
-                dxCity = request.form['dxCity'],
-                dxState = request.form['dxState'],
-                dxZip = request.form['dxZip'],
-                dxCounty = request.form['dxCounty'],
-                dnc = request.form['dnc'],
-                dncReason = request.form['dncReason']
+                participantID=form.participantID.data,
+                dxDateDay=form.dxDateDay.data,
+                dxDateMonth=form.dxDateMonth.data,
+                dxDateYear=form.dxDateYear.data,
+                site=form.site.data,
+                histology=form.histology.data,
+                behavior=form.behavior.data,
+                ctcSequence=form.ctcSequence.data,
+                stage=form.stage.data,
+                dxAge=form.dxAge.data,
+                dxStreet1=form.dxStreet1.data,
+                dxStreet2=form.dxStreet2.data,
+                dxCity=form.dxCity.data,
+                dxStateID=form.dxStateID.data,
+                dxZip=form.dxZip.data,
+                dxCounty=form.dxCounty.data,
+                dnc=form.dnc.data,
+                dncReason=form.dncReason.data,
+                recordID=form.recordID.data
             )
             query.add(ctc)
-            return jsonify({"ctcID" : ctc.ctcID})
+            return ctc.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1405,8 +748,9 @@ def update_ctc_facility(CTCFacilityID):
             form = forms.CTCFacilityForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == ctcFacility.versionID:
-                    ctcFacility.ctcID = request.form['ctcID']
-                    ctcFacility.facilityID = request.form['facilityID']
+                    ctcFacility.ctcID = form.ctcID.data
+                    ctcFacility.facilityID = form.facilityID.data
+                    ctcFacility.coc = form.coc.data
                     query.commit()
                     return ctcFacility.json()
                 else:
@@ -1424,11 +768,12 @@ def create_ctc_facility():
         form = forms.CTCFacilityForm(request.form)
         if form.validate():
             ctcFacility = models.CTCFacility(
-                ctcID = request.form['ctcID'],
-                facilityID = request.form['facilityID']
+                ctcID=form.ctcID.data,
+                facilityID=form.facilityID.data,
+                coc=form.coc.data
             )
             query.add(ctcFacility)
-            return jsonify({"CTCFacilityID" : ctcFacility.CTCFacilityID})
+            return ctcFacility.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1476,17 +821,17 @@ def update_funding(fundingID):
             form = forms.FundingForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == funding.versionID:
-                    funding.grantStatusID = request.form['grantStatusID']
-                    funding.projectID = request.form['projectID']
-                    funding.fundingSourceID = request.form['fundingSourceID']
-                    funding.primaryFundingSource = request.form['primaryFundingSource']
-                    funding.secondaryFundingSource = request.form['secondaryFundingSource']
-                    funding.fundingNumber = request.form['fundingNumber']
-                    funding.grantTitle = request.form['grantTitle']
-                    funding.dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d")
-                    funding.grantPi = request.form['grantPi']
-                    funding.primaryChartfield = request.form['primaryChartfield']
-                    funding.secondaryChartfield = request.form['secondaryChartfield']
+                    funding.grantStatusID = form.grantStatusID.data
+                    funding.projectID = form.projectID.data
+                    funding.fundingSourceID = form.fundingSourceID.data
+                    funding.primaryFundingSource = form.primaryFundingSource.data
+                    funding.secondaryFundingSource = form.secondaryFundingSource.data
+                    funding.fundingNumber = form.fundingNumber.data
+                    funding.grantTitle = form.grantTitle.data
+                    funding.dateStatus = form.dateStatus.data
+                    funding.grantPi = form.grantPi.data
+                    funding.primaryChartfield = form.primaryChartfield.data
+                    funding.secondaryChartfield = form.secondaryChartfield.data
                     query.commit()
                     return funding.json()
                 else:
@@ -1504,20 +849,20 @@ def create_funding():
         form = forms.FundingForm(request.form)
         if form.validate():
             funding = models.Funding(
-                grantStatusID = request.form['grantStatusID'],
-                projectID = request.form['projectID'],
-                fundingSourceID = request.form['fundingSourceID'],
-                primaryFundingSource = request.form['primaryFundingSource'],
-                secondaryFundingSource = request.form['secondaryFundingSource'],
-                fundingNumber = request.form['fundingNumber'],
-                grantTitle = request.form['grantTitle'],
-                dateStatus = datetime.strptime(request.form['dateStatus'],"%Y-%m-%d"),
-                grantPi = request.form['grantPi'],
-                primaryChartfield = request.form['primaryChartfield'],
-                secondaryChartfield = request.form['secondaryChartfield']
+                grantStatusID=form.grantStatusID.data,
+                projectID=form.projectID.data,
+                fundingSourceID=form.fundingSourceID.data,
+                primaryFundingSource=form.primaryFundingSource.data,
+                secondaryFundingSource=form.secondaryFundingSource.data,
+                fundingNumber=form.fundingNumber.data,
+                grantTitle=form.grantTitle.data,
+                dateStatus=form.dateStatus.data,
+                grantPi=form.grantPi.data,
+                primaryChartfield=form.primaryChartfield.data,
+                secondaryChartfield=form.secondaryChartfield.data
             )
             query.add(funding)
-            return jsonify({'fundingID':funding.fundingID})
+            return funding.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1565,13 +910,13 @@ def update_facility_phone(facilityPhoneID):
             form = forms.FacilityPhoneForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == facilityPhone.versionID:
-                    facilityPhone.contactInfoSourceID = request.form['contactInfoSourceID']
-                    facilityPhone.facilityID = request.form['facilityID']
-                    facilityPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                    facilityPhone.clinicName = request.form['clinicName']
-                    facilityPhone.phoneTypeID = request.form['phoneTypeID']
-                    facilityPhone.phoneNumber = request.form['phoneNumber']
-                    facilityPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    facilityPhone.contactInfoSourceID = form.contactInfoSourceID.data
+                    facilityPhone.facilityID = form.facilityID.data
+                    facilityPhone.contactInfoStatusID = form.contactInfoStatusID.data
+                    facilityPhone.clinicName = form.clinicName.data
+                    facilityPhone.phoneTypeID = form.phoneTypeID.data
+                    facilityPhone.phoneNumber = form.phoneNumber.data
+                    facilityPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
                     return facilityPhone.json()
                 else:
@@ -1589,16 +934,16 @@ def create_facility_phone():
         form = forms.FacilityPhoneForm(request.form)
         if form.validate():
             facilityPhone = models.FacilityPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                facilityID = request.form['facilityID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                clinicName = request.form['clinicName'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                facilityID=form.facilityID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                clinicName=form.clinicName.data,
+                phoneNumber=form.phoneNumber.data,
+                phoneTypeID=form.phoneTypeID.data,
+                phoneStatusDate=form.phoneStatusDate.data
                 )
             query.add(facilityPhone)
-            return jsonify({'facilityPhoneID':facilityPhone.facilityPhoneID})
+            return facilityPhone.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1646,13 +991,13 @@ def update_facility(facilityID):
             form = forms.FacilityForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == facility.versionID:
-                    facility.facilityName = request.form['facilityName']
-                    facility.contactFirstName = request.form['contactFirstName']
-                    facility.contactLastName = request.form['contactLastName']
-                    facility.facilityStatus = request.form['facilityStatus']
-                    facility.facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d")
-                    facility.contact2FirstName = request.form['contact2FirstName']
-                    facility.contact2LastName = request.form['contact2LastName']
+                    facility.facilityName = form.facilityName.data
+                    facility.contactFirstName = form.contactFirstName.data
+                    facility.contactLastName = form.contactLastName.data
+                    facility.facilityStatus = form.facilityStatus.data
+                    facility.facilityStatusDate = form.facilityStatusDate.data
+                    facility.contact2FirstName = form.contact2FirstName.data
+                    facility.contact2LastName = form.contact2LastName.data
                     query.commit()
                     return facility.json()
                 else:
@@ -1667,21 +1012,23 @@ def update_facility(facilityID):
 @api.route('/facilities/', methods=['POST'])
 def create_facility():
     try:
-        facility = models.Facility(
-            facilityName = request.form['facilityName'],
-            contactFirstName = request.form['contactFirstName'],
-            contactLastName = request.form['contactLastName'],
-            facilityStatus = request.form['facilityStatus'],
-            facilityStatusDate = datetime.strptime(request.form['facilityStatusDate'],"%Y-%m-%d"),
-            contact2FirstName = request.form['contact2FirstName'],
-            contact2LastName = request.form['contact2LastName']
-            )
-        ret = query.add(facility)
-    except KeyError as e:
-       return missing_params(e)
+        form = forms.FacilityForm(request.form)
+        if form.validate():
+            facility = models.Facility(
+                facilityName=form.facilityName.data,
+                contactFirstName=form.contactFirstName.data,
+                contactLastName=form.contactLastName.data,
+                facilityStatus=form.facilityStatus.data,
+                facilityStatusDate=form.facilityStatusDate.data,
+                contact2FirstName=form.contact2FirstName.data,
+                contact2LastName=form.contact2LastName.data
+                )
+            ret = query.add(facility)
+            return facility.json()
+        else:
+            return missing_params(form.errors)
     except Exception as e:
        return internal_error(e)
-    return jsonify({'facilityID':facility.facilityID})
 
 @api.route('/facilities/<int:facilityID>/',methods = ['DELETE'])
 def delete_facility(facilityID):
@@ -1725,15 +1072,15 @@ def update_facility_address(facilityAddressID):
             form = forms.FacilityAddressForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == facilityAddress.versionID:
-                    facilityAddress.contactInfoSourceID = request.form['contactInfoSourceID']
-                    facilityAddress.facilityID = request.form['facilityID']
-                    facilityAddress.contactInfoStatusID = request.form['contactInfoStatusID']
-                    facilityAddress.street = request.form['street']
-                    facilityAddress.street2 = request.form['street2']
-                    facilityAddress.city = request.form['city']
-                    facilityAddress.state = request.form['state']
-                    facilityAddress.zip = request.form['zip']
-                    facilityAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                    facilityAddress.contactInfoSourceID = form.contactInfoSourceID.data
+                    facilityAddress.facilityID = form.facilityID.data
+                    facilityAddress.contactInfoStatusID = form.contactInfoStatusID.data
+                    facilityAddress.street = form.street.data
+                    facilityAddress.street2 = form.street2.data
+                    facilityAddress.city = form.city.data
+                    facilityAddress.stateID = form.stateID.data
+                    facilityAddress.zip = form.zip.data
+                    facilityAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
                 else:
                     return out_of_date_error()
@@ -1751,18 +1098,18 @@ def create_facility_address():
         form = forms.FacilityAddressForm(request.form)
         if form.validate():
             facilityAddress = models.FacilityAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                facilityID = request.form['facilityID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                facilityID=form.facilityID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                street=form.street.data,
+                street2=form.street2.data,
+                city=form.city.data,
+                stateID=form.stateID.data,
+                zip=form.zip.data,
+                addressStatusDate=form.addressStatusDate.data,
                 )
             query.add(facilityAddress)
-            return jsonify({'facilityAddressID':facilityAddress.facilityAddressID})
+            return facilityAddress.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1783,6 +1130,84 @@ def delete_facility_address(facilityAddressID):
             return item_not_found("FacilityAddressID {} not found".format(facilityAddressID))
     except Exception as e:
         return internal_error(e)
+
+@api.route('/finalcodes/', methods=['GET'])
+@api.route('/finalcodes/<int:finalCodeID>/', methods=['GET'])
+def get_final_code(finalCodeID=None):
+    try:
+        if finalCodeID is None:
+            return jsonify(FinalCodes=[i.dict() for i in query.get_final_codes()])
+        else:
+            finalCode = query.get_final_code(finalCodeID)
+            if finalCode is not None:
+                return finalCode.json()
+            else:
+                return item_not_found("FinalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/finalcodes/<int:finalCodeID>/', methods=['PUT'])
+def update_final_code(finalCodeID):
+    try:
+        finalCode = query.get_final_code(finalCodeID)
+        if finalCode is not None:
+            form = forms.FinalCodeForm(request.form)
+            if form.validate():
+                if finalCode.finalCode != form.finalCode.data:
+                    finalCode2 = query.get_final_code_by_code(form.finalCode.data)
+                    if finalCode2:
+                        form.finalCode.errors.append("Final Code already exists in database.")
+                        return missing_params(form.errors)
+                if int(form.versionID.data) == finalCode.versionID:
+                    finalCode.finalCode = form.finalCode.data
+                    finalCode.finalCodeDefinition = form.finalCodeDefinition.data
+                    query.commit()
+                    return finalCode.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("FinalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/finalcodes/', methods=['POST'])
+def create_final_code():
+    try:
+        form = forms.FinalCodeForm(request.form)
+        if form.validate():
+            finalCode2 = query.get_final_code_by_code(form.finalCode.data)
+            if finalCode2:
+                form.finalCode.errors.append("Final code already exists in the database.")
+                return missing_params(form.errors)
+            finalCode = models.FinalCode(
+                finalCode=form.finalCode.data,
+                finalCodeDefinition=form.finalCodeDefinition.data
+            )
+            query.add(finalCode)
+            return finalCode.json()
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/finalcodes/<int:finalCodeID>/', methods=['DELETE'])
+def delete_final_code(finalCodeID):
+    try:
+        finalCode = query.get_final_code(finalCodeID)
+        if finalCode is not None:
+            deps = get_dependencies(finalCode)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(finalCode)
+                return item_deleted("FinalCodeID {} deleted".format(finalCodeID))
+        else:
+            return item_not_found("finalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
 
 ##############################################################################
 # Funding Source LUT
@@ -1810,7 +1235,7 @@ def update_funding_source(fundingSourceID):
             form = forms.FundingSourceLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == fundingSource.versionID:
-                    fundingSource.fundingSource = request.form['fundingSource']
+                    fundingSource.fundingSource = form.fundingSource.data
                     query.commit()
                     return fundingSource.json()
                 else:
@@ -1828,10 +1253,10 @@ def create_funding_source():
         form = forms.FundingSourceLUTForm(request.form)
         if form.validate():
             fundingSource = models.FundingSourceLUT(
-                fundingSource = request.form['fundingSource']
+                fundingSource=form.fundingSource.data
             )
             query.add(fundingSource)
-            return jsonify({'fundingSourceID':fundingSource.fundingSourceID})
+            return fundingSource.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1879,7 +1304,7 @@ def update_grant_status(grantStatusID):
             form = forms.GrantStatusLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == grantStatus.versionID:
-                    grantStatus.grantStatus = request.form['grantStatus']
+                    grantStatus.grantStatus = form.grantStatus.data
                     query.commit()
                     return grantStatus.json()
                 else:
@@ -1897,10 +1322,10 @@ def create_grant_status():
         form = forms.GrantStatusLUTForm(request.form)
         if form.validate():
             grantStatus = models.GrantStatusLUT(
-                grantStatus = request.form['grantStatus']
+                grantStatus=form.grantStatus.data
             )
             query.add(grantStatus)
-            return jsonify({'grantStatusID':grantStatus.grantStatusID})
+            return grantStatus.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -1948,7 +1373,7 @@ def update_human_subject_training(humanSubjectTrainingID):
             form = forms.HumanSubjectTrainingLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == humanSubjectTraining.versionID:
-                    humanSubjectTraining.trainingType = request.form['trainingType']
+                    humanSubjectTraining.trainingType = form.trainingType.data
                     query.commit()
                     return humanSubjectTraining.json()
                 else:
@@ -1966,10 +1391,10 @@ def create_human_subject_training():
         form = forms.HumanSubjectTrainingLUTForm(request.form)
         if form.validate():
             humanSubjectTraining = models.HumanSubjectTrainingLUT(
-                trainingType = request.form['trainingType']
+                trainingType=form.trainingType.data
             )
             query.add(humanSubjectTraining)
-            return jsonify({'humanSubjectTrainingID':humanSubjectTraining.humanSubjectTrainingID})
+            return humanSubjectTraining.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2016,10 +1441,16 @@ def update_incentive(incentiveID):
         if incentive is not None:
             form = forms.IncentiveForm(request.form)
             if form.validate():
+                if incentive.barcode != form.barcode.data:
+                    incentive2 = query.get_incentive_by_barcode(form.barcode.data)
+                    if incentive2:
+                        form.barcode.errors.append("Barcode was already used for a different incentive.")
+                        return missing_params(form.errors)
                 if int(request.form['versionID']) == incentive.versionID:
-                    incentive.projectPatientID = request.form["projectPatientID"]
-                    incentive.incentiveDescription = request.form['incentiveDescription']
-                    incentive.incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
+                    incentive.participantID = form.participantID.data
+                    incentive.incentiveDescription = form.incentiveDescription.data
+                    incentive.barcode = form.barcode.data
+                    incentive.dateGiven = form.dateGiven.data
                     query.commit()
                     return incentive.json()
                 else:
@@ -2036,13 +1467,19 @@ def create_incentive():
     try:
         form = forms.IncentiveForm(request.form)
         if form.validate():
+            # make sure the barcode isn't used for another incentive (DB won't allow it but we want a useful message)
+            incentive2 = query.get_incentive_by_barcode(form.barcode.data)
+            if incentive2:
+                form.barcode.errors.append("Barcode was already used for a different incentive.")
+                return missing_params(form.errors)
             incentive = models.Incentive(
-                projectPatientID = request.form['projectPatientID'],
-                incentiveDescription = request.form['incentiveDescription'],
-                incentiveDate = datetime.strptime(request.form['incentiveDate'],"%Y-%m-%d")
+                participantID=form.participantID.data,
+                incentiveDescription=form.incentiveDescription.data,
+                barcode=form.barcode.data,
+                dateGiven=form.dateGiven.data
             )
             query.add(incentive)
-            return jsonify({'incentiveID':incentive.incentiveID})
+            return incentive.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2091,13 +1528,13 @@ def update_informant(informantID):
             form = forms.InformantForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == informant.versionID:
-                    informant.patientID = request.form['patientID']
-                    informant.firstName = request.form['firstName']
-                    informant.lastName = request.form['lastName']
-                    informant.middleName = request.form['middleName']
-                    informant.informantPrimary = request.form['informantPrimary']
-                    informant.informantRelationship = request.form['informantRelationship']
-                    informant.notes = request.form['notes']
+                    informant.participantID = form.participantID.data
+                    informant.firstName = form.firstName.data
+                    informant.lastName = form.lastName.data
+                    informant.middleName = form.middleName.data
+                    informant.informantPrimary = form.informantPrimary.data
+                    informant.informantRelationshipID = form.informantRelationshipID.data
+                    informant.notes = form.notes.data
                     query.commit()
                     return informant.json()
                 else:
@@ -2115,16 +1552,16 @@ def create_informant():
         form = forms.InformantForm(request.form)
         if form.validate():
             informant = models.Informant(
-                patientID = request.form['patientID'],
-                firstName = request.form['firstName'],
-                lastName = request.form['lastName'],
-                middleName = request.form['middleName'],
-                informantPrimary = request.form['informantPrimary'],
-                informantRelationship = request.form['informantRelationship'],
-                notes = request.form['notes']
+                participantID=form.participantID.data,
+                firstName=form.firstName.data,
+                lastName=form.lastName.data,
+                middleName=form.middleName.data,
+                informantPrimary=form.informantPrimary.data,
+                informantRelationshipID=form.informantRelationshipID.data,
+                notes=form.notes.data
                 )
             query.add(informant)
-            return jsonify({'informantID':informant.informantID})
+            return informant.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2172,15 +1609,15 @@ def update_informant_address(informantAddressID):
             form = forms.InformantAddressForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == informantAddress.versionID:
-                    informantAddress.contactInfoSourceID = request.form['contactInfoSourceID']
-                    informantAddress.informantID = request.form['informantID']
-                    informantAddress.contactInfoStatusID = request.form['contactInfoStatusID']
-                    informantAddress.street = request.form['street']
-                    informantAddress.street2 = request.form['street2']
-                    informantAddress.city = request.form['city']
-                    informantAddress.state = request.form['state']
-                    informantAddress.zip = request.form['zip']
-                    informantAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                    informantAddress.contactInfoSourceID = form.contactInfoSourceID.data
+                    informantAddress.informantID = form.informantID.data
+                    informantAddress.contactInfoStatusID = form.contactInfoStatusID.data
+                    informantAddress.street = form.street.data
+                    informantAddress.street2 = form.street2.data
+                    informantAddress.city = form.city.data
+                    informantAddress.stateID = form.stateID.data
+                    informantAddress.zip = form.zip.data
+                    informantAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
                     return informantAddress.json()
                 else:
@@ -2198,18 +1635,18 @@ def create_informant_address():
         form = forms.InformantAddressForm(request.form)
         if form.validate():
             informantAddress = models.InformantAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                informantID = request.form['informantID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                informantID=form.informantID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                street=form.street.data,
+                street2=form.street2.data,
+                city=form.city.data,
+                stateID=form.stateID.data,
+                zip=form.zip.data,
+                addressStatusDate=form.addressStatusDate.data,
                 )
             query.add(informantAddress)
-            return jsonify({'informantAddressID':informantAddress.informantAddressID})
+            return informantAddress.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2257,12 +1694,12 @@ def update_informant_phone(informantPhoneID):
             form = forms.InformantPhoneForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == informantPhone.versionID:
-                    informantPhone.contactInfoSourceID = request.form['contactInfoSourceID']
-                    informantPhone.informantID = request.form['informantID']
-                    informantPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                    informantPhone.phoneTypeID = request.form['phoneTypeID']
-                    informantPhone.phoneNumber = request.form['phoneNumber']
-                    informantPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    informantPhone.contactInfoSourceID = form.contactInfoSourceID.data
+                    informantPhone.informantID = form.informantID.data
+                    informantPhone.contactInfoStatusID = form.contactInfoStatusID.data
+                    informantPhone.phoneTypeID = form.phoneTypeID.data
+                    informantPhone.phoneNumber = form.phoneNumber.data
+                    informantPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
                     return informantPhone.json()
                 else:
@@ -2280,15 +1717,15 @@ def create_informant_phone():
         form = forms.InformantPhoneForm(request.form)
         if form.validate():
             informantPhone = models.InformantPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                informantID = request.form['informantID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                informantID=form.informantID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                phoneTypeID=form.phoneTypeID.data,
+                phoneNumber=form.phoneNumber.data,
+                phoneStatusDate=form.phoneStatusDate.data
                 )
             query.add(informantPhone)
-            return jsonify({'informantPhoneID':informantPhone.informantPhoneID})
+            return informantPhone.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2336,8 +1773,8 @@ def update_irb_holder(irbHolderID):
             form = forms.IRBHolderLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == irb.versionID:
-                    irb.holder = request.form['holder']
-                    irb.holderDefinition = request.form['holderDefinition']
+                    irb.holder = form.holder.data
+                    irb.holderDefinition = form.holderDefinition.data
                     query.commit()
                     return irb.json()
                 else:
@@ -2355,11 +1792,11 @@ def create_irb_holder():
         form = forms.IRBHolderLUTForm(request.form)
         if form.validate():
             irb = models.IRBHolderLUT(
-                holder = request.form['holder'],
-                holderDefinition = request.form['holderDefinition']
+                holder=form.holder.data,
+                holderDefinition=form.holderDefinition.data
             )
             query.add(irb)
-            return jsonify({"irbHolderID":irb.irbHolderID})
+            return irb.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2407,12 +1844,12 @@ def update_log(logID):
             form = forms.LogForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == log.versionID:
-                    log.logSubjectID = request.form['logSubjectID']
-                    log.projectID = request.form['projectID']
-                    log.staffID = request.form['staffID']
-                    log.phaseStatusID = request.form['phaseStatusID']
-                    log.note = request.form['note']
-                    log.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+                    log.logSubjectID = form.logSubjectID.data
+                    log.projectID = form.projectID.data
+                    log.staffID = form.staffID.data
+                    log.phaseStatusID = form.phaseStatusID.data
+                    log.note = form.note.data
+                    log.date = form.date.data
                     query.commit()
                     return log.json()
                 else:
@@ -2430,15 +1867,15 @@ def create_log():
         form = forms.LogForm(request.form)
         if form.validate():
             log  = models.Log(
-                logSubjectID = request.form['logSubjectID'],
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                phaseStatusID = request.form['phaseStatusID'],
-                note = request.form['note'],
-                date = datetime.strptime(request.form['date'],"%Y-%m-%d")
+                logSubjectID=form.logSubjectID.data,
+                projectID=form.projectID.data,
+                staffID=form.staffID.data,
+                phaseStatusID=form.phaseStatusID.data,
+                note=form.note.data,
+                date=form.date.data
             )
             query.add(log)
-            return jsonify({"logID":log.logID})
+            return log.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2486,7 +1923,7 @@ def update_log_subject(logSubjectID):
             form = forms.LogSubjectLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == logSubject.versionID:
-                    logSubject.logSubject = request.form['logSubject']
+                    logSubject.logSubject = form.logSubject.data
                     query.commit()
                     return logSubject.json()
                 else:
@@ -2504,10 +1941,10 @@ def create_log_subject():
         form = forms.LogSubjectLUTForm(request.form)
         if form.validate():
             logSubject = models.LogSubjectLUT(
-                logSubject = request.form['logSubject']
+                logSubject=form.logSubject.data
             )
             query.add(logSubject)
-            return jsonify({"logSubjectID":logSubject.logSubjectID})
+            return logSubject.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2555,23 +1992,24 @@ def update_patient(patientID):
             form = forms.PatientForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patient.versionID:
-                    patient.patID = request.form['patID']
-                    patient.recordID = request.form['recordID']
-                    patient.ucrDistID = request.form['ucrDistID']
-                    patient.UPDBID = request.form['UPDBID']
-                    patient.firstName = request.form['firstName']
-                    patient.lastName = request.form['lastName']
-                    patient.middleName = request.form['middleName']
-                    patient.maidenName = request.form['maidenName']
-                    patient.aliasFirstName = request.form['aliasFirstName']
-                    patient.aliasLastName = request.form['aliasLastName']
-                    patient.aliasMiddleName = request.form['aliasMiddleName']
-                    patient.dob = datetime.strptime(request.form['dob'],"%Y-%m-%d")
-                    patient.SSN = request.form['SSN']
-                    patient.sex = request.form['sex']
-                    patient.race = request.form['race']
-                    patient.ethnicity = request.form['ethnicity']
-                    patient.vitalStatus = request.form['vitalStatus']
+                    patient.patID = form.patID.data
+                    patient.ucrDistID = form.ucrDistID.data
+                    patient.UPDBID = form.UPDBID.data
+                    patient.firstName = form.firstName.data
+                    patient.lastName = form.lastName.data
+                    patient.middleName = form.middleName.data
+                    patient.maidenName = form.maidenName.data
+                    patient.aliasFirstName = form.aliasFirstName.data
+                    patient.aliasLastName = form.aliasLastName.data
+                    patient.aliasMiddleName = form.aliasMiddleName.data
+                    patient.dobDay = form.dobDay.data
+                    patient.dobMonth = form.dobMonth.data
+                    patient.dobYear = form.dobYear.data
+                    patient.SSN = form.SSN.data
+                    patient.sexID = form.sexID.data
+                    patient.raceID = form.raceID.data
+                    patient.ethnicityID = form.ethnicityID.data
+                    patient.vitalStatusID = form.vitalStatusID.data
                     query.commit()
                     return patient.json()
                 else:
@@ -2589,25 +2027,27 @@ def create_patient():
         form = forms.PatientForm(request.form)
         if form.validate():
             patient = models.Patient(
-               patID = request.form['patID'],
-               recordID = request.form['recordID'],
-               ucrDistID = request.form['ucrDistID'],
-               UPDBID = request.form['UPDBID'],
-               firstName = request.form['firstName'],
-               lastName = request.form['lastName'],
-               middleName = request.form['middleName'],
-               maidenName = request.form['maidenName'],
-               aliasFirstName = request.form['aliasFirstName'],
-               aliasLastName = request.form['aliasLastName'],
-               aliasMiddleName = request.form['aliasMiddleName'],
-               dob = datetime.strptime(request.form['dob'],"%Y-%m-%d"),
-               SSN = request.form['SSN'],
-               sex = request.form['sex'],
-               ethnicity = request.form['ethnicity'],
-               vitalStatus = request.form['vitalStatus']
+                patID=form.patID.data,
+                ucrDistID=form.ucrDistID.data,
+                UPDBID=form.UPDBID.data,
+                firstName=form.firstName.data,
+                lastName=form.lastName.data,
+                middleName=form.middleName.data,
+                maidenName=form.maidenName.data,
+                aliasFirstName=form.aliasFirstName.data,
+                aliasLastName=form.aliasLastName.data,
+                aliasMiddleName=form.aliasMiddleName.data,
+                dobDay=form.dobDay.data,
+                dobMonth=form.dobMonth.data,
+                dobYear=form.dobYear.data,
+                SSN=form.SSN.data,
+                raceID=form.raceID.data,
+                sexID=form.sexID.data,
+                ethnicityID=form.ethnicityID.data,
+                vitalStatusID=form.vitalStatusID.data
                 )
             query.add(patient)
-            return jsonify({'patientID':patient.patientID})
+            return patient.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2655,15 +2095,15 @@ def update_patient_address(patAddressID):
             form = forms.PatientAddressForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patientAddress.versionID:
-                    patientAddress.contactInfoSourceID = request.form['contactInfoSourceID']
-                    patientAddress.patientID = request.form['patientID']
-                    patientAddress.contactInfoStatusID = request.form['contactInfoStatusID']
-                    patientAddress.street = request.form['street']
-                    patientAddress.street2 = request.form['street2']
-                    patientAddress.city = request.form['city']
-                    patientAddress.state = request.form['state']
-                    patientAddress.zip = request.form['zip']
-                    patientAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                    patientAddress.contactInfoSourceID = form.contactInfoSourceID.data
+                    patientAddress.participantID = form.participantID.data
+                    patientAddress.contactInfoStatusID = form.contactInfoStatusID.data
+                    patientAddress.street = form.street.data
+                    patientAddress.street2 = form.street2.data
+                    patientAddress.city = form.city.data
+                    patientAddress.stateID = form.stateID.data
+                    patientAddress.zip = form.zip.data
+                    patientAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
                     return patientAddress.json()
                 else:
@@ -2681,18 +2121,18 @@ def create_patient_address():
         form = forms.PatientAddressForm(request.form)
         if form.validate():
             patientaddress = models.PatientAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                participantID=form.participantID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                street=form.street.data,
+                street2=form.street2.data,
+                city=form.city.data,
+                stateID=form.stateID.data,
+                zip=form.zip.data,
+                addressStatusDate=form.addressStatusDate.data,
                 )
             query.add(patientaddress)
-            return jsonify({'patAddressID':patientaddress.patAddressID})
+            return patientaddress.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2740,11 +2180,11 @@ def update_patient_email(emailID):
             form = forms.PatientEmailForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patientEmail.versionID:
-                    patientEmail.contactInfoSourceID = request.form['contactInfoSourceID']
-                    patientEmail.patientID = request.form['patientID']
-                    patientEmail.contactInfoStatusID = request.form['contactInfoStatusID']
-                    patientEmail.email = request.form['email']
-                    patientEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                    patientEmail.contactInfoSourceID = form.contactInfoSourceID.data
+                    patientEmail.participantID = form.participantID.data
+                    patientEmail.contactInfoStatusID = form.contactInfoStatusID.data
+                    patientEmail.email = form.email.data
+                    patientEmail.emailStatusDate = form.emailStatusDate.data
                     query.commit()
                     return patientEmail.json()
                 else:
@@ -2762,14 +2202,14 @@ def create_patient_email():
         form = forms.PatientEmailForm(request.form)
         if form.validate():
             patientEmail = models.PatientEmail(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                email = request.form['email'],
-                emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                participantID=form.participantID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                email=form.email.data,
+                emailStatusDate=form.emailStatusDate.data
                 )
             query.add(patientEmail)
-            return jsonify({'emailID':patientEmail.emailID})
+            return patientEmail.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2817,12 +2257,12 @@ def update_patient_phone(patPhoneID):
             form = forms.PatientPhoneForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patientPhone.versionID:
-                    patientPhone.contactInfoSourceID = request.form['contactInfoSourceID']
-                    patientPhone.patientID = request.form['patientID']
-                    patientPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                    patientPhone.phoneTypeID = request.form['phoneTypeID']
-                    patientPhone.phoneNumber = request.form['phoneNumber']
-                    patientPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    patientPhone.contactInfoSourceID = form.contactInfoSourceID.data
+                    patientPhone.participantID = form.participantID.data
+                    patientPhone.contactInfoStatusID = form.contactInfoStatusID.data
+                    patientPhone.phoneTypeID = form.phoneTypeID.data
+                    patientPhone.phoneNumber = form.phoneNumber.data
+                    patientPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
                     return patientPhone.json()
                 else:
@@ -2840,15 +2280,15 @@ def create_patient_phone():
         form = forms.PatientPhoneForm(request.form)
         if form.validate():
             patientPhone = models.PatientPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                patientID = request.form['patientID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                participantID=form.participantID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                phoneTypeID=form.phoneTypeID.data,
+                phoneNumber=form.phoneNumber.data,
+                phoneStatusDate=form.phoneStatusDate.data
                 )
             query.add(patientPhone)
-            return jsonify({'patPhoneID':patientPhone.patPhoneID})
+            return patientPhone.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2896,8 +2336,9 @@ def update_patient_project_status(patientProjectStatusID):
             form = forms.PatientProjectStatusForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patientProjectStatus.versionID:
-                    patientProjectStatus.patientProjectStatusTypeID = request.form['patientProjectStatusTypeID']
-                    patientProjectStatus.projectPatientID = request.form['projectPatientID']
+                    patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
+                    patientProjectStatus.participantID = form.participantID.data
+                    patientProjectStatus.statusDate = form.statusDate.data
                     query.commit()
                     return patientProjectStatus.json()
                 else:
@@ -2915,11 +2356,12 @@ def create_patient_project_status():
         form = forms.PatientProjectStatusForm(request.form)
         if form.validate():
             patientProjectStatus = models.PatientProjectStatus(
-                patientProjectStatusTypeID = request.form['patientProjectStatusTypeID'],
-                projectPatientID = request.form['projectPatientID']
+                patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
+                participantID=form.participantID.data,
+                statusDate = form.statusDate.data
             )
             query.add(patientProjectStatus)
-            return jsonify({'patientProjectStatusID':patientProjectStatus.patientProjectStatusID})
+            return patientProjectStatus.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -2967,7 +2409,7 @@ def update_patient_project_status_type(patientProjectStatusTypeID):
             form = forms.PatientProjectStatusLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == patientProjectStatusType.versionID:
-                    patientProjectStatusType.statusDescription = request.form['statusDescription']
+                    patientProjectStatusType.statusDescription = form.statusDescription.data
                     query.commit()
                     return patientProjectStatusType.json()
                 else:
@@ -2985,10 +2427,10 @@ def create_patient_project_status_type():
         form = forms.PatientProjectStatusLUTForm(request.form)
         if form.validate():
             patientProjectStatusType = models.PatientProjectStatusLUT(
-                statusDescription = request.form['statusDescription']
+                statusDescription=form.statusDescription.data
             )
             query.add(patientProjectStatusType)
-            return jsonify({'patientProjectStatusTypeID':patientProjectStatusType.patientProjectStatusTypeID})
+            return patientProjectStatusType.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3036,8 +2478,8 @@ def update_phase_status(logPhaseID):
             form = forms.PhaseStatusForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == phaseStatus.versionID:
-                    phaseStatus.phaseStatus = request.form['phaseStatus']
-                    phaseStatus.phaseDescription = request.form['phaseDescription']
+                    phaseStatus.phaseStatus = form.phaseStatus.data
+                    phaseStatus.phaseDescription = form.phaseDescription.data
                     query.commit()
                     return phaseStatus.json()
                 else:
@@ -3055,11 +2497,11 @@ def create_phase_status():
         form = forms.PhaseStatusForm(request.form)
         if form.validate():
             phaseStatus = models.PhaseStatus(
-                phaseStatus = request.form['phaseStatus'],
-                phaseDescription = request.form['phaseDescription']
+                phaseStatus=form.phaseStatus.data,
+                phaseDescription=form.phaseDescription.data
             )
             query.add(phaseStatus)
-            return jsonify({'logPhaseID':phaseStatus.logPhaseID})
+            return phaseStatus.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3107,7 +2549,7 @@ def update_phone_type(phoneTypeID):
             form = forms.PhoneTypeForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == phoneType.versionID:
-                    phoneType.phoneType = request.form['phoneType']
+                    phoneType.phoneType = form.phoneType.data
                     query.commit()
                     return phoneType.json()
                 else:
@@ -3125,10 +2567,10 @@ def create_phone_type():
         form = forms.PhoneTypeForm(request.form)
         if form.validate():
             phoneType = models.PhoneTypeLUT(
-                phoneType = request.form['phoneType']
+                phoneType=form.phoneType.data
             )
             query.add(phoneType)
-            return jsonify({"phoneTypeID": phoneType.phoneTypeID})
+            return phoneType.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3177,16 +2619,16 @@ def update_physician(physicianID):
             form = forms.PhysicianForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physician.versionID:
-                    physician.firstName = request.form['firstName']
-                    physician.lastName = request.form['lastName']
-                    physician.middleName = request.form['middleName']
-                    physician.credentials = request.form['credentials']
-                    physician.specialty = request.form['specialty']
-                    physician.aliasFirstName = request.form['aliasFirstName']
-                    physician.aliasLastName = request.form['aliasLastName']
-                    physician.aliasMiddleName = request.form['aliasMiddleName']
-                    physician.physicianStatus = request.form['physicianStatus']
-                    physician.physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d")
+                    physician.firstName = form.firstName.data
+                    physician.lastName = form.lastName.data
+                    physician.middleName = form.middleName.data
+                    physician.credentials = form.credentials.data
+                    physician.specialty = form.specialty.data
+                    physician.aliasFirstName = form.aliasFirstName.data
+                    physician.aliasLastName = form.aliasLastName.data
+                    physician.aliasMiddleName = form.aliasMiddleName.data
+                    physician.physicianStatusID = form.physicianStatusID.data
+                    physician.physicianStatusDate = form.physicianStatusDate.data
                     query.commit()
                     return physician.json()
                 else:
@@ -3204,19 +2646,19 @@ def create_physician():
         form = forms.PhysicianForm(request.form)
         if form.validate():
             physician = models.Physician(
-                firstName = request.form['firstName'],
-                lastName = request.form['lastName'],
-                middleName = request.form['middleName'],
-                credentials = request.form['credentials'],
-                specialty = request.form['specialty'],
-                aliasFirstName = request.form['aliasFirstName'],
-                aliasLastName = request.form['aliasLastName'],
-                aliasMiddleName = request.form['aliasMiddleName'],
-                physicianStatus = request.form['physicianStatus'],
-                physicianStatusDate = datetime.strptime(request.form['physicianStatusDate'],"%Y-%m-%d"),
+                firstName=form.firstName.data,
+                lastName=form.lastName.data,
+                middleName=form.middleName.data,
+                credentials=form.credentials.data,
+                specialty=form.specialty.data,
+                aliasFirstName=form.aliasFirstName.data,
+                aliasLastName=form.aliasLastName.data,
+                aliasMiddleName=form.aliasMiddleName.data,
+                physicianStatusID=form.physicianStatusID.data,
+                physicianStatusDate=form.physicianStatusDate.data,
             )
             query.add(physician)
-            return jsonify({'physicianID':physician.physicianID})
+            return physician.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3264,15 +2706,15 @@ def update_physician_address(physicianAddressID):
             form = forms.PhysicianAddressForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physicianAddress.versionID:
-                    physicianAddress.contactInfoSourceID = request.form['contactInfoSourceID']
-                    physicianAddress.physicianID = request.form['physicianID']
-                    physicianAddress.contactInfoStatusID = request.form['contactInfoStatusID']
-                    physicianAddress.street = request.form['street']
-                    physicianAddress.street2 = request.form['street2']
-                    physicianAddress.city = request.form['city']
-                    physicianAddress.state = request.form['state']
-                    physicianAddress.zip = request.form['zip']
-                    physicianAddress.addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d")
+                    physicianAddress.contactInfoSourceID = form.contactInfoSourceID.data
+                    physicianAddress.physicianID = form.physicianID.data
+                    physicianAddress.contactInfoStatusID = form.contactInfoStatusID.data
+                    physicianAddress.street = form.street.data
+                    physicianAddress.street2 = form.street2.data
+                    physicianAddress.city = form.city.data
+                    physicianAddress.stateID = form.stateID.data
+                    physicianAddress.zip = form.zip.data
+                    physicianAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
                     return physicianAddress.json()
                 else:
@@ -3290,18 +2732,18 @@ def create_physician_address():
         form = forms.PhysicianAddressForm(request.form)
         if form.validate():
             physicianAddress = models.PhysicianAddress(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                physicianID = request.form['physicianID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                street = request.form['street'],
-                street2 = request.form['street2'],
-                city = request.form['city'],
-                state = request.form['state'],
-                zip = request.form['zip'],
-                addressStatusDate = datetime.strptime(request.form['addressStatusDate'],"%Y-%m-%d"),
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                physicianID=form.physicianID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                street=form.street.data,
+                street2=form.street2.data,
+                city=form.city.data,
+                stateID=form.stateID.data,
+                zip=form.zip.data,
+                addressStatusDate=form.addressStatusDate.data,
                 )
             query.add(physicianAddress)
-            return jsonify({'physicianAddressID':physicianAddress.physicianAddressID})
+            return physicianAddress.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3349,11 +2791,11 @@ def update_physician_email(physicianEmailID):
             form = forms.PhysicianEmailForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physicianEmail.versionID:
-                    physicianEmail.contactInfoSourceID = request.form['contactInfoSourceID']
-                    physicianEmail.physicianID = request.form['physicianID']
-                    physicianEmail.contactInfoStatusID = request.form['contactInfoStatusID']
-                    physicianEmail.email = request.form['email']
-                    physicianEmail.emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                    physicianEmail.contactInfoSourceID = form.contactInfoSourceID.data
+                    physicianEmail.physicianID = form.physicianID.data
+                    physicianEmail.contactInfoStatusID = form.contactInfoStatusID.data
+                    physicianEmail.email = form.email.data
+                    physicianEmail.emailStatusDate = form.emailStatusDate.data
                     query.commit()
                     return physicianEmail.json()
                 else:
@@ -3371,14 +2813,14 @@ def create_physician_email():
         form = forms.PhysicianEmailForm(request.form)
         if form.validate():
             physicianEmail = models.PhysicianEmail(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                physicianID = request.form['physicianID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                email = request.form['email'],
-                emailStatusDate = datetime.strptime(request.form['emailStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                physicianID=form.physicianID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                email=form.email.data,
+                emailStatusDate=form.emailStatusDate.data
                 )
             query.add(physicianEmail)
-            return jsonify({'physicianEmailID':physicianEmail.physicianEmailID})
+            return physicianEmail.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3426,10 +2868,10 @@ def update_physician_facility(physFacilityID):
             form = forms.PhysicianFacilityForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physicianFacility.versionID:
-                    physicianFacility.facilityID = request.form['facilityID']
-                    physicianFacility.physicianID = request.form['physicianID']
-                    physicianFacility.physFacilityStatus = request.form['physFacilityStatus']
-                    physicianFacility.physFacilityStatusDate = datetime.strptime(request.form['physFacilityStatusDate'],"%Y-%m-%d")
+                    physicianFacility.facilityID = form.facilityID.data
+                    physicianFacility.physicianID = form.physicianID.data
+                    physicianFacility.physFacilityStatusID = form.physFacilityStatusID.data
+                    physicianFacility.physFacilityStatusDate = form.physFacilityStatusDate.data
                     query.commit()
                     return physicianFacility.json()
                 else:
@@ -3447,13 +2889,13 @@ def create_physician_facility():
         form = forms.PhysicianFacilityForm(request.form)
         if form.validate():
             physicianFacility = models.PhysicianFacility(
-                facilityID = request.form['facilityID'],
-                physicianID = request.form['physicianID'],
-                physFacilityStatus = request.form['physFacilityStatus'],
-                physFacilityStatusDate = datetime.strptime(request.form['physFacilityStatusDate'],"%Y-%m-%d"),
+                facilityID=form.facilityID.data,
+                physicianID=form.physicianID.data,
+                physFacilityStatusID=form.physFacilityStatusID.data,
+                physFacilityStatusDate=form.physFacilityStatusDate.data,
                 )
             query.add(physicianFacility)
-            return jsonify({'physFacilityID':physicianFacility.physFacilityID})
+            return physicianFacility.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3501,12 +2943,12 @@ def update_physician_phone(physicianPhoneID):
             form = forms.PhysicianPhoneForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physicianPhone.versionID:
-                    physicianPhone.contactInfoSourceID = request.form['contactInfoSourceID']
-                    physicianPhone.physicianID = request.form['physicianID']
-                    physicianPhone.contactInfoStatusID = request.form['contactInfoStatusID']
-                    physicianPhone.phoneNumber = request.form['phoneNumber']
-                    physicianPhone.phoneTypeID = request.form['phoneTypeID']
-                    physicianPhone.phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                    physicianPhone.contactInfoSourceID = form.contactInfoSourceID.data
+                    physicianPhone.physicianID = form.physicianID.data
+                    physicianPhone.contactInfoStatusID = form.contactInfoStatusID.data
+                    physicianPhone.phoneNumber = form.phoneNumber.data
+                    physicianPhone.phoneTypeID = form.phoneTypeID.data
+                    physicianPhone.phoneStatusDate = form.phoneStatusDate.data
                     query.commit()
                     return physicianPhone.json()
                 else:
@@ -3524,15 +2966,15 @@ def create_physician_phone():
         form = forms.PhysicianPhoneForm(request.form)
         if form.validate():
             physicianPhone = models.PhysicianPhone(
-                contactInfoSourceID = request.form['contactInfoSourceID'],
-                physicianID = request.form['physicianID'],
-                contactInfoStatusID = request.form['contactInfoStatusID'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneTypeID = request.form['phoneTypeID'],
-                phoneStatusDate = datetime.strptime(request.form['phoneStatusDate'],"%Y-%m-%d")
+                contactInfoSourceID=form.contactInfoSourceID.data,
+                physicianID=form.physicianID.data,
+                contactInfoStatusID=form.contactInfoStatusID.data,
+                phoneNumber=form.phoneNumber.data,
+                phoneTypeID=form.phoneTypeID.data,
+                phoneStatusDate=form.phoneStatusDate.data
                 )
             query.add(physicianPhone)
-            return jsonify({'physicianPhoneID':physicianPhone.physicianPhoneID})
+            return physicianPhone.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3553,6 +2995,73 @@ def delete_physician_phone(physicianPhoneID):
             return item_not_found("PhysicianPhoneID {} not found".format(physicianPhoneID))
     except Exception as e:
         return internal_error(e)
+
+@api.route('/physicianstatuses/', methods=['GET'])
+@api.route('/physicianstatuses/<int:physicianStatusID>/', methods=['GET'])
+def get_physician_status(physicianStatusID=None):
+    try:
+        if physicianStatusID is None:
+            return jsonify(PhysicianStatuses=[i.dict() for i in query.get_physician_statuses()])
+        else:
+            physicianStatus = query.get_physician_status(physicianStatusID)
+            if physicianStatus is not None:
+                return physicianStatus.json()
+            else:
+                return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/physicianstatuses/<int:physicianStatusID>/', methods=['PUT'])
+def update_physician_status(physicianStatusID):
+    try:
+        physicianStatus = query.get_physician_status(physicianStatusID)
+        if physicianStatus is not None:
+            form = forms.PhysicianStatusForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == physicianStatus.versionID:
+                    physicianStatus.physicianStatus = form.physicianStatus.data
+                    query.commit()
+                    return physicianStatus.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/physicianstatuses/', methods=['POST'])
+def create_physician_status():
+    try:
+        form = forms.PhysicianStatusForm(request.form)
+        if form.validate():
+            physicianStatus = models.PhysicianStatus(
+                physicianStatus=form.physicianStatus.data,
+            )
+            query.add(physicianStatus)
+            return physicianStatus.json()
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@api.route('/physicianstatuses/<int:physicianStatusID>/', methods=['DELETE'])
+def delete_physician_status(physicianStatusID):
+    try:
+        physicianStatus = query.get_physician_status(physicianStatusID)
+        if physicianStatus is not None:
+            deps = get_dependencies(physicianStatus)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(physicianStatus)
+                return item_deleted("PhysicianStatusID {} deleted".format(physicianStatusID))
+        else:
+            return item_not_found("PhysicianStatusID {} not found".format(physicianStatusID))
+    except Exception as e:
+        return internal_error(e)
+
 
 ##############################################################################
 # PhysicianToCTC
@@ -3580,8 +3089,8 @@ def update_physician_to_ctc(physicianCTCID):
             form = forms.PhysicianToCTCForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == physicianToCTC.versionID:
-                    physicianToCTC.physicianID = request.form['physicianID']
-                    physicianToCTC.ctcID = request.form['ctcID']
+                    physicianToCTC.physicianID = form.physicianID.data
+                    physicianToCTC.ctcID = form.ctcID.data
                     query.commit()
                     return physicianToCTC.json()
                 else:
@@ -3599,11 +3108,11 @@ def create_physician_to_ctc():
         form = forms.PhysicianToCTCForm(request.form)
         if form.validate():
             physicianToCTC = models.PhysicianToCTC(
-               physicianID = request.form['physicianID'],
-               ctcID = request.form['ctcID']
+                physicianID=form.physicianID.data,
+                ctcID=form.ctcID.data
             )
             query.add(physicianToCTC)
-            return jsonify({'physicianCTCID':physicianToCTC.physicianCTCID})
+            return physicianToCTC.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3651,33 +3160,33 @@ def update_pre_application(preApplicationID):
             form = forms.PreApplicationForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == preApplication.versionID:
-                    preApplication.projectID = request.form['projectID']
-                    preApplication.piFirstName = request.form['piFirstName']
-                    preApplication.piLastName = request.form['piLastName']
-                    preApplication.piPhone = request.form['piPhone']
-                    preApplication.piEmail = request.form['piEmail']
-                    preApplication.contactFirstName = request.form['contactFirstName']
-                    preApplication.contactLastName = request.form['contactLastName']
-                    preApplication.contactPhone = request.form['contactPhone']
-                    preApplication.contactEmail = request.form['contactEmail']
-                    preApplication.institution = request.form['institution']
-                    preApplication.institution2 = request.form['institution2']
-                    preApplication.uid = request.form['uid']
-                    preApplication.udoh = request.form['udoh']
-                    preApplication.projectTitle = request.form['projectTitle']
-                    preApplication.purpose = request.form['purpose']
-                    preApplication.irb0 = "true" == request.form['irb0'].lower()
-                    preApplication.irb1 = "true" == request.form['irb1'].lower()
-                    preApplication.irb2 = "true" == request.form['irb2'].lower()
-                    preApplication.irb3 = "true" == request.form['irb3'].lower()
-                    preApplication.irb4 = "true" == request.form['irb4'].lower()
-                    preApplication.otherIrb = request.form['otherIrb']
-                    preApplication.updb = "true" == request.form['updb'].lower()
-                    preApplication.ptContact = "true" == request.form['ptContact'].lower()
-                    preApplication.startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d")
-                    preApplication.link = "true" == request.form['link'].lower()
-                    preApplication.deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d")
-                    preApplication.description = request.form['description']
+                    preApplication.projectID = form.projectID.data
+                    preApplication.piFirstName = form.piFirstName.data
+                    preApplication.piLastName = form.piLastName.data
+                    preApplication.piPhone = form.piPhone.data
+                    preApplication.piEmail = form.piEmail.data
+                    preApplication.contactFirstName = form.contactFirstName.data
+                    preApplication.contactLastName = form.contactLastName.data
+                    preApplication.contactPhone = form.contactPhone.data
+                    preApplication.contactEmail = form.contactEmail.data
+                    preApplication.institution = form.institution.data
+                    preApplication.institution2 = form.institution2.data
+                    preApplication.uid = form.uid.data
+                    preApplication.udoh = form.udoh.data
+                    preApplication.projectTitle = form.projectTitle.data
+                    preApplication.purpose = form.purpose.data
+                    preApplication.irb0 = form.irb0.data
+                    preApplication.irb1 = form.irb1.data
+                    preApplication.irb2 = form.irb2.data
+                    preApplication.irb3 = form.irb3.data
+                    preApplication.irb4 = form.irb4.data
+                    preApplication.otherIrb = form.otherIrb.data
+                    preApplication.updb = form.updb.data
+                    preApplication.ptContact = form.ptContact.data
+                    preApplication.startDate = form.startDate.data
+                    preApplication.link = form.link.data
+                    preApplication.deliveryDate = form.deliveryDate.data
+                    preApplication.description = form.description.data
                     query.commit()
                     return preApplication.json()
                 else:
@@ -3695,36 +3204,36 @@ def create_pre_application():
         form = forms.PreApplicationForm(request.form)
         if form.validate():
             preApplication = models.PreApplication(
-                projectID = request.form['projectID'],
-                piFirstName = request.form['piFirstName'],
-                piLastName = request.form['piLastName'],
-                piPhone = request.form['piPhone'],
-                piEmail = request.form['piEmail'],
-                contactFirstName = request.form['contactFirstName'],
-                contactLastName = request.form['contactLastName'],
-                contactPhone = request.form['contactPhone'],
-                contactEmail = request.form['contactEmail'],
-                institution = request.form['institution'],
-                institution2 = request.form['institution2'],
-                uid = request.form['uid'],
-                udoh = request.form['udoh'],
-                projectTitle = request.form['projectTitle'],
-                purpose = request.form['purpose'],
-                irb0 = "true" == request.form['irb0'].lower(),
-                irb1 = "true" == request.form['irb1'].lower(),
-                irb2 = "true" == request.form['irb2'].lower(),
-                irb3 = "true" == request.form['irb3'].lower(),
-                irb4 = "true" == request.form['irb4'].lower(),
-                otherIrb = request.form['otherIrb'],
-                updb = "true" == request.form['updb'].lower(),
-                ptContact = "true" == request.form['ptContact'].lower(),
-                startDate = datetime.strptime(request.form['startDate'],"%Y-%m-%d"),
-                link = "true" == request.form['link'].lower(),
-                deliveryDate = datetime.strptime(request.form['deliveryDate'], "%Y-%m-%d"),
-                description = request.form['description']
+                projectID=form.projectID.data,
+                piFirstName=form.piFirstName.data,
+                piLastName=form.piLastName.data,
+                piPhone=form.piPhone.data,
+                piEmail=form.piEmail.data,
+                contactFirstName=form.contactFirstName.data,
+                contactLastName=form.contactLastName.data,
+                contactPhone=form.contactPhone.data,
+                contactEmail=form.contactEmail.data,
+                institution=form.institution.data,
+                institution2=form.institution2.data,
+                uid=form.uid.data,
+                udoh=form.udoh.data,
+                projectTitle=form.projectTitle.data,
+                purpose=form.purpose.data,
+                irb0 = form.irb0.data,
+                irb1 = form.irb1.data,
+                irb2 = form.irb2.data,
+                irb3 = form.irb3.data,
+                irb4 = form.irb4.data,
+                otherIrb=form.otherIrb.data,
+                updb = form.updb.data,
+                ptContact = form.ptContact.data,
+                startDate=form.startDate.data,
+                link = form.link.data,
+                deliveryDate=form.deliveryDate.data,
+                description=form.description.data
             )
             query.add(preApplication)
-            return jsonify({'preApplicationID':preApplication.preApplicationID})
+            return preApplication.json()
         else:
             print("error")
             print(form.errors)
@@ -3774,22 +3283,22 @@ def update_project(projectID):
             form = forms.ProjectForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == proj.versionID:
-                    proj.projectTypeID = request.form['projectTypeID']
-                    proj.irbHolderID = request.form['irbHolderID']
-                    proj.projectTitle = request.form['projectTitle']
-                    proj.shortTitle = request.form['shortTitle']
-                    proj.projectSummary = request.form['projectSummary']
-                    proj.sop = request.form['sop']
-                    proj.ucrProposal = request.form['ucrProposal']
-                    proj.budgetDoc = request.form['budgetDoc']
-                    proj.ucrFee = request.form['ucrFee']
-                    proj.ucrNoFee = request.form['ucrNoFee']
-                    proj.previousShortTitle = request.form['previousShortTitle']
-                    proj.dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d")
-                    proj.finalRecruitmentReport = request.form['finalRecruitmentReport']
-                    proj.ongoingContact = "true" == request.form['ongoingContact'].lower()
-                    proj.activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
-                    proj.activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
+                    proj.projectTypeID = form.projectTypeID.data
+                    proj.irbHolderID = form.irbHolderID.data
+                    proj.projectTitle = form.projectTitle.data
+                    proj.shortTitle = form.shortTitle.data
+                    proj.projectSummary = form.projectSummary.data
+                    proj.sop = form.sop.data
+                    proj.ucrProposal = form.ucrProposal.data
+                    proj.budgetDoc = form.budgetDoc.data
+                    proj.ucrFee = form.ucrFee.data
+                    proj.ucrNoFee = form.ucrNoFee.data
+                    proj.previousShortTitle = form.previousShortTitle.data
+                    proj.dateAdded = form.dateAdded.data
+                    proj.finalRecruitmentReport = form.finalRecruitmentReport.data
+                    proj.ongoingContact = form.ongoingContact.data
+                    proj.activityStartDate = form.activityStartDate.data
+                    proj.activityEndDate = form.activityEndDate.data
                     query.commit()
                     return proj.json()
                 else:
@@ -3807,25 +3316,25 @@ def create_project():
         form = forms.ProjectForm(request.form)
         if form.validate():
             proj = models.Project(
-                projectTypeID = request.form['projectTypeID'],
-                irbHolderID = request.form['irbHolderID'],
-                projectTitle = request.form['projectTitle'],
-                shortTitle = request.form['shortTitle'],
-                projectSummary = request.form['projectSummary'],
-                sop = request.form['sop'],
-                ucrProposal = request.form['ucrProposal'],
-                budgetDoc = request.form['budgetDoc'],
-                ucrFee = request.form['ucrFee'],
-                ucrNoFee = request.form['ucrNoFee'],
-                previousShortTitle = request.form['previousShortTitle'],
-                dateAdded = datetime.strptime(request.form['dateAdded'],"%Y-%m-%d"),
-                finalRecruitmentReport = request.form['finalRecruitmentReport'],
-                ongoingContact = "true" == request.form['ongoingContact'].lower(),
-                activityStartDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d"),
-                activityEndDate = datetime.strptime(request.form['activityStartDate'], "%Y-%m-%d")
+                projectTypeID=form.projectTypeID.data,
+                irbHolderID=form.irbHolderID.data,
+                projectTitle=form.projectTitle.data,
+                shortTitle=form.shortTitle.data,
+                projectSummary=form.projectSummary.data,
+                sop=form.sop.data,
+                ucrProposal=form.ucrProposal.data,
+                budgetDoc=form.budgetDoc.data,
+                ucrFee=form.ucrFee.data,
+                ucrNoFee=form.ucrNoFee.data,
+                previousShortTitle=form.previousShortTitle.data,
+                dateAdded=form.dateAdded.data,
+                finalRecruitmentReport=form.finalRecruitmentReport.data,
+                ongoingContact = form.ongoingContact.data,
+                activityStartDate=form.activityStartDate.data,
+                activityEndDate=form.activityEndDate.data
                 )
             query.add(proj)
-            return jsonify({'projectID':proj.projectID})
+            return proj.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -3873,37 +3382,37 @@ def update_project_patient(participantID):
             form = forms.ProjectPatientForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == projectPatient.versionID:
-                    projectPatient.projectID = request.form['projectID']
-                    projectPatient.staffID = request.form['staffID']
-                    projectPatient.ctcID = request.form['ctcID']
-                    projectPatient.currentAge = request.form['currentAge']
-                    projectPatient.batch = request.form['batch']
-                    projectPatient.siteGrp = request.form['siteGrp']
-                    projectPatient.finalCode = request.form['finalCode']
-                    projectPatient.finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d")
-                    projectPatient.enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d")
-                    projectPatient.dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d")
-                    projectPatient.importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d")
-                    projectPatient.finalCodeStaffID = request.form['finalCodeStaffID']
-                    projectPatient.enrollmentStaffID = request.form['enrollmentStaffID']
-                    projectPatient.dateCoordSignedStaffID = request.form['dateCoordSignedStaffID']
-                    projectPatient.abstractStatus = request.form['abstractStatus']
-                    projectPatient.abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d")
-                    projectPatient.abstractStatusStaffID = request.form['abstractStatusStaffID']
-                    projectPatient.sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d")
-                    projectPatient.sentToAbstractorStaffID = request.form['sentToAbstractorStaffID']
-                    projectPatient.abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d")
-                    projectPatient.abstractorStaffID = request.form['abstractorStaffID']
-                    projectPatient.researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d")
-                    projectPatient.researcherStaffID = request.form['researcherStaffID']
-                    projectPatient.consentLink = request.form['consentLink']
-                    projectPatient.tracingStatus = request.form['tracingStatus']
-                    projectPatient.medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower()
-                    projectPatient.medRecordReleaseLink = request.form['medRecordReleaseLink']
-                    projectPatient.medRecordReleaseStaffID = request.form['medRecordReleaseStaffID']
-                    projectPatient.medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d")
-                    projectPatient.surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d")
-                    projectPatient.surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
+                    projectPatient.projectID = form.projectID.data
+                    projectPatient.staffID = form.staffID.data
+                    projectPatient.ctcID = form.ctcID.data
+                    projectPatient.currentAge = form.currentAge.data
+                    projectPatient.batch = form.batch.data
+                    projectPatient.siteGrp = form.siteGrp.data
+                    projectPatient.finalCodeID = form.finalCodeID.data
+                    projectPatient.finalCodeDate = form.finalCodeDate.data
+                    projectPatient.enrollmentDate = form.enrollmentDate.data
+                    projectPatient.dateCoordSigned = form.dateCoordSigned.data
+                    projectPatient.importDate = form.importDate.data
+                    projectPatient.finalCodeStaffID = form.finalCodeStaffID.data
+                    projectPatient.enrollmentStaffID = form.enrollmentStaffID.data
+                    projectPatient.dateCoordSignedStaffID = form.dateCoordSignedStaffID.data
+                    projectPatient.abstractStatusID = form.abstractStatusID.data
+                    projectPatient.abstractStatusDate = form.abstractStatusDate.data
+                    projectPatient.abstractStatusStaffID = form.abstractStatusStaffID.data
+                    projectPatient.sentToAbstractorDate = form.sentToAbstractorDate.data
+                    projectPatient.sentToAbstractorStaffID = form.sentToAbstractorStaffID.data
+                    projectPatient.abstractedDate = form.abstractedDate.data
+                    projectPatient.abstractorStaffID = form.abstractorStaffID.data
+                    projectPatient.researcherDate = form.researcherDate.data
+                    projectPatient.researcherStaffID = form.researcherStaffID.data
+                    projectPatient.consentLink = form.consentLink.data
+                    projectPatient.medRecordReleaseSigned = form.medRecordReleaseSigned.data
+                    projectPatient.medRecordReleaseLink = form.medRecordReleaseLink.data
+                    projectPatient.medRecordReleaseStaffID = form.medRecordReleaseStaffID.data
+                    projectPatient.medRecordReleaseDate = form.medRecordReleaseDate.data
+                    projectPatient.surveyToResearcher = form.surveyToResearcher.data
+                    projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
+                    projectPatient.qualityControl = form.qualityControl.data
                     query.commit()
                     return projectPatient.json()
                 else:
@@ -3921,39 +3430,40 @@ def create_project_patient():
         form = forms.ProjectPatientForm(request.form)
         if form.validate():
             projectPatient = models.ProjectPatient(
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                ctcID = request.form['ctcID'],
-                currentAge = request.form['currentAge'],
-                batch = request.form['batch'],
-                siteGrp = request.form['siteGrp'],
-                finalCode = request.form['finalCode'],
-                finalCodeDate = datetime.strptime(request.form['finalCodeDate'],"%Y-%m-%d"),
-                enrollmentDate = datetime.strptime(request.form['enrollmentDate'],"%Y-%m-%d"),
-                dateCoordSigned = datetime.strptime(request.form['dateCoordSigned'],"%Y-%m-%d"),
-                importDate = datetime.strptime(request.form['importDate'],"%Y-%m-%d"),
-                finalCodeStaffID = request.form['finalCodeStaffID'],
-                enrollmentStaffID = request.form['enrollmentStaffID'],
-                dateCoordSignedStaffID = request.form['dateCoordSignedStaffID'],
-                abstractStatus = request.form['abstractStatus'],
-                abstractStatusDate = datetime.strptime(request.form['abstractStatusDate'],"%Y-%m-%d"),
-                abstractStatusStaffID = request.form['abstractStatusStaffID'],
-                sentToAbstractorDate = datetime.strptime(request.form['sentToAbstractorDate'],"%Y-%m-%d"),
-                sentToAbstractorStaffID = request.form['sentToAbstractorStaffID'],
-                abstractedDate = datetime.strptime(request.form['abstractedDate'],"%Y-%m-%d"),
-                abstractorStaffID = request.form['abstractorStaffID'],
-                researcherDate = datetime.strptime(request.form['researcherDate'],"%Y-%m-%d"),
-                researcherStaffID = request.form['researcherStaffID'],
-                consentLink = request.form['consentLink'],
-                medRecordReleaseSigned = "true" == request.form['medRecordReleaseSigned'].lower(),
-                medRecordReleaseLink = request.form['medRecordReleaseLink'],
-                medRecordReleaseStaffID = request.form['medRecordReleaseStaffID'],
-                medRecordReleaseDate =  datetime.strptime(request.form['medRecordReleaseDate'],"%Y-%m-%d"),
-                surveyToResearcher =  datetime.strptime(request.form['surveyToResearcher'],"%Y-%m-%d"),
-                surveyToResearcherStaffID = request.form['surveyToResearcherStaffID']
+                projectID=form.projectID.data,
+                staffID=form.staffID.data,
+                ctcID=form.ctcID.data,
+                currentAge=form.currentAge.data,
+                batch=form.batch.data,
+                siteGrp=form.siteGrp.data,
+                finalCodeID=form.finalCodeID.data,
+                finalCodeDate=form.finalCodeDate.data,
+                enrollmentDate=form.enrollmentDate.data,
+                dateCoordSigned=form.dateCoordSigned.data,
+                importDate=form.importDate.data,
+                finalCodeStaffID=form.finalCodeStaffID.data,
+                enrollmentStaffID=form.enrollmentStaffID.data,
+                dateCoordSignedStaffID=form.dateCoordSignedStaffID.data,
+                abstractStatusID=form.abstractStatusID.data,
+                abstractStatusDate=form.abstractStatusDate.data,
+                abstractStatusStaffID=form.abstractStatusStaffID.data,
+                sentToAbstractorDate=form.sentToAbstractorDate.data,
+                sentToAbstractorStaffID=form.sentToAbstractorStaffID.data,
+                abstractedDate=form.abstractedDate.data,
+                abstractorStaffID=form.abstractorStaffID.data,
+                researcherDate=form.researcherDate.data,
+                researcherStaffID=form.researcherStaffID.data,
+                consentLink=form.consentLink.data,
+                medRecordReleaseSigned = form.medRecordReleaseSigned.data,
+                medRecordReleaseLink=form.medRecordReleaseLink.data,
+                medRecordReleaseStaffID=form.medRecordReleaseStaffID.data,
+                medRecordReleaseDate=form.medRecordReleaseDate.data,
+                surveyToResearcher=form.surveyToResearcher.data,
+                surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
+                qualityControl=form.qualityControl.data
             )
             query.add(projectPatient)
-            return jsonify({'participantID':projectPatient.participantID})
+            return projectPatient.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4001,14 +3511,13 @@ def update_project_staff(projectStaffID):
             form = forms.ProjectStaffForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == projectStaff.versionID:
-                    projectStaff.staffRoleID = request.form['staffRoleID']
-                    projectStaff.projectID = request.form['projectID']
-                    projectStaff.staffID = request.form['staffID']
-                    projectStaff.role = request.form['role']
-                    projectStaff.datePledge = datetime.strptime(request.form['datePledge'],"%Y-%m-%d")
-                    projectStaff.dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d")
-                    projectStaff.contact = request.form['contact']
-                    projectStaff.inactive = request.form['inactive']
+                    projectStaff.staffRoleID = form.staffRoleID.data
+                    projectStaff.projectID = form.projectID.data
+                    projectStaff.staffID = form.staffID.data
+                    projectStaff.datePledge = form.datePledge.data
+                    projectStaff.dateRevoked = form.dateRevoked.data
+                    projectStaff.contactID = form.contactID.data
+                    projectStaff.inactiveID = form.inactiveID.data
                     query.commit()
                     return projectStaff.json()
                 else:
@@ -4026,17 +3535,16 @@ def create_project_staff():
         form = forms.ProjectStaffForm(request.form)
         if form.validate():
             projectStaff = models.ProjectStaff(
-                staffRoleID = request.form['staffRoleID'],
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                role = request.form['role'],
-                datePledge = datetime.strptime(request.form['datePledge'],"%Y-%m-%d"),
-                dateRevoked = datetime.strptime(request.form['dateRevoked'],"%Y-%m-%d"),
-                contact = request.form['contact'],
-                inactive = request.form['inactive'],
+                staffRoleID=form.staffRoleID.data,
+                projectID=form.projectID.data,
+                staffID=form.staffID.data,
+                datePledge=form.datePledge.data,
+                dateRevoked=form.dateRevoked.data,
+                contactID=form.contactID.data,
+                inactiveID=form.inactiveID.data,
             )
             query.add(projectStaff)
-            return jsonify({'projectStaffID':projectStaff.projectStaffID})
+            return projectStaff.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4084,11 +3592,11 @@ def update_project_status(projectStatusID):
             form = forms.ProjectStatusForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == projectStatus.versionID:
-                    projectStatus.projectStatusTypeID = request.form['projectStatusTypeID']
-                    projectStatus.projectID = request.form['projectID']
-                    projectStatus.staffID = request.form['staffID']
-                    projectStatus.statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d")
-                    projectStatus.statusNotes = request.form['statusNotes']
+                    projectStatus.projectStatusTypeID = form.projectStatusTypeID.data
+                    projectStatus.projectID = form.projectID.data
+                    projectStatus.staffID = form.staffID.data
+                    projectStatus.statusDate = form.statusDate.data
+                    projectStatus.statusNotes = form.statusNotes.data
                     query.commit()
                     return projectStatus.json()
                 else:
@@ -4106,14 +3614,14 @@ def create_project_status():
         form = forms.ProjectStatusForm(request.form)
         if form.validate():
             projectStatus = models.ProjectStatus(
-                projectStatusTypeID = request.form['projectStatusTypeID'],
-                projectID = request.form['projectID'],
-                staffID = request.form['staffID'],
-                statusDate = datetime.strptime(request.form['statusDate'],"%Y-%m-%d"),
-                statusNotes = request.form['statusNotes']
+                projectStatusTypeID=form.projectStatusTypeID.data,
+                projectID=form.projectID.data,
+                staffID=form.staffID.data,
+                statusDate=form.statusDate.data,
+                statusNotes=form.statusNotes.data
             )
             query.add(projectStatus)
-            return jsonify({'projectStatusID':projectStatus.projectStatusID})
+            return projectStatus.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4161,8 +3669,8 @@ def update_project_status_lut(projectStatusTypeID):
             form = forms.ProjectStatusLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == projectStatusType.versionID:
-                    projectStatusType.projectStatus = request.form['projectStatus']
-                    projectStatusType.projectStatusDefinition = request.form['projectStatusDefinition']
+                    projectStatusType.projectStatus = form.projectStatus.data
+                    projectStatusType.projectStatusDefinition = form.projectStatusDefinition.data
                     query.commit()
                     return projectStatusType.json()
                 else:
@@ -4180,11 +3688,11 @@ def create_project_status_lut():
         form = forms.ProjectStatusLUTForm(request.form)
         if form.validate():
             projectStatusType = models.ProjectStatusLUT(
-                projectStatus = request.form['projectStatus'],
-                projectStatusDefinition = request.form['projectStatusDefinition']
+                projectStatus=form.projectStatus.data,
+                projectStatusDefinition=form.projectStatusDefinition.data
             )
             query.add(projectStatusType)
-            return jsonify({'projectStatusTypeID':projectStatusType.projectStatusTypeID})
+            return projectStatusType.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4232,8 +3740,8 @@ def update_project_type(projectTypeID):
             form = forms.ProjectTypeForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == projectType.versionID:
-                    projectType.projectType = request.form['projectType']
-                    projectType.projectTypeDefinition = request.form['projectTypeDefinition']
+                    projectType.projectType = form.projectType.data
+                    projectType.projectTypeDefinition = form.projectTypeDefinition.data
                     query.commit()
                     return projectType.json()
                 else:
@@ -4251,11 +3759,11 @@ def create_project_type():
         form = forms.ProjectTypeForm(request.form)
         if form.validate():
             projectType = models.ProjectType(
-                projectType = request.form['projectType'],
-                projectTypeDefinition = request.form['projectTypeDefinition']
+                projectType=form.projectType.data,
+                projectTypeDefinition=form.projectTypeDefinition.data
             )
             query.add(projectType)
-            return jsonify({'projectTypeID':projectType.projectTypeID})
+            return projectType.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4303,8 +3811,8 @@ def update_rc_status_list(reviewCommitteeStatusID):
             form = forms.ReviewCommitteeStatusLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == rcStatus.versionID:
-                    rcStatus.reviewCommitteeStatus = request.form['reviewCommitteeStatus']
-                    rcStatus.reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
+                    rcStatus.reviewCommitteeStatus = form.reviewCommitteeStatus.data
+                    rcStatus.reviewCommitteeStatusDefinition = form.reviewCommitteeStatusDefinition.data
                     query.commit()
                     return rcStatus.json()
                 else:
@@ -4322,11 +3830,11 @@ def create_rc_status_list():
         form = forms.ReviewCommitteeStatusLUTForm(request.form)
         if form.validate():
             rcStatus = models.ReviewCommitteeStatusLUT(
-                reviewCommitteeStatus = request.form['reviewCommitteeStatus'],
-                reviewCommitteeStatusDefinition = request.form['reviewCommitteeStatusDefinition']
+                reviewCommitteeStatus=form.reviewCommitteeStatus.data,
+                reviewCommitteeStatusDefinition=form.reviewCommitteeStatusDefinition.data
             )
             query.add(rcStatus)
-            return jsonify({'reviewCommitteeStatusID':rcStatus.reviewCommitteeStatusID})
+            return rcStatus.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4374,15 +3882,15 @@ def update_review_committee(reviewCommitteeID):
             form = forms.ReviewCommitteeForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == rc.versionID:
-                    rc.projectID = request.form['projectID']
-                    rc.reviewCommitteeStatusID = request.form['reviewCommitteeStatusID']
-                    rc.reviewCommitteeLUTID = request.form['reviewCommitteeLUTID']
-                    rc.reviewCommitteeNumber = request.form['reviewCommitteeNumber']
-                    rc.dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d")
-                    rc.dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
-                    rc.rcNote = request.form['rcNote']
-                    rc.rcProtocol = request.form['rcProtocol']
-                    rc.rcApproval = request.form['rcApproval']
+                    rc.projectID = form.projectID.data
+                    rc.reviewCommitteeStatusID = form.reviewCommitteeStatusID.data
+                    rc.reviewCommitteeLUTID = form.reviewCommitteeLUTID.data
+                    rc.reviewCommitteeNumber = form.reviewCommitteeNumber.data
+                    rc.dateInitialReview = form.dateInitialReview.data
+                    rc.dateExpires = form.dateExpires.data
+                    rc.rcNote = form.rcNote.data
+                    rc.rcProtocol = form.rcProtocol.data
+                    rc.rcApproval = form.rcApproval.data
                     query.commit()
                     return rc.json()
                 else:
@@ -4400,18 +3908,18 @@ def create_review_committee():
         form = forms.ReviewCommitteeForm(request.form)
         if form.validate():
             rc = models.ReviewCommittee(
-                projectID = request.form['projectID'],
-                reviewCommitteeStatusID = request.form['reviewCommitteeStatusID'],
-                reviewCommitteeLUTID = request.form['reviewCommitteeLUTID'],
-                reviewCommitteeNumber = request.form['reviewCommitteeNumber'],
-                dateInitialReview = datetime.strptime(request.form['dateInitialReview'],"%Y-%m-%d"),
-                dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d"),
-                rcNote = request.form['rcNote'],
-                rcProtocol = request.form['rcProtocol'],
-                rcApproval = request.form['rcApproval']
+                projectID=form.projectID.data,
+                reviewCommitteeStatusID=form.reviewCommitteeStatusID.data,
+                reviewCommitteeLUTID=form.reviewCommitteeLUTID.data,
+                reviewCommitteeNumber=form.reviewCommitteeNumber.data,
+                dateInitialReview=form.dateInitialReview.data,
+                dateExpires=form.dateExpires.data,
+                rcNote=form.rcNote.data,
+                rcProtocol=form.rcProtocol.data,
+                rcApproval=form.rcApproval.data
             )
             query.add(rc)
-            return jsonify({'reviewCommitteeID':rc.reviewCommitteeID})
+            return rc.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4459,8 +3967,8 @@ def update_review_committee_list(reviewCommitteeID):
             form = forms.ReviewCommitteeLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == rcList.versionID:
-                    rcList.reviewCommittee = request.form['reviewCommittee']
-                    rcList.reviewCommitteeDescription = request.form['reviewCommitteeDescription']
+                    rcList.reviewCommittee = form.reviewCommittee.data
+                    rcList.reviewCommitteeDescription = form.reviewCommitteeDescription.data
                     query.commit()
                     return rcList.json()
                 else:
@@ -4478,11 +3986,11 @@ def create_review_committee_list():
         form = forms.ReviewCommitteeLUTForm(request.form)
         if form.validate():
             reviewCommitteeList = models.ReviewCommitteeLUT(
-                reviewCommittee = request.form['reviewCommittee'],
-                reviewCommitteeDescription = request.form['reviewCommitteeDescription']
+                reviewCommittee=form.reviewCommittee.data,
+                reviewCommitteeDescription=form.reviewCommitteeDescription.data
                 )
             query.add(reviewCommitteeList)
-            return jsonify({'reviewCommitteeID':reviewCommitteeList.reviewCommitteeID})
+            return reviewCommitteeList.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4530,21 +4038,22 @@ def update_staff(staffID):
             form = forms.StaffForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == staff.versionID:
-                    staff.firstName = request.form['firstName']
-                    staff.lastName = request.form['lastName']
-                    staff.middleName = request.form['middleName']
-                    staff.email = request.form['email']
-                    staff.phoneNumber = request.form['phoneNumber']
-                    staff.phoneComment = request.form['phoneComment']
-                    staff.institution = request.form['institution']
-                    staff.department = request.form['department']
-                    staff.position = request.form['position']
-                    staff.credentials = request.form['credentials']
-                    staff.street = request.form['street']
-                    staff.city = request.form['city']
-                    staff.state = request.form['state']
-                    staff.humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d")
-                    staff.ucrRole = request.form['ucrRole']
+                    staff.firstName = form.firstName.data
+                    staff.lastName = form.lastName.data
+                    staff.middleName = form.middleName.data
+                    staff.email = form.email.data
+                    staff.phoneNumber = form.phoneNumber.data
+                    staff.phoneComment = form.phoneComment.data
+                    staff.institution = form.institution.data
+                    staff.department = form.department.data
+                    staff.position = form.position.data
+                    staff.credentials = form.credentials.data
+                    staff.street = form.street.data
+                    staff.city = form.city.data
+                    staff.stateID = form.stateID.data
+                    staff.ucrRoleID = form.ucrRoleID.data
+                    # don't allow user id to be changed
+                    #staff.userID = form.userID.data
                     query.commit()
                     return staff.json()
                 else:
@@ -4554,7 +4063,7 @@ def update_staff(staffID):
         else:
             return item_not_found("StaffID {} not found".format(staffID))
     except Exception as e:
-        internal_error(e)
+        return internal_error(e)
 
 @api.route('/staff/',methods = ['POST'])
 def create_staff():
@@ -4562,24 +4071,24 @@ def create_staff():
         form = forms.StaffForm(request.form)
         if form.validate():
             staff = models.Staff(
-                firstName = request.form['firstName'],
-                lastName = request.form['lastName'],
-                middleName = request.form['middleName'],
-                email = request.form['email'],
-                phoneNumber = request.form['phoneNumber'],
-                phoneComment = request.form['phoneComment'],
-                institution = request.form['institution'],
-                department = request.form['department'],
-                position = request.form['position'],
-                credentials = request.form['credentials'],
-                street = request.form['street'],
-                city = request.form['city'],
-                state = request.form['state'],
-                humanSubjectTrainingExp = datetime.strptime(request.form['humanSubjectTrainingExp'],"%Y-%m-%d"),
-                ucrRole = request.form['ucrRole']
+                firstName=form.firstName.data,
+                lastName=form.lastName.data,
+                middleName=form.middleName.data,
+                email=form.email.data,
+                phoneNumber=form.phoneNumber.data,
+                phoneComment=form.phoneComment.data,
+                institution=form.institution.data,
+                department=form.department.data,
+                position=form.position.data,
+                credentials=form.credentials.data,
+                street=form.street.data,
+                city=form.city.data,
+                stateID=form.stateID.data,
+                ucrRoleID=form.ucrRoleID.data,
+                userID = form.userID.data
             )
             query.add(staff)
-            return jsonify({'staffID':staff.staffID})
+            return staff.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4627,8 +4136,8 @@ def update_staff_role(staffRoleID):
             form = forms.StaffRoleLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == staffRole.versionID:
-                    staffRole.staffRole = request.form['staffRole']
-                    staffRole.staffRoleDescription = request.form['staffRoleDescription']
+                    staffRole.staffRole = form.staffRole.data
+                    staffRole.staffRoleDescription = form.staffRoleDescription.data
                     query.commit()
                     return staffRole.json()
                 else:
@@ -4646,11 +4155,11 @@ def create_staff_role():
         form = forms.StaffRoleLUTForm(request.form)
         if form.validate():
             staffRole = models.StaffRoleLUT(
-                staffRole = request.form['staffRole'],
-                staffRoleDescription = request.form['staffRoleDescription'],
+                staffRole=form.staffRole.data,
+                staffRoleDescription=form.staffRoleDescription.data,
             )
             query.add(staffRole)
-            return jsonify({'staffRoleID':staffRole.staffRoleID})
+            return staffRole.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4698,10 +4207,10 @@ def update_staff_training(staffTrainingID):
             form = forms.StaffTrainingForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == stafftraining.versionID:
-                    stafftraining.staffID = request.form['staffID']
-                    stafftraining.humanSubjectTrainingID = request.form['humanSubjectTrainingID']
-                    stafftraining.dateTaken = datetime.strptime(request.form['dateTaken'],"%Y-%m-%d")
-                    stafftraining.dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
+                    stafftraining.staffID = form.staffID.data
+                    stafftraining.humanSubjectTrainingID = form.humanSubjectTrainingID.data
+                    stafftraining.dateTaken = form.dateTaken.data
+                    stafftraining.dateExpires = form.dateExpires.data
                     query.commit()
                     return stafftraining.json()
                 else:
@@ -4719,13 +4228,13 @@ def create_staff_training():
         form = forms.StaffTrainingForm(request.form)
         if form.validate():
             stafftraining = models.StaffTraining(
-                staffID = request.form['staffID'],
-                humanSubjectTrainingID = request.form['humanSubjectTrainingID'],
-                dateTaken = datetime.strptime(request.form['dateTaken'],"%Y-%m-%d"),
-                dateExpires = datetime.strptime(request.form['dateExpires'],"%Y-%m-%d")
+                staffID=form.staffID.data,
+                humanSubjectTrainingID=form.humanSubjectTrainingID.data,
+                dateTaken=form.dateTaken.data,
+                dateExpires=form.dateExpires.data
                 )
             query.add(stafftraining)
-            return jsonify({'staffTrainingID':stafftraining.staffTrainingID})
+            return stafftraining.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4773,11 +4282,11 @@ def update_tracing(tracingID):
             form = forms.TracingForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == tracing.versionID:
-                    tracing.tracingSourceID = request.form['tracingSourceID']
-                    tracing.projectPatientID = request.form['projectPatientID']
-                    tracing.date = datetime.strptime(request.form['date'],"%Y-%m-%d")
-                    tracing.staff = request.form['staff']
-                    tracing.notes = request.form['notes']
+                    tracing.tracingSourceID = form.tracingSourceID.data
+                    tracing.participantID = form.participantID.data
+                    tracing.date = form.date.data
+                    tracing.staffID = form.staffID.data
+                    tracing.notes = form.notes.data
                     query.commit()
                     return tracing.json()
                 else:
@@ -4795,14 +4304,14 @@ def create_tracing():
         form = forms.TracingForm(request.form)
         if form.validate():
             tracing = models.Tracing(
-                tracingSourceID = request.form['tracingSourceID'],
-                projectPatientID = request.form['projectPatientID'],
-                date = datetime.strptime(request.form['date'],"%Y-%m-%d"),
-                staff = request.form['staff'],
-                notes = request.form['notes']
+                tracingSourceID=form.tracingSourceID.data,
+                participantID=form.participantID.data,
+                date=form.date.data,
+                staffID=form.staffID.data,
+                notes=form.notes.data
                 )
             query.add(tracing)
-            return jsonify({'tracingID':tracing.tracingID})
+            return tracing.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4850,7 +4359,7 @@ def update_tracing_source(tracingSourceID):
             form = forms.TracingSourceLUTForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == tracingSource.versionID:
-                    tracingSource.description = request.form['description']
+                    tracingSource.description = form.description.data
                     query.commit()
                     return tracingSource.json()
                 else:
@@ -4868,10 +4377,10 @@ def create_tracing_source():
         form = forms.TracingSourceLUTForm(request.form)
         if form.validate():
             tracingSource = models.TracingSourceLUT(
-                description = request.form['description']
+                description=form.description.data
                 )
             ret = query.add(tracingSource)
-            return jsonify({'tracingSourceID':tracingSource.tracingSourceID})
+            return tracingSource.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4919,11 +4428,11 @@ def update_ucr_report(ucrReportID):
             form = forms.UCRReportForm(request.form)
             if form.validate():
                 if int(request.form['versionID']) == ucr.versionID:
-                    ucr.projectID = request.form['projectID']
-                    ucr.reportType = request.form['reportType']
-                    ucr.reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d")
-                    ucr.reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d")
-                    ucr.reportDoc = request.form['reportDoc']
+                    ucr.projectID = form.projectID.data
+                    ucr.reportTypeID = form.reportTypeID.data
+                    ucr.reportSubmitted = form.reportSubmitted.data
+                    ucr.reportDue = form.reportDue.data
+                    ucr.reportDoc = form.reportDoc.data
                     query.commit()
                     return ucr.json()
                 else:
@@ -4941,15 +4450,14 @@ def create_ucr_report():
         form = forms.UCRReportForm(request.form)
         if form.validate():
             ucr = models.UCRReport(
-                projectID = request.form['projectID'],
-                reportType = request.form['reportType'],
-                reportSubmitted = datetime.strptime(request.form['reportSubmitted'],"%Y-%m-%d"),
-                reportDue = datetime.strptime(request.form['reportDue'],"%Y-%m-%d"),
-                reportDoc = request.form['reportDoc']
+                projectID=form.projectID.data,
+                reportTypeID=form.reportTypeID.data,
+                reportSubmitted=form.reportSubmitted.data,
+                reportDue=form.reportDue.data,
+                reportDoc=form.reportDoc.data
             )
             query.add(ucr)
-            query.commit()
-            return jsonify({'ucrReportID': ucr.ucrReportID})
+            return ucr.json()
         else:
             return missing_params(form.errors)
     except Exception as e:
@@ -4966,5 +4474,75 @@ def delete_ucr_report(ucrReportID):
             else:
                 query.delete(ucr)
                 return item_deleted("UcrReportID {} deleted".format(ucrReportID))
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/ucrroles/', methods=['GET'])
+@api.route('/ucrroles/<int:ucrRoleID>/', methods=['GET'])
+def get_ucr_role(ucrRoleID=None):
+    try:
+        if ucrRoleID is None:
+            return jsonify(ucrRoles=[i.dict() for i in query.get_ucr_roles()])
+        else:
+            ucrRole = query.get_ucr_role(ucrRoleID)
+            if ucrRole is not None:
+                return ucrRole.json()
+            else:
+                return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/ucrroles/<int:ucrRoleID>/', methods=['PUT'])
+def update_ucr_role(ucrRoleID):
+    try:
+        ucrRole = query.get_ucr_role(ucrRoleID)
+        if ucrRole is not None:
+            form = forms.UCRRoleForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == ucrRole.versionID:
+                    ucrRole.ucrRole = form.ucrRole.data
+                    query.commit()
+                    return ucrRole.json()
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/ucrroles/', methods=['POST'])
+def create_ucr_role():
+    try:
+        form = forms.UCRRoleForm(request.form)
+        if form.validate():
+            ucrRole = models.UCRRole(
+                ucrRole=form.ucrRole.data,
+            )
+            query.add(ucrRole)
+            return ucrRole.json()
+        else:
+            return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+
+@api.route('/ucrroles/<int:ucrRoleID>/', methods=['DELETE'])
+def delete_ucr_role(ucrRoleID):
+    try:
+        ucrRole = query.get_project_type(ucrRoleID)
+        if ucrRole is not None:
+            deps = get_dependencies(ucrRole)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ucrRole)
+                return item_deleted("UCRRoleID {} deleted".format(ucrRoleID))
+        else:
+            return item_not_found("UCRRoleID {} not found".format(ucrRoleID))
     except Exception as e:
         return internal_error(e)

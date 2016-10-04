@@ -1,0 +1,236 @@
+{% if contact is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="contactForm" action='/website/contacts/{{contact["contactID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="contactForm" action='/website/contacts/', method='post'>
+{% endif %}
+      <fieldset>
+            <div class="form-group">
+              {% if contact is not none %}
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="select_participantID">Project Patient</label>
+                  <select type="text" class="form-control" name="participantID" id="select_participantID">
+                      {% for pp in form.projectPatients %}
+                        {% if pp.participantID == contact.participantID %}
+                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                        {% else %}
+                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% endif %}
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_contactTypeLUTID">Contact Type</label>
+                  <select type="text" class="form-control" required="required" name="contactTypeLUTID" id="select_contactTypeLUTID">
+                      <option></option>
+                      {% for contactType in form.contactTypes %}
+                        {% if contactType.contactTypeID == contact.contactTypeLUTID %}
+                            <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
+                        {% else %}
+                            <option value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
+                  {% for staff in form.staff %}
+                    {% if contact is none and  user.staff.staffID == staff.staffID %}
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% elif staff.staffID == contact.staffID %}
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% else %}
+                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                  <div class = "col-md-2">
+                  <label for="select_informantID">Informant</label>
+                  <select type="text" class="form-control" name="informantID" id="select_informantID">
+                      <option></option>
+                      {% if contact is not none %}
+                          {% for informant in contact.projectPatient.ctc.patient.informants %}
+                            {% if informant.informantID == contact.informantID %}
+                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                            {% else %}
+                                <option value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                            {% endif %}
+                          {% endfor %}
+                       {% else %}
+                          {% for informant in projectPatient.ctc.patient.informants %}
+                            {% if informant.informantID == contact.informantID %}
+                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                            {% else %}
+                                <option value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                            {% endif %}
+                          {% endfor %}
+                       {% endif %}
+                  </select>
+                </div>
+                  <div class = "col-md-2">
+                  <label for="select_informantID">Informant Phone</label>
+                  <select type="text" class="form-control" name="informantPhoneID" id="select_informantPhoneID">
+                      <option></option>
+                          {% for informantPhone in form.informantPhones %}
+                            {% if informantPhone.informantPhoneID == contact.informantPhoneID %}
+                                <option selected="selected" value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                            {% else %}
+                                <option value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                            {% endif %}
+                          {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_facilityID">Facility</label>
+                  <select type="text" class="form-control" name="facilityID" id="select_facilityID">
+                      <option></option>
+                      {% for facility in form.facilities %}
+                        {% if facility.facilityID == contact.facilityID %}
+                            <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                        {% else %}
+                            <option value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              <div class = "col-md-2">
+                  <label for="select_facilityID">Facility Phone</label>
+                  <select type="text" class="form-control" name="facilityPhoneID" id="select_facilityPhoneID">
+                      <option></option>
+                      {% for facilityPhone in form.facilityPhones %}
+                        {% if facilityPhone.facilityPhoneID == contact.facilityPhoneID %}
+                            <option selected="selected" value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.facilityPhoneID}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                </div>
+                <div class="row">
+                <div class = "col-md-2">
+                  <label for="select_physicianID">Physician</label>
+                  <select type="text" class="form-control" name="physicianID" id="select_physicianID">
+                      <option></option>
+                      {% for physician in form.physicians %}
+                        {% if physician.physicianID == contact.physicianID %}
+                            <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                        {% else %}
+                            <option value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_physicianID">Physician Phone</label>
+                  <select type="text" class="form-control" name="physicianPhoneID" id="select_physicianPhoneID">
+                      <option></option>
+                      {% for physicianPhone in form.physicianPhones %}
+                        {% if physicianPhone.physicianPhoneID == contact.physicianPhoneID %}
+                            <option selected="selected" value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+                </div>
+              <div class="row">
+              <div class = "col-md-2"></div>
+                <div class = "col-md-2">
+                  <label for="select_patientPhoneID">Patient Phone</label>
+                  <select type="text" class="form-control" name="patientPhoneID" id="select_patientPhoneID">
+                      <option></option>
+                      {% for patientPhone in form.patientPhones %}
+                        {% if patientPhone.patPhoneID == contact.patientPhoneID %}
+                            <option selected="selected" value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                        {% else %}
+                            <option value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_description">Description</label>
+                  <input type="text" class="form-control" name="description" id="text_description" value="{{contact.description}}">
+                </div>
+              </div>
+            <div class="row">
+                <div class = "col-md-4">
+                  <label for="text_notes">Notes</label>
+                  <input type="text" class="form-control" name="notes" id="text_notes" value="{{contact.notes}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="date_contactDate">Contact Date</label>
+                  <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate" value="{{contact.contactDate}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_initials">Initials</label>
+                  <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials}}">
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{contact.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{contact.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>
+                  {% if contact is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{contact.versionID}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID" value="0" readonly="readonly">
+                  {% endif %}
+                </div>
+                <!-- Extra hidden fields -->
+                {% if contact is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{contact.participantID}}/#contactTable"/>
+                {% else %}
+                    <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#contactTable"/>
+                {% endif %}
+
+            </div>
+          </div>
+        </fieldset>
+            <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-2">
+                      {% if contact is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Contact</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </fieldset>
+    </form>

@@ -1,0 +1,79 @@
+{% extends "layout_all.html" %}
+{% block content %}
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Projects</h1>
+        </div>
+      </div>
+      <form class="formOverride" id="mainform" action='' method='get'>
+          <fieldset>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_projectID">Project ID</label>
+                  <input type="text" class="form-control" name="projectID" id="text_projectID" value="{{form.queryParams.projectID}}">
+                </div>
+                <div class="col-md-2"> 
+                  <label for="text_shortTitle">Short Title</label>
+                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form.queryParams.shortTitle}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_shortTitle">PI Last Name</label>
+                  <input type="text" class="form-control" name="piLastName" id="text_piLastName" value="{{form.queryParams.piLastName}}">
+                </div>
+                <div class="col-md-1">
+                  <label for="select_projectTypeID">Project Type</label>
+                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID">
+                    <option value=""></option>
+                  {% for projectType in form["projectTypes"] %}
+                    {% if projectType.projectTypeID|string() == form.queryParams.projectTypeID %}
+                    <option value="{{projectType.projectTypeID}}" selected="selected">{{projectType.projectType}}</option>
+                    {% else %}
+                    <option value="{{projectType.projectTypeID}}">{{projectType.projectType}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                  <div class="col-md-1">
+                  <label for="select_projectTypeID">Current Status</label>
+                  <select type="text" class="form-control" name="mostRecentProjectStatusTypeID" id="select_mostRecentProjectStatus">
+                    <option value=""></option>
+                  {% for projectStatusType in form["projectStatusLUTs"] %}
+                    {% if projectStatusType.projectStatusTypeID|string() == form.queryParams.mostRecentProjectStatusTypeID %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}" selected="selected">{{projectStatusType.projectStatus}}</option>
+                    {% else %}
+                    <option value="{{projectStatusType.projectStatusTypeID}}">{{projectStatusType.projectStatus}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="btn-search" style="visibility: hidden">Search</label>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      
+        <table class="table table-striped no-spacing">
+          <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Type</th>
+                <th>Short Title</th>
+                <th>Date Added</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for project in projects %}
+            <tr>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"]}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectType"].projectType}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["shortTitle"]}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["dateAdded"]}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}
