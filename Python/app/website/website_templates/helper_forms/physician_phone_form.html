@@ -13,7 +13,7 @@
                 </div>
               <div class="col-md-2">  
                   <label for="select_phoneTypeID">Phone Type</label>        
-                  <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
+                  <select required="required" type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
                       <option></option>
                       {% for phoneType in form["phoneTypes"] %}
                         {% if phoneType["phoneTypeID"] == physicianPhone["phoneTypeID"] %}
@@ -28,7 +28,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == physicianPhone["contactInfoSourceID"] %}
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == physicianPhone["contactInfoStatusID"] %}
@@ -54,7 +54,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_phoneStatusDate">Phone Status Date</label>
-                  <input type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
                 </div>
             </div>
           </fieldset>
@@ -83,8 +83,10 @@
                     {% if physicianPhone is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="physicianID" value="{{physicianPhone["physicianID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="physicians/{{physicianPhone["physicianID"]}}/#physicianPhoneTab">
                     {% else %}
                         <input type="hidden" name="physicianID" value="{{physician["physicianID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianPhoneTab">
                     {% endif %}
                 </div>
               </div>

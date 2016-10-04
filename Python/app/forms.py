@@ -283,11 +283,11 @@ class CTCFacilityForm(BaseForm):
 class CTCForm(BaseForm):
     participantID = IntegerField('participantID',
                              [validators.InputRequired()])
-    dxDateDay = DateField('dxDateDay',
+    dxDateDay = IntegerField('dxDateDay',
                        [validators.number_range(max=31)] + COMMON_INTEGER_VALIDATORS)
-    dxDateMonth = DateField('dxDateMonth',
+    dxDateMonth = IntegerField('dxDateMonth',
                        [validators.number_range(max=12)] + COMMON_INTEGER_VALIDATORS)
-    dxDateYear = DateField('dxDateYear',
+    dxDateYear = IntegerField('dxDateYear',
                        [] + COMMON_INTEGER_VALIDATORS)
     site = StringField('site',
                         [] + COMMON_STRING_VALIDATORS)
@@ -308,9 +308,9 @@ class CTCForm(BaseForm):
     dxCity = StringField('dxCity',
                          [] + COMMON_STRING_VALIDATORS)
     dxStateID = IntegerField('dxStateID',
-                             [] + COMMON_STRING_VALIDATORS)
-    dxZip = IntegerField('dxZip',
-                         [] + COMMON_INTEGER_VALIDATORS)
+                             [] + COMMON_INTEGER_VALIDATORS)
+    dxZip = StringField('dxZip',
+                         [] + COMMON_STRING_VALIDATORS)
     dxCounty = StringField('dxCounty',
                            [] + COMMON_STRING_VALIDATORS)
     dnc = StringField('dnc',
@@ -538,6 +538,8 @@ class IncentiveForm(BaseForm):
     dateGiven = DateField('dateGiven',[]+COMMON_DATE_VALIDATORS,
                           format=DATE_FORMAT)
 
+    contactID = IntegerField('contactID', [validators.InputRequired()])
+
     def validate(self):
         hasErrors = not Form.validate(self)
 
@@ -545,6 +547,11 @@ class IncentiveForm(BaseForm):
         if participant is None:
             self.participantID.errors.append("ID not found")
             hasErrors = True
+
+        contact = query.get_contact(self.contactID.data)
+        if contact is None:
+            self.contactID.errors.append("ID not found")
+            hasErrors=True
 
         # make sure barcode is in the table
         if self.barcode.data:
@@ -564,10 +571,10 @@ class InformantForm(BaseForm):
                            [] + COMMON_STRING_VALIDATORS)
     middleName = StringField('middleName',
                              [] + COMMON_STRING_VALIDATORS)
-    informantPrimary = StringField('informantPrimary',
-                                   [] + COMMON_STRING_VALIDATORS)
-    informantRelationship = StringField('informantRelationship',
-                                        [] + COMMON_STRING_VALIDATORS)
+    informantPrimary = BooleanField('informantPrimary',
+                                   [] + COMMON_BOOL_VALIDATORS)
+    informantRelationshipID = IntegerField('informantRelationshipID',
+                                        [] + COMMON_INTEGER_VALIDATORS)
     notes = StringField('notes',
                         [] + COMMON_STRING_VALIDATORS)
 
@@ -577,6 +584,12 @@ class InformantForm(BaseForm):
         if patient is None:
             self.participantID.errors.append("ID not found")
             hasErrors = True
+
+        if self.informantRelationshipID.data:
+            relationship = query.get_informant_relationship(self.informantRelationshipID.data)
+            if relationship is None:
+                self.informantRelationshipID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 
@@ -739,19 +752,19 @@ class PatientForm(BaseForm):
                                   [] + COMMON_STRING_VALIDATORS)
     dobDay = IntegerField('dobDay',
                     [validators.number_range(max=31)] + COMMON_INTEGER_VALIDATORS)
-    dobMonth = IntegerField('dobDay',
+    dobMonth = IntegerField('dobMonth',
                     [validators.number_range(max=12)] + COMMON_INTEGER_VALIDATORS)
     dobYear = IntegerField('dobYear',
                     [] + COMMON_INTEGER_VALIDATORS)
-    SSN = IntegerField('SSN',
-                       [] + COMMON_INTEGER_VALIDATORS)
-    sexID = StringField('sexID',
+    SSN = StringField('SSN',
+                       [] + COMMON_STRING_VALIDATORS)
+    sexID = IntegerField('sexID',
                         [] + COMMON_INTEGER_VALIDATORS)
-    raceID = StringField('raceID',
+    raceID = IntegerField('raceID',
                          [] + COMMON_INTEGER_VALIDATORS)
-    ethnicityID = StringField('ethnicityID',
+    ethnicityID = IntegerField('ethnicityID',
                               [] + COMMON_INTEGER_VALIDATORS)
-    vitalStatusID = StringField('vitalStatusID',
+    vitalStatusID = IntegerField('vitalStatusID',
                                 [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
@@ -914,6 +927,7 @@ class PatientProjectStatusForm(BaseForm):
                                               [] + COMMON_INTEGER_VALIDATORS)
     participantID = IntegerField('participantID',
                                     [validators.InputRequired()])
+    statusDate = DateField('statusDate',[] + COMMON_DATE_VALIDATORS, format=DATE_FORMAT)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -987,7 +1001,7 @@ class PhysicianFacilityForm(BaseForm):
                               [validators.InputRequired()])
     physicianID = IntegerField('physicianID',
                                [validators.InputRequired()])
-    physFacilityStatusID = IntegerField('physFacilityStatus',
+    physFacilityStatusID = IntegerField('physFacilityStatusID',
                                         [] + COMMON_INTEGER_VALIDATORS)
     physFacilityStatusDate = DateField('physFacilityStatusDate',
                                        [] + COMMON_DATE_VALIDATORS,
@@ -1085,7 +1099,7 @@ class PhysicianEmailForm(BaseForm):
                 self.contactInfoSourceID.errors.append("ID not found")
                 hasErrors = True
 
-        physician = query.get_patient(self.physicianID.data)
+        physician = query.get_physician(self.physicianID.data)
         if physician is None:
             self.physicianID.errors.append("ID not found")
             hasErrors = True
@@ -1647,6 +1661,8 @@ class StaffForm(BaseForm):
                            [] + COMMON_INTEGER_VALIDATORS)
     ucrRoleID = IntegerField('ucrRoleID',
                              [] + COMMON_INTEGER_VALIDATORS)
+    userID = IntegerField('userID',
+                          [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1655,6 +1671,12 @@ class StaffForm(BaseForm):
             ucrRole = query.get_ucr_role(self.ucrRoleID.data)
             if ucrRole is None:
                 self.ucrRoleID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.userID.data:
+            user = query.get_user(self.userID.data)
+            if user is None:
+                self.userID.errors.append("ID not found")
                 hasErrors = True
 
         if self.stateID.data:

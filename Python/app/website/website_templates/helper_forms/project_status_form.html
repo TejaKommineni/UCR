@@ -26,7 +26,7 @@
               <div class="row">
               <div class = "col-md-2">
                   <label for="select_projectStatusType">Project Status Type</label>
-                  <select type="text" class="form-control" name="projectStatusTypeID" id="select_projectStatusType">
+                  <select required="required" type="text" class="form-control" name="projectStatusTypeID" id="select_projectStatusType">
                       <option></option>
                       {% for projectStatusType in form["projectStatusTypes"] %}
                         {% if projectStatusType.projectStatusTypeID == projectStatus["projectStatusTypeID"] %}
@@ -39,14 +39,16 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
-                  <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
-                      {% for staff in form["staff"] %}
-                        {% if staff.staffID == projectStatus["staffID"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% endif %}
-                      {% endfor %}
+                  <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
+                  {% for staff in form.staff %}
+                    {% if projectStatus is none and  user.staff.staffID == staff.staffID %}
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% elif staff.staffID == projectStatus.staffID %}
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% else %}
+                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% endif %}
+                  {% endfor %}
                   </select>
                 </div>
               </div>
@@ -57,7 +59,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_statusDate">Status Date</label>
-                  <input type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{projectStatus["statusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{projectStatus["statusDate"]}}">
                 </div>
               </div>
           </div>
@@ -84,8 +86,10 @@
                 {% if projectStatus is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStatusID" value="{{projectStatus["projectStatusID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{projectStatus["projectID"]}}/#projectStatusTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStatusTableTab">
                 {% endif %}
             </div>
           </div>

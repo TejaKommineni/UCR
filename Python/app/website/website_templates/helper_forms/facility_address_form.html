@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == facilityAddress["contactInfoSourceID"] %}
@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == facilityAddress["contactInfoStatusID"] %}
@@ -71,7 +71,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_addressStatusDate">Address Status Date</label>
-                  <input type="date" class="form-control" name="addressStatusDate" id="date_addressStatusDate" value="{{facilityAddress["addressStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="addressStatusDate" id="date_addressStatusDate" value="{{facilityAddress["addressStatusDate"]}}">
                 </div>
             </div>
       
@@ -97,8 +97,10 @@
                     {% if facilityAddress is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="facilityID" value="{{facilityAddress.facilityAddressID}}"/>
+                        <input type="hidden" name="_redirectlink" value="facilities/{{facilityAddress["facilityID"]}}/#facilityAddressTab">
                     {% else %}
                         <input type="hidden" name="facilityID" value="{{facility.facilityID}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#facilityAddressTab"/>
                     {% endif %}
                 </div>
               </div>

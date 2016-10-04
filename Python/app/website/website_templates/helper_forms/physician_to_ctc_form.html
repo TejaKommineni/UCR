@@ -61,9 +61,15 @@
                 {% if physicianToCTC is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="physicianToCTCID" value="{{physicianToCTC.physicianToCTCID}}"/>
+                    {% if "ctcfacilities" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="ctcs/{{physicianToCTC.ctcID}}/#physicianTableTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianTableTab"/>
+                    {% endif %}
                 {% else %}
                     <input type="hidden" name="ctcID" value = "{{ctc.ctcID}}"/>
                     <input type="hidden" name="physicianToCTCID" value="0"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianTableTab"/>
                 {% endif %}
             </div>
           </div>

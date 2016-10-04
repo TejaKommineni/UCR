@@ -12,17 +12,22 @@ How to set up the UCR Web App
 * Optionally create a virtual environment in conda
 * Install the dependencies (pip3 install -r Python/requirements.txt) into the conda installation. Note pyodbc will probably not install properly as it needs to be compilied.
 * Install pyodbc from conda repo (conda install pydobc)
-* Clone the repository (webappwithauth branch) to your machine
-* Edit the config.py to meet your needs (uncomment DEV_MODE and DEV_ROLE, make sure it points to the right database and has the right connection properties etc...)
-* Edit runserver.py to point to your certificate and key (see [here](http://flask.pocoo.org/snippets/111/) for more information (assuming you want to use basic SSL/TLS). Edit the port if you want.
+* Add [one-line](https://github.com/cameronbwhite/Flask-CAS/issues/43) patch to flask-cas library in "flask_cas/routing.py lines 124/125"
+    ```python
+    attributes = xml_from_dict.get("cas:attributes", {})
+    if attributes is None: attributes = {}
+    ```
+* Clone the repository (verify the branch) to your machine
+* Edit the config.py to meet your needs
 * Navigate to the folder containing "runserver.py"
+* If you need to seed your database, use the seed_database.py script
 * Run the server (python runserver.py)
 * You should now be able to navigate to localhost:\<port\> and see the website
 
 ### Getting the application to run with IIS ###
 
 * Make sure you have a server configured with IIS and that you have a valid SSL Certificate to use
-* On the server, do "How to I get set up?" steps but make sure the "DEV_MODE" and "DEV_ROLE" are commented out in the config.py file
+* On the server, do "How to I get set up?" steps but make sure the "DEV_MODE", "JSON_API", and "DEBUG" are commented out in the config
 * Verify that you can run server as localhost (this ensure the dependencies are correct
 * Install wfastcgi into your conda python installation (conda install wfastcgi OR pip install wfastcgi)
 * Make sure the "Web Server (IIS)" role is set up
@@ -41,9 +46,11 @@ How to set up the UCR Web App
 * Make sure your server/application is running and navigate to localhost:8443 or localhost:443. You should be prompted to enter your uID and password. If entered correctly, you will be redirected to the application.
 
 
-### What are DEV_MODE and DEV_ROLE in the Config File? ###
+### What do the extra variables in the config mean? ###
 
-* DEV_MODE is a flag that can be set which will ignore the CAS/SSO and basically create a fake user and pretend that that user is signed in.
-* DEV_ROLE is a string that can be set to "Developer", "Contact Staff", "Director", "Informatics Staff", or "Research Manager". It is used to set the role of the fake user when DEV_MODE is set. 
+* DEV_MODE is a flag that can be set which will ignore the CAS/SSO and fake authenticates using the first user in your database. Since the CAS/SSO requires a SSL secured and whitelisted domain we must ignore the CAS login stuff when not working on a whitelisted server.
+* SSL_CRT is the path to the certificate to use when running flask locally (development) with SSL enabled
+* SSL_KEY is the path to the certificate key to use when running flask locally (development) with SSL enabled
+* JSON_API is a boolean flag that can enable or disable the "/api" endpoint (which serves unprotected json)
+* SQLALCHEMY_DATABASE_URI is the uri to connect to the sql server instance
 
-These are meant to be used when developing on a local machine. Since the CAS/SSO requires a SSL secured and whitelisted domain we must ignore the CAS login stuff.

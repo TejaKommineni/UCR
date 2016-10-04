@@ -133,7 +133,7 @@
           </div>
         </fieldset>
         {# Only allow edit button for developers... #}
-        {% if user.role.role in ['Developer', 'Research Manager', 'Informantics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
         </fieldset>
             <fieldset>
                 <div class = "form-group">
@@ -147,15 +147,17 @@
         {% endif %}
     </form>
     <ul class = "nav nav-tabs" role="tablist">
-        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
         <li><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
         <li><a href="#budgetTab" role="tab" data-toggle="tab">Budgets</a></li>
         <li><a href="#fundingTab" role="tab" data-toggle="tab">Fundings</a></li>
         <li><a href="#logTab" role="tab" data-toggle="tab">Logs</a></li>
         <li><a href="#preApplicationTab" role="tab" data-toggle="tab">Pre Application</a></li>
         {% endif %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <li class="active"><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
-        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% endif %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
         <li><a href="#projectStaffTab" role="tab" data-toggle="tab">Project Staff</a></li>
         <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
         <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
@@ -163,7 +165,7 @@
         {% endif %}
     </ul>
     <div class="tab-content">
-        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
         <div class="tab-pane" id="arcReviewTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
@@ -189,14 +191,14 @@
                                   <tbody>
                                     {% for arcReview in form.project.arcReviews %}
                                     <tr>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewType}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.contact}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.linkage}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.engaged}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["tracingID"]}}">{{arcReview.nonPublicData}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewType or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -233,10 +235,10 @@
                                   <tbody>
                                     {% for budget in form.project.budgets %}
                                     <tr>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods or ''}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal or ''}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment}}</a></td>
                                     </tr>
                                     {% endfor %}
@@ -343,6 +345,7 @@
             {% include 'helper_forms/pre_application_form.html' %}
         </div>
         {% endif %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
         <div class = "tab-pane active" id="projectPatientTab">
             <form class="formOverride" id="projectPatients">
                 <fieldset>
@@ -375,7 +378,8 @@
                 </fieldset>
             </form>
         </div>
-        {% if user.role.role in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+        {% endif %}
+        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
         <div class = "tab-pane" id="projectStaffTab">
             <ul class ="nav nav-tabs" role="tablist">
                 <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>

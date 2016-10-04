@@ -8,3 +8,53 @@
         border-style: solid;
     }
 }
+
+.row-dark {
+    /*background-color:#d3d3d3;*/
+}
+
+.row-dark input {
+    /*background-color:#CDE7F0;*/
+}
+.row-dark select {
+    /*background-color:#CDE7F0;*/
+}
+
+
+.row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.modal.fade .modal-dialog {
+    transform: translate(0px, -25%);
+    transition: transform 0.3s ease-out 0s;
+}
+.modal.fade.in .modal-dialog {
+    transform: translate(0px, 0px);
+}
+
+.flyover {
+   left: 150%;
+   overflow: hidden;
+   position: fixed;
+   width: 50%;
+   opacity: 0.9;
+   z-index: 1050;
+   transition: left 0.6s ease-out 0s;
+}
+
+.flyover-centered {
+   top: 50%;
+   transform: translate(-50%, -50%);
+}
+
+.flyover.in {
+   left: 50%;
+}
+
+.alert-custom {
+    color: black;
+    text-align: center;
+    font-size: 28px;
+}

@@ -26,7 +26,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_grantStatusID">Grant Status</label>
-                  <select type="text" class="form-control" name="grantStatusID" id="select_grantStatusID">
+                  <select required="required" type="text" class="form-control" name="grantStatusID" id="select_grantStatusID">
                       {% for grantStatus in form["grantStatuses"] %}
                         {% if grantStatus.grantStatusID == funding["grantStatusID"] %}
                             <option selected="selected" value="{{grantStatus.grantStatusID}}">{{grantStatus.grantStatus}}</option>
@@ -38,7 +38,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_fundingSourceID">Funding Source</label>
-                  <select type="text" class="form-control" name="fundingSourceID" id="select_fundingSourceID">
+                  <select required="required" type="text" class="form-control" name="fundingSourceID" id="select_fundingSourceID">
                       {% for fundingSource in form["fundingSources"] %}
                         {% if fundingSource.fundingSourceID == funding["fundingSourceID"] %}
                             <option selected="selected" value="{{fundingSource.fundingSourceID}}">{{fundingSource.fundingSource}}</option>
@@ -70,11 +70,12 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_dateStatus">Date Status</label>
-                  <input type="date" class="form-control" name="dateStatus" id="date_dateStatus" value="{{funding["dateStatus"]}}">
+                  <input required="required" type="date" class="form-control" name="dateStatus" id="date_dateStatus" value="{{funding["dateStatus"]}}">
                 </div>
                  <div class = "col-md-2">
                   <label for="select_grantPi">Grant PI</label>
-                  <select type="text" class="form-control" name="grantPi" id="select_grantPi">
+                  <select required="required" type="text" class="form-control" name="grantPi" id="select_grantPi">
+                      <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == funding["grantPi"] %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -117,8 +118,10 @@
                 {% if funding is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="fundingID" value="{{funding["fundingID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{funding["projectID"]}}/#fundingTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#fundingTableTab">
                 {% endif %}
             </div>
           </div>

@@ -26,7 +26,7 @@
               <div class="row">
               <div class = "col-md-2">
                   <label for="select_logSubjectID">Log Subject</label>
-                  <select type="text" class="form-control" name="logSubjectID" id="select_logSubjectID">
+                  <select required="required" type="text" class="form-control" name="logSubjectID" id="select_logSubjectID">
                       <option></option>
                       {% for logSubject in form["logSubjects"] %}
                         {% if log.logSubjectID == logSubject["logSubjectID"] %}
@@ -39,7 +39,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_phaseStatusID">Phase Status</label>
-                  <select type="text" class="form-control" name="phaseStatusID" id="select_phaseStatusID">
+                  <select required="required" type="text" class="form-control" name="phaseStatusID" id="select_phaseStatusID">
                       <option></option>
                       {% for phaseStatus in form["phaseStatuses"] %}
                         {% if log.phaseStatusID == phaseStatus["logPhaseID"] %}
@@ -53,13 +53,15 @@
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
-                      {% for staff in form["staff"] %}
-                        {% if staff.staffID == log["staffID"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% endif %}
-                      {% endfor %}
+                  {% for staff in form.staff %}
+                    {% if log is none and  user.staff.staffID == staff.staffID %}
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% elif staff.staffID == log.staffID %}
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% else %}
+                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% endif %}
+                  {% endfor %}
                   </select>
                 </div>
               </div>
@@ -70,7 +72,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_date">Date</label>
-                  <input type="date" class="form-control" name="date" id="date_date" value="{{log["date"]}}">
+                  <input required="required" type="date" class="form-control" name="date" id="date_date" value="{{log["date"]}}">
                 </div>
               </div>
           </div>
@@ -97,8 +99,10 @@
                 {% if log is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="logID" value="{{log["logID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{log["projectID"]}}/#logTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#logTableTab">
                 {% endif %}
             </div>
           </div>

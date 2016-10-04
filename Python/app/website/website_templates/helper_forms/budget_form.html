@@ -26,19 +26,19 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_numPeriods">Number of Periods</label>
-                  <input type="text" class="form-control" name="numPeriods" id="text_numPeriods" value="{{budget["numPeriods"]}}">
+                  <input type="text" class="form-control" name="numPeriods" id="text_numPeriods" value="{{budget["numPeriods"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_periodStart">Period Start</label>
-                  <input type="date" class="form-control" name="periodStart" id="date_periodStart" value="{{budget["periodStart"]}}">
+                  <input required="required" type="date" class="form-control" name="periodStart" id="date_periodStart" value="{{budget["periodStart"]}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_periodEnd">Period End</label>
-                  <input type="date" class="form-control" name="periodEnd" id="date_periodEnd" value="{{budget["periodEnd"]}}">
+                  <input required="required" type="date" class="form-control" name="periodEnd" id="date_periodEnd" value="{{budget["periodEnd"]}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_periodTotal">Period Total</label>
-                  <input type="text" class="form-control" name="periodTotal" id="text_periodTotal" value="{{budget["periodTotal"]}}">
+                  <input type="text" class="form-control" name="periodTotal" id="text_periodTotal" value="{{budget["periodTotal"] or ''}}">
                 </div>
               </div>
               <div class="row">
@@ -71,9 +71,11 @@
                 {% if budget is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectID" value="{{budget["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{budget["projectID"]}}/#budgetTableTab">
                 {% else %}
                     <input type="hidden" name="budgetID" value="0"/>
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#budgetTableTab">
                 {% endif %}
             </div>
           </div>

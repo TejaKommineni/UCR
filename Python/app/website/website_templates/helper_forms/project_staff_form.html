@@ -28,6 +28,7 @@
                <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
+                      <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectStaff.staffID %}
                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -40,7 +41,7 @@
                 {% endif %}
                 <div class = "col-md-2">
                   <label for="select_staffRoleID">Staff Role</label>
-                  <select type="text" class="form-control" name="staffRoleID" id="select_staffRoleID">
+                  <select required="required" type="text" class="form-control" name="staffRoleID" id="select_staffRoleID">
                       <option></option>
                       {% for staffRole in form.staffRoles %}
                         {% if staffRole.staffRoleID == projectStaff.staffRoleID %}
@@ -55,7 +56,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_contact">Contact</label>
-                  <select type="text" class="form-control" name="contactID" id="select_contact">
+                  <select required="required" type="text" class="form-control" name="contactID" id="select_contact">
                       <option></option>
                       {% for contact in form.contacts %}
                         {% if projectStaff.contactID == contact.contactID %}
@@ -68,7 +69,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_inactive">Inactive</label>
-                  <select type="text" class="form-control" name="inactiveID" id="select_inactive">
+                  <select required="required" type="text" class="form-control" name="inactiveID" id="select_inactive">
                       <option></option>
                       {% for inactive in form.inactives %}
                         {% if projectStaff.inactiveID == inactive.inactiveID %}
@@ -81,7 +82,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="date_datePledge">Date Pledged</label>
-                  <input type="date" class="form-control" name="datePledge" id="date_datePledge" value="{{projectStaff.datePledge}}">
+                  <input required="required" type="date" class="form-control" name="datePledge" id="date_datePledge" value="{{projectStaff.datePledge}}">
                 </div>
                 <div class="col-md-2">
                   <label for="date_dateRevoked">Date Revoked</label>
@@ -111,10 +112,17 @@
                 {% if projectStaff is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="projectStaffID" value="{{projectStaff.projectStaffID}}"/>
+                    {% if "projectstaff" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="staff/{{projectStaff.staffID}}/#projectStaffTableTab"/>
+                    {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStaffTableTab"/>
+                    {% endif %}
                 {% elif staff%}
                     <input type="hidden" name="staffID" value="{{staff.staffID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectsTableTab"/>
                 {% elif project %}
                     <input type="hidden" name="projectID" value="{{project.projectID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#projectStaffTableTab"/>
                 {% endif %}
             </div>
           </div>

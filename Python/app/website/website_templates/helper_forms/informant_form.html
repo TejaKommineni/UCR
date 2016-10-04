@@ -24,11 +24,31 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_informantPrimary">Informant Primary</label>
-                  <input type="text" class="form-control" name="informantPrimary" id="text_informantPrimary" value="{{informant["informantPrimary"]}}">
+                  <select type="text" class="form-control" name="informantPrimary" id="select_contact">
+                        {% if informant.informantPrimary %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not informant.informantPrimary %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                  </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_informantRelationship">Informant Relationship</label>
-                  <input type="text" class="form-control" name="informantRelationship" id="text_informantRelationship" value="{{informant["informantRelationship"]}}">
+                  <select type="text" class="form-control" name="informantRelationshipID" id="select_informantRelationshipID">
+                      <option></option>
+                          {% for informantRelationship in form.informantRelationships %}
+                            {% if informantRelationship.informantRelationshipID == informant.informantRelationshipID %}
+                                <option selected="selected" value="{{informantRelationship.informantRelationshipID}}">{{informantRelationship.informantRelationship}}</option>
+                            {% else %}
+                                <option value="{{informantRelationship.informantRelationshipID}}">{{informantRelationship.informantRelationship}}</option>
+                            {% endif %}
+                          {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_notes">Notes</label>
@@ -56,10 +76,11 @@
                 <!-- Extra hidden fields -->
                 {% if informant is not none %}
                     <input type="hidden" name="_method" value="put" />
-                    <input type="hidden" name="patientID" value="{{informant["patientID"]}}"/>
+                    <input type="hidden" name="participantID" value="{{informant["participantID"]}}"/>
                 {% else %}
-                    <input type="hidden" name="patientID" value="{{form["patient"]["patientID"]}}"/>
+                    <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
                 {% endif %}
+                <input type="hidden" name="_redirectlink" value="{{request.path}}#informantTableTab"/>
             </div>
           </div>
         </fieldset>

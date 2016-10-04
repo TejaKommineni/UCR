@@ -45,7 +45,8 @@
             <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                      <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == patientAddress["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -57,7 +58,8 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                      <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == patientAddress["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>
@@ -69,7 +71,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_addressStatusDate">Address Status Date</label>
-                  <input type="date" class="form-control" name="addressStatusDate" id="date_addressStatusDate" value="{{patientAddress["addressStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="addressStatusDate" id="date_addressStatusDate" value="{{patientAddress["addressStatusDate"]}}">
                 </div>
             </div>
       
@@ -95,10 +97,17 @@
                     {% if patientAddress is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="participantID" value="{{patientAddress["participantID"]}}"/>
+                        {% if "patientaddresses" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="patients/{{patientAddress.participantID}}/#patientAddressTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#patientAddressTab"/>
+                        {% endif %}
                     {% elif form.patient %}
                         <input type="hidden" name="participantID" value="{{form["patient"]["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="patients/{{form["patient"]["participantID"]}}/#patientAddressTab"/>
               `     {% else %}
                         <input type="hidden" name="participantID" value="{{projectPatient["participantID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient["participantID"]}}/#patientAddressTab"/>
                     {% endif %}
                 </div>
               </div>
@@ -117,3 +126,11 @@
                 </div>
             </fieldset>
     </form>
+
+<script>
+    $(document).ready( function() {
+        if (!$("#date_addressStatusDate").val()){
+            document.getElementById('date_addressStatusDate').valueAsDate = new Date();
+        }
+    });
+</script>

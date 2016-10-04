@@ -63,9 +63,15 @@
                     {% if ctcFacility is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="CTCFacilityID" value="{{ctcFacility.CTCFacilityID}}"/>
+                        {% if "ctcfacilities" in request.path %}
+                            <input type="hidden" name="_redirectlink" value="ctcs/{{ctcFacility.ctcID}}/#facilityTableTab"/>
+                        {% else %}
+                            <input type="hidden" name="_redirectlink" value="{{request.path}}#facilityTableTab"/>
+                        {% endif %}
                     {% else %}
                         <input type="hidden" name="ctcID" value ="{{ctc.ctcID}}"/>
                         <input type="hidden" name="CTCFacilityID" value="0"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#facilityTableTab"/>
                     {% endif %}
                 </div>
               </div>

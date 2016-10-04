@@ -26,7 +26,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_reviewCommitteeStatusID">Review Committee Status</label>
-                  <select type="text" class="form-control" name="reviewCommitteeStatusID" id="select_reviewCommitteeStatusID">
+                  <select required="required" type="text" class="form-control" name="reviewCommitteeStatusID" id="select_reviewCommitteeStatusID">
                         <option></option>
                       {% for reviewCommitteeStatus in form["reviewCommitteeStatuses"] %}
                         {% if reviewCommitteeStatus.reviewCommitteeStatusID == reviewCommittee["reviewCommitteeStatusID"] %}
@@ -39,7 +39,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_reviewCommitteeLUTID">Review Committee</label>
-                  <select type="text" class="form-control" name="reviewCommitteeLUTID" id="select_reviewCommitteeLUTID">
+                  <select required="required" type="text" class="form-control" name="reviewCommitteeLUTID" id="select_reviewCommitteeLUTID">
                       <option></option>
                       {% for reviewCommitteeLUT in form["reviewCommitteeLUTs"] %}
                         {% if reviewCommitteeLUT.reviewCommitteeID == reviewCommittee["reviewCommitteeLUTID"] %}
@@ -58,11 +58,11 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateInitialReview">Date Initial Review</label>
-                  <input type="date" class="form-control" name="dateInitialReview" id="date_dateInitialReview" value="{{reviewCommittee["dateInitialReview"]}}">
+                  <input required="required" type="date" class="form-control" name="dateInitialReview" id="date_dateInitialReview" value="{{reviewCommittee["dateInitialReview"]}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateExpires">Date Expires</label>
-                  <input type="date" class="form-control" name="dateExpires" id="date_dateExpires" value="{{reviewCommittee["dateExpires"]}}">
+                  <input required="required" type="date" class="form-control" name="dateExpires" id="date_dateExpires" value="{{reviewCommittee["dateExpires"]}}">
                 </div>
               </div>
               <div class="row">
@@ -103,8 +103,10 @@
                 {% if reviewCommittee is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="reviewCommitteeID" value="{{reviewCommittee["reviewCommitteeID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{reviewCommittee["projectID"]}}/#reviewCommitteeTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form["project"]["projectID"]}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#reviewCommitteeTableTab">
                 {% endif %}
             </div>
           </div>

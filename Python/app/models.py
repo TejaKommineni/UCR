@@ -126,6 +126,7 @@ class Contact(CustomModel):
     informantPhone = db.relationship('InformantPhone')
     physicianPhone = db.relationship('PhysicianPhone')
     patientPhone = db.relationship('PatientPhone')
+    incentive = db.relationship('Incentive')
 
 
 class Contacts(CustomModel):
@@ -391,9 +392,9 @@ class Incentive(CustomModel):
     participantID = db.Column('participantID', db.Integer, db.ForeignKey("ProjectPatient.participantID"), nullable=False)
     incentiveDescription = db.Column('incentive_desc', db.String)
     barcode = db.Column('barcode', db.String(50), db.ForeignKey("GiftCardLUT.barcode"), unique=True, nullable=False)
-    dateGiven = db.Column('date_given', db.DateTime)
+    dateGiven = db.Column('date_given', db.Date)
 
-    contact = db.relationship("Contact")
+    contact = db.relationship("Contact", back_populates="incentive", uselist=False)
     projectPatient = db.relationship("ProjectPatient", back_populates="incentives")
     giftCard = db.relationship("GiftCard")
 
@@ -406,8 +407,8 @@ class Informant(CustomModel):
     firstName = db.Column('first_name', db.String)
     lastName = db.Column('last_name', db.String)
     middleName = db.Column('middle_name', db.String)
-    informantPrimary = db.Column('informant_primary', db.String)
-    informantRelationship = db.Column('informant_relationship', db.String)
+    informantPrimary = db.Column('informant_primary', db.Boolean)
+    informantRelationshipID = db.Column('informant_relationshipID', db.Integer, db.ForeignKey("InformantRelationship.informantRelationshipID"))
     notes = db.Column('notes', db.String)
 
     # Relationships
@@ -465,6 +466,13 @@ class InformantPhone(CustomModel):
     phoneType = db.relationship("PhoneTypeLUT")
 
 
+class InformantRelationship(CustomModel):
+    __tablename__ = 'InformantRelationship'
+
+    informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True)
+    informantRelationship = db.Column('informant_relationship', db.String)
+
+
 class Log(CustomModel):
     __tablename__ = 'Log3'
 
@@ -515,7 +523,7 @@ class Patient(CustomModel):
     dobDay = db.Column('dob_day', db.Integer)
     dobMonth = db.Column('dob_month', db.Integer)
     dobYear = db.Column('dob_year', db.Integer)
-    SSN = db.Column('SSN', db.Integer)
+    SSN = db.Column('SSN', db.String)
     sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
     raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))
     ethnicityID = db.Column('ethnicityID', db.Integer, db.ForeignKey("EthnicityLUT.ethnicityID"))
@@ -608,6 +616,7 @@ class PatientProjectStatus(CustomModel):
     patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer,
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
+    statusDate = db.Column('patientProjectStatusDate', db.Date)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
@@ -908,10 +917,10 @@ class ProjectPatient(CustomModel):
                                           db.ForeignKey('Staff.staffID'))  # FK
     qualityControl = db.Column('quality_control', db.Boolean)
 
-    incentives = db.relationship('Incentive', back_populates='projectPatient')
+    incentives = db.relationship('Incentive', back_populates='projectPatient', order_by="desc(Incentive.dateGiven)")
     # Relationships
     # 1 - M, one PP with many PPStatuses
-    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient")
+    patientProjectStatuses = db.relationship('PatientProjectStatus', back_populates="projectPatient", order_by="desc(PatientProjectStatus.statusDate)")
     # 1 - M, one PP with many tracings
     tracings = db.relationship('Tracing', back_populates="projectPatient")
     # M -1 many projectPatient can have the same project
@@ -1060,13 +1069,6 @@ class ReviewCommitteeLUT(CustomModel):
     reviewCommittees = db.relationship("ReviewCommittee", back_populates="reviewCommitteeLUT")
 
 
-class Role(CustomModel):
-    __tablename__ = "Role"
-
-    roleID = db.Column("roleID", db.Integer, primary_key=True)
-    role = db.Column("role", db.String(50), unique=True, nullable=False)
-
-
 class Sex(CustomModel):
     __tablename__ = "SexLUT"
     sexID = db.Column('sexID', db.Integer, primary_key=True)
@@ -1109,7 +1111,7 @@ class Staff(CustomModel):
     tracings = db.relationship("Tracing", back_populates="staff")
     state = db.relationship("State")
     ucrRole = db.relationship("UCRRole", back_populates="staff")
-    user = db.relationship("User")
+    user = db.relationship("User", back_populates="staff")
 
 
 class StaffRoleLUT(CustomModel):
@@ -1212,9 +1214,8 @@ class User(CustomModel):
 
     userID = db.Column("userID", db.Integer, primary_key=True)
     uID = db.Column("uID", db.String(10), unique=True, nullable=False)
-    roleID = db.Column("roleID", db.Integer, db.ForeignKey('Role.roleID'), nullable=False)
 
-    role = db.relationship("Role")
+    staff = db.relationship("Staff", uselist=False)
 
 
 class VitalStatus(CustomModel):

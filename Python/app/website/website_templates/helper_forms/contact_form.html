@@ -39,14 +39,16 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
-                  <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
-                      {% for staff in form.staff %}
-                        {% if staff.staffID == contact.staffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
-                        {% endif %}
-                      {% endfor %}
+                  <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
+                  {% for staff in form.staff %}
+                    {% if contact is none and  user.staff.staffID == staff.staffID %}
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% elif staff.staffID == contact.staffID %}
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% else %}
+                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                    {% endif %}
+                  {% endfor %}
                   </select>
                 </div>
               </div>
@@ -207,9 +209,14 @@
                 {% if contact is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{contact.participantID}}/#contactTable"/>
                 {% else %}
                     <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
+                    <!-- redirect to contactTable in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#contactTable"/>
                 {% endif %}
+
             </div>
           </div>
         </fieldset>
@@ -227,4 +234,3 @@
                 </div>
             </fieldset>
     </form>
-

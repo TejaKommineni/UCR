@@ -26,7 +26,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_reportType">Report Type</label>
-                  <select type="text" class="form-control" name="reportType" id="select_reportType">
+                  <select required="required" type="text" class="form-control" name="reportTypeID" id="select_reportType">
                       <option></option>
                       {% for rt in form.reportTypes %}
                         {% if rt.ucrReportTypeID == ucrReport.reportTypeID %}
@@ -39,11 +39,11 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_reportSubmitted">Report Submitted</label>
-                  <input type="date" class="form-control" name="reportSubmitted" id="date_reportSubmitted" value="{{ucrReport.reportSubmitted}}">
+                  <input required="required" type="date" class="form-control" name="reportSubmitted" id="date_reportSubmitted" value="{{ucrReport.reportSubmitted}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_reportDue">Report Due</label>
-                  <input type="date" class="form-control" name="reportDue" id="date_reportDue" value="{{ucrReport.reportDue}}">
+                  <input required="required" type="date" class="form-control" name="reportDue" id="date_reportDue" value="{{ucrReport.reportDue}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_reportDoc">Report Document</label>
@@ -74,8 +74,10 @@
                 {% if ucrReport is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="ucrReportID" value="{{ucrReport.ucrReportID}}"/>
+                    <input type="hidden" name="_redirectlink" value="projects/{{ucrReport["projectID"]}}/#ucrReportTableTab">
                 {% else %}
                     <input type="hidden" name="projectID" value="{{form.project.projectID}}"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#ucrReportTableTab">
                 {% endif %}
             </div>
           </div>

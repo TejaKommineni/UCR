@@ -15,7 +15,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select required="required" type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == physicianEmail["contactInfoSourceID"] %}
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select required="required" type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
                       <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == physicianEmail["contactInfoStatusID"] %}
@@ -41,7 +41,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_emailStatusDate">Email Status Date</label>
-                  <input type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{physicianEmail["emailStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="emailStatusDate" id="date_emailStatusDate" value="{{physicianEmail["emailStatusDate"]}}">
                 </div>
             </div>
                 <div class="form-group">
@@ -66,8 +66,10 @@
                     {% if physicianEmail is not none %}
                         <input type="hidden" name="_method" value="put" />
                         <input type="hidden" name="physicianID" value="{{physicianEmail["physicianID"]}}"/>
+                        <input type="hidden" name="_redirectlink" value="physicians/{{physicianEmail["physicianID"]}}/#physicianEmailTab">
                     {% else %}
                         <input type="hidden" name="physicianID" value="{{physician.physicianID}}"/>
+                        <input type="hidden" name="_redirectlink" value="{{request.path}}#physicianEmailTab">
                     {% endif %}
                 </div>
               </div>

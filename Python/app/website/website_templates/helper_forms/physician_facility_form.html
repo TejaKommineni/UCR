@@ -38,11 +38,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_physFacilityStatus">Status</label>
-                  <input type="text" class="form-control" name="physFacilityStatus" id="text_physFacilityStatus" value="{{physicianFacility.physFacilityStatus}}">
+                  <input type="text" class="form-control" name="physFacilityStatus" id="text_physFacilityStatus" value="{{physicianFacility.physicianFacilityStatus}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_physFacilityStatusDate">Status Date</label>
-                  <input type="date" class="form-control" name="physFacilityStatusDate" id="date_physFacilityStatusDate" value="{{physicianFacility.physFacilityStatusDate}}">
+                  <input required="required" type="date" class="form-control" name="physFacilityStatusDate" id="date_physFacilityStatusDate" value="{{physicianFacility.physFacilityStatusDate}}">
                 </div>
               </div>
             </div>
@@ -69,8 +69,10 @@
                 {% if physicianFacility is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="physicianFacilityID" value="{{physicianFacility.physicianFacilityID}}"/>
+                    <input type="hidden" name="_redirectlink" value="physicians/{{physicianFacility["physicianID"]}}/#facilityTableTab">
                 {% else %}
                     <input type="hidden" name="physicianFacilityID" value="0"/>
+                    <input type="hidden" name="_redirectlink" value="{{request.path}}#facilityTableTab">
                 {% endif %}
             </div>
           </div>

@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-6">
 		<div class="panel panel-default" >
-			<div class="panel-heading"> New Patient Contact</div>
+			<div class="panel-heading"> New Informant Contact</div>
 				<div class="panel-body">
                 {% if contact is not none %}
                     <!-- action url is for update -->
@@ -31,7 +31,7 @@
                               <div class="row">
                                 <div class = "col-md-4">
                                   <label for="select_contactTypeLUTID">Contact Type</label>
-                                  <select type="text" class="form-control" required="required" name="contactTypeLUTID" id="select_contactTypeLUTID">
+                                  <select required="required" type="text" class="form-control" required="required" name="contactTypeLUTID" id="select_contactTypeLUTID">
                                       <option></option>
                                       {% for contactType in form.contactTypes %}
                                         {% if contactType.contactTypeID == contact.contactTypeLUTID %}
@@ -46,7 +46,9 @@
                                   <label for="select_staffID">Staff</label>
                                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                                       {% for staff in form.staff %}
-                                        {% if staff.staffID == contact.staffID %}
+                                        {% if contact is none and  user.staff.staffID == staff.staffID %}
+                                          <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                        {% elif staff.staffID == contact.staffID %}
                                             <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
                                         {% else %}
                                             <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
@@ -58,7 +60,7 @@
                               <div class="row">
                                   <div class = "col-md-4">
                                   <label for="select_informantID">Informant</label>
-                                  <select type="text" class="form-control" name="informantID" id="select_informantID">
+                                  <select required="required" type="text" class="form-control" name="informantID" id="select_informantID">
                                       <option></option>
                                       {% if contact is not none %}
                                           {% for informant in contact.projectPatient.ctc.patient.informants %}
@@ -108,7 +110,7 @@
                               <div class="row">
                                 <div class = "col-md-4">
                                   <label for="date_contactDate">Contact Date</label>
-                                  <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate" value="{{contact.contactDate}}">
+                                  <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate4" value="{{contact.contactDate}}">
                                 </div>
                                 <div class = "col-md-4">
                                   <label for="text_initials">Initials</label>
@@ -140,8 +142,12 @@
                                 {% if contact is not none %}
                                     <input type="hidden" name="_method" value="put" />
                                     <input type="hidden" name="contactID" value="{{contact.contactID}}"/>
+                                    <!-- redirect to contactTable in projectPatient -->
+                                    <input type="hidden" name="_redirectlink" value="projectpatients/{{contact.participantID}}/#contactTable"/>
                                 {% else %}
                                     <input type="hidden" name = "participantID" value = "{{projectPatient.participantID}}"/>
+                                    <!-- redirect to contactTable in projectPatient -->
+                                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#contactTable"/>
                                 {% endif %}
                             </div>
                           </div>
@@ -239,3 +245,10 @@
     </div>
 </div>
 
+<script>
+$(document).ready( function() {
+    if (!$("#date_contactDate4").val()){
+        document.getElementById('date_contactDate4').valueAsDate = new Date();
+    }
+});
+</script>

@@ -24,9 +24,9 @@
               </div>
               {% endif %}
               <div class="row">
-                <div class = "col-md-8">
+                <div class = "col-md-2">
                   <label for="select_patientProjectStatusTypeID">Project Patient Status Type</label>
-                  <select type="text" class="form-control" name="patientProjectStatusTypeID" id="select_patientProjectStatusTypeID">
+                  <select required="required" type="text" class="form-control" name="patientProjectStatusTypeID" id="select_patientProjectStatusTypeID">
                       <option></option>
                       {% for ppst in form.patientProjectStatusTypes %}
                         {% if ppst.patientProjectStatusTypeID == patientProjectStatus.patientProjectStatusTypeID %}
@@ -37,7 +37,10 @@
                       {% endfor %}
                   </select>
                 </div>
-              </div>
+             <div class = "col-md-2">
+              <label for="date_date">Date</label>
+              <input required="required" type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{patientProjectStatus["statusDate"]}}">
+             </div>
             </div>
             
             <div class="form-group">
@@ -62,9 +65,13 @@
                 {% if patientProjectStatus is not none %}
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="patientProjectStatusID" value="{{patientProjectStatus.patientProjectStatusID}}"/>
+                    <!-- redirect to patient project status tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{patientProjectStatus.participantID}}/#patientProjectStatusTableTab"/>
                 {% else %}
                     <input type="hidden" name="patientProjectStatusID" value="0"/>
                     <input type="hidden" name="participantID" value="{{projectPatient.participantID}}"/>
+                    <!-- redirect to patient project status tab in projectPatient -->
+                    <input type="hidden" name="_redirectlink" value="projectpatients/{{projectPatient.participantID}}/#patientProjectStatusTableTab"/>
                 {% endif %}
             </div>
           </div>
