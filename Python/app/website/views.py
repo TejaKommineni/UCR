@@ -2826,7 +2826,6 @@ def get_patient(patAutoID=None):
                 form["ethnicities"] = query.get_ethnicities()
                 form["sexes"] = query.get_sexes()
                 form["states"] = query.get_states()
-                form["vitalStatuses"] = query.get_vital_statues()
                 form["phoneTypes"] = query.get_phone_types()
                 return render_template("patient_form.html", form=form)
             else:
@@ -2860,7 +2859,6 @@ def update_patient(patientID):
                     patient.sexID = form.sexID.data
                     patient.raceID = form.raceID.data
                     patient.ethnicityID = form.ethnicityID.data
-                    patient.vitalStatusID = form.vitalStatusID.data
                     query.commit()
                     flash("Updated Patient")
                     return redirect_back("/patients/{}".format(patientID))
@@ -2905,8 +2903,7 @@ def create_patient(patientID=None):
                     SSN=form.SSN.data,
                     raceID=form.raceID.data,
                     sexID=form.sexID.data,
-                    ethnicityID=form.ethnicityID.data,
-                    vitalStatusID=form.vitalStatusID.data
+                    ethnicityID=form.ethnicityID.data
                 )
                 query.add(patient)
                 flash("Created Patient")
@@ -4677,6 +4674,7 @@ def delete_project(projectID):
 ##############################################################################
 # Project Patient
 ##############################################################################
+
 @website.route('/projectpatients/', methods=['GET'])
 @website.route('/projectpatients/<int:participantID>/', methods=['GET'])
 @authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
@@ -4703,9 +4701,9 @@ def get_project_patient(participantID=None):
             if "batch" in request.args:
                 batch = value_or_none(request.args["batch"])
                 form["queryParams"]["batch"] = request.args["batch"]
-            if "siteGrp" in request.args:
-                siteGrp = value_or_none(request.args["siteGrp"])
-                form["queryParams"]["siteGrp"] = request.args["siteGrp"]
+            if "siteGrpID" in request.args:
+                siteGrpID = value_or_none(request.args["siteGrpID"])
+                form["queryParams"]["siteGrpID"] = request.args["siteGrpID"]
             if "projectID" in request.args:
                 projectID = value_or_none(request.args["projectID"])
                 form["queryParams"]["projectID"] = request.args["projectID"]
@@ -4750,6 +4748,8 @@ def get_project_patient(participantID=None):
                 form["tracingSources"] = query.get_tracing_sources()
                 form["finalCodes"] = query.get_final_codes()
                 form["abstractStatuses"] = query.get_abstract_statuses()
+                form["vitalStatuses"] = query.get_vital_statues()
+                form["siteGroups"]=query.get_sites()
                 return render_template("project_patient_form.html", form=form, projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
@@ -4771,7 +4771,7 @@ def update_project_patient(participantID):
                     projectPatient.ctcID = form.ctcID.data
                     projectPatient.currentAge = form.currentAge.data
                     projectPatient.batch = form.batch.data
-                    projectPatient.siteGrp = form.siteGrp.data
+                    projectPatient.siteGrpID = form.siteGrpID.data
                     projectPatient.finalCodeID = form.finalCodeID.data
                     projectPatient.finalCodeDate = form.finalCodeDate.data
                     projectPatient.enrollmentDate = form.enrollmentDate.data
@@ -4797,6 +4797,7 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcher = form.surveyToResearcher.data
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
+                    projectPatient.vitalStatusID = form.vitalStatusID.data
                     query.commit()
                     flash("Updated Project Patient")
                     return redirect_back("projectpatients/{}/".format(participantID))
@@ -4831,7 +4832,7 @@ def create_project_patient(participantID=None):
                     ctcID=form.ctcID.data,
                     currentAge=form.currentAge.data,
                     batch=form.batch.data,
-                    siteGrp=form.siteGrp.data,
+                    siteGrpID=form.siteGrpID.data,
                     finalCodeID=form.finalCodeID.data,
                     finalCodeDate=form.finalCodeDate.data,
                     enrollmentDate=form.enrollmentDate.data,
@@ -4856,7 +4857,8 @@ def create_project_patient(participantID=None):
                     medRecordReleaseDate=form.medRecordReleaseDate.data,
                     surveyToResearcher=form.surveyToResearcher.data,
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
-                    qualityControl=form.qualityControl.data
+                    qualityControl=form.qualityControl.data,
+                    vitalStatusID=form.vitalStatusID.data
                 )
                 query.add(projectPatient)
                 flash("Created Project Patient")

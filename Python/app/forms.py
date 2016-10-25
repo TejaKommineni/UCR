@@ -764,8 +764,6 @@ class PatientForm(BaseForm):
                          [] + COMMON_INTEGER_VALIDATORS)
     ethnicityID = IntegerField('ethnicityID',
                               [] + COMMON_INTEGER_VALIDATORS)
-    vitalStatusID = IntegerField('vitalStatusID',
-                                [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -788,11 +786,6 @@ class PatientForm(BaseForm):
                 self.ethnicityID.errors.append("ID not found")
                 hasErrors = True
 
-        if self.vitalStatusID.data:
-            vitalStatus = query.get_vital_status(self.vitalStatusID.data)
-            if vitalStatus is None:
-                self.vitalStatusID.errors.append("ID not found")
-                hasErrors = True
         return not hasErrors
 
 
@@ -1317,7 +1310,7 @@ class ProjectPatientForm(BaseForm):
                               [] + COMMON_INTEGER_VALIDATORS)
     batch = IntegerField('batch',
                          [] + COMMON_INTEGER_VALIDATORS)
-    siteGrp = IntegerField('siteGrp',
+    siteGrpID = IntegerField('siteGrpID',
                            [] + COMMON_INTEGER_VALIDATORS)
     finalCodeID = IntegerField('finalCodeID',
                                [validators.InputRequired()])
@@ -1379,6 +1372,8 @@ class ProjectPatientForm(BaseForm):
                                              [] + COMMON_INTEGER_VALIDATORS)
     qualityControl = BooleanField('qualityControl',
                                             []+COMMON_BOOL_VALIDATORS)
+    vitalStatusID = IntegerField('vitalStatusID',
+                                 [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1464,6 +1459,17 @@ class ProjectPatientForm(BaseForm):
             self.ctcID.errors.append("ID not found")
             hasErrors = True
 
+        if self.vitalStatusID.data:
+            vitalStatus = query.get_vital_status(self.vitalStatusID.data)
+            if vitalStatus is None:
+                self.vitalStatusID.errors.append("ID not found")
+                hasErrors = True
+
+        if self.siteGrpID.data:
+            siteGrpID = query.get_site(self.siteGrpID.data)
+            if siteGrpID is None:
+                self.siteGrpID.errors.append("ID not found")
+                hasErrors = True
         return not hasErrors
 
 

@@ -387,6 +387,21 @@ def create_sexes():
     ))
     return sexes
 
+def create_sitegroup():
+    sitegroups = []
+    sitegroups.append(models.SiteGroup(
+        site="Breast Cancer"
+    ))
+    sitegroups.append(models.SiteGroup(
+        site="Colon Cancer"
+    ))
+    sitegroups.append(models.SiteGroup(
+        site="Liver Cancer"
+    ))
+    sitegroups.append(models.SiteGroup(
+        site="Unknown"
+    ))
+    return sitegroups
 
 def create_races():
     races = []
@@ -2528,8 +2543,7 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=1,
-        vitalStatusID=1
+        ethnicityID=1
     ))
     patients.append(models.Patient(
         patID="2",
@@ -2548,9 +2562,8 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=1,
-        vitalStatusID=1
-    ))
+        ethnicityID=1
+            ))
     patients.append(models.Patient(
         patID="3",
         ucrDistID=1,
@@ -2568,8 +2581,8 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=2,
-        vitalStatusID=1
+        ethnicityID=2
+
     ))
     patients.append(models.Patient(
         patID="4",
@@ -2588,8 +2601,8 @@ def create_patients():
         SSN="999999999",
         sexID=1,
         raceID=3,
-        ethnicityID=2,
-        vitalStatusID=1
+        ethnicityID=2
+
     ))
     patients.append(models.Patient(
         patID="4",
@@ -2608,8 +2621,7 @@ def create_patients():
         SSN="999999999",
         sexID=1,
         raceID=2,
-        ethnicityID=2,
-        vitalStatusID=2
+        ethnicityID=2
     ))
     return patients
 
@@ -3058,7 +3070,7 @@ def create_project_patients():
             ctcID=1,
             currentAge=1,
             batch=1,
-            siteGrp=1,
+            siteGrpID=1,
             finalCodeID=1,
             finalCodeDate=datetime(2016, 2, 2),
             enrollmentDate=datetime(2016, 2, 2),
@@ -3084,6 +3096,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
+            vitalStatusID=2
         )
     )
     pps.append(
@@ -3093,7 +3106,7 @@ def create_project_patients():
             ctcID=2,
             currentAge=1,
             batch=1,
-            siteGrp=1,
+            siteGrpID=1,
             finalCodeID=1,
             finalCodeDate=datetime(2016, 2, 2),
             enrollmentDate=datetime(2016, 2, 2),
@@ -3119,6 +3132,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
+            vitalStatusID=2
         )
     )
     pps.append(
@@ -3128,7 +3142,7 @@ def create_project_patients():
             ctcID=3,
             currentAge=1,
             batch=1,
-            siteGrp=1,
+            siteGrpID=1,
             finalCodeID=1,
             finalCodeDate=datetime(2016, 2, 2),
             enrollmentDate=datetime(2016, 2, 2),
@@ -3154,6 +3168,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
+            vitalStatusID=2
         )
     )
     pps.append(
@@ -3163,7 +3178,7 @@ def create_project_patients():
             ctcID=4,
             currentAge=1,
             batch=1,
-            siteGrp=1,
+            siteGrpID=1,
             finalCodeID=1,
             finalCodeDate=datetime(2016, 2, 2),
             enrollmentDate=datetime(2016, 2, 2),
@@ -3189,6 +3204,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
+            vitalStatusID=1
         )
     )
     pps.append(
@@ -3198,7 +3214,7 @@ def create_project_patients():
             ctcID=5,
             currentAge=1,
             batch=1,
-            siteGrp=1,
+            siteGrpID=1,
             finalCodeID=1,
             finalCodeDate=datetime(2016, 2, 2),
             enrollmentDate=datetime(2016, 2, 2),
@@ -3224,6 +3240,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
+            vitalStatusID=1
         )
     )
     return pps
@@ -3787,6 +3804,7 @@ def populate_db():
     tracingSources = create_tracing_sources()
     contactTypes = create_contact_types()
     giftCards = create_gift_cards()
+    siteGroups= create_sitegroup()
 
     projects = create_projects()
     budgets = create_budgets()
@@ -3862,6 +3880,7 @@ def populate_db():
     db.session.add_all(tracingSources)
     db.session.add_all(contactTypes)
     db.session.add_all(giftCards)
+    db.session.add_all(siteGroups)
 
     # Main Tables
     db.session.add_all(projects)

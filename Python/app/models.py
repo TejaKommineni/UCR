@@ -527,7 +527,6 @@ class Patient(CustomModel):
     sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
     raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))
     ethnicityID = db.Column('ethnicityID', db.Integer, db.ForeignKey("EthnicityLUT.ethnicityID"))
-    vitalStatusID = db.Column('vital_statusID', db.Integer, db.ForeignKey("VitalStatusLUT.vitalStatusID"))
 
     # Relationships
     # M - 1, many patients can be at the same address
@@ -543,7 +542,7 @@ class Patient(CustomModel):
     sex = db.relationship('Sex')
     race = db.relationship('Race')
     ethnicity = db.relationship('Ethnicity')
-    vitalStatus = db.relationship('VitalStatus')
+
 
 
 class PatientAddress(CustomModel):
@@ -889,7 +888,7 @@ class ProjectPatient(CustomModel):
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
     currentAge = db.Column('current_age', db.Integer)
     batch = db.Column('batch', db.Integer)
-    siteGrp = db.Column('sitegrp', db.Integer)
+    siteGrpID = db.Column('sitegrpID', db.Integer,db.ForeignKey('SiteGroupLUT.siteID'), nullable=False)
     finalCodeID = db.Column('final_code', db.Integer, db.ForeignKey('FinalCode.finalCodeID'), nullable=False)
     finalCodeDate = db.Column('final_code_date', db.Date)
     finalCodeStaffID = db.Column('final_code_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK?
@@ -931,6 +930,7 @@ class ProjectPatient(CustomModel):
     staff = db.relationship("Staff", foreign_keys=[staffID])  # , back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate)")
+    vitalStatusID = db.Column('vital_statusID', db.Integer, db.ForeignKey("VitalStatusLUT.vitalStatusID"))
 
     abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
     finalCode = db.relationship("FinalCode", back_populates="projectPatients")
@@ -942,7 +942,8 @@ class ProjectPatient(CustomModel):
     researcherStaff = db.relationship("Staff", foreign_keys=[researcherStaffID])
     medRecordReleaseStaff = db.relationship("Staff", foreign_keys=[medRecordReleaseStaffID])
     surveyToResearcherStaff = db.relationship("Staff", foreign_keys=[surveyToResearcherStaffID])
-
+    vitalStatus = db.relationship('VitalStatus')
+    siteGrp=db.relationship('SiteGroup')
 
 class ProjectStaff(CustomModel):
     __tablename__ = 'ProjectStaff'
@@ -1074,6 +1075,10 @@ class Sex(CustomModel):
     sexID = db.Column('sexID', db.Integer, primary_key=True)
     sex = db.Column('sex', db.String)
 
+class SiteGroup(CustomModel):
+    __tablename__ = "SiteGroupLUT"
+    siteID = db.Column('siteID', db.Integer, primary_key=True)
+    site = db.Column('site', db.String)
 
 class Staff(CustomModel):
     __tablename__ = 'Staff'

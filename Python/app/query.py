@@ -702,6 +702,11 @@ def get_sex(id):
 def get_sexes():
     return db.session.query(Sex).all()
 
+def get_site(id):
+    return db.session.query(SiteGroup).filter_by(siteID=id).first()
+
+def get_sites():
+    return db.session.query(SiteGroup).all()
 
 def get_staffs():
     return db.session.query(Staff).all()

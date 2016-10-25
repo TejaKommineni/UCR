@@ -54,8 +54,22 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class="col-md-2">
+                   <label for="select_vitalStatus">Vital Status</label>
+                   <select type="text" class="form-control" name="vitalStatusID" id="select_vitalStatus" >
+                       <option></option>
+                   {% for vitalStatus in form["vitalStatuses"] %}
+                     {% if vitalStatus.vitalStatusID == projectPatient.vitalStatus.vitalStatusID %}
+                        <option value="{{vitalStatus.vitalStatusID}}" selected="selected">{{vitalStatus.vitalStatus}}</option>
+                     {% else %}
+                        <option value="{{vitalStatus.vitalStatusID}}">{{vitalStatus.vitalStatus}}</option>
+                      {% endif %}
+                   {% endfor %}
+                   </select>
+               </div>
               </div>
               {% endif %}
+
               <div class="row">
                 <div class = "col-md-2">
                   <label for="select_staffID">Staff</label>
@@ -78,10 +92,18 @@
                   <label for="text_batch">Batch</label>
                   <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch}}" readonly="readonly" disabled="disabled">
                 </div>
-               <div class="col-md-2">  
-                  <label for="text_siteGrp">Site Group</label>        
-                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value="{{projectPatient.siteGrp}}" readonly="readonly" disabled="disabled">
-               </div>
+               <div class = "col-md-2">
+                  <label for="select_siteGroupID">Site Group</label>
+                  <select type="text" class="form-control" required="required" name="siteGrpID" id="select_siteGroupID">
+                      {% for siteGroup in form.siteGroups %}
+                        {% if siteGroup.siteID == projectPatient.siteGrpID %}
+                            <option selected="selected" value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
+                        {% else %}
+                            <option value="{{siteGroup.siteID}}">{{siteGroup.site}} </option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
               </div>
               <div class = "row row-dark">
                 <div class="col-md-2">  
