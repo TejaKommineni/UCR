@@ -229,6 +229,7 @@ class Facility(CustomModel):
     facilityStatusDate = db.Column('facility_status_date', db.Date)
     contact2FirstName = db.Column('contact2_first_name', db.String)
     contact2LastName = db.Column('contact2_last_name', db.String)
+    displayID= db.Column('display_id', db.String)
 
     # Relationships
     # M - 1, many facilities can have the same phone
@@ -527,6 +528,7 @@ class Patient(CustomModel):
     sexID = db.Column('sexID', db.Integer, db.ForeignKey("SexLUT.sexID"))
     raceID = db.Column('raceID', db.Integer, db.ForeignKey("RaceLUT.raceID"))
     ethnicityID = db.Column('ethnicityID', db.Integer, db.ForeignKey("EthnicityLUT.ethnicityID"))
+    recordNumber=db.Column('record_num', db.String)
 
     # Relationships
     # M - 1, many patients can be at the same address
@@ -616,6 +618,7 @@ class PatientProjectStatus(CustomModel):
                                            db.ForeignKey('PatientProjectStatusLUT.patientProjectStatusLUTID'))
     participantID = db.Column('participantID', db.Integer, db.ForeignKey('ProjectPatient.participantID'), nullable=False)
     statusDate = db.Column('patientProjectStatusDate', db.Date)
+    staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
 
     # Relationships
     # M - 1, many patientProjectStatuses with same ppsLUT
@@ -668,6 +671,7 @@ class Physician(CustomModel):
     aliasMiddleName = db.Column('alias_middle_name', db.String)
     physicianStatusID = db.Column('physician_status', db.Integer, db.ForeignKey("PhysicianStatusLUT.physicianStatusID"))
     physicianStatusDate = db.Column('physician_status_date', db.Date)
+    displayID = db.Column('display_id', db.String)
 
     # Relationships
     # M - 1, many physicians can be at the same address
@@ -915,6 +919,10 @@ class ProjectPatient(CustomModel):
     surveyToResearcherStaffID = db.Column('survey_to_researcher_staff', db.Integer,
                                           db.ForeignKey('Staff.staffID'))  # FK
     qualityControl = db.Column('quality_control', db.Boolean)
+    vitalStatusID = db.Column('vital_statusID', db.Integer, db.ForeignKey("VitalStatusLUT.vitalStatusID"))
+    dayOfLastConsent = db.Column('dolc_day', db.Integer)
+    monthOfLastConsent = db.Column('dolc_month', db.Integer)
+    yearOfLastConsent = db.Column('dolc_year', db.Integer)
 
     incentives = db.relationship('Incentive', back_populates='projectPatient', order_by="desc(Incentive.dateGiven)")
     # Relationships
@@ -930,7 +938,7 @@ class ProjectPatient(CustomModel):
     staff = db.relationship("Staff", foreign_keys=[staffID])  # , back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate)")
-    vitalStatusID = db.Column('vital_statusID', db.Integer, db.ForeignKey("VitalStatusLUT.vitalStatusID"))
+
 
     abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
     finalCode = db.relationship("FinalCode", back_populates="projectPatients")

@@ -338,7 +338,11 @@
                         {% endif %}
                     </select>
                 </div>
-            </div>
+                <div class="col-md-2">
+                  <label for="date_lastConsentedDate">Last Consented Date</label>
+                  <input type="date" class="form-control" name="lastConsentedDate" id="date_lastConsentedDate" value="{{form.lastConsentedDate}}">
+                </div>
+             </div>
 
             <!-- hidden fields -->
             <input type="hidden" class="form-control" name="ctcID" id="text_ctcID" value="{{projectPatient.ctcID}}">

@@ -37,10 +37,31 @@
                       {% endfor %}
                   </select>
                 </div>
-             <div class = "col-md-2">
-              <label for="date_date">Date</label>
-              <input required="required" type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{patientProjectStatus["statusDate"]}}">
-             </div>
+                <div class = "col-md-2">
+                  <label for="date_date">Date</label>
+                  <input required="required" type="date" class="form-control" name="statusDate" id="date_statusDate" value="{{patientProjectStatus["statusDate"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_staffID">Project Patient Status Staff</label>
+                  <select required="required" type="text" class="form-control" name="staffID" id="select_staffID">
+                      <option></option>
+                        {% if patientProjectStatus is not none %}
+                            {% for staff in form.staffs %}
+                                {% if staff.staffID == patientProjectStatus.staffID %}
+                                    <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                {% else %}
+                                    <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                {% endif %}
+                             {% endfor %}
+                        {% else %}
+                            {% for staff in form.staff %}
+                                <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            {% endfor %}
+                        {% endif %}
+
+
+                  </select>
+                </div>
             </div>
             
             <div class="form-group">

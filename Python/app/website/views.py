@@ -13,6 +13,7 @@ import json
 from urllib.parse import urlparse, urljoin
 from flask.ext.cas import login as cas_login
 from functools import wraps
+import datetime
 
 website = Blueprint('website', __name__, template_folder='website_templates')
 
@@ -1480,6 +1481,7 @@ def update_facility(facilityID):
                     facility.facilityStatusDate = form.facilityStatusDate.data
                     facility.contact2FirstName = form.contact2FirstName.data
                     facility.contact2LastName = form.contact2LastName.data
+                    facility.displayID=form.displayID.data
                     query.commit()
                     flash("Updated Facility")
                     return redirect_back("facilties/{}/".format(facilityID))
@@ -1515,7 +1517,8 @@ def create_facility(facilityID=None):
                     facilityStatus=form.facilityStatus.data,
                     facilityStatusDate=form.facilityStatusDate.data,
                     contact2FirstName=form.contact2FirstName.data,
-                    contact2LastName=form.contact2LastName.data
+                    contact2LastName=form.contact2LastName.data,
+                    displayID=form.displayID.data
                 )
                 ret = query.add(facility)
                 flash("Created Facility")
@@ -2859,6 +2862,7 @@ def update_patient(patientID):
                     patient.sexID = form.sexID.data
                     patient.raceID = form.raceID.data
                     patient.ethnicityID = form.ethnicityID.data
+                    patient.recordNumber=form.recordNumber.data
                     query.commit()
                     flash("Updated Patient")
                     return redirect_back("/patients/{}".format(patientID))
@@ -2903,7 +2907,8 @@ def create_patient(patientID=None):
                     SSN=form.SSN.data,
                     raceID=form.raceID.data,
                     sexID=form.sexID.data,
-                    ethnicityID=form.ethnicityID.data
+                    ethnicityID=form.ethnicityID.data,
+                    recordNumber = form.recordNumber.data
                 )
                 query.add(patient)
                 flash("Created Patient")
@@ -3258,6 +3263,7 @@ def get_patient_project_status(patientProjectStatusID=None):
                 form = {}
                 form["projectPatients"] = query.get_project_patients()
                 form["patientProjectStatusTypes"] = query.get_patient_project_status_types()
+                form["staffs"]=query.get_staffs()
                 return render_template("patient_project_status_form.html", form=form,
                                        patientProjectStatus=patientProjectStatus)
             else:
@@ -3278,6 +3284,7 @@ def update_patient_project_status(patientProjectStatusID):
                     patientProjectStatus.patientProjectStatusTypeID = form.patientProjectStatusTypeID.data
                     patientProjectStatus.participantID = form.participantID.data
                     patientProjectStatus.statusDate = form.statusDate.data
+                    patientProjectStatus.staffID = form.staffID.data
                     query.commit()
                     flash("Updated Patient Project Status")
                     return redirect_back("patientprojectstatuses/{}/".format(patientProjectStatusID))
@@ -3309,7 +3316,8 @@ def create_patient_project_status(patientProjectStatusID=None):
                 patientProjectStatus = models.PatientProjectStatus(
                     patientProjectStatusTypeID=form.patientProjectStatusTypeID.data,
                     participantID=form.participantID.data,
-                    statusDate = form.statusDate.data
+                    statusDate = form.statusDate.data,
+                    staffID = form.staffID.data
                 )
                 query.add(patientProjectStatus)
                 flash("Created Patient Project Status")
@@ -3700,6 +3708,7 @@ def update_physician(physicianID):
                     physician.aliasMiddleName = form.aliasMiddleName.data
                     physician.physicianStatusID = form.physicianStatusID.data
                     physician.physicianStatusDate = form.physicianStatusDate.data
+                    physician.displayID=form.displayID.data
                     query.commit()
                     flash("Updated Physician")
                     return redirect_back("physicians/{}/".format(physicianID))
@@ -3739,6 +3748,7 @@ def create_physician(physicianID=None):
                     aliasMiddleName=form.aliasMiddleName.data,
                     physicianStatusID=form.physicianStatusID.data,
                     physicianStatusDate=form.physicianStatusDate.data,
+                    displayID = form.displayID.data
                 )
                 query.add(physician)
                 flash("Created Physician")
@@ -4750,6 +4760,16 @@ def get_project_patient(participantID=None):
                 form["abstractStatuses"] = query.get_abstract_statuses()
                 form["vitalStatuses"] = query.get_vital_statues()
                 form["siteGroups"]=query.get_sites()
+                day=projectPatient.dayOfLastConsent
+                month=projectPatient.monthOfLastConsent
+                year=projectPatient.yearOfLastConsent
+                if day == None:
+                    day =1
+                if month == None:
+                    month = 1
+                if year == None:
+                    year = 1
+                form["lastConsentedDate"]=datetime.date(year,month,day)
                 return render_template("project_patient_form.html", form=form, projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
@@ -4798,6 +4818,9 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
                     projectPatient.vitalStatusID = form.vitalStatusID.data
+                    projectPatient.dayOfLastConsent=form.lastConsentedDate.data.day
+                    projectPatient.monthOfLastConsent=form.lastConsentedDate.data.month
+                    projectPatient.yearOfLastConsent = form.lastConsentedDate.data.year
                     query.commit()
                     flash("Updated Project Patient")
                     return redirect_back("projectpatients/{}/".format(participantID))
@@ -4858,7 +4881,10 @@ def create_project_patient(participantID=None):
                     surveyToResearcher=form.surveyToResearcher.data,
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
                     qualityControl=form.qualityControl.data,
-                    vitalStatusID=form.vitalStatusID.data
+                    vitalStatusID=form.vitalStatusID.data,
+                    dayOfLastConsent=form.lastConsentedDate.data.day,
+                    monthOfLastConsent=form.lastConsentedDate.data.month,
+                    yearOfLastConsent=form.lastConsentedDate.data.year
                 )
                 query.add(projectPatient)
                 flash("Created Project Patient")

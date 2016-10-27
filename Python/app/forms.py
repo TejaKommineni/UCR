@@ -1,5 +1,6 @@
 from wtforms import Form, BooleanField, StringField, IntegerField, DateField, FloatField, BooleanField, validators
 from . import query
+import datetime
 
 COMMON_STRING_VALIDATORS = [
     validators.optional(),
@@ -353,6 +354,8 @@ class FacilityForm(BaseForm):
     contact2FirstName = StringField('contact2FirstName',
                                     [] + COMMON_STRING_VALIDATORS)
     contact2LastName = StringField('contact2LastName',
+                                   [] + COMMON_STRING_VALIDATORS)
+    displayID = StringField('displayID',
                                    [] + COMMON_STRING_VALIDATORS)
 
 
@@ -764,6 +767,8 @@ class PatientForm(BaseForm):
                          [] + COMMON_INTEGER_VALIDATORS)
     ethnicityID = IntegerField('ethnicityID',
                               [] + COMMON_INTEGER_VALIDATORS)
+    recordNumber = StringField('recordNumber',
+                      [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -921,6 +926,7 @@ class PatientProjectStatusForm(BaseForm):
     participantID = IntegerField('participantID',
                                     [validators.InputRequired()])
     statusDate = DateField('statusDate',[] + COMMON_DATE_VALIDATORS, format=DATE_FORMAT)
+    staffID=IntegerField('staffID',[validators.InputRequired()])
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -977,6 +983,9 @@ class PhysicianForm(BaseForm):
     physicianStatusDate = DateField('physicianStatusDate',
                                     [] + COMMON_DATE_VALIDATORS,
                                     format=DATE_FORMAT)
+    displayID = StringField('displayID',
+                                  [] + COMMON_STRING_VALIDATORS)
+
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1374,6 +1383,10 @@ class ProjectPatientForm(BaseForm):
                                             []+COMMON_BOOL_VALIDATORS)
     vitalStatusID = IntegerField('vitalStatusID',
                                  [] + COMMON_INTEGER_VALIDATORS)
+    lastConsentedDate = DateField('lastConsentedDate',
+                                    [] + COMMON_DATE_VALIDATORS,
+                                    format=DATE_FORMAT)
+
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1470,6 +1483,13 @@ class ProjectPatientForm(BaseForm):
             if siteGrpID is None:
                 self.siteGrpID.errors.append("ID not found")
                 hasErrors = True
+
+        if self.lastConsentedDate.data:
+            today = datetime.date.today()
+            if self.lastConsentedDate.data > today:
+                self.lastConsentedDate.errors.append("Last Consented day cannot be greater than today's date")
+                hasErrors = True
+
         return not hasErrors
 
 

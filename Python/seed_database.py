@@ -2543,7 +2543,8 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=1
+        ethnicityID=1,
+        recordNumber='PA-123'
     ))
     patients.append(models.Patient(
         patID="2",
@@ -2562,7 +2563,8 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=1
+        ethnicityID=1,
+        recordNumber='PA-313'
             ))
     patients.append(models.Patient(
         patID="3",
@@ -2581,7 +2583,8 @@ def create_patients():
         SSN="999999999",
         sexID=2,
         raceID=1,
-        ethnicityID=2
+        ethnicityID=2,
+        recordNumber='PA-746'
 
     ))
     patients.append(models.Patient(
@@ -2601,7 +2604,8 @@ def create_patients():
         SSN="999999999",
         sexID=1,
         raceID=3,
-        ethnicityID=2
+        ethnicityID=2,
+        recordNumber='PA-567'
 
     ))
     patients.append(models.Patient(
@@ -2621,7 +2625,8 @@ def create_patients():
         SSN="999999999",
         sexID=1,
         raceID=2,
-        ethnicityID=2
+        ethnicityID=2,
+        recordNumber='PA-154'
     ))
     return patients
 
@@ -2972,7 +2977,8 @@ def create_ctcs():
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
-        recordID="1"
+        recordID="1",
+
     ))
     ctcs.append(models.CTC(
         participantID=2,
@@ -3096,7 +3102,10 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2
+            vitalStatusID=2,
+            dayOfLastConsent=5,
+            monthOfLastConsent=5,
+            yearOfLastConsent=2016
         )
     )
     pps.append(
@@ -3132,7 +3141,10 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2
+            vitalStatusID=2,
+            dayOfLastConsent=5,
+            monthOfLastConsent=6,
+            yearOfLastConsent=2016
         )
     )
     pps.append(
@@ -3168,7 +3180,10 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2
+            vitalStatusID=2,
+            dayOfLastConsent=4,
+            monthOfLastConsent=3,
+            yearOfLastConsent=2014
         )
     )
     pps.append(
@@ -3204,7 +3219,10 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=1
+            vitalStatusID=1,
+            dayOfLastConsent=28,
+            monthOfLastConsent=9,
+            yearOfLastConsent=2015
         )
     )
     pps.append(
@@ -3240,7 +3258,9 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=1
+            vitalStatusID=1,
+            monthOfLastConsent=12,
+            yearOfLastConsent=2012
         )
     )
     return pps
@@ -3300,6 +3320,7 @@ def create_physicians():
             aliasMiddleName="alias_middle_name",
             physicianStatusID=1,
             physicianStatusDate=datetime(2016, 2, 2),
+            displayID='DP-548'
         )
     )
     physicians.append(
@@ -3314,6 +3335,7 @@ def create_physicians():
             aliasMiddleName="alias_middle_name",
             physicianStatusID=1,
             physicianStatusDate=datetime(2016, 2, 2),
+            displayID='DP-363'
         )
     )
     physicians.append(
@@ -3328,6 +3350,7 @@ def create_physicians():
             aliasMiddleName="alias_middle_name",
             physicianStatusID=1,
             physicianStatusDate=datetime(2016, 2, 2),
+            displayID='DP-4836'
         )
     )
     return physicians
@@ -3482,7 +3505,8 @@ def create_facilities():
         facilityStatus=1,
         facilityStatusDate=datetime(2016, 2, 2),
         contact2FirstName="fname",
-        contact2LastName="lname"
+        contact2LastName="lname",
+        displayID='FDP-484'
     ))
     facilities.append(models.Facility(
         facilityName="Facility 2",
@@ -3491,7 +3515,8 @@ def create_facilities():
         facilityStatus=1,
         facilityStatusDate=datetime(2016, 2, 2),
         contact2FirstName="fname",
-        contact2LastName="lname"
+        contact2LastName="lname",
+        displayID='FDP-787'
     ))
     return facilities
 
@@ -3566,35 +3591,40 @@ def create_patient_project_statuses():
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=1,
-            statusDate = datetime(2016,8,9)
+            statusDate = datetime(2016,8,9),
+            staffID=1
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=2,
-            statusDate=datetime(2016, 8, 9)
+            statusDate=datetime(2016, 8, 9),
+            staffID=4
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=3,
-            statusDate=datetime(2016, 8, 9)
+            statusDate=datetime(2016, 8, 9),
+            staffID=5
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=4,
-            statusDate=datetime(2016, 8, 9)
+            statusDate=datetime(2016, 8, 9),
+            staffID=3
         )
     )
     statuses.append(
         models.PatientProjectStatus(
             patientProjectStatusTypeID=1,
             participantID=5,
-            statusDate=datetime(2016, 8, 9)
+            statusDate=datetime(2016, 8, 9),
+            staffID=7
         )
     )
     return statuses
