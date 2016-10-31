@@ -55,7 +55,11 @@
                              {% endfor %}
                         {% else %}
                             {% for staff in form.staff %}
+                                {% if user.staff.staffID == staff.staffID %}
+                                <option selected value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                {% else %}
                                 <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
 

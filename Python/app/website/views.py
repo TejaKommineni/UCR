@@ -1028,6 +1028,8 @@ def update_ctc(ctcID):
                     ctc.dnc = form.dnc.data
                     ctc.dncReason = form.dncReason.data
                     ctc.recordID = form.recordID.data
+                    ctc.ctcRecordNumber = form.ctcRecordNumber.data
+                    ctc.dmsCtcID=form.dmsCtcID.data
                     query.commit()
                     flash("Updated CTC")
                     return redirect_back('ctcs/{}/'.format(ctcID))
@@ -1075,7 +1077,9 @@ def create_ctc(ctcID=None):
                     dxCounty=form.dxCounty.data,
                     dnc=form.dnc.data,
                     dncReason=form.dncReason.data,
-                    recordID=form.recordID.data
+                    recordID=form.recordID.data,
+                    ctcRecordNumber = form.ctcRecordNumber.data,
+                    dmsCtcID = form.dmsCtcID.data
                 )
                 query.add(ctc)
                 flash("Created CTC")
@@ -4608,6 +4612,9 @@ def update_project(projectID):
                     proj.ongoingContact = form.ongoingContact.data
                     proj.activityStartDate = form.activityStartDate.data
                     proj.activityEndDate = form.activityEndDate.data
+                    proj.numberAbstractions=form.numberAbstractions.data
+                    proj.sftpUsername=form.sftpUsername.data
+                    proj.irbResearchManager=form.irbResearchManager.data
                     query.commit()
                     flash("Updated Project", 'message')
                     return redirect_back("projects/{}/".format(projectID))
@@ -4652,7 +4659,10 @@ def create_project(projectID=None):
                     finalRecruitmentReport=form.finalRecruitmentReport.data,
                     ongoingContact=form.ongoingContact.data,
                     activityStartDate=form.activityStartDate.data,
-                    activityEndDate=form.activityEndDate.data
+                    activityEndDate=form.activityEndDate.data,
+                    numberAbstractions=form.numberAbstractions.data,
+                    sftpUsername=form.sftpUsername.data,
+                    irbResearchManager=form.irbResearchManager.data
                 )
                 query.add(proj)
                 flash("Created Project")
@@ -4760,16 +4770,19 @@ def get_project_patient(participantID=None):
                 form["abstractStatuses"] = query.get_abstract_statuses()
                 form["vitalStatuses"] = query.get_vital_statues()
                 form["siteGroups"]=query.get_sites()
-                day=projectPatient.dayOfLastConsent
-                month=projectPatient.monthOfLastConsent
-                year=projectPatient.yearOfLastConsent
-                if day == None:
-                    day =1
-                if month == None:
-                    month = 1
-                if year == None:
-                    year = 1
-                form["lastConsentedDate"]=datetime.date(year,month,day)
+                if projectPatient.dayOfLastConsent == None:
+                    form["dayOfLastConsent"]=''
+                else:
+                    form["dayOfLastConsent"]=projectPatient.dayOfLastConsent
+                if projectPatient.monthOfLastConsent == None:
+                    form["monthOfLastConsent"]=''
+                else:
+                    form["monthOfLastConsent"] = projectPatient.monthOfLastConsent
+                if projectPatient.yearOfLastConsent == None:
+                    form["yearOfLastConsent"] = ''
+                else:
+                    form["yearOfLastConsent"] = projectPatient.yearOfLastConsent
+
                 return render_template("project_patient_form.html", form=form, projectPatient=projectPatient)
             else:
                 return item_not_found("ParticipantID {} not found".format(participantID))
@@ -4818,9 +4831,9 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
                     projectPatient.vitalStatusID = form.vitalStatusID.data
-                    projectPatient.dayOfLastConsent=form.lastConsentedDate.data.day
-                    projectPatient.monthOfLastConsent=form.lastConsentedDate.data.month
-                    projectPatient.yearOfLastConsent = form.lastConsentedDate.data.year
+                    projectPatient.dayOfLastConsent=form.dayOfLastConsent.data
+                    projectPatient.monthOfLastConsent=form.monthOfLastConsent.data
+                    projectPatient.yearOfLastConsent = form.yearOfLastConsent.data
                     query.commit()
                     flash("Updated Project Patient")
                     return redirect_back("projectpatients/{}/".format(participantID))
@@ -4882,9 +4895,9 @@ def create_project_patient(participantID=None):
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
                     qualityControl=form.qualityControl.data,
                     vitalStatusID=form.vitalStatusID.data,
-                    dayOfLastConsent=form.lastConsentedDate.data.day,
-                    monthOfLastConsent=form.lastConsentedDate.data.month,
-                    yearOfLastConsent=form.lastConsentedDate.data.year
+                    dayOfLastConsent=form.lastConsentedDay.data,
+                    monthOfLastConsent=form.lastConsentedMonth.data,
+                    yearOfLastConsent=form.lastConsentedYear.data
                 )
                 query.add(projectPatient)
                 flash("Created Project Patient")

@@ -12,47 +12,99 @@ import app.models as models
 def create_informant_relationships():
     relationships = []
     relationships.append(models.InformantRelationship(
-        informantRelationship="Mother"
+        informantRelationship="Spouse/Partner",
+        informantRelationshipID=0
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Father"
+        informantRelationship="Ex-spouse",
+        informantRelationshipID=1
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Son"
+        informantRelationship="Child",
+        informantRelationshipID=10
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Daughter"
+        informantRelationship="In-Law",
+        informantRelationshipID=5
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Grandson"
+        informantRelationship="Ex-In-law",
+        informantRelationshipID=6
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Granddaughter"
+        informantRelationship="Grandchild",
+        informantRelationshipID=12
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Uncle"
+        informantRelationship="Nephew/Niece",
+        informantRelationshipID=14
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Aunt"
+        informantRelationship="Parent",
+        informantRelationshipID=20
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Cousin"
+        informantRelationship="Step-parent",
+        informantRelationshipID=21
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Wife"
+        informantRelationship="Guardian",
+        informantRelationshipID=22
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Husband"
+        informantRelationship="Grandparent",
+        informantRelationshipID=23
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Friend"
+        informantRelationship="Aunt/Uncle",
+        informantRelationshipID=24
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Other Family Member"
+        informantRelationship="Sibling",
+        informantRelationshipID=30
     ))
     relationships.append(models.InformantRelationship(
-        informantRelationship="Other"
+        informantRelationship="Other Relative",
+        informantRelationshipID=39
     ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Friend/Neighbor",
+        informantRelationshipID=40
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Boyfriend/Girlfriend",
+        informantRelationshipID=41
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Employer",
+        informantRelationshipID=50
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Attorney",
+        informantRelationshipID=60
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Power of Attorney",
+        informantRelationshipID=61
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Doctor",
+        informantRelationshipID=70
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Caregiver",
+        informantRelationshipID=71
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Other",
+        informantRelationshipID=88
+    ))
+    relationships.append(models.InformantRelationship(
+        informantRelationship="Unknown",
+        informantRelationshipID=99
+    ))
+
+
     return relationships
 
 
@@ -60,132 +112,164 @@ def create_final_codes():
     finalCodes = []
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Pending",
-        finalCode=0
+        finalCode=0,
+        finalCodeID=1
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Consent- Survey complete w/Med. Rcd. release",
-        finalCode=100
+        finalCode=100,
+        finalCodeID=2
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Consent- Survey complete NO Med.Rcd. release",
-        finalCode=101
+        finalCode=101,
+        finalCodeID=3
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Consent- Incomplete survey. Cannot complete (see notes for reason)",
-        finalCode=111
+        finalCode=111,
+        finalCodeID=4
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Survey complete- no consent form with or without medical release",
-        finalCode=112
+        finalCode=112,
+        finalCodeID=5
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- by mail",
-        finalCode=200
+        finalCode=200,
+        finalCodeID=6
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- no reason",
-        finalCode=201
+        finalCode=201,
+        finalCodeID=7
 
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- too ill",
-        finalCode=202
+        finalCode=202,
+        finalCodeID=8
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- no interest",
-        finalCode=203
+        finalCode=203,
+        finalCodeID=9
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- too old",
-        finalCode=204
+        finalCode=204,
+        finalCodeID=10
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- no cancer",
-        finalCode=205
+        finalCode=205,
+        finalCodeID=11
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No-upset",
-        finalCode=207
+        finalCode=207,
+        finalCodeID=12
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- DO NOT CONTACT-per contact with patient on study",
-        finalCode=208
+        finalCode=208,
+        finalCodeID=13
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No- no signed consent form",
-        finalCode=209
+        finalCode=209,
+        finalCodeID=14
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No response after max effort",
-        finalCode=300
+        finalCode=300,
+        finalCodeID=15
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Lost to follow-up (bad/no address or phone)-may have contacted once or initial letter not returned, but can no longer contact",
-        finalCode=301
+        finalCode=301,
+        finalCodeID=16
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Language Barrier",
-        finalCode=302
+        finalCode=302,
+        finalCodeID=17
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="No response after 2+ letters (no/bad phone)",
-        finalCode=303
+        finalCode=303,
+        finalCodeID=18
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Deceased AFTER selection",
-        finalCode=309
+        finalCode=309,
+        finalCodeID=19
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible - Current Age",
-        finalCode=400
+        finalCode=400,
+        finalCodeID=20
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible-other",
-        finalCode=401
+        finalCode=401,
+        finalCodeID=21
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible- DX date",
-        finalCode=402
+        finalCode=402,
+        finalCodeID=22
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible- Patient Deceased",
-        finalCode=403
+        finalCode=403,
+        finalCodeID=23
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible- mental capacity",
-        finalCode=404
+        finalCode=404,
+        finalCodeID=24
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible- histology or behavior",
-        finalCode=406
+        finalCode=406,
+        finalCodeID=25
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible- out of state resident at DX",
-        finalCode=407
+        finalCode=407,
+        finalCodeID=26
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible-Recently contacted for another UCR study or lost to follow-up in another UCR study within past year",
-        finalCode=408
+        finalCode=408,
+        finalCodeID=27
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible-out of country",
-        finalCode=409
+        finalCode=409,
+        finalCodeID=28
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible-Do not contact per DMS",
-        finalCode=410
+        finalCode=410,
+        finalCodeID=29
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible-Not able to send letter OR letter returned and no other contact possible (for NOK or Patient)",
-        finalCode=411
+        finalCode=411,
+        finalCodeID=30
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Ineligible - Contacted for other study within 1 year",
-        finalCode=412
+        finalCode=412,
+        finalCodeID=31
     ))
     finalCodes.append(models.FinalCode(
         finalCodeDefinition="Holding",
-        finalCode=999
+        finalCode=999,
+        finalCodeID=32
     ))
     return finalCodes
 
@@ -374,16 +458,32 @@ def create_abstract_statuses():
 def create_sexes():
     sexes = []
     sexes.append(models.Sex(
-        sex="Female"
+        sex="Female",
+        sexID=2
     ))
     sexes.append(models.Sex(
-        sex="Male"
+        sex="Male",
+        sexID=1
     ))
     sexes.append(models.Sex(
-        sex="Transsexual"
+        sex="Transsexual, NOS",
+        sexID=4
     ))
     sexes.append(models.Sex(
-        sex="Unknown"
+        sex="Transsexual, natal male",
+        sexID=5
+    ))
+    sexes.append(models.Sex(
+        sex="Transsexual, natal female",
+        sexID=6
+    ))
+    sexes.append(models.Sex(
+        sex="Not stated/Unknown",
+        sexID=9
+    ))
+    sexes.append(models.Sex(
+        sex="Other (intersex, disorders of sexual development/DSD)",
+        sexID=3
     ))
     return sexes
 
@@ -406,22 +506,128 @@ def create_sitegroup():
 def create_races():
     races = []
     races.append(models.Race(
-        race="American Indian or Alaska Native"
+        race="White",
+        raceID=1
     ))
     races.append(models.Race(
-        race="Asian"
+        race="Black",
+        raceID=2
     ))
     races.append(models.Race(
-        race="Black"
+        race="American Indian/Alaska Native",
+        raceID=3
     ))
     races.append(models.Race(
-        race="Native Hawaiian or Other Pacific Islander"
+        race="Chinese",
+        raceID=4
     ))
     races.append(models.Race(
-        race="White"
+        race="Japanese",
+        raceID=5
     ))
     races.append(models.Race(
-        race="Unknown"
+        race="Filipino",
+        raceID=6
+    ))
+    races.append(models.Race(
+        race="Hawaiian",
+        raceID=7
+    ))
+    races.append(models.Race(
+        race="Korean",
+        raceID=8
+    ))
+    races.append(models.Race(
+        race="Vietnamese",
+        raceID=10
+    ))
+    races.append(models.Race(
+        race="Laotian",
+        raceID=11
+    ))
+    races.append(models.Race(
+        race="Hmong",
+        raceID=12
+    ))
+    races.append(models.Race(
+        race="Kampuchean (Cambodian)",
+        raceID=13
+    ))
+    races.append(models.Race(
+        race="Thai",
+        raceID=14
+    ))
+    races.append(models.Race(
+        race="Asian Indian, Pakistani, NOS",
+        raceID=15
+    ))
+    races.append(models.Race(
+        race="Asian Indian",
+        raceID=16
+    ))
+    races.append(models.Race(
+        race="Pakistani",
+        raceID=17
+    ))
+    races.append(models.Race(
+        race="Micronesian, NOS",
+        raceID=20
+    ))
+    races.append(models.Race(
+        race="Chamorro/Chamoru",
+        raceID=21
+    ))
+    races.append(models.Race(
+        race="Guamanian, NOS",
+        raceID=22
+    ))
+    races.append(models.Race(
+        race="Polynesian, NOS",
+        raceID=25
+    ))
+    races.append(models.Race(
+        race="Tahitian",
+        raceID=26
+    ))
+    races.append(models.Race(
+        race="Samoan",
+        raceID=27
+    ))
+    races.append(models.Race(
+        race="Tongan",
+        raceID=28
+    ))
+    races.append(models.Race(
+        race="Melanesian, NOS",
+        raceID=30
+    ))
+    races.append(models.Race(
+        race="Fiji Islander",
+        raceID=31
+    ))
+    races.append(models.Race(
+        race="New Guinean",
+        raceID=32
+    ))
+    races.append(models.Race(
+        race="No further race documented",
+        raceID=88
+    ))
+    races.append(models.Race(
+        race="Other Asian",
+        raceID=96
+    ))
+    races.append(models.Race(
+        race="Pacific Islander, NOS",
+        raceID=97
+    ))
+    races.append(models.Race(
+        race="Other",
+        raceID=98
+    ))
+    races.append(models.Race(
+        race="Unknown",
+        raceID=99
     ))
     return races
 
@@ -429,24 +635,58 @@ def create_races():
 def create_ethnicities():
     ethnicities = []
     ethnicities.append(models.Ethnicity(
-        ethnicity="Hispanic or Latino"
+        ethnicity="Non-Spanish",
+        ethnicityID=0
     ))
     ethnicities.append(models.Ethnicity(
-        ethnicity="Not Hispanic or Latino"
+        ethnicity="Mexican",
+        ethnicityID=1
     ))
     ethnicities.append(models.Ethnicity(
-        ethnicity="Unknown"
+        ethnicity="Puerto Rican",
+        ethnicityID=2
     ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Cuban",
+        ethnicityID=3
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="South or Central American (except Brazil)",
+        ethnicityID=4
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Other Spanish",
+        ethnicityID=5
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Spanish, NOS",
+        ethnicityID=6
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Spanish surname only",
+        ethnicityID=7
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Dominican Republic (2005+)",
+        ethnicityID=8
+    ))
+    ethnicities.append(models.Ethnicity(
+        ethnicity="Unknown",
+        ethnicityID=9
+    ))
+
     return ethnicities
 
 
 def create_vital_statuses():
     vitals = []
     vitals.append(models.VitalStatus(
-        vitalStatus="Alive"
+        vitalStatus="Alive",
+        vitalStatusID=1
     ))
     vitals.append(models.VitalStatus(
-        vitalStatus="Dead"
+        vitalStatus="Dead",
+        vitalStatusID=4
     ))
     return vitals
 
@@ -1166,135 +1406,169 @@ def create_contact_types():
     contact_types = []
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed 1st packet to patient (intro letter, survey, consent, med rcd. release)",
-        contactCode=100
+        contactCode=100,
+        contactTypeID=1
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed Reminder letter",
-        contactCode=101
+        contactCode=101,
+        contactTypeID=2
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed 2nd packet (FU letter, survey, consent, med rcd release)",
-        contactCode=102
+        contactCode=102,
+        contactTypeID=3
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed Thank you letter and copy of consent form",
-        contactCode=103
+        contactCode=103,
+        contactTypeID=4
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed Packet (after phone contact)",
-        contactCode=109
+        contactCode=109,
+        contactTypeID=9
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Mailed additional items- (survey, consent form, envelope, etc)",
-        contactCode=110
+        contactCode=110,
+        contactTypeID=89
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Undeliverable, mail returned w/forwarding addresses, mailed to new address",
-        contactCode=150
+        contactCode=150,
+        contactTypeID=45
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Undeliverable, Mail returned, NO forwarding address",
-        contactCode=151
+        contactCode=151,
+        contactTypeID=576
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Packet Returned - Temporarily Away",
-        contactCode=152
+        contactCode=152,
+        contactTypeID=98
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Left voicemail",
-        contactCode=200
+        contactCode=200,
+        contactTypeID=34
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Left message with person",
-        contactCode=201
+        contactCode=201,
+        contactTypeID=12
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="No answer",
-        contactCode=202
+        contactCode=202,
+        contactTypeID=485
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Busy",
-        contactCode=203
+        contactCode=203,
+        contactTypeID=344
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Bad Phone number",
-        contactCode=204
+        contactCode=204,
+        contactTypeID=122
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- Received, thinking about it",
-        contactCode=205
+        contactCode=205,
+        contactTypeID=67
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- Received, willing",
-        contactCode=206
+        contactCode=206,
+        contactTypeID=123
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- Received, already sent to us",
-        contactCode=207
+        contactCode=207,
+        contactTypeID=16
+
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- too sick",
-        contactCode=208
+        contactCode=208,
+        contactTypeID=17
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- no cancer",
-        contactCode=209
+        contactCode=209,
+        contactTypeID=18
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Language Barrier",
-        contactCode=210
+        contactCode=210,
+        contactTypeID=20
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Deceased",
-        contactCode=211
+        contactCode=211,
+        contactTypeID=21
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Pt unable to come to phone, could not leave message",
-        contactCode=212
+        contactCode=212,
+        contactTypeID=22
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Incompetent",
-        contactCode=213
+        contactCode=213,
+        contactTypeID=44
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Patient left message for Coordinator",
-        contactCode=214
+        contactCode=214,
+        contactTypeID=55
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- Refused (no reason given)",
-        contactCode=215
+        contactCode=215,
+        contactTypeID=66
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Ineligible",
-        contactCode=216
+        contactCode=216,
+        contactTypeID=77
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- did not receive, mailed another letter",
-        contactCode=217
+        contactCode=217,
+        contactTypeID=333
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Spoke with- Other",
-        contactCode=218
+        contactCode=218,
+        contactTypeID=444
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Survey returned without consent form",
-        contactCode=300
+        contactCode=300,
+        contactTypeID=222
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Survey returned incomplete",
-        contactCode=301
+        contactCode=301,
+        contactTypeID=999
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Consent returned without survey",
-        contactCode=302
+        contactCode=302,
+        contactTypeID=345
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Received consent, survey received previously",
-        contactCode=304
+        contactCode=304,
+        contactTypeID=789
     ))
     contact_types.append(models.ContactTypeLUT(
         contactDefinition="Enter in error",
-        contactCode=999
+        contactCode=999,
+        contactTypeID=356
     ))
     return contact_types
 
@@ -1536,14 +1810,18 @@ def create_projects():
             sop="sop",
             ucrProposal="UCR Proposal 1",
             budgetDoc="N:/Fakelocation/fakebudget.pdf",
-            ucrFee="No",
-            ucrNoFee="Yes",
+            ucrFee=34.5,
+            ucrNoFee=1,
             previousShortTitle="Test Project One",
             dateAdded=datetime(2016, 2, 2),
             finalRecruitmentReport="N:/Fakelocation/fakereport.pdf",
             ongoingContact=True,
             activityStartDate=datetime(2016, 2, 2),
-            activityEndDate=datetime(2016, 2, 2))
+            activityEndDate=datetime(2016, 2, 2),
+            numberAbstractions=6,
+            irbResearchManager=0,
+            sftpUsername = 'r548363'
+        )
     )
     projects.append(
         models.Project(
@@ -1555,14 +1833,18 @@ def create_projects():
             sop="sop",
             ucrProposal="UCR Proposal 2",
             budgetDoc="N:/Fakelocation/fakebudget2.pdf",
-            ucrFee="No",
-            ucrNoFee="Yes",
+            ucrFee=345.78,
+            ucrNoFee=1,
             previousShortTitle="Test Project Two",
             dateAdded=datetime(2016, 2, 2),
             finalRecruitmentReport="N:/Fakelocation/fakereport2.pdf",
             ongoingContact=True,
             activityStartDate=datetime(2016, 2, 2),
-            activityEndDate=datetime(2016, 2, 2))
+            activityEndDate=datetime(2016, 2, 2),
+            numberAbstractions=89,
+            sftpUsername='F587385',
+            irbResearchManager=0
+        )
     )
     projects.append(
         models.Project(
@@ -1574,14 +1856,19 @@ def create_projects():
             sop="sop",
             ucrProposal="UCR Proposal 3",
             budgetDoc="N:/Fakelocation/fakebudget3.pdf",
-            ucrFee="Yes",
-            ucrNoFee="No",
+            ucrFee=1.24,
+            ucrNoFee=1,
             previousShortTitle="Test Project Three",
             dateAdded=datetime(2016, 4, 5),
             finalRecruitmentReport="N:/Fakelocation/fakereport3.pdf",
             ongoingContact=True,
             activityStartDate=datetime(2016, 4, 5),
-            activityEndDate=datetime(2016, 6, 7))
+            activityEndDate=datetime(2016, 6, 7),
+            numberAbstractions=456,
+            sftpUsername='komaster',
+            irbResearchManager=0
+
+        )
     )
     projects.append(
         models.Project(
@@ -1593,14 +1880,18 @@ def create_projects():
             sop="sop",
             ucrProposal="UCR Proposal 4",
             budgetDoc="N:/Fakelocation/fakebudget4.pdf",
-            ucrFee="No",
-            ucrNoFee="Yes",
+            ucrFee=4567.09,
+            ucrNoFee=0,
             previousShortTitle="Test Project Four",
             dateAdded=datetime(2016, 8, 8),
             finalRecruitmentReport="N:/Fakelocation/fakereport4.pdf",
             ongoingContact=True,
             activityStartDate=datetime(2016, 9, 9),
-            activityEndDate=datetime(2016, 9, 10))
+            activityEndDate=datetime(2016, 9, 10),
+            numberAbstractions=56,
+            sftpUsername='classic',
+            irbResearchManager=1
+        )
     )
     projects.append(
         models.Project(
@@ -1612,14 +1903,19 @@ def create_projects():
             sop="sop",
             ucrProposal="UCR Proposal 2",
             budgetDoc="N:/Fakelocation/fakebudget5.pdf",
-            ucrFee="No",
-            ucrNoFee="Yes",
+            ucrFee=76.45,
+            ucrNoFee=1,
             previousShortTitle="Test Project Five",
             dateAdded=datetime(2016, 2, 2),
             finalRecruitmentReport="N:/Fakelocation/fakereport5.pdf",
             ongoingContact=True,
             activityStartDate=datetime(2016, 2, 2),
-            activityEndDate=datetime(2016, 2, 2))
+            activityEndDate=datetime(2016, 2, 2),
+            numberAbstractions=436,
+            sftpUsername='aniMation',
+            irbResearchManager=0
+
+        )
     )
     return projects
 
@@ -2818,7 +3114,7 @@ def create_informants():
         lastName="Smith2",
         middleName="",
         informantPrimary=True,
-        informantRelationshipID=2,
+        informantRelationshipID=6,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2827,7 +3123,7 @@ def create_informants():
         lastName="Smith3",
         middleName="",
         informantPrimary=True,
-        informantRelationshipID=3,
+        informantRelationshipID=12,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2836,7 +3132,7 @@ def create_informants():
         lastName="Smith4",
         middleName="",
         informantPrimary=True,
-        informantRelationshipID=4,
+        informantRelationshipID=14,
         notes="notes"
     ))
     informants.append(models.Informant(
@@ -2845,7 +3141,7 @@ def create_informants():
         lastName="Smith5",
         middleName="",
         informantPrimary=True,
-        informantRelationshipID=5,
+        informantRelationshipID=20,
         notes="notes"
     ))
     return informants
@@ -2978,6 +3274,8 @@ def create_ctcs():
         dnc="dnc",
         dncReason="dnc_reason",
         recordID="1",
+        ctcRecordNumber='ctc-234',
+        dmsCtcID=345
 
     ))
     ctcs.append(models.CTC(
@@ -2999,7 +3297,9 @@ def create_ctcs():
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
-        recordID="2"
+        recordID="2",
+        ctcRecordNumber='ctc-874',
+        dmsCtcID=9876
     ))
     ctcs.append(models.CTC(
         participantID=3,
@@ -3020,7 +3320,9 @@ def create_ctcs():
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
-        recordID="3"
+        recordID="3",
+        ctcRecordNumber='ctc-984',
+        dmsCtcID=6765
     ))
     ctcs.append(models.CTC(
         participantID=4,
@@ -3041,7 +3343,9 @@ def create_ctcs():
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
-        recordID="4"
+        recordID="4",
+        ctcRecordNumber='ctc-4',
+        dmsCtcID=2111
     ))
     ctcs.append(models.CTC(
         participantID=5,
@@ -3062,7 +3366,9 @@ def create_ctcs():
         dxCounty="county",
         dnc="dnc",
         dncReason="dnc_reason",
-        recordID="5"
+        recordID="5",
+        ctcRecordNumber='ctc-56',
+        dmsCtcID=980
     ))
     return ctcs
 
@@ -3102,9 +3408,8 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2,
-            dayOfLastConsent=5,
-            monthOfLastConsent=5,
+            vitalStatusID=4,
+            monthOfLastConsent=1,
             yearOfLastConsent=2016
         )
     )
@@ -3141,9 +3446,9 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2,
+            vitalStatusID=4,
             dayOfLastConsent=5,
-            monthOfLastConsent=6,
+
             yearOfLastConsent=2016
         )
     )
@@ -3180,7 +3485,7 @@ def create_project_patients():
             surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
             qualityControl=True,
-            vitalStatusID=2,
+            vitalStatusID=4,
             dayOfLastConsent=4,
             monthOfLastConsent=3,
             yearOfLastConsent=2014
@@ -3574,13 +3879,16 @@ def create_facility_phones():
 def create_patient_project_status_types():
     status_types = []
     status_types.append(models.PatientProjectStatusLUT(
-        statusDescription="Status 1"
+        statusDescription="Status 1",
+        patientProjectStatusTypeID=1
     ))
     status_types.append(models.PatientProjectStatusLUT(
-        statusDescription="Status 2"
+        statusDescription="Status 2",
+        patientProjectStatusTypeID=2
     ))
     status_types.append(models.PatientProjectStatusLUT(
-        statusDescription="Status 3"
+        statusDescription="Status 3",
+        patientProjectStatusTypeID=3
     ))
     return status_types
 

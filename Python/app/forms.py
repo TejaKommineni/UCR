@@ -320,6 +320,10 @@ class CTCForm(BaseForm):
                             [] + COMMON_STRING_VALIDATORS)
     recordID = StringField('recordID',
                             [] + COMMON_STRING_VALIDATORS)
+    ctcRecordNumber = StringField('ctcRecordNumber',
+                           [] + COMMON_STRING_VALIDATORS)
+    dmsCtcID = IntegerField('dmsCtcID',
+                           [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1269,10 +1273,10 @@ class ProjectForm(BaseForm):
                               [] + COMMON_STRING_VALIDATORS)
     budgetDoc = StringField('budgetDoc',
                             [] + COMMON_STRING_VALIDATORS)
-    ucrFee = StringField('ucrFee',
-                         [] + COMMON_STRING_VALIDATORS)
-    ucrNoFee = StringField('ucrNoFee',
-                           [] + COMMON_STRING_VALIDATORS)
+    ucrFee = FloatField('ucrFee',
+                         [] + COMMON_FLOAT_VALIDATORS)
+    ucrNoFee = IntegerField('ucrNoFee',
+                           [] + COMMON_INTEGER_VALIDATORS)
     previousShortTitle = StringField('previousShortTitle',
                                      [] + COMMON_STRING_VALIDATORS)
     dateAdded = DateField('dateAdded',
@@ -1288,6 +1292,12 @@ class ProjectForm(BaseForm):
     activityEndDate = DateField('activityEndDate',
                                 [] + COMMON_DATE_VALIDATORS,
                                 format=DATE_FORMAT)
+    numberAbstractions = IntegerField('numberAbstractions',
+                           [] + COMMON_INTEGER_VALIDATORS)
+    sftpUsername = StringField('sftpUsername',
+                           [] + COMMON_STRING_VALIDATORS)
+    irbResearchManager = IntegerField('irbResearchManager',
+                           [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1383,10 +1393,12 @@ class ProjectPatientForm(BaseForm):
                                             []+COMMON_BOOL_VALIDATORS)
     vitalStatusID = IntegerField('vitalStatusID',
                                  [] + COMMON_INTEGER_VALIDATORS)
-    lastConsentedDate = DateField('lastConsentedDate',
-                                    [] + COMMON_DATE_VALIDATORS,
-                                    format=DATE_FORMAT)
-
+    dayOfLastConsent = IntegerField('dayOfLastConsent',
+                                    [] + COMMON_INTEGER_VALIDATORS)
+    monthOfLastConsent = IntegerField('monthOfLastConsent',
+                                    [] + COMMON_INTEGER_VALIDATORS)
+    yearOfLastConsent = IntegerField('yearOfLastConsent',
+                                    [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1484,11 +1496,48 @@ class ProjectPatientForm(BaseForm):
                 self.siteGrpID.errors.append("ID not found")
                 hasErrors = True
 
-        if self.lastConsentedDate.data:
-            today = datetime.date.today()
-            if self.lastConsentedDate.data > today:
-                self.lastConsentedDate.errors.append("Last Consented day cannot be greater than today's date")
+        if self.dayOfLastConsent.data:
+            if self.monthOfLastConsent.data in [1, 3, 5, 7, 8, 10, 12]:
+                if self.dayOfLastConsent.data > 31:
+                    self.dayOfLastConsent.errors.append("There are only 31 days for this month")
+                    hasErrors = True
+            if self.monthOfLastConsent.data in [4, 6, 9, 11]:
+                if self.dayOfLastConsent.data > 30:
+                    self.dayOfLastConsent.errors.append("There are only 30 days for this month")
+                    hasErrors = True
+            if self.monthOfLastConsent.data in [2]:
+                if self.yearOfLastConsent.data % 4 == 0:
+                    if self.dayOfLastConsent.data > 29:
+                        self.dayOfLastConsent.errors.append("There are only 29 days for this month")
+                        hasErrors = True
+                else:
+                    if self.dayOfLastConsent.data > 28:
+                        self.dayOfLastConsent.errors.append("There are only 28 days for this month")
+                        hasErrors = True
+
+        if self.monthOfLastConsent.data:
+            if self.monthOfLastConsent.data > 12:
+                if self.monthOfLastConsent.data > 31:
+                    self.monthOfLastConsent.errors.append("There are only 12 months in a year")
+                    hasErrors = True
+
+        if self.yearOfLastConsent.data:
+            now = datetime.datetime.now()
+            if self.yearOfLastConsent.data > now.year:
+                self.yearOfLastConsent.errors.append("The year cannot be greater than {}.".format(now.year))
                 hasErrors = True
+            if self.yearOfLastConsent.data == now.year:
+                if self.monthOfLastConsent.data > now.month:
+                    self.monthOfLastConsent.errors.append(
+                        "The month cannot be greater than {} for the year {}.".format(now.month, now.year))
+                    hasErrors = True
+                if self.monthOfLastConsent.data == now.month:
+                    if self.dateOfLastConsent.data > now.date:
+                        self.dateOfLastConsent.errors.append(
+                            "The date cannot be greater than {} for the month {} and year {}.".format(now.date,
+                                                                                                      now.month,
+                                                                                                      now.year))
+                        hasErrors = True
 
         return not hasErrors
 

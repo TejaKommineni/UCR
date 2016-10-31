@@ -338,11 +338,22 @@
                         {% endif %}
                     </select>
                 </div>
-                <div class="col-md-2">
-                  <label for="date_lastConsentedDate">Last Consented Date</label>
-                  <input type="date" class="form-control" name="lastConsentedDate" id="date_lastConsentedDate" value="{{form.lastConsentedDate}}">
-                </div>
              </div>
+             <div class="row row-dark">
+                     <div class="col-md-2">
+                         <label for="date_lastConsentedDay">Last Consented Day</label>
+                         <input type="text" class="form-control" name="dayOfLastConsent" id="date_lastConsentedDay" value="{{form["dayOfLastConsent"]}}">
+                     </div>
+                     <div class="col-md-2">
+                         <label for="date_lastConsentedMonth">Last Consented Month</label>
+                         <input type="text" class="form-control" name="monthOfLastConsent" id="date_lastConsentedMonth" value="{{form["monthOfLastConsent"]}}">
+                     </div>
+                     <div class="col-md-2">
+                         <label for="date_lastConsentedYear">Last Consented Year</label>
+                         <input type="text" class="form-control" name="yearOfLastConsent" id="date_lastConsentedYear" value="{{form["yearOfLastConsent"]}}">
+                     </div>
+             </div>
+
 
             <!-- hidden fields -->
             <input type="hidden" class="form-control" name="ctcID" id="text_ctcID" value="{{projectPatient.ctcID}}">

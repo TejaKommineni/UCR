@@ -152,7 +152,7 @@ class ContactInfoStatusLUT(CustomModel):
 class ContactTypeLUT(CustomModel):
     __tablename__ = "ContactTypeLUT"
 
-    contactTypeID = db.Column('contactTypeLUTID', db.Integer, primary_key=True)
+    contactTypeID = db.Column('contactTypeLUTID', db.Integer, primary_key=True, autoincrement=False)
     contactCode = db.Column('contact_code', db.Integer, unique=True)
     contactDefinition = db.Column('contact_definition', db.String)
 
@@ -184,6 +184,8 @@ class CTC(CustomModel):
     dnc = db.Column('dnc', db.String)
     dncReason = db.Column('dnc_reason', db.String)
     recordID = db.Column('recordID', db.String)
+    ctcRecordNumber = db.Column('ctcRecordNumber', db.String)
+    dmsCtcID = db.Column('dmsCtcID', db.Integer)
 
     # Relationship
     # 1 - 1, one ctc per projectPatient
@@ -214,7 +216,7 @@ class CTCFacility(CustomModel):
 
 class Ethnicity(CustomModel):
     __tablename__ = "EthnicityLUT"
-    ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True)
+    ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True,autoincrement=False)
     ethnicity = db.Column('ethnicity', db.String)
 
 
@@ -292,7 +294,7 @@ class FacilityPhone(CustomModel):
 class FinalCode(CustomModel):
     __tablename__ = "FinalCode"
 
-    finalCodeID = db.Column('finalCodeID', db.Integer, primary_key=True)
+    finalCodeID = db.Column('finalCodeID', db.Integer, primary_key=True, autoincrement=False)
     finalCodeDefinition = db.Column('final_code_definition', db.String)
     finalCode = db.Column('final_code', db.Integer, unique=True)
 
@@ -470,7 +472,7 @@ class InformantPhone(CustomModel):
 class InformantRelationship(CustomModel):
     __tablename__ = 'InformantRelationship'
 
-    informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True)
+    informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True, autoincrement=False)
     informantRelationship = db.Column('informant_relationship', db.String)
 
 
@@ -630,7 +632,7 @@ class PatientProjectStatus(CustomModel):
 class PatientProjectStatusLUT(CustomModel):
     __tablename__ = 'PatientProjectStatusLUT'
 
-    patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer, primary_key=True)
+    patientProjectStatusTypeID = db.Column('patientProjectStatusLUTID', db.Integer, primary_key=True,autoincrement=False)
     statusDescription = db.Column('status_description', db.String)
 
     # Relationships
@@ -697,7 +699,7 @@ class PhysicianAddress(CustomModel):
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"), nullable=False)
-    contactInfoStatusID = db.Column('contactInfoSourceID', db.Integer,
+    contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     street = db.Column('physician_street', db.String)
     street2 = db.Column('physician_street2', db.String)
@@ -721,7 +723,7 @@ class PhysicianEmail(CustomModel):
     contactInfoSourceID = db.Column('contactInfoSourceLUTID', db.Integer,
                                     db.ForeignKey("ContactInfoSourceLUT.contactInfoSourceID"))
     physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"), nullable=False)
-    contactInfoStatusID = db.Column('contactInfoSourceID', db.Integer,
+    contactInfoStatusID = db.Column('contactInfoStatusID', db.Integer,
                                     db.ForeignKey("ContactInfoStatusLUT.contactInfoStatusID"))
     email = db.Column('email', db.String)
     emailStatusDate = db.Column('email_status_date', db.Date)
@@ -848,14 +850,17 @@ class Project(CustomModel):
     sop = db.Column('sop', db.String)
     ucrProposal = db.Column('UCR_proposal', db.String)
     budgetDoc = db.Column('budget_doc', db.String)
-    ucrFee = db.Column('UCR_fee', db.String)
-    ucrNoFee = db.Column('UCR_no_fee', db.String)
+    ucrFee = db.Column('UCR_fee', db.Float)
+    ucrNoFee = db.Column('UCR_no_fee', db.Integer)
     previousShortTitle = db.Column('previous_short_title', db.String)
     dateAdded = db.Column('date_added', db.Date)
     finalRecruitmentReport = db.Column('final_recruitment_report', db.String)
     ongoingContact = db.Column('ongoing_contact', db.Boolean)
     activityStartDate = db.Column('activity_start_date', db.Date)
     activityEndDate = db.Column('activity_end_date', db.Date)
+    numberAbstractions = db.Column('numberAbstractions', db.Integer)
+    sftpUsername = db.Column('sftp_username', db.String)
+    irbResearchManager = db.Column('rm_onirb', db.Integer)
 
     # M - 1, Many projects with same IRB Holder
     irbHolder = db.relationship("IRBHolderLUT", back_populates="projects")
@@ -1024,7 +1029,7 @@ class ProjectType(CustomModel):
 
 class Race(CustomModel):
     __tablename__ = "RaceLUT"
-    raceID = db.Column('raceID', db.Integer, primary_key=True)
+    raceID = db.Column('raceID', db.Integer, primary_key=True,autoincrement=False)
     race = db.Column('race', db.String)
 
 
@@ -1080,7 +1085,7 @@ class ReviewCommitteeLUT(CustomModel):
 
 class Sex(CustomModel):
     __tablename__ = "SexLUT"
-    sexID = db.Column('sexID', db.Integer, primary_key=True)
+    sexID = db.Column('sexID', db.Integer, primary_key=True, autoincrement=False)
     sex = db.Column('sex', db.String)
 
 class SiteGroup(CustomModel):
@@ -1233,5 +1238,5 @@ class User(CustomModel):
 
 class VitalStatus(CustomModel):
     __tablename__ = "VitalStatusLUT"
-    vitalStatusID = db.Column('vitalStatusID', db.Integer, primary_key=True)
+    vitalStatusID = db.Column('vitalStatusID', db.Integer, primary_key=True,autoincrement=False)
     vitalStatus = db.Column('vitalStatus', db.String)
