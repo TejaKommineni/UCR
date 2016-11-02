@@ -579,7 +579,7 @@ def get_project_patients():
 
 def query_project_patients(firstName=None, lastName=None,
                            finalCodeID=None, batch=None,
-                           siteGrp=None, projectID=None):
+                           siteGrpID=None, projectID=None):
     filters = []
     if firstName:
         filters.append(Patient.firstName.like('%{}%'.format(firstName)))
@@ -589,8 +589,8 @@ def query_project_patients(firstName=None, lastName=None,
         filters.append(ProjectPatient.finalCodeID == finalCodeID)
     if batch:
         filters.append(ProjectPatient.batch == batch)
-    if siteGrp:
-        filters.append(ProjectPatient.siteGrp == siteGrp)
+    if siteGrpID:
+        filters.append(ProjectPatient.siteGrpID == siteGrpID)
     if projectID:
         filters.append(Project.projectID == projectID)
     return db.session.query(ProjectPatient).outerjoin(Project).outerjoin(CTC).outerjoin(Patient).filter(

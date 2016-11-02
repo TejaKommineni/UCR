@@ -184,8 +184,8 @@ class CTC(CustomModel):
     dnc = db.Column('dnc', db.String)
     dncReason = db.Column('dnc_reason', db.String)
     recordID = db.Column('recordID', db.String)
-    ctcRecordNumber = db.Column('ctcRecordNumber', db.String)
-    dmsCtcID = db.Column('dmsCtcID', db.Integer)
+    ctcRecordNumber = db.Column('ctc_trn', db.String)
+    dmsCtcID = db.Column('dms_ctc_id', db.Integer)
 
     # Relationship
     # 1 - 1, one ctc per projectPatient
@@ -851,7 +851,7 @@ class Project(CustomModel):
     ucrProposal = db.Column('UCR_proposal', db.String)
     budgetDoc = db.Column('budget_doc', db.String)
     ucrFee = db.Column('UCR_fee', db.Float)
-    ucrNoFee = db.Column('UCR_no_fee', db.Integer)
+    ucrNoFee = db.Column('UCR_no_fee', db.Boolean)
     previousShortTitle = db.Column('previous_short_title', db.String)
     dateAdded = db.Column('date_added', db.Date)
     finalRecruitmentReport = db.Column('final_recruitment_report', db.String)

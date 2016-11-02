@@ -35,8 +35,17 @@
                   <input type="text" class="form-control" name="batch" id="text_batch" value = "{{form.queryParams.batch}}">
                 </div>
                 <div class = "col-md-1">
-                  <label for="text_siteGrp">Site Group</label>
-                  <input type="text" class="form-control" name="siteGrp" id="text_siteGrp" value = "{{form.queryParams.siteGrp}}">
+                    <label for="select_siteGroup">Site Group</label>
+                    <select type="text" class="form-control" name="siteGrpID" id="select_SiteGroup">
+                        <option value=""></option>
+                        {% for siteGroup in form["siteGroups"] %}
+                        {% if siteGroup.siteID == form.queryParams.siteGrpID %}
+                        <option value="{{siteGroup.siteID}}" selected="selected">{{siteGroup.site}}</option>
+                        {% else %}
+                        <option value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-2">
                   <label for="select_projectID">Project</label>
@@ -79,7 +88,7 @@
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}} - {{projectPatient["finalCode"].finalCodeDefinition}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"]}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"]}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"].site}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

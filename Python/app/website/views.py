@@ -4706,7 +4706,7 @@ def get_project_patient(participantID=None):
             firstName = None
             lastName = None
             batch = None
-            siteGrp = None
+            siteGrpID = None
             projectID = None
             finalCodeID = None
             form["queryParams"] = {}
@@ -4733,10 +4733,11 @@ def get_project_patient(participantID=None):
                                                            lastName=lastName,
                                                            finalCodeID=finalCodeID,
                                                            batch=batch,
-                                                           siteGrp=siteGrp,
+                                                           siteGrpID=siteGrpID,
                                                            projectID=projectID)
             form["projects"] = query.get_projects()
             form["finalCodes"] = query.get_final_codes()
+            form["siteGroups"] = query.get_sites()
             return render_template("project_patient_table.html", form=form, projectPatients=projectPatients)
         else:
             projectPatient = query.get_project_patient(participantID)

@@ -82,9 +82,20 @@
                   <label for="text_finalRecruitmentReport">Final Recruitment Report</label>
                   <input type="text" class="form-control" name="finalRecruitmentReport" id="text_finalRecruitmentReport" value="{{form["project"]["finalRecruitmentReport"]}}">
                 </div>
-                <div class="col-md-2"> 
-                  <label for="text_ucrNoFee">UCR No Fee</label>
-                  <input type="text" class="form-control" name="ucrNoFee" id="text_ucrNoFee" value="{{form["project"]["ucrNoFee"]}}">
+                <div class = "col-md-2">
+                  <label for="select_ucrNoFee">UCR No Fee</label>
+                    <select type="text" class="form-control" name="ongoingContact" id="select_ucrNoFee">
+                      {% if form.project.ucrNoFee %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not form.project.ucrNoFee %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
                 </div>
               </div>
               <div class="row">
