@@ -4211,16 +4211,19 @@ def populate_db():
     db.session.add_all(states)
     db.session.add_all(staff)
 
-    # # Mostly LUTS
-    db.session.add_all(staffRoles)
+	# Basic LUTS to initialize app
     db.session.add_all(sexes)
     db.session.add_all(ethnicities)
     db.session.add_all(races)
     db.session.add_all(informantRelationships)
-    db.session.add_all(states)
-    db.session.add_all(finalCodes)
-    db.session.add_all(abstractStatuses)
     db.session.add_all(vitals)
+    db.session.add_all(contacts)
+    db.session.add_all(inactives)
+
+    # Mostly LUTS
+    db.session.add_all(finalCodes)
+    db.session.add_all(staffRoles)
+    db.session.add_all(abstractStatuses)
     db.session.add_all(contacts)
     db.session.add_all(inactives)
     db.session.add_all(ucrReportTypes)
