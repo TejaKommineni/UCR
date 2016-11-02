@@ -3570,6 +3570,29 @@ def create_project_patients():
     )
     return pps
 
+def create_project_sitegroups():
+    project_sites = []
+    project_sites.append(models.ProjectSiteGroups(
+        projectID=1,
+        siteGroupID=1,
+        siteGroupDate= datetime(2016, 2, 2)
+    ))
+    project_sites.append(models.ProjectSiteGroups(
+        projectID=2,
+        siteGroupID=2,
+        siteGroupDate=datetime(2016, 1, 2)
+    ))
+    project_sites.append(models.ProjectSiteGroups(
+        projectID=3,
+        siteGroupID=1,
+        siteGroupDate=datetime(2015, 2, 2)
+    ))
+    project_sites.append(models.ProjectSiteGroups(
+        projectID=3,
+        siteGroupID=3,
+        siteGroupDate=datetime(2014, 12, 2)
+    ))
+    return project_sites
 
 def create_tracings():
     tracings = []
@@ -4143,6 +4166,7 @@ def populate_db():
     contactTypes = create_contact_types()
     giftCards = create_gift_cards()
     siteGroups= create_sitegroup()
+    projectSiteGroups=create_project_sitegroups()
 
     projects = create_projects()
     budgets = create_budgets()
@@ -4219,6 +4243,7 @@ def populate_db():
     db.session.add_all(contactTypes)
     db.session.add_all(giftCards)
     db.session.add_all(siteGroups)
+    db.session.add_all(projectSiteGroups)
 
     # Main Tables
     db.session.add_all(projects)

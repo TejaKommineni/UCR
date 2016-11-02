@@ -4580,6 +4580,7 @@ def get_project(projectID=None):
                 form["inactives"] = query.get_inactive_enums()
                 form["contacts"] = query.get_contact_enums()
                 form["staffRoles"] = query.get_staff_roles()
+                form["siteGroups"]=query.get_sites()
                 return render_template("project_form.html", form=form)
             else:
                 return item_not_found("ProjectID {} not found".format(projectID))
@@ -5631,6 +5632,98 @@ def delete_review_committee_list(reviewCommitteeID):
     except Exception as e:
         return internal_error(e)
 
+
+##############################################################################
+    # Site Groups
+##############################################################################
+@website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
+def get_site_groups(projectSiteGroupID=None):
+    try:
+        if projectSiteGroupID is None:
+            return jsonify(projectSiteGroupID=[i.dict() for i in query.get_project_site_groups()])
+        else:
+            siteGroups = query.get_project_site_group(projectSiteGroupID)
+            if siteGroups is not None:
+                form = {}
+                form["staff"] = query.get_staffs()
+                form["siteGroups"] = query.get_sites()
+                form["projects"] = query.get_projects()
+                return render_template("site_groups_form.html", form=form, siteGroups=siteGroups)
+            else:
+                return item_not_found("SiteGroupID {} not found".format(projectSiteGroupID))
+    except Exception as e:
+        return internal_error(e)
+
+# @website.route('/sitegroups/', methods = ['POST'])
+@website.route('/sitegroups/', methods=['POST'])
+@website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
+def create_site_groups(projectSiteGroupID=None):
+    try:
+        if projectSiteGroupID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_site_group(projectSiteGroupID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_site_groups(projectSiteGroupID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.SiteGroupsForm(request.form)
+            if form.validate():
+                projectSiteGroups = models.ProjectSiteGroups(
+                    projectID=form.projectID.data,
+                    siteGroupID=form.siteGroupID.data,
+                    siteGroupDate=form.siteGroupDate.data
+                )
+                query.add(projectSiteGroups)
+                flash("Created Project Site Group")
+                return redirect_back('sitegroups/{}/'.format(projectSiteGroupID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
+def update_site_group(projectSiteGroupID):
+    try:
+        projectSiteGroup = query.get_project_site_group(projectSiteGroupID)
+        if projectSiteGroup is not None:
+            form = forms.SiteGroupsForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == projectSiteGroup.versionID:
+                    projectSiteGroup.projectID = form.projectID.data
+                    projectSiteGroup.siteGroupID = form.siteGroupID.data
+                    projectSiteGroup.siteGroupDate = form.siteGroupDate.data
+                    query.commit()
+                    flash("Updated Site Groups")
+                    return redirect_back('sitegroups/{}/'.format(projectSiteGroup.projectSiteGroupID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("ProjectSiteGroupID {} not found".format(projectSiteGroupID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_site_groups(projectSiteGroupID):
+    try:
+        projectSiteGroup = query.get_project_site_group(projectSiteGroupID)
+        if projectSiteGroup is not None:
+            deps = get_dependencies(projectSiteGroup)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(projectSiteGroup)
+                return item_deleted("ProjectSiteGroupID {} deleted".format(projectSiteGroupID))
+        else:
+            return item_not_found("ProjectSiteGroupID {} not found".format(projectSiteGroupID))
+    except Exception as e:
+        return internal_error(e)
 
 ##############################################################################
 # Staff

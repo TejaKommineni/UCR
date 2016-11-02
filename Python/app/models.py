@@ -886,7 +886,7 @@ class Project(CustomModel):
     projectStaff = db.relationship("ProjectStaff", back_populates="project")
     # M - 2, many project patients can have the same project
     projectPatients = db.relationship("ProjectPatient", back_populates="project")
-
+    projectSiteGroups = db.relationship("ProjectSiteGroups",back_populates="project")
 
 class ProjectPatient(CustomModel):
     __tablename__ = 'ProjectPatient'
@@ -957,6 +957,18 @@ class ProjectPatient(CustomModel):
     surveyToResearcherStaff = db.relationship("Staff", foreign_keys=[surveyToResearcherStaffID])
     vitalStatus = db.relationship('VitalStatus')
     siteGrp=db.relationship('SiteGroup')
+
+class ProjectSiteGroups(CustomModel):
+    __tablename__ = 'ProjectSiteGroups'
+    projectSiteGroupID= db.Column('projectSiteGroupID', db.Integer, primary_key=True)
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'),nullable=False)
+    siteGroupID = db.Column('siteGroupID ', db.Integer, db.ForeignKey('SiteGroupLUT.siteID'),nullable=False)
+    siteGroupDate = db.Column('siteGroupDate', db.Date)
+
+    projectSiteGroup = db.relationship("SiteGroup", foreign_keys=[siteGroupID],
+                                    back_populates="projectSiteGroups")
+
+    project = db.relationship("Project", foreign_keys=[projectID], back_populates="projectSiteGroups")
 
 class ProjectStaff(CustomModel):
     __tablename__ = 'ProjectStaff'
@@ -1092,6 +1104,7 @@ class SiteGroup(CustomModel):
     __tablename__ = "SiteGroupLUT"
     siteID = db.Column('siteID', db.Integer, primary_key=True)
     site = db.Column('site', db.String)
+    projectSiteGroups = db.relationship("ProjectSiteGroups", back_populates="projectSiteGroup")
 
 class Staff(CustomModel):
     __tablename__ = 'Staff'

@@ -177,6 +177,7 @@
         <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
         <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
         <li><a href="#ucrReportTab" role="tab" data-toggle="tab">UCR Reports</a></li>
+        <li><a href="#siteGroupsTab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
         {% endif %}
     </ul>
     <div class="tab-content">
@@ -572,6 +573,42 @@
                 </div>
             </div>
         </div>
+        <div class = "tab-pane" id="siteGroupsTab">
+            <ul class ="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#siteGroupsTableab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
+                <li><a href="#newSiteGroups" role="tab" data-toggle="tab">New SiteGroup</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="siteGroupsTableab">
+                    <form class="formOverride" id="siteGroups">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Site Group Type</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for siteGroup in form.project.projectSiteGroups %}
+                                    <tr>
+                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site}}</a></td>
+                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.siteGroupDate}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="newSiteGroups">
+                {% set siteGroups = none %}
+                {% include 'helper_forms/site_groups_form.html' %}
+                </div>
+            </div>
+        </div>
+
+
         {% endif %}
     </div>
 

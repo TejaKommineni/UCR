@@ -650,10 +650,14 @@ def get_project_status_lut(id):
 def get_project_types():
     return db.session.query(ProjectType).all()
 
-
 def get_project_type(id):
     return db.session.query(ProjectType).filter_by(projectTypeID=id).first()
 
+def get_project_site_groups():
+    return db.session.query(ProjectSiteGroups).all()
+
+def get_project_site_group(id):
+    return db.session.query(ProjectSiteGroups).filter_by(projectSiteGroupID=id).first()
 
 def get_race(id):
     return db.session.query(Race).filter_by(raceID=id).first()

@@ -1707,6 +1707,34 @@ class ReviewCommitteeLUTForm(BaseForm):
                                              [] + COMMON_STRING_VALIDATORS)
 
 
+class SiteGroupsForm(BaseForm):
+    projectSiteGroupID = IntegerField('projectSiteGroupID',
+                                       [] + COMMON_INTEGER_VALIDATORS)
+    projectID = IntegerField('projectID',
+                             [validators.InputRequired()])
+    siteGroupID = IntegerField('siteGroupID',
+                           [validators.InputRequired()])
+    siteGroupDate = DateField('siteGroupDate',
+                           [] + COMMON_DATE_VALIDATORS,
+                           format=DATE_FORMAT)
+
+
+    def validate(self):
+        hasErrors = not Form.validate(self)
+
+        # Check to make sure the project type FK exists
+        project = query.get_project_type(self.projectID.data)
+        if project is None:
+            self.projectID.errors.append("ID not found")
+            hasErrors = True
+
+        site = query.get_site(self.siteGroupID.data)
+        if site is None:
+            self.siteGroupID.errors.append("ID not found")
+            hasErrors = True
+        return not hasErrors
+
+
 class StaffForm(BaseForm):
     firstName = StringField('firstName',
                             [] + COMMON_STRING_VALIDATORS)
