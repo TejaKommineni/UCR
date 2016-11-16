@@ -2,6 +2,9 @@ from wtforms import Form, BooleanField, StringField, IntegerField, DateField, Fl
 from . import query
 import datetime
 
+# Monkey Patch the values for False so that "False" and "false" are both considered false
+BooleanField.false_values={False,"False","false",""}
+
 COMMON_STRING_VALIDATORS = [
     validators.optional(),
     validators.Length(min=1)]
