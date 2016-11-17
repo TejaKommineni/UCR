@@ -1690,8 +1690,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="84102",
         stateID=1,
-        ucrRoleID=2
+        ucrRoleID=2,
+        hci=True,
+        ucr=True,
+        external=True
     ))
     staff.append(models.Staff(
         userID=2,
@@ -1707,8 +1711,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="84100",
         stateID=2,
-        ucrRoleID=2
+        ucrRoleID=2,
+        hci=False,
+        ucr=True,
+        external=True
     ))
     staff.append(models.Staff(
         userID=3,
@@ -1724,8 +1732,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="507208",
         stateID=2,
-        ucrRoleID=4
+        ucrRoleID=4,
+        hci=True,
+        ucr=True,
+        external=False
     ))
     staff.append(models.Staff(
         userID=4,
@@ -1741,8 +1753,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="ch102",
         stateID=2,
-        ucrRoleID=5
+        ucrRoleID=5,
+        hci=True,
+        ucr=False,
+        external=True
     ))
     staff.append(models.Staff(
         userID=5,
@@ -1758,8 +1774,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="84tel",
         stateID=2,
-        ucrRoleID=5
+        ucrRoleID=5,
+        hci=True,
+        ucr=False,
+        external=False
     ))
     staff.append(models.Staff(
         userID=6,
@@ -1775,8 +1795,12 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="0000",
         stateID=2,
-        ucrRoleID=1
+        ucrRoleID=1,
+        hci=False,
+        ucr=False,
+        external=True
     ))
     staff.append(models.Staff(
         userID=7,
@@ -1792,8 +1816,33 @@ def create_staff():
         credentials="credentials",
         street="street",
         city="city",
+        zipcode="driveme",
         stateID=2,
-        ucrRoleID=1
+        ucrRoleID=1,
+        hci=True,
+        ucr=True,
+        external=True
+    ))
+    staff.append(models.Staff(
+        firstName="kirk",
+        lastName="webb",
+        middleName="",
+        email="kirk@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institution="institution",
+        department="department",
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        zipcode="cozy45",
+        stateID=2,
+        ucrRoleID=1,
+        hci=True,
+        ucr=True,
+        external=False
+
     ))
     return staff
 
@@ -2077,28 +2126,33 @@ def create_ucr_reports():
         reportTypeID=1,
         reportSubmitted=datetime(2016, 2, 2),
         reportDue=datetime(2016, 2, 2),
-        reportDoc="N:/FakeLocation/FakeDoc1.pdf"
+        reportDoc="N:/FakeLocation/FakeDoc1.pdf",
+        statusNotes="test notes"
     ))
     ucr_reports.append(models.UCRReport(
         projectID=2,
         reportTypeID=1,
         reportSubmitted=datetime(2016, 2, 2),
         reportDue=datetime(2016, 2, 2),
-        reportDoc="N:/FakeLocation/FakeDoc2.pdf"
+        reportDoc="N:/FakeLocation/FakeDoc2.pdf",
+        statusNotes="test notes 2"
+
     ))
     ucr_reports.append(models.UCRReport(
         projectID=3,
         reportTypeID=1,
         reportSubmitted=datetime(2016, 2, 2),
         reportDue=datetime(2016, 2, 2),
-        reportDoc="N:/FakeLocation/FakeDoc3.pdf"
+        reportDoc="N:/FakeLocation/FakeDoc3.pdf",
+        statusNotes="test notes 3"
     ))
     ucr_reports.append(models.UCRReport(
         projectID=4,
         reportTypeID=1,
         reportSubmitted=datetime(2016, 2, 2),
         reportDue=datetime(2016, 2, 2),
-        reportDoc="N:/FakeLocation/FakeDoc4.pdf"
+        reportDoc="N:/FakeLocation/FakeDoc4.pdf",
+        statusNotes="test notes 4"
     ))
     ucr_reports.append(models.UCRReport(
         projectID=5,

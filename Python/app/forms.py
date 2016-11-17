@@ -1760,13 +1760,20 @@ class StaffForm(BaseForm):
                          [] + COMMON_STRING_VALIDATORS)
     city = StringField('city',
                        [] + COMMON_STRING_VALIDATORS)
+    zipcode = StringField('zipcode',
+                       [] + COMMON_STRING_VALIDATORS)
     stateID = IntegerField('stateID',
                            [] + COMMON_INTEGER_VALIDATORS)
     ucrRoleID = IntegerField('ucrRoleID',
                              [] + COMMON_INTEGER_VALIDATORS)
     userID = IntegerField('userID',
                           [] + COMMON_INTEGER_VALIDATORS)
-
+    hci = BooleanField('hci_test',
+                           [] + COMMON_BOOL_VALIDATORS)
+    ucr = BooleanField('ucr_test',
+                       [] + COMMON_BOOL_VALIDATORS)
+    external = BooleanField('external_test',
+                       [] + COMMON_BOOL_VALIDATORS)
     def validate(self):
         hasErrors = not Form.validate(self)
 
@@ -1881,6 +1888,8 @@ class UCRReportForm(BaseForm):
                           [] + COMMON_DATE_VALIDATORS,
                           format=DATE_FORMAT)
     reportDoc = StringField('reportDoc',
+                            [] + COMMON_STRING_VALIDATORS)
+    statusNotes = StringField('statusNotes',
                             [] + COMMON_STRING_VALIDATORS)
 
     def validate(self):

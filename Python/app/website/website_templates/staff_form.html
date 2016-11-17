@@ -78,6 +78,11 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class = "col-md-2">
+                  <label for="text_zipcode">Zipcode</label>
+                  <input type="text" class="form-control" name="zipcode" id="text_zipcode" value="{{staff.zipcode}}">
+                </div>
+
               </div>
               <div class="row">
                 <div class = "col-md-2">
@@ -93,9 +98,55 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class = "col-md-2">
+                  <label for="select_hci">Hci</label>
+                  <select type="text" class="form-control" name="hci_test" id="select_hci">
+                      {% if staff.hci %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not staff.hci %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_ucr">Ucr</label>
+                  <select type="text" class="form-control" name="ucr_test" id="select_ucr">
+                      {% if staff.ucr %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not staff.ucr %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class = "col-md-2">
+                  <label for="select_external">External</label>
+                  <select type="text" class="form-control" name="external_test" id="select_external">
+                      {% if staff.external %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not staff.external %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
               </div>
             
-            <div class="form-group">
+             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_createdDate">Created</label>

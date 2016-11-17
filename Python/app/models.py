@@ -1122,9 +1122,13 @@ class Staff(CustomModel):
     credentials = db.Column('credentials', db.String)
     street = db.Column('street', db.String)
     city = db.Column('city', db.String)
+    zipcode = db.Column('zipcode', db.String)
     stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
     ucrRoleID = db.Column('UCR_role', db.Integer, db.ForeignKey("UCRRole.ucrRoleID"))
-    userID = db.Column("user_id", db.Integer, db.ForeignKey("User.userID"), nullable=False)
+    userID = db.Column("user_id", db.Integer, db.ForeignKey("User.userID"))
+    hci = db.Column('hci', db.Boolean)
+    ucr = db.Column('ucr', db.Boolean)
+    external = db.Column('external', db.Boolean)
 
     # Relationships
     # 1 - M, one staff with many statuses
@@ -1218,6 +1222,7 @@ class UCRReport(CustomModel):
     reportSubmitted = db.Column('report_submitted', db.Date)
     reportDue = db.Column('report_due', db.Date)
     reportDoc = db.Column('report_doc', db.String)
+    statusNotes = db.Column('statusNotes', db.String)
 
     # Relationships
     # 1 - M, one project, many reports

@@ -5820,8 +5820,12 @@ def update_staff(staffID):
                     staff.credentials = form.credentials.data
                     staff.street = form.street.data
                     staff.city = form.city.data
+                    staff.zipcode=form.zipcode.data
                     staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data
+                    staff.hci = form.hci.data
+                    staff.ucr = form.ucr.data
+                    staff.external = form.external.data
                     # Don't allow updates to userID
                     #staff.userID = form.userID.data
                     query.commit()
@@ -5864,10 +5868,14 @@ def create_staff(staffID=None):
                     position=form.position.data,
                     credentials=form.credentials.data,
                     street=form.street.data,
+                    zipcode=form.zipcode.data,
                     city=form.city.data,
                     stateID=form.stateID.data,
                     ucrRoleID=form.ucrRoleID.data,
-                    userID=form.userID.data
+                    userID=form.userID.data,
+                    hci=form.hci.data,
+                    ucr=form.ucr.data,
+                    external=form.external.data
                 )
                 query.add(staff)
                 flash("Created Staff")
@@ -6322,6 +6330,7 @@ def update_ucr_report(ucrReportID):
                     ucr.reportSubmitted = form.reportSubmitted.data
                     ucr.reportDue = form.reportDue.data
                     ucr.reportDoc = form.reportDoc.data
+                    ucr.statusNotes=form.statusNotes.data
                     query.commit()
                     flash("Updated UCR Report")
                     return redirect_back("ucrreports/{}/".format(ucrReportID))
@@ -6355,7 +6364,8 @@ def create_ucr_report(ucrReportID=None):
                     reportTypeID=form.reportTypeID.data,
                     reportSubmitted=form.reportSubmitted.data,
                     reportDue=form.reportDue.data,
-                    reportDoc=form.reportDoc.data
+                    reportDoc=form.reportDoc.data,
+                    statusNotes=form.statusNotes.data
                 )
                 query.add(ucr)
                 flash("Created UCR Report")
