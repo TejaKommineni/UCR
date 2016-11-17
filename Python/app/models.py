@@ -178,7 +178,7 @@ class CTC(CustomModel):
     dxStreet1 = db.Column('dx_street1', db.String)
     dxStreet2 = db.Column('dx_street2', db.String)
     dxCity = db.Column('dx_city', db.String)
-    dxStateID = db.Column('dx_stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    dxStateID = db.Column('dx_stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     dxZip = db.Column('dx_zip', db.String)
     dxCounty = db.Column('dx_county', db.String)
     dnc = db.Column('dnc', db.String)
@@ -212,6 +212,13 @@ class CTCFacility(CustomModel):
     facility = db.relationship("Facility", back_populates="ctcFacilities")
     # M - 1,many ctc to one ctcfacility
     ctc = db.relationship("CTC", back_populates="ctcFacilities")
+
+
+class Department(CustomModel):
+    __tablename__ = 'DepartmentLUT'
+
+    departmentID = db.Column('departmentLUTID', db.Integer, primary_key=True)
+    department = db.Column('department', db.String)
 
 
 class Ethnicity(CustomModel):
@@ -257,7 +264,7 @@ class FacilityAddress(CustomModel):
     street = db.Column('street', db.String)
     street2 = db.Column('street2', db.String)
     city = db.Column('city', db.String)
-    stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    stateID = db.Column('stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip', db.String)
     addressStatusDate = db.Column('facility_address_status_date', db.Date)
 
@@ -290,6 +297,11 @@ class FacilityPhone(CustomModel):
     contactInfoSourceLUT = db.relationship("ContactInfoSourceLUT")
     phoneType = db.relationship("PhoneTypeLUT")
 
+class FieldDivision(CustomModel):
+    __tablename__ = 'FieldDivisionLUT'
+
+    fieldDivisionID = db.Column('fieldDivisionLUTID', db.Integer, primary_key=True)
+    fieldDivision = db.Column('fieldDivision', db.String)
 
 class FinalCode(CustomModel):
     __tablename__ = "FinalCode"
@@ -314,9 +326,10 @@ class Funding(CustomModel):
     fundingNumber = db.Column('funding_number', db.String)
     grantTitle = db.Column('grant_title', db.String)
     dateStatus = db.Column('date_status', db.Date)
-    grantPi = db.Column('grant_pi', db.Integer)
+    grantPi = db.Column('grant_pi', db.Integer, db.ForeignKey('Staff.staffID'))
     primaryChartfield = db.Column('primary_chartfield', db.String)
     secondaryChartfield = db.Column('secondary_chartfield', db.String)
+    fundingNotes = db.Column('fundingNotes', db.String)
 
     # Relationships
     # M - 1, many fundings with the same source
@@ -381,12 +394,6 @@ class IRBHolderLUT(CustomModel):
     projects = db.relationship("Project", back_populates="irbHolder")
 
 
-class Inactive(CustomModel):
-    __tablename__ = "InactiveLUT"
-    inactiveID = db.Column('inactiveID', db.Integer, primary_key=True)
-    inactive = db.Column('inactive', db.String)
-
-
 class Incentive(CustomModel):
     __tablename__ = "Incentive"
 
@@ -436,7 +443,7 @@ class InformantAddress(CustomModel):
     street = db.Column('street', db.String)
     street2 = db.Column('street2', db.String)
     city = db.Column('city', db.String)
-    stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    stateID = db.Column('stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip', db.String)
     addressStatusDate = db.Column('address_status_date', db.Date)
 
@@ -474,6 +481,12 @@ class InformantRelationship(CustomModel):
 
     informantRelationshipID = db.Column('informantRelationshipID', db.Integer, primary_key=True, autoincrement=False)
     informantRelationship = db.Column('informant_relationship', db.String)
+
+class Institution(CustomModel):
+    __tablename__ = 'InstitutionLUT'
+
+    institutionID = db.Column('institutionLUTID', db.Integer, primary_key=True)
+    institution = db.Column('institution', db.String)
 
 
 class Log(CustomModel):
@@ -561,7 +574,7 @@ class PatientAddress(CustomModel):
     street = db.Column('street', db.String)
     street2 = db.Column('street2', db.String)
     city = db.Column('city', db.String)
-    stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    stateID = db.Column('stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('zip', db.String)
     addressStatusDate = db.Column('address_status_date', db.Date)
 
@@ -704,7 +717,7 @@ class PhysicianAddress(CustomModel):
     street = db.Column('physician_street', db.String)
     street2 = db.Column('physician_street2', db.String)
     city = db.Column('physician_city', db.String)
-    stateID = db.Column('physician_stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    stateID = db.Column('physician_stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     zip = db.Column('physician_zip', db.String)
     addressStatusDate = db.Column('physician_address_status_date', db.Date)
 
@@ -805,7 +818,7 @@ class PreApplication(CustomModel):
     __tablename__ = 'PreApplication'
 
     preApplicationID = db.Column('preApplication', db.Integer, primary_key=True)
-    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
+    projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'))
     piFirstName = db.Column('pi_first_name', db.String)
     piLastName = db.Column('pi_last_name', db.String)
     piPhone = db.Column('pi_phone', db.String)
@@ -814,10 +827,10 @@ class PreApplication(CustomModel):
     contactLastName = db.Column('contact_last_name', db.String)
     contactPhone = db.Column('contact_phone', db.String)
     contactEmail = db.Column('contact_email', db.String)
-    institution = db.Column('institution', db.String)
-    institution2 = db.Column('institution2', db.String)
+    institution = db.Column('institution', db.Integer, db.ForeignKey('InstitutionLUT.institutionLUTID'))
+    institution2 = db.Column('institution2', db.Integer, db.ForeignKey('InstitutionLUT.institutionLUTID'))
     uid = db.Column('uid', db.String)
-    udoh = db.Column('udoh', db.Integer)
+    udoh = db.Column('udoh', db.String)
     projectTitle = db.Column('project_title', db.String)
     purpose = db.Column('purpose', db.String)
     irb0 = db.Column('irb0', db.Boolean)
@@ -836,7 +849,8 @@ class PreApplication(CustomModel):
     # Relationships
     # 1-1 one project, one preApp
     project = db.relationship('Project', back_populates='preApplication')
-
+    institute=db.relationship('Institution', foreign_keys=[institution])
+    institute2=db.relationship('Institution', foreign_keys=[institution2])
 
 class Project(CustomModel):
     __tablename__ = 'Project'
@@ -860,7 +874,7 @@ class Project(CustomModel):
     activityEndDate = db.Column('activity_end_date', db.Date)
     numberAbstractions = db.Column('numberAbstractions', db.Integer)
     sftpUsername = db.Column('sftp_username', db.String)
-    irbResearchManager = db.Column('rm_onirb', db.Integer)
+    irbResearchManager = db.Column('rm_onirb', db.Boolean)
 
     # M - 1, Many projects with same IRB Holder
     irbHolder = db.relationship("IRBHolderLUT", back_populates="projects")
@@ -979,11 +993,9 @@ class ProjectStaff(CustomModel):
     staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     datePledge = db.Column('date_pledge', db.Date)
     dateRevoked = db.Column('date_revoked', db.Date)
-    contactID = db.Column('contactID', db.Integer, db.ForeignKey('ContactsLUT.contactID'))
-    inactiveID = db.Column('inactiveID', db.Integer, db.ForeignKey('InactiveLUT.inactiveID'))
-
-    contact = db.relationship("Contacts")
-    inactive = db.relationship("Inactive")
+    contactID = db.Column('contact', db.Integer)
+    inactive = db.Column('inactive', db.Boolean)
+    primaryPI = db.Column('primaryPI', db.Boolean)
     # Relationships
     # M - 1, Many projectStaff with the same role
     staffRole = db.relationship("StaffRoleLUT", back_populates="projectStaff")
@@ -1116,19 +1128,21 @@ class Staff(CustomModel):
     email = db.Column('email', db.String)
     phoneNumber = db.Column('phone', db.String)
     phoneComment = db.Column('phone_comment', db.String)
-    institution = db.Column('institution', db.String)
-    department = db.Column('department', db.String)
+    institutionID = db.Column('institutionLUTID', db.Integer,  db.ForeignKey("InstitutionLUT.institutionLUTID"))
+    departmentID = db.Column('departmentLUTID', db.Integer,  db.ForeignKey("DepartmentLUT.departmentLUTID"))
     position = db.Column('position', db.String)
     credentials = db.Column('credentials', db.String)
     street = db.Column('street', db.String)
     city = db.Column('city', db.String)
     zipcode = db.Column('zipcode', db.String)
-    stateID = db.Column('stateID', db.Integer, db.ForeignKey("StateLUT.stateID"))
+    stateID = db.Column('stateID', db.String(length=2), db.ForeignKey("StateLUT.stateID"))
     ucrRoleID = db.Column('UCR_role', db.Integer, db.ForeignKey("UCRRole.ucrRoleID"))
     userID = db.Column("user_id", db.Integer, db.ForeignKey("User.userID"))
     hci = db.Column('hci', db.Boolean)
     ucr = db.Column('ucr', db.Boolean)
     external = db.Column('external', db.Boolean)
+    fieldDivisionID = db.Column('fieldDivisionLUTID', db.Integer, db.ForeignKey("FieldDivisionLUT.fieldDivisionLUTID"))
+
 
     # Relationships
     # 1 - M, one staff with many statuses
@@ -1147,6 +1161,9 @@ class Staff(CustomModel):
     state = db.relationship("State")
     ucrRole = db.relationship("UCRRole", back_populates="staff")
     user = db.relationship("User", back_populates="staff")
+    institution = db.relationship("Institution")
+    department = db.relationship("Department")
+    fieldDivision = db.relationship("FieldDivision")
 
 
 class StaffRoleLUT(CustomModel):
@@ -1180,7 +1197,7 @@ class StaffTraining(CustomModel):
 
 class State(CustomModel):
     __tablename__ = "StateLUT"
-    stateID = db.Column('stateID', db.Integer, primary_key=True)
+    stateID = db.Column('stateID', db.String(length=2), primary_key=True, autoincrement=False)
     state = db.Column('state', db.String)
 
 

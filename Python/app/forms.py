@@ -2,6 +2,9 @@ from wtforms import Form, BooleanField, StringField, IntegerField, DateField, Fl
 from . import query
 import datetime
 
+# Monkey Patch the values for False so that "False" and "false" are both considered false
+BooleanField.false_values={False,"False","false",""}
+
 COMMON_STRING_VALIDATORS = [
     validators.optional(),
     validators.Length(min=1)]
@@ -308,8 +311,8 @@ class CTCForm(BaseForm):
                             [] + COMMON_STRING_VALIDATORS)
     dxCity = StringField('dxCity',
                          [] + COMMON_STRING_VALIDATORS)
-    dxStateID = IntegerField('dxStateID',
-                             [] + COMMON_INTEGER_VALIDATORS)
+    dxStateID = StringField('dxStateID',
+                             [] + COMMON_STRING_VALIDATORS)
     dxZip = StringField('dxZip',
                          [] + COMMON_STRING_VALIDATORS)
     dxCounty = StringField('dxCounty',
@@ -376,8 +379,8 @@ class FacilityAddressForm(BaseForm):
                           [] + COMMON_STRING_VALIDATORS)
     city = StringField('city',
                        [] + COMMON_STRING_VALIDATORS)
-    stateID = IntegerField('stateID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    stateID = StringField('stateID',
+                           [] + COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
                       [] + COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -488,6 +491,9 @@ class FundingForm(BaseForm):
                                     [] + COMMON_STRING_VALIDATORS)
     secondaryChartfield = StringField('secondaryChartfield',
                                       [] + COMMON_STRING_VALIDATORS)
+    fundingNotes = StringField('fundingNotes',
+                                      [] + COMMON_STRING_VALIDATORS)
+
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -613,8 +619,8 @@ class InformantAddressForm(BaseForm):
                           [] + COMMON_STRING_VALIDATORS)
     city = StringField('city',
                        [] + COMMON_STRING_VALIDATORS)
-    stateID = IntegerField('stateID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    stateID = StringField('stateID',
+                           [] + COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
                       [] + COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -811,8 +817,8 @@ class PatientAddressForm(BaseForm):
                           [] + COMMON_STRING_VALIDATORS)
     city = StringField('city',
                        [] + COMMON_STRING_VALIDATORS)
-    stateID = IntegerField('stateID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    stateID = StringField('stateID',
+                           [] + COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
                       [] + COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -1048,8 +1054,8 @@ class PhysicianAddressForm(BaseForm):
                           [] + COMMON_STRING_VALIDATORS)
     city = StringField('city',
                        [] + COMMON_STRING_VALIDATORS)
-    stateID = IntegerField('stateID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    stateID = StringField('stateID',
+                           [] + COMMON_STRING_VALIDATORS)
     zip = StringField('zip',
                       [] + COMMON_STRING_VALIDATORS)
     addressStatusDate = DateField('addressStatusDate',
@@ -1206,14 +1212,14 @@ class PreApplicationForm(BaseForm):
                                [] + COMMON_STRING_VALIDATORS)
     contactEmail = StringField('contactEmail',
                                [] + COMMON_STRING_VALIDATORS)
-    institution = StringField('institution',
-                              [] + COMMON_STRING_VALIDATORS)
-    institution2 = StringField('institution2',
-                               [] + COMMON_STRING_VALIDATORS)
+    institution = IntegerField('institution',
+                              [] + COMMON_INTEGER_VALIDATORS)
+    institution2 = IntegerField('institution2',
+                               [] + COMMON_INTEGER_VALIDATORS)
     uid = StringField('uid',
                       [] + COMMON_STRING_VALIDATORS)
-    udoh = IntegerField('udoh',
-                        [] + COMMON_INTEGER_VALIDATORS)
+    udoh = StringField('udoh',
+                        [] + COMMON_STRING_VALIDATORS)
     projectTitle = StringField('projectTitle',
                                [] + COMMON_STRING_VALIDATORS)
     purpose = StringField('purpose',
@@ -1296,8 +1302,8 @@ class ProjectForm(BaseForm):
                            [] + COMMON_INTEGER_VALIDATORS)
     sftpUsername = StringField('sftpUsername',
                            [] + COMMON_STRING_VALIDATORS)
-    irbResearchManager = IntegerField('irbResearchManager',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    irbResearchManager = BooleanField('irbResearchManager',
+                           [] + COMMON_BOOL_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1555,10 +1561,12 @@ class ProjectStaffForm(BaseForm):
     dateRevoked = DateField('dateRevoked',
                             [] + COMMON_DATE_VALIDATORS,
                             format=DATE_FORMAT)
-    contactID = IntegerField('contactID',
-                             [] + COMMON_INTEGER_VALIDATORS)
-    inactiveID = IntegerField('inactiveID',
-                              [] + COMMON_INTEGER_VALIDATORS)
+    contactID = BooleanField('contactID',
+                             [] + COMMON_BOOL_VALIDATORS)
+    inactive = BooleanField('inactive',
+                              [] + COMMON_BOOL_VALIDATORS)
+    primaryPI = BooleanField('primaryPI',
+                            [] + COMMON_BOOL_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1578,12 +1586,6 @@ class ProjectStaffForm(BaseForm):
             contact = query.get_contact_enum(self.contactID.data)
             if contact is None:
                 self.contactID.errors.append("ID not found")
-                hasErrors = True
-
-        if self.inactiveID.data:
-            inactive = query.get_inactive_enum(self.inactiveID.data)
-            if inactive is None:
-                self.inactiveID.errors.append("ID not found")
                 hasErrors = True
 
         if self.staffRoleID.data:
@@ -1748,10 +1750,12 @@ class StaffForm(BaseForm):
                               [] + COMMON_STRING_VALIDATORS)
     phoneComment = StringField('phoneComment',
                                [] + COMMON_STRING_VALIDATORS)
-    institution = StringField('institution',
-                              [] + COMMON_STRING_VALIDATORS)
-    department = StringField('department',
-                             [] + COMMON_STRING_VALIDATORS)
+    institutionID = IntegerField('institutionID',
+                              [] + COMMON_INTEGER_VALIDATORS)
+    departmentID = IntegerField('departmentID',
+                             [] + COMMON_INTEGER_VALIDATORS)
+    fieldDivisionID = IntegerField('fieldDivisionID',
+                               [] + COMMON_INTEGER_VALIDATORS)
     position = StringField('position',
                            [] + COMMON_STRING_VALIDATORS)
     credentials = StringField('credentials',
@@ -1762,17 +1766,17 @@ class StaffForm(BaseForm):
                        [] + COMMON_STRING_VALIDATORS)
     zipcode = StringField('zipcode',
                        [] + COMMON_STRING_VALIDATORS)
-    stateID = IntegerField('stateID',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    stateID = StringField('stateID',
+                           [] + COMMON_STRING_VALIDATORS)
     ucrRoleID = IntegerField('ucrRoleID',
                              [] + COMMON_INTEGER_VALIDATORS)
     userID = IntegerField('userID',
                           [] + COMMON_INTEGER_VALIDATORS)
-    hci = BooleanField('hci_test',
+    hci = BooleanField('hci',
                            [] + COMMON_BOOL_VALIDATORS)
-    ucr = BooleanField('ucr_test',
+    ucr = BooleanField('ucr',
                        [] + COMMON_BOOL_VALIDATORS)
-    external = BooleanField('external_test',
+    external = BooleanField('external',
                        [] + COMMON_BOOL_VALIDATORS)
     def validate(self):
         hasErrors = not Form.validate(self)

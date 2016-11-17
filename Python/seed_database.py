@@ -277,158 +277,350 @@ def create_final_codes():
 def create_states():
     states = []
     states.append(models.State(
-        state="Alabama"
+        state="Alberta",
+        stateID="AB"
     ))
     states.append(models.State(
-        state="Alaska"
+        state="Alabama",
+        stateID = "AL"
     ))
     states.append(models.State(
-        state="Arizona"
+        state="Alaska",
+        stateID = "AK"
     ))
     states.append(models.State(
-        state="Arkansas"
+        state="APO/FPO for Armed Services Pacific",
+        stateID="AP"
     ))
     states.append(models.State(
-        state="California"
+        state="American Samoa",
+        stateID="AS"
     ))
     states.append(models.State(
-        state="Colorado"
+        state="Arizona",
+        stateID="AZ"
     ))
     states.append(models.State(
-        state="Connecticut"
+        state="Arkansas",
+        stateID="AR"
     ))
     states.append(models.State(
-        state="Delaware"
+        state="British Columbia",
+        stateID="BC"
     ))
     states.append(models.State(
-        state="Florida"
+        state="California",
+        stateID="CA"
     ))
     states.append(models.State(
-        state="Georgia"
+        state="Canada, NOS",
+        stateID="CD"
     ))
     states.append(models.State(
-        state="Hawaii"
+        state="Colorado",
+        stateID="CO"
     ))
     states.append(models.State(
-        state="Idaho"
+        state="Connecticut",
+        stateID="CT"
     ))
     states.append(models.State(
-        state="Illinois"
+        state="District of Columbia",
+        stateID="DC"
     ))
     states.append(models.State(
-        state="Indiana"
+        state="Delaware",
+        stateID="DE"
     ))
     states.append(models.State(
-        state="Iowa"
+        state="Florida",
+        stateID="FL"
     ))
     states.append(models.State(
-        state="Kansas"
+        state="Federated States of Micronesia",
+        stateID="FM"
     ))
     states.append(models.State(
-        state="Kentucky"
+        state="Georgia",
+        stateID="GA"
     ))
     states.append(models.State(
-        state="Louisiana"
+        state="Guam",
+        stateID="GU"
     ))
     states.append(models.State(
-        state="Maine"
+        state="Hawaii",
+        stateID="HI"
     ))
     states.append(models.State(
-        state="Maryland"
+        state="Idaho",
+        stateID="ID"
     ))
     states.append(models.State(
-        state="Massachusetts"
+        state="Illinois",
+        stateID="IL"
     ))
     states.append(models.State(
-        state="Michigan"
+        state="Indiana",
+        stateID="IN"
     ))
     states.append(models.State(
-        state="Minnesota"
+        state="Iowa",
+        stateID="IA"
     ))
     states.append(models.State(
-        state="Mississippi"
+        state="Kansas",
+        stateID="KS"
     ))
     states.append(models.State(
-        state="Missouri"
+        state="Kentucky",
+        stateID="KY"
     ))
     states.append(models.State(
-        state="Montana"
+        state="Louisiana",
+        stateID="LA"
     ))
     states.append(models.State(
-        state="Nebraska"
+        state="Maine",
+        stateID="ME"
     ))
     states.append(models.State(
-        state="Nevada"
+        state="Maryland",
+        stateID="MD"
     ))
     states.append(models.State(
-        state="New Hampshire"
+        state="Massachusetts",
+        stateID="MA"
     ))
     states.append(models.State(
-        state="New Jersey"
+        state="Manitoba",
+        stateID="MB"
     ))
     states.append(models.State(
-        state="New Mexico"
+        state="Marshall Islands",
+        stateID="MH"
     ))
     states.append(models.State(
-        state="New York"
+        state="Michigan",
+        stateID="MI"
     ))
     states.append(models.State(
-        state="North Carolina"
+        state="Minnesota",
+        stateID="MN"
     ))
     states.append(models.State(
-        state="North Dakota"
+        state="Northern Mariana Islands",
+        stateID="MP"
     ))
     states.append(models.State(
-        state="Ohio"
+        state="Mississippi",
+        stateID="MS"
     ))
     states.append(models.State(
-        state="Oklahoma"
+        state="Missouri",
+        stateID="MO"
     ))
     states.append(models.State(
-        state="Oregon"
+        state="Montana",
+        stateID="MT"
     ))
     states.append(models.State(
-        state="Pennsylvania"
+        state="New Brunswick",
+        stateID="NB"
     ))
     states.append(models.State(
-        state="Rhhode Island"
+        state="Nebraska",
+        stateID="NE"
     ))
     states.append(models.State(
-        state="South Carolina"
+        state="Newfoundland and Labrador",
+        stateID="NL"
     ))
     states.append(models.State(
-        state="South Dakota"
+        state="Nevada",
+        stateID="NV"
     ))
     states.append(models.State(
-        state="Tennessee"
+        state="New Hampshire",
+        stateID="NH"
     ))
     states.append(models.State(
-        state="Texas"
+        state="New Jersey",
+        stateID="NJ"
     ))
     states.append(models.State(
-        state="Utah"
+        state="New Mexico",
+        stateID="NM"
     ))
     states.append(models.State(
-        state="Vermont"
+        state="Nova Scotia",
+        stateID="NS"
     ))
     states.append(models.State(
-        state="Virginia"
+        state="Northwest Territories",
+        stateID="NT"
     ))
     states.append(models.State(
-        state="Washington"
+        state="Nunavut",
+        stateID="NU"
     ))
     states.append(models.State(
-        state="West Virginia"
+        state="New York",
+        stateID="NY"
     ))
     states.append(models.State(
-        state="Wisonsin"
+        state="North Carolina",
+        stateID="NC"
     ))
     states.append(models.State(
-        state="Wyoming"
+        state="North Dakota",
+        stateID="ND"
     ))
     states.append(models.State(
-        state="District of Columbia"
+        state="Ohio",
+        stateID="OH"
     ))
+    states.append(models.State(
+        state="Oklahoma",
+        stateID="OK"
+    ))
+    states.append(models.State(
+        state="Ontario",
+        stateID="ON"
+    ))
+    states.append(models.State(
+        state="Oregon",
+        stateID="OR"
+    ))
+    states.append(models.State(
+        state="Pennsylvania",
+        stateID="PA"
+    ))
+    states.append(models.State(
+        state="Prince Edward Island",
+        stateID="PE"
+    ))
+    states.append(models.State(
+        state="Puerto Rico",
+        stateID="PR"
+    ))
+    states.append(models.State(
+        state="Quebec",
+        stateID="QC"
+    ))
+    states.append(models.State(
+        state="Rhhode Island",
+        stateID="RI"
+    ))
+    states.append(models.State(
+        state="South Carolina",
+        stateID="SC"
+    ))
+    states.append(models.State(
+        state="South Dakota",
+        stateID="SD"
+    ))
+    states.append(models.State(
+        state="Saskatchewan",
+        stateID="SK"
+    ))
+    states.append(models.State(
+        state="Tennessee",
+        stateID="TN"
+    ))
+    states.append(models.State(
+        state="Trust Territories",
+        stateID="TT"
+    ))
+    states.append(models.State(
+        state="Texas",
+        stateID="TX"
+    ))
+    states.append(models.State(
+        state="US Minor Outlying Islands",
+        stateID="UM"
+    ))
+    states.append(models.State(
+        state="Utah",
+        stateID="UT"
+    ))
+    states.append(models.State(
+        state="Vermont",
+        stateID="VT"
+    ))
+    states.append(models.State(
+        state="Virginia",
+        stateID="VA"
+    ))
+    states.append(models.State(
+        state="Washington",
+        stateID="WA"
+    ))
+    states.append(models.State(
+        state="West Virginia",
+        stateID="WV"
+    ))
+    states.append(models.State(
+        state="Wisonsin",
+        stateID="WI"
+    ))
+    states.append(models.State(
+        state="Wyoming",
+        stateID="WY"
+    ))
+    states.append(models.State(
+        state="Country Known, Not U.S., Not Canada",
+        stateID="XX"
+    ))
+    states.append(models.State(
+        state="Yukon Territories",
+        stateID="YT"
+    ))
+    states.append(models.State(
+        state="Country Unknown, Not U.S., Not Canada",
+        stateID="YY"
+    ))
+    states.append(models.State(
+        state="Country Unknown",
+        stateID="ZZ"
+    ))
+    states.append(models.State(
+        state="New England and New Jersey (Historic PLACE only)",
+        stateID="NN"
+    ))
+    states.append(models.State(
+        state="APO/FPO for Armed Services Americas",
+        stateID="AA"
+    ))
+    states.append(models.State(
+        state="APO/FPO for Armed Services Canada, Europe, Middle East, Africa",
+        stateID="AE"
+    ))
+    states.append(models.State(
+        state="Palau (Trust Territory of Pacific Islands)",
+        stateID="PW"
+    ))
+    states.append(models.State(
+        state="United States, NOS",
+        stateID="US"
+    ))
+    states.append(models.State(
+        state="Virgin Islands, U.S.",
+        stateID="VI"
+    ))
+    states.append(models.State(
+        state="Maritime Provinces (New Brunswick, Newfoundland, Nova Scotia, Prince Edward) (Historic PLACE only)",
+        stateID="MM"
+    ))
+    states.append(models.State(
+        state="Prairie Provinces (Alberta, Manitoba, Saskatchewan) (Historic PLACE only)",
+        stateID="PP"
+    ))
+    states.append(models.State(
+        state="Northwest Territories, Yukon Territories (Historic PLACE only))",
+        stateID="YN"
+    ))
+
     return states
 
 
@@ -700,17 +892,6 @@ def create_contacts():
         contact="No"
     ))
     return contacts
-
-
-def create_inactives():
-    inactives = []
-    inactives.append(models.Inactive(
-        inactive="Yes"
-    ))
-    inactives.append(models.Inactive(
-        inactive="No"
-    ))
-    return inactives
 
 
 def create_ucr_report_types():
@@ -1684,18 +1865,20 @@ def create_staff():
         email="aaron.pulver@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=1,
+        departmentID=2,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="84102",
-        stateID=1,
+        stateID="AZ",
         ucrRoleID=2,
         hci=True,
         ucr=True,
-        external=True
+        external=True,
+        fieldDivisionID=2
+
     ))
     staff.append(models.Staff(
         userID=2,
@@ -1705,18 +1888,19 @@ def create_staff():
         email="phoebe.mcneally.geog.utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=2,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="84100",
-        stateID=2,
+        stateID="UT",
         ucrRoleID=2,
         hci=False,
         ucr=True,
-        external=True
+        external=True,
+        fieldDivisionID=1
     ))
     staff.append(models.Staff(
         userID=3,
@@ -1726,18 +1910,19 @@ def create_staff():
         email="u0372607@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=1,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="507208",
-        stateID=2,
+        stateID="WI",
         ucrRoleID=4,
         hci=True,
         ucr=True,
-        external=False
+        external=False,
+        fieldDivisionID=3
     ))
     staff.append(models.Staff(
         userID=4,
@@ -1747,18 +1932,19 @@ def create_staff():
         email="u0710561@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=2,
+        departmentID=2,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="ch102",
-        stateID=2,
+        stateID="MT",
         ucrRoleID=5,
         hci=True,
         ucr=False,
-        external=True
+        external=True,
+        fieldDivisionID=2
     ))
     staff.append(models.Staff(
         userID=5,
@@ -1768,18 +1954,19 @@ def create_staff():
         email="u0372607@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=1,
+        departmentID=3,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="84tel",
-        stateID=2,
+        stateID="NV",
         ucrRoleID=5,
         hci=True,
         ucr=False,
-        external=False
+        external=False,
+        fieldDivisionID=1
     ))
     staff.append(models.Staff(
         userID=6,
@@ -1789,18 +1976,19 @@ def create_staff():
         email="u0030586@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=3,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="0000",
-        stateID=2,
+        stateID="CO",
         ucrRoleID=1,
         hci=False,
         ucr=False,
-        external=True
+        external=True,
+        fieldDivisionID=3
     ))
     staff.append(models.Staff(
         userID=7,
@@ -1810,18 +1998,19 @@ def create_staff():
         email="u0666687@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=3,
+        departmentID=3,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="driveme",
-        stateID=2,
+        stateID="CA",
         ucrRoleID=1,
         hci=True,
         ucr=True,
-        external=True
+        external=True,
+        fieldDivisionID=2
     ))
     staff.append(models.Staff(
         firstName="kirk",
@@ -1830,18 +2019,19 @@ def create_staff():
         email="kirk@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institution="institution",
-        department="department",
+        institutionID=2,
+        departmentID=2,
         position="position",
         credentials="credentials",
         street="street",
         city="city",
         zipcode="cozy45",
-        stateID=2,
+        stateID="WY",
         ucrRoleID=1,
         hci=True,
         ucr=True,
-        external=False
+        external=False,
+        fieldDivisionID=1
 
     ))
     return staff
@@ -1868,7 +2058,7 @@ def create_projects():
             activityStartDate=datetime(2016, 2, 2),
             activityEndDate=datetime(2016, 2, 2),
             numberAbstractions=6,
-            irbResearchManager=0,
+            irbResearchManager=True,
             sftpUsername = 'r548363'
         )
     )
@@ -1892,7 +2082,7 @@ def create_projects():
             activityEndDate=datetime(2016, 2, 2),
             numberAbstractions=89,
             sftpUsername='F587385',
-            irbResearchManager=0
+            irbResearchManager=True
         )
     )
     projects.append(
@@ -1915,7 +2105,7 @@ def create_projects():
             activityEndDate=datetime(2016, 6, 7),
             numberAbstractions=456,
             sftpUsername='komaster',
-            irbResearchManager=0
+            irbResearchManager=False
 
         )
     )
@@ -1939,7 +2129,7 @@ def create_projects():
             activityEndDate=datetime(2016, 9, 10),
             numberAbstractions=56,
             sftpUsername='classic',
-            irbResearchManager=1
+            irbResearchManager=True
         )
     )
     projects.append(
@@ -1962,7 +2152,7 @@ def create_projects():
             activityEndDate=datetime(2016, 2, 2),
             numberAbstractions=436,
             sftpUsername='aniMation',
-            irbResearchManager=0
+            irbResearchManager=False
 
         )
     )
@@ -2408,7 +2598,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes 1"
         )
     )
     fundings.append(
@@ -2423,7 +2614,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes 2"
         )
     )
     fundings.append(
@@ -2438,7 +2630,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes 3"
         )
     )
     fundings.append(
@@ -2453,7 +2646,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes"
         )
     )
     fundings.append(
@@ -2468,7 +2662,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes test"
         )
     )
     fundings.append(
@@ -2483,7 +2678,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Notes tested"
         )
     )
     fundings.append(
@@ -2498,7 +2694,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Noted"
         )
     )
     fundings.append(
@@ -2513,7 +2710,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="Noting"
         )
     )
     fundings.append(
@@ -2528,7 +2726,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="ynoting"
         )
     )
     fundings.append(
@@ -2543,7 +2742,8 @@ def create_fundings():
             dateStatus=datetime(2016, 2, 2),
             grantPi=1,
             primaryChartfield="pcf",
-            secondaryChartfield="scf"
+            secondaryChartfield="scf",
+            fundingNotes="ynotes days"
         )
     )
     return fundings
@@ -2612,10 +2812,10 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution="institution",
-            institution2="institution2",
+            institution=1,
+            institution2=3,
             uid="uid",
-            udoh=1,
+            udoh="udoh1",
             projectTitle="Project 1",
             purpose="purpose",
             irb0=True,
@@ -2643,10 +2843,10 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution="institution",
-            institution2="institution2",
+            institution=2,
+            institution2=3,
             uid="uid",
-            udoh=1,
+            udoh="udoh2",
             projectTitle="Project 2",
             purpose="purpose",
             irb0=True,
@@ -2674,10 +2874,10 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution="institution",
-            institution2="institution2",
+            institution=1,
+            institution2=2,
             uid="uid",
-            udoh=1,
+            udoh="timeline",
             projectTitle="Project 3",
             purpose="purpose",
             irb0=True,
@@ -2705,10 +2905,10 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution="institution",
-            institution2="institution2",
+            institution=2,
+            institution2=3,
             uid="uid",
-            udoh=1,
+            udoh="stellar",
             projectTitle="Project 4",
             purpose="purpose",
             irb0=True,
@@ -2736,10 +2936,10 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution="institution",
-            institution2="institution2",
+            institution=1,
+            institution2=2,
             uid="uid",
-            udoh=1,
+            udoh="inter",
             projectTitle="Project 5",
             purpose="purpose",
             irb0=True,
@@ -2822,8 +3022,9 @@ def create_project_staff():
         staffID=1,
         datePledge=datetime(2016, 2, 2),
         dateRevoked=datetime(2016, 2, 2),
-        contactID=1,
-        inactiveID=1
+        contactID=False,
+        inactive=True,
+        primaryPI=True
     ))
     project_staff.append(models.ProjectStaff(
         staffRoleID=1,
@@ -2831,8 +3032,9 @@ def create_project_staff():
         staffID=2,
         datePledge=datetime(2016, 2, 2),
         dateRevoked=datetime(2016, 2, 2),
-        contactID=1,
-        inactiveID=1
+        contactID=True,
+        inactive=False,
+        primaryPI=False
     ))
     return project_staff
 
@@ -2991,7 +3193,7 @@ def create_patient_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="AB",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3003,7 +3205,7 @@ def create_patient_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="AB",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3015,7 +3217,7 @@ def create_patient_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="AL",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3027,7 +3229,7 @@ def create_patient_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="AK",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3039,7 +3241,7 @@ def create_patient_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="KY",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3210,7 +3412,7 @@ def create_informant_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=2,
+        stateID="NC",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3221,7 +3423,7 @@ def create_informant_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=2,
+        stateID="NN",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3232,7 +3434,7 @@ def create_informant_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=2,
+        stateID="AA",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3243,7 +3445,7 @@ def create_informant_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=2,
+        stateID="XX",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3254,7 +3456,7 @@ def create_informant_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=2,
+        stateID="SD",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3322,7 +3524,7 @@ def create_ctcs():
         dxStreet1="street1",
         dxStreet2="street2",
         dxCity="city",
-        dxStateID=1,
+        dxStateID="IA",
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
@@ -3346,7 +3548,7 @@ def create_ctcs():
         dxStreet1="street1",
         dxStreet2="street2",
         dxCity="city",
-        dxStateID=1,
+        dxStateID="ID",
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
@@ -3369,7 +3571,7 @@ def create_ctcs():
         dxStreet1="street1",
         dxStreet2="street2",
         dxCity="city",
-        dxStateID=1,
+        dxStateID="IL",
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
@@ -3392,7 +3594,7 @@ def create_ctcs():
         dxStreet1="street1",
         dxStreet2="street2",
         dxCity="city",
-        dxStateID=1,
+        dxStateID="NS",
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
@@ -3415,7 +3617,7 @@ def create_ctcs():
         dxStreet1="street1",
         dxStreet2="street2",
         dxCity="city",
-        dxStateID=1,
+        dxStateID="FL",
         dxZip=99999,
         dxCounty="county",
         dnc="dnc",
@@ -3747,7 +3949,7 @@ def create_physician_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="LA",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3758,7 +3960,7 @@ def create_physician_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="MA",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3769,7 +3971,7 @@ def create_physician_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="MB",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3912,7 +4114,7 @@ def create_faciliy_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="LA",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -3923,7 +4125,7 @@ def create_faciliy_addresses():
         street="street",
         street2="street2",
         city="city",
-        stateID=1,
+        stateID="CA",
         zip="12345",
         addressStatusDate=datetime(2016, 2, 2),
     ))
@@ -4178,6 +4380,75 @@ def create_incentives():
     )
     return incentives
 
+def create_institutions():
+    institutions = []
+    institutions.append(
+        models.Institution(
+            institutionID=1,
+            institution="Utah Biology Institute",
+        )
+    )
+    institutions.append(
+        models.Institution(
+            institutionID=2,
+            institution="Utah Research Institute",
+        )
+    )
+    institutions.append(
+        models.Institution(
+            institutionID=3,
+            institution="Utah Medical Institution",
+        )
+    )
+
+    return institutions
+
+def create_departments():
+    departments = []
+    departments.append(
+        models.Department(
+            departmentID=1,
+            department="Medical Department",
+        )
+    )
+    departments.append(
+        models.Department(
+            departmentID=2,
+            department="Anatomy Department",
+        )
+    )
+    departments.append(
+        models.Department(
+            departmentID=3,
+            department="Zoology Department",
+        )
+    )
+
+    return departments
+
+def create_fieldDivisions():
+    fieldDivisions = []
+    fieldDivisions.append(
+        models.FieldDivision(
+            fieldDivisionID=1,
+            fieldDivision="FieldDivision I",
+        )
+    )
+    fieldDivisions.append(
+        models.FieldDivision(
+            fieldDivisionID=2,
+            fieldDivision="FieldDivision II",
+        )
+    )
+    fieldDivisions.append(
+        models.FieldDivision(
+            fieldDivisionID=3,
+            fieldDivision="FieldDivision III",
+        )
+    )
+
+    return fieldDivisions
+
 
 def populate_db():
     """
@@ -4198,7 +4469,6 @@ def populate_db():
     ethnicities = create_ethnicities()
     vitals = create_vital_statuses()
     contacts = create_contacts()
-    inactives = create_inactives()
     ucrReportTypes = create_ucr_report_types()
     physicianStatuses = create_physician_statuses()
     physFacilityStatuses = create_physician_facility_statuses()
@@ -4221,6 +4491,10 @@ def populate_db():
     giftCards = create_gift_cards()
     siteGroups= create_sitegroup()
     projectSiteGroups=create_project_sitegroups()
+    institutions=create_institutions()
+    departments = create_departments()
+    fieldDivisions = create_fieldDivisions()
+
 
     projects = create_projects()
     budgets = create_budgets()
@@ -4272,14 +4546,13 @@ def populate_db():
     db.session.add_all(informantRelationships)
     db.session.add_all(vitals)
     db.session.add_all(contacts)
-    db.session.add_all(inactives)
+
 
     # Mostly LUTS
     db.session.add_all(finalCodes)
     db.session.add_all(staffRoles)
     db.session.add_all(abstractStatuses)
     db.session.add_all(contacts)
-    db.session.add_all(inactives)
     db.session.add_all(ucrReportTypes)
     db.session.add_all(physicianStatuses)
     db.session.add_all(physFacilityStatuses)
@@ -4301,6 +4574,10 @@ def populate_db():
     db.session.add_all(giftCards)
     db.session.add_all(siteGroups)
     db.session.add_all(projectSiteGroups)
+    db.session.add_all(institutions)
+    db.session.add_all(departments)
+    db.session.add_all(fieldDivisions)
+
 
     # Main Tables
     db.session.add_all(projects)

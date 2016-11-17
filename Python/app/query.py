@@ -304,14 +304,6 @@ def get_human_subject_training(id):
     return db.session.query(HumanSubjectTrainingLUT).filter_by(humanSubjectTrainingID=id).first()
 
 
-def get_inactive_enum(id):
-    return db.session.query(Inactive).filter_by(inactiveID=id).first()
-
-
-def get_inactive_enums():
-    return db.session.query(Inactive).all()
-
-
 def get_incentives():
     return db.session.query(Incentive).order_by(Incentive.dateGiven.desc()).all()
 
@@ -354,6 +346,27 @@ def get_informant_relationship(id):
 
 def get_informant_relationships():
     return db.session.query(InformantRelationship).all()
+
+def get_institution(id):
+    return db.session.query(Institution).filter_by(institutionID=id).first()
+
+
+def get_institutions():
+    return db.session.query(Institution).all()
+
+def get_department(id):
+    return db.session.query(Department).filter_by(departmentID=id).first()
+
+
+def get_departments():
+    return db.session.query(Department).all()
+
+def get_fieldDivision(id):
+    return db.session.query(FieldDivision).filter_by(fieldDivisionID=id).first()
+
+
+def get_fieldDivisions():
+    return db.session.query(FieldDivision).all()
 
 
 def get_irb_holders():
@@ -605,8 +618,8 @@ def get_project_staffs():
     return db.session.query(ProjectStaff).all()
 
 
-def query_staffs(firstName=None, lastName=None, staffID=None, phoneNumber=None, email=None, institution=None,
-                 department=None, ucrRoleID=None):
+def query_staffs(firstName=None, lastName=None, staffID=None, phoneNumber=None, email=None, institutionID=None,
+                 departmentID=None, ucrRoleID=None):
     filters = []
     if firstName:
         filters.append(Staff.firstName.like('%{}%'.format(firstName)))
@@ -618,10 +631,10 @@ def query_staffs(firstName=None, lastName=None, staffID=None, phoneNumber=None, 
         filters.append(Staff.phoneNumber == phoneNumber)
     if email:
         filters.append(Staff.email == email)
-    if institution:
-        filters.append(Staff.institution == institution)
-    if department:
-        filters.append(Staff.department == department)
+    if institutionID:
+        filters.append(Staff.institutionID == institutionID)
+    if departmentID:
+        filters.append(Staff.departmentID == departmentID)
     if ucrRoleID:
         filters.append(Staff.ucrRoleID == ucrRoleID)
     return db.session.query(Staff).filter(or_(*filters)).all()

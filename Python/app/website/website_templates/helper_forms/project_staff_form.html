@@ -52,33 +52,52 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class = "col-md-2">
+                  <label for="select_primaryPI">Primary PI</label>
+                  <select required="required" type="text" class="form-control" name="primaryPI" id="select_primaryPI">
+                      {% if projectStaff.primaryPI %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectStaff.primaryPI %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="select_contact">Contact</label>
-                  <select required="required" type="text" class="form-control" name="contactID" id="select_contact">
-                      <option></option>
-                      {% for contact in form.contacts %}
-                        {% if projectStaff.contactID == contact.contactID %}
-                            <option value="{{contact.contactID}}" selected="selected" >{{contact.contact}}</option>
+                  <label for="select_contactID">Contact</label>
+                  <select required="required" type="text" class="form-control" name="contactID" id="select_contactID">
+                      {% if projectStaff.contactID %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option value="{{contact.contactID}}">{{contact.contact}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
-                  </select>
+                        {% if not projectStaff.contactID %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_inactive">Inactive</label>
-                  <select required="required" type="text" class="form-control" name="inactiveID" id="select_inactive">
-                      <option></option>
-                      {% for inactive in form.inactives %}
-                        {% if projectStaff.inactiveID == inactive.inactiveID %}
-                            <option value="{{inactive.inactiveID}}" selected="selected">{{inactive.inactive}}</option>
+                   <select required="required" type="text" class="form-control" name="inactive" id="select_inactive">
+                      {% if projectStaff.inactive %}
+                            <option value="True" selected="selected">Yes</option>
                         {% else %}
-                            <option value="{{inactive.inactiveID}}">{{inactive.inactive}}</option>
+                            <option value="True">Yes</option>
                         {% endif %}
-                      {% endfor %}
-                  </select>
+                        {% if not projectStaff.inactive %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
                 </div>
                 <div class="col-md-2">
                   <label for="date_datePledge">Date Pledged</label>

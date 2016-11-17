@@ -134,7 +134,18 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_irbResearchManager">Research Manager on IRB</label>
-                  <input type="text" class="form-control" name="irbResearchManager" id="text_irbResearchManager" value="{{form["project"]["irbResearchManager"]}}">
+                    <select type="text" class="form-control" name="irbResearchManager" id="select_irbResearchManager">
+                      {% if form.project.irbResearchManager %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not form.project.irbResearchManager %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
               </div>
             </div>
             </div>
@@ -441,8 +452,16 @@
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole}}</a></td>
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge}}</a></td>
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.contact.contact}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.inactive.inactive}}</a></td>
+                                        {% if ps.contactID %}
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
+                                        {% else %}
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
+                                        {% endif %}
+                                        {% if ps.inactive %}
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
+                                        {% else %}
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
+                                        {% endif %}
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate}}</a></td>
                                     </tr>
                                     {% endfor %}

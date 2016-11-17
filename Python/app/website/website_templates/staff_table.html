@@ -31,11 +31,29 @@
                 </div>
                 <div class = "col-md-1">
                   <label for="text_institution">Insitution</label>
-                  <input type="text" class="form-control" name="institution" id="text_institution" value = "{{form.queryParams.institution}}">
+                  <select type="text" class="form-control" name="institutionID" id="select_institutionID">
+                        <option></option>
+                      {% for institution in form.institutions %}
+                        {% if institution.institutionID|string() == form.queryParams.institutionID %}
+                            <option selected="selected" value="{{institution.institutionID}}">{{institution.institution}}</option>
+                        {% else %}
+                            <option value="{{institution.institutionID}}">{{institution.institution}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-1">
                   <label for="text_department">Department</label>
-                  <input type="text" class="form-control" name="department" id="text_department" value = "{{form.queryParams.department}}">
+                  <select type="text" class="form-control" name="departmentID" id="select_departmentID">
+                        <option></option>
+                      {% for department in form.departments %}
+                        {% if department.departmentID|string() == form.queryParams.departmentID %}
+                            <option selected="selected" value="{{department.departmentID}}">{{department.department}}</option>
+                        {% else %}
+                            <option value="{{department.departmentID}}">{{department.department}}</option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_ucrRoleID">UCR Role</label>

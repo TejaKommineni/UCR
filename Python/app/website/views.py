@@ -1248,6 +1248,7 @@ def update_funding(fundingID):
                     funding.grantPi = form.grantPi.data
                     funding.primaryChartfield = form.primaryChartfield.data
                     funding.secondaryChartfield = form.secondaryChartfield.data
+                    funding.fundingNotes= form.fundingNotes.data
                     query.commit()
                     flash("Updated Funding")
                     return redirect_back('fundings/{}/'.format(fundingID))
@@ -1287,7 +1288,8 @@ def create_funding(fundingID=None):
                     dateStatus=form.dateStatus.data,
                     grantPi=form.grantPi.data,
                     primaryChartfield=form.primaryChartfield.data,
-                    secondaryChartfield=form.secondaryChartfield.data
+                    secondaryChartfield=form.secondaryChartfield.data,
+                    fundingNotes=form.fundingNotes.data
                 )
                 query.add(funding)
                 flash("Created Funding")
@@ -4391,6 +4393,7 @@ def get_pre_application(preApplicationID=None):
             if preApplication is not None:
                 form = {}
                 form["projects"] = query.get_projects()
+                form["institutions"] = query.get_institutions()
                 return render_template("pre_application_form.html", form=form, preApplication=preApplication)
             else:
                 return item_not_found("PreApplicationID {} not found".format(preApplicationID))
@@ -4557,6 +4560,7 @@ def get_project(projectID=None):
                                             mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
             form["projectTypes"] = query.get_project_types()
             form["projectStatusLUTs"] = query.get_project_status_luts()
+            form["institutions"] = query.get_institutions()
             return render_template("project_table.html", form=form, projects=projects)
         else:
             proj = query.get_project(projectID)
@@ -4577,10 +4581,10 @@ def get_project(projectID=None):
                 form["reviewCommitteeStatuses"] = query.get_review_committee_statuses()
                 form["reviewCommitteeLUTs"] = query.get_review_committee_luts()
                 form["reportTypes"] = query.get_report_types()
-                form["inactives"] = query.get_inactive_enums()
                 form["contacts"] = query.get_contact_enums()
                 form["staffRoles"] = query.get_staff_roles()
                 form["siteGroups"]=query.get_sites()
+                form["institutions"] = query.get_institutions()
                 return render_template("project_form.html", form=form)
             else:
                 return item_not_found("ProjectID {} not found".format(projectID))
@@ -4945,7 +4949,6 @@ def get_project_staff(projectStaffID=None):
                 form["staff"] = query.get_staffs()
                 form["projects"] = query.get_projects()
                 form["contacts"] = query.get_contact_enums()
-                form["inactives"] = query.get_inactive_enums()
                 form["staffRoles"] = query.get_staff_roles()
                 return render_template("project_staff_form.html", form=form, projectStaff=projectStaff)
             else:
@@ -4969,7 +4972,8 @@ def update_project_staff(projectStaffID):
                     projectStaff.datePledge = form.datePledge.data
                     projectStaff.dateRevoked = form.dateRevoked.data
                     projectStaff.contactID = form.contactID.data
-                    projectStaff.inactiveID = form.inactiveID.data
+                    projectStaff.inactive = form.inactive.data
+                    projectStaff.primaryPI = form.primaryPI.data
                     query.commit()
                     flash("Updated Project-Staff Link")
                     return redirect_back("projectstaff/{}/".format(projectStaffID))
@@ -5005,7 +5009,8 @@ def create_project_staff(projectStaffID=None):
                     datePledge=form.datePledge.data,
                     dateRevoked=form.dateRevoked.data,
                     contactID=form.contactID.data,
-                    inactiveID=form.inactiveID.data,
+                    inactive=form.inactive.data,
+                    primaryPI=form.primaryPI.data
                 )
                 query.add(projectStaff)
                 flash("Created Project-Staff Link")
@@ -5741,8 +5746,8 @@ def get_staff(staffID=None):
             staffID = None
             phoneNumber = None
             email = None
-            institution = None
-            department = None
+            institutionID = None
+            departmentID = None
             ucrRoleID = None
             form["queryParams"] = {}
             if "firstName" in request.args:
@@ -5760,12 +5765,12 @@ def get_staff(staffID=None):
             if "email" in request.args:
                 email = value_or_none(request.args["email"])
                 form["queryParams"]["email"] = request.args["email"]
-            if "institution" in request.args:
-                institution = value_or_none(request.args["institution"])
-                form["queryParams"]["institution"] = request.args["institution"]
-            if "department" in request.args:
-                department = value_or_none(request.args["department"])
-                form["queryParams"]["department"] = request.args["department"]
+            if "institutionID" in request.args:
+                institutionID = value_or_none(request.args["institutionID"])
+                form["queryParams"]["institutionID"] = request.args["institutionID"]
+            if "departmentID" in request.args:
+                departmentID = value_or_none(request.args["departmentID"])
+                form["queryParams"]["departmentID"] = request.args["departmentID"]
             if "ucrRoleID" in request.args:
                 ucrRoleID = value_or_none(request.args["ucrRoleID"])
                 form["queryParams"]["ucrRoleID"] = request.args["ucrRoleID"]
@@ -5775,10 +5780,12 @@ def get_staff(staffID=None):
                                         staffID=staffID,
                                         phoneNumber=phoneNumber,
                                         email=email,
-                                        institution=institution,
-                                        department=department,
+                                        institutionID=institutionID,
+                                        departmentID=departmentID,
                                         ucrRoleID=ucrRoleID)
             form["ucrRoles"] = query.get_ucr_roles()
+            form["institutions"] = query.get_institutions()
+            form["departments"] = query.get_departments()
             return render_template("staff_table.html", form=form, staffs=staffs)
         else:
             staff = query.get_staff(staffID)
@@ -5788,10 +5795,12 @@ def get_staff(staffID=None):
                 form["humanSubjectTrainings"] = query.get_human_subject_trainings()
                 form["staff"] = query.get_staffs()
                 form["contacts"] = query.get_contact_enums()
-                form["inactives"] = query.get_inactive_enums()
                 form["projects"] = query.get_projects()
                 form["staffRoles"] = query.get_staff_roles()
                 form["ucrRoles"] = query.get_ucr_roles()
+                form["institutions"] = query.get_institutions()
+                form["departments"] = query.get_departments()
+                form["fieldDivisions"] = query.get_fieldDivisions()
                 return render_template("staff_form.html", form=form, staff=staff)
             else:
                 return item_not_found("StaffID {} not found".format(staffID))
@@ -5814,8 +5823,8 @@ def update_staff(staffID):
                     staff.email = form.email.data
                     staff.phoneNumber = form.phoneNumber.data
                     staff.phoneComment = form.phoneComment.data
-                    staff.institution = form.institution.data
-                    staff.department = form.department.data
+                    staff.institutionID = form.institutionID.data
+                    staff.departmentID = form.departmentID.data
                     staff.position = form.position.data
                     staff.credentials = form.credentials.data
                     staff.street = form.street.data
@@ -5826,6 +5835,7 @@ def update_staff(staffID):
                     staff.hci = form.hci.data
                     staff.ucr = form.ucr.data
                     staff.external = form.external.data
+                    staff.fieldDivisionID=form.fieldDivisionID.data
                     # Don't allow updates to userID
                     #staff.userID = form.userID.data
                     query.commit()
@@ -5863,8 +5873,8 @@ def create_staff(staffID=None):
                     email=form.email.data,
                     phoneNumber=form.phoneNumber.data,
                     phoneComment=form.phoneComment.data,
-                    institution=form.institution.data,
-                    department=form.department.data,
+                    institutionID=form.institutionID.data,
+                    departmentID=form.departmentID.data,
                     position=form.position.data,
                     credentials=form.credentials.data,
                     street=form.street.data,
@@ -5875,7 +5885,8 @@ def create_staff(staffID=None):
                     userID=form.userID.data,
                     hci=form.hci.data,
                     ucr=form.ucr.data,
-                    external=form.external.data
+                    external=form.external.data,
+                    fieldDivisionID = form.fieldDivisionID.data
                 )
                 query.add(staff)
                 flash("Created Staff")
