@@ -883,17 +883,6 @@ def create_vital_statuses():
     return vitals
 
 
-def create_contacts():
-    contacts = []
-    contacts.append(models.Contacts(
-        contact="Yes"
-    ))
-    contacts.append(models.Contacts(
-        contact="No"
-    ))
-    return contacts
-
-
 def create_ucr_report_types():
     reports = []
     reports.append(models.UCRReportType(
@@ -4468,7 +4457,6 @@ def populate_db():
     races = create_races()
     ethnicities = create_ethnicities()
     vitals = create_vital_statuses()
-    contacts = create_contacts()
     ucrReportTypes = create_ucr_report_types()
     physicianStatuses = create_physician_statuses()
     physFacilityStatuses = create_physician_facility_statuses()
@@ -4545,14 +4533,12 @@ def populate_db():
     db.session.add_all(races)
     db.session.add_all(informantRelationships)
     db.session.add_all(vitals)
-    db.session.add_all(contacts)
 
 
     # Mostly LUTS
     db.session.add_all(finalCodes)
     db.session.add_all(staffRoles)
     db.session.add_all(abstractStatuses)
-    db.session.add_all(contacts)
     db.session.add_all(ucrReportTypes)
     db.session.add_all(physicianStatuses)
     db.session.add_all(physFacilityStatuses)

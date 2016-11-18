@@ -4581,7 +4581,6 @@ def get_project(projectID=None):
                 form["reviewCommitteeStatuses"] = query.get_review_committee_statuses()
                 form["reviewCommitteeLUTs"] = query.get_review_committee_luts()
                 form["reportTypes"] = query.get_report_types()
-                form["contacts"] = query.get_contact_enums()
                 form["staffRoles"] = query.get_staff_roles()
                 form["siteGroups"]=query.get_sites()
                 form["institutions"] = query.get_institutions()
@@ -4948,7 +4947,6 @@ def get_project_staff(projectStaffID=None):
                 form = {}
                 form["staff"] = query.get_staffs()
                 form["projects"] = query.get_projects()
-                form["contacts"] = query.get_contact_enums()
                 form["staffRoles"] = query.get_staff_roles()
                 return render_template("project_staff_form.html", form=form, projectStaff=projectStaff)
             else:
@@ -5794,7 +5792,6 @@ def get_staff(staffID=None):
                 form["states"] = query.get_states()
                 form["humanSubjectTrainings"] = query.get_human_subject_trainings()
                 form["staff"] = query.get_staffs()
-                form["contacts"] = query.get_contact_enums()
                 form["projects"] = query.get_projects()
                 form["staffRoles"] = query.get_staff_roles()
                 form["ucrRoles"] = query.get_ucr_roles()

@@ -129,12 +129,6 @@ class Contact(CustomModel):
     incentive = db.relationship('Incentive')
 
 
-class Contacts(CustomModel):
-    __tablename__ = "ContactsLUT"
-    contactID = db.Column('contactID', db.Integer, primary_key=True)
-    contact = db.Column('contact', db.String)
-
-
 class ContactInfoSourceLUT(CustomModel):
     __tablename__ = "ContactInfoSourceLUT"
 
@@ -1239,7 +1233,7 @@ class UCRReport(CustomModel):
     reportSubmitted = db.Column('report_submitted', db.Date)
     reportDue = db.Column('report_due', db.Date)
     reportDoc = db.Column('report_doc', db.String)
-    statusNotes = db.Column('statusNotes', db.String)
+    statusNotes = db.Column('notes', db.String)
 
     # Relationships
     # 1 - M, one project, many reports

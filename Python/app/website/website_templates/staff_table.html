@@ -98,8 +98,8 @@
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["staffID"]}}</a></td>
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["phoneNumber"]}}</a></td>
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["email"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]["institution"]}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]["department"]}}</a></td>
                 <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"].ucrRole}}</a></td>
             </tr>
             {% endfor %}
