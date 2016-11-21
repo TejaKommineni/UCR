@@ -1877,8 +1877,8 @@ def create_staff():
         email="phoebe.mcneally.geog.utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institutionID=2,
-        departmentID=1,
+        institutionID=1,
+        departmentID=2,
         position="position",
         credentials="credentials",
         street="street",
@@ -1921,8 +1921,8 @@ def create_staff():
         email="u0710561@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institutionID=2,
-        departmentID=2,
+        institutionID=1,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
@@ -1944,7 +1944,7 @@ def create_staff():
         phoneNumber="phone",
         phoneComment="phoneComment",
         institutionID=1,
-        departmentID=3,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
@@ -1965,7 +1965,7 @@ def create_staff():
         email="u0030586@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institutionID=3,
+        institutionID=1,
         departmentID=1,
         position="position",
         credentials="credentials",
@@ -1987,8 +1987,8 @@ def create_staff():
         email="u0666687@utah.edu",
         phoneNumber="phone",
         phoneComment="phoneComment",
-        institutionID=3,
-        departmentID=3,
+        institutionID=1,
+        departmentID=1,
         position="position",
         credentials="credentials",
         street="street",
@@ -2000,28 +2000,6 @@ def create_staff():
         ucr=True,
         external=True,
         fieldDivisionID=2
-    ))
-    staff.append(models.Staff(
-        firstName="kirk",
-        lastName="webb",
-        middleName="",
-        email="kirk@utah.edu",
-        phoneNumber="phone",
-        phoneComment="phoneComment",
-        institutionID=2,
-        departmentID=2,
-        position="position",
-        credentials="credentials",
-        street="street",
-        city="city",
-        zipcode="cozy45",
-        stateID="WY",
-        ucrRoleID=1,
-        hci=True,
-        ucr=True,
-        external=False,
-        fieldDivisionID=1
-
     ))
     return staff
 
@@ -2802,7 +2780,7 @@ def create_pre_applications():
             contactPhone="contact_phone",
             contactEmail="contact_email",
             institution=1,
-            institution2=3,
+            institution2=2,
             uid="uid",
             udoh="udoh1",
             projectTitle="Project 1",
@@ -2832,8 +2810,8 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution=2,
-            institution2=3,
+            institution=1,
+            institution2=2,
             uid="uid",
             udoh="udoh2",
             projectTitle="Project 2",
@@ -2894,8 +2872,8 @@ def create_pre_applications():
             contactLastName="contact_lname",
             contactPhone="contact_phone",
             contactEmail="contact_email",
-            institution=2,
-            institution2=3,
+            institution=1,
+            institution2=None,
             uid="uid",
             udoh="stellar",
             projectTitle="Project 4",
@@ -2926,7 +2904,7 @@ def create_pre_applications():
             contactPhone="contact_phone",
             contactEmail="contact_email",
             institution=1,
-            institution2=2,
+            institution2=None,
             uid="uid",
             udoh="inter",
             projectTitle="Project 5",
@@ -4374,22 +4352,15 @@ def create_institutions():
     institutions.append(
         models.Institution(
             institutionID=1,
-            institution="Utah Biology Institute",
+            institution="University of Utah",
         )
     )
     institutions.append(
         models.Institution(
             institutionID=2,
-            institution="Utah Research Institute",
+            institution="University of Utah Hospital",
         )
     )
-    institutions.append(
-        models.Institution(
-            institutionID=3,
-            institution="Utah Medical Institution",
-        )
-    )
-
     return institutions
 
 def create_departments():
@@ -4397,22 +4368,15 @@ def create_departments():
     departments.append(
         models.Department(
             departmentID=1,
-            department="Medical Department",
+            department="Utah Cancer Registry",
         )
     )
     departments.append(
         models.Department(
             departmentID=2,
-            department="Anatomy Department",
+            department="Geography Department",
         )
     )
-    departments.append(
-        models.Department(
-            departmentID=3,
-            department="Zoology Department",
-        )
-    )
-
     return departments
 
 def create_fieldDivisions():
@@ -4533,6 +4497,9 @@ def populate_db():
     db.session.add_all(races)
     db.session.add_all(informantRelationships)
     db.session.add_all(vitals)
+    db.session.add_all(institutions)
+    db.session.add_all(departments)
+    db.session.add_all(fieldDivisions)
 
 
     # Mostly LUTS
@@ -4560,9 +4527,6 @@ def populate_db():
     db.session.add_all(giftCards)
     db.session.add_all(siteGroups)
     db.session.add_all(projectSiteGroups)
-    db.session.add_all(institutions)
-    db.session.add_all(departments)
-    db.session.add_all(fieldDivisions)
 
 
     # Main Tables
