@@ -74,17 +74,8 @@
                    </select>
                 </div>
                 <div class = "col-md-2">
-                  <label for="text_institution">Institution</label>
-                   <select type="text" class="form-control" name="institution2" id="select_institution">
-                      <option></option>
-                      {% for institution in form["institutions"] %}
-                        {% if institution.institutionID == preApplication.institution2 %}
-                            <option value="{{institution.institutionID}}" selected="selected">{{institution.institution}}</option>
-                        {% else %}
-                            <option value="{{institution.institutionID}}">{{institution.institution}}</option>
-                        {% endif %}
-                      {% endfor %}
-                   </select>
+                  <label for="text_institution2">Institution 2</label>
+                  <input type="text" class="form-control" name="institution2" id="text_institution2" value="{{preApplication.institution2}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_uid">UID</label>

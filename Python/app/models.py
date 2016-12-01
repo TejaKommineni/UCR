@@ -822,7 +822,7 @@ class PreApplication(CustomModel):
     contactPhone = db.Column('contact_phone', db.String)
     contactEmail = db.Column('contact_email', db.String)
     institution = db.Column('institution', db.Integer, db.ForeignKey('InstitutionLUT.institutionLUTID'))
-    institution2 = db.Column('institution2', db.Integer, db.ForeignKey('InstitutionLUT.institutionLUTID'))
+    institution2 = db.Column('institution2', db.String)
     uid = db.Column('uid', db.String)
     udoh = db.Column('udoh', db.String)
     projectTitle = db.Column('project_title', db.String)
@@ -844,7 +844,6 @@ class PreApplication(CustomModel):
     # 1-1 one project, one preApp
     project = db.relationship('Project', back_populates='preApplication')
     institute=db.relationship('Institution', foreign_keys=[institution])
-    institute2=db.relationship('Institution', foreign_keys=[institution2])
 
 class Project(CustomModel):
     __tablename__ = 'Project'

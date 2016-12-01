@@ -1214,8 +1214,8 @@ class PreApplicationForm(BaseForm):
                                [] + COMMON_STRING_VALIDATORS)
     institution = IntegerField('institution',
                               [] + COMMON_INTEGER_VALIDATORS)
-    institution2 = IntegerField('institution2',
-                               [] + COMMON_INTEGER_VALIDATORS)
+    institution2 = StringField('institution2',
+                               [] + COMMON_STRING_VALIDATORS)
     uid = StringField('uid',
                       [] + COMMON_STRING_VALIDATORS)
     udoh = StringField('udoh',
@@ -1258,6 +1258,11 @@ class PreApplicationForm(BaseForm):
         project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
+            hasErrors = True
+
+        institution = query.get_institution(self.institution.data)
+        if institution is None:
+            self.institution.errors.append("ID not found")
             hasErrors = True
         return not hasErrors
 
