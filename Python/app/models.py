@@ -315,8 +315,6 @@ class Funding(CustomModel):
     grantStatusID = db.Column('grantStatusLUTID', db.Integer, db.ForeignKey('GrantStatusLUT.grantStatusID'))
     projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     fundingSourceID = db.Column('fundingSourceID', db.Integer, db.ForeignKey('FundingSourceLUT.fundingSourceID'))
-    primaryFundingSource = db.Column('primary_funding_source', db.String)
-    secondaryFundingSource = db.Column('secondary_funding_source', db.String)
     fundingNumber = db.Column('funding_number', db.String)
     grantTitle = db.Column('grant_title', db.String)
     dateStatus = db.Column('date_status', db.Date)
@@ -513,7 +511,7 @@ class LogSubjectLUT(CustomModel):
 
     # Relationships
     # M - 1, many logs with the same subject
-    logs = db.relationship("Log", back_populates="logSubject")
+    logs = db.relationship("Log", back_populates="logSubject" , order_by="desc(Log.date)")
 
 
 class Patient(CustomModel):
@@ -656,7 +654,7 @@ class PhaseStatus(CustomModel):
 
     # Relationships
     # M - 1, many logs with the same phase
-    logs = db.relationship("Log", back_populates="phaseStatus")
+    logs = db.relationship("Log", back_populates="phaseStatus", order_by="desc(Log.date)")
 
 
 class PhoneTypeLUT(CustomModel):
@@ -882,11 +880,11 @@ class Project(CustomModel):
     # 1 - M, one project, many ucrReports
     ucrReports = db.relationship("UCRReport", back_populates="project")
     # 1 - M, one project many project statuses
-    projectStatuses = db.relationship("ProjectStatus", back_populates="project")
+    projectStatuses = db.relationship("ProjectStatus", back_populates="project" , order_by =("desc(ProjectStatus.statusDate)"))
     # 1 - 1, one project, one preApp
     preApplication = db.relationship("PreApplication", uselist=False, back_populates="project")
     # 1 - M, one project, many logs
-    logs = db.relationship("Log", back_populates="project")
+    logs = db.relationship("Log", back_populates="project", order_by="desc(Log.date)")
     # 1 - M, one project, many fundings
     fundings = db.relationship("Funding", back_populates="project")
     # M - 1, many project staff can have the same project
@@ -1141,7 +1139,7 @@ class Staff(CustomModel):
     # 1 - M, one staff with many statuses
     projectStatuses = db.relationship("ProjectStatus", back_populates="staff")
     # 1 - M, one staff with many lgos
-    logs = db.relationship("Log", back_populates="staff")
+    logs = db.relationship("Log", back_populates="staff", order_by="desc(Log.date)")
     # 1 - M, one staff with many trainings
     staffTraining = db.relationship('StaffTraining', back_populates="staff")
     # M - 1, many projectStaff to staff (people can be working on multiple projects)

@@ -1,9 +1,23 @@
 {% extends "layout_all.html" %}
 {% block content %}
-    
+<div class="container-fluid">
         <form class="formOverride" id="projectForm" action='/website/projects/{{form.project.projectID}}/', method='post'>
           <fieldset>
             <legend>Project Information</legend>
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
+                <fieldset>
+                    <div class = "form-group">
+                      <div class="row">
+                        <div class="col-md-1">
+                         <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                        </div>
+                        <div class="col-md-2">
+                          <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                        </div>
+                      </div>
+                    </div>
+                </fieldset>
+           {% endif %}
             <div class="form-group">
               <div class="row">
                 <div class="col-md-8">
@@ -171,10 +185,13 @@
         </fieldset>
         {# Only allow edit button for developers... #}
         {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
-        </fieldset>
+
             <fieldset>
                 <div class = "form-group">
                   <div class="row">
+                    <div class="col-md-1">
+                      <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                    </div>
                     <div class="col-md-2">
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
                     </div>
@@ -306,8 +323,6 @@
                                     <tr>
                                         <th>Grant Status</th>
                                         <th>Funding Source</th>
-                                        <th>Primary Funding Source</th>
-                                        <th>Secondary Funding Source</th>
                                         <th>Funding Number</th>
                                         <th>Grant Title</th>
                                         <th>Date Status</th>
@@ -318,8 +333,6 @@
                                     <tr>
                                         <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus}}</a></td>
                                         <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.primaryFundingSource}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.secondaryFundingSource}}</a></td>
                                         <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber}}</a></td>
                                         <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle}}</a></td>
                                         <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus}}</a></td>
@@ -641,5 +654,6 @@
 
         {% endif %}
     </div>
-
+</div>
 {% endblock %}
+

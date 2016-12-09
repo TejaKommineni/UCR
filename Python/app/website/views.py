@@ -218,14 +218,24 @@ def overview():
     form["queryParams"] = {}
     mostRecentProjectStatusTypeID=None
     projectTitle=None
+    piLastName=None
+    projectTypeID=None
     if "mostRecentProjectStatusTypeID" in request.args:
         mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
         form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
     if "projectTitle" in request.args:
         projectTitle = value_or_none(request.args["projectTitle"])
         form["queryParams"]["projectTitle"] = request.args["projectTitle"]
-    form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
+    if "piLastName" in request.args:
+        piLastName = value_or_none(request.args["piLastName"])
+        form["queryParams"]["piLastName"] = request.args["piLastName"]
+    if "projectTypeID" in request.args:
+        projectTypeID = value_or_none(request.args["projectTypeID"])
+        form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+    form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID,piLastName=piLastName,projectTypeID=projectTypeID)
     form["projectStatusLUTs"] = query.get_project_status_luts()
+    form["preapplications"] = query.get_pre_applications()
+    form["projectTypes"] = query.get_project_types()
 
     return render_template("study_summary_table.html", form=form)
 
@@ -1202,6 +1212,99 @@ def delete_ctc_facility(CTCFacilityID):
     except Exception as e:
         return internal_error(e)
 
+##############################################################################
+# Departments LUT
+##############################################################################
+@website.route('/departments/', methods=['GET'])
+@website.route('/departments/<int:departmentID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def get_department(departmentID=None):
+    try:
+        if departmentID is None:
+            form = {
+                "departments": query.get_departments(),
+                "add": True
+            }
+            return render_template("departments.html", form=form)
+        else:
+            department = query.get_department(departmentID)
+            if department is not None:
+                form = {
+                    "departments": [department],
+                    "add": False
+                }
+                return render_template("departments.html", form=form)
+            else:
+                return item_not_found("DepartmentID {} not found".format(departmentID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/departments/<int:departmentID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def update_department(departmentID):
+    try:
+        department = query.get_department(departmentID)
+        if department is not None:
+            form = forms.DepartmentLUTForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == department.versionID:
+                    department.department = form.department.data
+                    query.commit()
+                    flash("Updated Departments")
+                    return redirect_back('departments/{}/'.format(departmentID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("DepartmentID {} not found".format(departmentID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/departments/', methods=['POST'])
+@website.route('/departments/<int:departmentID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def create_department(departmentID=None):
+    try:
+        if departmentID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_department(departmentID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_department(departmentID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.DepartmentLUTForm(request.form)
+            if form.validate():
+                department = models.Department(
+                    department=form.department.data
+                )
+                query.add(department)
+                flash("Created Department")
+                return redirect_back(
+                    'departments/{}/'.format(department.departmentID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/departments/<int:departmentID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_department(departmentID):
+    try:
+        department = query.get_department(departmentID)
+        if department is not None:
+            deps = get_dependencies(department)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(department)
+                return item_deleted("DepartmentID {} deleted".format(departmentID))
+        else:
+            return item_not_found("DepartmentID {} not found".format(departmentID))
+    except Exception as e:
+        return internal_error(e)
+
 
 ##############################################################################
 # Funding
@@ -1240,8 +1343,6 @@ def update_funding(fundingID):
                     funding.grantStatusID = form.grantStatusID.data
                     funding.projectID = form.projectID.data
                     funding.fundingSourceID = form.fundingSourceID.data
-                    funding.primaryFundingSource = form.primaryFundingSource.data
-                    funding.secondaryFundingSource = form.secondaryFundingSource.data
                     funding.fundingNumber = form.fundingNumber.data
                     funding.grantTitle = form.grantTitle.data
                     funding.dateStatus = form.dateStatus.data
@@ -1281,8 +1382,6 @@ def create_funding(fundingID=None):
                     grantStatusID=form.grantStatusID.data,
                     projectID=form.projectID.data,
                     fundingSourceID=form.fundingSourceID.data,
-                    primaryFundingSource=form.primaryFundingSource.data,
-                    secondaryFundingSource=form.secondaryFundingSource.data,
                     fundingNumber=form.fundingNumber.data,
                     grantTitle=form.grantTitle.data,
                     dateStatus=form.dateStatus.data,
@@ -1761,6 +1860,99 @@ def delete_final_code(finalCodeID):
                 return item_deleted("FinalCodeID {} deleted".format(finalCodeID))
         else:
             return item_not_found("finalCodeID {} not found".format(finalCodeID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Field Divisions LUT
+##############################################################################
+@website.route('/fielddivisions/', methods=['GET'])
+@website.route('/fielddivisions/<int:fielddivisionID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def get_fielddivision(fielddivisionID=None):
+    try:
+        if fielddivisionID is None:
+            form = {
+                "fieldDivisions": query.get_fieldDivisions(),
+                "add": True
+            }
+            return render_template("fielddivisions.html", form=form)
+        else:
+            fieldDivision = query.get_fieldDivision(fielddivisionID)
+            if fieldDivision is not None:
+                form = {
+                    "fieldDivisions": [fieldDivision],
+                    "add": False
+                }
+                return render_template("fielddivisions.html", form=form)
+            else:
+                return item_not_found("Field Division ID {} not found".format(fielddivisionID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/fielddivisions/<int:fielddivisionID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def update_fielddivision(fielddivisionID):
+    try:
+        fieldDivision = query.get_fieldDivision(fielddivisionID)
+        if fieldDivision is not None:
+            form = forms.FieldDivisionLUTForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == fieldDivision.versionID:
+                    fieldDivision.fieldDivision = form.fieldDivision.data
+                    query.commit()
+                    flash("Updated Field Divisions")
+                    return redirect_back('fielddivisions/{}/'.format(fielddivisionID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("Field Division ID {} not found".format(fielddivisionID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/fielddivisions/', methods=['POST'])
+@website.route('/fielddivisions/<int:fielddivisionID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def create_fielddivision(fielddivisionID=None):
+    try:
+        if fielddivisionID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_fielddivision(fielddivisionID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_fielddivision(fielddivisionID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.FieldDivisionLUTForm(request.form)
+            if form.validate():
+                fieldDivision = models.FieldDivision(
+                    fieldDivision=form.fieldDivision.data
+                )
+                query.add(fieldDivision)
+                flash("Created Field Division")
+                return redirect_back(
+                    'fielddivisions/{}/'.format(fieldDivision.fieldDivisionID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/fielddivisions/<int:fielddivisionID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_fielddivision(fielddivisionID):
+    try:
+        fieldDivision = query.get_fieldDivision(fielddivisionID)
+        if fieldDivision is not None:
+            deps = get_dependencies(fieldDivision)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(fieldDivision)
+                return item_deleted("Field Division ID {} deleted".format(fielddivisionID))
+        else:
+            return item_not_found("Field Division ID {} not found".format(fielddivisionID))
     except Exception as e:
         return internal_error(e)
 
@@ -2474,6 +2666,99 @@ def delete_informant_phone(informantPhoneID):
                 return item_deleted("InformantPhoneID {} deleted".format(informantPhoneID))
         else:
             return item_not_found("InformantPhoneID {} not found".format(informantPhoneID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# Institutions LUT
+##############################################################################
+@website.route('/institutions/', methods=['GET'])
+@website.route('/institutions/<int:institutionID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def get_institution(institutionID=None):
+    try:
+        if institutionID is None:
+            form = {
+                "institutions": query.get_institutions(),
+                "add": True
+            }
+            return render_template("institutions.html", form=form)
+        else:
+            institution = query.get_institution(institutionID)
+            if institution is not None:
+                form = {
+                    "institutions": [institution],
+                    "add": False
+                }
+                return render_template("institutions.html", form=form)
+            else:
+                return item_not_found("InstitutionID {} not found".format(institutionID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/institutions/<int:institutionID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def update_institution(institutionID):
+    try:
+        institution = query.get_institution(institutionID)
+        if institution is not None:
+            form = forms.InstitutionLUTForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == institution.versionID:
+                    institution.institution = form.institution.data
+                    query.commit()
+                    flash("Updated Institutions")
+                    return redirect_back('institutions/{}/'.format(institutionID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("InstitutionID {} not found".format(institutionID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/institutions/', methods=['POST'])
+@website.route('/institutions/<int:institutionID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def create_institution(institutionID=None):
+    try:
+        if institutionID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_institution(institutionID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_institution(institutionID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.InstitutionLUTForm(request.form)
+            if form.validate():
+                institution = models.Institution(
+                    institution=form.institution.data
+                )
+                query.add(institution)
+                flash("Created Institution")
+                return redirect_back(
+                    'institutions/{}/'.format(institution.institutionID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/institutions/<int:institutionID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_institution(institutionID):
+    try:
+        institution = query.get_institution(institutionID)
+        if institution is not None:
+            deps = get_dependencies(institution)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(institution)
+                return item_deleted("InstitutionID {} deleted".format(institutionID))
+        else:
+            return item_not_found("InstitutionID {} not found".format(institutionID))
     except Exception as e:
         return internal_error(e)
 
@@ -4561,6 +4846,7 @@ def get_project(projectID=None):
             form["projectTypes"] = query.get_project_types()
             form["projectStatusLUTs"] = query.get_project_status_luts()
             form["institutions"] = query.get_institutions()
+            form["verifyDate"] = datetime.date(1,1,1);
             return render_template("project_table.html", form=form, projects=projects)
         else:
             proj = query.get_project(projectID)
@@ -6492,6 +6778,98 @@ def delete_ucr_role(ucrRoleID):
     except Exception as e:
         return internal_error(e)
 
+##############################################################################
+# Ucr Report Type LUT
+##############################################################################
+@website.route('/ucrreporttypes/', methods=['GET'])
+@website.route('/ucrreporttypes/<int:ucrreporttypesID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def get_ucrreporttype(ucrreporttypesID=None):
+    try:
+        if ucrreporttypesID is None:
+            form = {
+                "ucrReports": query.get_report_types(),
+                "add": True
+            }
+            return render_template("ucr_reports.html", form=form)
+        else:
+            ucrReport = query.get_report_type(ucrreporttypesID)
+            if ucrReport is not None:
+                form = {
+                    "ucrReports": [ucrReport],
+                    "add": False
+                }
+                return render_template("ucr_reports.html", form=form)
+            else:
+                return item_not_found("UcrReportID {} not found".format(ucrreporttypesID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrreporttypes/<int:ucrreporttypesID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def update_ucrreporttype(ucrreporttypesID):
+    try:
+        ucrReport = query.get_report_type(ucrreporttypesID)
+        if ucrReport is not None:
+            form = forms.UcrReportLUTForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == ucrReport.versionID:
+                    ucrReport.ucrReportType = form.ucrReportType.data
+                    query.commit()
+                    flash("Updated UCR Report")
+                    return redirect_back('ucrreporttypes/{}/'.format(ucrreporttypesID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("UcrReportID {} not found".format(ucrreporttypesID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrreporttypes/', methods=['POST'])
+@website.route('/ucrreporttypes/<int:ucrreporttypesID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def create_ucrreporttype(ucrreporttypesID=None):
+    try:
+        if ucrreporttypesID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_ucrreporttype(ucrreporttypesID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_ucrreporttype(ucrreporttypesID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.UcrReportLUTForm(request.form)
+            if form.validate():
+                ucrReport = models.UCRReportType(
+                    ucrReportType=form.ucrReportType.data
+                )
+                ret = query.add(ucrReport)
+                flash("Created Ucr Report Type ")
+                return redirect_back('ucrreporttypes/{}/'.format(ucrreporttypesID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/ucrreporttypes/<int:ucrreporttypesID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_ucrreporttype(ucrreporttypesID):
+    try:
+        ucrReport = query.get_report_type(ucrreporttypesID)
+        if ucrReport is not None:
+            deps = get_dependencies(ucrReport)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(ucrReport)
+                return item_deleted("UcrReportTypesID {} deleted".format(ucrreporttypesID))
+        else:
+            return item_not_found("UcrReportTypesID {} not found".format(ucrreporttypesID))
+    except Exception as e:
+        return internal_error(e)
+
 
 ##############################################################################
 # Lookup Table
@@ -6533,6 +6911,22 @@ def get_lookup_tables():
         "endpoint": "contacttypes"
     })
 
+    departments = query.get_departments()
+    form["tables"].append({
+        "name": "Departments",
+        "count": len(departments),
+        "values": [department.department for department in departments],
+        "endpoint": "departments"
+    })
+
+    fieldDivisions = query.get_fieldDivisions()
+    form["tables"].append({
+        "name": "Field Divisions",
+        "count": len(fieldDivisions),
+        "values": [fieldDivision.fieldDivision for fieldDivision in fieldDivisions],
+        "endpoint": "fielddivisions"
+    })
+
     finalCodes = query.get_final_codes()
     form["tables"].append({
         "name": "Final Codes",
@@ -6565,6 +6959,14 @@ def get_lookup_tables():
         "endpoint": "humansubjecttrainings"
     })
 
+    institutions = query.get_institutions()
+    form["tables"].append({
+        "name": "Institutions",
+        "count": len(institutions),
+        "values": [institution.institution for institution in institutions],
+        "endpoint": "institutions"
+    })
+
     irbHolders = query.get_irb_holders()
     form["tables"].append({
         "name": "IRB Holders",
@@ -6581,14 +6983,6 @@ def get_lookup_tables():
         "endpoint": "logsubjects"
     })
 
-    patientProjectStatuses = query.get_patient_project_status_types()
-    form["tables"].append({
-        "name": "Patient Project Statuses",
-        "count": len(patientProjectStatuses),
-        "values": [pps.statusDescription for pps in patientProjectStatuses],
-        "endpoint": "patientprojectstatustypes"
-    })
-
     phaseStatuses = query.get_phase_statuses()
     form["tables"].append({
         "name": "Phase Status",
@@ -6603,14 +6997,6 @@ def get_lookup_tables():
         "count": len(phoneTypes),
         "values": [pt.phoneType for pt in phoneTypes],
         "endpoint": "phonetypes"
-    })
-
-    physicianStatuses = query.get_physician_statuses()
-    form["tables"].append({
-        "name": "Physician Statuses",
-        "count": len(physicianStatuses),
-        "values": [ps.physicianStatus for ps in physicianStatuses],
-        "endpoint": "physicianstatuses"
     })
 
     projectStatuses = query.get_project_status_luts()
@@ -6659,6 +7045,14 @@ def get_lookup_tables():
         "count": len(tracingSources),
         "values": [ts.description for ts in tracingSources],
         "endpoint": "tracingsources"
+    })
+
+    ucrReportTypes = query.get_report_types()
+    form["tables"].append({
+        "name": "UCR Report Types",
+        "count": len(ucrReportTypes),
+        "values": [ut.ucrReportType for ut in ucrReportTypes],
+        "endpoint": "ucrreporttypes"
     })
 
     return render_template("lookup_tables_table.html", form=form)

@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+ <div class = container-fluid>
       <div class="row">
         <div class="col-md-6">
           <h1>Project Summary</h1>
@@ -9,7 +10,7 @@
           <fieldset>
             <div class="form-group">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label for="text_shortTitle">Project Title</label>
                   <input type="text" class="form-control" name="projectTitle" id="text_shortTitle" value="{{form.queryParams.projectTitle}}">
                 </div>
@@ -27,6 +28,32 @@
                   </select>
                 </div>
                 <div class="col-md-2">
+                  <label for="select_piLastName">PI Last Name</label>
+                  <select type="text" class="form-control" name="piLastName" id="select_piLastName">
+                    <option value=""></option>
+                  {% for preapplication in form["preapplications"] %}
+                    {% if preapplication.piLastName == form.queryParams.piLastName %}
+                    <option value="{{preapplication.piLastName}}" selected="selected">{{preapplication.piLastName}}</option>
+                    {% else %}
+                    <option value="{{preapplication.piLastName}}">{{preapplication.piLastName}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="select_projectTypeID">Project Type</label>
+                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID">
+                    <option value=""></option>
+                  {% for projectType in form["projectTypes"] %}
+                    {% if projectType.projectTypeID|string() == form.queryParams.projectTypeID %}
+                    <option value="{{projectType.projectTypeID}}" selected="selected">{{projectType.projectType}}</option>
+                    {% else %}
+                    <option value="{{projectType.projectTypeID}}">{{projectType.projectType}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-2">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
                 </div>
@@ -34,15 +61,15 @@
             </div>
           </fieldset>
         </form>
-        <table class="table table-striped no-spacing">
+        <table class="table table-striped no-spacing" id="overviewTable">
           <thead>
             <tr>
                 <th>Project ID</th>
+                <th>PI Last Name</th>
                 <th>Project Title</th>
-                <th>Start Date</th>
+                <th>UCR Start Date</th>
                 <th>Letters Sent in Last 30 Days</th>
                 <th>Phone Calls in Last 30 Days</th>
-                <th>Average Contacts Per Patient</th>
                 <th>Consents & Permissions</th>
             </tr>
           </thead>
@@ -50,14 +77,15 @@
             {% for project in form.summary.projects %}
             <tr>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectID}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["preapplication"].piLastName}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectTitle}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.activityStartDate}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.avgNumberOfContactsPerPerson}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsentsOrPermissions}}</a></td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
+</div>
 {% endblock %}

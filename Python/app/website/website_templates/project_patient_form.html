@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+<div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
           <h1>Project Patient Information</h1>
@@ -7,6 +8,22 @@
       </div>
       
       <form class="formOverride" id="patientInfoForm">
+         <fieldset>
+                <div class = "form-group">
+                  <div class="row">
+                    <div class="col-md-1">
+                       <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                    </div>
+                    <div class="col-md-2">
+                      {% if preApplication is not none %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                      {% else %}
+                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Project Patient</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+         </fieldset>
         <fieldset>
             <div class="form-group">
                 <div class="row">
@@ -387,6 +404,9 @@
             <fieldset>
                 <div class = "form-group">
                   <div class="row">
+                    <div class="col-md-1">
+                       <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                    </div>
                     <div class="col-md-2">
                       {% if preApplication is not none %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
@@ -682,5 +702,5 @@
         </div>
     </div>
     </div>
-    
+</div>
 {% endblock %}

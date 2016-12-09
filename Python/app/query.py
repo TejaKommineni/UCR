@@ -6,9 +6,10 @@ from app.database import db
 from sqlalchemy import or_, and_, func
 from sqlalchemy.orm import aliased
 from app.models import *
+from sqlalchemy import desc
+from sqlalchemy import asc
 
-
-def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
+def summary(projectTitle=None, mostRecentProjectStatusTypeID=None, piLastName=None, projectTypeID=None):
     """
     Generates a dictionary that summarizes each project over the last 30 days
     :return:
@@ -32,11 +33,21 @@ def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
 
     # some complex query to filter by the most recent projectStatusTypeID
     filters = []
+    filters.append(ProjectStatus.projectStatusTypeID != 4)
+    filters.append(ProjectStatus.projectStatusTypeID != 5)
+    filters.append(ProjectStatus.projectStatusTypeID != 6)
     if projectTitle:
         filters.append(Project.projectTitle.like('%{}%'.format(projectTitle)))
     if mostRecentProjectStatusTypeID:
         filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
-    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).outerjoin(ProjectStatus.project).filter(ProjectStatus.statusDate == db.session.query(
+    if piLastName:
+        filters.append(PreApplication.piLastName == piLastName)
+    if piLastName:
+        filters.append(PreApplication.piLastName == piLastName)
+    if projectTypeID:
+        filters.append(Project.projectTypeID == projectTypeID)
+
+    res = db.session.query(Project.projectID, Project.projectTitle, Project.activityStartDate, Project.projectTypeID).outerjoin(ProjectStatus.project).outerjoin(PreApplication, Project.projectID == PreApplication.projectID).filter(ProjectStatus.statusDate == db.session.query(
         func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.projectTitle).all()
     for result in res:
         summary_info = {
@@ -52,6 +63,7 @@ def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
                                                               max_contact_code=299, min_contact_code=200)[0],
             "numberOfConsentsOrPermissions": get_number_of_final_code_types(projectID=result[0],
                                                               min_final_code=100, max_final_code=199)[0],
+            "preapplication": get_pi_last_name(projectID=result[0]),
         }
         try:
             summary_info["avgNumberOfContactsPerPerson"]= float(get_number_of_contact_types(projectID=result[0],
@@ -61,6 +73,7 @@ def summary(projectTitle=None, mostRecentProjectStatusTypeID=None):
         except ZeroDivisionError:
             summary_info["avgNumberOfContactsPerPerson"] = "inf"
         summary_dict["projects"].append(summary_info)
+        projects = summary_dict["projects"]
     return summary_dict
 
 
@@ -99,6 +112,10 @@ def get_number_of_final_code_types(projectID=None, final_code_type_ids=None, min
         filter(and_(*filters)).first()
     return res
 
+def get_pi_last_name(projectID= None):
+
+    res = db.session.query(PreApplication).filter_by(projectID=projectID).first()
+    return res
 
 def create_all():
     db.create_all()
@@ -113,7 +130,7 @@ def flush():
 
 
 def get_abstract_statuses():
-    return db.session.query(AbstractStatus).all()
+    return db.session.query(AbstractStatus).order_by(AbstractStatus.abstractStatus).all()
 
 
 def get_abstract_status(id):
@@ -173,7 +190,7 @@ def get_contact_type_by_code(code):
 
 
 def get_contact_info_sources():
-    return db.session.query(ContactInfoSourceLUT).all()
+    return db.session.query(ContactInfoSourceLUT).order_by(ContactInfoSourceLUT.contactInfoSource).all()
 
 
 def get_contact_info_source(id):
@@ -181,7 +198,7 @@ def get_contact_info_source(id):
 
 
 def get_contact_info_statuses():
-    return db.session.query(ContactInfoStatusLUT).all()
+    return db.session.query(ContactInfoStatusLUT).order_by(ContactInfoStatusLUT.contactInfoStatus).all()
 
 
 def get_contact_info_status(id):
@@ -270,7 +287,7 @@ def get_funding(id):
 
 
 def get_funding_sources():
-    return db.session.query(FundingSourceLUT).all()
+    return db.session.query(FundingSourceLUT).order_by(FundingSourceLUT.fundingSource).all()
 
 
 def get_funding_source(id):
@@ -289,7 +306,7 @@ def get_gift_card_by_barcode(barcode):
 
 
 def get_grant_statuses():
-    return db.session.query(GrantStatusLUT).all()
+    return db.session.query(GrantStatusLUT).order_by(GrantStatusLUT.grantStatus).all()
 
 
 def get_grant_status(id):
@@ -297,7 +314,7 @@ def get_grant_status(id):
 
 
 def get_human_subject_trainings():
-    return db.session.query(HumanSubjectTrainingLUT).all()
+    return db.session.query(HumanSubjectTrainingLUT).order_by(HumanSubjectTrainingLUT.trainingType).all()
 
 
 def get_human_subject_training(id):
@@ -352,25 +369,25 @@ def get_institution(id):
 
 
 def get_institutions():
-    return db.session.query(Institution).all()
+    return db.session.query(Institution).order_by(Institution.institution).all()
 
 def get_department(id):
     return db.session.query(Department).filter_by(departmentID=id).first()
 
 
 def get_departments():
-    return db.session.query(Department).all()
+    return db.session.query(Department).order_by(Department.department).all()
 
 def get_fieldDivision(id):
     return db.session.query(FieldDivision).filter_by(fieldDivisionID=id).first()
 
 
 def get_fieldDivisions():
-    return db.session.query(FieldDivision).all()
+    return db.session.query(FieldDivision).order_by(FieldDivision.fieldDivision).all()
 
 
 def get_irb_holders():
-    return db.session.query(IRBHolderLUT).all()
+    return db.session.query(IRBHolderLUT).order_by(IRBHolderLUT.holder).all()
 
 
 def get_irb_holder(id):
@@ -386,7 +403,7 @@ def get_log(id):
 
 
 def get_log_subjects():
-    return db.session.query(LogSubjectLUT).all()
+    return db.session.query(LogSubjectLUT).order_by(LogSubjectLUT.logSubject).all()
 
 
 def get_log_subject(id):
@@ -460,7 +477,7 @@ def get_patient_project_status_type(id):
 
 
 def get_phase_statuses():
-    return db.session.query(PhaseStatus).all()
+    return db.session.query(PhaseStatus).order_by(PhaseStatus.phaseStatus).all()
 
 
 def get_phase_status(id):
@@ -468,7 +485,7 @@ def get_phase_status(id):
 
 
 def get_phone_types():
-    return db.session.query(PhoneTypeLUT).all()
+    return db.session.query(PhoneTypeLUT).order_by(PhoneTypeLUT.phoneType).all()
 
 
 def get_phone_type(id):
@@ -513,7 +530,7 @@ def get_physician_email(id):
 
 
 def get_physician_facilities():
-    return db.session.query(PhysicianFacility).all()
+    return db.session.query(PhysicianFacility).order_by(PhysicianFacility.facility).all()
 
 
 def get_physician_facility(id):
@@ -525,7 +542,7 @@ def get_physician_facility_status(id):
 
 
 def get_physician_facility_statuses():
-    return db.session.query(PhysicianFacilityStatus).all()
+    return db.session.query(PhysicianFacilityStatus).oreder_by(PhysicianFacilityStatus.physicianFacilityStatus).all()
 
 
 def get_physician_phones():
@@ -537,7 +554,7 @@ def get_physician_phone(id):
 
 
 def get_physician_statuses():
-    return db.session.query(PhysicianStatus).all()
+    return db.session.query(PhysicianStatus).order_by(PhysicianStatus.physicianStatus).all()
 
 
 def get_physician_status(id):
@@ -553,7 +570,7 @@ def get_physician_to_ctc(id):
 
 
 def get_pre_applications():
-    return db.session.query(PreApplication).all()
+    return db.session.query(PreApplication).order_by(PreApplication.piLastName).all()
 
 
 def get_pre_application(id):
@@ -565,7 +582,7 @@ def get_project(id):
 
 
 def get_projects():
-    return db.session.query(Project).all()
+    return db.session.query(Project).order_by(Project.shortTitle).all()
 
 
 def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastName=None, mostRecentProjectStatusTypeID=None):
@@ -582,7 +599,7 @@ def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastNa
         filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
 
     res = db.session.query(Project).outerjoin(ProjectStatus.project).filter(ProjectStatus.statusDate == db.session.query(
-        func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.projectTitle).all()
+        func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.shortTitle).all()
     return res
 
 
@@ -637,7 +654,7 @@ def query_staffs(firstName=None, lastName=None, staffID=None, phoneNumber=None, 
         filters.append(Staff.departmentID == departmentID)
     if ucrRoleID:
         filters.append(Staff.ucrRoleID == ucrRoleID)
-    return db.session.query(Staff).filter(or_(*filters)).all()
+    return db.session.query(Staff).filter(or_(*filters)).order_by(Staff.lastName).all()
 
 
 def get_project_staff(id):
@@ -653,7 +670,7 @@ def get_project_status(id):
 
 
 def get_project_status_luts():
-    return db.session.query(ProjectStatusLUT).all()
+    return db.session.query(ProjectStatusLUT).order_by(ProjectStatusLUT.projectStatus).all()
 
 
 def get_project_status_lut(id):
@@ -661,7 +678,7 @@ def get_project_status_lut(id):
 
 
 def get_project_types():
-    return db.session.query(ProjectType).all()
+    return db.session.query(ProjectType).order_by(ProjectType.projectType).all()
 
 def get_project_type(id):
     return db.session.query(ProjectType).filter_by(projectTypeID=id).first()
@@ -685,7 +702,7 @@ def get_review_committee_status(id):
 
 
 def get_review_committee_statuses():
-    return db.session.query(ReviewCommitteeStatusLUT).all()
+    return db.session.query(ReviewCommitteeStatusLUT).order_by(ReviewCommitteeStatusLUT.reviewCommitteeStatus).all()
 
 
 def get_review_committees():
@@ -701,7 +718,7 @@ def get_review_committee_lut(id):
 
 
 def get_review_committee_luts():
-    return db.session.query(ReviewCommitteeLUT).all()
+    return db.session.query(ReviewCommitteeLUT).order_by(ReviewCommitteeLUT.reviewCommittee).all()
 
 
 def get_roles():
@@ -726,7 +743,7 @@ def get_sites():
     return db.session.query(SiteGroup).all()
 
 def get_staffs():
-    return db.session.query(Staff).all()
+    return db.session.query(Staff).order_by(Staff.firstName).all()
 
 
 def get_staff(id):
@@ -734,7 +751,7 @@ def get_staff(id):
 
 
 def get_staff_roles():
-    return db.session.query(StaffRoleLUT).all()
+    return db.session.query(StaffRoleLUT).order_by(StaffRoleLUT.staffRole).all()
 
 
 def get_staff_role(id):
@@ -766,7 +783,7 @@ def get_tracing(id):
 
 
 def get_tracing_sources():
-    return db.session.query(TracingSourceLUT).all()
+    return db.session.query(TracingSourceLUT).order_by(TracingSourceLUT.description).all()
 
 
 def get_tracing_source(id):
@@ -786,7 +803,7 @@ def get_report_type(id):
 
 
 def get_report_types():
-    return db.session.query(UCRReportType).all()
+    return db.session.query(UCRReportType).order_by(UCRReportType.ucrReportType).all()
 
 
 def get_ucr_roles():

@@ -1,0 +1,56 @@
+<div class="container-fluid">
+{% if ucrReport is not none %}
+    <!-- action url is for update -->
+    <form class="formOverride" id="ucrReport{{loop.index}}" action='/website/ucrreporttypes/{{ucrReport["ucrReportTypeID"]}}/', method='post'>
+{% else %}
+    <!-- action url is for post/create -->
+    <form class="formOverride" id="ucrReport{{loop.index}}" action='/website/ucrreporttypes/', method='post'>
+{% endif %}
+      <fieldset>
+        <legend>UCR Report Types</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_ucrreport{{loop.index}}">UCR Report Type</label>
+                  <input type="text" class="form-control" name="ucrReportType" id="text_ucrReportType{{loop.index}}" value="{{ucrReport["ucrReportType"]}}">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate{{loop.index}}">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate{{loop.index}}" value="{{ucrReport["createdDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate{{loop.index}}">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate{{loop.index}}" value="{{ucrReport["modifiedDate"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID{{loop.index}}">Version</label>
+                  {% if department is not none %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="{{ucrReport["versionID"]}}" readonly="readonly">
+                  {% else %}
+                    <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
+                  {% endif %}
+                </div>
+              <div class="col-md-1">
+                    <label>Undo Changes</label>
+                    <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                </div>
+                <div class="col-md-2">
+                  <label for="sub_button{{loop.index}}">Make Changes</label>
+                  {% if ucrReport is not none %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Add Ucr Report Type</button>
+                  {% endif %}
+                </div>
+                                <!-- Extra hidden fields -->
+                {% if ucrReport is not none %}
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="ucrReportTypeID" value="{{ucrReport["ucrReportTypeID"]}}"/>
+                {% else %}
+                    <input type="hidden" name="ucrReportTypeID" value="0"/>
+                {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

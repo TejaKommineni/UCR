@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+<div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
           <h1>Projects</h1>
@@ -9,10 +10,6 @@
           <fieldset>
             <div class="form-group">
               <div class="row">
-                <div class = "col-md-2">
-                  <label for="text_projectID">Project ID</label>
-                  <input type="text" class="form-control" name="projectID" id="text_projectID" value="{{form.queryParams.projectID}}">
-                </div>
                 <div class="col-md-2"> 
                   <label for="text_shortTitle">Short Title</label>
                   <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form.queryParams.shortTitle}}">
@@ -56,24 +53,34 @@
           </fieldset>
         </form>
       
-        <table class="table table-striped no-spacing">
+        <table class="table table-striped no-spacing" id="projectTable">
           <thead>
             <tr>
                 <th>Project ID</th>
-                <th>Project Type</th>
                 <th>Short Title</th>
-                <th>Date Added</th>
+                <th>Project Type</th>
+                <th>Current Project Status</th>
+                <th>Current Status Date</th>
+                <th>IRB Holder</th>
             </tr>
           </thead>
           <tbody>
             {% for project in projects %}
             <tr>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"]}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectType"].projectType}}</a></td>
                 <td><a href="/website/projects/{{project["projectID"]}}">{{project["shortTitle"]}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["dateAdded"]}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}" >{{project["projectType"].projectType}}</a></td>
+                {% for projectStatus in project["projectStatuses"]%}
+                    {% if loop.index  == 1 %}
+                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.projectStatus.projectStatus }}</a></td>
+                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.statusDate }}</a></td>
+                    {% endif %}
+                {% endfor %}
+
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["irbHolder"].holder}}</a></td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
+</div>
 {% endblock %}

@@ -7,12 +7,28 @@
         <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/dataTables.min.css') }}">
         <!-- Optional theme -->
         <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap-theme.min.css') }}">
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
         <!-- Latest compiled and minified JavaScript -->
         <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static',filename='js/theme.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/dataTables.min.js') }}"></script>
+
+
+        <script>
+            $(document).ready(function() {
+              $('.table').dataTable({
+                        "bPaginate": true,
+                        "bLengthChange": false,
+                        "bFilter": false,
+                        "bInfo": true,
+                        "bAutoWidth": false });
+            $('#overviewTable').dataTable().fnSort( [[1,'asc']]);
+            $('#projectTable').dataTable().fnSort( [[1,'asc']]);
+             } );
+        </script>
     </head>
     <body>
         <nav class = "navbar navbar-default navbar-dark navbar-inverse" role = "navigation">

@@ -345,6 +345,10 @@ class CTCForm(BaseForm):
 
         return not hasErrors
 
+class DepartmentLUTForm(BaseForm):
+    department = StringField('department',
+                               [] + COMMON_STRING_VALIDATORS)
+
 
 class FacilityForm(BaseForm):
     facilityName = StringField('facilityName',
@@ -459,6 +463,9 @@ class FacilityPhoneForm(BaseForm):
                 hasErrors = True
         return not hasErrors
 
+class FieldDivisionLUTForm(BaseForm):
+    fieldDivision = StringField('fieldDivision',
+                               [] + COMMON_STRING_VALIDATORS)
 
 class FinalCodeForm(BaseForm):
     finalCode = IntegerField('finalCode',
@@ -474,10 +481,6 @@ class FundingForm(BaseForm):
                              [validators.InputRequired()])
     fundingSourceID = IntegerField('fundingSourceID',
                                    [] + COMMON_INTEGER_VALIDATORS)
-    primaryFundingSource = StringField('primaryFundingSource',
-                                       [] + COMMON_STRING_VALIDATORS)
-    secondaryFundingSource = StringField('secondaryFundingSource',
-                                         [] + COMMON_STRING_VALIDATORS)
     fundingNumber = StringField('fundingNumber',
                                 [] + COMMON_STRING_VALIDATORS)
     grantTitle = StringField('grantTitle',
@@ -538,6 +541,10 @@ class IRBHolderLUTForm(BaseForm):
                          [] + COMMON_STRING_VALIDATORS)
     holderDefinition = StringField('holderDefinition',
                                    [] + COMMON_STRING_VALIDATORS)
+
+class InstitutionLUTForm(BaseForm):
+    institution = StringField('institution',
+                               [] + COMMON_STRING_VALIDATORS)
 
 
 class IncentiveForm(BaseForm):
@@ -1917,7 +1924,9 @@ class UCRReportForm(BaseForm):
                 hasErrors = True
         return not hasErrors
 
-
+class UcrReportLUTForm(BaseForm):
+    ucrReportType = StringField('ucrReportType',
+                               [] + COMMON_STRING_VALIDATORS)
 class UCRRoleForm(BaseForm):
     ucrRole = StringField('ucrRole',
                           [] + COMMON_STRING_VALIDATORS)

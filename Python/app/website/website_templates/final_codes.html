@@ -1,4 +1,5 @@
 {% extends "layout_all.html" %}
+<div class="container-fluid">
 {% block content %}
 {% for finalCode in form["finalCodes"] %}
     {% with %}
@@ -11,3 +12,4 @@
     {% include 'helper_forms/final_codes.html' %}
 {% endif %}
 {% endblock %}
+</div>

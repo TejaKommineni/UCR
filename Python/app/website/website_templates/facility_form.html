@@ -1,6 +1,7 @@
 {% extends "layout_all.html" %}
 {% block content %}
-      <div class="row">
+ <div class = container-fluid>
+     <div class="row">
         <div class="col-md-6">
           <h1>Facility Information</h1>
         </div>
@@ -14,6 +15,22 @@
         <form class="formOverride" id="facilityForm" action='/website/facilities/', method='post'>
     {% endif %}
       <fieldset>
+            <fieldset>
+             <div class = "form-group">
+              <div class="row">
+                <div class="col-md-1">
+                   <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                </div>
+                <div class="col-md-2">
+                  {% if facility is not none %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                  {% else %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Add Facility</button>
+                  {% endif %}
+                </div>
+              </div>
+             </div>
+            </fieldset>
             <div class="form-group">
               <div class="row">
                 <div class="col-md-8"> 
@@ -88,6 +105,9 @@
         <fieldset>
             <div class = "form-group">
               <div class="row">
+                <div class="col-md-1">
+                   <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                </div>
                 <div class="col-md-2">
                   {% if facility is not none %}
                   <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
@@ -186,5 +206,6 @@
                 </table>
         </div>
     </div>
-    
+   </div>
+</div>
 {% endblock %}

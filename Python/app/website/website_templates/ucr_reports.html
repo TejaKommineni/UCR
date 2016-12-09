@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for ucrReport in form["ucrReports"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/ucr_reports_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set ucrReport = none %}
+    {% include 'helper_forms/ucr_reports_form.html' %}
+{% endif %}
+{% endblock %}

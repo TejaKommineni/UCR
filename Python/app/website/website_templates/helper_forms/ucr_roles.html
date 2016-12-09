@@ -1,3 +1,4 @@
+<div class="container-fluid">
 {% if ucrRole is not none %}
     <!-- action url is for update -->
     <form class="formOverride" id="ucrRoleForm{{loop.index}}" action='/website/ucrroles/{{ucrRole["ucrRoleID"]}}/', method='post'>
@@ -29,6 +30,10 @@
                     <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
                   {% endif %}  
                 </div>
+                <div class="col-md-1">
+                    <label>Undo Changes</label>
+                    <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                </div>
                 <div class="col-md-2">
                   <label for="sub_button{{loop.index}}">Make Changes</label>
                   {% if ucrRole is not none %}
@@ -48,3 +53,4 @@
             </div>
         </fieldset>
     </form>
+</div>

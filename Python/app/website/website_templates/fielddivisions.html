@@ -1,0 +1,13 @@
+{% extends "layout_all.html" %}
+{% block content %}
+{% for fieldDivision in form["fieldDivisions"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/fielddivisions_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set fieldDivision = none %}
+    {% include 'helper_forms/fielddivisions_form.html' %}
+{% endif %}
+{% endblock %}

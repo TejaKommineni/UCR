@@ -1,10 +1,26 @@
-
+<div class="container-fluid">
     {% if informant is not none %}
             <!-- action url is for update -->
             <form class="formOverride" id="informantForm" action='/website/informants/{{informant["informantID"]}}/', method='post'>
         {% else %}
             <form class="formOverride" id="informantForm" action='/website/informants/', method='post'>
         {% endif %}
+       <fieldset>
+            <div class = "form-group">
+              <div class="row">
+                 <div class="col-md-1">
+                        <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                    </div>
+                <div class="col-md-2">
+                {% if informant is not none %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                {% else %}
+                  <button class="btn btn-primary form-control" type="submit" value="Submit">Add Informant</button>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+        </fieldset>
           <fieldset>
             <div class="form-group">
               <div class="row">
@@ -87,6 +103,9 @@
         <fieldset>
             <div class = "form-group">
               <div class="row">
+                 <div class="col-md-1">
+                        <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
+                    </div>
                 <div class="col-md-2">
                 {% if informant is not none %}
                   <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
@@ -98,3 +117,4 @@
             </div>
         </fieldset>
     </form>
+</div>
