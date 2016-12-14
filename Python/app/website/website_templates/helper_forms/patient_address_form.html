@@ -8,18 +8,16 @@
 {% endif %}
        <fieldset>
                 <div class = "form-group">
+                 {% if patientAddress is not none %}
                   <div class="row">
                     <div class="col-md-1">
                      <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
                     </div>
                     <div class="col-md-2">
-                      {% if patientAddress is not none %}
                       <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
-                      {% else %}
-                      <button class="btn btn-primary form-control" type="submit" value="Submit">Add Address</button>
-                      {% endif %}
                     </div>
                   </div>
+                 {% endif %}
                 </div>
             </fieldset>
       <fieldset>

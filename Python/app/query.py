@@ -594,11 +594,11 @@ def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastNa
     if projectTypeID:
         filters.append(Project.projectTypeID == projectTypeID)
     if piLastName:
-        filters.append(PreApplication.piLastName.like('%{}%'.format(piLastName)))
+        filters.append(PreApplication.piLastName == piLastName)
     if mostRecentProjectStatusTypeID:
         filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
 
-    res = db.session.query(Project).outerjoin(ProjectStatus.project).filter(ProjectStatus.statusDate == db.session.query(
+    res = db.session.query(Project).outerjoin(ProjectStatus.project).outerjoin(PreApplication, Project.projectID == PreApplication.projectID).filter(ProjectStatus.statusDate == db.session.query(
         func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.shortTitle).all()
     return res
 

@@ -29,16 +29,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="select_piLastName">PI Last Name</label>
-                  <select type="text" class="form-control" name="piLastName" id="select_piLastName">
-                    <option value=""></option>
-                  {% for preapplication in form["preapplications"] %}
-                    {% if preapplication.piLastName == form.queryParams.piLastName %}
-                    <option value="{{preapplication.piLastName}}" selected="selected">{{preapplication.piLastName}}</option>
-                    {% else %}
-                    <option value="{{preapplication.piLastName}}">{{preapplication.piLastName}}</option>
-                    {% endif %}
-                  {% endfor %}
-                  </select>
+                  <input type="text" class="form-control" name="piLastName" id="text_piLastName" value="{{form.queryParams.piLastName}}">
                 </div>
                 <div class="col-md-2">
                   <label for="select_projectTypeID">Project Type</label>

@@ -234,7 +234,6 @@ def overview():
         form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
     form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID,piLastName=piLastName,projectTypeID=projectTypeID)
     form["projectStatusLUTs"] = query.get_project_status_luts()
-    form["preapplications"] = query.get_pre_applications()
     form["projectTypes"] = query.get_project_types()
 
     return render_template("study_summary_table.html", form=form)
