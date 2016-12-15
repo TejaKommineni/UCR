@@ -30,7 +30,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_firstName">First Name</label>
-                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{staff.firstName}}">
+                  <input required type="text" class="form-control" name="firstName" id="text_firstName" value="{{staff.firstName}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_middleName">Middle Name</label>
@@ -38,31 +38,31 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_lastName">Last Name</label>
-                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{staff.lastName}}">
+                  <input required type="text" class="form-control" name="lastName" id="text_lastName" value="{{staff.lastName}}">
                 </div>
                 <div class = "col-md-1">
                   <label for="text_credentials">Credentials</label>
-                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{staff.credentials}}">
+                  <input required type="text" class="form-control" name="credentials" id="text_credentials" value="{{staff.credentials}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_email">Email</label>
-                  <input type="text" class="form-control" name="email" id="text_email" value="{{staff.email}}">
+                  <input required type="text" class="form-control" name="email" id="text_email" value="{{staff.email}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_phone">Phone</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="text_phone" value="{{staff.phoneNumber}}">
+                  <input required type="text" class="form-control" name="phoneNumber" id="text_phone" value="{{staff.phoneNumber}}">
                 </div>
                 <div class = "col-md-4">
                   <label for="text_phoneComment">Phone Comment</label>
-                  <input type="text" class="form-control" name="phoneComment" id="text_phoneComment" value="{{staff.phoneComment}}">
+                  <input required type="text" class="form-control" name="phoneComment" id="text_phoneComment" value="{{staff.phoneComment}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_institution">Institution</label>
-                   <select type="text" class="form-control" name="institutionID" id="select_institution">
+                   <select required type="text" class="form-control" name="institutionID" id="select_institution">
                       <option></option>
                       {% for institution in form["institutions"] %}
                         {% if institution.institutionID == staff.institutionID %}
@@ -75,7 +75,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_department">Department</label>
-                  <select type="text" class="form-control" name="departmentID" id="select_department">
+                  <select required type="text" class="form-control" name="departmentID" id="select_department">
                       <option></option>
                       {% for department in form["departments"] %}
                         {% if department.departmentID == staff.departmentID %}
@@ -88,21 +88,21 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_position">Position</label>
-                  <input type="text" class="form-control" name="position" id="text_position" value="{{staff.position}}">
+                  <input required type="text" class="form-control" name="position" id="text_position" value="{{staff.position}}">
                 </div>
               </div>
               <div class="row">
                <div class = "col-md-2">
                   <label for="text_street">Street</label>
-                  <input type="text" class="form-control" name="street" id="text_street" value="{{staff.street}}">
+                  <input required type="text" class="form-control" name="street" id="text_street" value="{{staff.street}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_city">City</label>
-                  <input type="text" class="form-control" name="city" id="text_city" value="{{staff.city}}">
+                  <input required type="text" class="form-control" name="city" id="text_city" value="{{staff.city}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_state">State</label>        
-                  <select type="text" class="form-control" name="stateID" id="select_state">
+                  <select required type="text" class="form-control" name="stateID" id="select_state">
                       <option></option>
                       {% for state in form["states"] %}
                         {% if state.stateID == staff.stateID %}
@@ -115,14 +115,14 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_zipcode">Zipcode</label>
-                  <input type="text" class="form-control" name="zipcode" id="text_zipcode" value="{{staff.zipcode}}">
+                  <input required type="text" class="form-control" name="zipcode" id="text_zipcode" value="{{staff.zipcode}}">
                 </div>
 
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_ucrRole">UCR Role</label>
-                  <select type="text" class="form-control" name="ucrRoleID" id="select_ucr_role">
+                  <select required type="text" class="form-control" name="ucrRoleID" id="select_ucr_role">
                       <option></option>
                       {% for ucrRole in form["ucrRoles"] %}
                         {% if ucrRole.ucrRoleID == staff.ucrRoleID %}
@@ -135,7 +135,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_hci">Hci</label>
-                  <select type="text" class="form-control" name="hci" id="select_hci">
+                  <select required type="text" class="form-control" name="hci" id="select_hci">
                       {% if staff.hci %}
                             <option value="True" selected="selected">Yes</option>
                         {% else %}
@@ -150,7 +150,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_ucr">Ucr</label>
-                  <select type="text" class="form-control" name="ucr" id="select_ucr">
+                  <select required type="text" class="form-control" name="ucr" id="select_ucr">
                       {% if staff.ucr %}
                             <option value="True" selected="selected">Yes</option>
                         {% else %}
@@ -166,7 +166,7 @@
 
                 <div class = "col-md-2">
                   <label for="select_external">External</label>
-                  <select type="text" class="form-control" name="external" id="select_external">
+                  <select required type="text" class="form-control" name="external" id="select_external">
                       {% if staff.external %}
                             <option value="True" selected="selected">Yes</option>
                         {% else %}
@@ -183,7 +183,7 @@
               <div class="row">
                <div class = "col-md-2">
                   <label for="text_fieldDivision">Field Division</label>
-                  <select type="text" class="form-control" name="fieldDivisionID" id="select_fieldDivision">
+                  <select required type="text" class="form-control" name="fieldDivisionID" id="select_fieldDivision">
                       <option></option>
                       {% for fieldDivision in form["fieldDivisions"] %}
                         {% if fieldDivision.fieldDivisionID == staff.fieldDivisionID %}
@@ -240,84 +240,86 @@
                 </div>
             </fieldset>
     </form>
-    <ul class = "nav nav-tabs" role="tablist">
-        <li class="active"><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
-        <li><a href="#staffTrainings" role="tab" data-toggle="tab">Trainings</a></li>
-    </ul>
-    <div class="tab-content"> 
-        <div class = "tab-pane active" id="projects">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#projectsTableTab" role="tab" data-toggle="tab">Table</a></li>
-                <li><a href="#newProjectTab" role="tab" data-toggle="tab">Add To Project</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="projectsTableTab">
+    {% if staff is not none %}
+        <ul class = "nav nav-tabs" role="tablist">
+            <li class="active"><a href="#projects" role="tab" data-toggle="tab">Projects</a></li>
+            <li><a href="#staffTrainings" role="tab" data-toggle="tab">Trainings</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class = "tab-pane active" id="projects">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#projectsTableTab" role="tab" data-toggle="tab">Table</a></li>
+                    <li><a href="#newProjectTab" role="tab" data-toggle="tab">Add To Project</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="projectsTableTab">
+                        <table class="table table-striped no-spacing">
+                          <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Type</th>
+                                <th>Short Title</th>
+                                <th>Inactive</th>
+                                <th>Date Pledged</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for ps in staff.projectStaff %}
+                            <tr>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectType.projectType}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.inactive.inactive}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.datePledge}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.dateRevoked}}</a></td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="newProjectTab">
+                    {% set projectStaff = none %}
+                    {% set project = none %}
+                    {% include 'helper_forms/project_staff_form.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class = "tab-pane" id="staffTrainings">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#trainingTableTab" role="tab" data-toggle="tab">Table</a></li>
+                    <li><a href="#newTraining" role="tab" data-toggle="tab">New Training</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="trainingTableTab">
                     <table class="table table-striped no-spacing">
                       <thead>
                         <tr>
-                            <th>Project ID</th>
-                            <th>Project Type</th>
-                            <th>Short Title</th>
-                            <th>Inactive</th>
-                            <th>Date Pledged</th>
+                            <th>Training Type</th>
+                            <th>Date Taken</th>
+                            <th>Date Expires</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {% for ps in staff.projectStaff %}
+                        {% for st in staff.staffTraining %}
                         <tr>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectType.projectType}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.inactive.inactive}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.datePledge}}</a></td>
-                            <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.dateRevoked}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.humanSubjectTraining.trainingType}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateTaken}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateExpires}}</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
                     </table>
-                </div>
-                <div class="tab-pane" id="newProjectTab">
-                {% set projectStaff = none %}
-                {% set project = none %}
-                {% include 'helper_forms/project_staff_form.html' %}
-                </div>
-            </div>
-        </div>
-        <div class = "tab-pane" id="staffTrainings">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#trainingTableTab" role="tab" data-toggle="tab">Table</a></li>
-                <li><a href="#newTraining" role="tab" data-toggle="tab">New Training</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="trainingTableTab">
-                <table class="table table-striped no-spacing">
-                  <thead>
-                    <tr>
-                        <th>Training Type</th>
-                        <th>Date Taken</th>
-                        <th>Date Expires</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for st in staff.staffTraining %}
-                    <tr>
-                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.humanSubjectTraining.trainingType}}</a></td>
-                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateTaken}}</a></td>
-                        <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateExpires}}</a></td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                </div>
-                
-                <div class="tab-pane" id="newTraining">
-                {% set staffTraining = none %}
-                {% include 'helper_forms/staff_training_form.html' %}
+                    </div>
+
+                    <div class="tab-pane" id="newTraining">
+                    {% set staffTraining = none %}
+                    {% include 'helper_forms/staff_training_form.html' %}
+                    </div>
                 </div>
             </div>
-        </div>
-            
-        </div>
+
+            </div>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -27,8 +27,44 @@
                         "bAutoWidth": false });
             $('#overviewTable').dataTable().fnSort( [[1,'asc']]);
             $('#projectTable').dataTable().fnSort( [[1,'asc']]);
-             } );
+            $(":submit").scrollPosReaload();
+             });
+            function test()
+            {
+                alert("test");
+
+
+document.getElementById("myform").submit();
+
+
+  }
+            ;(function($){
+
+            /**
+             * Store scroll position for and set it after reload
+             *
+             * @return {boolean} [loacalStorage is available]
+             */
+            $.fn.scrollPosReaload = function(){
+                    if (localStorage) {
+                        var posReader = localStorage["posStorage"];
+                        if (posReader) {
+                            $(window).scrollTop(posReader);
+                            localStorage.removeItem("posStorage");
+                        }
+                        $(this).click(function(e) {
+                            localStorage["posStorage"] = $(window).scrollTop();
+                        });
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            }(jQuery));
+
         </script>
+
     </head>
     <body>
         <nav class = "navbar navbar-default navbar-dark navbar-inverse" role = "navigation">
@@ -62,6 +98,9 @@
                   {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Informatics Staff', 'Research Manager'] %}
                  <li><a href = "/website/staff/">Staff</a></li>
                   {% endif %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager'] %}
+                 <li> <a href="/website/addstaff/">Add Staff</a></li>
+                  {% endif %}
                   {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                  <li><a href = "/website/lookuptables/">LUTS</a></li>
                   {% endif %}
@@ -69,6 +108,8 @@
               </ul>
            </div>
         </nav>
+         <form name="myform" id="myform" action="/website/staff/" method="post">
+         </form>
         <div id="message-box" class="jumbotron flyover flyover-centered alert-custom">
           {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}

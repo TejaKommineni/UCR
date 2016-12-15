@@ -6017,6 +6017,25 @@ def delete_site_groups(projectSiteGroupID):
 ##############################################################################
 # Staff
 ##############################################################################
+@website.route('/addstaff/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Research Manager'])
+def add_staff():
+    try:
+        form = {}
+        form["states"] = query.get_states()
+        form["humanSubjectTrainings"] = query.get_human_subject_trainings()
+        form["staff"] = query.get_staffs()
+        form["projects"] = query.get_projects()
+        form["staffRoles"] = query.get_staff_roles()
+        form["ucrRoles"] = query.get_ucr_roles()
+        form["institutions"] = query.get_institutions()
+        form["departments"] = query.get_departments()
+        form["fieldDivisions"] = query.get_fieldDivisions()
+        return render_template("staff_form.html", form=form, staff=None)
+
+    except Exception as e:
+     internal_error(e)
+
 @website.route('/staff/', methods=['GET'])
 @website.route('/staff/<int:staffID>/', methods=['GET'])
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
@@ -6172,7 +6191,7 @@ def create_staff(staffID=None):
                 )
                 query.add(staff)
                 flash("Created Staff")
-                return redirect_back("staff/{}/".format(staff.staffID))
+                return redirect("/website/staff/{}/".format(staff.staffID))
             else:
                 return missing_params(form.errors)
     except Exception as e:
