@@ -466,7 +466,12 @@
                                   </tbody>
                             </table>
                         </fieldset>
-                    </form>
+                     {% if projectPatient is not none %}
+                         </form>
+                     {% else %}
+                        </form>
+                     {%endif %}
+
                 </div>
                 <div class="tab-pane" id="newPatientContactTab">
                 {% set contact = none %}
@@ -628,40 +633,6 @@
                 </div>
             </div>
     </div>
-        <div class="tab-pane" id="statusesTab">
-        <ul class ="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#patientProjectStatusTableTab" role="tab" data-toggle="tab">Patient Project Statuses</a></li>
-            <li><a href="#newPatientProjectStatus" role="tab" data-toggle="tab">New Patient Project Status</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="patientProjectStatusTableTab">
-                <form class="formOverride">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Status Type</th>
-                                        <th>Status Date</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
-                                    <tr>
-                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td>
-                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.statusDate}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-            </div>
-            <div class="tab-pane" id="newPatientProjectStatus">
-            {% set patientProjectStatus = none %}
-            {% include 'helper_forms/patient_project_status_form.html' %}
-            </div>
-        </div>
-         </div>
 
         <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
@@ -701,6 +672,42 @@
             </div>
         </div>
     </div>
+        <div class="tab-pane" id="statusesTab">
+        <ul class ="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#patientProjectStatusTableTab" role="tab" data-toggle="tab">Patient Project Statuses</a></li>
+            <li><a href="#newPatientProjectStatus" role="tab" data-toggle="tab">New Patient Project Status</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="patientProjectStatusTableTab">
+                <form class="formOverride">
+                        <fieldset>
+                            <table class="table table-striped no-spacing">
+                                  <thead>
+                                    <tr>
+                                        <th>Status Type</th>
+                                        <th>Status Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
+                                    <tr>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.statusDate}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+            </div>
+            <div class="tab-pane" id="newPatientProjectStatus">
+            {% set patientProjectStatus = none %}
+            {% include 'helper_forms/patient_project_status_form.html' %}
+            </div>
+        </div>
+         </div>
+
+
     </div>
 </div>
 {% endblock %}
