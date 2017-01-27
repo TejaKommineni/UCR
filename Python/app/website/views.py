@@ -6105,7 +6105,10 @@ def update_staff(staffID):
                     staff.street = form.street.data
                     staff.city = form.city.data
                     staff.zipcode=form.zipcode.data
-                    staff.stateID = form.stateID.data
+                    if form.stateID.data == "":
+                     staff.stateID = None
+                    else:
+                     staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data
                     staff.hci = form.hci.data
                     staff.ucr = form.ucr.data
@@ -6155,7 +6158,7 @@ def create_staff(staffID=None):
                     street=form.street.data,
                     zipcode=form.zipcode.data,
                     city=form.city.data,
-                    stateID=form.stateID.data,
+                    stateID=None if form.stateID.data == "" else form.stateID.data ,
                     ucrRoleID=form.ucrRoleID.data,
                     userID=form.userID.data,
                     hci=form.hci.data,
