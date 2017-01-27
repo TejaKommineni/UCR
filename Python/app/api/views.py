@@ -348,7 +348,6 @@ def update_contact(contactID):
                     contact.physicianID = form.physicianID.data
                     contact.physicianPhoneID = form.physicianPhoneID.data
                     contact.patientPhoneID = form.patientPhoneID.data
-                    contact.description = form.description.data
                     contact.contactDate = form.contactDate.data
                     contact.initials = form.initials.data
                     contact.notes = form.notes.data
@@ -379,7 +378,6 @@ def create_contact():
                 physicianID=form.physicianID.data,
                 physicianPhoneID=form.physicianPhoneID.data,
                 patientPhoneID=form.patientPhoneID.data,
-                description=form.description.data,
                 contactDate=form.contactDate.data,
                 initials=form.initials.data,
                 notes=form.notes.data,

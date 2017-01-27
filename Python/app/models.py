@@ -103,7 +103,6 @@ class Contact(CustomModel):
     physicianID = db.Column('physicianID', db.Integer, db.ForeignKey("Physician.physicianID"))
     physicianPhoneID = db.Column('physicianPhoneID', db.Integer, db.ForeignKey("PhysicianPhone.physicianPhoneID"))
     patientPhoneID = db.Column('patientPhoneID', db.Integer, db.ForeignKey("PatientPhone.patPhoneID"))
-    description = db.Column('description', db.String)
     contactDate = db.Column('contact_date', db.Date, nullable=False)
     initials = db.Column('initials', db.String)
     notes = db.Column('notes', db.String)
@@ -921,7 +920,7 @@ class ProjectPatient(CustomModel):
     researcherDate = db.Column('researcher_date', db.Date)
     researcherStaffID = db.Column('researcher_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK
     consentLink = db.Column('consent_link', db.String)
-    medRecordReleaseSigned = db.Column('med_record_release_signed', db.Boolean)
+    medRecordReleaseSigned = db.Column('med_record_release_signed', db.Boolean, default=True)
     medRecordReleaseLink = db.Column('med_record_release_link', db.String)
     medRecordReleaseStaffID = db.Column('med_record_release_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK
     medRecordReleaseDate = db.Column('med_record_release_date', db.Date)
@@ -968,7 +967,6 @@ class ProjectSiteGroups(CustomModel):
     projectSiteGroupID= db.Column('projectSiteGroupID', db.Integer, primary_key=True)
     projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'),nullable=False)
     siteGroupID = db.Column('siteGroupID ', db.Integer, db.ForeignKey('SiteGroupLUT.siteID'),nullable=False)
-    siteGroupDate = db.Column('siteGroupDate', db.Date)
 
     projectSiteGroup = db.relationship("SiteGroup", foreign_keys=[siteGroupID],
                                     back_populates="projectSiteGroups")

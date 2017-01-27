@@ -61,9 +61,13 @@
                   {% endfor %}
                   </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+                <div class="col-md-1">
+                  <label for="btn-clear" style="visibility: hidden">Clear Search</label>
+                  <button class="btn btn-primary form-control" id="btn_clear" onclick="document.getElementById('mainform').reset();">Clear Search</button>
                 </div>
               </div>
             </div>
@@ -84,7 +88,7 @@
           <tbody>
             {% for projectPatient in projectPatients %}
             <tr>
-                <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.projectTitle}}</a></td>
+                <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.shortTitle}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}} - {{projectPatient["finalCode"].finalCodeDefinition}}</a></td>

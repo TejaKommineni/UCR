@@ -65,16 +65,8 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-md-1">
-                  <label for="date_dobDay">DOB Day</label>
-                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobDay"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                <div class="col-md-1">
-                  <label for="date_dobMonth">DOB Month</label>
-                  <input type="text" class="form-control" name="dobMonth" id="date_dobMonth" value="{{form["patient"]["dobMonth"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                <div class="col-md-1">
-                  <label for="date_dobYear">DOB Year</label>
-                  <input type="text" class="form-control" name="dobYear" id="date_dobYear" value="{{form["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
+                  <label for="date_dobDay">DOB Date</label>
+                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobMonth"]}}/{{form["patient"]["dobDay"]}}/{{form["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">

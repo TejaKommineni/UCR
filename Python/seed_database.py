@@ -1841,6 +1841,9 @@ def create_users():
     users.append(models.User(
         uID="u0666687",
     ))
+    users.append(models.User(
+        uID="u1072593",
+    ))
     return users
 
 
@@ -1996,6 +1999,28 @@ def create_staff():
         zipcode="driveme",
         stateID="CA",
         ucrRoleID=1,
+        hci=True,
+        ucr=True,
+        external=True,
+        fieldDivisionID=2
+    ))
+    staff.append(models.Staff(
+        userID=8,
+        firstName="Teja",
+        lastName="Kommineni",
+        middleName="",
+        email="u1072593@utah.edu",
+        phoneNumber="phone",
+        phoneComment="phoneComment",
+        institutionID=1,
+        departmentID=1,
+        position="position",
+        credentials="credentials",
+        street="street",
+        city="city",
+        zipcode="driveme",
+        stateID="CA",
+        ucrRoleID=5,
         hci=True,
         ucr=True,
         external=True,
@@ -3769,7 +3794,6 @@ def create_project_patients():
             researcherDate=datetime(2016, 2, 2),
             researcherStaffID=1,
             consentLink="link",
-            medRecordReleaseSigned=True,
             medRecordReleaseLink="link",
             medRecordReleaseStaffID=1,
             medRecordReleaseDate=datetime(2016, 2, 2),
@@ -3787,23 +3811,19 @@ def create_project_sitegroups():
     project_sites = []
     project_sites.append(models.ProjectSiteGroups(
         projectID=1,
-        siteGroupID=1,
-        siteGroupDate= datetime(2016, 2, 2)
+        siteGroupID=1
     ))
     project_sites.append(models.ProjectSiteGroups(
         projectID=2,
-        siteGroupID=2,
-        siteGroupDate=datetime(2016, 1, 2)
+        siteGroupID=2
     ))
     project_sites.append(models.ProjectSiteGroups(
         projectID=3,
-        siteGroupID=1,
-        siteGroupDate=datetime(2015, 2, 2)
+        siteGroupID=1
     ))
     project_sites.append(models.ProjectSiteGroups(
         projectID=3,
-        siteGroupID=3,
-        siteGroupDate=datetime(2014, 12, 2)
+        siteGroupID=3
     ))
     return project_sites
 
@@ -4253,7 +4273,6 @@ def create_pp_contacts():
                 staffID=1,
                 informantID=1,
                 informantPhoneID=1,
-                description="desc",
                 contactDate=datetime(2016, 2, 2),
                 initials="atp",
                 notes="notes"
@@ -4264,7 +4283,6 @@ def create_pp_contacts():
             staffID=1,
             facilityID=1,
             facilityPhoneID=1,
-            description="desc",
             contactDate=datetime(2016, 2, 2),
             initials="atp",
             notes="notes"
@@ -4275,7 +4293,6 @@ def create_pp_contacts():
             staffID=1,
             physicianID=1,
             physicianPhoneID=1,
-            description="desc",
             contactDate=datetime(2016, 2, 2),
             initials="atp",
             notes="notes"
@@ -4285,7 +4302,6 @@ def create_pp_contacts():
             participantID=i,
             staffID=1,
             patientPhoneID=1,
-            description="desc",
             contactDate=datetime(2016, 2, 2),
             initials="atp",
             notes="notes"

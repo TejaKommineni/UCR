@@ -613,7 +613,6 @@ def update_contact(contactID):
                     contact.physicianID = form.physicianID.data
                     contact.physicianPhoneID = form.physicianPhoneID.data
                     contact.patientPhoneID = form.patientPhoneID.data
-                    contact.description = form.description.data
                     contact.contactDate = form.contactDate.data
                     contact.initials = form.initials.data
                     contact.notes = form.notes.data
@@ -656,7 +655,6 @@ def create_contact(contactID=None):
                     physicianID=form.physicianID.data,
                     physicianPhoneID=form.physicianPhoneID.data,
                     patientPhoneID=form.patientPhoneID.data,
-                    description=form.description.data,
                     contactDate=form.contactDate.data,
                     initials=form.initials.data,
                     notes=form.notes.data,
@@ -3145,9 +3143,6 @@ def update_patient(patientID):
                     patient.aliasFirstName = form.aliasFirstName.data
                     patient.aliasLastName = form.aliasLastName.data
                     patient.aliasMiddleName = form.aliasMiddleName.data
-                    patient.dobDay = form.dobDay.data
-                    patient.dobMonth = form.dobMonth.data
-                    patient.dobYear = form.dobYear.data
                     patient.SSN = form.SSN.data
                     patient.sexID = form.sexID.data
                     patient.raceID = form.raceID.data
@@ -3191,9 +3186,6 @@ def create_patient(patientID=None):
                     aliasFirstName=form.aliasFirstName.data,
                     aliasLastName=form.aliasLastName.data,
                     aliasMiddleName=form.aliasMiddleName.data,
-                    dobDay=form.dobDay.data,
-                    dobMonth=form.dobMonth.data,
-                    dobYear=form.dobYear.data,
                     SSN=form.SSN.data,
                     raceID=form.raceID.data,
                     sexID=form.sexID.data,
@@ -5090,16 +5082,11 @@ def update_project_patient(participantID):
             if form.validate():
                 if int(form.versionID.data) == projectPatient.versionID:
                     projectPatient.projectID = form.projectID.data
-                    projectPatient.staffID = form.staffID.data
                     projectPatient.ctcID = form.ctcID.data
-                    projectPatient.currentAge = form.currentAge.data
-                    projectPatient.batch = form.batch.data
-                    projectPatient.siteGrpID = form.siteGrpID.data
                     projectPatient.finalCodeID = form.finalCodeID.data
                     projectPatient.finalCodeDate = form.finalCodeDate.data
                     projectPatient.enrollmentDate = form.enrollmentDate.data
                     projectPatient.dateCoordSigned = form.dateCoordSigned.data
-                    projectPatient.importDate = form.importDate.data
                     projectPatient.finalCodeStaffID = form.finalCodeStaffID.data
                     projectPatient.enrollmentStaffID = form.enrollmentStaffID.data
                     projectPatient.dateCoordSignedStaffID = form.dateCoordSignedStaffID.data
@@ -5121,9 +5108,6 @@ def update_project_patient(participantID):
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
                     projectPatient.vitalStatusID = form.vitalStatusID.data
-                    projectPatient.dayOfLastConsent=form.dayOfLastConsent.data
-                    projectPatient.monthOfLastConsent=form.monthOfLastConsent.data
-                    projectPatient.yearOfLastConsent = form.yearOfLastConsent.data
                     query.commit()
                     flash("Updated Project Patient")
                     return redirect_back("projectpatients/{}/".format(participantID))
@@ -5154,16 +5138,11 @@ def create_project_patient(participantID=None):
             if form.validate():
                 projectPatient = models.ProjectPatient(
                     projectID=form.projectID.data,
-                    staffID=form.staffID.data,
                     ctcID=form.ctcID.data,
-                    currentAge=form.currentAge.data,
-                    batch=form.batch.data,
-                    siteGrpID=form.siteGrpID.data,
                     finalCodeID=form.finalCodeID.data,
                     finalCodeDate=form.finalCodeDate.data,
                     enrollmentDate=form.enrollmentDate.data,
                     dateCoordSigned=form.dateCoordSigned.data,
-                    importDate=form.importDate.data,
                     finalCodeStaffID=form.finalCodeStaffID.data,
                     enrollmentStaffID=form.enrollmentStaffID.data,
                     dateCoordSignedStaffID=form.dateCoordSignedStaffID.data,
@@ -5184,10 +5163,7 @@ def create_project_patient(participantID=None):
                     surveyToResearcher=form.surveyToResearcher.data,
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
                     qualityControl=form.qualityControl.data,
-                    vitalStatusID=form.vitalStatusID.data,
-                    dayOfLastConsent=form.lastConsentedDay.data,
-                    monthOfLastConsent=form.lastConsentedMonth.data,
-                    yearOfLastConsent=form.lastConsentedYear.data
+                    vitalStatusID=form.vitalStatusID.data
                 )
                 query.add(projectPatient)
                 flash("Created Project Patient")
@@ -5962,8 +5938,7 @@ def create_site_groups(projectSiteGroupID=None):
             if form.validate():
                 projectSiteGroups = models.ProjectSiteGroups(
                     projectID=form.projectID.data,
-                    siteGroupID=form.siteGroupID.data,
-                    siteGroupDate=form.siteGroupDate.data
+                    siteGroupID=form.siteGroupID.data
                 )
                 query.add(projectSiteGroups)
                 flash("Created Project Site Group")
@@ -5984,7 +5959,6 @@ def update_site_group(projectSiteGroupID):
                 if int(form.versionID.data) == projectSiteGroup.versionID:
                     projectSiteGroup.projectID = form.projectID.data
                     projectSiteGroup.siteGroupID = form.siteGroupID.data
-                    projectSiteGroup.siteGroupDate = form.siteGroupDate.data
                     query.commit()
                     flash("Updated Site Groups")
                     return redirect_back('sitegroups/{}/'.format(projectSiteGroup.projectSiteGroupID))
@@ -6939,7 +6913,7 @@ def get_lookup_tables():
 
     fieldDivisions = query.get_fieldDivisions()
     form["tables"].append({
-        "name": "Field Divisions",
+        "name": "Divisions",
         "count": len(fieldDivisions),
         "values": [fieldDivision.fieldDivision for fieldDivision in fieldDivisions],
         "endpoint": "fielddivisions"

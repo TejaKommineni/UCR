@@ -55,16 +55,16 @@
             <div class="form-group">
               <div class="row">
                 <div class = "col-md-2">
-                  <label for="date_dxDateDay">Dx Date Day</label>
-                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateDay"]}}" readonly="readonly" disabled="disabled">
+                  <label for="date_dxDateDay">Dx Date</label>
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateMonth"]}}/{{ctc["dxDateDay"]}}/{{ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
-                  <label for="date_dxDateMonth">Dx Date Month</label>
-                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateMonth" value="{{ctc["dxDateMonth"]}}" readonly="readonly" disabled="disabled">
+                  <label for="text_ctcSequence">CTC Sequence</label>
+                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
-                  <label for="date_dxDateYear">Dx Date Year</label>
-                  <input type="text" class="form-control" name="dxDateYear" id="date_dxDateYear" value="{{ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                    <label for="text_ctcRecordNumber">CTC Tumor Record Number</label>
+                    <input type="text" class="form-control" name="ctcRecordNumber" id="text_ctcRecordNumber" value="{{ctc["ctcRecordNumber"]}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
@@ -73,26 +73,32 @@
                   <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"]}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
-                  <label for="text_ctcSequence">CTC Sequence</label>
-                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"]}}" readonly="readonly" disabled="disabled">
+                  <label for="text_histology">Histology</label>
+                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"]}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_stage">Stage</label>
                   <input type="text" class="form-control" name="stage" id="text_stage" value="{{ctc["stage"]}}" readonly="readonly" disabled="disabled">
                 </div>
-              </div>
-              <div class = "row">
-                <div class = "col-md-8">
-                  <label for="text_histology">Histology</label>
-                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"]}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
-                </div>
-             </div>
-             <div class="row">
-                <div class = "col-md-8">
+                 <div class = "col-md-2">
                   <label for="text_behavior">Behavior</label>
                   <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{ctc["behavior"]}}</textarea>
                 </div>
               </div>
+              <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_dnc">DNC</label>
+                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_dncReason">DNC Reason</label>
+                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_recordID">Record ID</label>
+                  <input type="text" class="form-control" name="recordID" id="text_recordID" value="{{ctc["recordID"]}}" readonly="readonly" disabled="disabled">
+                </div>
+            </div>
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_dxStreet">Dx Street</label>
@@ -130,33 +136,6 @@
                   </select>
                 </div>
               </div>
-              <div class="row">
-                
-            </div>
-            <div class="row">
-                <div class = "col-md-2">
-                  <label for="text_dnc">DNC</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                <div class = "col-md-2">
-                  <label for="text_dncReason">DNC Reason</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                <div class="col-md-2">
-                  <label for="text_recordID">Record ID</label>
-                  <input type="text" class="form-control" name="recordID" id="text_recordID" value="{{ctc["recordID"]}}" readonly="readonly" disabled="disabled">
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col-md-2">
-                    <label for="text_ctcRecordNumber">CTC Record Number</label>
-                    <input type="text" class="form-control" name="ctcRecordNumber" id="text_ctcRecordNumber" value="{{ctc["ctcRecordNumber"]}}" readonly="readonly" disabled="disabled">
-                </div>
-                <div class = "col-md-2">
-                    <label for="text_dmsCtcID">DMS CTC ID</label>
-                    <input type="text" class="form-control" name="dmsCtcID" id="text_dmsCtcID" value="{{ctc["dmsCtcID"]}}" readonly="readonly" disabled="disabled">
-                </div>
-            </div>
             </div>
           </fieldset>
               

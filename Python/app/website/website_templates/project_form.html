@@ -12,7 +12,7 @@
                          <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
                         </div>
                         <div class="col-md-2">
-                          <button class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>
+                          <button class="btn btn-primary form-control" type="submit" value="Submit" onclick="test();">Submit Edits</button>
                         </div>
                       </div>
                     </div>
@@ -359,7 +359,7 @@
                 <div class="tab-pane active" id="logTableTab">
                     <form class="formOverride">
                         <fieldset>
-                            <table class="table table-striped no-spacing">
+                            <table class="table table-striped no-spacing" id="logTable">
                                   <thead>
                                     <tr>
                                         <th>Log Subject</th>
@@ -407,7 +407,7 @@
                                 <th>Last Name</th>
                                 <th>Site</th>
                                 <th>Histology</th>
-                                <th>Stage</th>
+                                <th>Final Code</th>
                                 <th>DNC</th>
                                 <th>Last Updated</th>
                             </tr>
@@ -419,7 +419,7 @@
                                 <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.lastName}}</a></td>
                                 <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.site}}</a></td>
                                 <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.histology}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.stage}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.finalCode.finalCode}} - {{pp.finalCode.finalCodeDefinition}}</a></td>
                                 <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.dnc}}</a></td>
                                 <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.modifiedDate}}</a></td>
                             </tr>
@@ -593,6 +593,7 @@
                                             <th>Report Type</th>
                                             <th>Report Submitted</th>
                                             <th>Report Due</th>
+                                            <th>Status Note</th>
                                             <th>Report Document</th>
                                         </tr>
                                       </thead>
@@ -602,6 +603,7 @@
                                             <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType}}</a></td>
                                             <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted}}</a></td>
                                             <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.statusNotes}}</a></td>
                                             <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc}}</a></td>
                                         </tr>
                                         {% endfor %}
@@ -629,14 +631,12 @@
                                   <thead>
                                     <tr>
                                         <th>Site Group Type</th>
-                                        <th>Date</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     {% for siteGroup in form.project.projectSiteGroups %}
                                     <tr>
                                         <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site}}</a></td>
-                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.siteGroupDate}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>

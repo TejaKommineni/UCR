@@ -89,27 +89,16 @@
                                     </div>
 
                                   </div>
-                                  <div class="row">
-                                    <div class = "col-md-8">
-                                      <label for="text_description">Description</label>
-                                      <input type="text" class="form-control" name="description" id="text_description" value="{{contact.description}}">
-                                    </div>
-
-                                  </div>
                                 <div class="row">
                                     <div class = "col-md-8">
                                       <label for="text_notes">Notes</label>
-                                      <input type="text" class="form-control" name="notes" id="text_notes" value="{{contact.notes}}">
+                                      <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class = "col-md-4">
                                       <label for="date_contactDate">Contact Date</label>
                                       <input type="date" class="form-control" required="required" name="contactDate" id="date_contactDate2" value="{{contact.contactDate}}">
-                                    </div>
-                                    <div class = "col-md-4">
-                                      <label for="text_initials">Initials</label>
-                                      <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials}}">
                                     </div>
                                   </div>
                                 </div>
@@ -197,26 +186,64 @@
                                             <label for="text_dncReason">DNC Reason</label>
                                             <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason}}" readonly="readonly" disabled="disabled">
                                         </div>
+                                        <div class = "col-md-4">
+                                            <label for="select_siteGroupID">Site Group</label>
+                                            <select type="text" class="form-control" required="required" name="siteGrpID" id="select_siteGroupID" readonly="readonly" disabled="disabled" >
+                                              {% for siteGroup in form.siteGroups %}
+                                                {% if siteGroup.siteID == projectPatient.siteGrpID %}
+                                                    <option selected="selected" value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
+                                                {% else %}
+                                                    <option value="{{siteGroup.siteID}}">{{siteGroup.site}} </option>
+                                                {% endif %}
+                                              {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                         <div class="col-md-2">
-                                              <label for="date_dobDay">DOB Day</label>
-                                              <input type="text" class="form-control" id="date_dobDay" value="{{projectPatient.ctc["patient"]["dobDay"]}}" readonly="readonly" disabled="disabled">
-                                         </div>
-                                         <div class="col-md-2">
-                                              <label for="date_dobMonth">DOB Mo</label>
-                                              <input type="text" class="form-control" id="date_dobMonth" value="{{projectPatient.ctc["patient"]["dobMonth"]}}" readonly="readonly" disabled="disabled">
-                                         </div>
-                                         <div class="col-md-2">
-                                              <label for="date_dobYear">DOB Year</label>
-                                              <input type="text" class="form-control" id="date_dobYear" value="{{projectPatient.ctc["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
-                                         </div>
-                                    </div>
+                                        <div class="col-md-2">
+                                          <label for="text_currentAge">Current Age</label>
+                                          <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class="col-md-3">
+                                         <label for="date_lastConsentedDay">Date of Last Contact</label>
+                                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"]}}/{{form["dayOfLastConsent"]}}/{{form["yearOfLastConsent"]}}">
+                                        </div>
+                                        <div class="col-md-2">
+                                           <label for="select_vitalStatus">Vital Status</label>
+                                           <select type="text" class="form-control" name="vitalStatusID" id="select_vitalStatus" readonly="readonly" disabled="disabled" >
+                                               <option></option>
+                                           {% for vitalStatus in form["vitalStatuses"] %}
+                                             {% if vitalStatus.vitalStatusID == projectPatient.vitalStatus.vitalStatusID %}
+                                                <option value="{{vitalStatus.vitalStatusID}}" selected="selected">{{vitalStatus.vitalStatus}}</option>
+                                             {% else %}
+                                                <option value="{{vitalStatus.vitalStatusID}}">{{vitalStatus.vitalStatus}}</option>
+                                              {% endif %}
+                                           {% endfor %}
+                                           </select>
+                                       </div>
+                                        <div class = "col-md-2">
+                                          <label for="date_dxDateDay">Dx Date</label>
+                                          <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{projectPatient.ctc["dxDateMonth"]}}/{{projectPatient.ctc["dxDateDay"]}}/{{projectPatient.ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class = "col-md-2">
+                                          <label for="text_stage">Stage</label>
+                                          <input type="text" class="form-control" name="stage" id="text_stage" value="{{projectPatient.ctc["stage"]}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                      </div>
+                                        <div  class="row">
+                                        <div class = "col-md-4">
+                                          <label for="text_behavior">Behavior</label>
+                                          <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{projectPatient.ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{projectPatient.ctc["behavior"]}}</textarea>
+                                        </div>
+                                        </div>
+
+
                                     <table class="table table-striped no-spacing">
                                         <thead>
                                             <tr>
                                             <th>Phone Number</th>
                                             <th>Status</th>
+                                            <th>Status Date</th>
                                             <th>Type</th>
                                         </tr>
                                         </thead>
@@ -225,6 +252,7 @@
                                             <tr>
                                                 <td>{{phone["phoneNumber"]}}</td>
                                                 <td>{{phone["contactInfoStatus"].contactInfoStatus}}</td>
+                                                <td>{{phone["phoneStatusDate"]}}</td>
                                                 <td>{{phone["phoneType"].phoneType}}</td>
                                             </tr>
                                             {% endfor %}
@@ -238,10 +266,4 @@
     </div>
 </div>
 </div>
-<script>
-    $(document).ready( function() {
-        if (!$("#date_contactDate2").val()){
-            document.getElementById('date_contactDate2').valueAsDate = new Date();
-        }
-    });
-</script>
+

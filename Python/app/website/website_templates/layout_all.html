@@ -21,22 +21,19 @@
             $(document).ready(function() {
               $('.table').dataTable({
                         "bPaginate": true,
-                        "bLengthChange": false,
+                        "bLengthChange": true,
                         "bFilter": false,
                         "bInfo": true,
                         "bAutoWidth": false });
             $('#overviewTable').dataTable().fnSort( [[1,'asc']]);
             $('#projectTable').dataTable().fnSort( [[1,'asc']]);
+            $('#logTable').dataTable().fnSort( [[4,'desc']]);
+            $('#logTable2').dataTable().fnSort( [[0,'desc']]);
             $(":submit").scrollPosReaload();
              });
             function test()
             {
-                alert("test");
-
-
 document.getElementById("myform").submit();
-
-
   }
             ;(function($){
 
@@ -62,6 +59,59 @@ document.getElementById("myform").submit();
                     return false;
                 }
             }(jQuery));
+
+
+         $(document).ready(function() {
+
+            if (!$("#date_contactDate1").val()){
+                document.getElementById('date_contactDate1').valueAsDate = new Date();
+            }
+            if (!$("#date_contactDate2").val()){
+                document.getElementById('date_contactDate2').valueAsDate = new Date();
+            }
+            if (!$("#date_contactDate3").val()){
+                document.getElementById('date_contactDate3').valueAsDate = new Date();
+            }
+            if (!$("#date_contactDate4").val()){
+                document.getElementById('date_contactDate4').valueAsDate = new Date();
+            }
+             if (!$("#date_dateGiven").val()){
+                document.getElementById('date_dateGiven').valueAsDate = new Date();
+            }
+
+             $(':input').each(function () {
+                 $(this).data('initialValue', $(this).val());
+             });
+                var submitClicked = false;
+              $(':button').click(function(){
+                if ($(this).val() == 'Submit')
+                {
+                    submitClicked = true;
+                }
+
+            });
+
+
+        window.onbeforeunload = function(){
+            if(!submitClicked) {
+                var msg = 'You haven\'t saved your changes.';
+                var isDirty = false;
+
+                $(':input').each(function () {
+                    temp = $(this).data('initialValue');
+                    temp2 = $(this).val();
+                    if ($(this).data('initialValue') != $(this).val()) {
+                        isDirty = true;
+                        $(this).css('color','red');
+                    }
+                });
+
+                if (isDirty == true) {
+                    return msg;
+                }
+            }
+        };
+ });
 
         </script>
 
@@ -98,7 +148,7 @@ document.getElementById("myform").submit();
                   {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Informatics Staff', 'Research Manager'] %}
                  <li><a href = "/website/staff/">Staff</a></li>
                   {% endif %}
-                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager'] %}
+                  {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}
                  <li> <a href="/website/addstaff/">Add Staff</a></li>
                   {% endif %}
                   {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff', 'Research Manager'] %}

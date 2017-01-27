@@ -141,8 +141,6 @@ class ContactForm(BaseForm):
     patientPhoneID = IntegerField('patientPhoneID',
                                     [] + COMMON_INTEGER_VALIDATORS)
 
-    description = StringField('description',
-                              [] + COMMON_STRING_VALIDATORS)
     contactDate = DateField('contactDate',
                             [validators.InputRequired()],
                             format=DATE_FORMAT)
@@ -1361,7 +1359,6 @@ class ProjectPatientForm(BaseForm):
                                 [] + COMMON_DATE_VALIDATORS,
                                 format=DATE_FORMAT)
     importDate = DateField('importDate',
-                           [validators.InputRequired()],
                            format=DATE_FORMAT)
     finalCodeStaffID = IntegerField('finalCodeStaffID',
                                     [] + COMMON_INTEGER_VALIDATORS)
@@ -1411,6 +1408,8 @@ class ProjectPatientForm(BaseForm):
                                             []+COMMON_BOOL_VALIDATORS)
     vitalStatusID = IntegerField('vitalStatusID',
                                  [] + COMMON_INTEGER_VALIDATORS)
+    dateOfLastConsent = StringField('dateOfLastConsent',
+                                    [] + COMMON_STRING_VALIDATORS)
     dayOfLastConsent = IntegerField('dayOfLastConsent',
                                     [] + COMMON_INTEGER_VALIDATORS)
     monthOfLastConsent = IntegerField('monthOfLastConsent',
@@ -1625,7 +1624,7 @@ class ProjectStatusForm(BaseForm):
         hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
-        project = query.get_project_type(self.projectID.data)
+        project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
             hasErrors = True

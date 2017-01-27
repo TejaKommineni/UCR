@@ -36,6 +36,10 @@
                       {% endfor %}
                   </select>
                 </div>
+                <div class="col-md-2">
+                        <label>Link to Staff</label><br>
+                        <a class="btn btn-primary" role="button" href="/website/staff/{{projectStaff.staffID}}/">Full Staff Info</a>
+                </div>
               </div>
               {% endif %}
               <div class="row">
@@ -116,7 +120,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="date_datePledge">Date Pledged</label>
-                  <input required="required" type="date" class="form-control" name="datePledge" id="date_datePledge" value="{{projectStaff.datePledge}}">
+                  <input type="date" class="form-control" name="datePledge" id="date_datePledge" value="{{projectStaff.datePledge}}">
                 </div>
                 <div class="col-md-2">
                   <label for="date_dateRevoked">Date Revoked</label>

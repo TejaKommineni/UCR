@@ -69,9 +69,13 @@
                       {% endfor %}
                   </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                </div>
+                <div class="col-md-1">
+                  <label for="btn-clear" style="visibility: hidden">Clear Search</label>
+                  <button class="btn btn-primary form-control" id="btn_clear" onclick="document.getElementById('mainform').reset();">Clear Search</button>
                 </div>
               </div>
             </div>
