@@ -27,8 +27,11 @@
         <li><a href="#ctcTab" role="tab" data-toggle="tab">CTC</a></li>
         <li><a href="#incentivesTab" role="tab" data-toggle="tab">Incentives</a></li>
         <li><a href="#patientContactInfoTab" role="tab" data-toggle="tab">Patient Contact Info</a></li>
+        <li><a href="#tracingsTab" role="tab" data-toggle="tab">Tracings</a></li>
+        <li><a href="#projectPatientInformantsTab" role="tab" data-toggle="tab">Informants</a></li>
+        <li><a href="#projectPatientFacilitiesTab" role="tab" data-toggle="tab">Facilities</a></li>
+        <li><a href="#projectPatientPhysiciansTab" role="tab" data-toggle="tab">Physicians</a></li>
         <li><a href="#statusesTab" role="tab" data-toggle="tab">Statuses</a></li>
-        <li><a href="#informantsTab" role="tab" data-toggle="tab">Informants</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="contactsTab">
@@ -238,6 +241,108 @@
             </div>
     </div>
 
+        <div class="tab-pane" id="projectPatientInformantsTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                     <li class="active"><a href="#patientProjectInformantsTableTab" role="tab" data-toggle="tab">Informants</a></li>
+                 </ul>
+                 <div class="tab-content">
+                     <div class="tab-pane active" id="patientProjectInformantsTableTab">
+                         <form class="formOverride">
+                                 <fieldset>
+                                     <table class="table table-striped no-spacing">
+                                           <thead>
+                                             <tr>
+                                                 <th>First Name</th>
+                                                 <th>Last Name</th>
+                                                 <th>Primary</th>
+                                                 <th>Relationship</th>
+                                             </tr>
+                                           </thead>
+                                            <tbody>
+                                                {% for informant in form["informants"] %}
+                                                <tr>
+                                                    <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"] or ''}}</a></td>
+                                                    <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"] or ''}}</a></td>
+                                                    <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"] or ''}}</a></td>
+                                                    <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"] or ''}}</a></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                     </table>
+                                 </fieldset>
+                             </form>
+                     </div>
+                 </div>
+        </div>
+
+        <div class="tab-pane" id="projectPatientFacilitiesTab">
+        <ul class ="nav nav-tabs" role="tablist">
+             <li class="active"><a href="#patientProjectFacilitiesTableTab" role="tab" data-toggle="tab">Facilities</a></li>
+         </ul>
+         <div class="tab-content">
+             <div class="tab-pane active" id="patientProjectFacilitiesTableTab">
+                 <form class="formOverride">
+                         <fieldset>
+                             <table class="table table-striped no-spacing">
+                                   <thead>
+                                     <tr>
+                                         <th>Facility Name</th>
+                                         <th>Contact First Name</th>
+                                         <th>Contact Last Name</th>
+                                         <th>Status</th>
+                                     </tr>
+                                   </thead>
+                                    <tbody>
+                                        {% for facility in form["facilities"] %}
+                                        <tr>
+                                            <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityName"] or ''}}</a></td>
+                                            <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactFirstName"] or ''}}</a></td>
+                                            <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactLastName"] or ''}}</a></td>
+                                            <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityStatus"] or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                             </table>
+                         </fieldset>
+                     </form>
+             </div>
+         </div>
+</div>
+
+        <div class="tab-pane" id="projectPatientPhysiciansTab">
+        <ul class ="nav nav-tabs" role="tablist">
+             <li class="active"><a href="#patientProjectPhysiciansTableTab" role="tab" data-toggle="tab">Physicians</a></li>
+         </ul>
+         <div class="tab-content">
+             <div class="tab-pane active" id="patientProjectPhysiciansTableTab">
+                 <form class="formOverride">
+                         <fieldset>
+                             <table class="table table-striped no-spacing">
+                                   <thead>
+                                     <tr>
+                                         <th>First Name</th>
+                                         <th>Last Name</th>
+                                         <th>Specialty</th>
+                                         <th>Status</th>
+                                     </tr>
+                                   </thead>
+                                  <tbody>
+                                    {% for physician in form["physicians"] %}
+                                    <tr>
+                                        <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["firstName"] or ''}}</a></td>
+                                        <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["lastName"] or ''}}</a></td>
+                                        <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["specialty"] or ''}}</a></td>
+                                        <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["physicianStatus"].physicianStatus or ''}}</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                             </table>
+                         </fieldset>
+                     </form>
+             </div>
+         </div>
+</div>
+
         <div class="tab-pane" id="tracingsTab">
         <ul class ="nav nav-tabs" role="tablist">
             <li class="active"><a href="#tracingTableTab" role="tab" data-toggle="tab">Tracings</a></li>
@@ -277,40 +382,6 @@
         </div>
     </div>
 
-        <div class="tab-pane" id="informantsTab">
-                <ul class ="nav nav-tabs" role="tablist">
-                     <li class="active"><a href="#patientProjectInformantsTableTab" role="tab" data-toggle="tab">Informants</a></li>
-                 </ul>
-                 <div class="tab-content">
-                     <div class="tab-pane active" id="patientProjectInformantsTableTab">
-                         <form class="formOverride">
-                                 <fieldset>
-                                     <table class="table table-striped no-spacing">
-                                           <thead>
-                                             <tr>
-                                                 <th>First Name</th>
-                                                 <th>Last Name</th>
-                                                 <th>Primary</th>
-                                                 <th>Relationship</th>
-                                             </tr>
-                                           </thead>
-                                           <tbody>
-                                             {% for informant in projectPatient.ctc.patient.informants %}
-                                             <tr>
-                                                 <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"] or ''}}</a></td>
-                                                 <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"] or ''}}</a></td>
-                                                 <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"] or ''}}</a></td>
-                                                 <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"] or ''}}</a></td>
-                                             </tr>
-                                             {% endfor %}
-                                           </tbody>
-                                     </table>
-                                 </fieldset>
-                             </form>
-                     </div>
-                 </div>
-        </div>
-
         <div class="tab-pane" id="statusesTab">
         <ul class ="nav nav-tabs" role="tablist">
             <li class="active"><a href="#patientProjectStatusTableTab" role="tab" data-toggle="tab">Patient Project Statuses</a></li>
@@ -345,6 +416,10 @@
             </div>
         </div>
          </div>
+
+
+
+
 
 
 
