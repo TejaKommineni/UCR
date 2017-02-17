@@ -34,9 +34,9 @@
                                   <select type="text" class="form-control" name="participantID" id="select_participantID">
                                       {% for pp in form.projectPatients %}
                                         {% if pp.participantID == contact.participantID %}
-                                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                                         {% else %}
-                                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                                         {% endif %}
                                       {% endfor %}
                                   </select>
@@ -62,11 +62,11 @@
                                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                                       {% for staff in form.staff %}
                                         {% if contact is none and  user.staff.staffID == staff.staffID %}
-                                          <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                          <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% elif staff.staffID == contact.staffID %}
-                                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% else %}
-                                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% endif %}
                                       {% endfor %}
                                   </select>
@@ -79,9 +79,9 @@
                                       <option></option>
                                       {% for physician in form.physicians %}
                                         {% if physician.physicianID == contact.physicianID %}
-                                            <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                                            <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName or ''}} {{physician.middleName or ''}} {{physician.lastName or ''}}</option>
                                         {% else %}
-                                            <option value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                                            <option value="{{physician.physicianID}}">{{physician.firstName or ''}} {{physician.middleName or ''}} {{physician.lastName or ''}}</option>
                                         {% endif %}
                                       {% endfor %}
                                   </select>
@@ -103,7 +103,11 @@
                             <div class="row">
                                 <div class = "col-md-8">
                                   <label for="text_notes">Notes</label>
-                                  <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                                    {%if contact.notes == None%}
+                                  <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4"></textarea>
+                                    {% else %}
+                                       <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                                    {% endif %}
                                 </div>
                               </div>
                               <div class="row">
@@ -113,7 +117,7 @@
                                 </div>
                                 <div class = "col-md-4">
                                   <label for="text_initials">Initials</label>
-                                  <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials}}">
+                                  <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials or ''}}">
                                 </div>
                               </div>
                             </div>
@@ -182,39 +186,39 @@
                                     <div class="row">
                                           <div class = "col-md-4">
                                               <label for="text_firstName">First Name</label>
-                                              <input type="text" class="form-control" id="text_firstName" value="{{projectPatient.ctc["patient"]["firstName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_firstName" value="{{projectPatient.ctc["patient"]["firstName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                           <div class="col-md-4">
                                               <label for="text_middleName">Middle Name</label>
-                                              <input type="text" class="form-control" id="text_middleName" value="{{projectPatient.ctc["patient"]["middleName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_middleName" value="{{projectPatient.ctc["patient"]["middleName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                           <div class="col-md-4">
                                               <label for="text_lastName">Last Name</label>
-                                              <input type="text" class="form-control" id="text_lastName" value="{{projectPatient.ctc["patient"]["lastName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_lastName" value="{{projectPatient.ctc["patient"]["lastName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                     </div>
                                     <div class="row">
                                         <div class = "col-md-4">
                                             <label for="text_dnc">DNC</label>
-                                            <input type="text" class="form-control" id="text_dnc" value="{{projectPatient.ctc.dnc}}" readonly="readonly" disabled="disabled">
+                                            <input type="text" class="form-control" id="text_dnc" value="{{projectPatient.ctc.dnc or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                         <div class = "col-md-4">
                                             <label for="text_dncReason">DNC Reason</label>
-                                            <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason}}" readonly="readonly" disabled="disabled">
+                                            <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                     </div>
                                     <div class="row">
                                          <div class="col-md-2">
                                               <label for="date_dobDay">DOB Day</label>
-                                              <input type="text" class="form-control" id="date_dobDay" value="{{projectPatient.ctc["patient"]["dobDay"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="date_dobDay" value="{{projectPatient.ctc["patient"]["dobDay"] or ''}}" readonly="readonly" disabled="disabled">
                                          </div>
                                          <div class="col-md-2">
                                               <label for="date_dobMonth">DOB Mo</label>
-                                              <input type="text" class="form-control" id="date_dobMonth" value="{{projectPatient.ctc["patient"]["dobMonth"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="date_dobMonth" value="{{projectPatient.ctc["patient"]["dobMonth"] or ''}}" readonly="readonly" disabled="disabled">
                                          </div>
                                          <div class="col-md-2">
                                               <label for="date_dobYear">DOB Year</label>
-                                              <input type="text" class="form-control" id="date_dobYear" value="{{projectPatient.ctc["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="date_dobYear" value="{{projectPatient.ctc["patient"]["dobYear"] or ''}}" readonly="readonly" disabled="disabled">
                                          </div>
                                     </div>
                                     <table class="table table-striped no-spacing">
@@ -230,10 +234,10 @@
                                         {% for physicianToCTC in projectPatient.ctc.physicianToCTC %}
                                         {% for phone in physicianToCTC.physician.physicianPhones %}
                                             <tr>
-                                                <td>{{physicianToCTC.physician.firstName}} {{physicianToCTC.physician.lastName}}</td>
-                                                <td>{{phone["phoneNumber"]}}</td>
-                                                <td>{{phone["contactInfoStatus"].contactInfoStatus}}</td>
-                                                <td>{{phone["phoneType"].phoneType}}</td>
+                                                <td>{{physicianToCTC.physician.firstName or ''}} {{physicianToCTC.physician.lastName or ''}}</td>
+                                                <td>{{phone["phoneNumber"] or ''}}</td>
+                                                <td>{{phone["contactInfoStatus"].contactInfoStatus or ''}}</td>
+                                                <td>{{phone["phoneType"].phoneType or ''}}</td>
                                             </tr>
                                             {% endfor %}
                                             {% endfor %}

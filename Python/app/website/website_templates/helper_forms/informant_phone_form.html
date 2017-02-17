@@ -25,11 +25,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_phoneNumber">Phone Number</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{informantPhone["phoneNumber"]}}">
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{informantPhone["phoneNumber"] or ''}}">
                 </div>
               <div class="col-md-2">  
                   <label for="select_phoneTypeID">Phone Type</label>        
-                  <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID">
+                  <select type="text" class="form-control" name="phoneTypeID" id="select_phoneTypeID" required>
                       <option></option>
                       {% for phoneType in form["phoneTypes"] %}
                         {% if phoneType["phoneTypeID"] == informantPhone["phoneTypeID"] %}
@@ -44,7 +44,7 @@
               <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
-                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                  <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource" required>
                       <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == informantPhone["contactInfoSourceID"] %}
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
-                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                  <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus" required>
                       <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == informantPhone["contactInfoStatusID"] %}

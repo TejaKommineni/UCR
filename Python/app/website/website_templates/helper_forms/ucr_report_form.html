@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == ucrReport.projectID %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -45,9 +45,9 @@
                       <option></option>
                       {% for rt in form.reportTypes %}
                         {% if rt.ucrReportTypeID == ucrReport.reportTypeID %}
-                            <option value="{{rt.ucrReportTypeID}}" selected="selected">{{rt.ucrReportType}}</option>
+                            <option value="{{rt.ucrReportTypeID}}" selected="selected">{{rt.ucrReportType or ''}}</option>
                         {% else %}
-                            <option value="{{rt.ucrReportTypeID}}">{{rt.ucrReportType}}</option>
+                            <option value="{{rt.ucrReportTypeID}}">{{rt.ucrReportType or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -62,13 +62,17 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_reportDoc">Report Document</label>
-                  <input type="text" class="form-control" name="reportDoc" id="text_reportDoc" value="{{ucrReport.reportDoc}}">
+                  <input type="text" class="form-control" name="reportDoc" id="text_reportDoc" value="{{ucrReport.reportDoc or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_statusNote">Status Note</label>
-                  <textarea type="textaraea" class="form-control" name="statusNotes" id="text_statusNote" rows="4">{{ucrReport.statusNotes}}</textarea>
+                   {% if ucrReport.statusNotes == None%}
+                     <textarea type="textaraea" class="form-control" name="statusNotes" id="text_statusNote" rows="4"></textarea>
+                    {% else %}
+                    <textarea type="textaraea" class="form-control" name="statusNotes" id="text_statusNote" rows="4">{{ucrReport.statusNotes}}</textarea>
+                    {% endif %}
                  </div>
               </div>
           </div>

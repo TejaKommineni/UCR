@@ -71,17 +71,17 @@
           <tbody>
             {% for project in projects %}
             <tr>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"]}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["shortTitle"]}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}" >{{project["projectType"].projectType}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["projectID"] or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["shortTitle"] or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}" >{{project["projectType"].projectType or ''}}</a></td>
                 {% for projectStatus in project["projectStatuses"]%}
                     {% if loop.index  == 1 %}
-                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.projectStatus.projectStatus }}</a></td>
-                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.statusDate }}</a></td>
+                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.projectStatus.projectStatus  or ''}}</a></td>
+                        <td><a href="/website/projects/{{project["projectID"]}}">{{projectStatus.statusDate  or ''}}</a></td>
                     {% endif %}
                 {% endfor %}
 
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["irbHolder"].holder}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["irbHolder"].holder or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

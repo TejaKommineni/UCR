@@ -24,7 +24,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_phoneNumber">Phone Number</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{physicianPhone["phoneNumber"]}}">
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phoneNumber" value="{{physicianPhone["phoneNumber"] or ''}}">
                 </div>
               <div class="col-md-2">  
                   <label for="select_phoneTypeID">Phone Type</label>        
@@ -69,7 +69,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_phoneStatusDate">Phone Status Date</label>
-                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"]}}">
+                  <input required="required" type="date" class="form-control" name="phoneStatusDate" id="date_phoneStatusDate" value="{{physicianPhone["phoneStatusDate"] or ''}}">
                 </div>
             </div>
           </fieldset>

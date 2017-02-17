@@ -30,33 +30,33 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_firstName">First Name</label>
-                  <input required type="text" class="form-control" name="firstName" id="text_firstName" value="{{staff.firstName}}">
+                  <input required type="text" class="form-control" name="firstName" id="text_firstName" value="{{staff.firstName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_middleName">Middle Name</label>
-                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{staff.middleName}}">
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{staff.middleName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_lastName">Last Name</label>
-                  <input required type="text" class="form-control" name="lastName" id="text_lastName" value="{{staff.lastName}}">
+                  <input required type="text" class="form-control" name="lastName" id="text_lastName" value="{{staff.lastName or ''}}">
                 </div>
                 <div class = "col-md-1">
                   <label for="text_credentials">Credentials</label>
-                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{staff.credentials}}">
+                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{staff.credentials or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_email">Email</label>
-                  <input required type="text" class="form-control" name="email" id="text_email" value="{{staff.email}}">
+                  <input required type="text" class="form-control" name="email" id="text_email" value="{{staff.email or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_phone">Phone</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="text_phone" value="{{staff.phoneNumber}}">
+                  <input type="text" class="form-control" name="phoneNumber" id="text_phone" value="{{staff.phoneNumber or ''}}">
                 </div>
                 <div class = "col-md-4">
                   <label for="text_phoneComment">Phone Comment</label>
-                  <input type="text" class="form-control" name="phoneComment" id="text_phoneComment" value="{{staff.phoneComment}}">
+                  <input type="text" class="form-control" name="phoneComment" id="text_phoneComment" value="{{staff.phoneComment or ''}}">
                 </div>
               </div>
               <div class="row">
@@ -88,17 +88,17 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_position">Position</label>
-                  <input required type="text" class="form-control" name="position" id="text_position" value="{{staff.position}}">
+                  <input required type="text" class="form-control" name="position" id="text_position" value="{{staff.position or ''}}">
                 </div>
               </div>
               <div class="row">
                <div class = "col-md-2">
                   <label for="text_street">Street</label>
-                  <input type="text" class="form-control" name="street" id="text_street" value="{{staff.street}}">
+                  <input type="text" class="form-control" name="street" id="text_street" value="{{staff.street or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_city">City</label>
-                  <input type="text" class="form-control" name="city" id="text_city" value="{{staff.city}}">
+                  <input type="text" class="form-control" name="city" id="text_city" value="{{staff.city or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_state">State</label>        
@@ -115,7 +115,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_zipcode">Zipcode</label>
-                  <input type="text" class="form-control" name="zipcode" id="text_zipcode" value="{{staff.zipcode}}">
+                  <input type="text" class="form-control" name="zipcode" id="text_zipcode" value="{{staff.zipcode or ''}}">
                 </div>
 
               </div>
@@ -123,7 +123,7 @@
               {% if user.staff.ucrRole.ucrRole in ['Developer', 'Informatics Staff'] %}
                 <div class = "col-md-2">
                   <label for="text_ucrRole">UCR Role</label>
-                  <select type="text" class="form-control" name="ucrRoleID" id="select_ucr_role">
+                  <select type="text" class="form-control" name="ucrRoleID" id="select_ucr_role" required>
                       <option></option>
                       {% for ucrRole in form["ucrRoles"] %}
                         {% if ucrRole.ucrRoleID == staff.ucrRoleID %}
@@ -189,9 +189,9 @@
                       <option></option>
                       {% for fieldDivision in form["fieldDivisions"] %}
                         {% if fieldDivision.fieldDivisionID == staff.fieldDivisionID %}
-                            <option value="{{fieldDivision.fieldDivisionID}}" selected="selected">{{fieldDivision.fieldDivision}}</option>
+                            <option value="{{fieldDivision.fieldDivisionID}}" selected="selected">{{fieldDivision.fieldDivision or ''}}</option>
                         {% else %}
-                            <option value="{{fieldDivision.fieldDivisionID}}">{{fieldDivision.fieldDivision}}</option>
+                            <option value="{{fieldDivision.fieldDivisionID}}">{{fieldDivision.fieldDivision or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -268,12 +268,12 @@
                           <tbody>
                             {% for ps in staff.projectStaff %}
                             <tr>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID}}</a></td>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectType.projectType}}</a></td>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle}}</a></td>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.inactive.inactive}}</a></td>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.datePledge}}</a></td>
-                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.dateRevoked}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectID or ''}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.projectType.projectType or ''}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.project.shortTitle or ''}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.inactive.inactive or ''}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.datePledge or ''}}</a></td>
+                                <td><a href="/website/projects/{{ps.project.projectID}}">{{ps.dateRevoked or ''}}</a></td>
                             </tr>
                             {% endfor %}
                           </tbody>
@@ -304,9 +304,9 @@
                       <tbody>
                         {% for st in staff.staffTraining %}
                         <tr>
-                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.humanSubjectTraining.trainingType}}</a></td>
-                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateTaken}}</a></td>
-                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateExpires}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.humanSubjectTraining.trainingType or ''}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateTaken or ''}}</a></td>
+                            <td><a href="/website/stafftrainings/{{st.staffTrainingID}}">{{st.dateExpires or ''}}</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>

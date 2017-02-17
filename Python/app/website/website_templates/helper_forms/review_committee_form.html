@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == reviewCommittee["projectID"] %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -69,7 +69,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_reviewCommitteeNumber">Review Committee Number</label>
-                  <input type="text" class="form-control" name="reviewCommitteeNumber" id="text_reviewCommitteeNumber" value="{{reviewCommittee["reviewCommitteeNumber"]}}">
+                  <input type="text" class="form-control" name="reviewCommitteeNumber" id="text_reviewCommitteeNumber" value="{{reviewCommittee["reviewCommitteeNumber"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateInitialReview">Date Initial Review</label>
@@ -83,15 +83,19 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_rcNote">Note</label>
-                  <textarea type="textaraea" class="form-control" name="rcNote" id="text_rcNote" rows="4">{{reviewCommittee["rcNote"]}}</textarea>
+                  {% if reviewCommittee["rcNote"] == None%}
+                  <textarea type="textaraea" class="form-control" name="rcNote" id="text_rcNote" rows="4"></textarea>
+                  {% else %}
+                    <textarea type="textaraea" class="form-control" name="rcNote" id="text_rcNote" rows="4">{{reviewCommittee["rcNote"]}}</textarea>
+                  {% endif %}
                 </div>
                 <div class = "col-md-2">
                   <label for="text_protocol">Protocol</label>
-                  <input type="text" class="form-control" name="rcProtocol" id="text_protocol" value="{{reviewCommittee["rcProtocol"]}}">
+                  <input type="text" class="form-control" name="rcProtocol" id="text_protocol" value="{{reviewCommittee["rcProtocol"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_approval">Approval</label>
-                  <input type="text" class="form-control" name="rcApproval" id="text_approval" value="{{reviewCommittee["rcApproval"]}}">
+                  <input type="text" class="form-control" name="rcApproval" id="text_approval" value="{{reviewCommittee["rcApproval"] or ''}}">
                 </div>
               </div>
           </div>

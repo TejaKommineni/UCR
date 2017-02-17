@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == projectStatus["projectID"] %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -57,11 +57,11 @@
                   <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                   {% for staff in form.staff %}
                     {% if projectStatus is none and  user.staff.staffID == staff.staffID %}
-                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% elif staff.staffID == projectStatus.staffID %}
-                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% else %}
-                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% endif %}
                   {% endfor %}
                   </select>
@@ -70,7 +70,11 @@
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_statusNote">Status Note</label>
+                  {% if projectStatus["statusNotes"] == None%}
+                  <textarea type="textaraea" class="form-control" name="statusNotes" id="text_statusNote" rows="4"></textarea>
+                  {% else %}
                   <textarea type="textaraea" class="form-control" name="statusNotes" id="text_statusNote" rows="4">{{projectStatus["statusNotes"]}}</textarea>
+                  {% endif %}
                 </div>
                 <div class = "col-md-2">
                   <label for="date_statusDate">Status Date</label>

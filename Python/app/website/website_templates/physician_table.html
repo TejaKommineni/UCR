@@ -60,10 +60,10 @@
           <tbody>
             {% for physician in physicians %}
             <tr>
-                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["firstName"]}}</a></td>
-                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["lastName"]}}</a></td>
-                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["specialty"]}}</a></td>
-                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["physicianStatus"].physicianStatus}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["firstName"] or ''}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["lastName"] or ''}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["specialty"] or ''}}</a></td>
+                <td><a href="/website/physicians/{{physician["physicianID"]}}">{{physician["physicianStatus"].physicianStatus or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

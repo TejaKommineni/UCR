@@ -31,9 +31,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form.projects %}
                         {% if proj.projectID == preApplication.projectID %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -43,43 +43,43 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_piFirstName">PI First Name</label>
-                  <input type="text" class="form-control" name="piFirstName" id="text_piFirstName" value="{{preApplication.piFirstName}}">
+                  <input type="text" class="form-control" name="piFirstName" id="text_piFirstName" value="{{preApplication.piFirstName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_piLastName">PI Last Name</label>
-                  <input type="text" class="form-control" name="piLastName" id="text_piLastName" value="{{preApplication.piLastName}}">
+                  <input type="text" class="form-control" name="piLastName" id="text_piLastName" value="{{preApplication.piLastName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_piPhone">PI Phone</label>
-                  <input type="text" class="form-control" name="piPhone" id="text_piPhone" value="{{preApplication.piPhone}}">
+                  <input type="text" class="form-control" name="piPhone" id="text_piPhone" value="{{preApplication.piPhone or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_piEmail">PI Email</label>
-                  <input type="text" class="form-control" name="piEmail" id="text_piEmail" value="{{preApplication.piEmail}}">
+                  <input type="text" class="form-control" name="piEmail" id="text_piEmail" value="{{preApplication.piEmail or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_contactFirstName">Contact First Name</label>
-                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{preApplication.contactFirstName}}">
+                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{preApplication.contactFirstName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_contactLastName">Contact Last Name</label>
-                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{preApplication.contactLastName}}">
+                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{preApplication.contactLastName or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_contactPhone">Contact Phone</label>
-                  <input type="text" class="form-control" name="contactPhone" id="text_contactPhone" value="{{preApplication.contactPhone}}">
+                  <input type="text" class="form-control" name="contactPhone" id="text_contactPhone" value="{{preApplication.contactPhone or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_contactEmail">Contact Email</label>
-                  <input type="text" class="form-control" name="contactEmail" id="text_contactEmail" value="{{preApplication.contactEmail}}">
+                  <input type="text" class="form-control" name="contactEmail" id="text_contactEmail" value="{{preApplication.contactEmail or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_institution">Institution</label>
-                   <select type="text" class="form-control" name="institution" id="select_institution">
+                   <select type="text" class="form-control" name="institution" id="select_institution" required>
                       <option></option>
                       {% for institution in form["institutions"] %}
                         {% if institution.institutionID == preApplication.institution %}
@@ -92,25 +92,25 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_institution2">Institution 2</label>
-                  <input type="text" class="form-control" name="institution2" id="text_institution2" value="{{preApplication.institution2}}">
+                  <input type="text" class="form-control" name="institution2" id="text_institution2" value="{{preApplication.institution2 or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_uid">UID</label>
-                  <input type="text" class="form-control" name="uid" id="text_uid" value="{{preApplication.uid}}">
+                  <input type="text" class="form-control" name="uid" id="text_uid" value="{{preApplication.uid or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_udoh">UDOH</label>
-                  <input type="text" class="form-control" name="udoh" id="text_udoh" value="{{preApplication.udoh}}">
+                  <input type="text" class="form-control" name="udoh" id="text_udoh" value="{{preApplication.udoh or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_projectTitle">Project Title</label>
-                  <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{preApplication.projectTitle}}">
+                  <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{preApplication.projectTitle or ''}}">
                 </div>
                 <div class = "col-md-8">
                   <label for="text_purpose">Purpose</label>
-                  <textarea type="text" class="form-control" name="purpose" id="text_purpose" rows="4">{{preApplication.purpose}}</textarea>
+                  <textarea type="text" class="form-control" name="purpose" id="text_purpose" rows="4">{{preApplication.purpose or ''}}</textarea>
                 </div>
               </div>
               <div class="row">
@@ -193,7 +193,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_otherIrb">Other IRB</label>
-                  <input type="text" class="form-control" name="otherIrb" id="text_otherIrb" value="{{preApplication.otherIrb}}">
+                  <input type="text" class="form-control" name="otherIrb" id="text_otherIrb" value="{{preApplication.otherIrb or ''}}">
                 </div>
               </div>
               <div class="row">
@@ -254,7 +254,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_description">Description</label>
-                  <input type="text" class="form-control" name="description" id="text_description" value="{{preApplication.description}}">
+                  <input type="text" class="form-control" name="description" id="text_description" value="{{preApplication.description or ''}}">
                 </div>
               </div>
           </div>

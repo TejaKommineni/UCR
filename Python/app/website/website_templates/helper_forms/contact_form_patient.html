@@ -34,9 +34,9 @@
                                       <select type="text" class="form-control" name="participantID" id="select_participantID">
                                           {% for pp in form.projectPatients %}
                                             {% if pp.participantID == contact.participantID %}
-                                                <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                                                <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                                             {% else %}
-                                                <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                                                <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                                             {% endif %}
                                           {% endfor %}
                                       </select>
@@ -62,11 +62,11 @@
                                       <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                                       {% for staff in form.staff %}
                                         {% if contact is none and  user.staff.staffID == staff.staffID %}
-                                          <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                          <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% elif staff.staffID == contact.staffID %}
-                                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% else %}
-                                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                         {% endif %}
                                       {% endfor %}
                                       </select>
@@ -92,7 +92,11 @@
                                 <div class="row">
                                     <div class = "col-md-8">
                                       <label for="text_notes">Notes</label>
-                                      <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                                      {% if contact.notes == None%}
+                                      <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4"></textarea>
+                                      {% else %}
+                                        <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                                      {% endif %}
                                     </div>
                                   </div>
                                   <div class="row">
@@ -166,25 +170,25 @@
                                     <div class="row">
                                           <div class = "col-md-4">
                                               <label for="text_firstName">First Name</label>
-                                              <input type="text" class="form-control" id="text_firstName" value="{{projectPatient.ctc["patient"]["firstName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_firstName" value="{{projectPatient.ctc["patient"]["firstName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                           <div class="col-md-4">
                                               <label for="text_middleName">Middle Name</label>
-                                              <input type="text" class="form-control" id="text_middleName" value="{{projectPatient.ctc["patient"]["middleName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_middleName" value="{{projectPatient.ctc["patient"]["middleName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                           <div class="col-md-4">
                                               <label for="text_lastName">Last Name</label>
-                                              <input type="text" class="form-control" id="text_lastName" value="{{projectPatient.ctc["patient"]["lastName"]}}" readonly="readonly" disabled="disabled">
+                                              <input type="text" class="form-control" id="text_lastName" value="{{projectPatient.ctc["patient"]["lastName"] or ''}}" readonly="readonly" disabled="disabled">
                                           </div>
                                     </div>
                                     <div class="row">
                                         <div class = "col-md-4">
                                             <label for="text_dnc">DNC</label>
-                                            <input type="text" class="form-control" id="text_dnc" value="{{projectPatient.ctc.dnc}}" readonly="readonly" disabled="disabled">
+                                            <input type="text" class="form-control" id="text_dnc" value="{{projectPatient.ctc.dnc or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                         <div class = "col-md-4">
                                             <label for="text_dncReason">DNC Reason</label>
-                                            <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason}}" readonly="readonly" disabled="disabled">
+                                            <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                         <div class = "col-md-4">
                                             <label for="select_siteGroupID">Site Group</label>
@@ -202,11 +206,11 @@
                                     <div class="row">
                                         <div class="col-md-2">
                                           <label for="text_currentAge">Current Age</label>
-                                          <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}" readonly="readonly" disabled="disabled">
+                                          <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                         <div class="col-md-3">
                                          <label for="date_lastConsentedDay">Date of Last Contact</label>
-                                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"]}}/{{form["dayOfLastConsent"]}}/{{form["yearOfLastConsent"]}}">
+                                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"] or ''}}/{{form["dayOfLastConsent"] or ''}}/{{form["yearOfLastConsent"] or ''}}">
                                         </div>
                                         <div class="col-md-2">
                                            <label for="select_vitalStatus">Vital Status</label>
@@ -223,17 +227,17 @@
                                        </div>
                                         <div class = "col-md-2">
                                           <label for="date_dxDateDay">Dx Date</label>
-                                          <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{projectPatient.ctc["dxDateMonth"]}}/{{projectPatient.ctc["dxDateDay"]}}/{{projectPatient.ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                                          <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{projectPatient.ctc["dxDateMonth"] or ''}}/{{projectPatient.ctc["dxDateDay"] or ''}}/{{projectPatient.ctc["dxDateYear"] or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                         <div class = "col-md-2">
                                           <label for="text_stage">Stage</label>
-                                          <input type="text" class="form-control" name="stage" id="text_stage" value="{{projectPatient.ctc["stage"]}}" readonly="readonly" disabled="disabled">
+                                          <input type="text" class="form-control" name="stage" id="text_stage" value="{{projectPatient.ctc["stage"] or ''}}" readonly="readonly" disabled="disabled">
                                         </div>
                                       </div>
                                         <div  class="row">
                                         <div class = "col-md-4">
                                           <label for="text_behavior">Behavior</label>
-                                          <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{projectPatient.ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{projectPatient.ctc["behavior"]}}</textarea>
+                                          <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{projectPatient.ctc["behavior"] or ''}}" readonly="readonly" disabled="disabled">{{projectPatient.ctc["behavior"]}}</textarea>
                                         </div>
                                         </div>
 
@@ -250,10 +254,10 @@
                                         <tbody>
                                         {% for phone in projectPatient.ctc.patient.patientPhones %}
                                             <tr>
-                                                <td>{{phone["phoneNumber"]}}</td>
-                                                <td>{{phone["contactInfoStatus"].contactInfoStatus}}</td>
-                                                <td>{{phone["phoneStatusDate"]}}</td>
-                                                <td>{{phone["phoneType"].phoneType}}</td>
+                                                <td>{{phone["phoneNumber"] or ''}}</td>
+                                                <td>{{phone["contactInfoStatus"].contactInfoStatus or ''}}</td>
+                                                <td>{{phone["phoneStatusDate"] or ''}}</td>
+                                                <td>{{phone["phoneType"].phoneType or ''}}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

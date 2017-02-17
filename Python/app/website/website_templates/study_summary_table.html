@@ -71,13 +71,13 @@
           <tbody>
             {% for project in form.summary.projects %}
             <tr>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectID}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project["preapplication"].piLastName}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectTitle}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.activityStartDate}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls}}</a></td>
-                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsentsOrPermissions}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectID or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project["preapplication"].piLastName or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.projectTitle or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.activityStartDate or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfLettersSent or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfPhoneCalls or ''}}</a></td>
+                <td><a href="/website/projects/{{project["projectID"]}}">{{project.numberOfConsentsOrPermissions or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

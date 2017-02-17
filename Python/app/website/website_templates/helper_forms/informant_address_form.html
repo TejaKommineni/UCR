@@ -26,19 +26,19 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_street">Street</label>
-                  <input type="text" class="form-control" name="street" id="text_street" value="{{informantAddress["street"]}}">
+                  <input type="text" class="form-control" name="street" id="text_street" value="{{informantAddress["street"] or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_street2">Street 2</label>
-                  <input type="text" class="form-control" name="street2" id="text_street2" value="{{informantAddress["street2"]}}">
+                  <input type="text" class="form-control" name="street2" id="text_street2" value="{{informantAddress["street2"] or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_city">City</label>
-                  <input type="text" class="form-control" name="city" id="text_city" value="{{informantAddress["city"]}}">
+                  <input type="text" class="form-control" name="city" id="text_city" value="{{informantAddress["city"] or ''}}">
                 </div>
                 <div class="col-md-2">  
                   <label for="select_state">State</label>        
@@ -55,13 +55,14 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_zip">Zip Code</label>
-                  <input type="text" class="form-control" name="zip" id="text_zip" value="{{informantAddress["zip"]}}">
+                  <input type="text" class="form-control" name="zip" id="text_zip" value="{{informantAddress["zip"] or ''}}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2">  
                   <label for="select_contactInfoSource">Contact Info Source</label>        
                   <select type="text" class="form-control" name="contactInfoSourceID" id="select_contactInfoSource">
+                      <option></option>
                       {% for contactInfoSource in form["contactInfoSources"] %}
                         {% if contactInfoSource["contactInfoSourceID"] == informantAddress["contactInfoSourceID"] %}
                             <option value="{{contactInfoSource["contactInfoSourceID"]}}" selected="selected">{{contactInfoSource["contactInfoSource"]}}</option>
@@ -74,6 +75,7 @@
                 <div class="col-md-2">  
                   <label for="select_contactInfoStatus">Contact Info Status</label>        
                   <select type="text" class="form-control" name="contactInfoStatusID" id="select_contactInfoStatus">
+                      <option></option>
                       {% for contactInfoStatus in form["contactInfoStatuses"] %}
                         {% if contactInfoStatus["contactInfoStatusID"] == informantAddress["contactInfoStatusID"] %}
                             <option value="{{contactInfoStatus["contactInfoStatusID"]}}" selected="selected">{{contactInfoStatus["contactInfoStatus"]}}</option>

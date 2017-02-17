@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == funding["projectID"] %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -42,6 +42,7 @@
                 <div class = "col-md-2">
                   <label for="select_grantStatusID">Grant Status</label>
                   <select required="required" type="text" class="form-control" name="grantStatusID" id="select_grantStatusID">
+                  <option></option>
                       {% for grantStatus in form["grantStatuses"] %}
                         {% if grantStatus.grantStatusID == funding["grantStatusID"] %}
                             <option selected="selected" value="{{grantStatus.grantStatusID}}">{{grantStatus.grantStatus}}</option>
@@ -54,6 +55,7 @@
                 <div class = "col-md-2">
                   <label for="select_fundingSourceID">Funding Source</label>
                   <select required="required" type="text" class="form-control" name="fundingSourceID" id="select_fundingSourceID">
+                  <option></option>
                       {% for fundingSource in form["fundingSources"] %}
                         {% if fundingSource.fundingSourceID == funding["fundingSourceID"] %}
                             <option selected="selected" value="{{fundingSource.fundingSourceID}}">{{fundingSource.fundingSource}}</option>
@@ -65,11 +67,11 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_fundingNumber">Funding Number</label>
-                  <input type="text" class="form-control" name="fundingNumber" id="text_fundingNumber" value="{{funding["fundingNumber"]}}">
+                  <input type="text" class="form-control" name="fundingNumber" id="text_fundingNumber" value="{{funding["fundingNumber"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_grantTitle">Grant Title</label>
-                  <input type="text" class="form-control" name="grantTitle" id="text_grantTitle" value="{{funding["grantTitle"]}}">
+                  <input type="text" class="form-control" name="grantTitle" id="text_grantTitle" value="{{funding["grantTitle"]  or ''}}">
                 </div>
               </div>
               <div class="row">
@@ -83,26 +85,26 @@
                       <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == funding["grantPi"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName  or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_primaryChartfield">Primary Chartfield</label>
-                  <input type="text" class="form-control" name="primaryChartfield" id="text_primaryChartfield" value="{{funding["primaryChartfield"]}}">
+                  <input type="text" class="form-control" name="primaryChartfield" id="text_primaryChartfield" value="{{funding["primaryChartfield"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_secondaryChartfield">Secondary Chartfield</label>
-                  <input type="text" class="form-control" name="secondaryChartfield" id="text_secondaryChartfield" value="{{funding["secondaryChartfield"]}}">
+                  <input type="text" class="form-control" name="secondaryChartfield" id="text_secondaryChartfield" value="{{funding["secondaryChartfield"] or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_fundingNotes">Funding Notes</label>
-                  <textarea type="textaraea" class="form-control" name="fundingNotes" id="text_fundingNotes" rows="4">{{funding["fundingNotes"]}}</textarea>
+                  <textarea type="textaraea" class="form-control" name="fundingNotes" id="text_fundingNotes" rows="4">{{funding["fundingNotes"] or ''}}</textarea>
                 </div>
               </div>
           </div>

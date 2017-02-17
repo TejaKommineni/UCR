@@ -12,11 +12,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_phaseStatus{{loop.index}}">Status</label>
-                  <input type="text" class="form-control" name="phaseStatus" id="text_phaseStatus{{loop.index}}" value="{{phaseStatus["phaseStatus"]}}">
+                  <input type="text" class="form-control" name="phaseStatus" id="text_phaseStatus{{loop.index}}" value="{{phaseStatus["phaseStatus"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_phaseDescription{{loop.index}}">Description</label>
-                  <input type="text" class="form-control" name="phaseDescription" id="text_phaseDescription{{loop.index}}" value="{{phaseStatus["phaseDescription"]}}">
+                  <input type="text" class="form-control" name="phaseDescription" id="text_phaseDescription{{loop.index}}" value="{{phaseStatus["phaseDescription"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

@@ -1,6 +1,8 @@
 <div class="container-fluid">
 <div class="row">
+ <div class="col-md-6">
         <div class="panel panel-default" >
+			<div class="panel-heading"> New Tracing</div>
                 <div class="panel-body">
                     {% if tracing is not none %}
                         <!-- action url is for update -->
@@ -149,4 +151,115 @@
                 </div>
         </div>
  </div>
+{% if projectPatient is not none %}
+ <div class="col-md-6">
+		<div class="panel panel-default" >
+			<div class="panel-heading"> Patient/CTC Info</div>
+				<div class="panel-body">
+                     <form class="formOverride" id="contactInfoForm">
+                          <fieldset>
+                                <div class="form-group">
+                                    <div class="row">
+                                          <div class = "col-md-4">
+                                              <label for="text_firstName">First Name</label>
+                                              <input type="text" class="form-control" id="text_firstName" value="{{projectPatient.ctc["patient"]["firstName"] or ''}}" readonly="readonly" disabled="disabled">
+                                          </div>
+                                          <div class="col-md-4">
+                                              <label for="text_middleName">Middle Name</label>
+                                              <input type="text" class="form-control" id="text_middleName" value="{{projectPatient.ctc["patient"]["middleName"] or ''}}" readonly="readonly" disabled="disabled">
+                                          </div>
+                                          <div class="col-md-4">
+                                              <label for="text_lastName">Last Name</label>
+                                              <input type="text" class="form-control" id="text_lastName" value="{{projectPatient.ctc["patient"]["lastName"] or ''}}" readonly="readonly" disabled="disabled">
+                                          </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class = "col-md-4">
+                                            <label for="text_dnc">DNC</label>
+                                            <input type="text" class="form-control" id="text_dnc" value="{{projectPatient.ctc.dnc or ''}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class = "col-md-4">
+                                            <label for="text_dncReason">DNC Reason</label>
+                                            <input type="text" class="form-control" id="text_dncReason" value="{{projectPatient.ctc.dncReason or ''}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class = "col-md-4">
+                                            <label for="select_siteGroupID">Site Group</label>
+                                            <select type="text" class="form-control" required="required" name="siteGrpID" id="select_siteGroupID" readonly="readonly" disabled="disabled" >
+                                              {% for siteGroup in form.siteGroups %}
+                                                {% if siteGroup.siteID == projectPatient.siteGrpID %}
+                                                    <option selected="selected" value="{{siteGroup.siteID}}">{{siteGroup.site or ''}}</option>
+                                                {% else %}
+                                                    <option value="{{siteGroup.siteID}}">{{siteGroup.site or ''}} </option>
+                                                {% endif %}
+                                              {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                          <label for="text_currentAge">Current Age</label>
+                                          <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge or ''}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class="col-md-3">
+                                         <label for="date_lastConsentedDay">Date of Last Contact</label>
+                                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"] or ''}}/{{form["dayOfLastConsent"] or ''}}/{{form["yearOfLastConsent"] or ''}}">
+                                        </div>
+                                        <div class="col-md-2">
+                                           <label for="select_vitalStatus">Vital Status</label>
+                                           <select type="text" class="form-control" name="vitalStatusID" id="select_vitalStatus" readonly="readonly" disabled="disabled" >
+                                               <option></option>
+                                           {% for vitalStatus in form["vitalStatuses"] %}
+                                             {% if vitalStatus.vitalStatusID == projectPatient.vitalStatus.vitalStatusID %}
+                                                <option value="{{vitalStatus.vitalStatusID}}" selected="selected">{{vitalStatus.vitalStatus}}</option>
+                                             {% else %}
+                                                <option value="{{vitalStatus.vitalStatusID}}">{{vitalStatus.vitalStatus}}</option>
+                                              {% endif %}
+                                           {% endfor %}
+                                           </select>
+                                       </div>
+                                        <div class = "col-md-2">
+                                          <label for="date_dxDateDay">Dx Date</label>
+                                          <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{projectPatient.ctc["dxDateMonth"] or ''}}/{{projectPatient.ctc["dxDateDay"] or ''}}/{{projectPatient.ctc["dxDateYear"] or ''}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class = "col-md-2">
+                                          <label for="text_stage">Stage</label>
+                                          <input type="text" class="form-control" name="stage" id="text_stage" value="{{projectPatient.ctc["stage"] or ''}}" readonly="readonly" disabled="disabled">
+                                        </div>
+                                      </div>
+                                        <div  class="row">
+                                        <div class = "col-md-4">
+                                          <label for="text_behavior">Behavior</label>
+                                          <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{projectPatient.ctc["behavior"] or ''}}" readonly="readonly" disabled="disabled">{{projectPatient.ctc["behavior"]}}</textarea>
+                                        </div>
+                                        </div>
+
+
+                                    <table class="table table-striped no-spacing">
+                                        <thead>
+                                            <tr>
+                                            <th>Phone Number</th>
+                                            <th>Status</th>
+                                            <th>Status Date</th>
+                                            <th>Type</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for phone in projectPatient.ctc.patient.patientPhones %}
+                                            <tr>
+                                                <td>{{phone["phoneNumber"] or ''}}</td>
+                                                <td>{{phone["contactInfoStatus"].contactInfoStatus or ''}}</td>
+                                                <td>{{phone["phoneStatusDate"] or ''}}</td>
+                                                <td>{{phone["phoneType"].phoneType or ''}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                          </fieldset>
+                     </form>
+                </div>
+        </div>
+    </div>
+{% endif %}
+</div>
 </div>

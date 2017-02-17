@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="participantID" id="select_projectPatientID">
                       {% for pp in form.projectPatients %}
                         {% if pp.participantID == patientProjectStatus.participantID %}
-                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -63,17 +63,17 @@
                         {% if patientProjectStatus is not none %}
                             {% for staff in form.staffs %}
                                 {% if staff.staffID == patientProjectStatus.staffID %}
-                                    <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                    <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                 {% else %}
-                                    <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                    <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                 {% endif %}
                              {% endfor %}
                         {% else %}
                             {% for staff in form.staff %}
                                 {% if user.staff.staffID == staff.staffID %}
-                                <option selected value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                <option selected value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                 {% else %}
-                                <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                                <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

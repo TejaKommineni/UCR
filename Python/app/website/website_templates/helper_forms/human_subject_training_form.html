@@ -12,7 +12,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_humanSubjectTraining{{loop.index}}">Training Type</label>
-                  <input type="text" class="form-control" name="trainingType" id="text_humanSubjectTraining{{loop.index}}" value="{{humanSubjectTraining["trainingType"]}}">
+                  <input type="text" class="form-control" name="trainingType" id="text_humanSubjectTraining{{loop.index}}" value="{{humanSubjectTraining["trainingType"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

@@ -12,7 +12,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_fundingSource{{loop.index}}">Source</label>
-                  <input type="text" class="form-control" name="fundingSource" id="text_fundingSource{{loop.index}}" value="{{fundingSource["fundingSource"]}}">
+                  <input type="text" class="form-control" name="fundingSource" id="text_fundingSource{{loop.index}}" value="{{fundingSource["fundingSource"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

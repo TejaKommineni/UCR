@@ -1688,7 +1688,10 @@ def update_facility_address(facilityAddressID):
                     facilityAddress.street = form.street.data
                     facilityAddress.street2 = form.street2.data
                     facilityAddress.city = form.city.data
-                    facilityAddress.stateID = form.stateID.data
+                    if form.stateID.data is '':
+                        facilityAddress.stateID = 'zz'
+                    else:
+                        facilityAddress.stateID = form.stateID.data
                     facilityAddress.zip = form.zip.data
                     facilityAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
@@ -2495,7 +2498,10 @@ def update_informant_address(informantAddressID):
                     informantAddress.street = form.street.data
                     informantAddress.street2 = form.street2.data
                     informantAddress.city = form.city.data
-                    informantAddress.stateID = form.stateID.data
+                    if form.stateID.data is not '':
+                      informantAddress.stateID = form.stateID.data
+                    else:
+                      informantAddress.stateID = 'zz'
                     informantAddress.zip = form.zip.data
                     informantAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
@@ -3257,7 +3263,10 @@ def update_patient_address(patAddressID):
                     patientAddress.street = form.street.data
                     patientAddress.street2 = form.street2.data
                     patientAddress.city = form.city.data
-                    patientAddress.stateID = form.stateID.data
+                    if form.stateID.data is not '':
+                        patientAddress.stateID = form.stateID.data
+                    else:
+                        patientAddress.stateID = 'zz'
                     patientAddress.zip = form.zip.data
                     patientAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
@@ -4099,7 +4108,10 @@ def update_physician_address(physicianAddressID):
                     physicianAddress.street = form.street.data
                     physicianAddress.street2 = form.street2.data
                     physicianAddress.city = form.city.data
-                    physicianAddress.stateID = form.stateID.data
+                    if form.stateID.data is not '':
+                        physicianAddress.stateID = form.stateID.data
+                    else:
+                        physicianAddress.stateID = 'zz'
                     physicianAddress.zip = form.zip.data
                     physicianAddress.addressStatusDate = form.addressStatusDate.data
                     query.commit()
@@ -5052,15 +5064,15 @@ def get_project_patient(participantID=None):
                 form["abstractStatuses"] = query.get_abstract_statuses()
                 form["vitalStatuses"] = query.get_vital_statues()
                 form["siteGroups"]=query.get_sites()
-                if projectPatient.dayOfLastConsent == None:
+                if projectPatient.dayOfLastConsent == '':
                     form["dayOfLastConsent"]=''
                 else:
                     form["dayOfLastConsent"]=projectPatient.dayOfLastConsent
-                if projectPatient.monthOfLastConsent == None:
+                if projectPatient.monthOfLastConsent == '':
                     form["monthOfLastConsent"]=''
                 else:
                     form["monthOfLastConsent"] = projectPatient.monthOfLastConsent
-                if projectPatient.yearOfLastConsent == None:
+                if projectPatient.yearOfLastConsent == '':
                     form["yearOfLastConsent"] = ''
                 else:
                     form["yearOfLastConsent"] = projectPatient.yearOfLastConsent
@@ -6105,8 +6117,8 @@ def update_staff(staffID):
                     staff.street = form.street.data
                     staff.city = form.city.data
                     staff.zipcode=form.zipcode.data
-                    if form.stateID.data == "":
-                     staff.stateID = None
+                    if form.stateID.data is '':
+                     staff.stateID = 'zz'
                     else:
                      staff.stateID = form.stateID.data
                     staff.ucrRoleID = form.ucrRoleID.data

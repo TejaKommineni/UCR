@@ -10,15 +10,15 @@
                 <div class="row">
                     <div class="col-md-2">  
                       <label for="text_firstName">First Name</label>        
-                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{ctc.patient.firstName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">  
                       <label for="text_middleName">Middle Name</label>        
-                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{ctc.patient.middleName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{ctc.patient.middleName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">  
                       <label for="text_lastName">Last Name</label>        
-                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{ctc.patient.lastName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{ctc.patient.lastName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-1">
                         <label>Patient</label><br>
@@ -28,7 +28,7 @@
                   <div class="row">
                     <div class="col-md-5">
                       <label for="text_lastName">Project Title</label>
-                      <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{ctc.projectPatient.project.projectTitle}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{ctc.projectPatient.project.projectTitle or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-1">
                         <label>Project</label><br>
@@ -56,71 +56,75 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_dxDateDay">Dx Date</label>
-                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateMonth"]}}/{{ctc["dxDateDay"]}}/{{ctc["dxDateYear"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxDateDay" id="date_dxDateDay" value="{{ctc["dxDateMonth"] or ''}}/{{ctc["dxDateDay"] or ''}}/{{ctc["dxDateYear"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_ctcSequence">CTC Sequence</label>
-                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="ctcSequence" id="text_ctcSequence" value="{{ctc["ctcSequence"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                     <label for="text_ctcRecordNumber">CTC Tumor Record Number</label>
-                    <input type="text" class="form-control" name="ctcRecordNumber" id="text_ctcRecordNumber" value="{{ctc["ctcRecordNumber"]}}" readonly="readonly" disabled="disabled">
+                    <input type="text" class="form-control" name="ctcRecordNumber" id="text_ctcRecordNumber" value="{{ctc["ctcRecordNumber"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_site">Site</label>
-                  <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="site" id="text_site" value="{{ctc["site"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_histology">Histology</label>
-                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"]}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
+                  <textarea type="textarea" class="form-control" name="histology" id="text_histology" value="{{ctc["histology"] or ''}}" readonly="readonly" disabled="disabled">{{ctc["histology"]}}</textarea>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_stage">Stage</label>
-                  <input type="text" class="form-control" name="stage" id="text_stage" value="{{ctc["stage"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="stage" id="text_stage" value="{{ctc["stage"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                  <div class = "col-md-2">
                   <label for="text_behavior">Behavior</label>
-                  <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"]}}" readonly="readonly" disabled="disabled">{{ctc["behavior"]}}</textarea>
+                  {% if  ctc["behavior"]  == None%}
+                  <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"] or ''}}" readonly="readonly" disabled="disabled"></textarea>
+                  {% else %}
+                   <textarea type="textarea" class="form-control" name="behavior" id="text_behavior" value="{{ctc["behavior"] or ''}}" readonly="readonly" disabled="disabled">{{ctc["behavior"]}}</textarea>
+                  {% endif %}
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_dnc">DNC</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dnc" id="text_dnc" value="{{ctc["dnc"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_dncReason">DNC Reason</label>
-                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dnc" id="text_dncReason" value="{{ctc["dncReason"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">
                   <label for="text_recordID">Record ID</label>
-                  <input type="text" class="form-control" name="recordID" id="text_recordID" value="{{ctc["recordID"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="recordID" id="text_recordID" value="{{ctc["recordID"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
             </div>
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_dxStreet">Dx Street</label>
-                  <input type="text" class="form-control" name="dxStreet1" id="text_dx_street" value="{{ctc["dxStreet1"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxStreet1" id="text_dx_street" value="{{ctc["dxStreet1"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_dxZip">Dx Zip Code</label>
-                  <input type="text" class="form-control" name="dxZip" id="text_dxZip" value="{{ctc["dxZip"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxZip" id="text_dxZip" value="{{ctc["dxZip"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                  <div class = "col-md-2">
                   <label for="text_dxCounty">Dx County</label>
-                  <input type="text" class="form-control" name="dxCounty" id="text_dxCounty" value="{{ctc["dxCounty"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxCounty" id="text_dxCounty" value="{{ctc["dxCounty"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-4">
                   <label for="text_dxStreet2">Dx Street 2</label>
-                  <input type="text" class="form-control" name="dxStreet2" id="text_dxStreet2" value="{{ctc["dxStreet2"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxStreet2" id="text_dxStreet2" value="{{ctc["dxStreet2"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_dxCity">Dx City</label>
-                  <input type="text" class="form-control" name="dxCity" id="text_dxCity" value="{{ctc["dxCity"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dxCity" id="text_dxCity" value="{{ctc["dxCity"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">  
                   <label for="select_dxState">Dx State</label>        
@@ -208,11 +212,11 @@
                     <tbody>
                 {% for ctcFacility in ctc.ctcFacilities %}
                     <tr>
-                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityName"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityName"] or ''}}</a></td>
                         <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.coc or ''}}</a></td>
-                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactFirstName"]}}</a></td>
-                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactLastName"]}}</a></td>
-                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityStatus"]}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactFirstName"] or ''}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["contactLastName"] or ''}}</a></td>
+                        <td><a href="/website/facilities/{{ctcFacility.facility["facilityID"]}}">{{ctcFacility.facility["facilityStatus"] or ''}}</a></td>
                     </tr>    
                 {% endfor %}
                     </tbody>
@@ -247,10 +251,10 @@
                       <tbody>
                         {% for physicianToCTC in ctc.physicianToCTC %}
                             <tr>
-                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["lastName"]}}</a></td>
-                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["firstName"]}}</a></td>
-                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["specialty"]}}</a></td>
-                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"].physicianStatus}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["lastName"] or ''}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["firstName"] or ''}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["specialty"] or ''}}</a></td>
+                                <td><a href="/website/physicians/{{physicianToCTC.physician["physicianID"]}}">{{physicianToCTC.physician["physicianStatus"].physicianStatus or ''}}</a></td>
                             </tr>
                         {% endfor %}
                           </tbody>

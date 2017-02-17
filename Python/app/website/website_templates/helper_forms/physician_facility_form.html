@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="physicianID" id="select_physicianID">
                       {% for phys in form.physicians %}
                         {% if phys.physicianID == physicianFacility.physicianID %}
-                            <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                            <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName or ''}} {{phys.middleName or ''}} {{phys.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                            <option value="{{phys.physicianID}}">{{phys.firstName or ''}} {{phys.middleName or ''}} {{phys.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -43,9 +43,9 @@
                   <select type="text" class="form-control" required="required" name="facilityID" id="select_facilityID">
                       {% for facility in form.facilities %}
                         {% if facility.facilityID == physicianFacility.facilityID %}
-                            <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                            <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName or ''}}</option>
                         {% else %}
-                            <option value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                            <option value="{{facility.facilityID}}">{{facility.facilityName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -54,7 +54,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_physFacilityStatus">Status</label>
-                  <input type="text" class="form-control" name="physFacilityStatus" id="text_physFacilityStatus" value="{{physicianFacility.physicianFacilityStatus}}">
+                  <input type="text" class="form-control" name="physFacilityStatus" id="text_physFacilityStatus" value="{{physicianFacility.physicianFacilityStatus  or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_physFacilityStatusDate">Status Date</label>

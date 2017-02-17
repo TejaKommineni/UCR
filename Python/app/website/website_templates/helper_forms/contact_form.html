@@ -30,9 +30,9 @@
                   <select type="text" class="form-control" name="participantID" id="select_participantID">
                       {% for pp in form.projectPatients %}
                         {% if pp.participantID == contact.participantID %}
-                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -46,9 +46,9 @@
                       <option></option>
                       {% for contactType in form.contactTypes %}
                         {% if contactType.contactTypeID == contact.contactTypeLUTID %}
-                            <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
+                            <option selected="selected" value="{{contactType.contactTypeID}}">{{contactType.contactCode or ''}} - {{contactType.contactDefinition or ''}}</option>
                         {% else %}
-                            <option value="{{contactType.contactTypeID}}">{{contactType.contactCode}} - {{contactType.contactDefinition}}</option>
+                            <option value="{{contactType.contactTypeID}}">{{contactType.contactCode or ''}} - {{contactType.contactDefinition or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -58,11 +58,11 @@
                   <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                   {% for staff in form.staff %}
                     {% if contact is none and  user.staff.staffID == staff.staffID %}
-                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% elif staff.staffID == contact.staffID %}
-                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% else %}
-                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% endif %}
                   {% endfor %}
                   </select>
@@ -76,17 +76,17 @@
                       {% if contact is not none %}
                           {% for informant in contact.projectPatient.ctc.patient.informants %}
                             {% if informant.informantID == contact.informantID %}
-                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName or ''}} {{informant.middleName or ''}} {{informant.lastName or ''}}</option>
                             {% else %}
-                                <option value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                                <option value="{{informant.informantID}}">{{informant.firstName or ''}} {{informant.middleName or ''}} {{informant.lastName or ''}}</option>
                             {% endif %}
                           {% endfor %}
                        {% else %}
                           {% for informant in projectPatient.ctc.patient.informants %}
                             {% if informant.informantID == contact.informantID %}
-                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                                <option selected="selected" value="{{informant.informantID}}">{{informant.firstName or ''}} {{informant.middleName or ''}} {{informant.lastName or ''}}</option>
                             {% else %}
-                                <option value="{{informant.informantID}}">{{informant.firstName}} {{informant.middleName}} {{informant.lastName}}</option>
+                                <option value="{{informant.informantID}}">{{informant.firstName or ''}} {{informant.middleName or ''}} {{informant.lastName or ''}}</option>
                             {% endif %}
                           {% endfor %}
                        {% endif %}
@@ -98,9 +98,9 @@
                       <option></option>
                           {% for informantPhone in form.informantPhones %}
                             {% if informantPhone.informantPhoneID == contact.informantPhoneID %}
-                                <option selected="selected" value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                                <option selected="selected" value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber or ''}}</option>
                             {% else %}
-                                <option value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber}}</option>
+                                <option value="{{informantPhone.informantPhoneID}}">{{informantPhone.phoneNumber or ''}}</option>
                             {% endif %}
                           {% endfor %}
                   </select>
@@ -113,9 +113,9 @@
                       <option></option>
                       {% for facility in form.facilities %}
                         {% if facility.facilityID == contact.facilityID %}
-                            <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                            <option selected="selected" value="{{facility.facilityID}}">{{facility.facilityName or ''}}</option>
                         {% else %}
-                            <option value="{{facility.facilityID}}">{{facility.facilityName}}</option>
+                            <option value="{{facility.facilityID}}">{{facility.facilityName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -126,9 +126,9 @@
                       <option></option>
                       {% for facilityPhone in form.facilityPhones %}
                         {% if facilityPhone.facilityPhoneID == contact.facilityPhoneID %}
-                            <option selected="selected" value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.phoneNumber}}</option>
+                            <option selected="selected" value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.phoneNumber or ''}}</option>
                         {% else %}
-                            <option value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.facilityPhoneID}}</option>
+                            <option value="{{facilityPhone.facilityPhoneID}}">{{facilityPhone.facilityPhoneID or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -141,9 +141,9 @@
                       <option></option>
                       {% for physician in form.physicians %}
                         {% if physician.physicianID == contact.physicianID %}
-                            <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                            <option selected="selected" value="{{physician.physicianID}}">{{physician.firstName or ''}} {{physician.middleName or ''}} {{physician.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{physician.physicianID}}">{{physician.firstName}} {{physician.middleName}} {{physician.lastName}}</option>
+                            <option value="{{physician.physicianID}}">{{physician.firstName or ''}} {{physician.middleName or ''}} {{physician.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -154,9 +154,9 @@
                       <option></option>
                       {% for physicianPhone in form.physicianPhones %}
                         {% if physicianPhone.physicianPhoneID == contact.physicianPhoneID %}
-                            <option selected="selected" value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                            <option selected="selected" value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber or ''}}</option>
                         {% else %}
-                            <option value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber}}</option>
+                            <option value="{{physicianPhone.physicianPhoneID}}">{{physicianPhone.phoneNumber or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -170,9 +170,9 @@
                       <option></option>
                       {% for patientPhone in form.patientPhones %}
                         {% if patientPhone.patPhoneID == contact.patientPhoneID %}
-                            <option selected="selected" value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                            <option selected="selected" value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber or ''}}</option>
                         {% else %}
-                            <option value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber}}</option>
+                            <option value="{{patientPhone.patientPhoneID}}">{{patientPhone.phoneNumber or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -181,7 +181,12 @@
             <div class="row">
                 <div class = "col-md-4">
                   <label for="text_notes">Notes</label>
-                  <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                    {% if contact.notes == None%}
+                    <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4"></textarea>
+                    {% else %}
+                    <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{contact.notes}}</textarea>
+                    {% endif %}
+
                 </div>
               </div>
               <div class="row">
@@ -191,7 +196,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_initials">Initials</label>
-                  <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials}}">
+                  <input type="text" class="form-control" name="initials" id="text_initials" value="{{contact.initials or ''}}">
                 </div>
               </div>
             </div>

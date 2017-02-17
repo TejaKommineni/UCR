@@ -30,9 +30,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == siteGroups["projectID"] %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -46,9 +46,9 @@
                       <option></option>
                       {% for siteGroup in form["siteGroups"] %}
                         {% if siteGroup.siteID == siteGroups["siteGroupID"] %}
-                            <option selected="selected" value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
+                            <option selected="selected" value="{{siteGroup.siteID}}">{{siteGroup.site or ''}}</option>
                         {% else %}
-                            <option value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
+                            <option value="{{siteGroup.siteID}}">{{siteGroup.site or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

@@ -70,11 +70,11 @@
                   <select type="text" class="form-control" required="required" name="staffID" id="select_staffID">
                   {% for staff in form.staff %}
                     {% if log is none and  user.staff.staffID == staff.staffID %}
-                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                      <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% elif staff.staffID == log.staffID %}
-                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% else %}
-                        <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                        <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                     {% endif %}
                   {% endfor %}
                   </select>
@@ -83,11 +83,15 @@
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_note">Note</label>
-                  <textarea type="textaraea" class="form-control" name="note" id="text_note" rows="4">{{log["note"]}}</textarea>
+                    {% if log["note"] == None%}
+                      <textarea type="textaraea" class="form-control" name="note" id="text_note" rows="4"></textarea>
+                      {% else %}
+                      <textarea type="textaraea" class="form-control" name="note" id="text_note" rows="4">{{log["note"]}}</textarea>
+                    {% endif %}
                 </div>
                 <div class = "col-md-2">
                   <label for="date_date">Date</label>
-                  <input required="required" type="date" class="form-control" name="date" id="date_date" value="{{log["date"]}}">
+                  <input required="required" type="date" class="form-control" name="date" id="date_date" value="{{log["date"] or ''}}">
                 </div>
               </div>
           </div>

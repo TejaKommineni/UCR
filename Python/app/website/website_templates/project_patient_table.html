@@ -88,12 +88,12 @@
           <tbody>
             {% for projectPatient in projectPatients %}
             <tr>
-                <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.shortTitle}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"]}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"]}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode}} - {{projectPatient["finalCode"].finalCodeDefinition}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"]}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"].site}}</a></td>
+                <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.shortTitle or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"] or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"] or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode or ''}} - {{projectPatient["finalCode"].finalCodeDefinition or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"] or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"].site or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

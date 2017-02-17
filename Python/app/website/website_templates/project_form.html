@@ -22,13 +22,13 @@
               <div class="row">
                 <div class="col-md-8">
                   <label for="text_projectTitle">Project Title</label>
-                  <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{form["project"]["projectTitle"]}}" >
+                  <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{form["project"]["projectTitle"] or ''}}" >
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <label for="text_shortTitle">Short Title</label>  
-                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form["project"]["shortTitle"]}}">
+                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form["project"]["shortTitle"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_projectTypeID">Project Type</label>
@@ -47,31 +47,31 @@
               <div class="row">
                 <div class = "col-md-6">
                   <label for="text_previousShortTitle">Previous Short Title</label>
-                  <input type="text" class="form-control" name="previousShortTitle" id="text_previousShortTitle" value="{{form["project"]["previousShortTitle"]}}">
+                  <input type="text" class="form-control" name="previousShortTitle" id="text_previousShortTitle" value="{{form["project"]["previousShortTitle"]or ''}}">
                 </div>
                <div class="col-md-2">  
                   <label for="text_sop">SOP</label>        
-                  <input type="text" class="form-control" name="sop" id="text_sop" value="{{form["project"]["sop"]}}">
+                  <input type="text" class="form-control" name="sop" id="text_sop" value="{{form["project"]["sop"] or ''}}">
                </div>
               </div>
               <div class = "row">
                <div class="col-md-8">  
                   <label for="text_projectSummary">Project Summary</label>        
-                  <textarea type="textaraea" class="form-control" name="projectSummary" id="text_projectSummary">{{form["project"]["projectSummary"]}}</textarea>
+                  <textarea type="textaraea" class="form-control" name="projectSummary" id="text_projectSummary">{{form["project"]["projectSummary"] or ''}}</textarea>
                </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_ucrProposal">UCR Proposal</label>
-                  <input type="text" class="form-control" name="ucrProposal" id="text_ucrProposal" value="{{form["project"]["ucrProposal"]}}">
+                  <input type="text" class="form-control" name="ucrProposal" id="text_ucrProposal" value="{{form["project"]["ucrProposal"] or ''}}">
                 </div>
                 <div class="col-md-2">
                   <label for="text_budgetDoc">Budget Doc</label>
-                  <input type="text" class="form-control" name="budgetDoc" id="text_budgetDoc" value="{{form["project"]["budgetDoc"]}}">
+                  <input type="text" class="form-control" name="budgetDoc" id="text_budgetDoc" value="{{form["project"]["budgetDoc"] or ''}}">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_ucrFee">UCR Fee</label>
-                  <input type="text" class="form-control" name="ucrFee" id="text_ucrFee" value="{{form["project"]["ucrFee"]}}">
+                  <input type="text" class="form-control" name="ucrFee" id="text_ucrFee" value="{{form["project"]["ucrFee"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irbHolderID">IRB Holder</label>
@@ -94,7 +94,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_finalRecruitmentReport">Final Recruitment Report</label>
-                  <input type="text" class="form-control" name="finalRecruitmentReport" id="text_finalRecruitmentReport" value="{{form["project"]["finalRecruitmentReport"]}}">
+                  <input type="text" class="form-control" name="finalRecruitmentReport" id="text_finalRecruitmentReport" value="{{form["project"]["finalRecruitmentReport"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_ucrNoFee">UCR No Fee</label>
@@ -140,11 +140,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_numberAbstractions">Number Abstractions</label>
-                  <input type="text" class="form-control" name="numberAbstractions" id="text_numberAbstractions" value="{{form["project"]["numberAbstractions"]}}">
+                  <input type="text" class="form-control" name="numberAbstractions" id="text_numberAbstractions" value="{{form["project"]["numberAbstractions"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_sftpUsername">SFTP Username</label>
-                  <input type="text" class="form-control" name="sftpUsername" id="text_sftpUsername" value="{{form["project"]["sftpUsername"]}}">
+                  <input type="text" class="form-control" name="sftpUsername" id="text_sftpUsername" value="{{form["project"]["sftpUsername"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_irbResearchManager">Research Manager on IRB</label>
@@ -247,13 +247,13 @@
                                     {% for arcReview in form.project.arcReviews %}
                                     <tr>
                                         <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewType or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged or ''}}</a></td>
+                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -291,10 +291,10 @@
                                     {% for budget in form.project.budgets %}
                                     <tr>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart or ''}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd or ''}}</a></td>
                                         <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment}}</a></td>
+                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -331,11 +331,11 @@
                                   <tbody>
                                     {% for funding in form.project.fundings %}
                                     <tr>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus or ''}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource or ''}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber or ''}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle or ''}}</a></td>
+                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -372,11 +372,11 @@
                                   <tbody>
                                     {% for log in form.project.logs %}
                                     <tr>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.logSubject.logSubject}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.phaseStatus.phaseStatus}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.staff.firstName}}  {{log.staff.lastName}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.note}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.date}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.logSubject.logSubject or ''}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.phaseStatus.phaseStatus or ''}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.staff.firstName or ''}}  {{log.staff.lastName or ''}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.note or ''}}</a></td>
+                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.date or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -415,13 +415,13 @@
                           <tbody>
                             {% for pp in form.project.projectPatients %}
                             <tr>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.firstName}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.lastName}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.site}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.histology}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.finalCode.finalCode}} - {{pp.finalCode.finalCodeDefinition}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.dnc}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.modifiedDate}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.firstName or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.lastName or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.site or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.histology or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.finalCode.finalCode or ''}} - {{pp.finalCode.finalCodeDefinition or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.dnc or ''}}</a></td>
+                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.modifiedDate or ''}}</a></td>
                             </tr>
                             {% endfor %}
                           </tbody>
@@ -458,13 +458,13 @@
                                   <tbody>
                                     {% for ps in form.project.projectStaff %}
                                     <tr>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge or ''}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked or ''}}</a></td>
                                         {% if ps.contactID %}
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
                                         {% else %}
@@ -475,7 +475,7 @@
                                         {% else %}
                                         <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
                                         {% endif %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate}}</a></td>
+                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -514,10 +514,10 @@
                                   <tbody>
                                     {% for projectStatus in form.project.projectStatuses %}
                                     <tr>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.projectStatus.projectStatus}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.staff.firstName}} {{projectStatus.staff.lastName}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusNotes}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusDate}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.projectStatus.projectStatus or ''}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.staff.firstName or ''}} {{projectStatus.staff.lastName or ''}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusNotes or ''}}</a></td>
+                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusDate or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -557,14 +557,14 @@
                                       <tbody>
                                         {% for rc in form.project.reviewCommittees %}
                                         <tr>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeLUT.reviewCommittee}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeStatusLUT.reviewCommitteeStatus}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeNumber}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateInitialReview}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateExpires}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcNote}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcProtocol}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcApproval}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeLUT.reviewCommittee or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeStatusLUT.reviewCommitteeStatus or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeNumber or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateInitialReview or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateExpires or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcNote or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcProtocol or ''}}</a></td>
+                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcApproval or ''}}</a></td>
                                         </tr>
                                         {% endfor %}
                                       </tbody>
@@ -600,11 +600,11 @@
                                       <tbody>
                                         {% for report in form.project.ucrReports %}
                                         <tr>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.statusNotes}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType or ''}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted or ''}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue or ''}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.statusNotes or ''}}</a></td>
+                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc or ''}}</a></td>
                                         </tr>
                                         {% endfor %}
                                       </tbody>
@@ -636,7 +636,7 @@
                                   <tbody>
                                     {% for siteGroup in form.project.projectSiteGroups %}
                                     <tr>
-                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site}}</a></td>
+                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>

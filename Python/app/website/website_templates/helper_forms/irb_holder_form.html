@@ -12,11 +12,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_irbHolder{{loop.index}}">Holder</label>
-                  <input type="text" class="form-control" name="holder" id="text_irbHolder{{loop.index}}" value="{{irbHolder["holder"]}}">
+                  <input type="text" class="form-control" name="holder" id="text_irbHolder{{loop.index}}" value="{{irbHolder["holder"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_irbHolderDefinition{{loop.index}}">Holder Definitinon</label>
-                  <input type="text" class="form-control" name="holderDefinition" id="text_irbHolderDefinition{{loop.index}}" value="{{irbHolder["holderDefinition"]}}">
+                  <input type="text" class="form-control" name="holderDefinition" id="text_irbHolderDefinition{{loop.index}}" value="{{irbHolder["holderDefinition"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

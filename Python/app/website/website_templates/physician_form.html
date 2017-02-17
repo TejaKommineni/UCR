@@ -35,37 +35,37 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_firstName">First Name</label>
-                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{physician["firstName"]}}" >
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{physician["firstName"] or ''}}" >
                 </div>
                 <div class="col-md-2">
                   <label for="text_middleName">Middle Name</label>
-                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{physician["middleName"]}}" >
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{physician["middleName"] or ''}}" >
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_lastName">Last Name</label>
-                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{physician["lastName"]}}" >
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{physician["lastName"] or ''}}" >
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_credentials">Credentials</label>
-                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{physician["credentials"]}}" >
+                  <input type="text" class="form-control" name="credentials" id="text_credentials" value="{{physician["credentials"] or ''}}" >
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_aliasFirstName">Alias First Name</label>
-                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{physician["aliasFirstName"]}}" >
+                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{physician["aliasFirstName"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="text_aliasMiddleName">Alias Middle Name</label>
-                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{physician["aliasMiddleName"]}}" >
+                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{physician["aliasMiddleName"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="text_aliasLastName">Alias Last Name</label>
-                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{physician["aliasLastName"]}}" >
+                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{physician["aliasLastName"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="text_specialty">Specialty</label>
-                  <input type="text" class="form-control" name="specialty" id="text_specialty" value="{{physician["specialty"]}}" >
+                  <input type="text" class="form-control" name="specialty" id="text_specialty" value="{{physician["specialty"] or ''}}" >
                 </div>
               </div>
               <div class="row">
@@ -88,7 +88,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_displayID">Display ID</label>
-                  <input type="text" class="form-control" name="displayID" id="text_displayID" value="{{physician["displayID"]}}" >
+                  <input type="text" class="form-control" name="displayID" id="text_displayID" value="{{physician["displayID"] or ''}}" >
                 </div>
               </div>
             </div>
@@ -253,11 +253,11 @@
                     <tbody>
                 {% for physicianFacility in physician.physicianFacilities %}
                     <tr>
-                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityName"]}}</a></td>
-                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactFirstName"]}}</a></td>
-                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactLastName"]}}</a></td>
-                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityStatus"]}}</a></td>
-                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.physFacilityStatus.physicianFacilityStatus}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityName"]  or ''}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactFirstName"] or ''}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["contactLastName"] or ''}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.facility["facilityStatus"] or ''}}</a></td>
+                        <td><a href="/website/facilities/{{physicianFacility.facility["facilityID"]}}">{{physicianFacility.physFacilityStatus.physicianFacilityStatus or ''}}</a></td>
                     </tr>    
                 {% endfor %}
                     </tbody>

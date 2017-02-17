@@ -51,10 +51,10 @@
           <tbody>
             {% for facility in facilities %}
             <tr>
-                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityName"]}}</a></td>
-                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactFirstName"]}}</a></td>
-                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactLastName"]}}</a></td>
-                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityStatus"]}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityName"] or ''}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactFirstName"] or ''}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["contactLastName"] or ''}}</a></td>
+                <td><a href="/website/facilities/{{facility["facilityID"]}}">{{facility["facilityStatus"] or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

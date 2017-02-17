@@ -12,11 +12,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_reviewCommittee{{loop.index}}">Review Committee</label>
-                  <input type="text" class="form-control" name="reviewCommittee" id="text_reviewCommittee{{loop.index}}" value="{{reviewCommittee["reviewCommittee"]}}">
+                  <input type="text" class="form-control" name="reviewCommittee" id="text_reviewCommittee{{loop.index}}" value="{{reviewCommittee["reviewCommittee"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_reviewCommitteeDescription{{loop.index}}">Description</label>
-                  <input type="text" class="form-control" name="reviewCommitteeDescription" id="text_reviewCommitteeDescription{{loop.index}}" value="{{reviewCommittee["reviewCommitteeDescription"]}}">
+                  <input type="text" class="form-control" name="reviewCommitteeDescription" id="text_reviewCommitteeDescription{{loop.index}}" value="{{reviewCommittee["reviewCommitteeDescription"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

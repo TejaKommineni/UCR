@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="participantID" id="select_projectPatientID">
                       {% for pp in form.projectPatients %}
                         {% if pp.participantID == incentive.participantID %}
-                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option selected="selected" value="{{pp.participantID}}">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName}} {{pp.ctc.patient.middleName}} {{pp.ctc.patient.lastName}}</option>
+                            <option value="{{pp.participantID}}" disabled="disabled">{{pp.ctc.patient.firstName or ''}} {{pp.ctc.patient.middleName or ''}} {{pp.ctc.patient.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -42,14 +42,15 @@
                 <div class = "col-md-8">
                   <label for="select_projectPatientID">Contact</label>
                   <select required="required" type="text" class="form-control" name="contactID" id="select_contactID">
+                      <option></option>
                       {% if incentive is not none %}
                         {% set projectPatient = incentive.projectPatient %}
                       {% endif %}
                       {% for contact in projectPatient.contacts %}
                         {% if contact.contactID == incentive.contactID %}
-                            <option selected="selected" value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName}},{{contact.staff.lastName}}) - ({{contact.contactType.contactCode}} {{contact.contactType.contactDefinition}})</option>
+                            <option selected="selected" value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName or ''}},{{contact.staff.lastName or ''}}) - ({{contact.contactType.contactCode or ''}} {{contact.contactType.contactDefinition or ''}})</option>
                         {% else %}
-                            <option value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName}},{{contact.staff.lastName}}) - ({{contact.contactType.contactCode}} {{contact.contactType.contactDefinition}})</option>
+                            <option value="{{contact.contactID}}">{{contact.contactDate}} - ({{contact.staff.firstName or ''}},{{contact.staff.lastName or ''}}) - ({{contact.contactType.contactCode or ''}} {{contact.contactType.contactDefinition or ''}})</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -58,13 +59,13 @@
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_description">Description</label>
-                  <input type="text" class="form-control" name="incentiveDescription" id="text_incentiveDescription" value="{{incentive.incentiveDescription}}">
+                  <input type="text" class="form-control" name="incentiveDescription" id="text_incentiveDescription" value="{{incentive.incentiveDescription or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_barcode">Barcode</label>
-                  <input type="text" class="form-control" name="barcode" id="text_barcode" required="required" value="{{incentive.barcode}}">
+                  <input type="text" class="form-control" name="barcode" id="text_barcode" required="required" value="{{incentive.barcode or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_dateGiven">Date Given</label>

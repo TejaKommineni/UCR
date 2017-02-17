@@ -33,40 +33,40 @@
               <div class="row">
                 <div class="col-md-8"> 
                   <label for="text_facilityName">Facility Name</label>
-                  <input type="text" class="form-control" name="facilityName" id="text_facilityName" value="{{facility["facilityName"]}}" >
+                  <input type="text" class="form-control" name="facilityName" id="text_facilityName" value="{{facility["facilityName"] or ''}}" >
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_contactFirstName">Contact First Name</label>
-                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{facility["contactFirstName"]}}" >
+                  <input type="text" class="form-control" name="contactFirstName" id="text_contactFirstName" value="{{facility["contactFirstName"] or ''}}" >
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_contactLastName">Contact Last Name</label>
-                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{facility["contactLastName"]}}" >
+                  <input type="text" class="form-control" name="contactLastName" id="text_contactLastName" value="{{facility["contactLastName"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="text_contact2FirstName">Contact 2 First Name</label>
-                  <input type="text" class="form-control" name="contact2FirstName" id="text_contact2FirstName" value="{{facility["contact2FirstName"]}}" >
+                  <input type="text" class="form-control" name="contact2FirstName" id="text_contact2FirstName" value="{{facility["contact2FirstName"] or ''}}" >
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_contact2LastName">Contact 2 Last Name</label>
-                  <input type="text" class="form-control" name="contact2LastName" id="text_contact2LastName" value="{{facility["contact2LastName"]}}" >
+                  <input type="text" class="form-control" name="contact2LastName" id="text_contact2LastName" value="{{facility["contact2LastName"] or ''}}" >
                 </div>
               </div>
               
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_facilityStatus">Status</label>
-                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus" value="{{facility["facilityStatus"]}}" >
+                  <input type="text" class="form-control" name="facilityStatus" id="text_facilityStatus" value="{{facility["facilityStatus"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="date_facilityStatusDate">Status Date</label>
-                  <input type="date" class="form-control" name="facilityStatusDate" id="date_facilityStatusDate" value="{{facility["facilityStatusDate"]}}" >
+                  <input type="date" class="form-control" name="facilityStatusDate" id="date_facilityStatusDate" value="{{facility["facilityStatusDate"] or ''}}" >
                 </div>
                 <div class = "col-md-2">
                   <label for="text_displayID">Display ID</label>
-                  <input type="text" class="form-control" name="displayID" id="text_displayID" value="{{facility["displayID"]}}" >
+                  <input type="text" class="form-control" name="displayID" id="text_displayID" value="{{facility["displayID"] or ''}}" >
                 </div>
               </div>
             </div>
@@ -127,9 +127,9 @@
             <ul class ="nav nav-tabs" role="tablist">
                 {% for facilityAddress in facility.facilityAddresses %}
                     {% if loop.index == 1 %}
-                    <li class="active"><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    <li class="active"><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                     {% else %}
-                    <li><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                    <li><a href="#facilityAddress{{facilityAddress.facilityAddressID}}Tab" role="tab" data-toggle="tab">{{facilityAddress.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                     {% endif %}
                 {% endfor %}
                 <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
@@ -156,9 +156,9 @@
             <ul class ="nav nav-tabs" role="tablist">
                 {% for facilityPhone in facility.facilityPhones %}
                     {% if loop.index == 1 %}
-                    <li class="active"><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    <li class="active"><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                     {% else %}
-                    <li><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                    <li><a href="#facilityPhone{{facilityPhone.facilityPhoneID}}Tab" role="tab" data-toggle="tab">{{facilityPhone.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                     {% endif %}
                 {% endfor %}
                 <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
@@ -194,10 +194,10 @@
               <tbody>
                 {% for facilityPhysician in facility.physicianFacilities %}
                     <tr>
-                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["lastName"]}}</a></td>
-                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["firstName"]}}</a></td>
-                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["specialty"]}}</a></td>
-                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["physicianStatus"].physicianStatus}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["lastName"] or ''}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["firstName"] or ''}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["specialty"] or ''}}</a></td>
+                        <td><a href="/website/physicians/{{facilityPhysician.physician["physicianID"]}}">{{facilityPhysician.physician["physicianStatus"].physicianStatus or ''}}</a></td>
                     </tr>
                 {% endfor %}
                   </tbody>

@@ -30,9 +30,9 @@
                   <select type="text" class="form-control" required="true" name="projectID" id="select_projectID">
                       {% for proj in form["projects"] %}
                         {% if proj.projectID == arcReview["projectID"] %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -50,7 +50,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_research">Research</label>
-                  <input type="text" class="form-control" name="research" id="text_research" value="{{arcReview["research"]}}">
+                  <input type="text" class="form-control" name="research" id="text_research" value="{{arcReview["research"] or ''}}">
                 </div>
               </div>
               <div class="row">
@@ -60,9 +60,9 @@
                       <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer1"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -73,16 +73,16 @@
                       <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer1Rec"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_reviewer1Comments">Reviewer 1 Comments</label>
-                  <input type="text" class="form-control" name="reviewer1Comments" id="text_reviewer1Comments" value="{{arcReview["reviewer1Comments"]}}">
+                  <input type="text" class="form-control" name="reviewer1Comments" id="text_reviewer1Comments" value="{{arcReview["reviewer1Comments"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_reviewer1SigDate">Reviewer 1 Sig Date</label>
@@ -96,9 +96,9 @@
                       <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer2"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -109,16 +109,16 @@
                       <option></option>
                       {% for staff in form["staff"] %}
                         {% if staff.staffID == arcReview["reviewer2Rec"] %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="text_reviewer2Comments">Reviewer 2 Comments</label>
-                  <input type="text" class="form-control" name="reviewer2Comments" id="text_reviewer2Comments" value="{{arcReview["reviewer2Comments"]}}">
+                  <input type="text" class="form-control" name="reviewer2Comments" id="text_reviewer2Comments" value="{{arcReview["reviewer2Comments"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="date_reviewer2SigDate">Reviewer 2 Sig Date</label>

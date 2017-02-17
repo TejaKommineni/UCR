@@ -78,6 +78,9 @@ document.getElementById("myform").submit();
              if (!$("#date_dateGiven").val()){
                 document.getElementById('date_dateGiven').valueAsDate = new Date();
             }
+            if (!$("#date_addressStatusDate").val()){
+                document.getElementById('date_addressStatusDate').valueAsDate = new Date();
+            }
 
              $(':input').each(function () {
                  $(this).data('initialValue', $(this).val());

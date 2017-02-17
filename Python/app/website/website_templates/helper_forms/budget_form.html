@@ -60,7 +60,7 @@
               <div class="row">
                 <div class = "col-md-8">
                   <label for="text_periodComment">Period Comment</label>
-                  <input type="text" class="form-control" name="periodComment" id="text_periodComment" value="{{budget["periodComment"]}}">
+                  <input type="text" class="form-control" name="periodComment" id="text_periodComment" value="{{budget["periodComment"] or ''}}">
                 </div>
               </div>
           </div>

@@ -26,21 +26,22 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_firstName">First Name</label>
-                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{informant["firstName"]}}">
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{informant["firstName"] or ''}}">
                 </div>
                 <div class="col-md-2">
                   <label for="text_middleName">Middle Name</label>
-                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{informant["middleName"]}}">
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{informant["middleName"] or ''}}">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_lastName">Last Name</label>
-                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{informant["lastName"]}}">
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{informant["lastName"] or ''}}">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_informantPrimary">Informant Primary</label>
                   <select type="text" class="form-control" name="informantPrimary" id="select_contact">
+                        <option></option>
                         {% if informant.informantPrimary %}
                             <option value="True" selected="selected">Yes</option>
                         {% else %}
@@ -68,7 +69,11 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="text_notes">Notes</label>
-                  <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{informant["notes"]}}</textarea>
+                     {% if informant["notes"] == None%}
+                  <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4"></textarea>
+                    {% else %}
+                    <textarea type="textaraea" class="form-control" name="notes" id="text_notes" rows="4">{{informant["notes"]}}</textarea>
+                     {% endif %}
                 </div>
               </div>
             </div>

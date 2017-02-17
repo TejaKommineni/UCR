@@ -60,11 +60,11 @@
           <tbody>
             {% for patient in form["patients"] %}
             <tr>
-                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["lastName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["firstName"]}}</a></td>
-                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["patID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["ucrDistID"]}}</a></td>
-                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["UPDBID"]}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["lastName"] or ''}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["firstName"] or ''}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["patID"] or ''}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["ucrDistID"] or ''}}</a></td>
+                <td><a href="/website/patients/{{patient["participantID"]}}">{{patient["UPDBID"] or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

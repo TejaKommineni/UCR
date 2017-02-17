@@ -98,14 +98,14 @@
           <tbody>
             {% for staff in staffs %}
             <tr>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["lastName"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["firstName"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["staffID"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["phoneNumber"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["email"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]["institution"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]["department"]}}</a></td>
-                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"].ucrRole}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["lastName"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["firstName"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["staffID"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["phoneNumber"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["email"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["institution"]["institution"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["department"]["department"] or ''}}</a></td>
+                <td><a href="/website/staff/{{staff["staffID"]}}">{{staff["ucrRole"].ucrRole or ''}}</a></td>
             </tr>
             {% endfor %}
           </tbody>

@@ -12,11 +12,11 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_finalCode{{loop.index}}">Final Code</label>
-                  <input type="text" class="form-control" name="finalCode" id="text_finalCode{{loop.index}}" value="{{finalCode["finalCode"]}}">
+                  <input type="text" class="form-control" name="finalCode" id="text_finalCode{{loop.index}}" value="{{finalCode["finalCode"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_finalCodeDefinition{{loop.index}}">Final Code Definition</label>
-                  <input type="text" class="form-control" name="finalCodeDefinition" id="text_finalCodeDefinition{{loop.index}}" value="{{finalCode["finalCodeDefinition"]}}">
+                  <input type="text" class="form-control" name="finalCodeDefinition" id="text_finalCodeDefinition{{loop.index}}" value="{{finalCode["finalCodeDefinition"] or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_createdDate{{loop.index}}">Created</label>

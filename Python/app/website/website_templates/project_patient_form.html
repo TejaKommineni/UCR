@@ -58,13 +58,13 @@
                                   <tbody>
                                     {% for contact in projectPatient.contacts %}
                                     <tr>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactCode}} - {{contact.contactType.contactDefinition}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.patientPhone.phoneNumber}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName}} {{contact.informantPhone.phoneNumber}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName}} {{contact.facilityPhone.phoneNumber}}</a></td>
-                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName}} {{contact.physicianPhone.phoneNumber}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactDate or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.contactType.contactCode or ''}} - {{contact.contactType.contactDefinition or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.staff.lastName or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.patientPhone.phoneNumber or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.informant.lastName or ''}} {{contact.informantPhone.phoneNumber or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.facility.facilityName or ''}} {{contact.facilityPhone.phoneNumber or ''}}</a></td>
+                                        <td><a href="/website/contacts/{{contact["contactID"]}}">{{contact.physician.lastName or ''}} {{contact.physicianPhone.phoneNumber or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -123,11 +123,11 @@
                                   <tbody>
                                     {% for incentive in projectPatient.incentives %}
                                     <tr>
-                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription}}</a></td>
-                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.barcode}}</a></td>
-                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.giftCard.description}}</a></td>
-                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount}}</a></td>
-                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.dateGiven}}</a></td></tr>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.incentiveDescription or ''}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.barcode or ''}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.giftCard.description or ''}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">${{incentive.giftCard.amount or ''}}</a></td>
+                                        <td><a href="/website/incentives/{{incentive["incentiveID"]}}">{{incentive.dateGiven or ''}}</a></td></tr>
                                     {% endfor %}
                                   </tbody>
                             </table>
@@ -152,9 +152,9 @@
                     <ul class ="nav nav-tabs" role="tablist">
                         {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
                             {% if loop.index == 1 %}
-                            <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
-                            <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% endif %}
                         {% endfor %}
                         <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
@@ -181,9 +181,9 @@
                     <ul class ="nav nav-tabs" role="tablist">
                         {% for patientEmail in projectPatient.ctc.patient.patientEmails %}
                             {% if loop.index == 1 %}
-                            <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
-                            <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% endif %}
                         {% endfor %}
                         <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
@@ -210,9 +210,9 @@
                     <ul class ="nav nav-tabs" role="tablist">
                         {% for patientPhone in projectPatient.ctc.patient.patientPhones  %}
                             {% if loop.index == 1 %}
-                            <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
-                            <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus}} </a></li>
+                            <li><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% endif %}
                         {% endfor %}
                         <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
@@ -259,10 +259,10 @@
                                   <tbody>
                                     {% for tracing in projectPatient.tracings %}
                                     <tr>
-                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.tracingSource.description}}</a></td>
-                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.staff.firstName}} {{tracing.staff.lastName}}</a></td>
-                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.notes}}</a></td>
-                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.date}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.tracingSource.description or ''}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.staff.firstName or ''}} {{tracing.staff.lastName or ''}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.notes or ''}}</a></td>
+                                        <td><a href="/website/tracings/{{tracing["tracingID"]}}">{{tracing.date or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -272,7 +272,7 @@
             </div>
             <div class="tab-pane" id="newtracing">
             {% set tracing = none %}
-            {% include 'helper_forms/tracing_form.html' %}
+            {% include 'helper_forms/new_tracing_form.html' %}
             </div>
         </div>
     </div>
@@ -295,8 +295,8 @@
                                   <tbody>
                                     {% for projectPatientStatus in projectPatient.patientProjectStatuses %}
                                     <tr>
-                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription}}</a></td>
-                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.statusDate}}</a></td>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.patientProjectStatus.statusDescription or ''}}</a></td>
+                                        <td><a href="/website/patientprojectstatuses/{{projectPatientStatus["patientProjectStatusID"]}}">{{projectPatientStatus.statusDate or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
@@ -338,15 +338,15 @@
                 <div class="row">
                     <div class="col-md-2">
                       <label for="text_firstName">First Name</label>
-                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{projectPatient.ctc.patient.firstName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{projectPatient.ctc.patient.firstName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_middleName">Middle Name</label>
-                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{projectPatient.ctc.patient.middleName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{projectPatient.ctc.patient.middleName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_lastName">Last Name</label>
-                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{projectPatient.ctc.patient.lastName}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{projectPatient.ctc.patient.lastName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                         <label>Link to Patient</label><br>
@@ -373,9 +373,9 @@
                   <select type="text" class="form-control" required="required" name="projectID" id="select_projectID">
                       {% for proj in form.projects %}
                         {% if proj.projectID == projectPatient.projectID %}
-                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle}}</option>
+                            <option selected="selected" value="{{proj.projectID}}">{{proj.shortTitle or ''}}</option>
                         {% else %}
-                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle}}</option>
+                            <option value="{{proj.projectID}}" disabled="disabled">{{proj.shortTitle or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -395,15 +395,15 @@
                </div>
                <div class="col-md-2">
                   <label for="text_currentAge">Current Age</label>
-                  <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="currentAge" id="text_currentAge" value="{{projectPatient.currentAge or ''}}" readonly="readonly" disabled="disabled">
                </div>
               <div class="col-md-2">
                          <label for="date_lastConsentedDay">Date of Last Contact (DMS)</label>
-                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"]}}/{{form["dayOfLastConsent"]}}/{{form["yearOfLastConsent"]}}">
+                         <input type="text" readonly="readonly" disabled="disabled" class="form-control" name="dateOfLastConsent" id="date_lastConsentedDate" value="{{form["monthOfLastConsent"] or ''}}/{{form["dayOfLastConsent"] or ''}}/{{form["yearOfLastConsent"] or ''}}">
               </div>
                <div class = "col-md-2">
                   <label for="text_batch">Batch</label>
-                  <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch}}" readonly="readonly" disabled="disabled" >
+                  <input type="text" class="form-control" name="batch" id="text_batch" value="{{projectPatient.batch or ''}}" readonly="readonly" disabled="disabled" >
                 </div>
                <div class = "col-md-2">
                   <label for="select_siteGroupID">Site Group</label>
@@ -435,7 +435,7 @@
               </div>
               <div class="col-md-2">
                   <label for="date_finalCodeDate">Final Code Date</label>
-                  <input type="date" class="form-control" name="finalCodeDate" id="date_finalCodeDate" value="{{projectPatient.finalCodeDate}}">
+                  <input type="date" class="form-control" name="finalCodeDate" id="date_finalCodeDate" value="{{projectPatient.finalCodeDate or ''}}">
               </div>
               <div class = "col-md-2">
                   <label for="select_finalCodeStaff">Final Code Staff</label>
@@ -470,7 +470,7 @@
               <div class="row">
                 <div class="col-md-2">
                   <label for="date_enrollmentDate">Enrollment Date</label>
-                  <input type="date" class="form-control" name="enrollmentDate" id="date_enrollmentDate" value="{{projectPatient.enrollmentDate}}">
+                  <input type="date" class="form-control" name="enrollmentDate" id="date_enrollmentDate" value="{{projectPatient.enrollmentDate or ''}}">
                </div>
                 <div class = "col-md-2">
                   <label for="select_enrollmentStaff">Enrollement Staff</label>
@@ -478,16 +478,16 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.enrollmentStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class="col-md-2">
                   <label for="date_dateCoordSigned">Date Coordinator Signed</label>
-                  <input type="date" class="form-control" name="dateCoordSigned" id="date_dateCoordSigned" value="{{projectPatient.dateCoordSigned}}">
+                  <input type="date" class="form-control" name="dateCoordSigned" id="date_dateCoordSigned" value="{{projectPatient.dateCoordSigned or ''}}">
                </div>
                 <div class = "col-md-2">
                   <label for="select_dateCoordSignedStaff">Date Coordinator Signed Staff</label>
@@ -495,9 +495,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.dateCoordSignedStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -522,7 +522,7 @@
 
                 <div class = "col-md-2">
                   <label for="text_medRecordReleaseDate">Medical Record Release Date</label>
-                  <input type="date" class="form-control" name="medRecordReleaseDate" id="text_medRecordReleaseDate" value="{{projectPatient.medRecordReleaseDate}}">
+                  <input type="date" class="form-control" name="medRecordReleaseDate" id="text_medRecordReleaseDate" value="{{projectPatient.medRecordReleaseDate or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_medRecordReleaseStaffID">Medical Record Release Staff</label>
@@ -530,9 +530,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.medRecordReleaseStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -541,17 +541,17 @@
              <div class="row">
                 <div class = "col-md-2">
                   <label for="text_medRecordReleaseLink">Medical Record Release Link</label>
-                  <input type="text" class="form-control" name="medRecordReleaseLink" id="text_medRecordReleaseLink" value="{{projectPatient.medRecordReleaseLink}}">
+                  <input type="text" class="form-control" name="medRecordReleaseLink" id="text_medRecordReleaseLink" value="{{projectPatient.medRecordReleaseLink or ''}}">
                 </div>
                 <div class = "col-md-4">
                   <label for="text_consentLink">Consent Link</label>
-                  <input type="text" class="form-control" name="consentLink" id="text_consentLink" value="{{projectPatient.consentLink}}">
+                  <input type="text" class="form-control" name="consentLink" id="text_consentLink" value="{{projectPatient.consentLink or ''}}">
                 </div>
              </div>
             <div class="row">
               <div class = "col-md-2">
                   <label for="date_researcherDate">Researcher Report Date</label>
-                  <input type="date" class="form-control" name="researcherDate" id="date_researcherDate" value="{{projectPatient.researcherDate}}">
+                  <input type="date" class="form-control" name="researcherDate" id="date_researcherDate" value="{{projectPatient.researcherDate or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_researcherStaff">Researcher Staff</label>
@@ -559,16 +559,16 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.researcherStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                  <div class = "col-md-2">
                   <label for="date_surveyToResearcher">Survey To Researcher</label>
-                  <input type="date" class="form-control" name="surveyToResearcher" id="date_surveyToResearcher" value="{{projectPatient.surveyToResearcher}}">
+                  <input type="date" class="form-control" name="surveyToResearcher" id="date_surveyToResearcher" value="{{projectPatient.surveyToResearcher or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_surveyToResearcherStaffID">Survey To Researcher Staff</label>
@@ -576,9 +576,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.surveyToResearcherStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -605,7 +605,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="date_abstractStatusDate">Abstract Status Date</label>
-                  <input type="date" class="form-control" name="abstractStatusDate" id="date_abstractStatusDate" value="{{projectPatient.abstractStatusDate}}">
+                  <input type="date" class="form-control" name="abstractStatusDate" id="date_abstractStatusDate" value="{{projectPatient.abstractStatusDate or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_abstractStatusStaff">Abstract Status Staff</label>
@@ -613,9 +613,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.abstractStatusStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -625,7 +625,7 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="date_sentToAbstractorDate">Sent to Abstractor Date</label>
-                  <input type="date" class="form-control" name="sentToAbstractorDate" id="date_sentToAbstractorDate" value="{{projectPatient.sentToAbstractorDate}}">
+                  <input type="date" class="form-control" name="sentToAbstractorDate" id="date_sentToAbstractorDate" value="{{projectPatient.sentToAbstractorDate or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_sentToAbstractorStaff">Sent to Abstractor Staff</label>
@@ -633,16 +633,16 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.sentToAbstractorStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
                 </div>
                 <div class = "col-md-2">
                   <label for="date_abstractedDate">Abstracted Date</label>
-                  <input type="date" class="form-control" name="abstractedDate" id="date_abstractedDate" value="{{projectPatient.abstractedDate}}">
+                  <input type="date" class="form-control" name="abstractedDate" id="date_abstractedDate" value="{{projectPatient.abstractedDate or ''}}">
                 </div>
                 <div class = "col-md-2">
                   <label for="select_abstractorStaff">Abstractor Staff</label>
@@ -650,9 +650,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.abstractorStaffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -662,7 +662,7 @@
               <div class = "row row-dark">
                 <div class="col-md-2">
                   <label for="date_importDate">Import Date</label>
-                  <input type="date" class="form-control" name="importDate" id="date_importDate" value="{{projectPatient.importDate}}" readonly="readonly" disabled="disabled">
+                  <input type="date" class="form-control" name="importDate" id="date_importDate" value="{{projectPatient.importDate or ''}}" readonly="readonly" disabled="disabled">
                </div>
 
                 <div class = "col-md-2">
@@ -671,9 +671,9 @@
                       <option></option>
                       {% for staff in form.staff %}
                         {% if staff.staffID == projectPatient.staffID %}
-                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{staff.staffID}}">{{staff.firstName}} {{staff.middleName}} {{staff.lastName}}</option>
+                            <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

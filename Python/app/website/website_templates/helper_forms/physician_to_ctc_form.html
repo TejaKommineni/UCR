@@ -29,9 +29,9 @@
                   <select type="text" class="form-control" required="required" name="physicianID" id="select_physicianID">
                       {% for phys in form.physicians %}
                         {% if phys.physicianID == physicianToCTC.physicianID %}
-                            <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                            <option selected="selected" value="{{phys.physicianID}}">{{phys.firstName or ''}} {{phys.middleName or ''}} {{phys.lastName or ''}}</option>
                         {% else %}
-                            <option value="{{phys.physicianID}}">{{phys.firstName}} {{phys.middleName}} {{phys.lastName}}</option>
+                            <option value="{{phys.physicianID}}">{{phys.firstName or ''}} {{phys.middleName or ''}} {{phys.lastName or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
@@ -44,9 +44,9 @@
                   <select type="text" class="form-control" required="required" name="ctcID" id="select_ctcID">
                       {% for ctc in form.ctcs %}
                         {% if ctc.ctcID == physicianToCTC.ctcID %}
-                            <option selected="selected" value="{{ctc.ctcID}}">{{ctc.patient.firstName}} {{ctc.patient.middleName}} {{ctc.patient.lastName}} {{ctc.dxDate}}</option>
+                            <option selected="selected" value="{{ctc.ctcID}}">{{ctc.patient.firstName or ''}} {{ctc.patient.middleName or ''}} {{ctc.patient.lastName or ''}} {{ctc.dxDate or ''}}</option>
                         {% else %}
-                            <option value="{{ctc.ctcID}}">{{ctc.patient.firstName}} {{ctc.patient.middleName}} {{ctc.patient.lastName}} {{ctc.dxDate}}</option>
+                            <option value="{{ctc.ctcID}}">{{ctc.patient.firstName or ''}} {{ctc.patient.middleName or ''}} {{ctc.patient.lastName or ''}} {{ctc.dxDate or ''}}</option>
                         {% endif %}
                       {% endfor %}
                   </select>

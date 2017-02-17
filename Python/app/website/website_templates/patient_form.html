@@ -13,51 +13,51 @@
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_patientID">Patient ID</label>
-                  <input type="text" class="form-control" name="patID" id="text_patientID" value="{{form["patient"]["patID"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="patID" id="text_patientID" value="{{form["patient"]["patID"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">
                   <label for="text_ucrDistID">UCRDISTID</label>  
-                  <input type="text" class="form-control" name="ucrDistID" id="text_ucrDistID" value="{{form["patient"]["ucrDistID"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="ucrDistID" id="text_ucrDistID" value="{{form["patient"]["ucrDistID"] or '' }}" readonly="readonly" disabled="disabled">
                 </div>
                <div class="col-md-2">  
                   <label for="text_UPDBID">UPDBID</label>        
-                  <input type="text" class="form-control" name="UPDBID" id="text_UPDBID" value="{{form["patient"]["UPDBID"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="UPDBID" id="text_UPDBID" value="{{form["patient"]["UPDBID"] or ''}}" readonly="readonly" disabled="disabled">
                </div>
                <div class="col-md-2">  
                   <label for="text_SSN">SSN</label>        
-                  <input type="text" class="form-control" name="SSN" id="text_SSN" value="{{form["patient"]["SSN"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="SSN" id="text_SSN" value="{{form["patient"]["SSN"] or ''}}" readonly="readonly" disabled="disabled">
                </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_firstName">First Name</label>
-                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{form["patient"]["firstName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{form["patient"]["firstName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2">
                   <label for="text_middleName">Middle Name</label>
-                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{form["patient"]["middleName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{form["patient"]["middleName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_lastName">Last Name</label>
-                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{form["patient"]["lastName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{form["patient"]["lastName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class="col-md-2"> 
                   <label for="text_maidenName">Maiden Name</label>
-                  <input type="text" class="form-control" name="maidenName" id="text_maidenName" value="{{form["patient"]["maidenName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="maidenName" id="text_maidenName" value="{{form["patient"]["maidenName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
                 <div class = "col-md-2">
                   <label for="text_aliasFirstName">Alias First Name</label>
-                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{form["patient"]["aliasFirstName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="aliasFirstName" id="text_aliasFirstName" value="{{form["patient"]["aliasFirstName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_aliasMiddleName">Alias Middle Name</label>
-                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{form["patient"]["aliasMiddleName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="aliasMiddleName" id="text_aliasMiddleName" value="{{form["patient"]["aliasMiddleName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
                 <div class = "col-md-2">
                   <label for="text_aliasLastName">Alias Last Name</label>
-                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{form["patient"]["aliasLastName"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="aliasLastName" id="text_aliasLastName" value="{{form["patient"]["aliasLastName"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
               <div class="row">
                 <div class="col-md-1">
                   <label for="date_dobDay">DOB Date</label>
-                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobMonth"]}}/{{form["patient"]["dobDay"]}}/{{form["patient"]["dobYear"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="dobDay" id="date_dobDay" value="{{form["patient"]["dobMonth"]or ''}}/{{form["patient"]["dobDay"]or ''}}/{{form["patient"]["dobYear"]or ''}}" readonly="readonly" disabled="disabled">
                 </div>
               </div>
               <div class="row">
@@ -111,7 +111,7 @@
                </div>
                <div class="col-md-2">
                   <label for="text_recordNumber">Record Number</label>
-                  <input type="text" class="form-control" name="recordNumber" id="text_recordNumber" value="{{form["patient"]["recordNumber"]}}" readonly="readonly" disabled="disabled">
+                  <input type="text" class="form-control" name="recordNumber" id="text_recordNumber" value="{{form["patient"]["recordNumber"] or ''}}" readonly="readonly" disabled="disabled">
                 </div>
             </div>
             <div class="form-group">
@@ -244,12 +244,12 @@
                           <tbody>
                             {% for ctc in form["ctcs"] %}
                             <tr>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["ctcID"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateDay"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateMonth"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateYear"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["site"]}}</a></td>
-                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["stage"]}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["ctcID"] or ''}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateDay"] or ''}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateMonth"] or ''}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["dxDateYear"] or ''}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["site"] or ''}}</a></td>
+                                <td><a href="/website/ctcs/{{ctc["ctcID"]}}">{{ctc["stage"] or ''}}</a></td>
                             </tr>
                             {% endfor %}
                           </tbody>
@@ -278,10 +278,10 @@
                                   <tbody>
                                     {% for informant in form["informants"] %}
                                     <tr>
-                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"]}}</a></td>
-                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"]}}</a></td>
-                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"]}}</a></td>
-                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"]}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["firstName"] or ''}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["lastName"] or ''}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantPrimary"] or ''}}</a></td>
+                                        <td><a href="/website/informants/{{informant["informantID"]}}">{{informant["informantRelationship"] or ''}}</a></td>
                                     </tr>
                                     {% endfor %}
                                   </tbody>
