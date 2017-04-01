@@ -7,9 +7,12 @@
     <form class="formOverride" id="grantStatusForm{{loop.index}}" action='/website/grantstatuses/', method='post'>
 {% endif %}
       <fieldset>
-        <legend>Grant Status</legend>
             <div class="form-group">
               <div class="row">
+                 <div class = "col-md-2">
+                  <label for="text_grantStatus{{loop.index}}">Grant Status ID</label>
+                  <input type="text" class="form-control" name="grantStatus" id="text_grantStatus{{loop.index}}" value="{{grantStatus["grantStatusID"] or ''}}" disabled>
+                </div>
                 <div class = "col-md-2">
                   <label for="text_grantStatus{{loop.index}}">Source</label>
                   <input type="text" class="form-control" name="grantStatus" id="text_grantStatus{{loop.index}}" value="{{grantStatus["grantStatus"] or ''}}">
@@ -30,11 +33,11 @@
                     <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
                   {% endif %}  
                 </div>
-                 <div class="col-md-2">
+                 <div class="col-md-1">
                     <label>Undo Changes</label>
                     <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <label for="sub_button{{loop.index}}">Make Changes</label>
                   {% if grantStatus is not none %}
                   <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>

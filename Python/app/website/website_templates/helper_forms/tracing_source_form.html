@@ -7,9 +7,12 @@
     <form class="formOverride" id="projectStatusForm{{loop.index}}" action='/website/tracingsources/', method='post'>
 {% endif %}
       <fieldset>
-        <legend>Tracing Source</legend>
             <div class="form-group">
               <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_tracingSourceDescription{{loop.index}}">Tracing Source ID</label>
+                  <input type="text" class="form-control" name="description" id="text_tracingSourceDescription{{loop.index}}" value="{{tracingSource["tracingSourceID"] or ''}}" disabled>
+                </div>
                 <div class = "col-md-2">
                   <label for="text_tracingSourceDescription{{loop.index}}">Description</label>
                   <input type="text" class="form-control" name="description" id="text_tracingSourceDescription{{loop.index}}" value="{{tracingSource["description"] or ''}}">
@@ -30,11 +33,11 @@
                     <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
                   {% endif %}  
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label>Undo Changes</label>
                     <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <label for="sub_button{{loop.index}}">Make Changes</label>
                   {% if tracingSource is not none %}
                   <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>

@@ -1,0 +1,140 @@
+{% extends "layout_all.html" %}
+{% block content %}
+ <script>
+       window.onload=function () {
+           $('#editQueryForm').css('display','block');
+           if ($('#reportTypes').val() == '0') {
+               $('#addQuery').prop('disabled', false);
+               $('#editQuery').prop('disabled', true);
+               $('#removeQuery').prop('disabled', true);
+           }
+           else {
+               $('#addQuery').prop('disabled', true);
+               $('#editQuery').prop('disabled', false);
+               $('#removeQuery').prop('disabled', false);
+           }
+       }
+
+ </script>
+
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 hidden-xs">
+        {% include 'leftnav_dashboard.html' %}
+    </div>
+    <br>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+             <form action='/website/queries/', method='get'>
+                 <div class="col-md-2 form-group">
+                     <label>Reports:</label>
+                 </div>
+                 <div class="col-md-6 form-group">
+                    <select type="text" class="form-control" required="required" name="reportTypes" id="reportTypes" onchange="$('#editQueryForm').css('display','none'); location.href = '/website/editqueries/'+$( '#reportTypes' ).val();">
+                                <option value="0" selected="selected">Add a new query</option>
+                      {% for query in form.queries %}
+                            {% if query.queryID == form.selectedQuery %}
+                                <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
+                            {% else %}
+                                <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
+                            {% endif %}
+                      {% endfor %}
+                    </select>
+                 </div>
+            </form>
+        </div>
+        <br><br>
+        <form id="editQueryForm" style="display: block;" action="/website/editqueries/{{ form.selectedQuery }}/" method="post">
+        <div class="row">
+            <div class="col-md-2">
+                <input type="hidden" name="queryID" value="{{ form.selectedQuery }}" />
+            </div>
+            <div class="col-md-2">
+                <label>Report Name :</label>
+            </div>
+            <div class="col-md-6">
+                <input  class="form-control" id="queryName" name="queryName" placeholder="Report Name" required value="{{ form.query.queryName }}">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <label>Roles :</label>
+            </div>
+            <div class="col-md-6">
+                {% if form.query.contactStaff == True %}
+                    <label class="checkbox-inline"><input type="checkbox" checked name="contactStaff">Contact Staff</label>
+                {% else %}
+                    <label class="checkbox-inline"><input type="checkbox"  name="contactStaff">Contact Staff</label>
+                {% endif %}
+                {% if form.query.director == True %}
+                    <label class="checkbox-inline"><input type="checkbox" checked name="director">Director</label>
+                {% else %}
+                    <label class="checkbox-inline"><input type="checkbox"  name="director">Director</label>
+                {% endif %}
+                {% if form.query.informaticsStaff == True %}
+                    <label class="checkbox-inline"><input type="checkbox" checked name="informaticsStaff">Informatics Staff</label>
+                {% else %}
+                    <label class="checkbox-inline"><input type="checkbox"  name="informaticsStaff">Informatics Staff</label>
+                {% endif %}
+                {% if form.query.researchManager == True %}
+                    <label class="checkbox-inline"><input type="checkbox" checked name="researchManager">Research Manager</label>
+                {% else %}
+                    <label class="checkbox-inline"><input type="checkbox" name="researchManager">Research Manager</label>
+                {% endif %}
+
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <label>Sql Query :</label>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control" rows="4" name = "query" required >{{ form.query.query }}</textarea>
+            </div>
+        </div>
+        <br>
+          <div class="row">
+                <div class = "col-md-4">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_createdDate">Created</label>
+                  <input type="text" class="form-control" name="createdDate" id="text_createdDate" value="{{form.query.createdDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class = "col-md-2">
+                  <label for="text_modifiedDate">Last Modified</label>
+                  <input type="text" class="form-control" name="modifiedDate" id="text_modifiedDate" value="{{form.query.modifiedDate}}" readonly="readonly" disabled="disabled">
+                </div>
+                <div class="col-md-2">
+                  <label for="text_versionID">Version</label>
+                  <input type="text" class="form-control" name="versionID" id="text_versionID" value="{{form.query.versionID}}" readonly="readonly">
+                </div>
+          </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-success" name="action" id="addQuery" value="addQuery">Add Query</button>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-info" name="action" id="editQuery" value="editQuery">Edit Query</button>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-danger" name="action" id="removeQuery" value="removeQuery">Remove Query</button>
+            </div>
+        </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+      <legend>Abstract Status</legend>
 {% for abstractStatus in form["abstractStatuses"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+  <legend>Phase Status</legend>
 {% for phaseStatus in form["phaseStatuses"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

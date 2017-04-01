@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+<legend>UCR Report Types</legend>
 {% for ucrReport in form["ucrReports"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

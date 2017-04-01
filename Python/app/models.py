@@ -1101,6 +1101,16 @@ class Sex(CustomModel):
     sexID = db.Column('sexID', db.Integer, primary_key=True, autoincrement=False)
     sex = db.Column('sex', db.String)
 
+class SqlQuery(CustomModel):
+    __tablename__ = "Queries"
+    queryID = db.Column('queryID', db.Integer, primary_key=True)
+    query = db.Column('query', db.String)
+    queryName = db.Column('queryName', db.String)
+    director = db.Column('director', db.Boolean)
+    contactStaff = db.Column('contactStaff', db.Boolean)
+    informaticsStaff = db.Column('informaticsStaff', db.Boolean)
+    researchManager = db.Column('researchManager', db.Boolean)
+
 class SiteGroup(CustomModel):
     __tablename__ = "SiteGroupLUT"
     siteID = db.Column('siteID', db.Integer, primary_key=True)

@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+     <legend>Log Subject</legend>
 {% for logSubject in form["logSubjects"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

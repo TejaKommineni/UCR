@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+    <legend>Funding Source</legend>
 {% for fundingSource in form["fundingSources"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

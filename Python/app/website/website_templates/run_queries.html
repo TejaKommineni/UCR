@@ -1,0 +1,64 @@
+{% extends "layout_all.html" %}
+{% block content %}
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 hidden-xs">
+        {% include 'leftnav_dashboard.html' %}
+    </div>
+    <br>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+             <form action='/website/queries/', method='get'>
+                 <div class="col-md-1 form-group">
+                     <label>Reports :</label>
+                 </div>
+                 <div class="col-md-4 form-group">
+                    <select type="text" class="form-control" required="required" name="reportTypes" id="reportTypes">
+                      {% for query in form.queries %}
+                            {% if query.queryID == form.selectedQuery %}
+                                <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
+                            {% else %}
+                                <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
+                            {% endif %}
+                      {% endfor %}
+                    </select>
+                 </div>
+                 <div class="col-md-2 form-group">
+                     <button type="submit" class="btn btn-primary">Generate Report</button>
+                 </div>
+            </form>
+        </div>
+        {% if form.results is not none %}
+            <div class="row">
+                    <button type="button" class="btn btn-warning" onclick="location.href = '/website/downloadReport/{{ form.selectedQuery }}';"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download Report</button>
+                    <br> <br>
+                    <table class="table table-striped no-spacing" id="resultsTable">
+                          <thead>
+                            <tr>
+                                {% for column in form['results'].cursor.description %}
+                                     <th>{{ column[0] }}</th>
+                                {% endfor %}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for result in form['results'] %}
+                            <tr>
+                                {% for column in form['results'].cursor.description %}
+                                     <td><a href="">{{result[column[0]] or ''}}</a></td>
+                                {% endfor %}
+
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+
+            </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

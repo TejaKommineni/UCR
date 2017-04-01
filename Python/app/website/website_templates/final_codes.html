@@ -1,6 +1,7 @@
 {% extends "layout_all.html" %}
 <div class="container-fluid">
 {% block content %}
+ <legend>Final Code</legend>
 {% for finalCode in form["finalCodes"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

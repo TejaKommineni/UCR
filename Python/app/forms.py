@@ -1929,3 +1929,17 @@ class UcrReportLUTForm(BaseForm):
 class UCRRoleForm(BaseForm):
     ucrRole = StringField('ucrRole',
                           [] + COMMON_STRING_VALIDATORS)
+class SqlQueryForm(BaseForm):
+    query = StringField('query',
+                              [] + COMMON_STRING_VALIDATORS)
+    queryName = StringField('queryName',
+                            [] + COMMON_STRING_VALIDATORS)
+    director = BooleanField('director',
+                          [] + COMMON_BOOL_VALIDATORS)
+    contactStaff = BooleanField('contactStaff',
+                          [] + COMMON_BOOL_VALIDATORS)
+    informaticsStaff = BooleanField('informaticsStaff',
+                          [] + COMMON_BOOL_VALIDATORS)
+    researchManager = BooleanField('researchManager',
+                                    [] + COMMON_BOOL_VALIDATORS)
+

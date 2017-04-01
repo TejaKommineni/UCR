@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+    <legend>Phone Type</legend>
 {% for phoneType in form["phoneTypes"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

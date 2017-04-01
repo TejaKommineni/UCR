@@ -7,9 +7,12 @@
     <form class="formOverride" id="projectStatusForm{{loop.index}}" action='/website/projectstatustypes/', method='post'>
 {% endif %}
       <fieldset>
-        <legend>Project Status Type</legend>
             <div class="form-group">
               <div class="row">
+                <div class = "col-md-2">
+                  <label for="text_projectStatus{{loop.index}}">Status ID</label>
+                  <input type="text" class="form-control" name="projectStatus" id="text_projectStatus{{loop.index}}" value="{{projectStatusType["projectStatusTypeID"] or ''}}" disabled>
+                </div>
                 <div class = "col-md-2">
                   <label for="text_projectStatus{{loop.index}}">Status</label>
                   <input type="text" class="form-control" name="projectStatus" id="text_projectStatus{{loop.index}}" value="{{projectStatusType["projectStatus"] or ''}}">
@@ -34,11 +37,11 @@
                     <input type="text" class="form-control" name="versionID" id="text_versionID{{loop.index}}" value="0" readonly="readonly">
                   {% endif %}  
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label>Undo Changes</label>
                     <button class="btn btn-primary form-control" onClick="window.history.back();" value="Back" type="button">Back</button>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <label for="sub_button{{loop.index}}">Make Changes</label>
                   {% if projectStatusType is not none %}
                   <button id="sub_button{{loop.index}}" class="btn btn-primary form-control" type="submit" value="Submit">Submit Edits</button>

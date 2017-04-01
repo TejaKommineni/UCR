@@ -1,13 +1,13 @@
 {% extends "layout_all.html" %}
 {% block content %}
-      <div class="row">
-        <div class="col-md-12">
-          <h1 class="text-center">Welcome to the Utah Cancer Registry Database Management System</h1>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="text-center">Use the navigation bar at the top to browse the system</h3>
-        </div>
-      </div>
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 hidden-xs">
+        {% include 'leftnav_dashboard.html' %}
+    </div>
+    <br>
+    <div class="col-md-9">
+    </div>
+  </div>
+</div>
 {% endblock %}

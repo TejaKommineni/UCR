@@ -1852,24 +1852,7 @@ def create_staff():
     staff.append(models.Staff(
         userID=1,
         firstName="Aaron",
-        lastName="Pulver",
-        middleName="Thomas",
-        email="aaron.pulver@utah.edu",
-        phoneNumber="phone",
-        phoneComment="phoneComment",
-        institutionID=1,
-        departmentID=2,
-        position="position",
-        credentials="credentials",
-        street="street",
-        city="city",
-        zipcode="84102",
-        stateID="AZ",
-        ucrRoleID=2,
-        hci=True,
-        ucr=True,
-        external=True,
-        fieldDivisionID=2
+        ucrRoleID=2
 
     ))
     staff.append(models.Staff(
@@ -2155,12 +2138,8 @@ def create_budgets():
     budgets = []
     budgets.append(
         models.Budget(
-            projectID=1,
-            numPeriods=1,
-            periodStart=datetime(2016, 2, 2),
-            periodEnd=datetime(2016, 9, 9),
-            periodTotal=1000,
-            periodComment="Initial Budget"))
+            projectID=1
+        ))
     budgets.append(
         models.Budget(
             projectID=1,
@@ -2241,13 +2220,7 @@ def create_project_review_committees():
     rcs.append(models.ReviewCommittee(
         projectID=1,
         reviewCommitteeStatusID=1,
-        reviewCommitteeLUTID=1,
-        reviewCommitteeNumber="1",
-        dateInitialReview=datetime(2016, 2, 2),
-        dateExpires=datetime(2016, 10, 10),
-        rcNote="Notes",
-        rcProtocol="Protocol 1",
-        rcApproval="No"))
+        reviewCommitteeLUTID=1))
     rcs.append(models.ReviewCommittee(
         projectID=1,
         reviewCommitteeStatusID=2,
@@ -2385,22 +2358,8 @@ def create_arc_reviews():
     arcs = []
     arcs.append(
         models.ArcReview(
-            projectID=1,
-            reviewType=1,
-            dateSentToReviewer=datetime(2016, 2, 2),
-            reviewer1=1,
-            reviewer1Rec=1,
-            reviewer1SigDate=datetime(2016, 2, 2),
-            reviewer1Comments="test comment",
-            reviewer2=2,
-            reviewer2Rec=2,
-            reviewer2SigDate=datetime(2016, 2, 2),
-            reviewer2Comments="test comment",
-            research=1,
-            linkage=False,
-            contact=True,
-            engaged=True,
-            nonPublicData=True)
+            projectID=1
+            )
     )
     arcs.append(
         models.ArcReview(
@@ -2580,16 +2539,7 @@ def create_fundings():
     fundings = []
     fundings.append(
         models.Funding(
-            grantStatusID=1,
-            projectID=1,
-            fundingSourceID=1,
-            fundingNumber="number",
-            grantTitle="title",
-            dateStatus=datetime(2016, 2, 2),
-            grantPi=1,
-            primaryChartfield="pcf",
-            secondaryChartfield="scf",
-            fundingNotes="Notes 1"
+            projectID=1
         )
     )
     fundings.append(
@@ -2775,33 +2725,7 @@ def create_pre_applications():
     preapps = []
     preapps.append(
         models.PreApplication(
-            projectID=1,
-            piFirstName="pi_fname",
-            piLastName="pi_lname_aaron",
-            piEmail="pi_email",
-            piPhone="pi_phone",
-            contactFirstName="contact_fname",
-            contactLastName="contact_lname",
-            contactPhone="contact_phone",
-            contactEmail="contact_email",
-            institution=1,
-            institution2="institution string",
-            uid="uid",
-            udoh="udoh1",
-            projectTitle="Project 1",
-            purpose="purpose",
-            irb0=True,
-            irb1=True,
-            irb2=True,
-            irb3=True,
-            irb4=True,
-            otherIrb="other_irb",
-            updb=True,
-            ptContact=True,
-            startDate=datetime(2016, 2, 2),
-            link=True,
-            deliveryDate=datetime(2016, 2, 2),
-            description="description"
+            projectID=1
         )
     )
     preapps.append(
@@ -2935,12 +2859,8 @@ def create_logs():
     logs = []
     logs.append(
         models.Log(
-            logSubjectID=1,
             projectID=1,
-            staffID=1,
-            phaseStatusID=1,
-            note="Test Note 1",
-            date=datetime(2016, 2, 2)
+            staffID=1
         )
     )
     logs.append(
@@ -3001,12 +2921,7 @@ def create_project_staff():
     project_staff.append(models.ProjectStaff(
         staffRoleID=1,
         projectID=1,
-        staffID=1,
-        datePledge=datetime(2016, 2, 2),
-        dateRevoked=datetime(2016, 2, 2),
-        contactID=False,
-        inactive=True,
-        primaryPI=True
+        staffID=1
     ))
     project_staff.append(models.ProjectStaff(
         staffRoleID=1,
@@ -3025,10 +2940,7 @@ def create_staff_trainings():
     trainings = []
     trainings.append(
         models.StaffTraining(
-            staffID=1,
-            humanSubjectTrainingID=1,
-            dateTaken=datetime(2016, 2, 2),
-            dateExpires=datetime(2016, 2, 2)
+            staffID=1
         )
     )
     trainings.append(
@@ -3169,15 +3081,7 @@ def create_patient_addresses():
     addresses = []
     addresses.append(
         models.PatientAddress(
-        contactInfoSourceID=1,
-        participantID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID="AB",
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
+        participantID=1
     ))
     addresses.append(
         models.PatientAddress(
@@ -3234,11 +3138,7 @@ def create_patient_emails():
     emails = []
     emails.append(
         models.PatientEmail(
-            contactInfoSourceID=1,
-            participantID=1,
-            contactInfoStatusID=1,
-            email="email@gmail.com",
-            emailStatusDate=datetime(2016, 2, 2)
+            participantID=1
         )
     )
     emails.append(
@@ -3284,12 +3184,7 @@ def create_patient_phones():
     phones = []
     phones.append(
         models.PatientPhone(
-            contactInfoSourceID=1,
-            participantID=1,
-            contactInfoStatusID=1,
-            phoneTypeID=1,
-            phoneNumber="phone",
-            phoneStatusDate=datetime(2016, 2, 2)
+            participantID=1
         )
     )
     phones.append(
@@ -3338,13 +3233,7 @@ def create_patient_phones():
 def create_informants():
     informants = []
     informants.append(models.Informant(
-        participantID=1,
-        firstName="Joe",
-        lastName="Smith",
-        middleName="",
-        informantPrimary=True,
-        informantRelationshipID=1,
-        notes="notes"
+        participantID=1
     ))
     informants.append(models.Informant(
         participantID=2,
@@ -3388,15 +3277,8 @@ def create_informants():
 def create_informant_addresses():
     informant_addresses = []
     informant_addresses.append(models.InformantAddress(
-        contactInfoSourceID=1,
         informantID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID="NC",
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
+
     ))
     informant_addresses.append(models.InformantAddress(
         contactInfoSourceID=1,
@@ -3448,12 +3330,8 @@ def create_informant_addresses():
 def create_informant_phones():
     informant_phones = []
     informant_phones.append(models.InformantPhone(
-        contactInfoSourceID=1,
         informantID=1,
-        contactInfoStatusID=1,
-        phoneTypeID=1,
-        phoneNumber="123-456-999 ext 1",
-        phoneStatusDate=datetime(2016, 2, 2)
+
     ))
     informant_phones.append(models.InformantPhone(
         contactInfoSourceID=1,
@@ -3493,29 +3371,7 @@ def create_informant_phones():
 def create_ctcs():
     ctcs = []
     ctcs.append(models.CTC(
-        participantID=1,
-        dxDateDay=2,
-        dxDateMonth=7,
-        dxDateYear=1998,
-        site="Site 2",
-        histology="histology",
-        behavior="behavior",
-        ctcSequence="sequence",
-        stage="stage",
-        dxAge=1,
-        dxStreet1="street1",
-        dxStreet2="street2",
-        dxCity="city",
-        dxStateID="IA",
-        dxZip=99999,
-        dxCounty="county",
-        dnc="dnc",
-        dncReason="dnc_reason",
-        recordID="1",
-        ctcRecordNumber='ctc-234',
-        dmsCtcID=345
-
-    ))
+        participantID=1    ))
     ctcs.append(models.CTC(
         participantID=2,
         dxDateDay=2,
@@ -3632,23 +3488,11 @@ def create_project_patients():
             abstractStatusID=1,
             abstractStatusDate=datetime(2016, 2, 2),
             abstractStatusStaffID=1,
-            sentToAbstractorDate=datetime(2016, 2, 2),
             sentToAbstractorStaffID=1,
-            abstractedDate=datetime(2016, 2, 2),
             abstractorStaffID=1,
-            researcherDate=datetime(2016, 2, 2),
             researcherStaffID=1,
-            consentLink="link",
-            medRecordReleaseSigned=True,
-            medRecordReleaseLink="link",
-            medRecordReleaseStaffID=1,
-            medRecordReleaseDate=datetime(2016, 2, 2),
-            surveyToResearcher=datetime(2016, 2, 2),
             surveyToResearcherStaffID=1,
-            qualityControl=True,
-            vitalStatusID=4,
-            monthOfLastConsent=1,
-            yearOfLastConsent=2016
+            qualityControl=True
         )
     )
     pps.append(
@@ -3830,11 +3674,8 @@ def create_project_sitegroups():
 def create_tracings():
     tracings = []
     tracings.append(models.Tracing(
-        tracingSourceID=1,
         participantID=1,
-        date=datetime(2016, 2, 2),
-        staffID=1,
-        notes="notes"
+        staffID=1
     ))
     tracings.append(models.Tracing(
         tracingSourceID=1,
@@ -3871,17 +3712,6 @@ def create_physicians():
     physicians = []
     physicians.append(
         models.Physician(
-            firstName="Bill",
-            lastName="Walden",
-            middleName="",
-            credentials="MD",
-            specialty="specialty",
-            aliasFirstName="alias_fname",
-            aliasLastName="alias_lname",
-            aliasMiddleName="alias_middle_name",
-            physicianStatusID=1,
-            physicianStatusDate=datetime(2016, 2, 2),
-            displayID='DP-548'
         )
     )
     physicians.append(
@@ -3920,15 +3750,9 @@ def create_physicians():
 def create_physician_addresses():
     addresses = []
     addresses.append(models.PhysicianAddress(
-        contactInfoSourceID=2,
-        physicianID=1,
-        contactInfoStatusID=2,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID="LA",
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
+
+        physicianID=1
+
     ))
     addresses.append(models.PhysicianAddress(
         contactInfoSourceID=2,
@@ -3959,11 +3783,7 @@ def create_physician_emails():
     emails = []
     emails.append(
         models.PhysicianEmail(
-            contactInfoSourceID=1,
-            physicianID=1,
-            contactInfoStatusID=1,
-            email="email@gmail.com",
-            emailStatusDate=datetime(2016, 2, 2)
+            physicianID=1
         )
     )
     emails.append(
@@ -3991,12 +3811,8 @@ def create_physician_phones():
     phones = []
     phones.append(
         models.PhysicianPhone(
-            contactInfoSourceID=1,
-            physicianID=1,
-            contactInfoStatusID=1,
-            phoneNumber="999-999-999",
-            phoneTypeID=1,
-            phoneStatusDate=datetime(2016, 2, 2)
+            physicianID=1
+
         )
     )
     phones.append(
@@ -4060,14 +3876,6 @@ def create_physician_to_ctcs():
 def create_facilities():
     facilities = []
     facilities.append(models.Facility(
-        facilityName="Facility 1",
-        contactFirstName="fname",
-        contactLastName="lname",
-        facilityStatus=1,
-        facilityStatusDate=datetime(2016, 2, 2),
-        contact2FirstName="fname",
-        contact2LastName="lname",
-        displayID='FDP-484'
     ))
     facilities.append(models.Facility(
         facilityName="Facility 2",
@@ -4085,15 +3893,7 @@ def create_facilities():
 def create_faciliy_addresses():
     addresses = []
     addresses.append(models.FacilityAddress(
-        contactInfoSourceID=1,
-        facilityID=1,
-        contactInfoStatusID=1,
-        street="street",
-        street2="street2",
-        city="city",
-        stateID="LA",
-        zip="12345",
-        addressStatusDate=datetime(2016, 2, 2),
+        facilityID=1
     ))
     addresses.append(models.FacilityAddress(
         contactInfoSourceID=1,
@@ -4112,13 +3912,7 @@ def create_faciliy_addresses():
 def create_facility_phones():
     phones = []
     phones.append(models.FacilityPhone(
-        contactInfoSourceID=1,
-        facilityID=1,
-        contactInfoStatusID=1,
-        clinicName="clinic",
-        phoneTypeID=1,
-        phoneNumber="phone",
-        phoneStatusDate=datetime(2016, 2, 2)
+        facilityID=1
     ))
     phones.append(models.FacilityPhone(
         contactInfoSourceID=1,
@@ -4153,9 +3947,7 @@ def create_patient_project_statuses():
     statuses = []
     statuses.append(
         models.PatientProjectStatus(
-            patientProjectStatusTypeID=1,
             participantID=1,
-            statusDate = datetime(2016,8,9),
             staffID=1
         )
     )
@@ -4199,9 +3991,7 @@ def create_physician_facilities():
     pfs.append(
         models.PhysicianFacility(
             facilityID=1,
-            physicianID=1,
-            physFacilityStatusID=1,
-            physFacilityStatusDate=datetime(2016, 2, 2)
+            physicianID=1
         )
     )
     pfs.append(
@@ -4228,8 +4018,7 @@ def create_ctc_to_facilities():
     cfs.append(
         models.CTCFacility(
             ctcID=1,
-            facilityID=1,
-            coc=123
+            facilityID=1
         )
     )
     cfs.append(
@@ -4271,11 +4060,7 @@ def create_pp_contacts():
                 contactTypeLUTID=1,
                 participantID=i,
                 staffID=1,
-                informantID=1,
-                informantPhoneID=1,
-                contactDate=datetime(2016, 2, 2),
-                initials="atp",
-                notes="notes"
+                contactDate=datetime(2016, 2, 2)
         ))
         contacts.append(models.Contact(
             contactTypeLUTID=2,
@@ -4314,9 +4099,7 @@ def create_incentives():
     incentives.append(
         models.Incentive(
             participantID=1,
-            incentiveDescription="desc",
             barcode="123456789",
-            dateGiven=datetime(2016, 4, 3)
         )
     )
     incentives.append(
@@ -4352,6 +4135,43 @@ def create_incentives():
         )
     )
     return incentives
+
+def create_queries():
+    queries = []
+    queries.append(
+        models.SqlQuery(
+            queryID=1,
+            query = 'Select * from [User]',
+            queryName = 'User Report',
+            director = False,
+            contactStaff = False,
+            informaticsStaff = True,
+            researchManager = True
+        )
+    )
+    queries.append(
+        models.SqlQuery(
+            queryID=2,
+            query='Select * from [Staff]',
+            queryName='Staff Report',
+            director=True,
+            contactStaff=False,
+            informaticsStaff=True,
+            researchManager=True
+        )
+    )
+    queries.append(
+        models.SqlQuery(
+            queryID=3,
+            query='Select * from [Incentive]',
+            queryName='Incentive Report',
+            director=True,
+            contactStaff=False,
+            informaticsStaff=False,
+            researchManager=True
+        )
+    )
+    return queries
 
 def create_institutions():
     institutions = []
@@ -4490,6 +4310,7 @@ def populate_db():
     ctc_to_facilities = create_ctc_to_facilities()
     pp_contacts = create_pp_contacts()
     incentives = create_incentives()
+    queries = create_queries()
 
     # Basic things to get started
     db.session.add_all(ucrRoles)
@@ -4571,6 +4392,7 @@ def populate_db():
     db.session.add_all(ctc_to_facilities)
     db.session.add_all(pp_contacts)
     db.session.add_all(incentives)
+    db.session.add_all(queries)
     db.session.commit()
 
 

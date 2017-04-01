@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+    <legend>Review Committee</legend>
 {% for reviewCommittee in form["reviewCommittees"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}

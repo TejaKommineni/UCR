@@ -689,6 +689,15 @@ def get_project_site_groups():
 def get_project_site_group(id):
     return db.session.query(ProjectSiteGroups).filter_by(projectSiteGroupID=id).first()
 
+def get_query(id):
+    return db.session.query(SqlQuery).filter_by(queryID=id).first()
+
+def get_queries():
+    return db.session.query(SqlQuery).all()
+
+def get_sql_query(sql_query):
+    return  db.engine.execute(sql_query)
+
 def get_race(id):
     return db.session.query(Race).filter_by(raceID=id).first()
 

@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify, request, url_for, redirect, abort, g, session, current_app, flash
+from flask import jsonify, request, make_response, url_for, redirect, abort, g, session, current_app, flash
 from flask import Blueprint, render_template, abort
 import app.query as query
 import app.models as models
@@ -10,11 +10,12 @@ from app.database import db
 from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
+from io import StringIO
 from urllib.parse import urlparse, urljoin
 from flask.ext.cas import login as cas_login
 from functools import wraps
 import datetime
-
+import csv
 website = Blueprint('website', __name__, template_folder='website_templates')
 
 @website.context_processor
@@ -209,6 +210,20 @@ def dependency_detected(dependencies, message="Dependency Detected"):
 def root():
     form = {}
     return render_template("homepage.html", form=form)
+    if 'DEV_MODE' in current_app.config and current_app.config['DEV_MODE']:
+        user = query.get_user(1)
+    else:
+        user = query.get_user_by_username(flask.session['CAS_USERNAME'])
+
+    if user.staff.ucrRole.ucrRole == 'Director':
+        return render_template("director.html", form=form)
+    elif user.staff.ucrRole.ucrRole == 'Research Manager':
+        return render_template("research_manager.html", form=form)
+    elif user.staff.ucrRole.ucrRole == 'Contact Staff':
+        return render_template("contact_staff.html", form=form)
+    else:
+        return render_template("informatics_staff.html", form=form)
+
 
 
 @website.route('/overview/', methods=['GET'])
@@ -5909,8 +5924,153 @@ def delete_review_committee_list(reviewCommitteeID):
     except Exception as e:
         return internal_error(e)
 
-
 ##############################################################################
+# Run Sql Queries
+##############################################################################
+@website.route('/queries/', methods = ['GET'])
+@website.route('/queries/<int:queryID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def get_sql_queries(queryID=None):
+    try:
+        if len(request.args) == 0:
+            form = {}
+            form['queries'] = query.get_queries()
+            form["results"] = None
+            return render_template("run_queries.html", form=form)
+        else:
+            type = query.get_query(request.args['reportTypes'])
+            sqlQuery = type.query
+            form = {}
+            form['queries'] = query.get_queries()
+            form['selectedQuery'] = int(request.args['reportTypes'])
+            form["results"] = query.get_sql_query(sqlQuery)
+            return render_template("run_queries.html", form=form)
+
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/downloadReport/', methods = ['GET'])
+@website.route('/downloadReport/<int:queryID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def get_download(queryID=None):
+    try:
+        # Create the HttpResponse object with the appropriate CSV header.
+        type = query.get_query(queryID)
+        sqlQuery = type.query
+        results = query.get_sql_query(sqlQuery)
+        si = StringIO()
+        writer = csv.writer(si)
+        row = []
+        for column in results.cursor.description:
+             row.append(column[0])
+        writer.writerow(row)
+        for row in results:
+            print(row)
+            writer.writerow(row)
+        output = make_response(si.getvalue())
+        output.headers["Content-Disposition"] = "attachment; filename="+type.queryName+".csv"
+        output.headers["Content-type"] = "text/csv"
+        return output
+
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/editqueries/', methods = ['GET'])
+@website.route('/editqueries/<int:queryID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def get_edit_sql_queries(queryID=None):
+    try:
+        if queryID is None:
+            form = {}
+            form['queries'] = query.get_queries()
+            form['query'] = {}
+            form['selectedQuery'] = 0
+            return render_template("edit_queries.html", form=form)
+        else:
+            form = {}
+            form['queries'] = query.get_queries()
+            form['query'] = query.get_query(queryID)
+            form['selectedQuery'] = int(queryID)
+            return render_template("edit_queries.html", form=form)
+
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/queries/<int:queryID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def update_sql_query(queryID):
+    try:
+        sqlQuery = query.get_query(queryID)
+        if queryID is not None:
+            form = forms.SqlQueryForm(request.form)
+            if int(form.versionID.data) == sqlQuery.versionID:
+                sqlQuery.query = form.query.data
+                sqlQuery.queryName = form.queryName.data
+                sqlQuery.director = form.director.data
+                sqlQuery.contactStaff = form.contactStaff.data
+                sqlQuery.informaticsStaff = form.informaticsStaff.data
+                sqlQuery.researchManager = form.researchManager.data
+                query.add(sqlQuery)
+                query.flush()
+                query.commit()
+                flash("Updated Report")
+                return redirect_back('editqueries/{}/'.format(queryID))
+            else:
+                return out_of_date_error()
+        else:
+            return item_not_found("Report ID {} not found".format(queryID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/editqueries/', methods=['POST'])
+@website.route('/editqueries/<int:queryID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def create_sql_query(queryID=None):
+    try:
+        if queryID != 0:
+            if request.form["action"].lower() == "editquery":
+                return update_sql_query(queryID)
+            elif request.form["action"].lower() == "removequery":
+                return delete_sql_query(queryID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.SqlQueryForm(request.form)
+            sqlQuery = models.SqlQuery(
+                    query=form.query.data,
+                    queryName=form.queryName.data,
+                    director=form.director.data,
+                    contactStaff=form.contactStaff.data,
+                    informaticsStaff=form.informaticsStaff.data,
+                    researchManager=form.researchManager.data
+                )
+            query.add(sqlQuery)
+            flash("Created New Report")
+            return redirect_back('editqueries/')
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/queries/<int:queryID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def delete_sql_query(queryID):
+    try:
+        sqlQuery = query.get_query(queryID)
+        if sqlQuery is not None:
+            deps = get_dependencies(sqlQuery)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(sqlQuery)
+                flash("Deleted Report {}".format(queryID))
+                return redirect_back('editqueries/')
+        else:
+            return item_not_found("ReportID {} not found".format(queryID))
+    except Exception as e:
+        return internal_error(e)
+
+
+
+ ##############################################################################
     # Site Groups
 ##############################################################################
 @website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['GET'])
@@ -6004,7 +6164,7 @@ def delete_site_groups(projectSiteGroupID):
 # Staff
 ##############################################################################
 @website.route('/addstaff/', methods=['GET'])
-@authorization_required(roles=['Developer', 'Research Manager'])
+@authorization_required(roles=['Developer','Informatics Staff', 'Research Manager'])
 def add_staff():
     try:
         form = {}

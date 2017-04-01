@@ -1,5 +1,6 @@
 {% extends "layout_all.html" %}
 {% block content %}
+     <legend>Project Type</legend>
 {% for projectType in form["projectTypes"] %}
     {% with %}
         {% set loop_revindex = loop.revindex %}
