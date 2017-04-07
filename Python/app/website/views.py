@@ -235,18 +235,23 @@ def overview():
     projectTitle=None
     piLastName=None
     projectTypeID=None
-    if "mostRecentProjectStatusTypeID" in request.args:
-        mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
-        form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
-    if "projectTitle" in request.args:
-        projectTitle = value_or_none(request.args["projectTitle"])
-        form["queryParams"]["projectTitle"] = request.args["projectTitle"]
-    if "piLastName" in request.args:
-        piLastName = value_or_none(request.args["piLastName"])
-        form["queryParams"]["piLastName"] = request.args["piLastName"]
-    if "projectTypeID" in request.args:
-        projectTypeID = value_or_none(request.args["projectTypeID"])
-        form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+    if "action" in request.args:
+        if request.args["action"].lower() == "clear":
+            projectTitle = mostRecentProjectStatusTypeID = piLastName = projectTypeID = None
+        else:
+            if "mostRecentProjectStatusTypeID" in request.args:
+                mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+                form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
+            if "projectTitle" in request.args:
+                projectTitle = value_or_none(request.args["projectTitle"])
+                form["queryParams"]["projectTitle"] = request.args["projectTitle"]
+            if "piLastName" in request.args:
+                piLastName = value_or_none(request.args["piLastName"])
+                form["queryParams"]["piLastName"] = request.args["piLastName"]
+            if "projectTypeID" in request.args:
+                projectTypeID = value_or_none(request.args["projectTypeID"])
+                form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+
     form["summary"] = query.summary(projectTitle=projectTitle, mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID,piLastName=piLastName,projectTypeID=projectTypeID)
     form["projectStatusLUTs"] = query.get_project_status_luts()
     form["projectTypes"] = query.get_project_types()
@@ -1548,18 +1553,23 @@ def get_facility(facilityID=None):
             facilityStatus = None
             form = {}
             form["queryParams"] = {}
-            if "facilityName" in request.args:
-                facilityName = value_or_none(request.args["facilityName"])
-                form["queryParams"]["facilityName"] = request.args["facilityName"]
-            if "contactFirstName" in request.args:
-                contactFirstName = value_or_none(request.args["contactFirstName"])
-                form["queryParams"]["contactFirstName"] = request.args["contactFirstName"]
-            if "contactLastName" in request.args:
-                contactLastName = value_or_none(request.args["contactLastName"])
-                form["queryParams"]["contactLastName"] = request.args["contactLastName"]
-            if "facilityStatus" in request.args:
-                facilityStatus = value_or_none(request.args["facilityStatus"])
-                form["queryParams"]["facilityStatus"] = request.args["facilityStatus"]
+            if "action" in request.args:
+                if request.args["action"].lower() == "clear":
+                    facilityName = contactFirstName = contactLastName = facilityStatus = None
+                else:
+                    if "facilityName" in request.args:
+                        facilityName = value_or_none(request.args["facilityName"])
+                        form["queryParams"]["facilityName"] = request.args["facilityName"]
+                    if "contactFirstName" in request.args:
+                        contactFirstName = value_or_none(request.args["contactFirstName"])
+                        form["queryParams"]["contactFirstName"] = request.args["contactFirstName"]
+                    if "contactLastName" in request.args:
+                        contactLastName = value_or_none(request.args["contactLastName"])
+                        form["queryParams"]["contactLastName"] = request.args["contactLastName"]
+                    if "facilityStatus" in request.args:
+                        facilityStatus = value_or_none(request.args["facilityStatus"])
+                        form["queryParams"]["facilityStatus"] = request.args["facilityStatus"]
+
             facilities = query.query_facilities(facilityName=facilityName,
                                                 contactFirstName=contactFirstName,
                                                 contactLastName=contactLastName,
@@ -3096,24 +3106,29 @@ def get_patient(patAutoID=None):
             UPDBID = None
             phoneNumber = None
             form["queryParams"] = {}
-            if "firstName" in request.args:
-                firstName = value_or_none(request.args["firstName"])
-                form["queryParams"]["firstName"] = request.args["firstName"]
-            if "lastName" in request.args:
-                lastName = value_or_none(request.args["lastName"])
-                form["queryParams"]["lastName"] = request.args["lastName"]
-            if "patID" in request.args:
-                patID = value_or_none(request.args["patID"])
-                form["queryParams"]["patID"] = request.args["patID"]
-            if "ucrDistID" in request.args:
-                ucrDistID = value_or_none(request.args["ucrDistID"])
-                form["queryParams"]["ucrDistID"] = request.args["ucrDistID"]
-            if "UPDBID" in request.args:
-                UPDBID = value_or_none(request.args["UPDBID"])
-                form["queryParams"]["UPDBID"] = request.args["UPDBID"]
-            if "phoneNumber" in request.args:
-                phoneNumber = value_or_none(request.args["phoneNumber"])
-                form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
+            if "action" in request.args:
+                if request.args["action"].lower() == "clear":
+                    firstName = lastName = patID = ucrDistID = UPDBID = phoneNumber = None
+                else:
+                    if "firstName" in request.args:
+                        firstName = value_or_none(request.args["firstName"])
+                        form["queryParams"]["firstName"] = request.args["firstName"]
+                    if "lastName" in request.args:
+                        lastName = value_or_none(request.args["lastName"])
+                        form["queryParams"]["lastName"] = request.args["lastName"]
+                    if "patID" in request.args:
+                        patID = value_or_none(request.args["patID"])
+                        form["queryParams"]["patID"] = request.args["patID"]
+                    if "ucrDistID" in request.args:
+                        ucrDistID = value_or_none(request.args["ucrDistID"])
+                        form["queryParams"]["ucrDistID"] = request.args["ucrDistID"]
+                    if "UPDBID" in request.args:
+                        UPDBID = value_or_none(request.args["UPDBID"])
+                        form["queryParams"]["UPDBID"] = request.args["UPDBID"]
+                    if "phoneNumber" in request.args:
+                        phoneNumber = value_or_none(request.args["phoneNumber"])
+                        form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
+
             patients = query.query_patients(firstName=firstName,
                                             lastName=lastName,
                                             patID=patID,
@@ -3958,18 +3973,22 @@ def get_physician(physicianID=None):
             specialty = None
             physicianStatusID = None
             form["queryParams"] = {}
-            if "firstName" in request.args:
-                firstName = value_or_none(request.args["firstName"])
-                form["queryParams"]["firstName"] = request.args["firstName"]
-            if "lastName" in request.args:
-                lastName = value_or_none(request.args["lastName"])
-                form["queryParams"]["lastName"] = request.args["lastName"]
-            if "specialty" in request.args:
-                specialty = value_or_none(request.args["specialty"])
-                form["queryParams"]["specialty"] = request.args["specialty"]
-            if "physicianStatusID" in request.args:
-                physicianStatusID = value_or_none(request.args["physicianStatusID"])
-                form["queryParams"]["physicianStatusID"] = request.args["physicianStatusID"]
+            if "action" in request.args:
+                if request.args["action"].lower() == "clear":
+                    firstName = lastName = specialty = physicianStatusID = None
+                else:
+                    if "firstName" in request.args:
+                        firstName = value_or_none(request.args["firstName"])
+                        form["queryParams"]["firstName"] = request.args["firstName"]
+                    if "lastName" in request.args:
+                        lastName = value_or_none(request.args["lastName"])
+                        form["queryParams"]["lastName"] = request.args["lastName"]
+                    if "specialty" in request.args:
+                        specialty = value_or_none(request.args["specialty"])
+                        form["queryParams"]["specialty"] = request.args["specialty"]
+                    if "physicianStatusID" in request.args:
+                        physicianStatusID = value_or_none(request.args["physicianStatusID"])
+                        form["queryParams"]["physicianStatusID"] = request.args["physicianStatusID"]
 
             physicians = query.query_physicians(firstName=firstName,
                                                 lastName=lastName,
@@ -4840,21 +4859,25 @@ def get_project(projectID=None):
             piLastName = None
             mostRecentProjectStatusTypeID = None
             form["queryParams"] = {}
-            if "projectID" in request.args:
-                projectID = value_or_none(request.args["projectID"])
-                form["queryParams"]["projectID"] = request.args["projectID"]
-            if "shortTitle" in request.args:
-                shortTitle = value_or_none(request.args["shortTitle"])
-                form["queryParams"]["shortTitle"] = request.args["shortTitle"]
-            if "piLastName" in request.args:
-                piLastName = value_or_none(request.args["piLastName"])
-                form["queryParams"]["piLastName"] = request.args["piLastName"]
-            if "projectTypeID" in request.args:
-                projectTypeID = value_or_none(request.args["projectTypeID"])
-                form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
-            if "mostRecentProjectStatusTypeID" in request.args:
-                mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
-                form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
+            if "action" in request.args:
+                if request.args["action"].lower() == "clear":
+                    projectID = shortTitle = projectTypeID = piLastName = mostRecentProjectStatusTypeID =None
+                else:
+                    if "projectID" in request.args:
+                        projectID = value_or_none(request.args["projectID"])
+                        form["queryParams"]["projectID"] = request.args["projectID"]
+                    if "shortTitle" in request.args:
+                        shortTitle = value_or_none(request.args["shortTitle"])
+                        form["queryParams"]["shortTitle"] = request.args["shortTitle"]
+                    if "piLastName" in request.args:
+                        piLastName = value_or_none(request.args["piLastName"])
+                        form["queryParams"]["piLastName"] = request.args["piLastName"]
+                    if "projectTypeID" in request.args:
+                        projectTypeID = value_or_none(request.args["projectTypeID"])
+                        form["queryParams"]["projectTypeID"] = request.args["projectTypeID"]
+                    if "mostRecentProjectStatusTypeID" in request.args:
+                        mostRecentProjectStatusTypeID = value_or_none(request.args["mostRecentProjectStatusTypeID"])
+                        form["queryParams"]["mostRecentProjectStatusTypeID"] = request.args["mostRecentProjectStatusTypeID"]
 
             projects = query.query_projects(projectID=projectID,
                                             shortTitle=shortTitle,
@@ -5017,24 +5040,28 @@ def get_project_patient(participantID=None):
             projectID = None
             finalCodeID = None
             form["queryParams"] = {}
-            if "firstName" in request.args:
-                firstName = value_or_none(request.args["firstName"])
-                form["queryParams"]["firstName"] = request.args["firstName"]
-            if "lastName" in request.args:
-                lastName = value_or_none(request.args["lastName"])
-                form["queryParams"]["lastName"] = request.args["lastName"]
-            if "finalCodeID" in request.args:
-                finalCodeID = value_or_none(request.args["finalCodeID"])
-                form["queryParams"]["finalCodeID"] = request.args["finalCodeID"]
-            if "batch" in request.args:
-                batch = value_or_none(request.args["batch"])
-                form["queryParams"]["batch"] = request.args["batch"]
-            if "siteGrpID" in request.args:
-                siteGrpID = value_or_none(request.args["siteGrpID"])
-                form["queryParams"]["siteGrpID"] = request.args["siteGrpID"]
-            if "projectID" in request.args:
-                projectID = value_or_none(request.args["projectID"])
-                form["queryParams"]["projectID"] = request.args["projectID"]
+            if "action" in  request.args:
+                if request.args["action"].lower() == "clear":
+                    firstName = lastName = finalCodeID = batch = siteGrpID = projectID = None
+                else:
+                    if "firstName" in request.args:
+                        firstName = value_or_none(request.args["firstName"])
+                        form["queryParams"]["firstName"] = request.args["firstName"]
+                    if "lastName" in request.args:
+                        lastName = value_or_none(request.args["lastName"])
+                        form["queryParams"]["lastName"] = request.args["lastName"]
+                    if "finalCodeID" in request.args:
+                        finalCodeID = value_or_none(request.args["finalCodeID"])
+                        form["queryParams"]["finalCodeID"] = request.args["finalCodeID"]
+                    if "batch" in request.args:
+                        batch = value_or_none(request.args["batch"])
+                        form["queryParams"]["batch"] = request.args["batch"]
+                    if "siteGrpID" in request.args:
+                        siteGrpID = value_or_none(request.args["siteGrpID"])
+                        form["queryParams"]["siteGrpID"] = request.args["siteGrpID"]
+                    if "projectID" in request.args:
+                        projectID = value_or_none(request.args["projectID"])
+                        form["queryParams"]["projectID"] = request.args["projectID"]
 
             projectPatients = query.query_project_patients(firstName=firstName,
                                                            lastName=lastName,
@@ -5965,7 +5992,6 @@ def get_download(queryID=None):
              row.append(column[0])
         writer.writerow(row)
         for row in results:
-            print(row)
             writer.writerow(row)
         output = make_response(si.getvalue())
         output.headers["Content-Disposition"] = "attachment; filename="+type.queryName+".csv"
@@ -6028,12 +6054,11 @@ def update_sql_query(queryID):
 def create_sql_query(queryID=None):
     try:
         if queryID != 0:
-            if request.form["action"].lower() == "editquery":
-                return update_sql_query(queryID)
-            elif request.form["action"].lower() == "removequery":
-                return delete_sql_query(queryID)
+            if "action" in request.args:
+                if "action" in request.form["action"].lower() == "editquery":
+                    return update_sql_query(queryID)
             else:
-                return invalid_method()
+                return delete_sql_query(queryID)
         else:
             form = forms.SqlQueryForm(request.form)
             sqlQuery = models.SqlQuery(
@@ -6069,8 +6094,105 @@ def delete_sql_query(queryID):
         return internal_error(e)
 
 
+##############################################################################
+   # Worklists
+##############################################################################
 
- ##############################################################################
+@website.route('/worklist/', methods=['GET'])
+@website.route('/worklist/<int:projectID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def get_worklist(projectID=None):
+    try:
+        if len(request.args) == 0:
+            form = {}
+            form['projects'] = query.get_projects()
+            form['project'] = {}
+            form['selectedProject'] = 0
+            return render_template("worklist.html", form=form)
+        else:
+            form = {}
+            form['projects'] = query.get_projects()
+            form['project'] = query.get_query(request.args['projectID'])
+            form['selectedProject'] = int(request.args['projectID'])
+            return render_template("worklist.html", form=form)
+
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/queries/<int:queryID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def update_sqal_query(queryID):
+    try:
+        sqlQuery = query.get_query(queryID)
+        if queryID is not None:
+            form = forms.SqlQueryForm(request.form)
+            if int(form.versionID.data) == sqlQuery.versionID:
+                sqlQuery.query = form.query.data
+                sqlQuery.queryName = form.queryName.data
+                sqlQuery.director = form.director.data
+                sqlQuery.contactStaff = form.contactStaff.data
+                sqlQuery.informaticsStaff = form.informaticsStaff.data
+                sqlQuery.researchManager = form.researchManager.data
+                query.add(sqlQuery)
+                query.flush()
+                query.commit()
+                flash("Updated Report")
+                return redirect_back('editqueries/{}/'.format(queryID))
+            else:
+                return out_of_date_error()
+        else:
+            return item_not_found("Report ID {} not found".format(queryID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/editqueries/', methods=['POST'])
+@website.route('/editqueries/<int:queryID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def create_sqal_query(queryID=None):
+    try:
+        if queryID != 0:
+            if request.form["action"].lower() == "editquery":
+                return update_sqal_query(queryID)
+            elif request.form["action"].lower() == "removequery":
+                return delete_sqal_query(queryID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.SqlQueryForm(request.form)
+            sqlQuery = models.SqlQuery(
+                query=form.query.data,
+                queryName=form.queryName.data,
+                director=form.director.data,
+                contactStaff=form.contactStaff.data,
+                informaticsStaff=form.informaticsStaff.data,
+                researchManager=form.researchManager.data
+            )
+            query.add(sqlQuery)
+            flash("Created New Report")
+            return redirect_back('editqueries/')
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/queries/<int:queryID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def delete_sqal_query(queryID):
+    try:
+        sqlQuery = query.get_query(queryID)
+        if sqlQuery is not None:
+            deps = get_dependencies(sqlQuery)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(sqlQuery)
+                flash("Deleted Report {}".format(queryID))
+                return redirect_back('editqueries/')
+        else:
+            return item_not_found("ReportID {} not found".format(queryID))
+    except Exception as e:
+        return internal_error(e)
+
+
+##############################################################################
     # Site Groups
 ##############################################################################
 @website.route('/sitegroups/<int:projectSiteGroupID>/', methods=['GET'])
@@ -6198,30 +6320,34 @@ def get_staff(staffID=None):
             departmentID = None
             ucrRoleID = None
             form["queryParams"] = {}
-            if "firstName" in request.args:
-                firstName = value_or_none(request.args["firstName"])
-                form["queryParams"]["firstName"] = request.args["firstName"]
-            if "lastName" in request.args:
-                lastName = value_or_none(request.args["lastName"])
-                form["queryParams"]["lastName"] = request.args["lastName"]
-            if "staffID" in request.args:
-                staffID = value_or_none(request.args["staffID"])
-                form["queryParams"]["staffID"] = request.args["staffID"]
-            if "phoneNumber" in request.args:
-                phoneNumber = value_or_none(request.args["phoneNumber"])
-                form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
-            if "email" in request.args:
-                email = value_or_none(request.args["email"])
-                form["queryParams"]["email"] = request.args["email"]
-            if "institutionID" in request.args:
-                institutionID = value_or_none(request.args["institutionID"])
-                form["queryParams"]["institutionID"] = request.args["institutionID"]
-            if "departmentID" in request.args:
-                departmentID = value_or_none(request.args["departmentID"])
-                form["queryParams"]["departmentID"] = request.args["departmentID"]
-            if "ucrRoleID" in request.args:
-                ucrRoleID = value_or_none(request.args["ucrRoleID"])
-                form["queryParams"]["ucrRoleID"] = request.args["ucrRoleID"]
+            if "action" in request.args:
+                if request.args["action"].lower() == "clear":
+                    firstName = lastName = staffID = phoneNumber = email = institutionID = departmentID = ucrRoleID= None
+                else:
+                    if "firstName" in request.args:
+                        firstName = value_or_none(request.args["firstName"])
+                        form["queryParams"]["firstName"] = request.args["firstName"]
+                    if "lastName" in request.args:
+                        lastName = value_or_none(request.args["lastName"])
+                        form["queryParams"]["lastName"] = request.args["lastName"]
+                    if "staffID" in request.args:
+                        staffID = value_or_none(request.args["staffID"])
+                        form["queryParams"]["staffID"] = request.args["staffID"]
+                    if "phoneNumber" in request.args:
+                        phoneNumber = value_or_none(request.args["phoneNumber"])
+                        form["queryParams"]["phoneNumber"] = request.args["phoneNumber"]
+                    if "email" in request.args:
+                        email = value_or_none(request.args["email"])
+                        form["queryParams"]["email"] = request.args["email"]
+                    if "institutionID" in request.args:
+                        institutionID = value_or_none(request.args["institutionID"])
+                        form["queryParams"]["institutionID"] = request.args["institutionID"]
+                    if "departmentID" in request.args:
+                        departmentID = value_or_none(request.args["departmentID"])
+                        form["queryParams"]["departmentID"] = request.args["departmentID"]
+                    if "ucrRoleID" in request.args:
+                        ucrRoleID = value_or_none(request.args["ucrRoleID"])
+                        form["queryParams"]["ucrRoleID"] = request.args["ucrRoleID"]
 
             staffs = query.query_staffs(firstName=firstName,
                                         lastName=lastName,

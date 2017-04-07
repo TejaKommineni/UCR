@@ -243,7 +243,7 @@ def query_facilities(facilityName=None, contactFirstName=None, contactLastName=N
         filters.append(Facility.contactLastName.like('%{}%'.format(contactLastName)))
     if facilityStatus:
         filters.append(Facility.facilityStatus == facilityStatus)
-    return db.session.query(Facility).filter(or_(*filters)).all()
+    return db.session.query(Facility).filter(and_(*filters)).all()
 
 
 def get_facility(id):
@@ -429,7 +429,7 @@ def query_patients(firstName=None, lastName=None, patID=None, UPDBID=None, ucrDi
         filters.append(Patient.ucrDistID == ucrDistID)
     if phoneNumber:
         filters.append(PatientPhone.phoneNumber == phoneNumber)
-    return db.session.query(Patient).outerjoin(PatientPhone).filter(or_(*filters)).all()
+    return db.session.query(Patient).outerjoin(PatientPhone).filter(and_(*filters)).all()
 
 
 def get_patient(id):
@@ -506,7 +506,7 @@ def query_physicians(firstName=None, lastName=None, specialty=None, physicianSta
         filters.append(Physician.specialty.like('%{}%'.format(specialty)))
     if physicianStatusID:
         filters.append(Physician.physicianStatusID == physicianStatusID)
-    return db.session.query(Physician).filter(or_(*filters)).all()
+    return db.session.query(Physician).filter(and_(*filters)).all()
 
 
 def get_physician(id):
@@ -624,7 +624,7 @@ def query_project_patients(firstName=None, lastName=None,
     if projectID:
         filters.append(Project.projectID == projectID)
     return db.session.query(ProjectPatient).outerjoin(Project).outerjoin(CTC).outerjoin(Patient).filter(
-        or_(*filters)).all()
+        and_(*filters)).all()
 
 
 def get_project_patient(id):
@@ -654,7 +654,7 @@ def query_staffs(firstName=None, lastName=None, staffID=None, phoneNumber=None, 
         filters.append(Staff.departmentID == departmentID)
     if ucrRoleID:
         filters.append(Staff.ucrRoleID == ucrRoleID)
-    return db.session.query(Staff).filter(or_(*filters)).order_by(Staff.lastName).all()
+    return db.session.query(Staff).filter(and_(*filters)).order_by(Staff.lastName).all()
 
 
 def get_project_staff(id):

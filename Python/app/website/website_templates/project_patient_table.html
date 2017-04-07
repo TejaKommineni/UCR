@@ -23,7 +23,7 @@
                   <select type="text" class="form-control" name="finalCodeID" id="select_finalCode">
                     <option value=""></option>
                   {% for finalCode in form["finalCodes"] %}
-                    {% if finalCode.finalCodeID == form.queryParams.finalCodeID %}
+                    {% if finalCode.finalCodeID |string() == form.queryParams.finalCodeID %}
                     <option value="{{finalCode.finalCodeID}}" selected="selected">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
                     {% else %}
                     <option value="{{finalCode.finalCodeID}}">{{finalCode.finalCode}} - {{finalCode.finalCodeDefinition}}</option>
@@ -40,7 +40,7 @@
                     <select type="text" class="form-control" name="siteGrpID" id="select_SiteGroup">
                         <option value=""></option>
                         {% for siteGroup in form["siteGroups"] %}
-                        {% if siteGroup.siteID == form.queryParams.siteGrpID %}
+                        {% if siteGroup.siteID |string() == form.queryParams.siteGrpID %}
                         <option value="{{siteGroup.siteID}}" selected="selected">{{siteGroup.site}}</option>
                         {% else %}
                         <option value="{{siteGroup.siteID}}">{{siteGroup.site}}</option>
@@ -53,7 +53,7 @@
                   <select type="text" class="form-control" name="projectID" id="select_projectID">
                     <option value=""></option>
                   {% for project in form["projects"] %}
-                    {% if project.projectID == form.queryParams.projectID %}
+                    {% if project.projectID |string() == form.queryParams.projectID %}
                     <option value="{{project.projectID}}" selected="selected">{{project.shortTitle}}</option>
                     {% else %}
                     <option value="{{project.projectID}}">{{project.shortTitle}}</option>
@@ -63,11 +63,11 @@
                 </div>
                 <div class="col-md-1">
                   <label for="btn-search" style="visibility: hidden">Search</label>
-                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit">Search</button>
+                  <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit" name="action">Search</button>
                 </div>
                 <div class="col-md-1">
                   <label for="btn-clear" style="visibility: hidden">Clear Search</label>
-                  <button class="btn btn-primary form-control" id="btn_clear" onclick="document.getElementById('mainform').reset();">Clear Search</button>
+                  <button class="btn btn-primary form-control" id="btn_clear" type="submit" value="clear" name="action">Clear Search</button>
                 </div>
               </div>
             </div>

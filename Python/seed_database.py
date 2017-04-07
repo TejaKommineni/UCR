@@ -3712,6 +3712,17 @@ def create_physicians():
     physicians = []
     physicians.append(
         models.Physician(
+            firstName="john",
+            lastName="Smith",
+            middleName="",
+            credentials="MD",
+            specialty="specialty",
+            aliasFirstName="alias_fname",
+            aliasLastName="alias_lname",
+            aliasMiddleName="alias_middle_name",
+            physicianStatusID=1,
+            physicianStatusDate=datetime(2016, 2, 2),
+            displayID='DP-363'
         )
     )
     physicians.append(
@@ -3876,6 +3887,14 @@ def create_physician_to_ctcs():
 def create_facilities():
     facilities = []
     facilities.append(models.Facility(
+        facilityName="Facility 1",
+        contactFirstName="fname",
+        contactLastName="lname",
+        facilityStatus=1,
+        facilityStatusDate=datetime(2016, 2, 2),
+        contact2FirstName="fname",
+        contact2LastName="lname",
+        displayID='FDP-772'
     ))
     facilities.append(models.Facility(
         facilityName="Facility 2",

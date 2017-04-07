@@ -17,11 +17,34 @@
                  <div class="col-md-4 form-group">
                     <select type="text" class="form-control" required="required" name="reportTypes" id="reportTypes">
                       {% for query in form.queries %}
+                          {% if user.staff.ucrRole.ucrRole == 'Director' and query.director%}
                             {% if query.queryID == form.selectedQuery %}
                                 <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
                             {% else %}
                                 <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
                             {% endif %}
+                          {% endif %}
+                          {% if user.staff.ucrRole.ucrRole == 'Research Manager' and query.researchManager%}
+                            {% if query.queryID == form.selectedQuery %}
+                                <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
+                            {% else %}
+                                <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
+                            {% endif %}
+                          {% endif %}
+                          {% if user.staff.ucrRole.ucrRole == 'Contact Staff' and query.contactStaff%}
+                            {% if query.queryID == form.selectedQuery %}
+                                <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
+                            {% else %}
+                                <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
+                            {% endif %}
+                          {% endif %}
+                          {% if user.staff.ucrRole.ucrRole in ['Developer','Informatics Staff']%}
+                            {% if query.queryID == form.selectedQuery %}
+                                <option value="{{query.queryID}}" selected="selected">{{query.queryName or ''}}</option>
+                            {% else %}
+                                <option value="{{query.queryID}}">{{query.queryName or ''}}</option>
+                            {% endif %}
+                          {% endif %}
                       {% endfor %}
                     </select>
                  </div>

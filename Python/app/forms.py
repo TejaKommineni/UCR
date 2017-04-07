@@ -1583,7 +1583,7 @@ class ProjectStaffForm(BaseForm):
         hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
-        project = query.get_project_type(self.projectID.data)
+        project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
             hasErrors = True
@@ -1736,7 +1736,7 @@ class SiteGroupsForm(BaseForm):
         hasErrors = not Form.validate(self)
 
         # Check to make sure the project type FK exists
-        project = query.get_project_type(self.projectID.data)
+        project = query.get_project(self.projectID.data)
         if project is None:
             self.projectID.errors.append("ID not found")
             hasErrors = True
