@@ -3,10 +3,11 @@ from app.api.views import api
 from app.website.views import website
 from app.database import db
 from app.helpers import DateTimeEncoder
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask.ext.cas import CAS
 from flask import redirect, session
 from datetime import timedelta
+
 
 def create_app(config):
     """
@@ -33,3 +34,4 @@ def create_app(config):
     return app
     
 app = create_app(r'../config.py')
+
