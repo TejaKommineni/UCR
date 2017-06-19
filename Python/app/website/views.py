@@ -7,7 +7,6 @@ import app.forms as forms
 from app.helpers import value_or_none
 from datetime import datetime
 from app.database import db
-from sipconfig import inform
 from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
