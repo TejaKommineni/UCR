@@ -550,7 +550,7 @@ class Patient(CustomModel):
     sex = db.relationship('Sex')
     race = db.relationship('Race')
     ethnicity = db.relationship('Ethnicity')
-
+    projectPatient = db.relationship('ProjectPatient', back_populates="patient")
 
 
 class PatientAddress(CustomModel):
@@ -895,7 +895,7 @@ class Project(CustomModel):
 class ProjectPatient(CustomModel):
     __tablename__ = 'ProjectPatient'
 
-    participantID = db.Column('participantID', db.Integer, primary_key=True)
+    participantID = db.Column('participantID', db.Integer, db.ForeignKey('Patient.participantID'), primary_key=True)
     projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
@@ -946,8 +946,8 @@ class ProjectPatient(CustomModel):
     # 1 - M, on PP with many staff
     staff = db.relationship("Staff", foreign_keys=[staffID])  # , back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
-    contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate)")
-
+    contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate), desc(Contact.modifiedDate)")
+    patient = db.relationship("Patient", back_populates="projectPatient")
 
     abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
     finalCode = db.relationship("FinalCode", back_populates="projectPatients")
@@ -961,6 +961,41 @@ class ProjectPatient(CustomModel):
     surveyToResearcherStaff = db.relationship("Staff", foreign_keys=[surveyToResearcherStaffID])
     vitalStatus = db.relationship('VitalStatus')
     siteGrp=db.relationship('SiteGroup')
+
+class ProjectProtocol(CustomModel):
+    __tablename__ = 'ProjectProtocol'
+
+    projectID = db.Column('projectID', db.Integer, primary_key=True)
+    mailing_1 = db.Column('mailing_1', db.Integer)
+    mailing_2 = db.Column('mailing_2', db.Integer)
+    mailing_3 = db.Column('mailing_3', db.Integer)
+    mailing_4 = db.Column('mailing_4', db.Integer)
+    mailing_5 = db.Column('mailing_5', db.Integer)
+    mailing_6 = db.Column('mailing_6', db.Integer)
+    mailing_7 = db.Column('mailing_7', db.Integer)
+    mailing_8 = db.Column('mailing_8', db.Integer)
+    mailing_9 = db.Column('mailing_9', db.Integer)
+    callwindow_1 = db.Column('callwindow_1', db.Integer)
+    callwindow_2 = db.Column('callwindow_2', db.Integer)
+    callwindow_3 = db.Column('callwindow_3', db.Integer)
+    callwindow_4 = db.Column('callwindow_4', db.Integer)
+    callwindow_5 = db.Column('callwindow_5', db.Integer)
+    callwindow_6 = db.Column('callwindow_6', db.Integer)
+    callwindow_7 = db.Column('callwindow_7', db.Integer)
+    callwindow_8 = db.Column('callwindow_8', db.Integer)
+    callwindow_9 = db.Column('callwindow_9', db.Integer)
+    callwindow_10 = db.Column('callwindow_10', db.Integer)
+    callwindow_11 = db.Column('callwindow_11', db.Integer)
+    callwindow_12 = db.Column('callwindow_12', db.Integer)
+    callwindow_13 = db.Column('callwindow_13', db.Integer)
+    callwindow_14 = db.Column('callwindow_14', db.Integer)
+    callwindow_15 = db.Column('callwindow_15', db.Integer)
+    callwindow_16 = db.Column('callwindow_16', db.Integer)
+    callwindow_17 = db.Column('callwindow_17', db.Integer)
+    callwindow_18 = db.Column('callwindow_18', db.Integer)
+    callwindow_19 = db.Column('callwindow_19', db.Integer)
+    daysBetweenSteps = db.Column('DaysBetweenSteps', db.Integer)
+    callsPerWindow = db.Column('CallsPerWindow', db.Integer)
 
 class ProjectSiteGroups(CustomModel):
     __tablename__ = 'ProjectSiteGroups'
@@ -1104,7 +1139,7 @@ class Sex(CustomModel):
 class SqlQuery(CustomModel):
     __tablename__ = "Queries"
     queryID = db.Column('queryID', db.Integer, primary_key=True)
-    query = db.Column('query', db.String)
+    query = db.Column('query', db.String, autoincrement = True)
     queryName = db.Column('queryName', db.String)
     director = db.Column('director', db.Boolean)
     contactStaff = db.Column('contactStaff', db.Boolean)

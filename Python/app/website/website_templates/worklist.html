@@ -28,99 +28,27 @@
                  <div class="col-md-2 form-group">
                      <button type="submit" class="btn btn-primary">View Worklist</button>
                  </div>
+
+            </form>
+            <form action='/website/worklist/0', method='get'>
+                 <div class="col-md-2 form-group">
+                     <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh </button>
+                 </div>
             </form>
         </div>
         <br>
-        <div class="row">
-          <div class="panel-group">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Edit</a>
-                    </h4>
-                </div>
-                <div id="collapseOne" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Mailing 1</a>
-                    </h4>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Mailing 2</a>
-                    </h4>
-                </div>
-                <div id="collapseThree" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Call Queue 1</a>
-                    </h4>
-                </div>
-                <div id="collapseFour" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Call Queue 2</a>
-                    </h4>
-                </div>
-                <div id="collapseFive" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Final Review</a>
-                    </h4>
-                </div>
-                <div id="collapseSix" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">Tracing</a>
-                    </h4>
-                </div>
-                <div id="collapseSeven" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>To be implemented. The List of patients who fall under this category are displayed here.</p>
-                    </div>
-                </div>
-            </div>
 
-
-          </div>
-        </div>
+         {% for button in form.buttons %}
+           <form target="_blank" action='/website/tasks/{{form.selectedProject}}/{{button}}', method='get'>
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-3 form-group">
+                         <button class="btn btn-info btn-lg btn-block btn-huge">{{button}}</button>
+                    </div>
+                </div>
+           </form>
+         {% endfor %}
 
     </div>
   </div>

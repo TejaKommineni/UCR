@@ -7,6 +7,7 @@ import app.forms as forms
 from app.helpers import value_or_none
 from datetime import datetime
 from app.database import db
+from sipconfig import inform
 from sqlalchemy_utils import dependent_objects
 from sqlalchemy.inspection import inspect
 import json
@@ -593,7 +594,6 @@ def get_contact(contactID=None):
                 form["staff"] = query.get_staffs()
                 form["contactTypes"] = query.get_contact_types()
                 form["projectPatients"] = query.get_project_patients()
-                form["staff"] = query.get_staffs()
                 form["informants"] = contact.projectPatient.ctc.patient.informants
                 form["informantPhones"] = []
                 for informant in form["informants"]:
@@ -4846,10 +4846,16 @@ def delete_pre_application(preApplicationID):
 ##############################################################################
 # Project
 ##############################################################################
+@website.route('/createprojects/', methods=['GET'])
+@authorization_required(roles=['Developer','Research Manager'])
+def create_project_preapplication():
+    get_project(None,1)
+
 @website.route('/projects/', methods=['GET'])
 @website.route('/projects/<int:projectID>/', methods=['GET'])
+@website.route('/projects/<int:projectID>/<int:preApplication>', methods=['GET'])
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
-def get_project(projectID=None):
+def get_project(projectID=None,preApplication=None):
     try:
         if projectID is None:
             form = {}
@@ -4884,6 +4890,9 @@ def get_project(projectID=None):
                                             projectTypeID=projectTypeID,
                                             piLastName=piLastName,
                                             mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
+            if preApplication == 1:
+                projects = query.query_projects_in_preapplications()
+
             form["projectTypes"] = query.get_project_types()
             form["projectStatusLUTs"] = query.get_project_status_luts()
             form["institutions"] = query.get_institutions()
@@ -5029,7 +5038,7 @@ def delete_project(projectID):
 @website.route('/projectpatients/', methods=['GET'])
 @website.route('/projectpatients/<int:participantID>/', methods=['GET'])
 @authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
-def get_project_patient(participantID=None):
+def get_project_patient(participantID=None,project=0,patientProjectStatus=0):
     try:
         if participantID is None:
             form = {}
@@ -5062,17 +5071,26 @@ def get_project_patient(participantID=None):
                     if "projectID" in request.args:
                         projectID = value_or_none(request.args["projectID"])
                         form["queryParams"]["projectID"] = request.args["projectID"]
-
-            projectPatients = query.query_project_patients(firstName=firstName,
+            if patientProjectStatus == 0:
+                projectPatients = query.query_project_patients(firstName=firstName,
                                                            lastName=lastName,
                                                            finalCodeID=finalCodeID,
                                                            batch=batch,
                                                            siteGrpID=siteGrpID,
                                                            projectID=projectID)
+            else:
+                projectPatients = query.get_project_patient_worklist(projectID = project,patientProjectStatusTypeID=patientProjectStatus,firstName=firstName,
+                                                           lastName=lastName,batch=batch,siteGrpID=siteGrpID)
             form["projects"] = query.get_projects()
             form["finalCodes"] = query.get_final_codes()
             form["siteGroups"] = query.get_sites()
-            return render_template("project_patient_table.html", form=form, projectPatients=projectPatients)
+            form["patientProjectStatus"] = patientProjectStatus
+            form["staff"] = query.get_staffs()
+            form["contactTypes"] = query.get_contact_types()
+            if patientProjectStatus == 0:
+                return render_template("project_patient_table.html", form=form, projectPatients=projectPatients)
+            else:
+                return form,projectPatients
         else:
             projectPatient = query.get_project_patient(participantID)
             if projectPatient is not None:
@@ -6053,12 +6071,10 @@ def update_sql_query(queryID):
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
 def create_sql_query(queryID=None):
     try:
-        if queryID != 0:
-            if "action" in request.args:
-                if "action" in request.form["action"].lower() == "editquery":
-                    return update_sql_query(queryID)
-            else:
-                return delete_sql_query(queryID)
+        if request.form["action"].lower() == "editquery":
+            return update_sql_query(queryID)
+        if request.form["action"].lower() == "removequery":
+            return delete_sql_query(queryID)
         else:
             form = forms.SqlQueryForm(request.form)
             sqlQuery = models.SqlQuery(
@@ -6097,27 +6113,286 @@ def delete_sql_query(queryID):
 ##############################################################################
    # Worklists
 ##############################################################################
+@website.route('/tasks/', methods=['GET'])
+@website.route('/tasks/<int:projectID>/<typeID>', methods=['GET'])
+@authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
+def get_tasks(projectID=None,typeID=None):
+    try:
+            patientprojectStatusID = 0
+            type = typeID.split('-')[0].strip().lower()
+            if type.find('edit')>=0:
+                patientprojectStatusID = 2
+            elif type.find('tracing')>=0:
+                patientprojectStatusID = 3
+            elif type.find('quality')>=0:
+                patientprojectStatusID = 4
+            elif type.find('mailing')>=0:
+                patientprojectStatusID = 20+int(type[8])
+            elif type.find('call')>=0:
+                patientprojectStatusID = 50+int(type[12:])
+
+            if patientprojectStatusID != 0:
+                form, projectPatients = get_project_patient(None,projectID,patientprojectStatusID)
+
+            if "action" in  request.args:
+                if request.args["action"].lower() == "mailing":
+                    sqlQuery = """SELECT p.patid, p.record_num,p.first_name, p.middle_name, p.last_name,concat(p.dob_month,'/',p.dob_day,'/',p.dob_year) as DOB,
+pp.batch,pp.final_code,pp.vital_statusID,pa.street,pa.street2,pa.city,pa.stateID,pa.zip,pa.contactInfoStatusID,pa.address_status_date
+FROM [ucr].[dbo].[Patient] p inner join [ucr].[dbo].[PatientAddress] pa on p.participantID = pa.participantID inner join [ucr].[dbo].[ProjectPatient] pp on pa.participantID = pp.participantID
+WHERE pa.contactInfoStatusID = 1 and pp.final_code =1  and """
+                    temp = "("
+                    for projectPatient in projectPatients:
+                        temp = temp +"p.participantID = "+str(projectPatient.participantID)+" or "
+                    temp = temp[:-3]+")"
+                    sqlQuery = sqlQuery + temp
+                    results = query.get_sql_query(sqlQuery)
+                    si = StringIO()
+                    writer = csv.writer(si)
+                    row = []
+                    for column in results.cursor.description:
+                        row.append(column[0])
+                    writer.writerow(row)
+                    for row in results:
+                        writer.writerow(row)
+                    output = make_response(si.getvalue())
+                    output.headers["Content-Disposition"] = "attachment; filename=Patient Addresses-"+str(datetime.datetime.now())+".csv"
+                    output.headers["Content-type"] = "text/csv"
+                    return output
+                if request.args["action"].lower() == "contact":
+                    for projectPatient in projectPatients:
+                        contact = models.Contact(
+                            contactTypeLUTID=request.args["contactType"],
+                            participantID=projectPatient.participantID,
+                            staffID=request.args["staffID"],
+                            contactDate=request.args["contactDate"]
+                        )
+                        query.add(contact)
+                    flash("Created Contacts")
+
+            return render_template("project_patient_table.html", form=form, projectPatients=projectPatients)
+    except Exception as e:
+        return internal_error(e)
+
 
 @website.route('/worklist/', methods=['GET'])
 @website.route('/worklist/<int:projectID>/', methods=['GET'])
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])
 def get_worklist(projectID=None):
     try:
-        if len(request.args) == 0:
+        if projectID is None:
+          if len(request.args) == 0 :
             form = {}
-            form['projects'] = query.get_projects()
+            form['projects'] = query.get_projects_worklists()
             form['project'] = {}
             form['selectedProject'] = 0
             return render_template("worklist.html", form=form)
+          else:
+              form = {}
+              form['projects'] = query.get_projects_worklists()
+              form['project'] = query.get_query(request.args['projectID'])
+              form['selectedProject'] = int(request.args['projectID'])
+              PatientProjectStatuses = query.get_project_worklists(int(request.args['projectID']))
+              map = {2:0,3:0,4:0,21:0,22:0,23:0,24:0,25:0,26:0,27:0,28:0,29:0,51:0,52:0,53:0,54:0,55:0,56:0,
+                     57:0,58:0,59:0,60:0,61:0,62:0,63:0,64:0,65:0,66:0,67:0,68:0,69:0}
+              for PatientProjectStatus in PatientProjectStatuses:
+                  if PatientProjectStatus.patientProjectStatusTypeID in map:
+                      map[PatientProjectStatus.patientProjectStatusTypeID] = map[PatientProjectStatus.patientProjectStatusTypeID]+1
+              buttons = []
+              for k,v in map.items():
+                  if v != 0:
+                    if k== 2:
+                       buttons.append("Edit - "+str(v))
+                    if k == 3:
+                       buttons.append("Tracing - "+str(v))
+                    if k == 4:
+                       buttons.append("Quality Control - "+str(v))
+                    if k>=21 and k<=29:
+                       buttons.append("Mailing "+str(k-20)+" - "   +str(v))
+                    if k>=51 and k<=69:
+                       buttons.append("Call Window "+str(k-50)+" - "   +str(v))
+              form['buttons'] = buttons
+              return render_template("worklist.html", form=form)
         else:
-            form = {}
-            form['projects'] = query.get_projects()
-            form['project'] = query.get_query(request.args['projectID'])
-            form['selectedProject'] = int(request.args['projectID'])
-            return render_template("worklist.html", form=form)
-
+            if projectID == 0:
+                execute_workflow()
+                return redirect_back('worklist/')
     except Exception as e:
         return internal_error(e)
+
+def execute_workflow():
+    patientProjectStatuses = query.get_patient_project_statuses()
+    for patientProjectStatus in patientProjectStatuses:
+        patient = patientProjectStatus.projectPatient.patient
+        currentAddress = False
+        currentPhone = False
+        for patientAddress in patient.patientAddresses:
+            if patientAddress.contactInfoStatusID == 1:
+                currentAddress = True
+                break
+        if currentAddress == False:
+            for informant in patient.informants:
+                for informantAddress in informant.informantAddresses:
+                    if informantAddress.contactInfoStatusID == 1:
+                        currentAddress = True
+                        break
+        for patientPhone in patient.patientPhones:
+            if patientPhone.contactInfoStatusID == 1:
+                currentPhone = True
+                break
+        if currentPhone == False:
+            for informant in patient.informants:
+                for informantPhone in informant.informantPhones:
+                    if informantPhone.contactInfoStatusID == 1:
+                        currentPhone = True
+                        break
+        compareTypeSet = set([100, 101, 102, 103, 104, 150, 151, 152, 153, 154, 300, 301, 302, 303, 304, 305, 306, 350,
+                             351, 352, 353, 354, 355, 356, 380, 381, 382, 383, 384, 385, 386, 390, 391, 392, 393, 394,
+                             395, 396])
+        finalCode = patientProjectStatus.projectPatient.finalCodeID
+        isChanged = True
+        old_value = patientProjectStatus.patientProjectStatusTypeID
+
+        if patientProjectStatus.patientProjectStatusTypeID == 2:   #Edit case
+            if currentAddress and currentPhone and finalCode == 1:
+               patientProjectStatus.patientProjectStatusTypeID = 21
+            elif currentAddress and not currentPhone and finalCode == 1:
+               patientProjectStatus.patientProjectStatusTypeID = 21
+            elif not currentAddress and currentPhone and finalCode == 1:
+               patientProjectStatus.patientProjectStatusTypeID = 3
+            elif not currentAddress and not currentPhone and finalCode == 1:
+               patientProjectStatus.patientProjectStatusTypeID = 3
+            elif finalCode >1:
+               patientProjectStatus.patientProjectStatusTypeID = 4
+            else:
+               isChanged = False
+
+        elif patientProjectStatus.patientProjectStatusTypeID == 3:  # Tracing case
+            contactType = []
+            for contact in patientProjectStatus.projectPatient.contacts:
+                contactType.append(contact.contactTypeLUTID)
+            contactTypeSet = set(contactType)
+            if currentAddress and currentPhone and len(contactTypeSet & compareTypeSet) ==0 and finalCode == 1:
+               patientProjectStatus.patientProjectStatusTypeID = 21
+            elif currentAddress and not currentPhone and len(contactTypeSet & compareTypeSet) ==0 and finalCode == 1:
+                patientProjectStatus.patientProjectStatusTypeID = 21
+            elif finalCode >1:
+               patientProjectStatus.patientProjectStatusTypeID = 4
+            else:
+               isChanged = False
+
+        elif patientProjectStatus.patientProjectStatusTypeID >= 21 and patientProjectStatus.patientProjectStatusTypeID <=29:  # Mailing 1-N case
+            projectProtocol = query.get_project_protocol(patientProjectStatus.projectPatient.projectID)
+            if projectProtocol is not None:
+                protocol = projectProtocol.dict()
+                daysBetweenSteps = protocol['daysBetweenSteps']
+                del protocol['daysBetweenSteps']
+                del protocol['projectID']
+                del protocol['callsPerWindow']
+                del protocol['createdDate']
+                del protocol['modifiedDate']
+                del protocol['versionID']
+                contactType = False
+                contactType2 = False
+                for contact in patientProjectStatus.projectPatient.contacts:
+                    difference = datetime.datetime.now().date() - contact.contactDate
+                    if contact.contactTypeLUTID in compareTypeSet and difference.days >= daysBetweenSteps:
+                        contactType = True
+                    if contact.contactTypeLUTID in set([121,171,321,371]):
+                        contactType2 = True
+
+                if currentAddress and currentPhone and contactType and finalCode == 1:
+                    present_value = protocol['mailing_'+str(patientProjectStatus.patientProjectStatusTypeID-20)]
+                    next_value = ''
+                    for k, v in protocol.items():
+                        if v == present_value+1:
+                            next_value =k
+                            break
+                    difference = datetime.datetime.now().date() - patientProjectStatus.statusDate
+                    if next_value.find('mailing') >= 0 and difference.days >= daysBetweenSteps:
+                        patientProjectStatus.patientProjectStatusTypeID = 20+int(next_value[8:])
+                    elif next_value.find('call') >= 0 and difference.days >= daysBetweenSteps:
+                        patientProjectStatus.patientProjectStatusTypeID = 50 + int(next_value[11:])
+                elif currentAddress and not currentPhone and contactType and finalCode == 1:
+                    present_value = protocol['mailing_' + str(patientProjectStatus.patientProjectStatusTypeID - 20)]
+                    next_value = ''
+                    for k, v in protocol.items():
+                        if v == present_value + 1:
+                            next_value = k
+                            break
+                    if next_value.find('mailing') >= 0:
+                        patientProjectStatus.patientProjectStatusTypeID = 20 + int(next_value[8:])
+                    elif next_value.find('call') >= 0:
+                        patientProjectStatus.patientProjectStatusTypeID = 3
+                elif currentAddress and currentPhone and contactType2 and finalCode == 1:
+                    patientProjectStatus.patientProjectStatusTypeID = 3
+                    localAddress = False
+                    for patientAddress in patient.patientAddresses:
+                        if patientAddress.contactInfoStatusID == 1:
+                            patientAddress.contactInfoStatusID = 3
+                            localAddress = True
+                            patientAddress.addressStatusDate = datetime.datetime.now().date()
+                            break
+                    if localAddress == False:
+                        for informant in patient.informants:
+                            for informantAddress in informant.informantAddresses:
+                                if informantAddress.contactInfoStatusID == 1:
+                                    currentAddress = True
+                                    break
+                elif currentAddress and not currentPhone and contactType2 and finalCode == 1:
+                    patientProjectStatus.patientProjectStatusTypeID = 3
+                    localAddress = False
+                    for patientAddress in patient.patientAddresses:
+                        if patientAddress.contactInfoStatusID == 1:
+                            patientAddress.contactInfoStatusID = 3
+                            localAddress = True
+                            patientAddress.addressStatusDate = datetime.datetime.now().date()
+                            break
+                    if localAddress == False:
+                        for informant in patient.informants:
+                            for informantAddress in informant.informantAddresses:
+                                if informantAddress.contactInfoStatusID == 1:
+                                    informantAddress.contactInfoStatusID = 3
+                                    informantAddress.addressStatusDate = datetime.datetime.now().date()
+                                    break
+                elif finalCode>1:
+                    patientProjectStatus.patientProjectStatusTypeID = 4
+                else:
+                    isChanged = False
+            else:
+                return item_not_found(" {} not found in ProjectProtocol table".format(patientProjectStatus.projectPatient.projectID))
+
+        elif patientProjectStatus.patientProjectStatusTypeID >= 51 and patientProjectStatus.patientProjectStatusTypeID <= 69:  # CallWindow 1-N case
+            contactType = False
+            for contact in patientProjectStatus.projectPatient.contacts:
+                if contact.contactTypeLUTID in set([205,255]):
+                    contactType = True
+            if currentAddress and currentPhone and contactType and finalCode == 1:
+                localPhone = False
+                for patientPhone in patient.patientPhones:
+                    if patientPhone.contactInfoStatusID == 1:
+                        patientPhone.contactInfoStatusID = 3
+                        localPhone = True
+                        patientPhone.phoneStatusDate = datetime.datetime.now().date()
+                        break
+                if localPhone == False:
+                    for informant in patient.informants:
+                        for informantPhone in informant.informantPhones:
+                            if informantPhone.contactInfoStatusID == 1:
+                                informantPhone.contactInfoStatusID = 3
+                                informantPhone.phoneStatusDate = datetime.datetime.now().date()
+                                break
+                patientProjectStatus.patientProjectStatusTypeID = 3
+            elif finalCode>1:
+                patientProjectStatus.patientProjectStatusTypeID = 4
+            else:
+                isChanged = False
+
+        if isChanged and patientProjectStatus.patientProjectStatusTypeID != old_value:
+           patientProjectStatus.staffID = 250
+           patientProjectStatus.statusDate = datetime.datetime.now().date()
+           query.commit()
+    flash("Refreshed Successfully")
+
 
 @website.route('/queries/<int:queryID>/', methods=['PUT'])
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager', 'Contact Staff'])

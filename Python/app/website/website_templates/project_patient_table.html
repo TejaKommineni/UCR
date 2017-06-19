@@ -1,5 +1,22 @@
 {% extends "layout_all.html" %}
 {% block content %}
+ <script>
+       function addContactForm(){
+             var x = document.getElementById('addContactForm');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                    document.getElementById('select_contactType').required = true;
+                    document.getElementById('contact_date').required = true;
+                    document.getElementById('btn_mailing').style.display = 'none';
+                } else {
+                    x.style.display = 'none';
+                    document.getElementById('select_contactType').required = false;
+                    document.getElementById('contact_date').required = false;
+                    document.getElementById('btn_mailing').style.display = 'block';
+                }
+
+       }
+ </script>
  <div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
@@ -18,6 +35,7 @@
                   <label for="text_lastName">Last Name</label>
                   <input type="text" class="form-control" name="lastName" id="text_lastName" value = "{{form.queryParams.lastName}}">
                 </div>
+                {% if form.patientProjectStatus == 0 %}
                 <div class="col-md-1">
                   <label for="select_finalCode">Final Code</label>
                   <select type="text" class="form-control" name="finalCodeID" id="select_finalCode">
@@ -31,6 +49,7 @@
                   {% endfor %}
                   </select>
                 </div>
+                {% endif %}
                 <div class = "col-md-1">
                   <label for="text_batch">Batch</label>
                   <input type="text" class="form-control" name="batch" id="text_batch" value = "{{form.queryParams.batch}}">
@@ -48,6 +67,7 @@
                         {% endfor %}
                     </select>
                 </div>
+                {% if form.patientProjectStatus == 0 %}
                 <div class="col-md-2">
                   <label for="select_projectID">Project</label>
                   <select type="text" class="form-control" name="projectID" id="select_projectID">
@@ -61,6 +81,7 @@
                   {% endfor %}
                   </select>
                 </div>
+                {% endif %}
                 <div class="col-md-1">
                   <label for="btn-search" style="visibility: hidden">Search</label>
                   <button class="btn btn-primary form-control" id="btn_search" type="submit" value="Submit" name="action">Search</button>
@@ -69,31 +90,88 @@
                   <label for="btn-clear" style="visibility: hidden">Clear Search</label>
                   <button class="btn btn-primary form-control" id="btn_clear" type="submit" value="clear" name="action">Clear Search</button>
                 </div>
+              {% if form.patientProjectStatus >= 21 and  form.patientProjectStatus <= 29%}
+                <div class="col-md-1">
+                  <label for="btn-search" style="visibility: hidden">Mailing List</label>
+                  <button class="btn btn-primary form-control" id="btn_mailing" type="submit" value="mailing" name="action">Mailing List</button>
+                </div>
+                <div class="col-md-1">
+                  <label for="btn-search" style="visibility: hidden">Add Contact</label>
+                  <button type="button" class="btn btn-primary"  onclick="addContactForm();">Add Contact Form</button>
+                </div>
+              {% endif %}
+              </div>
+              <div class = "row" id="addContactForm" style="display: none">
+                <div class = "col-md-2">
+                  <label for="date_dateAdded">Contact Date</label>
+                  <input type="date" class="form-control" name="contactDate" id="contact_date" value="" >
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_irbHolderID">Contact Type</label>
+                  <select type="text" class="form-control" name="contactType" id="select_contactType" >
+                    <option></option>
+                  {% for contactType in form.contactTypes %}
+                      <option value="{{contactType.contactTypeID}}">{{contactType.contactCode or ''}} - {{contactType.contactDefinition or ''}}</option>
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class = "col-md-2">
+                  <label for="select_staffID">Staff</label>
+                  <select required="required" type="text" class="form-control" required="required" name="staffID" id="select_staffID">
+                  {% for staff in form.staff %}
+                    {% if user.staff.staffID == staff.staffID %}
+                        <option selected="selected" value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
+                    {% else %}
+                        <option value="{{staff.staffID}}">{{staff.firstName or ''}} {{staff.middleName or ''}} {{staff.lastName or ''}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-1">
+                  <label for="btn-contact" style="visibility: hidden">Add Contact</label>
+                  <button class="btn btn-primary form-control" id="btn_contact" type="submit" value="contact" name="action">Add Contact</button>
+                </div>
               </div>
             </div>
           </fieldset>
         </form>
-      
+
         <table class="table table-striped no-spacing">
           <thead>
             <tr>
+                {% if form.patientProjectStatus == 0 %}
                 <th>Project Link</th>
+                {% endif %}
                 <th>Last Name</th>
                 <th>First Name</th>
+                {% if form.patientProjectStatus == 0 %}
                 <th>Final Code</th>
+                {% endif %}
                 <th>Batch</th>
                 <th>Site Group</th>
+                {% if form.patientProjectStatus >= 21 and  form.patientProjectStatus <= 29%}
+                <th>Recent Contact Date</th>
+                <th>Recent Contact Type</th>
+                {% endif %}
             </tr>
           </thead>
           <tbody>
             {% for projectPatient in projectPatients %}
             <tr>
+                {% if form.patientProjectStatus == 0 %}
                 <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.shortTitle or ''}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["lastName"] or ''}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient["firstName"] or ''}}</a></td>
+                {% endif %}
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.patient.lastName or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.patient.firstName or ''}}</a></td>
+                {% if form.patientProjectStatus == 0 %}
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode or ''}} - {{projectPatient["finalCode"].finalCodeDefinition or ''}}</a></td>
+                {% endif %}
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["batch"] or ''}}</a></td>
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["siteGrp"].site or ''}}</a></td>
+                {% if form.patientProjectStatus >= 21 and  form.patientProjectStatus <= 29 and projectPatient.contacts|length > 0 %}
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.contacts[0].contactDate or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.contacts[0].contactTypeLUTID or ''}}</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
           </tbody>

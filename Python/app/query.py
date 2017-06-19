@@ -112,10 +112,39 @@ def get_number_of_final_code_types(projectID=None, final_code_type_ids=None, min
         filter(and_(*filters)).first()
     return res
 
+def get_projects_worklists():
+    return db.session.query(Project).join(PatientProjectStatus.projectPatient).join(ProjectPatient.project).order_by(Project.shortTitle).all()
+
+def get_project_worklists(id):
+    return db.session.query(PatientProjectStatus).join(PatientProjectStatus.projectPatient).join(ProjectPatient.project).filter_by(projectID=id).order_by(PatientProjectStatus.patientProjectStatusTypeID).all()
+
+def get_project_patient_worklist(projectID=None, patientProjectStatusTypeID=None, firstName=None, lastName=None,
+                            batch=None, siteGrpID=None):
+    filters = []
+    if firstName:
+        filters.append(Patient.firstName.like('%{}%'.format(firstName)))
+    if lastName:
+        filters.append(Patient.lastName.like('%{}%'.format(lastName)))
+    if batch:
+        filters.append(ProjectPatient.batch == batch)
+    if siteGrpID:
+        filters.append(ProjectPatient.siteGrpID == siteGrpID)
+    if projectID:
+        filters.append(Project.projectID == projectID)
+    if patientProjectStatusTypeID:
+        filters.append(PatientProjectStatus.patientProjectStatusTypeID == patientProjectStatusTypeID)
+
+    return db.session.query(ProjectPatient).join(PatientProjectStatus.projectPatient).join(
+        ProjectPatient.project).join(Patient).filter(and_(*filters)).all()
+
+
 def get_pi_last_name(projectID= None):
 
     res = db.session.query(PreApplication).filter_by(projectID=projectID).first()
     return res
+
+
+
 
 def create_all():
     db.create_all()
@@ -468,6 +497,7 @@ def get_patient_project_status(id):
     return db.session.query(PatientProjectStatus).filter_by(patientProjectStatusID=id).first()
 
 
+
 def get_patient_project_status_types():
     return db.session.query(PatientProjectStatusLUT).all()
 
@@ -607,6 +637,7 @@ def get_project_patients():
     return db.session.query(ProjectPatient).all()
 
 
+
 def query_project_patients(firstName=None, lastName=None,
                            finalCodeID=None, batch=None,
                            siteGrpID=None, projectID=None):
@@ -630,6 +661,8 @@ def query_project_patients(firstName=None, lastName=None,
 def get_project_patient(id):
     return db.session.query(ProjectPatient).filter_by(participantID=id).first()
 
+def get_project_protocol(id = None):
+    return db.session.query(ProjectProtocol).filter_by(projectID=id).first()
 
 def get_project_staffs():
     return db.session.query(ProjectStaff).all()
