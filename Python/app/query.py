@@ -113,7 +113,15 @@ def get_number_of_final_code_types(projectID=None, final_code_type_ids=None, min
     return res
 
 def get_projects_worklists():
-    return db.session.query(Project).join(PatientProjectStatus.projectPatient).join(ProjectPatient.project).order_by(Project.shortTitle).all()
+    filters = []
+    filters.append(PatientProjectStatus.patientProjectStatusTypeID == 2)
+    filters.append(PatientProjectStatus.patientProjectStatusTypeID == 3)
+    filters.append(PatientProjectStatus.patientProjectStatusTypeID == 4)
+    for i in range (21,30):
+        filters.append(PatientProjectStatus.patientProjectStatusTypeID == i)
+    for i in range(51, 69):
+        filters.append(PatientProjectStatus.patientProjectStatusTypeID == i)
+    return db.session.query(Project).join(PatientProjectStatus.projectPatient).join(ProjectPatient.project).filter(or_(*filters)).order_by(Project.shortTitle).all()
 
 def get_project_worklists(id):
     return db.session.query(PatientProjectStatus).join(PatientProjectStatus.projectPatient).join(ProjectPatient.project).filter_by(projectID=id).order_by(PatientProjectStatus.patientProjectStatusTypeID).all()
