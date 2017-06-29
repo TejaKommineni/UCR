@@ -153,7 +153,7 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="patientAddressTab">
                     <ul class ="nav nav-tabs" role="tablist">
-                        {% for patientAddress in projectPatient.patient.patientAddresses %}
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
                             {% if loop.index == 1 %}
                             <li class="active"><a href="#patientAddress{{patientAddress.patAddressID}}Tab" role="tab" data-toggle="tab">{{patientAddress.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
@@ -163,7 +163,7 @@
                         <li><a href="#newAddressTab" role="tab" data-toggle="tab">New Address</a></li>
                     </ul>
                     <div class="tab-content">
-                        {% for patientAddress in projectPatient.patient.patientAddresses %}
+                        {% for patientAddress in projectPatient.ctc.patient.patientAddresses %}
                         {% if loop.index == 1 %}
                             <div class="tab-pane active" id="patientAddress{{patientAddress.patAddressID}}Tab">
                             {% include 'helper_forms/patient_address_form.html' %}
@@ -182,7 +182,7 @@
                 </div>
                 <div class="tab-pane" id="patientEmailTab">
                     <ul class ="nav nav-tabs" role="tablist">
-                        {% for patientEmail in projectPatient.patient.patientEmails %}
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails %}
                             {% if loop.index == 1 %}
                             <li class="active"><a href="#patientEmail{{patientEmail.emailID}}Tab" role="tab" data-toggle="tab">{{patientEmail.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
@@ -192,7 +192,7 @@
                         <li><a href="#newEmailTab" role="tab" data-toggle="tab">New Email</a></li>
                     </ul>
                     <div class="tab-content">
-                        {% for patientEmail in projectPatient.patient.patientEmails  %}
+                        {% for patientEmail in projectPatient.ctc.patient.patientEmails  %}
                         {% if loop.index == 1 %}
                             <div class="tab-pane active" id="patientEmail{{patientEmail.emailID}}Tab">
                             {% include 'helper_forms/patient_email_form.html' %}
@@ -211,7 +211,7 @@
                 </div>
                 <div class="tab-pane" id="patientPhoneTab">
                     <ul class ="nav nav-tabs" role="tablist">
-                        {% for patientPhone in projectPatient.patient.patientPhones  %}
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones  %}
                             {% if loop.index == 1 %}
                             <li class="active"><a href="#patientPhone{{patientPhone.patPhoneID}}Tab" role="tab" data-toggle="tab">{{patientPhone.contactInfoStatus.contactInfoStatus or ''}} </a></li>
                             {% else %}
@@ -221,7 +221,7 @@
                         <li><a href="#newPhoneTab" role="tab" data-toggle="tab">New Phone</a></li>
                     </ul>
                     <div class="tab-content">
-                        {% for patientPhone in projectPatient.patient.patientPhones %}
+                        {% for patientPhone in projectPatient.ctc.patient.patientPhones %}
                         {% if loop.index == 1 %}
                             <div class="tab-pane active" id="patientPhone{{patientPhone.patPhoneID}}Tab">
                             {% include 'helper_forms/patient_phone_form.html' %}
@@ -449,19 +449,19 @@
                 <div class="row">
                     <div class="col-md-2">
                       <label for="text_firstName">First Name</label>
-                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{projectPatient.patient.firstName or ''}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="firstName" id="text_firstName" value="{{projectPatient.ctc.patient.firstName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_middleName">Middle Name</label>
-                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{projectPatient.patient.middleName or ''}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="middleName" id="text_middleName" value="{{projectPatient.ctc.patient.middleName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                       <label for="text_lastName">Last Name</label>
-                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{projectPatient.patient.lastName or ''}}" readonly="readonly" disabled="disabled">
+                      <input type="text" class="form-control" name="lastName" id="text_lastName" value="{{projectPatient.ctc.patient.lastName or ''}}" readonly="readonly" disabled="disabled">
                     </div>
                     <div class="col-md-2">
                         <label>Link to Patient</label><br>
-                        <a class="btn btn-primary" role="button" href="/website/patients/{{projectPatient.patient.participantID}}/">Full Patient Info</a>
+                        <a class="btn btn-primary" role="button" href="/website/patients/{{projectPatient.ctc.patient.participantID}}/">Full Patient Info</a>
                     </div>
                 </div>
             </div>

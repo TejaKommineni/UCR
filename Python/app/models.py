@@ -550,7 +550,6 @@ class Patient(CustomModel):
     sex = db.relationship('Sex')
     race = db.relationship('Race')
     ethnicity = db.relationship('Ethnicity')
-    projectPatient = db.relationship('ProjectPatient', back_populates="patient")
 
 
 class PatientAddress(CustomModel):
@@ -895,7 +894,7 @@ class Project(CustomModel):
 class ProjectPatient(CustomModel):
     __tablename__ = 'ProjectPatient'
 
-    participantID = db.Column('participantID', db.Integer, db.ForeignKey('Patient.participantID'), primary_key=True)
+    participantID = db.Column('participantID', db.Integer, primary_key=True)
     projectID = db.Column('projectID', db.Integer, db.ForeignKey('Project.projectID'), nullable=False)
     staffID = db.Column('staffID', db.Integer, db.ForeignKey('Staff.staffID'), nullable=False)
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
@@ -947,7 +946,6 @@ class ProjectPatient(CustomModel):
     staff = db.relationship("Staff", foreign_keys=[staffID])  # , back_populates="projectPatient")
     # M - 1, many contacts may have the same facility
     contacts = db.relationship("Contact", back_populates="projectPatient", order_by="desc(Contact.contactDate), desc(Contact.modifiedDate)")
-    patient = db.relationship("Patient", back_populates="projectPatient")
 
     abstractStatus = db.relationship("AbstractStatus", back_populates="projectPatients")
     finalCode = db.relationship("FinalCode", back_populates="projectPatients")

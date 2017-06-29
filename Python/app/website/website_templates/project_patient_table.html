@@ -161,8 +161,8 @@
                 {% if form.patientProjectStatus == 0 %}
                 <td><a href="/website/projects/{{projectPatient.project.projectID}}">{{projectPatient.project.shortTitle or ''}}</a></td>
                 {% endif %}
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.patient.lastName or ''}}</a></td>
-                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.patient.firstName or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient.lastName or ''}}</a></td>
+                <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient.ctc.patient.firstName or ''}}</a></td>
                 {% if form.patientProjectStatus == 0 %}
                 <td><a href="/website/projectpatients/{{projectPatient["participantID"]}}">{{projectPatient["finalCode"].finalCode or ''}} - {{projectPatient["finalCode"].finalCodeDefinition or ''}}</a></td>
                 {% endif %}

@@ -1,7 +1,7 @@
  <html>
     <div id="MainMenu">
         <div class="list-group panel">
-          <a href="#reports" class="list-group-item " data-toggle="collapse"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Reports</a>
+          <a href="#reports" class="list-group-item list-group-item-info" data-toggle="collapse"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Reports</a>
           <div class="collapse" id="reports">
             <a class="list-group-item" data-toggle="collapse" onclick="location.href = '/website/queries/';" >Run Queries </a>
             {% if user.staff.ucrRole.ucrRole in ['Developer','Informatics Staff']%}
@@ -9,6 +9,9 @@
             {% endif %}
           </div>
           <a href="#worklist" class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="#MainMenu" onclick="location.href = '/website/worklist/';"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Worklist</a>
+          {% if user.staff.ucrRole.ucrRole in [ 'Developer', 'Research Manager'] %}
+            <a href="#createprojects" class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="#MainMenu" onclick="location.href = '/website/createprojects/';"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Create Projects</a>
+          {% endif %}
         </div>
       </div>
  </html>

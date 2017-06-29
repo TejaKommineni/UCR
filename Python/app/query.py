@@ -142,16 +142,16 @@ def get_project_patient_worklist(projectID=None, patientProjectStatusTypeID=None
     if patientProjectStatusTypeID:
         filters.append(PatientProjectStatus.patientProjectStatusTypeID == patientProjectStatusTypeID)
 
-    return db.session.query(ProjectPatient).join(PatientProjectStatus.projectPatient).join(
-        ProjectPatient.project).join(Patient).filter(and_(*filters)).all()
-
+    return db.session.query(ProjectPatient).outerjoin(PatientProjectStatus).outerjoin(Project).outerjoin(CTC).outerjoin(Patient).filter(and_(*filters)).all()
 
 def get_pi_last_name(projectID= None):
 
     res = db.session.query(PreApplication).filter_by(projectID=projectID).first()
     return res
 
-
+def query_projects_in_preapplications():
+    res = db.session.query(PreApplication).filter_by(projectID = None).order_by(PreApplication.projectTitle).all()
+    return res
 
 
 def create_all():

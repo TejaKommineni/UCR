@@ -4848,7 +4848,8 @@ def delete_pre_application(preApplicationID):
 @website.route('/createprojects/', methods=['GET'])
 @authorization_required(roles=['Developer','Research Manager'])
 def create_project_preapplication():
-    get_project(None,1)
+    form, projects = get_project(None,1)
+    return render_template("project_table.html", form=form, projects=projects)
 
 @website.route('/projects/', methods=['GET'])
 @website.route('/projects/<int:projectID>/', methods=['GET'])
@@ -4889,24 +4890,33 @@ def get_project(projectID=None,preApplication=None):
                                             projectTypeID=projectTypeID,
                                             piLastName=piLastName,
                                             mostRecentProjectStatusTypeID=mostRecentProjectStatusTypeID)
-            if preApplication == 1:
-                projects = query.query_projects_in_preapplications()
 
+            form["preApplication"] = preApplication
             form["projectTypes"] = query.get_project_types()
             form["projectStatusLUTs"] = query.get_project_status_luts()
             form["institutions"] = query.get_institutions()
             form["verifyDate"] = datetime.date(1,1,1);
+
+            if preApplication == 1:
+                projects = query.query_projects_in_preapplications()
+                return form, projects
             return render_template("project_table.html", form=form, projects=projects)
         else:
-            proj = query.get_project(projectID)
+            proj = ''
+            if preApplication is None:
+                proj = query.get_project(projectID)
             if proj is not None:
                 form = {}
-                form["project"] = proj
+                if preApplication is None:
+                    form["project"] = proj
+                else:
+                    form["project"] = query.get_pre_application(preApplication)
                 form["projects"] = query.get_projects()
                 form["irbHolders"] = query.get_irb_holders()
                 form["projectTypes"] = query.get_project_types()
-                form["projectStatuses"] = proj.projectStatuses
-                form["preApplication"] = proj.preApplication
+                if preApplication is None:
+                    form["projectStatuses"] = proj.projectStatuses
+                    form["preApplication"] = proj.preApplication
                 form["staff"] = query.get_staffs()
                 form["fundingSources"] = query.get_funding_sources()
                 form["grantStatuses"] = query.get_grant_statuses()
@@ -4919,6 +4929,7 @@ def get_project(projectID=None,preApplication=None):
                 form["staffRoles"] = query.get_staff_roles()
                 form["siteGroups"]=query.get_sites()
                 form["institutions"] = query.get_institutions()
+                form["preApplication"] = preApplication
                 return render_template("project_form.html", form=form)
             else:
                 return item_not_found("ProjectID {} not found".format(projectID))
@@ -4969,8 +4980,9 @@ def update_project(projectID):
 
 @website.route('/projects/', methods=['POST'])
 @website.route('/projects/<int:projectID>/', methods=['POST'])
+@website.route('/projects/<int:projectID>/<int:preApplication>', methods=['POST'])
 @authorization_required(roles=['Developer', 'Director', 'Informatics Staff', 'Research Manager'])
-def create_project(projectID=None):
+def create_project(projectID=None,preApplication=None):
     try:
         if projectID:
             if "_method" in request.form and request.form["_method"].lower() == "put":
@@ -4979,8 +4991,10 @@ def create_project(projectID=None):
                 return delete_project(projectID)
             else:
                 return invalid_method()
-        else:
+        if projectID is None or preApplication is not None:
             form = forms.ProjectForm(request.form)
+            if preApplication is not None:
+               form.dateAdded.data = datetime.datetime.now().date()
             if form.validate():
                 proj = models.Project(
                     projectTypeID=form.projectTypeID.data,
@@ -5005,6 +5019,11 @@ def create_project(projectID=None):
                 )
                 query.add(proj)
                 flash("Created Project")
+                if preApplication is not None:
+                    preApplications = query.get_pre_application(preApplication)
+                    preApplications.projectID = proj.projectID
+                    query.commit()
+                    return redirect("/website/projects/{}/".format(proj.projectID))
                 return redirect_back("projects/{}/".format(proj.projectID))
             else:
                 return missing_params(form.errors)
@@ -6137,11 +6156,11 @@ def get_tasks(projectID=None,typeID=None):
                 if request.args["action"].lower() == "mailing":
                     sqlQuery = """SELECT p.patid, p.record_num,p.first_name, p.middle_name, p.last_name,concat(p.dob_month,'/',p.dob_day,'/',p.dob_year) as DOB,
 pp.batch,pp.final_code,pp.vital_statusID,pa.street,pa.street2,pa.city,pa.stateID,pa.zip,pa.contactInfoStatusID,pa.address_status_date
-FROM [ucr].[dbo].[Patient] p inner join [ucr].[dbo].[PatientAddress] pa on p.participantID = pa.participantID inner join [ucr].[dbo].[ProjectPatient] pp on pa.participantID = pp.participantID
-WHERE pa.contactInfoStatusID = 1 and pp.final_code =1  and """
+FROM [ucr].[dbo].[Patient] p inner join [ucr].[dbo].[PatientAddress] pa on p.participantID = pa.participantID inner join [ucr].[dbo].[CTC] c on pa.participantID = c.participantID
+inner join [ucr].[dbo].[ProjectPatient] pp on c.ctcID = pp.ctcID WHERE pa.contactInfoStatusID = 1 and pp.final_code =1  and """
                     temp = "("
                     for projectPatient in projectPatients:
-                        temp = temp +"p.participantID = "+str(projectPatient.participantID)+" or "
+                        temp = temp +"pp.participantID = "+str(projectPatient.participantID)+" or "
                     temp = temp[:-3]+")"
                     sqlQuery = sqlQuery + temp
                     results = query.get_sql_query(sqlQuery)
@@ -6214,6 +6233,7 @@ def get_worklist(projectID=None):
         else:
             if projectID == 0:
                 execute_workflow()
+                flash("Refreshed Successfully")
                 return redirect_back('worklist/')
     except Exception as e:
         return internal_error(e)
@@ -6221,7 +6241,7 @@ def get_worklist(projectID=None):
 def execute_workflow():
     patientProjectStatuses = query.get_patient_project_statuses()
     for patientProjectStatus in patientProjectStatuses:
-        patient = patientProjectStatus.projectPatient.patient
+        patient = patientProjectStatus.projectPatient.ctc.patient
         currentAddress = False
         currentPhone = False
         for patientAddress in patient.patientAddresses:
@@ -6252,13 +6272,13 @@ def execute_workflow():
         old_value = patientProjectStatus.patientProjectStatusTypeID
 
         if patientProjectStatus.patientProjectStatusTypeID == 2:   #Edit case
-            if currentAddress and currentPhone and finalCode == 1:
+            if currentAddress and currentPhone and len(patientProjectStatus.projectPatient.contacts) == 0 and finalCode == 1:
                patientProjectStatus.patientProjectStatusTypeID = 21
-            elif currentAddress and not currentPhone and finalCode == 1:
+            elif currentAddress and not currentPhone and len(patientProjectStatus.projectPatient.contacts) == 0 and finalCode == 1:
                patientProjectStatus.patientProjectStatusTypeID = 21
-            elif not currentAddress and currentPhone and finalCode == 1:
+            elif not currentAddress and currentPhone and len(patientProjectStatus.projectPatient.contacts) == 0 and finalCode == 1:
                patientProjectStatus.patientProjectStatusTypeID = 3
-            elif not currentAddress and not currentPhone and finalCode == 1:
+            elif not currentAddress and not currentPhone and len(patientProjectStatus.projectPatient.contacts) == 0 and finalCode == 1:
                patientProjectStatus.patientProjectStatusTypeID = 3
             elif finalCode >1:
                patientProjectStatus.patientProjectStatusTypeID = 4

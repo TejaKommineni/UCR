@@ -1,7 +1,11 @@
 {% extends "layout_all.html" %}
 {% block content %}
 <div class="container-fluid">
+      {% if form.preApplication  == None %}
         <form class="formOverride" id="projectForm" action='/website/projects/{{form.project.projectID}}/', method='post'>
+        {% else %}
+        <form class="formOverride" id="projectForm" action='/website/projects/0/{{form.preApplication}}', method='post'>
+      {% endif %}
           <fieldset>
             <legend>Project Information</legend>
             {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
@@ -22,17 +26,17 @@
               <div class="row">
                 <div class="col-md-8">
                   <label for="text_projectTitle">Project Title</label>
-                  <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{form["project"]["projectTitle"] or ''}}" >
+                     <input type="text" class="form-control" name="projectTitle" id="text_projectTitle" value="{{form["project"]["projectTitle"] or ''}}" >
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <label for="text_shortTitle">Short Title</label>  
-                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form["project"]["shortTitle"] or ''}}">
+                  <input type="text" class="form-control" name="shortTitle" id="text_shortTitle" value="{{form["project"]["shortTitle"] or ''}}" required>
                 </div>
                 <div class = "col-md-2">
                   <label for="select_projectTypeID">Project Type</label>
-                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID" value="{{form["project"]["projectTypeID"]}}">
+                  <select type="text" class="form-control" name="projectTypeID" id="select_projectTypeID" value="{{form["project"]["projectTypeID"]}}" required>
                     <option></option>
                   {% for projectType in form["projectTypes"] %}
                   {% if projectType.projectTypeID == form["project"]["projectTypeID"] %}
@@ -56,8 +60,12 @@
               </div>
               <div class = "row">
                <div class="col-md-8">  
-                  <label for="text_projectSummary">Project Summary</label>        
+                  <label for="text_projectSummary">Project Summary</label>
+                  {% if form.preApplication  == None %}
                   <textarea type="textaraea" class="form-control" name="projectSummary" id="text_projectSummary">{{form["project"]["projectSummary"] or ''}}</textarea>
+                  {% else %}
+                  <textarea type="textaraea" class="form-control" name="projectSummary" id="text_projectSummary">{{form["project"]["description"] or ''}}</textarea>
+                  {% endif %}
                </div>
               </div>
               <div class="row">
@@ -75,7 +83,7 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_irbHolderID">IRB Holder</label>
-                  <select type="text" class="form-control" name="irbHolderID" id="select_irbHolderID">
+                  <select type="text" class="form-control" name="irbHolderID" id="select_irbHolderID" required>
                     <option></option>
                   {% for irbHolder in form["irbHolders"] %}
                     {% if irbHolder.irbHolderID == form["project"]["irbHolderID"] %}
@@ -180,12 +188,13 @@
                 </div>
             </div>
             <!-- Extra hidden fields -->
+            {% if form.preApplication  == None %}
             <input type="hidden" name="_method" value="put" />
+            {% endif %}
           </div>
         </fieldset>
         {# Only allow edit button for developers... #}
         {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informantics Staff'] %}
-
             <fieldset>
                 <div class = "form-group">
                   <div class="row">
@@ -200,460 +209,462 @@
             </fieldset>
         {% endif %}
     </form>
-    <ul class = "nav nav-tabs" role="tablist">
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
-        <li><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
-        <li><a href="#budgetTab" role="tab" data-toggle="tab">Budgets</a></li>
-        <li><a href="#fundingTab" role="tab" data-toggle="tab">Fundings</a></li>
-        <li><a href="#logTab" role="tab" data-toggle="tab">Logs</a></li>
-        <li><a href="#preApplicationTab" role="tab" data-toggle="tab">Pre Application</a></li>
-        {% endif %}
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
-        <li class="active"><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
-        {% endif %}
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
-        <li><a href="#projectStaffTab" role="tab" data-toggle="tab">Project Staff</a></li>
-        <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
-        <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
-        <li><a href="#ucrReportTab" role="tab" data-toggle="tab">UCR Reports</a></li>
-        <li><a href="#siteGroupsTab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
-        {% endif %}
-    </ul>
-    <div class="tab-content">
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
-        <div class="tab-pane" id="arcReviewTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
-                <li><a href="#newArcReview" role="tab" data-toggle="tab">New Arc Review</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="arcReviewTableTab">
-                     <form class="formOverride">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Review Type</th>
-                                        <th>Date Sent to Reviewer</th>
-                                        <th>Date Reviewer 1 Signed</th>
-                                        <th>Date Reviewer 2 Signed</th>
-                                        <th>Contact</th>
-                                        <th>Linkage</th>
-                                        <th>Enaged</th>
-                                        <th>Non-Public Data</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for arcReview in form.project.arcReviews %}
-                                    <tr>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewType or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged or ''}}</a></td>
-                                        <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newArcReview">
-                {% set arcReview = none %}
-                {% include 'helper_forms/arc_review_form.html' %}
-                </div>
-            </div>
-        </div>
-    
-        <div class="tab-pane" id="budgetTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#budgetTableTab" role="tab" data-toggle="tab">Budgets</a></li>
-                <li><a href="#newBudget" role="tab" data-toggle="tab">New Budget</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="budgetTableTab">
-                    <form class="formOverride">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Number of Periods</th>
-                                        <th>Period Start</th>
-                                        <th>Period End</th>
-                                        <th>Period Total</th>
-                                        <th>Period Comment</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for budget in form.project.budgets %}
-                                    <tr>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal or ''}}</a></td>
-                                        <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newBudget">
-                {% set budget = none %}
-                {% include 'helper_forms/budget_form.html' %}
-                </div>
-            </div>
-        </div>
-    
-        <div class = "tab-pane" id="fundingTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#fundingTableTab" role="tab" data-toggle="tab">Fundings</a></li>
-                <li><a href="#newFunding" role="tab" data-toggle="tab">New Funding</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="fundingTableTab">
-                    <form class="formOverride">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Grant Status</th>
-                                        <th>Funding Source</th>
-                                        <th>Funding Number</th>
-                                        <th>Grant Title</th>
-                                        <th>Date Status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for funding in form.project.fundings %}
-                                    <tr>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus or ''}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource or ''}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber or ''}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle or ''}}</a></td>
-                                        <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newFunding">
-                {% set funding = none %}
-                {% include 'helper_forms/funding_form.html' %}
-                </div>
-            </div>
-        </div>
-        
-        <div class = "tab-pane" id="logTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#logTableTab" role="tab" data-toggle="tab">Logs</a></li>
-                <li><a href="#newLog" role="tab" data-toggle="tab">New Log</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="logTableTab">
-                    <form class="formOverride">
-                        <fieldset>
-                            <table class="table table-striped no-spacing" id="logTable">
-                                  <thead>
-                                    <tr>
-                                        <th>Log Subject</th>
-                                        <th>Phase Status</th>
-                                        <th>Staff</th>
-                                        <th>Note</th>
-                                        <th>Date</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for log in form.project.logs %}
-                                    <tr>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.logSubject.logSubject or ''}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.phaseStatus.phaseStatus or ''}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.staff.firstName or ''}}  {{log.staff.lastName or ''}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.note or ''}}</a></td>
-                                        <td><a href="/website/logs/{{log["logID"]}}">{{log.date or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newLog">
-                {% set log = none %}
-                {% include 'helper_forms/log_form.html' %}
-                </div>
-            </div>
-        </div>
-        
-        <div class = "tab-pane" id="preApplicationTab">
-            {% set preApplication = form.project.preApplication %}
-            {% include 'helper_forms/pre_application_form.html' %}
-        </div>
-        {% endif %}
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
-        <div class = "tab-pane active" id="projectPatientTab">
-            <form class="formOverride" id="projectPatients">
-                <fieldset>
-                    <table class="table table-striped no-spacing">
-                          <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Site</th>
-                                <th>Histology</th>
-                                <th>Final Code</th>
-                                <th>DNC</th>
-                                <th>Last Updated</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for pp in form.project.projectPatients %}
-                            <tr>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.firstName or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.lastName or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.site or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.histology or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.finalCode.finalCode or ''}} - {{pp.finalCode.finalCodeDefinition or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.dnc or ''}}</a></td>
-                                <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.modifiedDate or ''}}</a></td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                    </table>
-                </fieldset>
-            </form>
-        </div>
-        {% endif %}
-        {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
-        <div class = "tab-pane" id="projectStaffTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>
-                <li><a href="#newProjectStaffTab" role="tab" data-toggle="tab">Add Staff to Project</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="projectStaffTableTab">
-                    <form class="formOverride" id="projectStaff">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>First Name</th>
-                                        <th>Middle Name</th>
-                                        <th>Last Name</th>
-                                        <th>Credentials</th>
-                                        <th>Role</th>
-                                        <th>Date Pledge</th>
-                                        <th>Date Revoked</th>
-                                        <th>Contact</th>
-                                        <th>Inactive</th>
-                                        <th>Last Updated</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for ps in form.project.projectStaff %}
-                                    <tr>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge or ''}}</a></td>
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked or ''}}</a></td>
-                                        {% if ps.contactID %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
-                                        {% else %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
-                                        {% endif %}
-                                        {% if ps.inactive %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
-                                        {% else %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
-                                        {% endif %}
-                                        <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
+    {% if form.preApplication  == None %}
+        <ul class = "nav nav-tabs" role="tablist">
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
+            <li><a href="#arcReviewTab"  role="tab" data-toggle="tab">Arc Reviews</a></li>
+            <li><a href="#budgetTab" role="tab" data-toggle="tab">Budgets</a></li>
+            <li><a href="#fundingTab" role="tab" data-toggle="tab">Fundings</a></li>
+            <li><a href="#logTab" role="tab" data-toggle="tab">Logs</a></li>
+            <li><a href="#preApplicationTab" role="tab" data-toggle="tab">Pre Application</a></li>
+            {% endif %}
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+            <li class="active"><a href="#projectPatientTab" role="tab" data-toggle="tab">Project Patients</a></li>
+            {% endif %}
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
+            <li><a href="#projectStaffTab" role="tab" data-toggle="tab">Project Staff</a></li>
+            <li><a href="#projectStatusesTab" role="tab" data-toggle="tab">Project Statuses</a></li>
+            <li><a href="#reviewCommitteeTab" role="tab" data-toggle="tab">Review Committees</a></li>
+            <li><a href="#ucrReportTab" role="tab" data-toggle="tab">UCR Reports</a></li>
+            <li><a href="#siteGroupsTab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
+            {% endif %}
+        </ul>
+        <div class="tab-content">
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
+            <div class="tab-pane" id="arcReviewTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#arcReviewTableTab" role="tab" data-toggle="tab">Arc Reviews</a></li>
+                    <li><a href="#newArcReview" role="tab" data-toggle="tab">New Arc Review</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="arcReviewTableTab">
+                         <form class="formOverride">
+                            <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Review Type</th>
+                                            <th>Date Sent to Reviewer</th>
+                                            <th>Date Reviewer 1 Signed</th>
+                                            <th>Date Reviewer 2 Signed</th>
+                                            <th>Contact</th>
+                                            <th>Linkage</th>
+                                            <th>Enaged</th>
+                                            <th>Non-Public Data</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for arcReview in form.project.arcReviews %}
+                                        <tr>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewType or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.dateSentToReviewer or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer1SigDate or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.reviewer2SigDate or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.contact or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.linkage or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.engaged or ''}}</a></td>
+                                            <td><a href="/website/arcreviews/{{arcReview["arcReviewID"]}}">{{arcReview.nonPublicData or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
                     </div>
-                <div class="tab-pane" id="newProjectStaffTab">
-                {% set projectStaff = none %}
-                {% set staff = none %}
-                {% set project = form.project %}
-                {% include 'helper_forms/project_staff_form.html' %}
+                    <div class="tab-pane" id="newArcReview">
+                    {% set arcReview = none %}
+                    {% include 'helper_forms/arc_review_form.html' %}
+                    </div>
                 </div>
             </div>
-            
-        </div>
-        
-        <div class = "tab-pane" id="projectStatusesTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#projectStatusTableTab" role="tab" data-toggle="tab">Project Statuses</a></li>
-                <li><a href="#newProjectStatus" role="tab" data-toggle="tab">New Status</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="projectStatusTableTab">
-                    <form class="formOverride" id="projectStatuses">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Status Type</th>
-                                        <th>Staff</th>
-                                        <th>Note</th>
-                                        <th>Date</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for projectStatus in form.project.projectStatuses %}
-                                    <tr>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.projectStatus.projectStatus or ''}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.staff.firstName or ''}} {{projectStatus.staff.lastName or ''}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusNotes or ''}}</a></td>
-                                        <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusDate or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newProjectStatus">
-                {% set projectStatus = none %}
-                {% include 'helper_forms/project_status_form.html' %}
-                </div>
-            </div>
-        </div>
-        
-        <div class = "tab-pane" id="reviewCommitteeTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#reviewCommitteeTableTab" role="tab" data-toggle="tab">Review Committees </a></li>
-                <li><a href="#newReviewCommittee" role="tab" data-toggle="tab">New RC</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="reviewCommitteeTableTab">
-                    <form class="formOverride">
-                         <fieldset>
+
+            <div class="tab-pane" id="budgetTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#budgetTableTab" role="tab" data-toggle="tab">Budgets</a></li>
+                    <li><a href="#newBudget" role="tab" data-toggle="tab">New Budget</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="budgetTableTab">
+                        <form class="formOverride">
+                            <fieldset>
                                 <table class="table table-striped no-spacing">
                                       <thead>
                                         <tr>
-                                            <th>Review Committee</th>
-                                            <th>RC Status</th>
-                                            <th>RC Number</th>
-                                            <th>Date Initial Review</th>
-                                            <th>Date Expires</th>
+                                            <th>Number of Periods</th>
+                                            <th>Period Start</th>
+                                            <th>Period End</th>
+                                            <th>Period Total</th>
+                                            <th>Period Comment</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for budget in form.project.budgets %}
+                                        <tr>
+                                            <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.numPeriods or ''}}</a></td>
+                                            <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodStart or ''}}</a></td>
+                                            <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodEnd or ''}}</a></td>
+                                            <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodTotal or ''}}</a></td>
+                                            <td><a href="/website/budgets/{{budget["budgetID"]}}">{{budget.periodComment or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newBudget">
+                    {% set budget = none %}
+                    {% include 'helper_forms/budget_form.html' %}
+                    </div>
+                </div>
+            </div>
+
+            <div class = "tab-pane" id="fundingTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#fundingTableTab" role="tab" data-toggle="tab">Fundings</a></li>
+                    <li><a href="#newFunding" role="tab" data-toggle="tab">New Funding</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="fundingTableTab">
+                        <form class="formOverride">
+                            <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Grant Status</th>
+                                            <th>Funding Source</th>
+                                            <th>Funding Number</th>
+                                            <th>Grant Title</th>
+                                            <th>Date Status</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for funding in form.project.fundings %}
+                                        <tr>
+                                            <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantStatus.grantStatus or ''}}</a></td>
+                                            <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingSource.fundingSource or ''}}</a></td>
+                                            <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.fundingNumber or ''}}</a></td>
+                                            <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.grantTitle or ''}}</a></td>
+                                            <td><a href="/website/fundings/{{funding["fundingID"]}}">{{funding.dateStatus or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newFunding">
+                    {% set funding = none %}
+                    {% include 'helper_forms/funding_form.html' %}
+                    </div>
+                </div>
+            </div>
+
+            <div class = "tab-pane" id="logTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#logTableTab" role="tab" data-toggle="tab">Logs</a></li>
+                    <li><a href="#newLog" role="tab" data-toggle="tab">New Log</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="logTableTab">
+                        <form class="formOverride">
+                            <fieldset>
+                                <table class="table table-striped no-spacing" id="logTable">
+                                      <thead>
+                                        <tr>
+                                            <th>Log Subject</th>
+                                            <th>Phase Status</th>
+                                            <th>Staff</th>
                                             <th>Note</th>
-                                            <th>Protocol</th>
-                                            <th>Approval</th>
+                                            <th>Date</th>
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {% for rc in form.project.reviewCommittees %}
+                                        {% for log in form.project.logs %}
                                         <tr>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeLUT.reviewCommittee or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeStatusLUT.reviewCommitteeStatus or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeNumber or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateInitialReview or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateExpires or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcNote or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcProtocol or ''}}</a></td>
-                                            <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcApproval or ''}}</a></td>
+                                            <td><a href="/website/logs/{{log["logID"]}}">{{log.logSubject.logSubject or ''}}</a></td>
+                                            <td><a href="/website/logs/{{log["logID"]}}">{{log.phaseStatus.phaseStatus or ''}}</a></td>
+                                            <td><a href="/website/logs/{{log["logID"]}}">{{log.staff.firstName or ''}}  {{log.staff.lastName or ''}}</a></td>
+                                            <td><a href="/website/logs/{{log["logID"]}}">{{log.note or ''}}</a></td>
+                                            <td><a href="/website/logs/{{log["logID"]}}">{{log.date or ''}}</a></td>
                                         </tr>
                                         {% endfor %}
                                       </tbody>
                                 </table>
                             </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newReviewCommittee">
-                {% set reviewCommittee = none %}
-                {% include 'helper_forms/review_committee_form.html' %}
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newLog">
+                    {% set log = none %}
+                    {% include 'helper_forms/log_form.html' %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class = "tab-pane" id="ucrReportTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#ucrReportTableTab" role="tab" data-toggle="tab">UCR Reports</a></li>
-                <li><a href="#newUCRReport" role="tab" data-toggle="tab">New UCR Report</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="ucrReportTableTab">
-                    <form class="formOverride">
-                         <fieldset>
+
+            <div class = "tab-pane" id="preApplicationTab">
+                {% set preApplication = form.project.preApplication %}
+                {% include 'helper_forms/pre_application_form.html' %}
+            </div>
+            {% endif %}
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Research Manager', 'Informatics Staff'] %}
+            <div class = "tab-pane active" id="projectPatientTab">
+                <form class="formOverride" id="projectPatients">
+                    <fieldset>
+                        <table class="table table-striped no-spacing">
+                              <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Site</th>
+                                    <th>Histology</th>
+                                    <th>Final Code</th>
+                                    <th>DNC</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for pp in form.project.projectPatients %}
+                                <tr>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.firstName or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.patient.lastName or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.site or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.histology or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.finalCode.finalCode or ''}} - {{pp.finalCode.finalCodeDefinition or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.ctc.dnc or ''}}</a></td>
+                                    <td><a href="/website/projectpatients/{{pp["participantID"]}}">{{pp.modifiedDate or ''}}</a></td>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                        </table>
+                    </fieldset>
+                </form>
+            </div>
+            {% endif %}
+            {% if user.staff.ucrRole.ucrRole in ['Developer', 'Director', 'Research Manager', 'Informatics Staff'] %}
+            <div class = "tab-pane" id="projectStaffTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li><a href="#projectStaffTableTab" role="tab" data-toggle="tab">Project Staff Table</a></li>
+                    <li><a href="#newProjectStaffTab" role="tab" data-toggle="tab">Add Staff to Project</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="projectStaffTableTab">
+                        <form class="formOverride" id="projectStaff">
+                            <fieldset>
                                 <table class="table table-striped no-spacing">
                                       <thead>
                                         <tr>
-                                            <th>Report Type</th>
-                                            <th>Report Submitted</th>
-                                            <th>Report Due</th>
-                                            <th>Status Note</th>
-                                            <th>Report Document</th>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Last Name</th>
+                                            <th>Credentials</th>
+                                            <th>Role</th>
+                                            <th>Date Pledge</th>
+                                            <th>Date Revoked</th>
+                                            <th>Contact</th>
+                                            <th>Inactive</th>
+                                            <th>Last Updated</th>
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {% for report in form.project.ucrReports %}
+                                        {% for ps in form.project.projectStaff %}
                                         <tr>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType or ''}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted or ''}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue or ''}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.statusNotes or ''}}</a></td>
-                                            <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.firstName or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.middleName or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.lastName or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staff.credentials or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.staffRole.staffRole or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.datePledge or ''}}</a></td>
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.dateRevoked or ''}}</a></td>
+                                            {% if ps.contactID %}
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
+                                            {% else %}
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
+                                            {% endif %}
+                                            {% if ps.inactive %}
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">Yes</a></td>
+                                            {% else %}
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">No</a></td>
+                                            {% endif %}
+                                            <td><a href="/website/projectstaff/{{ps["projectStaffID"]}}">{{ps.modifiedDate or ''}}</a></td>
                                         </tr>
                                         {% endfor %}
                                       </tbody>
                                 </table>
                             </fieldset>
-                    </form>
+                        </form>
+                        </div>
+                    <div class="tab-pane" id="newProjectStaffTab">
+                    {% set projectStaff = none %}
+                    {% set staff = none %}
+                    {% set project = form.project %}
+                    {% include 'helper_forms/project_staff_form.html' %}
+                    </div>
                 </div>
-                <div class="tab-pane" id="newUCRReport">
-                {% set ucrReport = none %}
-                {% include 'helper_forms/ucr_report_form.html' %}
+
+            </div>
+
+            <div class = "tab-pane" id="projectStatusesTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#projectStatusTableTab" role="tab" data-toggle="tab">Project Statuses</a></li>
+                    <li><a href="#newProjectStatus" role="tab" data-toggle="tab">New Status</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="projectStatusTableTab">
+                        <form class="formOverride" id="projectStatuses">
+                            <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Status Type</th>
+                                            <th>Staff</th>
+                                            <th>Note</th>
+                                            <th>Date</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for projectStatus in form.project.projectStatuses %}
+                                        <tr>
+                                            <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.projectStatus.projectStatus or ''}}</a></td>
+                                            <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.staff.firstName or ''}} {{projectStatus.staff.lastName or ''}}</a></td>
+                                            <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusNotes or ''}}</a></td>
+                                            <td><a href="/website/projectstatuses/{{projectStatus["projectStatusID"]}}">{{projectStatus.statusDate or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newProjectStatus">
+                    {% set projectStatus = none %}
+                    {% include 'helper_forms/project_status_form.html' %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class = "tab-pane" id="siteGroupsTab">
-            <ul class ="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#siteGroupsTableab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
-                <li><a href="#newSiteGroups" role="tab" data-toggle="tab">New SiteGroup</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="siteGroupsTableab">
-                    <form class="formOverride" id="siteGroups">
-                        <fieldset>
-                            <table class="table table-striped no-spacing">
-                                  <thead>
-                                    <tr>
-                                        <th>Site Group Type</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for siteGroup in form.project.projectSiteGroups %}
-                                    <tr>
-                                        <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site or ''}}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                            </table>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="tab-pane" id="newSiteGroups">
-                {% set siteGroups = none %}
-                {% include 'helper_forms/site_groups_form.html' %}
+
+            <div class = "tab-pane" id="reviewCommitteeTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#reviewCommitteeTableTab" role="tab" data-toggle="tab">Review Committees </a></li>
+                    <li><a href="#newReviewCommittee" role="tab" data-toggle="tab">New RC</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="reviewCommitteeTableTab">
+                        <form class="formOverride">
+                             <fieldset>
+                                    <table class="table table-striped no-spacing">
+                                          <thead>
+                                            <tr>
+                                                <th>Review Committee</th>
+                                                <th>RC Status</th>
+                                                <th>RC Number</th>
+                                                <th>Date Initial Review</th>
+                                                <th>Date Expires</th>
+                                                <th>Note</th>
+                                                <th>Protocol</th>
+                                                <th>Approval</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {% for rc in form.project.reviewCommittees %}
+                                            <tr>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeLUT.reviewCommittee or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeStatusLUT.reviewCommitteeStatus or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.reviewCommitteeNumber or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateInitialReview or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.dateExpires or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcNote or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcProtocol or ''}}</a></td>
+                                                <td><a href="/website/reviewcommittees/{{rc["reviewCommitteeID"]}}">{{rc.rcApproval or ''}}</a></td>
+                                            </tr>
+                                            {% endfor %}
+                                          </tbody>
+                                    </table>
+                                </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newReviewCommittee">
+                    {% set reviewCommittee = none %}
+                    {% include 'helper_forms/review_committee_form.html' %}
+                    </div>
                 </div>
             </div>
+            <div class = "tab-pane" id="ucrReportTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#ucrReportTableTab" role="tab" data-toggle="tab">UCR Reports</a></li>
+                    <li><a href="#newUCRReport" role="tab" data-toggle="tab">New UCR Report</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="ucrReportTableTab">
+                        <form class="formOverride">
+                             <fieldset>
+                                    <table class="table table-striped no-spacing">
+                                          <thead>
+                                            <tr>
+                                                <th>Report Type</th>
+                                                <th>Report Submitted</th>
+                                                <th>Report Due</th>
+                                                <th>Status Note</th>
+                                                <th>Report Document</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {% for report in form.project.ucrReports %}
+                                            <tr>
+                                                <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportType.ucrReportType or ''}}</a></td>
+                                                <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportSubmitted or ''}}</a></td>
+                                                <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDue or ''}}</a></td>
+                                                <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.statusNotes or ''}}</a></td>
+                                                <td><a href="/website/ucrreports/{{report["ucrReportID"]}}">{{report.reportDoc or ''}}</a></td>
+                                            </tr>
+                                            {% endfor %}
+                                          </tbody>
+                                    </table>
+                                </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newUCRReport">
+                    {% set ucrReport = none %}
+                    {% include 'helper_forms/ucr_report_form.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class = "tab-pane" id="siteGroupsTab">
+                <ul class ="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#siteGroupsTableab" role="tab" data-toggle="tab">Project SiteGroups</a></li>
+                    <li><a href="#newSiteGroups" role="tab" data-toggle="tab">New SiteGroup</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="siteGroupsTableab">
+                        <form class="formOverride" id="siteGroups">
+                            <fieldset>
+                                <table class="table table-striped no-spacing">
+                                      <thead>
+                                        <tr>
+                                            <th>Site Group Type</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for siteGroup in form.project.projectSiteGroups %}
+                                        <tr>
+                                            <td><a href="/website/sitegroups/{{siteGroup["projectSiteGroupID"]}}">{{siteGroup.projectSiteGroup.site or ''}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="newSiteGroups">
+                    {% set siteGroups = none %}
+                    {% include 'helper_forms/site_groups_form.html' %}
+                    </div>
+                </div>
+            </div>
+
+
+            {% endif %}
         </div>
-
-
-        {% endif %}
-    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
