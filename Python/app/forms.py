@@ -347,6 +347,11 @@ class DepartmentLUTForm(BaseForm):
     department = StringField('department',
                                [] + COMMON_STRING_VALIDATORS)
 
+class ExternalStudyCodeLUTForm(BaseForm):
+    externalID = IntegerField('externalID',
+                                  [] + COMMON_INTEGER_VALIDATORS)
+    externalStudyCode = StringField('externalStudyCode',
+                               [] + COMMON_STRING_VALIDATORS)
 
 class FacilityForm(BaseForm):
     facilityName = StringField('facilityName',
@@ -1291,8 +1296,8 @@ class ProjectForm(BaseForm):
                             [] + COMMON_STRING_VALIDATORS)
     ucrFee = FloatField('ucrFee',
                          [] + COMMON_FLOAT_VALIDATORS)
-    ucrNoFee = IntegerField('ucrNoFee',
-                           [] + COMMON_INTEGER_VALIDATORS)
+    ucrNoFee = BooleanField('ucrNoFee',
+                           [] + COMMON_BOOL_VALIDATORS)
     previousShortTitle = StringField('previousShortTitle',
                                      [] + COMMON_STRING_VALIDATORS)
     dateAdded = DateField('dateAdded',
@@ -1345,6 +1350,10 @@ class ProjectPatientForm(BaseForm):
                               [] + COMMON_INTEGER_VALIDATORS)
     batch = IntegerField('batch',
                          [] + COMMON_INTEGER_VALIDATORS)
+    consentSigned = BooleanField('consentSigned',
+                                          [] + COMMON_BOOL_VALIDATORS)
+    surveyReturned = BooleanField('surveyReturned',
+                                 [] + COMMON_BOOL_VALIDATORS)
     siteGrpID = IntegerField('siteGrpID',
                            [] + COMMON_INTEGER_VALIDATORS)
     finalCodeID = IntegerField('finalCodeID',
@@ -1416,6 +1425,8 @@ class ProjectPatientForm(BaseForm):
                                     [] + COMMON_INTEGER_VALIDATORS)
     yearOfLastConsent = IntegerField('yearOfLastConsent',
                                     [] + COMMON_INTEGER_VALIDATORS)
+    externalID = IntegerField('externalID',
+                                     [] + COMMON_INTEGER_VALIDATORS)
 
     def validate(self):
         hasErrors = not Form.validate(self)
@@ -1592,12 +1603,6 @@ class ProjectStaffForm(BaseForm):
         if staff is None:
             self.staffID.errors.append("ID not found")
             hasErrors = True
-
-        if self.contactID.data:
-            contact = query.get_contact_enum(self.contactID.data)
-            if contact is None:
-                self.contactID.errors.append("ID not found")
-                hasErrors = True
 
         if self.staffRoleID.data:
             staffRole = query.get_staff_role(self.staffRoleID.data)

@@ -106,8 +106,8 @@
                 </div>
                 <div class = "col-md-2">
                   <label for="select_ucrNoFee">UCR No Fee</label>
-                    <select type="text" class="form-control" name="ongoingContact" id="select_ucrNoFee">
-                      {% if form.project.ucrNoFee %}
+                    <select type="text" class="form-control" name="ucrNoFee" id="select_ucrNoFee">
+                        {% if form.project.ucrNoFee %}
                             <option value="True" selected="selected">Yes</option>
                         {% else %}
                             <option value="True">Yes</option>

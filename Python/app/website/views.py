@@ -16,6 +16,7 @@ from flask.ext.cas import login as cas_login
 from functools import wraps
 import datetime
 import csv
+import re
 website = Blueprint('website', __name__, template_folder='website_templates')
 
 @website.context_processor
@@ -1318,6 +1319,100 @@ def delete_department(departmentID):
                 return item_deleted("DepartmentID {} deleted".format(departmentID))
         else:
             return item_not_found("DepartmentID {} not found".format(departmentID))
+    except Exception as e:
+        return internal_error(e)
+
+##############################################################################
+# ExternalStudyCode LUT
+##############################################################################
+@website.route('/externalstudycodes/', methods=['GET'])
+@website.route('/externalstudycodes/<int:externalID>/', methods=['GET'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def get_external_study_code(externalID=None):
+    try:
+        if externalID is None:
+            form = {
+                "externals": query.get_external_study_codes(),
+                "add": True
+            }
+            return render_template("externalstudycodes.html", form=form)
+        else:
+            externalStudyCode = query.get_external_study_code(externalID)
+            if externalStudyCode is not None:
+                form = {
+                    "externals": [externalStudyCode],
+                    "add": False
+                }
+                return render_template("externalstudycodes.html", form=form)
+            else:
+                return item_not_found("externalID {} not found".format(externalID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/externalstudycodes/<int:externalID>/', methods=['PUT'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def update_external_study_code(externalID):
+    try:
+        externalStudy = query.get_external_study_code(externalID)
+        if externalStudy is not None:
+            form = forms.ExternalStudyCodeLUTForm(request.form)
+            if form.validate():
+                if int(form.versionID.data) == externalStudy.versionID:
+                    externalStudy.externalStudyCode = form.externalStudyCode.data
+                    query.commit()
+                    flash("Updated External Study Code")
+                    return redirect_back('externalstudycodes/{}/'.format(externalID))
+                else:
+                    return out_of_date_error()
+            else:
+                return missing_params(form.errors)
+        else:
+            return item_not_found("externalID {} not found".format(externalID))
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/externalstudycodes/', methods=['POST'])
+@website.route('/externalstudycodes/<int:externalID>/', methods=['POST'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def create_external_study_code(externalID=None):
+    try:
+        if externalID:
+            if "_method" in request.form and request.form["_method"].lower() == "put":
+                return update_external_study_code(externalID)
+            elif "_method" in request.form and request.form["_method"].lower() == "delete":
+                return delete_external_study_code(externalID)
+            else:
+                return invalid_method()
+        else:
+            form = forms.ExternalStudyCodeLUTForm(request.form)
+            if form.validate():
+                externalStudy = models.ExternalStudyCode(
+                    externalID = form.externalID.data,
+                    externalStudyCode=form.externalStudyCode.data
+                )
+                query.add(externalStudy)
+                flash("Created External Code")
+                return redirect_back(
+                    'externalstudycodes/{}/'.format(externalStudy.externalID))
+            else:
+                return missing_params(form.errors)
+    except Exception as e:
+        return internal_error(e)
+
+@website.route('/externalstudycodes/<int:externalID>/', methods=['DELETE'])
+@authorization_required(roles=['Developer', 'Informatics Staff', 'Research Manager'])
+def delete_external_study_code(externalID):
+    try:
+        studycode = query.get_external_study_code(externalID)
+        if studycode is not None:
+            deps = get_dependencies(studycode)
+            if deps:
+                return dependency_detected(deps)
+            else:
+                query.delete(studycode)
+                return item_deleted("ExternalCodeID {} deleted".format(externalID))
+        else:
+            return item_not_found("ExternalCodeID {} not found".format(externalID))
     except Exception as e:
         return internal_error(e)
 
@@ -5141,6 +5236,7 @@ def get_project_patient(participantID=None,project=0,patientProjectStatus=0):
                 form["finalCodes"] = query.get_final_codes()
                 form["abstractStatuses"] = query.get_abstract_statuses()
                 form["vitalStatuses"] = query.get_vital_statues()
+                form["externalstudycodes"] = query.get_external_study_codes()
                 form["siteGroups"]=query.get_sites()
                 if projectPatient.dayOfLastConsent == '':
                     form["dayOfLastConsent"]=''
@@ -5175,8 +5271,10 @@ def update_project_patient(participantID):
                     projectPatient.ctcID = form.ctcID.data
                     projectPatient.finalCodeID = form.finalCodeID.data
                     projectPatient.finalCodeDate = form.finalCodeDate.data
+                    projectPatient.consentSigned = form.consentSigned.data
                     projectPatient.enrollmentDate = form.enrollmentDate.data
                     projectPatient.dateCoordSigned = form.dateCoordSigned.data
+                    projectPatient.externalID = form.externalID.data
                     projectPatient.finalCodeStaffID = form.finalCodeStaffID.data
                     projectPatient.enrollmentStaffID = form.enrollmentStaffID.data
                     projectPatient.dateCoordSignedStaffID = form.dateCoordSignedStaffID.data
@@ -5194,6 +5292,7 @@ def update_project_patient(participantID):
                     projectPatient.medRecordReleaseLink = form.medRecordReleaseLink.data
                     projectPatient.medRecordReleaseStaffID = form.medRecordReleaseStaffID.data
                     projectPatient.medRecordReleaseDate = form.medRecordReleaseDate.data
+                    projectPatient.surveyReturned = form.surveyReturned.data
                     projectPatient.surveyToResearcher = form.surveyToResearcher.data
                     projectPatient.surveyToResearcherStaffID = form.surveyToResearcherStaffID.data
                     projectPatient.qualityControl = form.qualityControl.data
@@ -5229,10 +5328,12 @@ def create_project_patient(participantID=None):
                 projectPatient = models.ProjectPatient(
                     projectID=form.projectID.data,
                     ctcID=form.ctcID.data,
+                    consentSigned = form.consentSigned.data,
                     finalCodeID=form.finalCodeID.data,
                     finalCodeDate=form.finalCodeDate.data,
                     enrollmentDate=form.enrollmentDate.data,
                     dateCoordSigned=form.dateCoordSigned.data,
+                    externalID = form.externalID.data,
                     finalCodeStaffID=form.finalCodeStaffID.data,
                     enrollmentStaffID=form.enrollmentStaffID.data,
                     dateCoordSignedStaffID=form.dateCoordSignedStaffID.data,
@@ -5250,6 +5351,7 @@ def create_project_patient(participantID=None):
                     medRecordReleaseLink=form.medRecordReleaseLink.data,
                     medRecordReleaseStaffID=form.medRecordReleaseStaffID.data,
                     medRecordReleaseDate=form.medRecordReleaseDate.data,
+                    surveyReturned = form.surveyReturned.data,
                     surveyToResearcher=form.surveyToResearcher.data,
                     surveyToResearcherStaffID=form.surveyToResearcherStaffID.data,
                     qualityControl=form.qualityControl.data,
@@ -6007,6 +6109,15 @@ def get_sql_queries(queryID=None):
             form['queries'] = query.get_queries()
             form['selectedQuery'] = int(request.args['reportTypes'])
             form["results"] = query.get_sql_query(sqlQuery)
+            form["projectid"] =0
+            for column in form['results'].cursor.description:
+                regex = re.compile('[^a-zA-Z]')
+                temp = regex.sub('',column[0])
+                if "projectid" == temp.lower():
+                    form["projectid"] = 1
+                    form["projectid_name"] = column[0]
+                    break
+
             return render_template("run_queries.html", form=form)
 
     except Exception as e:
@@ -7512,6 +7623,14 @@ def get_lookup_tables():
         "count": len(fieldDivisions),
         "values": [fieldDivision.fieldDivision for fieldDivision in fieldDivisions],
         "endpoint": "fielddivisions"
+    })
+
+    externalStudyCodes = query.get_external_study_codes()
+    form["tables"].append({
+        "name": "External Study Codes",
+        "count": len(externalStudyCodes),
+        "values": [externalStudyCode.externalStudyCode for externalStudyCode in externalStudyCodes],
+        "endpoint": "externalstudycodes"
     })
 
     finalCodes = query.get_final_codes()

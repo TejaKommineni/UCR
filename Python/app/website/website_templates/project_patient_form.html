@@ -649,6 +649,54 @@
                   </select>
                 </div>
               </div>
+             <div class ="row">
+                 <div class = "col-md-2">
+                  <label for="select_consentSigned">Consent Signed</label>
+                  <select type="text" class="form-control" name="consentSigned" id="select_consentSigned" value="{{projectPatient.consentSigned}}">
+                      {% if projectPatient.consentSigned %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectPatient.consentSigned %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class = "col-md-2">
+                  <label for="select_surveyReturned">Questionnaire Returned</label>
+                  <select type="text" class="form-control" name="surveyReturned" id="select_surveyReturned" value="{{projectPatient.surveyReturned}}">
+                      {% if projectPatient.surveyReturned %}
+                            <option value="True" selected="selected">Yes</option>
+                        {% else %}
+                            <option value="True">Yes</option>
+                        {% endif %}
+                        {% if not projectPatient.surveyReturned %}
+                            <option value="False" selected="selected">No</option>
+                        {% else %}
+                            <option value="False">No</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+
+                 <div class = "col-md-2">
+                  <label for="select_externalStudyCode">External Study Code</label>
+                  <select type="text" class="form-control" name="externalID" id="select_externalID">
+                      <option></option>
+                      {% for externalstudycode in form.externalstudycodes %}
+                        {% if externalstudycode.externalID == projectPatient.externalID %}
+                            <option selected="selected" value="{{externalstudycode.externalID}}">{{externalstudycode.externalStudyCode or ''}}</option>
+                        {% else %}
+                            <option value="{{externalstudycode.externalID}}">{{externalstudycode.externalStudyCode or ''}} </option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+                </div>
+             </div>
              <div class="row">
                 <div class = "col-md-2">
                   <label for="text_medRecordReleaseLink">Medical Record Release Link</label>

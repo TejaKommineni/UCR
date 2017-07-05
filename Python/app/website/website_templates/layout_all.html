@@ -31,6 +31,9 @@
             $('#projectTable').dataTable().fnSort( [[1,'asc']]);
             $('#logTable').dataTable().fnSort( [[4,'desc']]);
             $('#logTable2').dataTable().fnSort( [[0,'desc']]);
+            $('#resultsTable').dataTable({
+                "aaSorting": []
+            });
             $(":submit").scrollPosReaload();
              });
 

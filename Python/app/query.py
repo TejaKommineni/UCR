@@ -257,6 +257,11 @@ def get_ethnicity(id):
 def get_ethnicities():
     return db.session.query(Ethnicity).all()
 
+def get_external_study_codes():
+    return db.session.query(ExternalStudyCode).all()
+
+def get_external_study_code(id):
+    return db.session.query(ExternalStudyCode).filter_by(externalID=id).first()
 
 def get_ctc_facilities():
     return db.session.query(CTCFacility).all()
@@ -632,11 +637,13 @@ def query_projects(projectID=None, shortTitle=None, projectTypeID=None, piLastNa
     if projectTypeID:
         filters.append(Project.projectTypeID == projectTypeID)
     if piLastName:
-        filters.append(PreApplication.piLastName == piLastName)
+        filters.append(Staff.lastName.like('%{}%'.format(piLastName)))
+        filters.append(ProjectStaff.staffRoleID == 1)
     if mostRecentProjectStatusTypeID:
         filters.append(ProjectStatus.projectStatusTypeID == mostRecentProjectStatusTypeID)
 
-    res = db.session.query(Project).outerjoin(ProjectStatus.project).outerjoin(PreApplication, Project.projectID == PreApplication.projectID).filter(ProjectStatus.statusDate == db.session.query(
+
+    res = db.session.query(Project).outerjoin(ProjectStatus.project).outerjoin(PreApplication, Project.projectID == PreApplication.projectID).outerjoin(ProjectStaff).outerjoin(Staff).filter(ProjectStatus.statusDate == db.session.query(
         func.max(ProjectStatus.statusDate)).filter(ProjectStatus.projectID==Project.projectID).correlate(Project).as_scalar()).filter(and_(*filters)).order_by(Project.shortTitle).all()
     return res
 
@@ -734,7 +741,7 @@ def get_query(id):
     return db.session.query(SqlQuery).filter_by(queryID=id).first()
 
 def get_queries():
-    return db.session.query(SqlQuery).all()
+    return db.session.query(SqlQuery).order_by(SqlQuery.queryName).all()
 
 def get_sql_query(sql_query):
     return  db.engine.execute(sql_query)

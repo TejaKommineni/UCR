@@ -219,6 +219,10 @@ class Ethnicity(CustomModel):
     ethnicityID = db.Column('ethnicityID', db.Integer, primary_key=True,autoincrement=False)
     ethnicity = db.Column('ethnicity', db.String)
 
+class ExternalStudyCode(CustomModel):
+    __tablename__ = "ExternalStudyCodeLUT"
+    externalID = db.Column('externalID', db.Integer, primary_key=True,autoincrement=False)
+    externalStudyCode = db.Column('external_study_code', db.String)
 
 class Facility(CustomModel):
     __tablename__ = "Facility"
@@ -900,7 +904,10 @@ class ProjectPatient(CustomModel):
     ctcID = db.Column('ctcID', db.Integer, db.ForeignKey('CTC.ctcID'))
     currentAge = db.Column('current_age', db.Integer)
     batch = db.Column('batch', db.Integer)
+    consentSigned = db.Column('consent_signed', db.Boolean)
+    surveyReturned = db.Column('survey_returned', db.Boolean)
     siteGrpID = db.Column('sitegrpID', db.Integer,db.ForeignKey('SiteGroupLUT.siteID'), nullable=False)
+    externalID = db.Column('externalID',db.Integer,db.ForeignKey('ExternalStudyCodeLUT.externalID'))
     finalCodeID = db.Column('final_code', db.Integer, db.ForeignKey('FinalCode.finalCodeID'), nullable=False)
     finalCodeDate = db.Column('final_code_date', db.Date)
     finalCodeStaffID = db.Column('final_code_staff', db.Integer, db.ForeignKey('Staff.staffID'))  # FK?
@@ -1137,7 +1144,7 @@ class Sex(CustomModel):
 class SqlQuery(CustomModel):
     __tablename__ = "Queries"
     queryID = db.Column('queryID', db.Integer, primary_key=True)
-    query = db.Column('query', db.String, autoincrement = True)
+    query = db.Column('query', db.String)
     queryName = db.Column('queryName', db.String)
     director = db.Column('director', db.Boolean)
     contactStaff = db.Column('contactStaff', db.Boolean)

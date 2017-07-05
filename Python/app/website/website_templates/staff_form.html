@@ -185,7 +185,7 @@
               <div class="row">
                <div class = "col-md-2">
                   <label for="text_fieldDivision">Division</label>
-                  <select required type="text" class="form-control" name="fieldDivisionID" id="select_fieldDivision">
+                  <select  type="text" class="form-control" name="fieldDivisionID" id="select_fieldDivision">
                       <option></option>
                       {% for fieldDivision in form["fieldDivisions"] %}
                         {% if fieldDivision.fieldDivisionID == staff.fieldDivisionID %}

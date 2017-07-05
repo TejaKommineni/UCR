@@ -57,7 +57,7 @@
             <div class="row">
                     <button type="button" class="btn btn-warning" onclick="location.href = '/website/downloadReport/{{ form.selectedQuery }}';"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download Report</button>
                     <br> <br>
-                    <table class="table table-striped no-spacing" id="resultsTable">
+                    <table class="table-striped no-spacing" id="resultsTable">
                           <thead>
                             <tr>
                                 {% for column in form['results'].cursor.description %}
@@ -69,14 +69,17 @@
                             {% for result in form['results'] %}
                             <tr>
                                 {% for column in form['results'].cursor.description %}
+                                     {% if form.projectid == 1 %}
+                                     <td><a href="/website/projects/{{ result[form.projectid_name] }}">{{result[column[0]] or ''}}</a></td>
+                                     {% else %}
                                      <td><a href="">{{result[column[0]] or ''}}</a></td>
+                                     {% endif %}
                                 {% endfor %}
 
                             </tr>
                             {% endfor %}
                           </tbody>
                         </table>
-
             </div>
         {% endif %}
     </div>

@@ -1,0 +1,14 @@
+{% extends "layout_all.html" %}
+{% block content %}
+    <legend>External Study Codes</legend>
+{% for external in form["externals"] %}
+    {% with %}
+        {% set loop_revindex = loop.revindex %}
+        {% include 'helper_forms/externalstudycodes_form.html' %}
+    {% endwith %}
+{% endfor %}
+{% if form["add"] %}
+    {% set external = none %}
+    {% include 'helper_forms/externalstudycodes_form.html' %}
+{% endif %}
+{% endblock %}
